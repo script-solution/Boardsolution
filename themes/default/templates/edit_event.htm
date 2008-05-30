@@ -1,0 +1,99 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<form method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('edit_topic')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('forum')}:</dt>
+			<dd>{forum_name}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('event_name')}:</dt>
+			<dd>{form.get_textbox('topic_name',topic_name_def,60)}</dd>
+		</dl>
+		{if lock_topic}
+		<dl>
+			<dt>{glocale.lang('lock_thread')}:</dt>
+			<dd>
+				{lock_thread}
+				<div class="bs_desc">{glocale.lang('lock_thread_explain')}</div>
+			</dd>
+		</dl>
+		{endif}
+		{if view_important}
+		<dl>
+			<dt>{glocale.lang('important')}:</dt>
+			<dd>{form.get_radio_yesno('important',important_def)} ( {glocale.lang('alwaysshowontop')} )</dd>
+		</dl>
+		{endif}
+		<dl>
+			<dt>{glocale.lang('allowposts')}:</dt>
+			<dd>{form.get_radio_yesno('allow_posts',allow_posts_def)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('location')}:</dt>
+			<dd>{form.get_textbox('location',location_def,50,100)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('begin')}:</dt>
+			<dd>{form.get_date_chooser('b_',event_begin_def)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('end')}:</dt>
+			<dd>
+				{form.get_date_chooser('e_',event_end_def)} {glocale.lang('or')}
+				<input type="checkbox" id="openEndCB" name="open_end" {open_end} value="1" />
+				<label for="openEndCB">{glocale.lang('openend')}</label>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('announcements')}:</dt>
+			<dd>
+				<table cellpadding="2" cellspacing="0">
+					<tr>
+						<td colspan="2">
+						{form.get_radio_yesno('enable_announcements',enable_announcements_def)}
+						| {glocale.lang('maximal')}:
+						{form.get_textbox('max_announcements',max_announcements_def,4,5)}
+						( 0 = {glocale.lang('unlimited')} )
+						</td>
+					</tr>
+					<tr>
+						<td><u>{glocale.lang('application_deadline')}:</u></td>
+						<td>
+						<input type="radio" name="timeout_type" value="begin" {close_announcements_begin} id="cab" />
+						<label for="cab">{glocale.lang('event_begin')}</label>
+						</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>
+						<input type="radio" name="timeout_type" value="self" {close_announcements_custom} id="cas" />
+						<label for="cas">{glocale.lang('custom')}</label>:
+						{form.get_date_chooser('c_',event_timeout_def)}
+						</td>
+					</tr>
+				</table>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('description')}:</dt>
+			<dd>{form.get_textarea('text',text_def,'90%',5)}</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{back_url}'" />
+	<input type="submit" value="{glocale.lang('save')}" />
+</center>
+</form>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

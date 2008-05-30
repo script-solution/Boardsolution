@@ -1,0 +1,22 @@
+<div class="bs_padtop_big">
+	<div class="bs_quote_section">
+		<div class="bs_quote_section_top"><b>{glocale.lang('attachments')}:</b></div>
+		<div class="bs_quote_section_main">
+		{loop attachments as attachment}
+		<table width="70%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td class="bs_quote_section_main" width="50%">
+				{if attachment:is_image}
+				<a href="{attachment:attachment_url}"><img src="{attachment:image_url}" alt="{attachment:attachment_name}" title="{attachment:image_title}" /></a>
+				{else}
+				<img src="{attachment:fileicon}" alt="" /> <a href="{attachment:attachment_url}">{attachment:attachment_name}</a>
+				{endif}
+				</td>
+				<td valign="top" class="bs_quote_section_main" width="25%">{attachment:attachment_size} Bytes</td>
+				<td valign="top" class="bs_quote_section_main" width="25%">{attachment:downloads} {glocale.lang('downloads')}</td>
+			</tr>
+		</table>
+		{endloop}
+		</div>
+	</div>
+</div>

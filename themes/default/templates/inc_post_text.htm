@@ -1,0 +1,17 @@
+{text}
+{if show_attachments}
+<div class="bs_padtop">
+	{include "inc_attachments_display.htm"}
+</div>
+{endif}
+{if show_signature}
+<div class="bs_padtop">
+	<hr class="bs_signature_sep" noshade="noshade" align="left" size="1" />
+	{signature}
+</div>
+{endif}
+{if show_edit_notice}
+<div class="bs_padtop_big" style="font-size: 0.9em;">
+	{edited}
+</div>
+{endif}

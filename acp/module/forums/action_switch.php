@@ -1,0 +1,48 @@
+<?php
+/**
+ * Contains the switch-forums-action
+ *
+ * @version			$Id: action_switch.php 741 2008-05-24 12:04:56Z nasmussen $
+ * @package			Boardsolution
+ * @subpackage	acp.module
+ * @author			Nils Asmussen <nils@script-solution.de>
+ * @copyright		2003-2008 Nils Asmussen
+ * @link				http://www.script-solution.de
+ */
+
+/**
+ * The switch-forums-action
+ *
+ * @package			Boardsolution
+ * @subpackage	acp.module
+ * @author			Nils Asmussen <nils@script-solution.de>
+ */
+final class BS_ACP_Action_forums_switch extends BS_ACP_Action_Base
+{
+	public function perform_action()
+	{
+		$id_str = $this->input->get_var('ids','get',PLIB_Input::STRING);
+		if(!($ids = PLIB_StringHelper::get_ids($id_str)) || count($ids) != 2)
+			return 'Got an invalid id-string via GET';
+		
+		// check if the forums exist and have the same parent
+		list($fid1,$fid2) = $ids;
+		$data1 = $this->forums->get_node_data($fid1);
+		$data2 = $this->forums->get_node_data($fid2);
+		if($data1 === null || $data2 === null || $data1->get_parent_id() != $data2->get_parent_id())
+			return 'Forums with ids "'.$fid1.'","'.$fid2.'" don\'t exist or are not in the same parent-forum';
+		
+		// update sort
+		BS_DAO::get_forums()->update_sort($fid1,array('sortierung - 1'));
+		BS_DAO::get_forums()->update_sort($fid2,array('sortierung + 1'));
+		
+		// refresh forums
+		PLIB_Object::set_prop('forums',new BS_Forums_Manager());
+		
+		$this->set_show_status_page(false);
+		$this->set_action_performed(true);
+
+		return '';
+	}
+}
+?>

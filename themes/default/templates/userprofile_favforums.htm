@@ -1,0 +1,51 @@
+<form method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('favorite_forums')}</h1>
+	<table width="100%" cellpadding="2" cellspacing="1">
+		<tr>
+			<th width="65%" class="bs_coldesc" align="left">{glocale.lang('forum')}</th>
+			<th width="35%" class="bs_coldesc">{glocale.lang('favorite')}</th>
+		</tr>
+	</table>
+	
+	{if forums.length == 0}
+	<div class="bs_main" align="center">{glocale.lang('no_forums_available')}</div>
+	{endif}
+	{loop forums as forum}
+	<table width="100%" cellpadding="2" cellspacing="1">
+		<tr>
+			{loop forum:path_images as pimage}
+			<td valign="top" height="18" width="20">{pimage}</td>
+			{endloop}
+			{if forum:contains_forums}
+			<td height="18" class="bs_coldesc">
+			<a href="{forum:forum_url}">{forum:name}</a>
+			</td>
+			{else}
+			<td height="18" class="bs_main"><a href="{forum:forum_url}">{forum:name}</a></td>
+			<td class="bs_main" width="35%" align="center"
+				onclick="var cb = document.getElementById('fav_{forum:index}'); cb.checked = cb.checked ? false : true;">
+			<input type="checkbox" id="fav_{forum:index}" name="favorite[{forum:id}]" value="1"
+				onclick="this.checked = this.checked ? false : true;" {if forum:selected}checked="checked" {endif}/>
+			</td>
+			{endif}
+		</tr>
+	</table>
+	{endloop}
+</div>
+
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="30%">&nbsp;</td>
+		<td width="40%" align="center"><input type="submit" value="{glocale.lang('submit')}" /></td>
+		<td width="30%" align="right">
+		<a href="Javascript:invertSelection('fav_');">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+
+<div class="bs_padtop">
+	{glocale.lang('favorite_forums_notice')}
+</div>

@@ -1,0 +1,52 @@
+{include "inc_userprofile_pmjs.htm"}
+
+<form id="pm_form" method="post" action="{target_url}">
+<div class="bs_border">
+	<h1 class="bs_topic">{title}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<th width="5%" class="bs_coldesc">&nbsp;</th>
+			<th width="34%" class="bs_coldesc" align="left">{glocale.lang('subject')}</th>
+			<th width="20%" class="bs_coldesc" align="left">{glocale.lang('to_or_from')}</th>
+			<th width="26%" class="bs_coldesc">{glocale.lang('date')}</th>
+			<th width="15%" class="bs_coldesc">{glocale.lang('folder')}</th>
+		</tr>
+		{if pms.length == 0}
+		<tr>
+			<td colspan="5" class="bs_main" align="center">{glocale.lang('nomessagesininbox')}</td>
+		</tr>
+		{endif}
+		{loop pms as index => pm}
+		<tr>
+			<td class="bs_main" align="center"
+				onclick="var cb = document.getElementById('inbox_{index}'); cb.checked = cb.checked ? false : true;">
+			<input type="checkbox" id="inbox_{index}" name="delete[]" value="{pm:pm_id}"
+						 onclick="this.checked = this.checked ? false : true;" />
+			</td>
+			<td class="bs_main">
+			<img title="{pm:status_title}" alt="{pm:status_title}" src="{pm:status_picture}" />
+			{pm:prefix}<a title="{pm:complete_title}" href="{pm:details_link}">{pm:pm_title}</a>
+			</td>
+			<td class="bs_main">{pm:sender}</td>
+			<td class="bs_main" align="center">{pm:date}</td>
+			<td class="bs_main" align="center">{pm:folder}</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+
+<div class="bs_padtop">
+	<div style="padding-left: 18px;">
+		<img src="{guser.get_theme_item_path('images/thread_option.gif')}" alt="" />
+		<select id="operation" name="operation">
+			<option value="delete">{glocale.lang('delete')}</option>
+		</select>
+		<input id="inbox_submit_btn" type="submit" onclick="submitForm();" value="{glocale.lang('submit')}" />
+		&nbsp;|&nbsp;<a href="Javascript:invertSelection('inbox_')">{glocale.lang('invertmark')}</a>
+	</div>
+</div>
+</form>
+
+<div class="bs_padtop">
+{include "inc_page_split.htm"}
+</div>

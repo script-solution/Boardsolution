@@ -1,0 +1,200 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<script type="text/javascript" src="{gjs.get_file('acp/src/user_selection.js')}"></script>
+<script type="text/javascript">
+<!--
+function toggleForumType()
+{
+	var cb = PLIB_getElement('forum_type');
+	var ids = new Array('rowclosed','rowdesc','rowexp','additional');
+	for(var i = 0;i < ids.length;i++)
+	{
+		if(cb.value == 'contains_cats')
+			PLIB_hideElement(ids[i]);
+		else
+			PLIB_showElement(ids[i]);
+	}
+}
+//-->
+</script>
+
+<form id="formular" method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<input type="hidden" id="selectedUsers" name="selectedUsers" value="" />
+<div class="a_border">
+	<h1 class="a_topic">{form_title}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('name')}:</dt>
+			<dd>{form.get_textbox('forum_name',default:forum_name,30,100)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('parent_forum')}:</dt>
+			<dd>{parent_combo}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('forum_type')}:</dt>
+			<dd>{forum_type_combo}</dd>
+		</dl>
+		<dl id="rowclosed">
+			<dt>{glocale.lang('conf_forum_is_closed')}:</dt>
+			<dd>
+				{form.get_radio_yesno('forum_is_closed',default:forum_is_closed)}
+				<div class="a_desc">{glocale.lang('conf_forum_is_closed_desc')}</div>
+			</dd>
+		</dl>
+		<dl id="rowdesc">
+			<dt>{glocale.lang('description')}: *</dt>
+			<dd>{form.get_textarea('description',default:description,'90%','100px')}</dd>
+		</dl>
+		<dl id="rowexp">
+			<dt>{glocale.lang('increase_experience')}:</dt>
+			<dd>
+				{form.get_radio_yesno('increase_experience',default:increase_experience)}
+				<div class="a_desc">{glocale.lang('increase_experience_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('display_subforums')}:</dt>
+			<dd>
+				{form.get_radio_yesno('display_subforums',default:display_subforums)}
+				<div class="a_desc">{glocale.lang('display_subforums_desc')}</div>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('save')}"
+		onclick="transferSelectedUser('user_intern','selectedUsers','formular');" />
+	<input type="button" value="{glocale.lang('back')}"
+		onclick="document.location.href = '{gurl.get_acpmod_url()}';" />
+</center>
+
+<p class="a_block_pad">* = {glocale.lang('html_allowed')}</p>
+
+<p class="a_block a_pad_double">{glocale.lang('forum_rights_explain')}</p>
+
+<div id="additional">
+	<div class="a_border a_pad">
+		<h1 class="a_topic">{glocale.lang('forum_rights')}</h1>
+		<fieldset class="a_form">
+			<dl>
+				<dt>{glocale.lang('permission_thread')}:</dt>
+				<dd>
+					<table width="100%" cellpadding="0" cellspacing="0">
+						{loop permission_thread as group}
+						<tr>
+							<td class="a_main" width="30%">{group:title}:</td>
+							<td class="a_main" width="70%">{form.get_radio_yesno('permission_thread['~group:id~']',group:value)}</td>
+						</tr>
+						{endloop}
+					</table>
+				</dd>
+			</dl>
+			<dl>
+				<dt>{glocale.lang('permission_poll')}:</dt>
+				<dd>
+					<table width="100%" cellpadding="0" cellspacing="0">
+						{loop permission_poll as group}
+						<tr>
+							<td class="a_main" width="30%">{group:title}:</td>
+							<td class="a_main" width="70%">{form.get_radio_yesno('permission_poll['~group:id~']',group:value)}</td>
+						</tr>
+						{endloop}
+					</table>
+				</dd>
+			</dl>
+			<dl>
+				<dt>{glocale.lang('permission_event')}:</dt>
+				<dd>
+					<table width="100%" cellpadding="0" cellspacing="0">
+						{loop permission_event as group}
+						<tr>
+							<td class="a_main" width="30%">{group:title}:</td>
+							<td class="a_main" width="70%">{form.get_radio_yesno('permission_event['~group:id~']',group:value)}</td>
+						</tr>
+						{endloop}
+					</table>
+				</dd>
+			</dl>
+			<dl>
+				<dt>{glocale.lang('permission_post')}:</dt>
+				<dd>
+					<table width="100%" cellpadding="0" cellspacing="0">
+						{loop permission_post as group}
+						<tr>
+							<td class="a_main" width="30%">{group:title}:</td>
+							<td class="a_main" width="70%">{form.get_radio_yesno('permission_post['~group:id~']',group:value)}</td>
+						</tr>
+						{endloop}
+					</table>
+				</dd>
+			</dl>
+		</fieldset>
+	</div>
+	<center>
+		<input type="button" value="{glocale.lang('save')}"
+			onclick="transferSelectedUser('user_intern','selectedUsers','formular');" />
+		<input type="button" value="{glocale.lang('back')}"
+			onclick="document.location.href = '{gurl.get_acpmod_url()}';" />
+	</center>
+	
+	<div class="a_border a_pad">
+		<h1 class="a_topic">{glocale.lang('forum_intern_access')}</h1>
+		<fieldset class="a_form">
+			<dl>
+				<dt>{glocale.lang('forum_is_intern')}:</dt>
+				<dd>
+					{form.get_radio_yesno('is_intern',default:forum_is_intern)}
+					<div class="a_desc">{glocale.lang('forum_is_intern_desc')}</div>
+				</dd>
+			</dl>
+			<dl>
+				<dt>{glocale.lang('access')}:</dt>
+				<dd>
+					<table width="100%" cellpadding="2" cellspacing="0">
+						<tr>
+							<td class="a_main" width="60%" align="center"><u>{glocale.lang('user_groups')}</u></td>
+							<td class="a_main" width="40%" colspan="2" align="center"><u>{glocale.lang('user')}</u></td>
+						</tr>
+						<tr>
+							<td class="a_main" align="center" valign="top">
+							<table width="100%" cellpadding="2" cellspacing="0">
+								{loop usergroups as group}
+								<tr>
+									<td class="a_main" align="left">{group:title}:</td>
+									<td class="a_main">{form.get_radio_yesno('group_access['~group:id~']',group:value)}</td>
+								</tr>
+								{endloop}
+							</table>
+							<br />
+							<div class="a_desc" align="left">{glocale.lang('intern_forums_hint')}</div>
+							</td>
+							<td class="a_main" valign="top">
+							{user_combo}
+							<br />
+							<input style="width: 100%;" type="button" value="{glocale.lang('add_user')}" onclick="PLIB_openDefaultPopup('{search_url}','UserSuche',800,700);" /><br />
+							<input style="width: 100%;" type="button" value="{glocale.lang('remove_selected')}" onclick="removeMarkedUser('user_intern');" />
+							</td>
+						</tr>
+					</table>
+				</dd>
+			</dl>
+		</fieldset>
+	</div>
+	<center>
+		<input type="button" value="{glocale.lang('save')}" onclick="transferSelectedUser('user_intern','selectedUsers','formular');" />
+		<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.get_acpmod_url()}';" />
+	</center>
+</div>
+</form>
+
+<script type="text/javascript">
+<!--
+toggleForumType();
+//-->
+</script>
+{endif}
+
+{include "inc_footer.htm"}

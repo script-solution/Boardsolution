@@ -1,0 +1,82 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+<script type="text/javascript" src="{gjs.get_file('src/ajax_user_matches.js')}"></script>
+
+<p class="a_block">{glocale.lang('configure_access_for_clients_desc')}</p>
+
+<form method="post" action="{gurl.get_acpmod_url(0,'&amp;action=client&amp;type=user')}">
+<table width="100%" cellpadding="0" cellspacing="0" class="a_pad">
+	<tr>
+		<td width="10%"><b>{glocale.lang('user')}:</b></td>
+		<td width="90%">
+		<input id="user_name_input" autocomplete="off" type="text" size="40" maxlength="100" name="user_name" />
+		<input type="submit" value="{glocale.lang('configure_access')}" />
+		</td>
+	</tr>
+</table>
+</form>
+
+<script type="text/javascript">
+<!--
+new BS_AJAXUserSearch('{gpath}','user_name_input','{action_param}','{glocale.lang('matching_user')}',
+	false,false);
+//-->
+</script>
+
+<form method="post" action="{gurl.get_acpmod_url(0,'&amp;action=client&amp;type=group')}">
+<table width="100%" cellpadding="0" cellspacing="0" class="a_pad">
+	<tr>
+		<td width="10%"><b>{glocale.lang('group')}:</b></td>
+		<td width="90%">
+		{form.get_combobox('user_group',groups)}
+		<input type="submit" value="{glocale.lang('configure_access')}" />
+		</td>
+	</tr>
+</table>
+</form>
+
+<div class="a_block a_pad_double">{glocale.lang('configure_access_for_modules_desc')}</div>
+
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('acp_modules')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="50%" class="a_coldesc">{glocale.lang('module_name')}</td>
+			<td width="45%" class="a_coldesc" align="center">{glocale.lang('module_permissions')}</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+		</tr>
+		{loop categories as category}
+		<tr>
+			<td colspan="3" height="25" class="a_coldesc">{category:name}</td>
+		</tr>
+		{loop category:mods as module}
+		<tr>
+			<td height="25" class="a_main">{module:name}</td>
+			<td class="a_main">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="20%"><b>{glocale.lang('user')}:</b></td>
+					<td width="80%">{module:usernames}</td>
+				</tr>
+				<tr>
+					<td width="20%"><b>{glocale.lang('groups')}:</b></td>
+					<td width="80%">{module:groups}</td>
+				</tr>
+			</table>
+			</td>
+			<td class="a_main" align="center">
+			<a href="{gurl.get_acpmod_url(0,'&amp;action=module&amp;module='~module:module)}">
+			<img src="{gpath}acp/images/edit.png" alt="{glocale.lang('edit')}" title="{glocale.lang('edit')}" />
+			</a>
+			</td>
+		</tr>
+		{endloop}
+		{endloop}
+	</table>
+</div>
+
+{endif}
+
+{include "inc_footer.htm"}

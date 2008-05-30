@@ -1,0 +1,149 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('memberlist')}</h1>
+	<table class="bs_table" width="100%" cellpadding="2" cellspacing="1">
+		<tr>
+			<th align="left" width="{name_col_width}%" class="bs_coldesc">{name_col}</th>
+			<th width="18%" class="bs_coldesc">{glocale.lang('email')}</th>
+			{if pms_enabled}
+			<th width="12%" class="bs_coldesc">{glocale.lang('pm')}</th>
+			{endif}
+			{if enable_post_count}
+			<th width="10%" class="bs_coldesc">{posts_col}</th>
+			{endif}
+			<th width="12%" class="bs_coldesc">{usergroup_col}</th>
+			<th width="14%" class="bs_coldesc">{lastlogin_col}</th>
+			<th width="14%" class="bs_coldesc">{register_col}</th>
+		</tr>
+		{if user == false}
+		<tr>
+			<td colspan="{colspan}" align="center" class="bs_main">{glocale.lang('no_user_found')}</td>
+		</tr>
+		{endif}
+		{loop user as data}
+		<tr>
+			<td height="27" class="bs_main">{data:user_name}</td>
+			<td height="27" class="bs_main" align="center">{data:email}</td>
+			{if pms_enabled}
+			<td height="27" class="bs_main" align="center">
+			{if data:allow_pms}
+			<a style="float: none;" title="{data:send_pm_title}" class="bs_button"
+				href="{gurl.simple_url('userprofile','&amp;$URL_LOC=pmcompose&amp;$URL_ID='~data:user_id)}"
+				>{glocale.lang('pm_short')}</a>
+			{else}
+			{glocale.lang('notavailable')}
+			{endif}
+			</td>
+			{endif}
+			{if enable_post_count}
+			<td align="center" height="27" class="bs_main">{data:posts}</td>
+			{endif}
+			<td align="center" height="27" class="bs_main">{data:user_group}</td>
+			<td align="center" height="27" class="bs_main">{data:lastlogin}</td>
+			<td align="center" height="27" class="bs_main">{data:register_date}</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+
+<div class="bs_padtop">
+{include "inc_page_split.htm"}
+</div>
+
+<script type="text/javascript" src="{gjs.get_file('src/ajax_user_matches.js')}"></script>
+
+<form method="get" action="{search_target}">
+{loop hidden_fields as k => v}
+<input type="hidden" name="{k}" value="{v}" />
+{endloop}
+<div class="bs_border bs_padtop_big">
+	<h1 class="bs_topic">
+	<span style="float: left; padding: 2px;">{clap_image}</span>
+	{glocale.lang('search')}
+	</h1>
+	<div class="bs_main"{search_row_params}>
+		<div style="float: left; width: 49.5%;">
+			<fieldset>
+				<legend><b>{glocale.lang('general')}</b></legend>
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td width="25%" class="bs_main">{glocale.lang('name')}:</td>
+						<td width="75%" class="bs_main">
+						<input id="user_name_input" autocomplete="off" type="text" size="30" maxlength="30" name="{name_param}" value="{name_value}" />
+						</td>
+					</tr>
+					<tr>
+						<td class="bs_main">{glocale.lang('email')}:</td>
+						<td class="bs_main">{form.get_textbox(email_param,email_value,30,30)}</td>
+					</tr>
+					<tr>
+						<td class="bs_main" valign="top">{glocale.lang('group')}:</td>
+						<td class="bs_main">{user_group_combo}</td>
+					</tr>
+					<tr>
+						<td class="bs_main" valign="top">{glocale.lang('just_moderators')}:</td>
+						<td class="bs_main">{form.get_radio_yesno(mod_param,mod_value)}</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
+		<div style="float: right; width: 49.5%;">
+			<fieldset>
+				<legend><b>{glocale.lang('activity')}</b></legend>
+				<table width="100%" cellpadding="0" cellspacing="0">
+					{if enable_post_count}
+					<tr>
+						<td width="25%" class="bs_main">{glocale.lang('posts')}:</td>
+						<td width="75%" class="bs_main">
+						{glocale.lang('From')} {form.get_textbox(from_posts_param,from_posts_value,5,10)}
+						{glocale.lang('to')} {form.get_textbox(to_posts_param,to_posts_value,5,10)}
+						</td>
+					</tr>
+					<tr>
+						<td class="bs_main">{glocale.lang('points')}:</td>
+						<td class="bs_main">
+						{glocale.lang('From')} {form.get_textbox(from_points_param,from_points_value,5,10)}
+						{glocale.lang('to')} {form.get_textbox(to_points_param,to_points_value,5,10)}
+						</td>
+					</tr>
+					{endif}
+					<tr>
+						<td class="bs_main">{glocale.lang('registered')}:</td>
+						<td class="bs_main">
+						{glocale.lang('between')} {form.get_date_chooser_textbox(from_reg_param,from_reg_value)}
+						{glocale.lang('and')} {form.get_date_chooser_textbox(to_reg_param,to_reg_value)}
+						</td>
+					</tr>
+					<tr>
+						<td class="bs_main">{glocale.lang('lastlogin')}:</td>
+						<td class="bs_main">
+						{glocale.lang('between')} {form.get_date_chooser_textbox(from_lastlogin_param,from_lastlogin_value)}
+						{glocale.lang('and')} {form.get_date_chooser_textbox(to_lastlogin_param,to_lastlogin_value)}
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
+		<div align="center" style="clear: both;">
+			<input type="button" value="{glocale.lang('reset')}" onclick="document.location.href = '{reset_url}';" />
+			<input type="submit" value="{glocale.lang('search')}" />
+		</div>
+	</div>
+</div>
+</form>
+
+<script type="text/javascript">
+<!--
+new BS_AJAXUserSearch('{gpath}','user_name_input','{action_param}','{glocale.lang('matching_user')}',
+	false);
+//-->
+</script>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

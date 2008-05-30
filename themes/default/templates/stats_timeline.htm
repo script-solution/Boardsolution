@@ -1,0 +1,83 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<a class="bs_button_big" href="{gurl.simple_url(0,'&amp;$URL_LOC=timeline')}">{glocale.lang('stats_timeline')}</a>
+<a class="bs_button_big" href="{gurl.simple_url(0)}">{glocale.lang('general')}</a>
+<br clear="all" />
+
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('stats_timeline')}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<th class="bs_coldesc" width="25%" align="left">{glocale.lang('periode')}</th>
+			<th class="bs_coldesc" width="25%">{glocale.lang('posts')}</th>
+			<th class="bs_coldesc" width="25%">{glocale.lang('threads')}</th>
+			<th class="bs_coldesc" width="25%">{glocale.lang('user')}</th>
+		</tr>
+		{if timeline.length == 0}
+		<tr>
+			<td class="bs_main" colspan="4" align="center">{glocale.lang('no_timeline_data')}</td>
+		</tr>
+		{endif}
+		{loop timeline as year => row}
+		<tr>
+			<td class="bs_coldesc" width="25%">{year}</td>
+			<td class="bs_coldesc" width="25%" align="center">
+			{row:total:posts},&nbsp;&nbsp;<img src="{guser.get_theme_item_path('images/avg.gif')}" alt="avg" title="avg" /> {row:avg:posts}
+			</td>
+			<td class="bs_coldesc" width="25%" align="center">
+			{row:total:topics},&nbsp;&nbsp;<img src="{guser.get_theme_item_path('images/avg.gif')}" alt="avg" title="avg" /> {row:avg:topics}
+			</td>
+			<td class="bs_coldesc" width="25%" align="center">
+			{row:total:user},&nbsp;&nbsp;<img src="{guser.get_theme_item_path('images/avg.gif')}" alt="avg" title="avg" /> {row:avg:user}
+			</td>
+		</tr>
+		{loop row as month => count}
+		{if month != 'total'}
+		{if month != 'avg'}
+		<tr>
+			<td class="bs_main" width="25%">{month}</td>
+			<td class="bs_main" width="25%">
+			<table width="100%" cellpadding="2" cellspacing="0">
+				<tr>
+					<td width="80%">
+						<img src="{guser.get_theme_item_path('images/diagrams/rate_blue.gif')}" style="width: {count:posts:percent}%; height: 10px;" alt="{count:posts:percent}%" />
+					</td>
+					<td width="20%">{count:posts:count}</td>
+				</tr>
+			</table>
+			</td>
+			<td class="bs_main" width="25%">
+			<table width="100%" cellpadding="2" cellspacing="0">
+				<tr>
+					<td width="80%">
+						<img src="{guser.get_theme_item_path('images/diagrams/rate_blue.gif')}" style="width: {count:topics:percent}%; height: 10px;" alt="{count:topics:percent}%" />
+					</td>
+					<td width="20%">{count:topics:count}</td>
+				</tr>
+			</table>
+			</td>
+			<td class="bs_main" width="25%">
+			<table width="100%" cellpadding="2" cellspacing="0">
+				<tr>
+					<td width="80%">
+						<img src="{guser.get_theme_item_path('images/diagrams/rate_blue.gif')}" style="width: {count:user:percent}%; height: 10px;" alt="{count:user:percent}%" />
+					</td>
+					<td width="20%">{count:user:count}</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		{endif}
+		{endif}
+		{endloop}
+		{endloop}
+	</table>
+</div>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

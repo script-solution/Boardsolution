@@ -1,0 +1,51 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('faq_desc')}</h1>
+	<div class="bs_main">
+		<ul>
+			{loop faq_titles as fnumber => ftitle}
+			<li><a href="#f_{fnumber}">{ftitle:title}</a></li>
+			{endloop}
+		</ul>
+	</div>
+</div>
+
+{loop faqs as fnumber => faq}
+<br />
+<a id="f_{fnumber}" name="f_{fnumber}"></a>
+<div class="bs_border">
+	<h1 class="bs_topic">
+		<span style="float: left;"><b>{faq:title}</b></span>
+		<a style="float: right;" href="#top">
+			<img alt="{glocale.lang('totop')}" title="{glocale.lang('totop')}" src="{guser.get_theme_item_path('images/totop.gif')}" />
+		</a>
+		<br style="clear: both;" />
+	</h1>
+	<div class="bs_main">
+		{faq:text}
+		{if faq:show_ranks}
+		<table width="50%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td colspan="3" align="center"><b>{glocale.lang('userranks')}</b></td>
+			</tr>
+			{loop faq:ranks as rank}
+			<tr>
+				<td width="40%"><b>{rank:title}</b></td>
+				<td width="30%">{rank:points}</td>
+				<td width="30%" align="right">{rank:image}</td>
+			</tr>
+			{endloop}
+		</table>
+		{endif}
+	</div>
+</div>
+{endloop}
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

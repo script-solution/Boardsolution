@@ -1,0 +1,64 @@
+<br />
+<form method="post" action="index.php">
+<table width="65%" align="center" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="bs_tbl_top_left"></td>
+		<td class="bs_tbl_top"></td>
+		<td class="bs_tbl_top_right"></td>
+	</tr>
+	<tr>
+		<td class="bs_tbl_left"></td>
+		<td>
+		<table width="100%" cellpadding="2" cellspacing="1">
+			<tr>
+				<td height="22" align="center" class="bs_topic">{glocale.lang('information')}</td>
+			</tr>
+			<tr>
+				<td class="bs_main" align="center">
+				<b>{glocale.lang('installation_complete')}</b><br />
+				
+				{if type == 'update'}
+				<br />
+				<span style="font-size: 12px; color: #FF0000;">{glocale.lang('important_tasks')}</span>
+				<br />
+				{endif}
+				
+				<br />
+				<input id="submit_btn" type="submit" value="{glocale.lang('toboard')}" {if type == 'update'}disabled="disabled" {endif}/>
+				</td>
+			</tr>
+		</table>
+		</td>
+		<td class="bs_tbl_right"></td>
+	</tr>
+	<tr>
+		<td class="bs_tbl_bottom_left"></td>
+		<td class="bs_tbl_bottom"></td>
+		<td class="bs_tbl_bottom_right"></td>
+	</tr>
+</table>
+</form>
+{if type == 'update'}
+<script type="text/javascript">
+<!--
+function countDown(id,title,seconds)
+{
+	var d = document.getElementById(id);
+	if(seconds > 0)
+	{
+		d.value = title + " " + seconds + "...";
+		d.style.color = '#CCCCCC';
+		window.setTimeout('countDown("' + id + '","' + title + '",' + (seconds - 1) + ')',1000);
+	}
+	else
+	{
+		d.value = title;
+		d.style.color = '#000000';
+		d.disabled = false;
+	}
+}
+
+countDown("submit_btn","{glocale.lang('toboard')}",10);
+//-->
+</script>
+{endif}

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<highlighter>
+	<name>Java</name>
+	<hlNumbers>true</hlNumbers>
+	<escapeChar>\</escapeChar>
+	<stringQuotes>
+		<def id="2">&quot;</def>
+		<def id="1">&#039;</def>
+	</stringQuotes>
+	<slComments>
+		<def id="1">//</def>
+	</slComments>
+	<mlComments>
+		<def id="1" start="/*" end="*/"/>
+	</mlComments>
+	<symbols>
+		<kw>!</kw>
+		<kw>&amp;</kw>
+		<kw>%</kw>
+		<kw>*</kw>
+		<kw>(</kw>
+		<kw>)</kw>
+		<kw>.</kw>
+		<kw>]</kw>
+		<kw>;</kw>
+		<kw>}</kw>
+		<kw>?</kw>
+		<kw>{</kw>
+		<kw>&gt;</kw>
+		<kw>[</kw>
+		<kw>=</kw>
+		<kw>&lt;</kw>
+	</symbols>
+	<regexps>
+	</regexps>
+	<keywords>
+		<def id="2" cs="false">
+			<kw>short</kw>
+			<kw>char</kw>
+			<kw>byte</kw>
+			<kw>int</kw>
+			<kw>true</kw>
+			<kw>void</kw>
+			<kw>false</kw>
+			<kw>boolean</kw>
+			<kw>long</kw>
+			<kw>double</kw>
+			<kw>float</kw>
+			<kw>null</kw>
+		</def>
+		<def id="1" cs="false">
+			<kw>foreach</kw>
+			<kw>const</kw>
+			<kw>for</kw>
+			<kw>package</kw>
+			<kw>catch</kw>
+			<kw>switch</kw>
+			<kw>goto</kw>
+			<kw>finally</kw>
+			<kw>private</kw>
+			<kw>while</kw>
+			<kw>super</kw>
+			<kw>throw</kw>
+			<kw>break</kw>
+			<kw>protected</kw>
+			<kw>if</kw>
+			<kw>do</kw>
+			<kw>import</kw>
+			<kw>strictfp</kw>
+			<kw>volatile</kw>
+			<kw>else</kw>
+			<kw>abstract</kw>
+			<kw>final</kw>
+			<kw>static</kw>
+			<kw>synchronized</kw>
+			<kw>extends</kw>
+			<kw>throws</kw>
+			<kw>transient</kw>
+			<kw>return</kw>
+			<kw>class</kw>
+			<kw>enum</kw>
+			<kw>interface</kw>
+			<kw>new</kw>
+			<kw>default</kw>
+			<kw>native</kw>
+			<kw>instanceof</kw>
+			<kw>continue</kw>
+			<kw>implements</kw>
+			<kw>assert</kw>
+			<kw>case</kw>
+			<kw>public</kw>
+			<kw>this</kw>
+			<kw>try</kw>
+		</def>
+	</keywords>
+	<colors>
+		<keywords id="2">
+			<attr name="fontColor" value="#2E8B57"/>
+			<attr name="bold" value="true"/>
+		</keywords>
+		<keywords id="1">
+			<attr name="fontColor" value="#A52A2A"/>
+			<attr name="bold" value="true"/>
+		</keywords>
+		<symbols>
+			<attr name="fontColor" value="#800000"/>
+		</symbols>
+		<numbers>
+			<attr name="fontColor" value="#800080"/>
+		</numbers>
+		<strings id="2">
+			<attr name="fontColor" value="#C800C8"/>
+		</strings>
+		<strings id="1">
+			<attr name="fontColor" value="#FF00FF"/>
+		</strings>
+		<mlComments id="1">
+			<attr name="fontColor" value="#0000FF"/>
+		</mlComments>
+		<slComments id="1">
+			<attr name="fontColor" value="#008000"/>
+		</slComments>
+	</colors>
+</highlighter>

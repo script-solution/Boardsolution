@@ -1,0 +1,83 @@
+{include "inc_header.htm"}
+{include "inc_delete_message.htm"}
+
+{if module_error == false}
+{include "inc_js_row_selector.htm"}
+
+<script type="text/javascript">
+<!--
+function change_avatar(pfad)
+{
+	Zweitbild = new Image();
+	Zweitbild.src = "images/avatars/" + pfad;
+	document.images['img_2'].src = Zweitbild.src;
+}
+//-->
+</script>
+
+<div class="a_block">
+	<div>
+		{glocale.lang('import_avatars_desc')}
+	</div>
+	<div class="a_menubar a_pad">
+		<a href="{gurl.get_acpmod_url(0,'&amp;at='~action_type_import)}">
+		<img src="{gpath}acp/images/plus.png" alt="{glocale.lang('import_avatars')}" />
+		{glocale.lang('import_avatars')}
+		</a>
+	</div>
+</div>
+
+<form name="avatars" method="post" action="{gurl.get_acpmod_url()}">
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('avatars')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="60%" class="a_coldesc">{glocale.lang('filename')}</td>
+			<td width="35%" class="a_coldesc" align="center">{glocale.lang('owner')}</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+		</tr>
+		{if avatars.length == 0}
+		<tr>
+			<td colspan="3" class="a_main" align="center">{glocale.lang('no_avatars_found')}</td>
+		</tr>
+		{endif}
+		{loop avatars as row => avatar}
+		<tr id="row_{row}" class="hlRow">
+			<td class="hlCol">
+			<a href="#" onmouseover="change_avatar('{avatar:av_pfad}');">{avatar:av_pfad}</a>
+			</td>
+			<td class="hlCol" align="center">{avatar:owner}</td>
+			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			<input id="check_{row}" type="checkbox" name="delete[]" value="{avatar:id}" />
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr>
+		<td width="40%" class="a_body">&nbsp;</td>
+		<td width="20%" align="center" class="a_body">
+		{glocale.lang('marked')}: <input type="submit" value="{glocale.lang('delete')}" />
+		</td>
+		<td width="40%" align="right" class="a_body">
+		<a href="javascript:rowHL.toggleAllSelected();">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+
+<div class="a_pad">
+	{include "inc_page_split.htm"}
+</div>
+
+<div class="a_border a_pad_double" style="width: 40%;">
+	<h1 class="a_topic">{glocale.lang('preview')}</h1>
+	<div class="a_main" style="height: 100px; vertical-align: middle; text-align: center;">
+		TODO: improve that!
+		<img id="img_2" src="images/avatars/_blank.jpg" style="vertical-align:middle;"alt="" />
+	</div>
+</div>
+{endif}
+
+{include "inc_footer.htm"}

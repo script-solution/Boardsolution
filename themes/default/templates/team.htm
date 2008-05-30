@@ -1,0 +1,87 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<script type="text/javascript">
+<!--
+function toggleForumList(id)
+{
+	var d = document.getElementById(id);
+	d.style.display = d.style.display == 'none' ? 'block' : 'none';
+}
+//-->
+</script>
+
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('administrators')}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<th width="30%" class="bs_coldesc" align="left">{glocale.lang('username')}</th>
+			<th width="50%" class="bs_coldesc">{glocale.lang('mod_forums')}</th>
+			<th width="20%" class="bs_coldesc">{glocale.lang('pm')}</th>
+		</tr>
+		{loop admins as admin}
+		<tr>
+			<td class="bs_main">{admin:user_name}</td>
+			<td class="bs_main">
+			{if admin:forum_count > 0}
+			<a href="javascript:toggleForumList('forum_list_{admin:id}');">{glocale.lang('mod_forums')} ({admin:forum_count})</a><br />
+			<div id="forum_list_{admin:id}" style="padding: 2px 0px 0px 10px; display: none;">
+			{admin:forum_list}
+			</div>
+			{else}
+			-
+			{endif}
+			</td>
+			<td class="bs_main" align="center">
+			{if show_pm}
+			<a class="bs_button" style="float: none;" href="{admin:pm_url}">{glocale.lang('pm_short')}</a>
+			{else}
+			{glocale.lang('notavailable')}
+			{endif}
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+
+{if mods}
+<div class="bs_border bs_padtop">
+	<h1 class="bs_topic">{glocale.lang('moderators')}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<th width="30%" class="bs_coldesc" align="left">{glocale.lang('username')}</th>
+			<th width="50%" class="bs_coldesc">{glocale.lang('mod_forums')}</th>
+			<th width="20%" class="bs_coldesc">{glocale.lang('pm')}</th>
+		</tr>
+		{loop mods as mod}
+		<tr>
+			<td class="bs_main">{mod:user_name}</td>
+			<td class="bs_main">
+			{if mod:forum_count > 0}
+			<a href="javascript:toggleForumList('forum_list_{mod:id}');">{glocale.lang('mod_forums')} ({mod:forum_count})</a><br />
+			<div id="forum_list_{mod:id}" style="padding: 2px 0px 0px 10px; display: none;">
+			{mod:forum_list}
+			</div>
+			{else}
+			-
+			{endif}
+			</td>
+			<td class="bs_main" align="center">
+			{if show_pm}
+			<a class="bs_button" style="float: none;" href="{mod:pm_url}">{glocale.lang('pm_short')}</a>
+			{else}
+			{glocale.lang('notavailable')}
+			{endif}
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+{endif}
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

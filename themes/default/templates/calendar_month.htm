@@ -1,0 +1,64 @@
+<div class="bs_border">
+	<h1 class="bs_topic"><a href="{back}">&laquo;</a> {title} <a href="{forward}">&raquo;</a></h1>
+	<table width="100%" class="bs_main" cellspacing="2">
+		<tr>
+			<td width="2%" align="center" class="bs_main"></td>
+			<th width="14%" class="bs_coldesc">{wd_detail:1}</th>
+			<th width="14%" class="bs_coldesc">{wd_detail:2}</th>
+			<th width="14%" class="bs_coldesc">{wd_detail:3}</th>
+			<th width="14%" class="bs_coldesc">{wd_detail:4}</th>
+			<th width="14%" class="bs_coldesc">{wd_detail:5}</th>
+			<th width="14%" class="bs_coldesc">{wd_detail:6}</th>
+			<th width="14%" class="bs_coldesc">{wd_detail:0}</th>
+		</tr>
+		{loop weeks as week}
+		<tr>
+			<td align="center" class="bs_main"
+					onmouseover="this.style.cursor='pointer';"
+					onmouseout="this.style.cursor='default';"
+					onclick="document.location.href='{week:url}'">
+			<a href="{week:url}">&raquo;</a>
+			</td>
+			{loop week:days as day}
+			{if day:isempty}
+			<td valign="top" class="bs_main">&nbsp;</td>
+			{else}
+			<td valign="top" align="center" class="{day:border}">
+			<table width="100%" cellpadding="2" cellspacing="0">
+				<tr>
+					<td align="center" class="bs_main"><u>{day:days}</u></td>
+				</tr>
+				<tr>
+					<td height="58" valign="top" align="left" class="bs_calendar">
+					<div style="font-size: 0.9em;">
+						{loop day:event:bd as bd}
+						<div>
+							<img src="{guser.get_theme_item_path('images/birthday.gif')}"
+								alt="{glocale.lang('birthday')}"  title="{glocale.lang('birthday')}" />
+							{bd:username} ({bd:age})
+						</div>
+						{endloop}
+						
+						{loop day:event:ev as ev}
+						<div>
+							<img src="{guser.get_theme_item_path('images/thread_type/event.gif')}"
+								width="15" height="15" alt="{glocale.lang('event')}"
+								title="{glocale.lang('event')}" />
+							<a title="{ev:name_complete}" href="{ev:url}">{ev:name}</a>
+						</div>
+						{endloop}
+						
+						{if day:event:toomany != ''}
+						<div><a href="{day:event:toomany}">...</a></div>
+						{endif}
+					</div>
+					</td>
+				</tr>
+			</table>
+			</td>
+			{endif}
+			{endloop}
+		</tr>
+		{endloop}
+	</table>
+</div>

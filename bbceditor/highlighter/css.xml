@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<highlighter>
+	<name>CSS</name>
+	<hlNumbers>false</hlNumbers>
+	<escapeChar>\</escapeChar>
+	<stringQuotes>
+		<def id="2">&#039;</def>
+		<def id="1">&quot;</def>
+	</stringQuotes>
+	<slComments>
+		<def id="1">@</def>
+	</slComments>
+	<mlComments>
+		<def id="1" start="/*" end="*/"/>
+	</mlComments>
+	<symbols>
+		<kw>;</kw>
+		<kw>:</kw>
+		<kw>(</kw>
+		<kw>}</kw>
+		<kw>)</kw>
+		<kw>{</kw>
+	</symbols>
+	<regexps>
+		<!--<def id="3" pattern=":[^;]+"/>-->
+		<def id="2" pattern="\.[a-zA-Z0-9\-_]+"/>
+		<def id="1" pattern="\#[a-zA-Z0-9\-_]+"/>
+		<def id="5" pattern="(\#(?:[a-f0-9]{6}|[a-f0-9]{3}))\s*;" cs="0" group="1"/>
+		<def id="4" pattern="(\d+|(\d*\.\d+))(em|ex|pt|px|cm|in|%)"/>
+	</regexps>
+	<keywords>
+		<def id="2" cs="false">
+			<kw>small-caps</kw>
+			<kw>spell-out</kw>
+			<kw>lower</kw>
+			<kw>higher</kw>
+			<kw>yellow</kw>
+			<kw>wait</kw>
+			<kw>fixed</kw>
+			<kw>olive</kw>
+			<kw>ridge</kw>
+			<kw>hiragana-iroha</kw>
+			<kw>center</kw>
+			<kw>avoid</kw>
+			<kw>bidi-override</kw>
+			<kw>help</kw>
+			<kw>hiragana</kw>
+			<kw>hide</kw>
+			<kw>cjk-ideographic</kw>
+			<kw>inline-table</kw>
+			<kw>slow</kw>
+			<kw>continuous</kw>
+			<kw>static</kw>
+			<kw>once</kw>
+			<kw>dotted</kw>
+			<kw>outset</kw>
+			<kw>rgb</kw>
+			<kw>capitalize</kw>
+			<kw>expanded</kw>
+			<kw>always</kw>
+			<kw>ultra-condensed</kw>
+			<kw>w-resize</kw>
+			<kw>solid</kw>
+			<kw>pointer</kw>
+			<kw>auto</kw>
+			<kw>text-bottom</kw>
+			<kw>sw-resize</kw>
+			<kw>low</kw>
+			<kw>outside</kw>
+			<kw>cross</kw>
+			<kw>silent</kw>
+			<kw>table-header-group</kw>
+			<kw>table-row-group</kw>
+			<kw>s-resize</kw>
+			<kw>katakana</kw>
+			<kw>ultra-expanded</kw>
+			<kw>justify</kw>
+			<kw>block</kw>
+			<kw>lower-greek</kw>
+			<kw>invert</kw>
+			<kw>condensed</kw>
+			<kw>fantasy</kw>
+			<kw>absolute</kw>
+			<kw>slower</kw>
+			<kw>center-left</kw>
+			<kw>faster</kw>
+			<kw>lower-alpha</kw>
+			<kw>list-item</kw>
+			<kw>nw-resize</kw>
+			<kw>inline</kw>
+			<kw>n-resize</kw>
+			<kw>baseline</kw>
+			<kw>monospace</kw>
+			<kw>georgian</kw>
+			<kw>table-footer-group</kw>
+			<kw>upper-alpha</kw>
+			<kw>close-quote</kw>
+			<kw>armenian</kw>
+			<kw>purple</kw>
+			<kw>small-caption</kw>
+			<kw>inset</kw>
+			<kw>green</kw>
+			<kw>larger</kw>
+			<kw>lime</kw>
+			<kw>medium</kw>
+			<kw>mix</kw>
+			<kw>far-left</kw>
+			<kw>yes</kw>
+			<kw>x-large</kw>
+			<kw>serif</kw>
+			<kw>dashed</kw>
+			<kw>red</kw>
+			<kw>leftwards</kw>
+			<kw>fuchsia</kw>
+			<kw>xx-large</kw>
+			<kw>square</kw>
+			<kw>text-top</kw>
+			<kw>visible</kw>
+			<kw>both</kw>
+			<kw>e-resize</kw>
+			<kw>hebrew</kw>
+			<kw>normal</kw>
+			<kw>ltr</kw>
+			<kw>show</kw>
+			<kw>x-fast</kw>
+			<kw>italic</kw>
+			<kw>middle</kw>
+			<kw>table-cell</kw>
+			<kw>crop</kw>
+			<kw>right-side</kw>
+			<kw>disc</kw>
+			<kw>uppercase</kw>
+			<kw>no-close-quote</kw>
+			<kw>message-box</kw>
+			<kw>bold</kw>
+			<kw>level</kw>
+			<kw>lower-roman</kw>
+			<kw>table-column-group</kw>
+			<kw>extra-condensed</kw>
+			<kw>no-repeat</kw>
+			<kw>table-caption</kw>
+			<kw>maroon</kw>
+			<kw>none</kw>
+			<kw>x-low</kw>
+			<kw>digits</kw>
+			<kw>collapse</kw>
+			<kw>text</kw>
+			<kw>scroll</kw>
+			<kw>se-resize</kw>
+			<kw>semi-expanded</kw>
+			<kw>upper-latin</kw>
+			<kw>repeat-y</kw>
+			<kw>repeat-x</kw>
+			<kw>groove</kw>
+			<kw>white</kw>
+			<kw>behind</kw>
+			<kw>katakana-iroha</kw>
+			<kw>teal</kw>
+			<kw>inherit</kw>
+			<kw>double</kw>
+			<kw>relative</kw>
+			<kw>portrait</kw>
+			<kw>upper-roman</kw>
+			<kw>url</kw>
+			<kw>cursive</kw>
+			<kw>embed</kw>
+			<kw>extra-expanded</kw>
+			<kw>open-quote</kw>
+			<kw>loud</kw>
+			<kw>default</kw>
+			<kw>oblique</kw>
+			<kw>line-through</kw>
+			<kw>thick</kw>
+			<kw>ne-resize</kw>
+			<kw>crosshair</kw>
+			<kw>x-small</kw>
+			<kw>no-open-quote</kw>
+			<kw>thin</kw>
+			<kw>fast</kw>
+			<kw>aural</kw>
+			<kw>large</kw>
+			<kw>x-loud</kw>
+			<kw>left-side</kw>
+			<kw>repeat</kw>
+			<kw>circle</kw>
+			<kw>landscape</kw>
+			<kw>lighter</kw>
+			<kw>smaller</kw>
+			<kw>status-bar</kw>
+			<kw>super</kw>
+			<kw>lowercase</kw>
+			<kw>underline</kw>
+			<kw>xx-small</kw>
+			<kw>below</kw>
+			<kw>above</kw>
+			<kw>semi-condensed</kw>
+			<kw>nowrap</kw>
+			<kw>transparent</kw>
+			<kw>bolder</kw>
+			<kw>narrower</kw>
+			<kw>icon</kw>
+			<kw>rightwards</kw>
+			<kw>separate</kw>
+			<kw>far-right</kw>
+			<kw>overline</kw>
+			<kw>silver</kw>
+			<kw>gray</kw>
+			<kw>decimal</kw>
+			<kw>x-high</kw>
+			<kw>table-column</kw>
+			<kw>soft</kw>
+			<kw>table-row</kw>
+			<kw>wider</kw>
+			<kw>center-right</kw>
+			<kw>px</kw>
+			<kw>blink</kw>
+			<kw>hidden</kw>
+			<kw>inside</kw>
+			<kw>decimal-leading-zero</kw>
+			<kw>x-soft</kw>
+			<kw>sans-serif</kw>
+			<kw>high</kw>
+			<kw>navy</kw>
+		</def>
+		<def id="1" cs="false">
+			<kw>text-indent</kw>
+			<kw>cursor</kw>
+			<kw>visibility</kw>
+			<kw>border-right-style</kw>
+			<kw>font-weight</kw>
+			<kw>cue</kw>
+			<kw>float</kw>
+			<kw>speak-header</kw>
+			<kw>border-bottom-style</kw>
+			<kw>page</kw>
+			<kw>border-right-width</kw>
+			<kw>white-space</kw>
+			<kw>list-style</kw>
+			<kw>margin</kw>
+			<kw>border</kw>
+			<kw>right</kw>
+			<kw>black</kw>
+			<kw>background-position</kw>
+			<kw>max-height</kw>
+			<kw>speak-numeral</kw>
+			<kw>min-height</kw>
+			<kw>padding-bottom</kw>
+			<kw>content</kw>
+			<kw>vertical-align</kw>
+			<kw>border-left-color</kw>
+			<kw>background-attachment</kw>
+			<kw>bottom</kw>
+			<kw>caption-side</kw>
+			<kw>aqua</kw>
+			<kw>border-left</kw>
+			<kw>position</kw>
+			<kw>border-top-style</kw>
+			<kw>counter-reset</kw>
+			<kw>text-align</kw>
+			<kw>speak-punctuation</kw>
+			<kw>cue-after</kw>
+			<kw>outline</kw>
+			<kw>pause-after</kw>
+			<kw>page-break-after</kw>
+			<kw>clear</kw>
+			<kw>line-height</kw>
+			<kw>richness</kw>
+			<kw>font-size</kw>
+			<kw>left</kw>
+			<kw>border-left-width</kw>
+			<kw>word-spacing</kw>
+			<kw>voice-family</kw>
+			<kw>play-during</kw>
+			<kw>padding-left</kw>
+			<kw>padding-top</kw>
+			<kw>list-style-type</kw>
+			<kw>pitch-range</kw>
+			<kw>font-variant</kw>
+			<kw>elevation</kw>
+			<kw>speak</kw>
+			<kw>font-size-adjust</kw>
+			<kw>margin-bottom</kw>
+			<kw>z-index</kw>
+			<kw>border-bottom-color</kw>
+			<kw>border-top-width</kw>
+			<kw>orphans</kw>
+			<kw>outline-color</kw>
+			<kw>text-transform</kw>
+			<kw>background</kw>
+			<kw>volume</kw>
+			<kw>border-right</kw>
+			<kw>border-bottom-width</kw>
+			<kw>marks</kw>
+			<kw>padding</kw>
+			<kw>marker-offset</kw>
+			<kw>pause</kw>
+			<kw>height</kw>
+			<kw>border-right-color</kw>
+			<kw>text-decoration</kw>
+			<kw>border-width</kw>
+			<kw>background-image</kw>
+			<kw>padding-right</kw>
+			<kw>widows</kw>
+			<kw>outline-width</kw>
+			<kw>font</kw>
+			<kw>unicode-bidi</kw>
+			<kw>width</kw>
+			<kw>stress</kw>
+			<kw>background-color</kw>
+			<kw>display</kw>
+			<kw>size</kw>
+			<kw>outline-style</kw>
+			<kw>border-top-color</kw>
+			<kw>border-left-style</kw>
+			<kw>overflow</kw>
+			<kw>margin-left</kw>
+			<kw>page-break-inside</kw>
+			<kw>empty-cells</kw>
+			<kw>azimuth</kw>
+			<kw>margin-top</kw>
+			<kw>pitch</kw>
+			<kw>background-repeat</kw>
+			<kw>list-style-position</kw>
+			<kw>border-spacing</kw>
+			<kw>direction</kw>
+			<kw>border-style</kw>
+			<kw>counter-increment</kw>
+			<kw>cue-before</kw>
+			<kw>margin-right</kw>
+			<kw>border-collapse</kw>
+			<kw>border-bottom</kw>
+			<kw>border-top</kw>
+			<kw>text-shadow</kw>
+			<kw>top</kw>
+			<kw>clip</kw>
+			<kw>letter-spacing</kw>
+			<kw>font-stretch</kw>
+			<kw>max-width</kw>
+			<kw>list-style-image</kw>
+			<kw>font-style</kw>
+			<kw>border-color</kw>
+			<kw>table-layout</kw>
+			<kw>quotes</kw>
+			<kw>blue</kw>
+			<kw>color</kw>
+			<kw>speech-rate</kw>
+			<kw>min-width</kw>
+			<kw>pause-before</kw>
+			<kw>font-family</kw>
+			<kw>page-break-before</kw>
+		</def>
+	</keywords>
+	<colors>
+		<keywords id="2">
+			<attr name="fontColor" value="#993333"/>
+		</keywords>
+		<keywords id="1">
+			<attr name="fontColor" value="#000000"/>
+			<attr name="bold" value="true"/>
+		</keywords>
+		<symbols>
+			<attr name="fontColor" value="#000080"/>
+		</symbols>
+		<numbers>
+		</numbers>
+		<strings id="2">
+			<attr name="fontColor" value="#FF00FF"/>
+		</strings>
+		<strings id="1">
+			<attr name="fontColor" value="#FF00FF"/>
+		</strings>
+		<regexp id="3">
+			<attr name="fontColor" value="#3333FF"/>
+		</regexp>
+		<regexp id="2">
+			<attr name="fontColor" value="#6666FF"/>
+		</regexp>
+		<regexp id="1">
+			<attr name="fontColor" value="#CC00CC"/>
+		</regexp>
+		<regexp id="5">
+			<attr name="fontColor" value="#000080"/>
+		</regexp>
+		<regexp id="4">
+			<attr name="fontColor" value="#993333"/>
+		</regexp>
+		<regexp id="6">
+			<attr name="fontColor" value="#ff0000"/>
+		</regexp>
+		<mlComments id="1">
+			<attr name="fontColor" value="#0000FF"/>
+		</mlComments>
+		<slComments id="1">
+			<attr name="fontColor" value="#008000"/>
+		</slComments>
+	</colors>
+</highlighter>

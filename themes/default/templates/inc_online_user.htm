@@ -1,0 +1,17 @@
+<div class="bs_border bs_padtop">
+	<div class="bs_coldesc" style="font-weight: normal;">
+	<b>
+	{if can_view_locations}
+	<a href="{gurl.simple_url('user_locations')}">{title}</a>:
+	{else}
+	{title}:
+	{endif}
+	</b>
+	{conclusion_list}</div>
+	<div class="bs_main">
+		{user_list}
+		<div style="padding-top: 5px; font-size: 90%;">
+			<b>{glocale.lang('legend')}:</b> {legend}
+		</div>
+	</div>
+</div>

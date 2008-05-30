@@ -1,0 +1,113 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<div class="bs_border">	
+	<h1 class="bs_topic">{glocale.lang('userdetails')}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="20%" class="bs_left">{glocale.lang('name')}:</td>
+			<td width="{width}%" class="bs_main">{user_name}</td>
+			{if enable_avatars}
+			<td width="35%" class="bs_main" align="center" rowspan="{rowspan}">{avatar}</td>
+			{endif}
+		</tr>
+		<tr>
+			<td class="bs_left" valign="top">{glocale.lang('email')}:</td>
+			<td class="bs_main">{user_email}</td>
+		</tr>
+		{loop add_fields as field}
+		<tr>
+			<td class="bs_left" valign="top">{field:field_name}:</td>
+			<td class="bs_main">{field:field_value}</td>
+		</tr>
+		{endloop}
+		{if enable_signatures}
+		<tr>
+			<td class="bs_left" valign="top">{glocale.lang('signature')}:</td>
+			<td class="bs_main"{colspan}>{signature}</td>
+		</tr>
+		{endif}
+		<tr>
+			<td class="bs_left" valign="top">{glocale.lang('statistics')}:</td>
+			<td class="bs_main"{colspan}>
+			<table width="100%" cellpadding="2" cellspacing="0">
+			 	{if enable_user_ranks}
+				<tr>
+					<td align="right" width="20%"><b>{glocale.lang('rank')}:</b></td>
+					<td width="80%">{user_rank}</td>
+				</tr>
+				{endif}
+				{if enable_diagram}
+				<tr>
+					<td align="right"><b>{glocale.lang('experience')}:</b></td>
+					<td>{experience_diagram}</td>
+				</tr>
+				{endif}
+				<tr>
+					<td align="right"><b>{glocale.lang('logins')}:</b></td>
+					<td>{user_data:logins}</td>
+				</tr>
+				<tr>
+					<td align="right"><b>{glocale.lang('lastlogin')}:</b></td>
+					<td>{lastlogin}</td>
+				</tr>
+				{if enable_post_count}
+				<tr>
+					<td align="right"><b>{glocale.lang('posts')}:</b></td>
+					<td>{user_data:posts}</td>
+				</tr>
+				<tr>
+					<td align="right"><b>{glocale.lang('points')}:</b></td>
+					<td>{user_data:exppoints}</td>
+				</tr>
+				<tr>
+					<td align="right"><b>{glocale.lang('postsperday')}:</b></td>
+					<td>{posts_per_day}</td>
+				</tr>
+				{endif}
+				<tr>
+					<td align="right"><b>{glocale.lang('registeredsince')}:</b></td>
+					<td>{register_date}</td>
+				</tr>
+				<tr>
+					<td align="right"><b>{glocale.lang('user_groups')}:</b></td>
+					<td>{user_groups}</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		<tr>
+			<td class="bs_left" valign="top">{glocale.lang('lastactivity')}:</td>
+			<td class="bs_main"{colspan}>
+			{if last_posts !== false}
+			{if last_posts.length == 0}
+			<i>{glocale.lang('none')}</i>
+			{else}
+			<ul>
+				{loop last_posts as lp}
+				<li>{lp:date}: {lp:forum_path} &raquo; <a href="{lp:topic_url}">{lp:topic_name}</a></li>
+				{endloop}
+			</ul>
+			{endif}
+			{endif}
+			
+			{if enable_search == 1}
+			<div class="bs_padtop">
+				<a href="{search_for_user_posts_url}">{glocale.lang('show_all_posts_of_user')}</a><br />
+				<a href="{search_for_user_topics_url}">{glocale.lang('show_all_topics_of_user')}</a>
+			</div>
+			{endif}
+			</td>
+		</tr>
+		<tr>
+			<td class="bs_left">{glocale.lang('options')}:</td>
+			<td class="bs_main"{colspan}>{options}</td>
+		</tr>
+	</table>
+</div>
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

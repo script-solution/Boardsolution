@@ -1,0 +1,54 @@
+{if applet}
+<input id="hiddenText" type="hidden" name="text" value="" />
+<applet id="bbcode_area" code="bbcodeeditor.gui.WysiwygBBCodeEditor.class"
+	alt="{glocale.lang('bbceditor_no_java')}" archive="{gpath}bbceditor/bbcapplet.jar"
+	width="100%" height="{textarea_height + 150}">
+	<param name="path" value="{gpath}bbceditor/" />
+	<param name="bgColor" value="#EBEBEB" />
+	<param name="lookAndFeel" value="system" />
+	<param name="lang" value="{glang}" />
+	<param name="maxLineLength" value="{max_line_length}" />
+	<param name="displayCodeLineNumbers" value="{code_line_numbers}" />
+	<param name="enabledTags" value="{allowed_tags}" />
+	{if enable_smileys}
+	<param name="smileyCount" value="{smileys.length}" />
+	{loop smileys as index => smiley}
+	<param name="smileyPrimCode{index}" value="{smiley:primary_code}" />
+	<param name="smileySecCode{index}" value="{smiley:secondary_code}" />
+	<param name="smileyPath{index}" value="../images/smileys/{smiley:smiley_path}" />
+	{endloop}
+	{else}
+	<param name="smileyCount" value="0" />
+	{endif}
+	<param name="text" value="{applet_text}" />
+</applet>
+{else}
+{bbcode_buttons}
+
+<textarea id="bbcode_area" style="width: 90%; height: {textarea_height}"
+	name="text" rows="10" cols="10">{text}</textarea>
+{endif}
+
+<script type="text/javascript" src="{gjs.get_file('src/taresize.js')}"></script>
+<script type="text/javascript">
+<!--
+BS_taResizer('bbcode_area','bbcode_area_resizer');
+//-->
+</script>
+<div id="bbcode_area_resizer" class="bs_coldesc_sep">&nbsp;</div>
+
+{if applet == false && enable_smileys}
+<div class="bs_padtop">
+{loop smileys as smiley}
+{if smiley:is_base}
+<a href="javascript:insertSmiley('bbcode_area','{smiley:prim_code_insert}');">
+<img alt="{smiley:primary_code}" src="{gpath}images/smileys/{smiley:smiley_path}" />
+</a>
+{endif}
+{endloop}
+
+{if more_smileys}
+&nbsp;&nbsp;[ <a href="javascript:PLIB_openDefaultPopup('{smiley_popup_url}','Smileys',300,{smiley_popup_height});">{glocale.lang('showallsmileys')}</a> ]
+{endif}
+</div>
+{endif}

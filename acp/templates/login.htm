@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; {charset}" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<title>{page_title}</title>
+<link rel="stylesheet" type="text/css" href="{gpath}acp/templates/style.css" />
+<style type="text/css">
+body {
+	margin-top: 0.7em;
+}
+.a_main {
+	padding: 0.8em;
+}
+</style>
+</head>
+<body>
+
+<form method="post" action="{login_target}">
+<input type="hidden" name="login" value="1" />
+<div class="a_border" style="width: 370px; margin: auto;">
+	<h1 class="a_topic">{page_title}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('username')}:</dt>
+			<dd><input type="text" size="30" name="user_login" /></dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('password')}:</dt>
+			<dd><input type="password" size="30" name="pw_login" /></dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" value="{glocale.lang('login')}" />
+</center>
+</form>
+
+{if error_msg}
+<div class="a_pad" align="center">
+	<b>ERROR:</b> {error_msg}
+</div>
+{endif}
+
+</body>
+</html>

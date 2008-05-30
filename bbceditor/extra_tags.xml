@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extraTags>
+	<buttons>
+		<button name="b1">
+			<tooltip>gui.dialog.extra.links.tooltip</tooltip>
+			<image>./images/paste_extra.png</image>
+		</button>
+	</buttons>
+	<items>
+		<item name="post">
+			<buttonID>b1</buttonID>
+			<comboName>gui.dialog.extra.post.comboname</comboName>
+			<dialogTitle>gui.dialog.extra.post.title</dialogTitle>
+			<parameterTitle>gui.dialog.extra.post.parameter.title</parameterTitle>
+			<hasParameter>true</hasParameter>
+			<description>gui.dialog.extra.post.desc</description>
+		</item>
+		<item name="topic">
+			<buttonID>b1</buttonID>
+			<comboName>gui.dialog.extra.topic.comboname</comboName>
+			<dialogTitle>gui.dialog.extra.topic.title</dialogTitle>
+			<parameterTitle>gui.dialog.extra.topic.parameter.title</parameterTitle>
+			<hasParameter>true</hasParameter>
+			<description>gui.dialog.extra.topic.desc</description>
+		</item>
+		<item name="att">
+			<buttonID>b1</buttonID>
+			<comboName>gui.dialog.extra.att.comboname</comboName>
+			<dialogTitle>gui.dialog.extra.att.title</dialogTitle>
+			<parameterTitle>gui.dialog.extra.att.parameter.title</parameterTitle>
+			<hasParameter>true</hasParameter>
+			<description>gui.dialog.extra.att.desc</description>
+		</item>
+		<item name="attimg">
+			<buttonID>b1</buttonID>
+			<comboName>gui.dialog.extra.attimg.comboname</comboName>
+			<dialogTitle>gui.dialog.extra.attimg.title</dialogTitle>
+			<parameterTitle>gui.dialog.extra.attimg.parameter.title</parameterTitle>
+			<hasParameter>false</hasParameter>
+			<description>gui.dialog.extra.attimg.desc</description>
+		</item>
+	</items>
+</extraTags>

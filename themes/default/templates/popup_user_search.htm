@@ -1,0 +1,105 @@
+{include "inc_popup_header.htm"}
+
+{if module_error == false}
+
+<script type="text/javascript" src="{gjs.get_file('js/basic.js','lib')}"></script>
+<script type="text/javascript" src="{gjs.get_file('js/ajax.js','lib')}"></script>
+<script type="text/javascript" src="{gjs.get_file('src/ajax_user_matches.js')}"></script>
+<script type="text/javascript">
+<!--
+var myAjax = new PLIB_Ajax();
+myAjax.setMimeType('text/plain; {charset}');
+
+function finish()
+{
+	var number = 0;
+	var selectedUser = new Array();
+	for(var i = 0;;i++)
+	{
+		var checkbox = document.getElementById('check_' + i);
+		if(checkbox == null)
+			break;
+
+		if(checkbox.checked)
+			selectedUser[number++] = checkbox.value;
+	}
+
+	opener.user_search_callback(selectedUser);
+	self.close();
+}
+//-->
+</script>
+
+<form method="get" action="{search_target}">
+<input type="hidden" name="{action_param}" value="{action_value}" />
+{loop hidden_fields as k => v}
+<input type="hidden" name="{k}" value="{v}" />
+{endloop}
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('search')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('name')}:</dt>
+			<dd>
+				<input type="text" id="user_input_field" autocomplete="off" name="{name_param}" size="30" maxlength="30" value="{name_value}" />
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('email')}:</dt>
+			<dd>
+				<input type="text" name="{email_param}" size="30" maxlength="30" value="{email_value}" />
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" value="{glocale.lang('search')}" />
+</center>
+</form>
+
+<div class="bs_border bs_padtop">
+	<h1 class="bs_topic">{result_title}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<th align="left" width="25%" class="bs_coldesc">{glocale.lang('name')}</th>
+			<th width="35%" class="bs_coldesc">{glocale.lang('email')}</th>
+			<th width="25%" class="bs_coldesc">{glocale.lang('group')}</th>
+			<th width="15%" class="bs_coldesc">{glocale.lang('selection')}</th>
+		</tr>
+		{if num == 0}
+		<tr>
+			<td colspan="4" align="center" class="bs_main">{glocale.lang('no_user_found')}</td>
+		</tr>
+		{endif}
+		{loop user_list as row => user}
+		<tr>
+			<td height="27" class="bs_main">{user:user_name}</td>
+			<td height="27" class="bs_main" align="center">{user:email}</td>
+			<td align="center" height="27" class="bs_main">{user:user_group}</td>
+			<td align="center" height="27" class="bs_main"
+				onclick="var cb = document.getElementById('check_{row}'); cb.checked = !cb.checked;">
+			<input type="checkbox" onclick="this.checked = !this.checked;" id="check_{row}" value="{user:user_name}" />
+			</td>
+		</tr>
+		{endif}
+	</table>
+</div>
+<center>
+	<input type="button" onclick="finish();" value="{glocale.lang('select_user')}" />
+</center>
+
+
+<script type="text/javascript">
+<!--
+new BS_AJAXUserSearch('{gpath}','user_input_field','{action_param}','{glocale.lang('matching_user')}',
+	false);
+//-->
+</script>
+
+<div class="bs_padtop">
+{include "inc_page_split.htm"}
+</div>
+
+{endif}
+
+{include "inc_popup_footer.htm"}

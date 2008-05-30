@@ -1,0 +1,76 @@
+	{if gisloggedin == false}
+	<dl>
+		<dt>{glocale.lang('yourname')}:</dt>
+		<dd>
+			<input type="text" name="user_name" size="30" maxlength="{user_maxlength}" value="{user_name_value}" />
+		</dd>
+	</dl>
+	<dl>
+		<dt>{glocale.lang('youremail')}:</dt>
+		<dd><input type="text" name="email_adr" size="40" value="{email_value}" /></dd>
+	</dl>
+	{if enable_security_code}
+	<dl>
+		<dt>{glocale.lang('security_code')}:</dt>
+		<dd>
+		<img src="{security_code_img}" style="padding-bottom: 5px; cursor: pointer;" onclick="reloadImage(this);" alt="{glocale.lang('reload_sec_image')}" title="{glocale.lang('reload_sec_image')}" />
+		<br clear="all" />
+		<input type="text"  name="{sec_code_field}" size="15" maxlength="10" />
+		<br />
+		<div class="bs_desc">{glocale.lang('security_code_desc')}</div>
+		</dd>
+	</dl>
+	{endif}
+	{endif}
+	<dl>
+		<dt>
+			{post_title}
+			<br /><br />
+			<span class="bs_desc">
+			{bbcode_activated}<br />
+			{smileys_activated}<br />
+			{glocale.lang('html_not_activated')}
+			</span>
+		</dt>
+		<dd>
+			<div style="padding-left: 0.5em;">
+				<div style="padding-bottom: 0.3em;">
+					<script type="text/javascript" src="{gjs.get_file('src/bbcode.js')}"></script>
+					<script type="text/javascript" src="{gjs.get_file('src/ajax_get_post_form.js')}"></script>
+					<script type="text/javascript">
+					<!--
+					var BBCodeMode = "{bbcode_mode}";
+					var postForm = new BS_getPostFormAJAXConstr('post_form','bbcode_area','{get_post_form_url}');
+					function BS_refresh_text()
+					{
+						if(BBCodeMode == 'applet')
+						{
+							var applet = document.getElementById('bbcode_area');
+							var text = '';
+							if(applet.getBBCode || typeof applet.getBBCode == 'function')
+								text = applet.getBBCode();
+							document.getElementById('hiddenText').value = text;
+						}
+					}
+					//-->
+					</script>
+					<input type="radio" name="bbcode_mode" id="bbcode_mode_simple"
+						onclick="changeBBCodeMode('simple',postForm);" value="simple"{bb_si_checked} />
+					<label for="bbcode_mode_simple">{glocale.lang('bbcode_mode_simple')}</label>
+					&nbsp;&nbsp;
+					<input type="radio" name="bbcode_mode" id="bbcode_mode_advanced"
+						onclick="changeBBCodeMode('advanced',postForm);" value="advanced"{bb_ad_checked} />
+					<label for="bbcode_mode_advanced">{glocale.lang('bbcode_mode_advanced')}</label>
+					&nbsp;&nbsp;
+					<input type="radio" name="bbcode_mode" id="bbcode_mode_applet"
+						onclick="changeBBCodeMode('applet',postForm);" value="applet"{bb_app_checked} />
+					<label for="bbcode_mode_applet">{glocale.lang('bbcode_mode_applet')}</label>
+				</div>
+				<div id="post_form">
+					{textarea}
+				</div>
+				{toggle_smbb}
+			</div>
+		</dd>
+	</dl>
+	{include "inc_attachments.htm"}

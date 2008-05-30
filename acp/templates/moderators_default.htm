@@ -1,0 +1,100 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+{if forums.length > 0}
+<script type="text/javascript" src="{gjs.get_file('src/ajax_user_matches.js')}"></script>
+
+<p class="a_block_pad">{glocale.lang('moderators_hint')}</p>
+<p class="a_block"><b>{glocale.lang('hint')}:</b> {glocale.lang('moderators_add_hint')}</p>
+
+<form method="get" action="{gurl.get_acpmod_url(0,'&amp;action=edituser')}">
+{loop hiddenfields as k => v}
+<input type="hidden" name="{k}" value="{v}" />
+{endloop}
+<div class="a_border a_pad">
+	<div class="a_main">
+		Moderierte Foren einstellen f&uuml;r User:
+		<input id="user_name_input" autocomplete="off" type="text" size="40" maxlength="100" name="usernames" />
+		<input type="submit" value="{glocale.lang('go')}" />
+	</div>
+</div>
+</form>
+
+<script type="text/javascript">
+<!--
+new BS_AJAXUserSearch('{gpath}','user_name_input','{action_param}','{glocale.lang('matching_user')}',
+	true,false,',');
+//-->
+</script>
+
+<script type="text/javascript">
+<!--
+function addUserToCombo(comboID,selectedUser)
+{
+	var combo = document.getElementById(comboID);
+	var user = new Array();
+	var i = 0;
+	for(var id in selectedUser)
+	{
+		if(typeof selectedUser[id] == 'string')
+			user[i++] = selectedUser[id];
+	}
+	
+	if(user.length > 0)
+	{
+		combo.value = combo.value.trim();
+		if(combo.value.length > 0 && !combo.value.endsWith(','))
+			combo.value += ',';
+		combo.value += user.implode(', ');
+	}
+}
+
+function showPopup(id)
+{
+	PLIB_openDefaultPopup('{search_url}' + id,'UserSuche',800,700);
+}
+//-->
+</script>
+
+<div class="a_pad_double">
+	<form method="post" action="{gurl.get_acpmod_url()}">
+	<input type="hidden" name="action_type" value="{action_type}" />
+	{loop forums as row => forum}
+	<table width="100%" cellpadding="0" cellspacing="2">
+		<tr>
+			{loop forum:path as pimage}
+			<td height="60" width="30" valign="top">{pimage}</td>
+			{endloop}
+			<td>
+			{if forum:type == 'contains_threads'}
+			<div class="a_border">
+				<table class="a_table" cellpadding="0" cellspacing="0">
+					<tr>
+						<td class="a_coldesc">{forum:name}</td>
+					</tr>
+					<tr>
+						<td class="a_main" valign="top">{forum:moderators}</td>
+					</tr>
+					<tr>
+						<td class="a_main" valign="top">
+						{glocale.lang('username_opt_multiple')}: <input id="user_{row}" type="text" name="user_add[{forum:fid}]" size="50" />
+						<input type="button" value="{glocale.lang('search_user')}" onclick="showPopup('{row}');" />
+						</td>
+					</tr>
+				</table>
+			</div>
+			{else}
+			<h1 class="a_topic">{forum:name}</h1>
+			{endif}
+			</td>
+		</tr>
+	</table>
+	{endloop}
+	<p class="a_block_pad"><b>{add_button}</b></p>
+	</form>
+</div>
+{endif}
+
+{endif}
+
+{include "inc_footer.htm"}

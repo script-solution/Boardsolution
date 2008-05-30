@@ -1,0 +1,24 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<div class="a_border">
+	<h1 class="a_topic">{glocale.lang('acpmod_adminfaq')}</h1>
+	<div class="a_main">
+		<ul>
+			{loop questions as item}
+				<li><a href="#f_{item:id}">{item:question}</a></li>
+			{endloop}
+		</ul>
+	</div>
+</div>
+
+{loop questions as item}
+<a name="f_{item:id}"></a>
+<div class="a_border a_pad">
+	<h1 class="a_topic">{item:question}</h1>
+	<div class="a_main">{item:answer}</div>
+</div>
+{endloop}
+{endif}
+
+{include "inc_footer.htm"}

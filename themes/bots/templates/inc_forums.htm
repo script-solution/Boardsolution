@@ -1,0 +1,32 @@
+{if forums}
+<div class="bs_border bs_padtop">
+	<h2 class="bs_title">{title}</h2>
+	{loop forums as forum}
+		{loop forum:path_images as pimage}
+		<div style="padding-left: 25px;">
+		{endloop}
+		
+		<ul>
+		{if forum:contains_forums}
+		<li>
+			<a href="{forum:forum_url}"><b>{forum:forum_name_ins}</b></a>
+		</li>
+		{else}
+		<li>
+	
+			<a href="{forum:forum_url}">{forum:forum_name_ins}</a>
+			{if forum:sub_forums}
+			<div class="bs_forums_small">
+			<b>{glocale.lang('subdirs')}:</b> {forum:sub_forums}
+			</div>
+			{endif}
+		</li>
+		{endif}
+		</ul>
+	
+		{loop forum:path_images as pimage}
+		</div>
+		{endloop}
+	{endloop}
+</div>
+{endif}

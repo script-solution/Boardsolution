@@ -1,0 +1,34 @@
+<script type="text/javascript">
+<!--
+function show_pw_complexity(fieldID,outputID)
+{
+	var pw = document.getElementById(fieldID);
+	var complexity = analysePassword(pw.value);
+	
+	var color = null;
+	var text = null;
+	switch(complexity)
+	{
+		case 'low':
+			color = '#FF0000';
+			text = '{glocale.lang('pw_complexity_low')}';
+			break;
+		case 'medium':
+			color = '#FF9900';
+			text = '{glocale.lang('pw_complexity_medium')}';
+			break;
+		case 'high':
+			color = '#0000FF';
+			text = '{glocale.lang('pw_complexity_high')}';
+			break;
+		case 'veryhigh':
+			color = '#00FF00';
+			text = '{glocale.lang('pw_complexity_veryhigh')}';
+			break;
+	}
+	
+	var notice_div = document.getElementById(outputID);
+	notice_div.innerHTML = text.replace(/%s/,color);
+}
+//-->
+</script>

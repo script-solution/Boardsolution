@@ -1,0 +1,67 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<form method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('lock_topics')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('selected_topics')}:</dt>
+			<dd>
+				<table cellpadding="2">
+					{loop selected_topics as data}
+					<tr>
+						<td width="20">{data:symbol}</td>
+						<td>{data:topic}</td>
+					</tr>
+					{endloop}
+				</table>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('edit_topic_lock')}:</dt>
+			<dd>
+				{form.get_radio_yesno('edit_topic',edit_topic_def)}
+				{if edit_topic_diffs}<span style="color: #f00;">*</span>{endif}
+				<div class="bs_desc">{glocale.lang('edit_topic_lock_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('openclose_topic_lock')}:</dt>
+			<dd>
+				{form.get_radio_yesno('openclose_topic',openclose_topic_def)}
+				{if openclose_topic_diffs}<span style="color: #f00;">*</span>{endif}
+				<div class="bs_desc">{glocale.lang('openclose_topic_lock_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('posts_topic_lock')}:</dt>
+			<dd>
+				{form.get_radio_yesno('posts_topic',posts_topic_def)}
+				{if posts_topic_diffs}<span style="color: #f00;">*</span>{endif}
+				<div class="bs_desc">{glocale.lang('posts_topic_lock_desc')}</div>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{back_url}'" />
+	<input type="submit" name="submit" value="{glocale.lang('submit')}" />
+</center>
+</form>
+
+{if show_diff_hint}
+<div class="bs_padtop">{glocale.lang('lock_values_diff_desc')}</div>
+{endif}
+
+<div class="bs_padtop">
+{include "inc_message_review.htm"}
+</div>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

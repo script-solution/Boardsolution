@@ -1,0 +1,128 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<script type="text/javascript">
+<!--
+function toggleParameter()
+{
+	var cb = PLIB_getElement('param');
+	var ids = new Array('p_type','p_replace');
+	for(var i = 0;i < ids.length;i++)
+	{
+		if(cb.value == 'no')
+			PLIB_hideElement(ids[i]);
+		else
+			PLIB_showElement(ids[i]);
+	}
+	
+	if(cb.value == 'required')
+		PLIB_hideElement('no_p_replace');
+	else
+		PLIB_showElement('no_p_replace');
+}
+//-->
+</script>
+
+<form method="post" action="{form_target}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="a_border">
+	<h1 class="a_topic">{title}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('tag_name')}:</dt>
+			<dd>
+				{form.get_textbox('name',default:name,10,30)}
+				<div class="a_desc">{glocale.lang('tag_name_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('tag_type')}:</dt>
+			<dd>
+				{form.get_combobox('type',types,default:type)}
+				{glocale.lang('or_new_type')}:
+				{form.get_textbox('type_custom','',15,30)}
+				<div class="a_desc">{glocale.lang('tag_type_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('tag_content')}:</dt>
+			<dd>
+				{form.get_combobox('content',contents,default:content)}
+				{glocale.lang('or_new_content')}:
+				{form.get_textbox('content_custom','',15,30)}
+				<div class="a_desc">{glocale.lang('tag_content_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('tag_param')}:</dt>
+			<dd>
+				{param_combo}
+				<div class="a_desc">{glocale.lang('tag_param_desc')}</div>
+			</dd>
+		</dl>
+		<dl id="p_type">
+			<dt>{glocale.lang('tag_param_type')}:</dt>
+			<dd>
+				{form.get_combobox('param_type',param_types,default:param_type)}
+				<div class="a_desc">{glocale.lang('tag_param_type_desc')}</div>
+			</dd>
+		</dl>
+		<dl id="no_p_replace">
+			<dt>{glocale.lang('tag_replacement')}:</dt>
+			<dd>
+				{form.get_textarea('replacement',default:replacement,'90%','80px')}
+				<div class="a_desc">{glocale.lang('tag_replacement_desc')}</div>
+			</dd>
+		</dl>
+		<dl id="p_replace">
+			<dt>{glocale.lang('tag_replacement_param')}:</dt>
+			<dd>
+				{form.get_textarea('replacement_param',default:replacement_param,'90%','80px')}
+				<div class="a_desc">{glocale.lang('tag_replacement_param_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('tag_allowed_content')}:</dt>
+			<dd>
+				{form.get_textbox('allowed_content',default:allowed_content,50,100)}
+				<div class="a_desc">{glocale.lang('tag_allowed_content_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('tag_allow_nesting')}:</dt>
+			<dd>
+				{form.get_radio_yesno('allow_nesting',default:allow_nesting)}
+				<div class="a_desc">{glocale.lang('tag_allow_nesting_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('tag_ignore_whitespace')}:</dt>
+			<dd>
+				{form.get_radio_yesno('ignore_whitespace',default:ignore_whitespace)}
+				<div class="a_desc">{glocale.lang('tag_ignore_whitespace_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('tag_ignore_unknown_tags')}:</dt>
+			<dd>
+				{form.get_radio_yesno('ignore_unknown_tags',default:ignore_unknown_tags)}
+				<div class="a_desc">{glocale.lang('tag_ignore_unknown_tags_desc')}</div>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="submit" value="{glocale.lang('save')}" />
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.get_acpmod_url(0,'&amp;site='~site)}';" />
+</center>
+</form>
+
+<script type="text/javascript">
+<!--
+toggleParameter();
+//-->
+</script>
+
+{endif}
+
+{include "inc_footer.htm"}

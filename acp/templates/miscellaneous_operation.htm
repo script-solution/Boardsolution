@@ -1,0 +1,26 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+{if not_finished}
+<script type="text/javascript" language="javascript">
+function reload()
+{
+	document.location.href='{target_url}';
+}
+
+window.setTimeout('reload()',2000);
+</script>
+
+<p class="a_block">{title}</p>
+
+<div class="a_border a_pad">
+	<div class="a_main">
+		<img alt="{percent}%" src="{gpath}acp/images/topic.gif" width="{percent}%" height="20" />
+	</div>
+</div>
+
+<div align="center">{percent}%</div>
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

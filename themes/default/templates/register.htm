@@ -1,0 +1,106 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+{include "inc_pw_complexity_js.htm"}
+
+<form method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('register')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('name')}: *</dt>
+			<dd>{form.get_textbox('user_name','',user_name_size,user_name_maxlength)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('pw')}: *</dt>
+			<dd>
+				<input id="pw_field" type="password" name="user_pw" size="{password_size}" maxlength="{password_maxlength}" onkeyup="show_pw_complexity('pw_field','pw_complexity_notice');" />
+				<div class="bs_desc" id="pw_complexity_notice"></div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('pw_confirmation')}: *</dt>
+			<dd>{form.get_passwordbox('user_pw_conf','',password_size,password_maxlength)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('email')}: *</dt>
+			<dd>
+				{form.get_textbox('user_email','',40,255)}
+				{if account_activation == 'email'}
+				<div class="bs_desc">{glocale.lang('correct_email')}</div>
+				{endif}
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('email_confirmation')}: *</dt>
+			<dd>{form.get_textbox('user_email_conf','',40,255)}</dd>
+		</dl>
+		{loop add_fields as field}
+		<dl>
+			<dt>{field:field_name}:{field:required_field}</dt>
+			<dd>{field:field_value}</dd>
+		</dl>
+		{endloop}
+		<dl>
+			<dt>{glocale.lang('email_display_mode')}:</dt>
+			<dd>
+				{form.get_combobox('email_display_mode',email_display_mode_options,'default')}
+				<div class="bs_desc">{glocale.lang('email_jumble_mode_desc')}</div>
+			</dd>
+		</dl>
+		{if enable_board_emails}
+		<dl>
+			<dt>{glocale.lang('allow_board_emails')}:</dt>
+			<dd>
+				{form.get_radio_yesno('allow_board_emails',1)}
+				<div class="bs_desc">{glocale.lang('allow_board_emails_desc')}</div>
+			</dd>
+		</dl>
+		{endif}
+		{if enable_pms}
+		<dl>
+			<dt>{glocale.lang('allowpms')}:</dt>
+			<dd>{form.get_radio_yesno('enable_pms',1)}</dd>
+		</dl>
+		{endif}
+		{if enable_security_code}
+		<dl>
+			<dt>{glocale.lang('security_code')}:</dt>
+			<dd>
+				<img src="{security_code_img}" style="padding-bottom: 5px; cursor: pointer;" onclick="reloadImage(this);" alt="{glocale.lang('reload_sec_image')}" title="{glocale.lang('reload_sec_image')}" />
+				<br clear="all" />
+				<input type="text" name="{sec_code_field}" size="15" maxlength="10" />
+				<div class="bs_desc">{glocale.lang('security_code_desc')}</div>
+			</dd>
+		</dl>
+		{endif}
+		<div class="bs_left" style="margin-top: 1px; font-weight: normal;">
+			<b>{glocale.lang('register_agreement_title')}:</b><br />
+			{glocale.lang('register_agreement_text')}<br /><br />
+			<input type="checkbox" style="background-color: #DBDBDB;" id="agree" name="agree_to_terms"
+				   onclick="checkAgreement(this,'submit');" />
+			<label for="agree">{glocale.lang('agree_to_terms')}</label>
+		</div>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" id="submit" name="submit" value="{glocale.lang('register')}" />
+	<input type="button" value="{glocale.lang('back')}" onclick="history.back()" />
+</center>
+</form>
+
+<script type="text/javascript">
+<!--
+var button = document.getElementById('submit');
+button.disabled = 'disabled';
+button.style.color = '#BBBBBB';
+//-->
+</script>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

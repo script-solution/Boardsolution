@@ -1,0 +1,63 @@
+<div class="bs_border">
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td colspan="2" class="bs_topic">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="20%" align="left"><a href="{back}">{glocale.lang('previous')}</a></td>
+					<td width="60%" align="center">
+					{if type == 'inbox'}
+					<a href="{gurl.simple_url(0,'&amp;$URL_LOC=pminbox')}">{glocale.lang('pminbox')}</a>
+					{else}
+					<a href="{gurl.simple_url(0,'&amp;$URL_LOC=pmoutbox')}">{glocale.lang('pmoutbox')}</a>
+					{endif}
+					:: {subject}
+					</td>
+					<td width="20%" align="right"><a href="{forward}">{glocale.lang('next')}</a></td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="bs_left" style="font-weight: normal;">{user_name}, {date}</td>
+		</tr>
+		<tr>
+			<td width="20%" class="bs_main" valign="top">{avatar}</td>
+			<td width="80%" class="bs_posts_main_1" valign="top">{text}</td>
+		</tr>
+		<tr>
+			<td class="bs_main"><b>{glocale.lang('attachments')}:</b></td>
+			<td class="bs_main">
+			{if attachments.length == 0}
+			-
+			{else}
+			<table width="100%" cellpadding="0" cellspacing="0">
+				{loop attachments as attachment}
+				<tr>
+					<td class="bs_main" width="75%">
+					{if attachment:is_image}
+					<a href="{attachment:attachment_url}"><img src="{attachment:image_url}" alt="{attachment:attachment_name}" title="{attachment:image_title}" /></a>
+					{else}
+					<img src="{attachment:file_icon}" align="top" alt="" /> <a href="{attachment:attachment_url}">{attachment:attachment_name}</a>
+					{endif}
+					</td>
+					<td valign="top" class="bs_main" width="25%">{attachment:attachment_size} Bytes</td>
+				</tr>
+				{endloop}
+			</table>
+			{endif}
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div class="bs_padtop">
+	{if show_reply_btn}
+	<a class="bs_button_big" style="float: right;" title="{glocale.lang('answer')}"
+		href="{gurl.simple_url(0,'&amp;$URL_LOC=pmcompose&amp;$URL_PID='~id)}">{glocale.lang('answer')}</a>
+	{endif}
+	<a class="bs_button_big" style="float: right;" title="{glocale.lang('search_for_pm_history')}"
+		href="{gurl.simple_url(0,'&amp;$URL_LOC=pmsearch&amp;$URL_MODE=history&amp;$URL_KW='~id)}">{glocale.lang('pm_history')}</a>
+	<a class="bs_button_big" style="float: right;" title="{glocale.lang('ban_user')}"
+		href="{ban_user_url}">{glocale.lang('ban_user')}</a>
+</div>

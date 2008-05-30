@@ -1,0 +1,17 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<p class="a_block">{glocale.lang('version_compare_explanation')}</p>
+
+<form method="post" action="{gurl.get_acpmod_url(0,'&amp;action=compare')}">
+<div class="a_border a_pad">
+	<div class="a_main">
+		{glocale.lang('your_version')}: <b>{current_version}</b>,
+		{glocale.lang('compare_to')}: {form.get_combobox('compare',versions)}
+		<input type="submit" value="{glocale.lang('go')}" />
+	</div>
+</div>
+</form>
+{endif}
+
+{include "inc_footer.htm"}

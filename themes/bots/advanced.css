@@ -1,0 +1,141 @@
+/* ------------ GENERAL ------------ */
+
+[title] {
+	cursor: help;
+}
+
+img {
+	border: 0;
+	vertical-align: text-top;
+}
+
+form {
+	margin: 0;
+}
+
+ul {
+	margin: 5px 0 0 0;
+	padding: 0 0 0 30px;
+}
+
+li {
+	padding: 0 0 5px 0;
+}
+
+label {
+	cursor: pointer;
+}
+
+table.bs_table {
+	width: 100%;
+}
+
+ul.bs_none_list {
+	list-style: none;
+	margin: 0;
+	margin-top: 1px;
+	padding: 0;
+}
+
+/* ------------ BORDER ------------ */
+
+.bs_border {
+	margin: 0.4em 0;
+}
+
+/* ------------ HEADER ------------ */
+
+h1 {
+	margin: 0.2em 0 0.5em 0;
+	padding: 0;
+}
+
+/* ------------ PADDING ------------ */
+
+.bs_padtop {
+	margin-top: 0.9em;
+}
+
+.bs_padbottom {
+	margin-bottom: 0.9em;
+}
+
+/* ------------ MAIN ------------ */
+
+.bs_title {
+	margin: 0;
+}
+* html .bs_title {
+	height: 15px;
+}
+
+h1.bs_topic {
+	margin: 0;
+}
+
+/* ------------ POLL ------------ */
+
+.bs_poll {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.bs_poll li {
+	padding: 0.2em 0.5em;
+}
+
+/* ------------ POSTS ------------ */
+
+.bs_post_username {
+	float: left;
+	width: 50%;
+}
+
+.bs_post_date {
+	float: left;
+	width: 50%;
+}
+
+/* ------------ FORMULARS ------------ */
+
+fieldset.bs_form {
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+fieldset.bs_form dl {
+	padding: 0;
+	margin: 0;
+	margin-top: 1px;
+}
+
+fieldset.bs_form dt {
+	display: block;
+	margin: 0;
+	float: left;
+	width: 21%;
+	vertical-align: middle;
+}
+
+fieldset.bs_form dd {
+	display: block;
+	margin: 0;
+	margin-left: 23%;
+	vertical-align: middle;
+}
+
+fieldset.bs_subform {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+fieldset.bs_subform dt {
+	font-weight: normal;
+	width: 20%;
+}
+
+fieldset.bs_subform dd {
+	margin-left: 20%;
+}

@@ -1,0 +1,86 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+
+{if max_login_tries}
+<form method="post" action="{forum_index_url}">
+<input type="hidden" name="login" value="1" />
+<input type="hidden" name="conf" value="1" />
+<input type="hidden" name="user_login" value="{user}" />
+<input type="hidden" name="pw_login" value="{pw}" />
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('login_confirmation')}</h1>
+	<div class="bs_main">{glocale.lang('max_login_tries_reached')}</div>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('security_code')}:</dt>
+			<dd>
+				<img src="{security_code_img}" style="padding-bottom: 5px; cursor: pointer;" onclick="reloadImage(this);" alt="{glocale.lang('reload_sec_image')}" title="{glocale.lang('reload_sec_image')}" />
+				<br clear="all" />
+				<input type="text"  name="{sec_code_field}" size="15" maxlength="10" />
+				<div class="bs_desc">{glocale.lang('security_code_desc')}</div>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center><input type="submit" value="{glocale.lang('submit')}" /></center>
+</form>
+{endif}
+
+{if target_url}
+<form method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<input type="hidden" name="login" value="1" />
+<div class="bs_border">
+	<h1 class="bs_topic">{title}</h1>
+	{if denied_msg != ''}
+	<div class="bs_main">
+		<b>{glocale.lang('login_several_reasons')}:</b><br />
+		{denied_msg}
+	</div>
+	{endif}
+	<div class="bs_main">{login_msg}</div>
+	<fieldset class="bs_form">
+		<table class="bs_table" cellpadding="2" cellspacing="1">
+			<tr>
+				<td width="40%" align="right" class="bs_main"><b>{glocale.lang('login')}:</b></td>
+				<td width="20%" align="center" class="bs_main">
+				<input type="text" tabindex="1" name="user_login" style="width: 90%;" maxlength="100" />
+				</td>
+				<td width="40%" align="right" class="bs_main">
+				{if show_register_link}
+				<a href="{register_url}">{glocale.lang('register')}</a>
+				{else}
+				&nbsp;
+				{endif}
+				</td>
+			</tr>
+			<tr>
+				<td class="bs_main" align="right"><b>{glocale.lang('password')}:</b></td>
+				<td align="center" class="bs_main">
+				<input type="password" tabindex="2" name="pw_login" style="width: 90%;" maxlength="100" />
+				</td>
+				<td align="right" class="bs_main">
+				{if show_sendpw_link}
+				<a href="{send_pw_url}">{glocale.lang('forgetpw')}</a>
+				{else}
+				&nbsp;
+				{endif}
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" class="bs_main" align="center">
+				<input type="submit" value="{glocale.lang('login')}" />
+				<input type="button" value="{glocale.lang('back')}" onclick="history.go(-1);" />
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+</div>
+</form>
+{endif}
+
+{endif}
+
+{include "inc_footer.htm"}

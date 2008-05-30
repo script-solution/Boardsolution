@@ -1,0 +1,184 @@
+/* ------------ BODY ------------ */
+
+body.bs_body {
+	margin: 5px 0px 5px 1px;
+	font-family: verdana, tahoma, arial, helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	background-color: #FFFFFF;
+}
+
+a.bs_body {
+	text-decoration: none;
+	color: #3F5E88;
+}
+
+a.bs_body:hover {
+	text-decoration: underline;
+	color: #3F5E88;
+}
+
+/* ------------ TABLE BORDER ------------ */
+
+td.bs_tbl_top_left {
+	background-color: #FFFFFF;
+	height: 1px;
+	width: 1px;
+}
+
+td.bs_tbl_top {
+	background-color: #7F90AE;
+	height: 1px;
+}
+
+td.bs_tbl_top_right {
+	background-color: #FFFFFF;
+	height: 1px;
+	width: 1px;
+}
+
+td.bs_tbl_left {
+	background-color: #7F90AE;
+	width: 1px;
+}
+
+td.bs_tbl_right {
+	background-color: #7F90AE;
+	width: 1px;
+}
+
+td.bs_tbl_bottom_left {
+	background-color: #FFFFFF;
+	height: 1px;
+	width: 1px;
+}
+
+td.bs_tbl_bottom {
+	background-color: #7F90AE;
+	height: 1px;
+}
+
+td.bs_tbl_bottom_right {
+	background-color: #FFFFFF;
+	height: 1px;
+	width: 1px;
+}
+
+/* ------------ BUTTON ------------ */
+
+button.bs_button {
+	margin: 0px;
+	padding: 0px;
+	font-size: 10px;
+	font-weight: bold;
+	width: 80px; 
+	height: 20px; 
+	border: 0px solid #000000;
+	background: url(../../themes/default/images/button.gif);
+}
+
+button.bs_button_big {
+	margin: 0px;
+	padding: 0px;
+	font-size: 10px;
+	font-weight: bold;
+	width: 120px; 
+	height: 20px; 
+	border: 0px solid #000000;
+	background: url(../../themes/default/images/button_big.gif);
+}
+
+/* ------------ GENERAL ------------ */
+
+td.bs_topic {
+	font-size: 12px;
+	font-weight: bold;
+	color: #FFFFFF;
+	padding: 0px 2px 0px 2px;
+	background-image: url(../../themes/default/images/topic.gif);
+	background-repeat: repeat-x;
+}
+
+a.bs_topic {
+	text-decoration: underline;
+	color: #FFFFFF;
+	font-size: 12px;
+}
+
+a.bs_topic:hover {
+	color: #000000;
+}
+
+td.bs_main {
+	padding: 4px 4px 4px 4px;
+	background-color: #EBEBEB;
+}
+
+a.bs_main {
+	text-decoration: none;
+	color: #3F5E88;
+}
+
+a.bs_main:hover {
+	text-decoration: underline;
+}
+
+td.bs_main_no_pad {
+	background-color: #EBEBEB;
+}
+
+td.bs_coldesc {
+	padding: 4px 4px 4px 4px;
+	font-size: 10px;
+	background-color: #DBDBDB;
+	font-weight: bold;
+}
+
+a.bs_coldesc {
+	text-decoration: none;
+	color: #3F5E88;
+	font-size: 10px;
+}
+
+a.bs_coldesc:hover {
+	text-decoration: underline;
+}
+
+.bs_desc {
+	padding-top: 2px;
+	font-size: 10px;
+	font-weight: normal;
+}
+
+/* ------------ OTHER ------------ */
+
+form {
+	margin: 0px;
+}
+
+ul {
+	margin: 5px 0px 0px 0px;
+	padding: 0px 0px 0px 20px;
+}
+
+li {
+	padding: 0px 0px 5px 0px;
+}
+
+label {
+	cursor: pointer;
+}
+
+input,select,textarea {
+	padding: 2px 2px 2px 2px;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 10px;
+	color: #000000;
+	background-color: #FFFFFF;
+	border: 1px solid #AAAAAA;
+}
+
+input.bs_checkbox {
+	background-color: #EBEBEB;
+	border: 0px;
+}

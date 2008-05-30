@@ -1,0 +1,100 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<a class="bs_button_big" href="{gurl.simple_url(0,'&amp;$URL_LOC=timeline')}">{glocale.lang('stats_timeline')}</a>
+<a class="bs_button_big" href="{gurl.simple_url(0)}">{glocale.lang('general')}</a>
+<br clear="all" />
+
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('general_statistics')}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="20%" class="bs_main"><b>{glocale.lang('forums')}:</b></td>
+			<td width="30%" class="bs_main">{general:total_forums}</td>
+			<td width="20%" class="bs_main"><b>{glocale.lang('threads')}:</b></td>
+			<td width="30%" class="bs_main">{general:total_topics}</td>
+		</tr>
+		<tr>
+			<td class="bs_main"><b>{glocale.lang('logins_total')}:</b></td>
+			<td class="bs_main">{general:logins_total}</td>
+			<td class="bs_main"><b>{glocale.lang('posts_total')}:</b></td>
+			<td class="bs_main">{general:posts_total}</td>
+		</tr>
+		<tr>
+			<td class="bs_main"><b>{glocale.lang('logins_today')}:</b></td>
+			<td class="bs_main">{general:logins_today}</td>
+			<td class="bs_main"><b>{glocale.lang('posts_today')}:</b></td>
+			<td class="bs_main">{general:posts_today}</td>
+		</tr>
+		<tr>
+			<td class="bs_main"><b>{glocale.lang('logins_yesterday')}:</b></td>
+			<td class="bs_main">{general:logins_yesterday}</td>
+			<td class="bs_main"><b>{glocale.lang('posts_yesterday')}:</b></td>
+			<td class="bs_main">{general:posts_yesterday}</td>
+		</tr>
+		<tr>
+			<td class="bs_main"><b>{glocale.lang('lastlogin')}:</b></td>
+			<td class="bs_main">{general:logins_last}</td>
+			<td class="bs_main"><b>{glocale.lang('lastpost')}:</b></td>
+			<td class="bs_main">{general:posts_last}</td>
+		</tr>
+		<tr>
+			<td class="bs_main"><b>{glocale.lang('registereduser')}:</b></td>
+			<td class="bs_main">{general:total_users}</td>
+			<td class="bs_main"><b>{glocale.lang('maxonline')}:</b></td>
+			<td class="bs_main">{general:max_online}</td>
+		</tr>
+	</table>
+</div>
+
+{loop stats as statsdata}
+<div class="bs_border bs_padtop" style="float: {statsdata:align}; width: 49%;">
+	<h1 class="bs_topic">{statsdata:title}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		{if statsdata:data.length == 0}
+		<tr>
+			<td class="bs_main" colspan="4" align="center">{glocale.lang('error_num')}</td>
+		</tr>
+		{endif}
+		{loop statsdata:data as row}
+		<tr>
+			<td width="3%" class="bs_main" align="center">{row:x_var}</td>
+			<td width="20%" class="bs_main">{if row:is_current}<b>{row:user}</b>{else}{row:user}{endif}</td>
+			<td width="44%" class="bs_main">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td><img src="{guser.get_theme_item_path('images/diagrams/rate_back.gif')}" alt="" /></td>
+					<td width="{row:img_percent}%">
+					<img src="{guser.get_theme_item_path('images/diagrams/rate_blue.gif')}" style="width: {row:img_width}; height: 10px;"
+						title="{row:img_percent}%" alt="{row:img_percent}%" />
+					</td>
+					<td width="{row:img_remaining_percent}%"><img src="{guser.get_theme_item_path('images/diagrams/rate_back.gif')}" alt="" /></td>
+				</tr>
+			</table>
+			</td>
+			<td width="33%" class="bs_main" align="center">{row:text}</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+{if statsdata:new_row}
+<br clear="all" />
+{endif}
+{endloop}
+
+{if own_stats_image != ''}
+<br clear="clear: right;" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('own_stats')}</h1>
+	<div class="bs_main" style="text-align: center;">
+		<img src="{own_stats_image}" alt="{glocale.lang('own_stats')}" title="{glocale.lang('own_stats')}" />
+	</div>
+</div>
+{endif}
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

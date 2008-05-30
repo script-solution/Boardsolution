@@ -1,0 +1,73 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<form id="dlform" method="post" action="{download_changes_url}">
+{loop changed_paths as path}
+<input type="hidden" name="paths[]" value="{path}" />
+{endloop}
+<div class="a_block">
+	<div class="a_menubar">
+		<a href="javascript:PLIB_getElement('dlform').submit();">
+		<img src="{gpath}acp/images/download.png" alt="{glocale.lang('vcompare_download_changes')}" title="{glocale.lang('vcompare_download_changes')}" />
+		{glocale.lang('vcompare_download_changes')}
+		</a>
+	</div>
+</div>
+</form>
+
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('acpmod_versioncompare')} ({current_version} vs. {compare_version})</h1>
+	<div>
+		<table class="a_table" width="100%" cellpadding="0" cellspacing="1">
+			<tr>
+				<td width="60%" class="a_coldesc">{glocale.lang('name')}</td>
+				<td width="20%" class="a_coldesc" align="center">{glocale.lang('filesize')}</td>
+				<td width="20%" class="a_coldesc" align="center">{glocale.lang('modified')}</td>
+			</tr>
+		</table>
+		{loop items as item}
+		{if item:layerend}
+		</div>
+		{else}
+		{if item:isfile == false}
+		<div class="a_main" style="margin-top: 1px; {if item:color}background-color: {item:color};{endif}">
+			<div style="padding-left: {item:layer * 15}px;">
+				<a href="javascript:PLIB_toggleElement('{item:id}');">
+				<img src="{gpath}acp/images/directory.gif" alt="Folder" />
+				{item:name}
+				</a>
+			</div>
+		</div>
+		{else}
+		<table class="a_table" width="100%" cellpadding="0" cellspacing="1">
+			<tr>
+				<td width="60%" class="a_main" {if item:color}style="background-color: {item:color};"{endif}>
+					<div style="padding-left: {item:layer * 15}px;">
+						<img src="{gpath}images/filetypes/{item:image}" alt="File" /> {item:name}
+					</div>
+				</td>
+				<td width="20%" class="a_main" align="center"
+					{if item:color}style="background-color: {item:color};"{endif}>{item:size}</td>
+				<td width="20%" class="a_main" align="center"
+					{if item:color}style="background-color: {item:color};"{endif}>{item:changed}</td>
+			</tr>
+		</table>
+		{endif}
+		{if item:isfile == false}
+		<div id="{item:id}" style="display: none;">
+		{endif}
+		{endif}
+		{endloop}
+	</div>
+</div>
+
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('legend')}</h1>
+	<div class="a_main" style="margin-top: 1px;">{glocale.lang('diff_equal')}</div>
+	<div class="a_main" style="margin-top: 1px; background-color: {add_color};">{glocale.lang('diff_add')}</div>
+	<div class="a_main" style="margin-top: 1px; background-color: {change_color};">{glocale.lang('diff_change')}</div>
+	<div class="a_main" style="margin-top: 1px; background-color: {remove_color};">{glocale.lang('diff_remove')}</div>
+</div>
+{endif}
+
+{include "inc_footer.htm"}

@@ -1,0 +1,66 @@
+{if page}
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<!-- START -->
+		<td class="bs_body" align="center" width="40">
+		{if page > 1}
+		<a href="{first_url}">
+		<img title="{glocale.lang('firstpage')}" src="{guser.get_theme_item_path('images/navigation/jmp_to_start.gif')}" alt="{glocale.lang('firstpage')}" />
+		</a>
+		{else}
+		<img src="{guser.get_theme_item_path('images/navigation/jmp_to_start_disabled.gif')}" title="{glocale.lang('notavailable')}" alt="{glocale.lang('notavailable')}" />
+		{endif}
+		</td>
+		
+		<!-- PREVIOUS -->
+		<td class="bs_body" align="center" width="20">
+		{if page > 1}
+		<a href="{prev_url}">
+		<img title="{glocale.lang('back')}" src="{guser.get_theme_item_path('images/navigation/prev.gif')}" alt="{glocale.lang('back')}" />
+		</a>
+		{else}
+		<img src="{guser.get_theme_item_path('images/navigation/prev_disabled.gif')}" title="{glocale.lang('notavailable')}" alt="{glocale.lang('notavailable')}" />
+		{endif}
+		</td>
+		
+		<!-- PAGES -->
+		<td class="bs_body" align="center">
+		{loop numbers as number}
+		{if number:number == page}
+		<span class="bs_pageno bs_pagecurrent">{number:number}</span>
+		{else}
+		{if number:link}
+		<span class="bs_pageno"><a href="{number:link}">{number:number}</a></span>
+		{else}
+		{number:number}
+		{endif}
+		{endif}
+		{endloop}
+		&nbsp;&nbsp;&nbsp;
+		( {glocale.lang('viewing')}: {start_item} - {end_item} , {glocale.lang('total')}: {total_items} )
+		</td>
+		
+		<!-- NEXT -->
+		<td class="bs_body" align="center" width="20">
+		{if page < total_pages}
+		<a href="{next_url}">
+		<img title="{glocale.lang('forward')}" src="{guser.get_theme_item_path('images/navigation/next.gif')}" alt="{glocale.lang('forward')}" />
+		</a>
+		{else}
+		<img src="{guser.get_theme_item_path('images/navigation/next_disabled.gif')}" title="{glocale.lang('notavailable')}" alt="{glocale.lang('notavailable')}" />
+		{endif}
+		</td>
+		
+		<!-- LAST -->
+		<td class="bs_body" align="center" width="40">
+		{if page < total_pages}
+		<a href="{last_url}">
+		<img title="{glocale.lang('lastpage')}" src="{guser.get_theme_item_path('images/navigation/jmp_to_end.gif')}" alt="{glocale.lang('lastpage')}" />
+		</a>
+		{else}
+		<img src="{guser.get_theme_item_path('images/navigation/jmp_to_end_disabled.gif')}" title="{glocale.lang('notavailable')}" alt="{glocale.lang('notavailable')}" />
+		{endif}
+		</td>
+	</tr>
+</table>
+{endif}

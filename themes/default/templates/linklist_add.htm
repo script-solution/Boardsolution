@@ -1,0 +1,34 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+{include "inc_post_preview.htm"}
+
+<form method="post" action="{target_url}" onsubmit="BS_refresh_text();">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('addnewlink')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('url')}:</dt>
+			<dd>{form.get_textbox('link_url','',50,255)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('category')}:</dt>
+			<dd>{category_combo} {glocale.lang('or_new_category')}: {form.get_textbox('new_category','',30,50)}</dd>
+		</dl>
+		{include "inc_post_form.htm"}
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{back_url}'" />
+	<input type="submit" name="preview" value="{glocale.lang('preview')}" />
+	<input type="submit" name="submit" value="{glocale.lang('submit')}" />
+</center>
+</form>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

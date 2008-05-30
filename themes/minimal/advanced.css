@@ -1,0 +1,266 @@
+/* ------------ GENERAL ------------ */
+
+[title] {
+	cursor: help;
+}
+
+img {
+	border: 0;
+	vertical-align: text-top;
+}
+
+form {
+	margin: 0;
+}
+
+ul {
+	margin: 5px 0 0 0;
+	padding: 0 0 0 30px;
+}
+
+li {
+	padding: 0 0 5px 0;
+}
+
+label {
+	cursor: pointer;
+}
+
+table.bs_table {
+	width: 100%;
+}
+
+/* ------------ LISTS ------------ */
+
+ul.bs_none_list {
+	list-style: none;
+	margin: 0;
+	margin-top: 1px;
+	padding: 0;
+}
+
+li.bs_main {
+	margin: 1px 0 0 0;
+}
+
+li.bs_left, li.bs_coldesc {
+	margin: 1px 0 0 0;
+}
+
+/* ------------ PORTAL ------------ */
+
+.bs_portal_left {
+	width: 70%;
+	float: left;
+}
+.bs_portal_right {
+	width: 29%;
+	float: right;
+}
+
+/* ------------ CALENDAR ------------ */
+
+.bs_calendar_left {
+	width: 18%;
+	float: left;
+}
+.bs_calendar_right {
+	width: 82%;
+	float: right;
+}
+
+/* ------------ PROFILE ------------ */
+
+.bs_profile_left {
+	width: 17%;
+	float: left;
+}
+
+.bs_profile_right {
+	width: 82%;
+	float: right;
+}
+
+/* ------------ BORDER ------------ */
+
+.bs_border {
+	margin: 0.4em 0;
+}
+
+/* ------------ HEADER ------------ */
+
+h1 {
+	margin: 0.2em 0 0.5em 0;
+	padding: 0;
+}
+
+/* ------------ PADDING ------------ */
+
+.bs_padtop {
+	margin-top: 0.9em;
+}
+
+.bs_padbottom {
+	margin-bottom: 0.9em;
+}
+
+/* ------------ HEADLINE ------------ */
+
+.bs_menu_wrapper {
+	padding: 0.3em;
+}
+* html .bs_menu_wrapper {
+	height: 18px;
+}
+.bs_menu {
+	list-type: none;
+	margin: 0;
+	padding: 0;
+}
+.bs_menu li {
+	display: block;
+	float: left;
+	margin: 0;
+	padding: 1px;
+}
+.bs_menu a {
+	display: block;
+	float: left;
+	padding: 2px 0.7em;
+}
+
+.bs_welcome {
+	margin-top: 0.2em;
+}
+
+/* ------------ MAIN ------------ */
+
+.bs_title {
+	margin: 0;
+}
+* html .bs_title {
+	height: 15px;
+}
+
+h1.bs_topic {
+	margin: 0;
+}
+
+/* ------------ POLL ------------ */
+
+.bs_poll {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.bs_poll li {
+	padding: 0.2em 0.5em;
+}
+
+/* ------------ POSTS ------------ */
+
+.bs_post_username {
+	float: left;
+	width: 50%;
+}
+
+.bs_post_date {
+	float: left;
+	width: 50%;
+}
+
+/* ------------ FORMULARS ------------ */
+
+fieldset.bs_form {
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+fieldset.bs_form dl {
+	padding: 0;
+	margin: 0;
+	margin-top: 1px;
+}
+
+fieldset.bs_form dt {
+	display: block;
+	margin: 0;
+	float: left;
+	width: 21%;
+	vertical-align: middle;
+}
+
+fieldset.bs_form dd {
+	display: block;
+	margin: 0;
+	margin-left: 23%;
+	vertical-align: middle;
+}
+
+fieldset.bs_subform {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+fieldset.bs_subform dt {
+	font-weight: normal;
+	width: 20%;
+}
+
+fieldset.bs_subform dd {
+	margin-left: 20%;
+}
+
+input.bs_bbcode_notice {
+	border: none;
+	background-color: #fff;
+}
+
+/* ------------ BBCODE BUTTONS ------------ */
+
+ul.bs_bbcode_helper {
+	padding-top: 0.5em;
+}
+
+.bs_bbcode_popup {
+	display: none;
+}
+.bs_bbcode_popup li {
+	padding: 0;
+}
+.bs_bbcode_popup li a {
+	display: block;
+}
+
+#bbcode_area_resizer {
+	width: 91%;
+	margin: 0;
+	padding: 0;
+	border: 1px dotted #888;
+	cursor: move;
+}
+
+/* Fix for konqueror */
+html:not(:nth-child(1)) #bbcode_area_resizer {
+	width: 90%;
+}
+
+/* ------------ BUTTON ------------ */
+
+a.bs_button {
+	width: 80px;
+	margin: 1px;
+	padding: 0.3em;
+	display: block;
+	float: right;
+}
+
+a.bs_button_big {
+	width: 120px;
+	margin: 1px;
+	padding: 0.3em;
+	display: block;
+	float: right;
+}

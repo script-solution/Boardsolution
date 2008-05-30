@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<highlighter>
+	<name>C</name>
+	<hlNumbers>true</hlNumbers>
+	<escapeChar>\</escapeChar>
+	<stringQuotes>
+		<def id="2">&quot;</def>
+		<def id="1">&#039;</def>
+	</stringQuotes>
+	<slComments>
+		<def id="2">#</def>
+		<def id="1">//</def>
+	</slComments>
+	<mlComments>
+		<def id="1" start="/*" end="*/"/>
+	</mlComments>
+	<symbols>
+		<kw>!</kw>
+		<kw>&amp;</kw>
+		<kw>%</kw>
+		<kw>*</kw>
+		<kw>+</kw>
+		<kw>(</kw>
+		<kw>)</kw>
+		<kw>.</kw>
+		<kw>/</kw>
+		<kw>-</kw>
+		<kw>;</kw>
+		<kw>]</kw>
+		<kw>:</kw>
+		<kw>}</kw>
+		<kw>::</kw>
+		<kw>^</kw>
+		<kw>{</kw>
+		<kw>&gt;</kw>
+		<kw>=</kw>
+		<kw>[</kw>
+		<kw>&lt;</kw>
+	</symbols>
+	<regexps>
+	</regexps>
+	<keywords>
+		<def id="2" cs="false">
+			<kw>volatile</kw>
+			<kw>static</kw>
+			<kw>const</kw>
+			<kw>char</kw>
+			<kw>signed</kw>
+			<kw>int</kw>
+			<kw>true</kw>
+			<kw>void</kw>
+			<kw>double</kw>
+			<kw>long</kw>
+			<kw>unsigned</kw>
+			<kw>typedef</kw>
+			<kw>float</kw>
+			<kw>register</kw>
+			<kw>short</kw>
+			<kw>wchar_t</kw>
+			<kw>struct</kw>
+			<kw>sizeof</kw>
+			<kw>string</kw>
+			<kw>union</kw>
+			<kw>false</kw>
+			<kw>auto</kw>
+			<kw>null</kw>
+		</def>
+		<def id="1" cs="false">
+			<kw>else</kw>
+			<kw>for</kw>
+			<kw>return</kw>
+			<kw>goto</kw>
+			<kw>enum</kw>
+			<kw>switch</kw>
+			<kw>function</kw>
+			<kw>while</kw>
+			<kw>break</kw>
+			<kw>default</kw>
+			<kw>if</kw>
+			<kw>extern</kw>
+			<kw>inline</kw>
+			<kw>continue</kw>
+			<kw>do</kw>
+			<kw>case</kw>
+		</def>
+	</keywords>
+	<colors>
+		<keywords id="2">
+			<attr name="fontColor" value="#2E8B57"/>
+			<attr name="bold" value="true"/>
+		</keywords>
+		<keywords id="1">
+			<attr name="fontColor" value="#A52A2A"/>
+			<attr name="bold" value="true"/>
+		</keywords>
+		<symbols>
+			<attr name="fontColor" value="#800000"/>
+		</symbols>
+		<numbers>
+			<attr name="fontColor" value="#800080"/>
+		</numbers>
+		<strings id="2">
+			<attr name="fontColor" value="#FF00FF"/>
+		</strings>
+		<strings id="1">
+			<attr name="fontColor" value="#FF00FF"/>
+		</strings>
+		<mlComments id="1">
+			<attr name="fontColor" value="#0000FF"/>
+		</mlComments>
+		<slComments id="2">
+			<attr name="fontColor" value="#008080"/>
+		</slComments>
+		<slComments id="1">
+			<attr name="fontColor" value="#008000"/>
+		</slComments>
+	</colors>
+</highlighter>

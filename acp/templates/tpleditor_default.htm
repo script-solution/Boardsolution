@@ -1,0 +1,61 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+<p class="a_block">{glocale.lang('template_editor_hint')}</p>
+<p class="a_block_pad">{glocale.lang('template_editor_other_theme')}</p>
+<p class="a_block_pad"><b>{glocale.lang('folder')}:</b> {position}</p>
+
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('acpmod_tpleditor')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="40%" class="a_coldesc">{glocale.lang('filename')}</td>
+			<td width="25%" align="center" class="a_coldesc">{glocale.lang('filesize')}</td>
+			<td width="30%" align="center" class="a_coldesc">{glocale.lang('modified')}</td>
+			<td width="5%" align="center" class="a_coldesc">&nbsp;</td>
+		</tr>
+		{if not_in_root}
+		<tr>
+			<td class="a_main">
+			<a href="{gurl.get_acpmod_url(0,'&amp;path='~parent_path)}"><img src="{gpath}acp/images/up.gif" alt="Up" /></a>
+			</td>
+			<td align="center" class="a_main">-</td>
+			<td align="center" class="a_main">-</td>
+			<td align="center" class="a_main">-</td>
+		</tr>
+		{endif}
+		{loop items as row => item}
+		<tr id="row_{row}" class="hlRow">
+			{if item:is_dir}
+			<td class="hlCol">
+			<a href="{item:url}">
+			<img src="{gpath}acp/images/directory.gif" alt="Folder" /> {item:name}
+			</a>
+			</td>
+			<td align="center" class="hlCol">&lt;DIR&gt;</td>
+			{else}
+			<td class="hlCol">
+			<img src="{gpath}images/filetypes/{item:image}" alt="File" /> {item:name}
+			{if item:exists_in_theme == false}*{endif}
+			</td>
+			<td align="center" class="hlCol">{item:filesize} Bytes</td>
+			{endif}
+			<td align="center" class="hlCol">{item:last_modified}</td>
+			<td align="center" class="hlCol">
+			{if item:is_dir}
+			-
+			{else}
+			<a href="{item:edit_url}">
+			<img src="{gpath}acp/images/edit.png" alt="{glocale.lang('edit')}" title="{glocale.lang('edit')}" />
+			</a>
+			{endif}
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+
+{endif}
+
+{include "inc_footer.htm"}

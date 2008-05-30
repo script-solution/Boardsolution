@@ -1,0 +1,111 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<div>
+	<div class="bs_border bs_profile_left">
+		<h1 class="bs_topic">{glocale.lang('options')}</h1>
+		<ul class="bs_none_list">
+			<li class="bs_left">{glocale.lang('profile')}</li>
+			<li class="bs_main">
+			- <a href="{gurl.simple_url(0,'&amp;$URL_LOC=infos')}">{glocale.lang('personal_info')}</a>
+			</li>
+			{if enable_signatures == 1}
+			<li class="bs_main">
+			- <a href="{gurl.simple_url(0,'&amp;$URL_LOC=signature')}">{glocale.lang('signature')}</a>
+			</li>
+			{endif}
+			<li class="bs_main">
+			- <a href="{gurl.simple_url(0,'&amp;$URL_LOC=config')}">{glocale.lang('profileconfig')}</a>
+			</li>
+			{if enable_avatars == 1}
+			<li class="bs_main">
+			- <a href="{gurl.simple_url(0,'&amp;$URL_LOC=avatars')}">{glocale.lang('avatars')}</a>
+			</li>
+			{endif}
+			{if allow_pw_change}
+			<li class="bs_main">
+			- <a href="{gurl.simple_url(0,'&amp;$URL_LOC=chpw')}">{user_pw_change_title}</a>
+			</li>
+			{endif}
+			<li class="bs_main">
+			- <a href="{gurl.simple_url(0,'&amp;$URL_LOC=favforums')}">{glocale.lang('favorite_forums')}</a>
+			</li>
+			{if enable_email_notification == 1}
+			<li class="bs_left">{glocale.lang('subscriptions')}</li>
+			{endif}
+			{if subscribe_forums_perm}
+			<li class="bs_main">
+			- <a href="{gurl.simple_url(0,'&amp;$URL_LOC=forums')}">{glocale.lang('forums')}</a>
+			</li>
+			{endif}
+			{if enable_email_notification == 1}
+			<li class="bs_main">
+			- <a href="{gurl.simple_url(0,'&amp;$URL_LOC=topics')}">{glocale.lang('threads')}</a>
+			</li>
+			{endif}
+			{if enable_pms == 1}
+			<li class="bs_left">{glocale.lang('privatemessages')}</li>
+			<li class="bs_main">
+			- <a href="{gurl.simple_url(0,'&amp;$URL_LOC=pmoverview')}">{glocale.lang('overview')}</a>
+			</li>
+			<li class="bs_main">
+			- <a href="{gurl.simple_url(0,'&amp;$URL_LOC=pminbox')}">{glocale.lang('pminbox')}</a>
+			</li>
+			<li class="bs_main">
+			- <a href="{gurl.simple_url(0,'&amp;$URL_LOC=pmoutbox')}">{glocale.lang('pmoutbox')}</a>
+			</li>
+			<li class="bs_main">
+			- <a href="{gurl.simple_url(0,'&amp;$URL_LOC=pmbanlist')}">{glocale.lang('banlist')}</a>
+			</li>
+			<li class="bs_main">
+			- <a href="{gurl.simple_url(0,'&amp;$URL_LOC=pmsearch')}">{glocale.lang('pm_search')}</a>
+			</li>
+			<li class="bs_main">
+			- <a href="{gurl.simple_url(0,'&amp;$URL_LOC=pmcompose')}">{glocale.lang('newpm')}</a>
+			</li>
+			<li class="bs_main">
+				<table width="100%" cellpadding="0" cellspacing="1">
+					<tr>
+						<td class="bs_main">
+						{glocale.lang('pminbox')}:
+						(
+							{inbox_num}
+							/
+							{if max_inbox == 0}<span title="{glocale.lang('unlimited')}">&infin;</span>{else}{max_inbox}{endif}
+						)
+						</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid #888;">{inbox_status}</td>
+					</tr>
+					<tr>
+						<td class="bs_main">
+						{glocale.lang('pmoutbox')}:
+						(
+							{outbox_num}
+							/
+							{if max_outbox == 0}<span title="{glocale.lang('unlimited')}">&infin;</span>{else}{max_outbox}{endif}
+						)
+						</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid #888;">{outbox_status}</td>
+					</tr>
+				</table>
+			</li>
+			{endif}
+		</ul>
+	</div>
+	
+	<div class="bs_profile_right">
+	{include content_tpl}
+	</div>
+</div>
+<br style="clear: both;" />
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

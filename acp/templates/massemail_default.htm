@@ -1,0 +1,90 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+{if show_confirmation}
+<form method="post" action="{gurl.get_acpmod_url(0,'&amp;action=send')}">
+{loop postvars as pname => pvalue}
+{if pname == 'recipient_groups'}
+{loop pvalue as gkey => gvalue}
+<input type="hidden" name="{pname}[{gkey}]" value="{gvalue}" />
+{endloop}
+{else}
+<input type="hidden" name="{pname}" value="{pvalue}" />
+{endif}
+{endloop}
+<div class="a_border">
+	<h1 class="a_topic">{glocale.lang('information')}</h1>
+	<div class="a_main">
+		{glocale.lang('send_massemail_default_conf')}
+		<div class="a_main a_pad" style="text-align: center;">
+			<input type="submit" value="{glocale.lang('yes')}" />
+			<input type="button" value="{glocale.lang('no')}" onclick="document.location.href = '{gurl.get_acpmod_url()}';" />
+		</div>
+	</div>
+</div>
+</form>
+{endif}
+
+{if show_preview}
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('preview')}</h1>
+	<div class="a_main">{preview_text}</div>
+</div>
+{endif}
+
+<script type="text/javascript" src="{gjs.get_file('acp/src/user_selection.js')}"></script>
+
+<p class="a_block_pad">{glocale.lang('mass_email_user_var_hint')}</p>
+
+<form id="formular" method="post" action="{gurl.get_acpmod_url()}">
+<input type="hidden" id="selectedUsers" name="recipient_user" value="" />
+<input type="hidden" id="selectedButton" name="selectedButton" value="" />
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('acpmod_massemail')}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('email_recipient')}:</dt>
+			<dd>
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td class="a_main" width="50%" align="center"><u>{glocale.lang('user_groups')}</u></td>
+						<td class="a_main" width="50%" align="center"><u>{glocale.lang('user')}</u></td>
+					</tr>
+					<tr>
+						<td class="a_main" valign="top">{groups_combo}</td>
+						<td class="a_main" valign="top">{user_combo}
+						<br />
+						<input style="width: 100%;" type="button" value="{glocale.lang('add_user')}" onclick="PLIB_openDefaultPopup('{search_url}','UserSuche',800,700);" /><br />
+						<input style="width: 100%;" type="button" value="{glocale.lang('remove_selected')}" onclick="removeMarkedUser('user_intern');" />
+						</td>
+					</tr>
+				</table>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('email_subject')}:</dt>
+			<dd>{form.get_textbox('subject','',40)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('email_method')}:</dt>
+			<dd>{form.get_radio_boxes('method',method_options,'default')}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('email_content_type')}:</dt>
+			<dd>
+				{form.get_combobox('content_type',content_type_options,'plain')}
+				<div class="a_desc">{glocale.lang('email_content_type_hint')}</div>
+			</dd>
+		</dl>
+		{include "inc_post_form.htm"}
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('preview')}" onclick="BS_refresh_text(); document.getElementById('selectedButton').value = 'preview'; transferSelectedUser('user_intern','selectedUsers','formular');" />
+	<input type="button" value="{glocale.lang('submit')}" onclick="BS_refresh_text(); document.getElementById('selectedButton').value = 'submit'; transferSelectedUser('user_intern','selectedUsers','formular');" />
+</center>
+</form>
+{endif}
+
+{include "inc_footer.htm"}

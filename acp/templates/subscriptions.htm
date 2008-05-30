@@ -1,0 +1,59 @@
+{include "inc_header.htm"}
+{include "inc_delete_message.htm"}
+
+{if module_error == false}
+{include "inc_js_row_selector.htm"}
+
+<p class="a_block">{glocale.lang('subscriptions_notice')}</p>
+
+<form method="post" action="{target_url}">
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('subscriptions')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="25%" class="a_coldesc">{glocale.lang('name')}</td>
+			<td width="17%" class="a_coldesc" align="center">{date_col}</td>
+			<td width="17%" class="a_coldesc" align="center">{username_col}</td>
+			<td width="18%" class="a_coldesc" align="center">{lastlogin_col}</td>
+			<td width="18%" class="a_coldesc" align="center">{lastpost_col}</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+		</tr>
+		{if subscriptions.length == 0}
+		<tr>
+			<td colspan="6" class="a_main" align="center">{glocale.lang('no_subscriptions_found')}</td>
+		</tr>
+		{endif}
+		{loop subscriptions as row => sub}
+		<tr id="row_{row}" class="hlRow">
+			<td class="hlCol">{sub:name}</td>
+			<td class="hlCol" align="center">{sub:subscription_date}</td>
+			<td class="hlCol" align="center">{sub:username}</td>
+			<td class="hlCol" align="center">{sub:lastlogin}</td>
+			<td class="hlCol" align="center">{sub:lastpost}</td>
+			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			<input id="check_{row}" type="checkbox" name="delete[]" value="{sub:id}" />
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="40%" class="a_body">&nbsp;</td>
+		<td width="20%" align="center" class="a_body">
+		{glocale.lang('marked')}: <input type="submit" value="{glocale.lang('delete')}" />
+		</td>
+		<td width="40%" align="right" class="a_body">
+		<a href="javascript:rowHL.toggleAllSelected();">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+
+<div class="a_pad">
+	{include "inc_page_split.htm"}
+</div>
+
+{endif}
+
+{include "inc_footer.htm"}

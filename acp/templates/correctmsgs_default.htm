@@ -1,0 +1,17 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+<form method="post" action="{target}">
+<p>{glocale.lang('incorrect_messages_desc')}</p>
+<div class="a_pad">
+	{incorrect_messages}
+	{if incorrect_num > 0}
+	<input type="submit" name="submit" value="{glocale.lang('correct')}" />
+	{endif}
+</div>
+</form>
+
+{endif}
+
+{include "inc_footer.htm"}

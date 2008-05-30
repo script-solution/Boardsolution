@@ -1,0 +1,42 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+<form method="post" action="{gurl.get_acpmod_url(0,'&amp;action=client&amp;type='~type)}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<input type="hidden" name="aval" value="{aval}" />
+<input type="hidden" name="user_name" value="{user_name}" />
+<input type="hidden" name="user_group" value="{user_group}" />
+<div class="a_border">
+	<h1 class="a_topic">{title}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="60%" class="a_coldesc">{glocale.lang('module_name')}</td>
+			<td width="25%" class="a_coldesc" align="center">{current_permission_col_title}</td>
+			<td width="15%" class="a_coldesc" align="center">{glocale.lang('new_module_permission')}</td>
+		</tr>
+		{loop categories as category}
+		<tr>
+			<td colspan="3" height="25" class="a_coldesc">{category:name}</td>
+		</tr>
+		{loop category:mods as module}
+		<tr>
+			<td height="25" class="a_main">{module:name}</td>
+			<td class="a_main" align="center">{module:current_permission}</td>
+			<td class="a_main" align="center">
+			{form.get_radio_yesno('permission['~module:module~']',module:has_direct_access)}
+			</td>
+		</tr>
+		{endloop}
+		{endloop}
+	</table>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.get_acpmod_url()}';" />
+	<input type="submit" name="submit" value="{glocale.lang('save')}" />
+</center>
+</form>
+
+{endif}
+
+{include "inc_footer.htm"}

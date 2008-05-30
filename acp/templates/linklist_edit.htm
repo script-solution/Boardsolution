@@ -1,0 +1,31 @@
+{include "inc_header.htm"}
+{include "inc_delete_message.htm"}
+
+{if module_error == false}
+<form method="post" action="{gurl.get_acpmod_url(0,'&amp;action=edit&amp;id='~id)}">
+<input type="hidden" name="update" value="1" />
+<div class="a_border">
+	<h1 class="a_topic">{glocale.lang('edit')}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('category')}:</dt>
+			<dd>
+				{form.get_combobox('category',categories,data:category)} {glocale.lang('or_new_category')}:
+				{form.get_textbox('new_category','',30,50)}
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('url')}:</dt>
+			<dd>{form.get_textbox('url',data:link_url,50,255)}</dd>
+		</dl>
+		{include "inc_post_form.htm"}
+	</fieldset>
+</div>
+<center>
+	<input type="submit" value="{glocale.lang('update')}" />
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.get_acpmod_url()}';" />
+</center>
+</form>
+{endif}
+
+{include "inc_footer.htm"}

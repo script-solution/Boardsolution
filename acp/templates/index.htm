@@ -1,0 +1,152 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<div class="a_border">
+	<h1 class="a_topic">{glocale.lang('versions')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="25%" class="a_main"><b>PHP-Version:</b></td>
+			<td width="25%" class="a_main">{php_version}</td>
+			<td width="25%" class="a_main"><b>MySQL-Version:</b></td>
+			<td width="25%" class="a_main">{mysql_version}</td>
+		</tr>
+		<tr>
+			<td class="a_main"><b>Boardsolution-Version:</b></td>
+			<td class="a_main">{bs_version}</td>
+			<td class="a_main"><b>GD-Library-Version:</b></td>
+			<td class="a_main">{gd_version}</td>
+		</tr>
+	</table>
+</div>
+
+{if tasks.length > 0}
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('task_list')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		{loop tasks as task}
+		<tr>
+			<td width="25%" class="a_coldesc">{task:name}:</td>
+			<td width="75%" class="a_main">{task:detail}</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+{endif}
+
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('online_user')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="13%" class="a_coldesc">{glocale.lang('username')}</td>
+			<td width="35%" class="a_coldesc">{glocale.lang('location')}</td>
+			<td width="12%" class="a_coldesc" align="center">{glocale.lang('user_ip')}</td>
+			<td width="25%" class="a_coldesc" align="center">{glocale.lang('user_agent')}</td>
+			<td width="15%" class="a_coldesc" align="center">{glocale.lang('date')}</td>
+		</tr>
+		{loop online_user as user}
+		<tr>
+			<td class="a_main">{user:name}</td>
+			<td class="a_main">{user:location}</td>
+			<td class="a_main" align="center">{user:ip}</td>
+			<td class="a_main" align="center">{user:agent}</td>
+			<td class="a_main" align="center">{user:date}</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('statistics')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="30%" class="a_main"><b>{glocale.lang('forums')}:</b></td>
+			<td width="20%" class="a_main">{stats:total_forums}</td>
+			<td width="30%" class="a_main"><b>{glocale.lang('threads')}:</b></td>
+			<td width="20%" class="a_main">{stats:total_topics}</td>
+		</tr>
+		<tr>
+			<td class="a_main"><b>{glocale.lang('logins_total')}:</b></td>
+			<td class="a_main">{stats:logins_total}</td>
+			<td class="a_main"><b>{glocale.lang('posts_total')}:</b></td>
+			<td class="a_main">{stats:posts_total}</td>
+		</tr>
+		<tr>
+			<td class="a_main"><b>{glocale.lang('logins_today')}:</b></td>
+			<td class="a_main">{stats:logins_today}</td>
+			<td class="a_main"><b>{glocale.lang('posts_today')}:</b></td>
+			<td class="a_main">{stats:posts_today}</td>
+		</tr>
+		<tr>
+			<td class="a_main"><b>{glocale.lang('logins_yesterday')}:</b></td>
+			<td class="a_main">{stats:logins_yesterday}</td>
+			<td class="a_main"><b>{glocale.lang('posts_yesterday')}:</b></td>
+			<td class="a_main">{stats:posts_yesterday}</td>
+		</tr>
+		<tr>
+			<td class="a_main"><b>{glocale.lang('lastlogin')}:</b></td>
+			<td class="a_main">{stats:logins_last}</td>
+			<td class="a_main"><b>{glocale.lang('lastpost')}:</b></td>
+			<td class="a_main">{stats:posts_last}</td>
+		</tr>
+		<tr>
+			<td class="a_main"><b>{glocale.lang('registereduser')}:</b></td>
+			<td class="a_main">{stats:total_users}</td>
+			<td class="a_main"><b>{glocale.lang('maxonline')}:</b></td>
+			<td class="a_main">{stats:max_online}</td>
+		</tr>
+		<tr>
+			<td class="a_coldesc_sep" colspan="4">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="a_main"><b>{glocale.lang('database_size')}:</b></td>
+			<td class="a_main">{stats:database_size}</td>
+			<td class="a_main"><b>{glocale.lang('upload_dir_size')}:</b></td>
+			<td class="a_main">{stats:upload_dir_size}</td>
+		</tr>
+		<tr>
+			<td class="a_main"><b>{glocale.lang('smiley_dir_size')}:</b></td>
+			<td class="a_main">{stats:smiley_dir_size}</td>
+			<td class="a_main"><b>{glocale.lang('avatar_dir_size')}:</b></td>
+			<td class="a_main">{stats:avatar_dir_size}</td>
+		</tr>
+	</table>
+</div>
+
+<div class="a_border a_pad">
+	<h1 class="a_topic"><a href="{phpinfo_url}">PHP - {glocale.lang('configuration')}</a></h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="25%" class="a_main"><b>safe_mode:</b></td>
+			<td width="25%" class="a_main">{safe_mode}</td>
+			<td width="25%" class="a_main"><b>open_basedir:</b></td>
+			<td width="25%" class="a_main">{open_basedir}</td>
+		</tr>
+		<tr>
+			<td class="a_main"><b>max_execution_time:</b></td>
+			<td class="a_main">{max_execution_time}</td>
+			<td class="a_main"><b>memory_limit:</b></td>
+			<td class="a_main">{memory_limit}</td>
+		</tr>
+		<tr>
+			<td class="a_main"><b>error_reporting:</b></td>
+			<td class="a_main">{error_reporting}</td>
+			<td class="a_main"><b>display_errors:</b></td>
+			<td class="a_main">{display_errors}</td>
+		</tr>
+		<tr>
+			<td class="a_main"><b>register_globals:</b></td>
+			<td class="a_main">{register_globals}</td>
+			<td class="a_main"><b>magic_quotes_gpc:</b></td>
+			<td class="a_main">{magic_quotes_gpc}</td>
+		</tr>
+		<tr>
+			<td class="a_main"><b>file_uploads:</b></td>
+			<td class="a_main">{file_uploads}</td>
+			<td class="a_main"><b>upload_max_filesize:</b></td>
+			<td class="a_main">{upload_max_filesize}</td>
+		</tr>
+	</table>
+</div>
+{endif}
+
+{include "inc_footer.htm"}

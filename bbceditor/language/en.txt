@@ -1,0 +1,179 @@
+gui.dialog.ok = "Ok"
+gui.dialog.cancel = "Cancel"
+gui.dialog.search.title = "Search & Replace"
+gui.dialog.search.search = "Search"
+gui.dialog.search.replace = "Replace"
+gui.dialog.search.scope = "Scope"
+gui.dialog.search.all = "All"
+gui.dialog.search.selection = "Selection"
+gui.dialog.search.casesensitive = "Case-sensitive"
+gui.dialog.search.direction = "Direction"
+gui.dialog.search.backwards = "Backwards"
+gui.dialog.search.forward = "Forward"
+gui.dialog.search.replacefind = "Replace & Find"
+gui.dialog.search.replaceall = "Replace all"
+gui.dialog.search.wrapsearch = "Wrap search"
+gui.dialog.search.parsebbcode = "Parse BBCode in result"
+gui.dialog.search.nomatches = "0 matches found"
+gui.dialog.search.xmatches = "Match %d of %d total"
+gui.btn.bold.tooltip = "Toggle the bold attribute"
+gui.btn.italic.tooltip = "Toggle the italic attribute"
+gui.btn.underline.tooltip = "Toggle the underline attribute"
+gui.btn.strike.tooltip = "Toggle the strike attribute"
+gui.btn.fontcolor.tooltip = "Change the font-color"
+gui.btn.bgcolor.tooltip = "Change the background-color"
+gui.btn.smiley.tooltip = "Insert a smiley"
+gui.btn.fontsize.tooltip = "Change the font-size"
+gui.btn.fontfamily.tooltip = "Change the font-family"
+gui.btn.subscript.tooltip = "Subscript"
+gui.btn.supscript.tooltip = "Superscript"
+gui.btn.new.tooltip = "Create a new text"
+gui.btn.cut.tooltip = "Cut the selected text"
+gui.btn.copy.tooltip = "Copy the selected text"
+gui.btn.paste.tooltip = "Paste the selected text"
+gui.btn.searchnreplace.tooltip = "Search & replace"
+gui.btn.undo.tooltip = "Undo"
+gui.btn.redo.tooltip = "Redo"
+gui.btn.alignleft.tooltip = "Set left alignment"
+gui.btn.aligncenter.tooltip = "Set center alignment"
+gui.btn.alignright.tooltip = "Set right alignment"
+gui.btn.quote.tooltip = "Insert a quote"
+gui.btn.code.tooltip = "Insert a code-section"
+gui.btn.code.nohl = "-None-"
+gui.btn.list.tooltip = "Insert a list"
+gui.btn.link.tooltip = "Insert a link"
+gui.btn.email.tooltip = "Insert an email-address"
+gui.btn.quote.list.default = "Default"
+gui.btn.quote.list.userdef = "With author"
+gui.btn.list.list.default = "Default"
+gui.btn.list.list.circle = "Circle"
+gui.btn.list.list.square = "Square"
+gui.btn.list.list.disc = "Disc"
+gui.btn.list.list.numeric = "Numeric"
+gui.btn.list.list.alphas = "Alpha small"
+gui.btn.list.list.alphab = "Alpha big"
+gui.btn.list.list.romans = "Roman small"
+gui.btn.list.list.romanb = "Roman big"
+gui.btn.image.tooltip = "Insert an image"
+gui.tab.editor.title = "Editor"
+gui.tab.source.title = "Source"
+gui.dialog.color.title = "Choose a color"
+gui.dialog.link.insert.title = "Insert a new link"
+gui.dialog.link.edit.title = "Edit a link"
+gui.dialog.link.title.field = "Link title:"
+gui.dialog.link.link.field = "Link address:"
+gui.dialog.email.insert.title = "Insert a new email"
+gui.dialog.email.edit.title = "Edit an email"
+gui.dialog.email.title.field = "Email title:"
+gui.dialog.email.email.field = "Email address:"
+gui.dialog.image.title = "Insert an image"
+gui.dialog.image.url.field = "Image address:"
+gui.dialog.quote.insert.title = "Insert a quote"
+gui.dialog.quote.edit.title = "Edit a quote"
+gui.dialog.quote.author.field = "Author:"
+gui.dialog.new.title = "Delete complete text?"
+gui.dialog.new.message = "Are you sure to delete the complete text?"
+gui.popup.cut = "Cut"
+gui.popup.copy = "Copy"
+gui.popup.copy.bbcode = "Copy as BBCode"
+gui.popup.copy.html = "Copy as HTML-Code"
+gui.popup.copy.plain = "Copy as plain-text"
+gui.popup.paste = "Paste"
+gui.popup.paste.bbcode = "Paste as BBCode"
+gui.popup.paste.html = "Paste as HTML-Code (e.g. for text-processing apps)"
+gui.popup.paste.plain = "Paste as plain-text"
+gui.popup.paste.plain.html = "Interprete Plain-text like HTML (For copied HTML-code)"
+gui.popup.undo = "Undo"
+gui.popup.redo = "Redo"
+gui.popup.editemail = "Edit email-address"
+gui.popup.editlink = "Edit link-location"
+gui.popup.copylink = "Copy link-location"
+gui.popup.copyemail = "Copy email-address"
+gui.popup.removeformating = "Remove formating"
+gui.popup.removelinks = "Remove links"
+gui.popup.editquoteauthor = "Edit quote author"
+gui.popup.editimageurl = "Edit image-URL"
+gui.popup.code.changehl = "Change highlighting"
+gui.popup.changelisttype = "Change list-type"
+gui.popup.list.type.default = "Default"
+gui.popup.list.type.circle = "Circle"
+gui.popup.list.type.square = "Square"
+gui.popup.list.type.disc = "Disc"
+gui.popup.list.type.numeric = "Numeric"
+gui.popup.list.type.alphas = "Alpha small"
+gui.popup.list.type.alphab = "Alpha big"
+gui.popup.list.type.romans = "Roman small"
+gui.popup.list.type.romanb = "Roman big"
+parser.err.invalidcontent = "Open tags at a opening-tag which does not allow open tags"
+parser.err.maxnestlevel = "The maximum nested level has been reached"
+parser.err.missopentag = "More closing tags than opening tags"
+parser.err.nestedtag = "A nested tag (...[b]...[b]...[/b]...[/b]...)"
+parser.err.wrongcloseorder = "Wrong closing-tag order"
+parser.err.missingclosingtag = "At least one closing tag is missing"
+error.invalid_image_url = "Invalid image url '%s'"
+error.missing_link_address = "Please enter a link-address!"
+error.missing_email_address = "Please enter an email-address!"
+gui.statusbar.loading_image = "Loading image '%s'"
+gui.dialog.help.title = "Help"
+gui.dialog.help.close = "Close"
+gui.dialog.help.text = "[size=20]Some tipps and tricks[/size][list]
+[*]Lists, quotes and code-areas work all the same. There is [b]always[/b] at least one line above and below! Therefore you don't have to/can leave these areas with \"double-enter\".
+[*]Besides inserting smileys by click you can also just type the smiley-code. The editor will automaticly detect smiley-codes and replace them by the corresponding smiley.
+[*]You can resize images to make them smaller so that they don't occupie so much space. Note that they will [b]not[/b] be displayed this way in the board!
+[*]You can use the following keyboard-shortcuts:
+[font=courier new][b]Shortcut[/b]				[b]Function[/b]
+Ctrl+Left				Moves the cursor to the previous word
+Ctrl+Right				Moves the cursor to the next word
+Ctrl+Up					Moves the visible area up
+Ctrl+Down				Moves the visible area down
+Ctrl+Backspace			Removes the previous word
+Ctrl+Del				Removes the next word
+Ctrl+Pos1				Moves the cursor to the very beginning
+Ctrl+End				Moves the cursor to the very end
+Pos1					Moves the cursor to the beginning of the line
+Ende					Moves the cursor to the end of the line
+Ctrl+Enter				Inserts a new line without list-point in lists
+PageUp					Moves the cursor one page up
+PageDown				Moves the cursor one page down
+Ctrl+Z					Undo the last action
+Ctrl+Y					Redo the last action
+Ctrl+X					Cut the selected text
+Ctrl+C					Copy the selected text
+Ctrl+V					Paste the text in the clipboard at the cursor
+Ctrl+A					Select the complete text
+Ctrl+B					Toggle the bold-attribute
+Ctrl+I					Toggle the italic-attribute
+Ctrl+U					Toggle the underline-attribute
+Ctrl+L					Set the alignment to \"left\"
+Ctrl+E					Set the alignment to \"center\"
+Ctrl+R					Set the alignment to \"right\"
+Ctrl+O					Inserts a list
+Ctrl+P					Inserts a code-area
+Ctrl+Q					Inserts a quote
+Ctrl+S					Splits lists,codes or quotes
+[/font]
+[b]Notice:[/b] It is possible that some shortcuts are disabled because the corresponding tag is disabled!
+
+Additionally you can combine all movement-shortcuts with shift to change the selection!
+[*]You can also paste text from word-processors like MS Word or OpenOffice.org. Or in other words: You can import text with MimeType \"text/html\".
+But note that not every possible formating-property can be used.
+[/list]"
+
+gui.dialog.extra.title = "Text:"
+gui.dialog.extra.links.tooltip = "Insert special tags"
+gui.dialog.extra.post.comboname = "Link to a post"
+gui.dialog.extra.post.title = "Link to a post"
+gui.dialog.extra.post.parameter.title = "Post-ID:"
+gui.dialog.extra.post.desc = "Please enter the post-ID. You can find it for example in the post-number-link on the right of each post (the part behind \"&id=\")"
+gui.dialog.extra.topic.comboname = "Link to a topic"
+gui.dialog.extra.topic.title = "Link to a topic"
+gui.dialog.extra.topic.parameter.title = "Topic-ID:"
+gui.dialog.extra.topic.desc = "Please enter the topic-ID. You can find it for example in the address-line behind \"&tid=\""
+gui.dialog.extra.att.comboname = "Link to an attachment"
+gui.dialog.extra.att.title = "Link to an attachment"
+gui.dialog.extra.att.parameter.title = "Attachment:"
+gui.dialog.extra.att.desc = "Please enter the file. E.g.: uploads/myfile.txt"
+gui.dialog.extra.attimg.comboname = "Link to an attachment-image"
+gui.dialog.extra.attimg.title = "Link to an attachment-image"
+gui.dialog.extra.attimg.parameter.title = "Attachment:"
+gui.dialog.extra.attimg.desc = "Please enter the picture. E.g.: uploads/myimage.jpg"

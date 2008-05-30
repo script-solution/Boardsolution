@@ -1,0 +1,56 @@
+{include "inc_delete_message.htm"}
+
+<form method="post" action="{target_url}">
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('subscribed_topics')}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<th width="42%" class="bs_coldesc" align="left" colspan="3">{glocale.lang('thread')}</th>
+			<th width="24%" class="bs_coldesc">{glocale.lang('subscribe_date')}</th>
+			<th width="24%" class="bs_coldesc">{glocale.lang('lastpost')}</th>
+			<th width="10%" class="bs_coldesc">{glocale.lang('delete')}</th>
+		</tr>
+		{if num == 0}
+		<tr>
+			<td colspan="6" align="center" class="bs_main">{glocale.lang('no_subscribed_topics')}</td>
+		</tr>
+		{endif}
+		{loop topics as index => topic}
+		<tr>
+			<td width="5%" align="center" class="bs_main">
+			<img src="{topic:topic_status:important_image}" title="{topic:topic_status:important_title}" alt="{topic:topic_status:important_title}" />
+			<img src="{topic:topic_status:hot_image}" title="{topic:topic_status:hot_title}" alt="{topic:topic_status:hot_title}" /><br />
+			<img src="{topic:topic_status:closed_image}" title="{topic:topic_status:closed_title}" alt="{topic:topic_status:closed_title}" />
+			<img src="{topic:topic_status:moved_image}" title="{topic:topic_status:moved_title}" alt="{topic:topic_status:moved_title}" />
+			</td>
+			<td width="4%" align="center" class="bs_main">{topic:topic_symbol}</td>
+			<td width="33%" class="bs_main">
+			{topic:topic_name}<br />
+			<div class="bs_topics_small">{topic:position}</div>
+			</td>
+			<td class="bs_main" align="center">{topic:subscribe_date}</td>
+			<td class="bs_main" align="center">{topic:last_post}</td>
+			<td class="bs_main" align="center"
+					onclick="var cb = document.getElementById('subscr_{index}'); cb.checked = cb.checked ? false : true;">
+			<input type="checkbox" id="subscr_{index}" name="delete[]" value="{topic:topic_id}"
+						 onclick="this.checked = this.checked ? false : true;" />
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="30%">&nbsp;</td>
+		<td width="40%" align="center"><input type="submit" value="{glocale.lang('delete')}" /></td>
+		<td width="30%" align="right">
+		<a href="Javascript:invertSelection('subscr_');">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+
+<div class="bs_padtop">
+{include "inc_page_split.htm"}
+</div>

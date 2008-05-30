@@ -1,0 +1,100 @@
+{include "inc_header.htm"}
+
+<script type="text/javascript" src="{gjs.get_file('js/colorpicker.js','lib')}"></script>
+<script type="text/javascript">
+<!--
+var cp = new PLIB_ColorPicker('{glibpath}','group_color');
+//-->
+</script>
+
+{if module_error == false}
+
+<form method="post" action="{form_target}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="a_border">
+	<h1 class="a_topic">{form_title}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('group_title')}:</dt>
+			<dd>{form.get_textbox('group_title',default:group_title,30,50)}</dd>
+		</dl>
+		{if is_guest_group == false}
+		<dl>
+			<dt>{glocale.lang('is_visible')}:</dt>
+			<dd>
+				{if is_predefined}
+				<i>{if default:is_visible}{glocale.lang('yes')}{else}{glocale.lang('no')}{endif}</i>
+				{else}
+				{form.get_radio_yesno('is_visible',default:is_visible)}
+				{endif}
+				<div class="a_desc">{glocale.lang('is_visible_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('overrides_mod')}:</dt>
+			<dd>
+				{form.get_radio_yesno('overrides_mod',default:overrides_mod)}
+				<div class="a_desc">{glocale.lang('overrides_mod_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('group_color')}:</dt>
+			<dd>
+				#{form.get_textbox('group_color',default:group_color,6,6)}
+				<img id="colorpicker_image" src="acp/images/color_picker.gif" title="{glocale.lang('color_picker_hint')}"
+						alt="{glocale.lang('color_picker_hint')}" onmouseover="this.style.cursor = 'pointer';"
+						onmouseout="this.style.cursor = 'default';" onclick="cp.toggle(this.id);" />
+				<div class="a_desc">{glocale.lang('group_color_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('group_rank_filled_image')}:</dt>
+			<dd>
+				{form.get_textbox('group_rank_filled_image',default:group_rank_filled_image,40,255)}
+				<div class="a_desc">{glocale.lang('group_rank_filled_image_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('group_rank_empty_image')}:</dt>
+			<dd>
+				{form.get_textbox('group_rank_empty_image',default:group_rank_empty_image,40,255)}
+				<div class="a_desc">{glocale.lang('group_rank_empty_image_desc')}</div>
+			</dd>
+		</dl>
+		{endif}
+		{loop fields as field}
+		<dl>
+			<dt>
+				{glocale.lang('permission_'~field:name)}:
+				{if field:login_required}
+				*
+				{endif}
+			</dt>
+			<dd>
+				{if field:login_required}
+				<i>{glocale.lang('no')}</i>
+				{else}
+				{form.get_radio_yesno(field:name,field:value)}
+				{endif}
+				{if field:show_description}
+				<div class="a_desc">{glocale.lang('permission_'~field:name~'_desc')}</div>
+				{endif}
+			</dd>
+		</dl>
+		{endloop}
+	</fieldset>
+</div>
+<center>
+	<input type="submit" value="{glocale.lang('save')}" />
+	<input type="button" value="{glocale.lang('back')}"
+		onclick="document.location.href='{gurl.get_acpmod_url()}'" />
+</center>
+</form>
+
+{if is_guest_group}
+<p class="a_block_pad">{glocale.lang('login_required_explain')}</p>
+{endif}
+
+{endif}
+
+{include "inc_footer.htm"}

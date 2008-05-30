@@ -1,0 +1,67 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<div>
+	<div style="float: left; width: 50%;">
+	<form method="get" action="{target}">
+	{loop hidden_fields as k => v}
+	<input type="hidden" name="{k}" value="{v}" />
+	{endloop}
+	{month_combo} {year_combo}
+	<input type="submit" value="Go!" />
+	</form>
+	</div>
+	
+	<div style="float: right; width: 49%;">
+	{if view_add_event}
+	<a class="bs_button_big" href="{add_event_url}">{glocale.lang('add_event')}</a>
+	{endif}
+	</div>
+	<br clear="all" />
+</div>
+
+<div class="bs_padtop">
+	<div class="bs_calendar_left">
+		{loop months as month}
+		<div class="bs_border" style="margin-bottom: 0.5em;">
+			<h1 class="bs_topic"><a href="{month:url}">{month:title}</a></h1>
+			<table width="100%" class="bs_main" cellpadding="0" cellspacing="2">
+				<tr>
+					<td width="8" align="center" class="bs_main"></td>
+					<th width="8" class="bs_coldesc">{wd_short:1}</th>
+					<th width="8" class="bs_coldesc">{wd_short:2}</th>
+					<th width="8" class="bs_coldesc">{wd_short:3}</th>
+					<th width="8" class="bs_coldesc">{wd_short:4}</th>
+					<th width="8" class="bs_coldesc">{wd_short:5}</th>
+					<th width="8" class="bs_coldesc">{wd_short:6}</th>
+					<th width="8" class="bs_coldesc">{wd_short:0}</th>
+				</tr>
+				{loop month:weeks as week}
+				<tr>
+					<td width="8" align="center" class="bs_main">
+					<a href="{week:url}">&raquo;</a>
+					</td>
+					{loop week:days as day}
+					<td width="8" align="center" class="{day:class}">{day:days}</td>
+					{endloop}
+				</tr>
+				{endloop}
+			</table>
+		</div>
+		{endloop}
+	</div>
+	
+	<div class="bs_calendar_right">
+		<div style="padding-left: 1.0em;">
+			{include submoduletpl}
+		</div>
+	</div>
+	<br style="clear: both;" />
+</div>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

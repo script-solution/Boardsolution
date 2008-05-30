@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<highlighter>
+	<name>C++</name>
+	<hlNumbers>true</hlNumbers>
+	<escapeChar>\</escapeChar>
+	<stringQuotes>
+		<def id="2">&quot;</def>
+		<def id="1">&#039;</def>
+	</stringQuotes>
+	<slComments>
+		<def id="2">#</def>
+		<def id="1">//</def>
+	</slComments>
+	<mlComments>
+		<def id="1" start="/*" end="*/"/>
+	</mlComments>
+	<symbols>
+		<kw>!</kw>
+		<kw>&amp;</kw>
+		<kw>%</kw>
+		<kw>*</kw>
+		<kw>+</kw>
+		<kw>(</kw>
+		<kw>)</kw>
+		<kw>.</kw>
+		<kw>/</kw>
+		<kw>-</kw>
+		<kw>;</kw>
+		<kw>]</kw>
+		<kw>:</kw>
+		<kw>}</kw>
+		<kw>::</kw>
+		<kw>^</kw>
+		<kw>{</kw>
+		<kw>&gt;</kw>
+		<kw>=</kw>
+		<kw>[</kw>
+		<kw>&lt;</kw>
+	</symbols>
+	<regexps>
+	</regexps>
+	<keywords>
+		<def id="3" cs="false">
+			<kw>pow</kw>
+			<kw>memmove</kw>
+			<kw>asctime</kw>
+			<kw>freopen</kw>
+			<kw>sprintf</kw>
+			<kw>memchr</kw>
+			<kw>strncat</kw>
+			<kw>ispunct</kw>
+			<kw>malloc</kw>
+			<kw>scanf</kw>
+			<kw>strxfrm</kw>
+			<kw>free</kw>
+			<kw>time</kw>
+			<kw>abs</kw>
+			<kw>memcpy</kw>
+			<kw>perror</kw>
+			<kw>rand</kw>
+			<kw>strspn</kw>
+			<kw>isprint</kw>
+			<kw>memset</kw>
+			<kw>fscanf</kw>
+			<kw>fgetc</kw>
+			<kw>frexp</kw>
+			<kw>sscanf</kw>
+			<kw>strtoul</kw>
+			<kw>ctime</kw>
+			<kw>log</kw>
+			<kw>snprintf</kw>
+			<kw>exit</kw>
+			<kw>tolower</kw>
+			<kw>system</kw>
+			<kw>vsprintf</kw>
+			<kw>floor</kw>
+			<kw>ferror</kw>
+			<kw>fseek</kw>
+			<kw>fflush</kw>
+			<kw>tan</kw>
+			<kw>offsetof</kw>
+			<kw>remove</kw>
+			<kw>ceil</kw>
+			<kw>ldiv</kw>
+			<kw>modf</kw>
+			<kw>rewind</kw>
+			<kw>ftell</kw>
+			<kw>fabs</kw>
+			<kw>strcspn</kw>
+			<kw>strtok</kw>
+			<kw>fgets</kw>
+			<kw>strtod</kw>
+			<kw>ungetc</kw>
+			<kw>isalpha</kw>
+			<kw>qsort</kw>
+			<kw>fputc</kw>
+			<kw>isupper</kw>
+			<kw>isgraph</kw>
+			<kw>strftime</kw>
+			<kw>strncpy</kw>
+			<kw>localtime</kw>
+			<kw>ldexp</kw>
+			<kw>strerror</kw>
+			<kw>strchr</kw>
+			<kw>clock</kw>
+			<kw>sqrt</kw>
+			<kw>realloc</kw>
+			<kw>fputs</kw>
+			<kw>toupper</kw>
+			<kw>strrchr</kw>
+			<kw>atexit</kw>
+			<kw>strcpy</kw>
+			<kw>clearerr</kw>
+			<kw>va_arg</kw>
+			<kw>sin</kw>
+			<kw>assert</kw>
+			<kw>abort</kw>
+			<kw>atol</kw>
+			<kw>strncmp</kw>
+			<kw>atan</kw>
+			<kw>cos</kw>
+			<kw>rename</kw>
+			<kw>setvbuf</kw>
+			<kw>isdigit</kw>
+			<kw>putchar</kw>
+			<kw>tanh</kw>
+			<kw>strlen</kw>
+			<kw>isxdigit</kw>
+			<kw>calloc</kw>
+			<kw>puts</kw>
+			<kw>strpbrk</kw>
+			<kw>vfprintf</kw>
+			<kw>isspace</kw>
+			<kw>atof</kw>
+			<kw>atoi</kw>
+			<kw>setjmp</kw>
+			<kw>tmpname</kw>
+			<kw>feof</kw>
+			<kw>cosh</kw>
+			<kw>strtol</kw>
+			<kw>strstr</kw>
+			<kw>fopen</kw>
+			<kw>sinh</kw>
+			<kw>fwrite</kw>
+			<kw>gmtime</kw>
+			<kw>fmod</kw>
+			<kw>difftime</kw>
+			<kw>strcat</kw>
+			<kw>getchar</kw>
+			<kw>exp</kw>
+			<kw>fsetpos</kw>
+			<kw>labs</kw>
+			<kw>srand</kw>
+			<kw>sizeof</kw>
+			<kw>iscntrl</kw>
+			<kw>setbuf</kw>
+			<kw>fprintf</kw>
+			<kw>fclose</kw>
+			<kw>asin</kw>
+			<kw>div</kw>
+			<kw>tmpfile</kw>
+			<kw>bsearch</kw>
+			<kw>atan2</kw>
+			<kw>longjmp</kw>
+			<kw>strcmp</kw>
+			<kw>fgetpos</kw>
+			<kw>mktime</kw>
+			<kw>vprintf</kw>
+			<kw>acos</kw>
+			<kw>isalnum</kw>
+			<kw>printf</kw>
+			<kw>getenv</kw>
+			<kw>putc</kw>
+			<kw>va_start</kw>
+			<kw>fread</kw>
+			<kw>gets</kw>
+			<kw>va_end</kw>
+			<kw>log10</kw>
+			<kw>islower</kw>
+			<kw>getc</kw>
+			<kw>strcoll</kw>
+			<kw>memcmp</kw>
+		</def>
+		<def id="2" cs="false">
+			<kw>tm</kw>
+			<kw>raise</kw>
+			<kw>const</kw>
+			<kw>char</kw>
+			<kw>size_t</kw>
+			<kw>signal</kw>
+			<kw>long</kw>
+			<kw>float</kw>
+			<kw>longint</kw>
+			<kw>short</kw>
+			<kw>div_t</kw>
+			<kw>struct</kw>
+			<kw>extern</kw>
+			<kw>union</kw>
+			<kw>FILE</kw>
+			<kw>false</kw>
+			<kw>ldiv_t</kw>
+			<kw>null</kw>
+			<kw>volatile</kw>
+			<kw>static</kw>
+			<kw>clock_t</kw>
+			<kw>signed</kw>
+			<kw>int</kw>
+			<kw>ptrdiff_t</kw>
+			<kw>void</kw>
+			<kw>true</kw>
+			<kw>double</kw>
+			<kw>unsigned</kw>
+			<kw>typedef</kw>
+			<kw>register</kw>
+			<kw>fpos_t</kw>
+			<kw>va_list</kw>
+			<kw>jmp_buf</kw>
+			<kw>time_t</kw>
+			<kw>shortint</kw>
+			<kw>auto</kw>
+			<kw>bool</kw>
+		</def>
+		<def id="1" cs="false">
+			<kw>virtual</kw>
+			<kw>using</kw>
+			<kw>for</kw>
+			<kw>catch</kw>
+			<kw>switch</kw>
+			<kw>goto</kw>
+			<kw>const_cast</kw>
+			<kw>private</kw>
+			<kw>function</kw>
+			<kw>namespace</kw>
+			<kw>while</kw>
+			<kw>break</kw>
+			<kw>protected</kw>
+			<kw>extern</kw>
+			<kw>if</kw>
+			<kw>static_cast</kw>
+			<kw>typeid</kw>
+			<kw>inline</kw>
+			<kw>delete</kw>
+			<kw>do</kw>
+			<kw>template</kw>
+			<kw>else</kw>
+			<kw>dynamic_cast</kw>
+			<kw>return</kw>
+			<kw>class</kw>
+			<kw>enum</kw>
+			<kw>reinterpret_cast</kw>
+			<kw>new</kw>
+			<kw>default</kw>
+			<kw>explicit</kw>
+			<kw>wchar_t</kw>
+			<kw>typename</kw>
+			<kw>continue</kw>
+			<kw>case</kw>
+			<kw>public</kw>
+			<kw>this</kw>
+			<kw>try</kw>
+			<kw>friend</kw>
+		</def>
+	</keywords>
+	<colors>
+		<keywords id="3">
+			<attr name="fontColor" value="#FF0000"/>
+		</keywords>
+		<keywords id="2">
+			<attr name="fontColor" value="#2E8B57"/>
+			<attr name="bold" value="true"/>
+		</keywords>
+		<keywords id="1">
+			<attr name="fontColor" value="#A52A2A"/>
+			<attr name="bold" value="true"/>
+		</keywords>
+		<symbols>
+			<attr name="fontColor" value="#800000"/>
+		</symbols>
+		<numbers>
+			<attr name="fontColor" value="#800080"/>
+		</numbers>
+		<strings id="2">
+			<attr name="fontColor" value="#FF00FF"/>
+		</strings>
+		<strings id="1">
+			<attr name="fontColor" value="#FF00FF"/>
+		</strings>
+		<mlComments id="1">
+			<attr name="fontColor" value="#0000FF"/>
+		</mlComments>
+		<slComments id="2">
+			<attr name="fontColor" value="#008080"/>
+		</slComments>
+		<slComments id="1">
+			<attr name="fontColor" value="#008000"/>
+		</slComments>
+	</colors>
+</highlighter>

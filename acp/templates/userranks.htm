@@ -1,0 +1,60 @@
+{include "inc_header.htm"}
+{include "inc_delete_message.htm"}
+
+{if module_error == false}
+{include "inc_js_row_selector.htm"}
+
+<div class="a_block">
+	<div class="a_menubar">
+		<a href="{gurl.get_acpmod_url(0,'&amp;at='~at_add)}">
+		<img src="{gpath}acp/images/plus.png" alt="{glocale.lang('insert_group')}" title="{glocale.lang('insert_group')}" />
+		{glocale.lang('add_new_rank')}
+		</a>
+	</div>
+</div>
+
+<form method="post" name="ranks" action="{gurl.get_acpmod_url()}">
+<input type="hidden" name="action_type" value="{at_update}" />
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('userranks')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="40%" class="a_coldesc">{glocale.lang('numberofpoints')}</td>
+			<td width="55%" class="a_coldesc">{glocale.lang('rankname')}</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+		</tr>
+		{loop ranks as row => rank}
+		<tr id="row_{row}" class="hlRow">
+			<td width="30%" class="hlCol">
+			{rank:post_from} - <input type="text" name="post_to[{rank:id}]" value="{rank:post_to}" size="6" />
+			</td>
+			<td width="50%" class="hlCol">
+			<input type="text" name="rank_name[{rank:id}]" value="{rank:rank}" size="30" />
+			</td>
+			<td width="20%" class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			{if row > 0}
+			<input id="check_{row}" type="checkbox" name="delete[]" value="{rank:id}" />
+			{else}
+			<script type="text/javascript">rowHL.setRowDisabled({row});</script>
+			-
+			{endif}
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="40%" class="a_body">&nbsp;</td>
+		<td width="20%" align="center" class="a_body">
+		<input type="submit" value="{glocale.lang('save')} / {glocale.lang('delete')}" />
+		</td>
+		<td width="40%" align="right" class="a_body">
+		<a href="javascript:rowHL.toggleAllSelected();">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+{endif}
+
+{include "inc_footer.htm"}

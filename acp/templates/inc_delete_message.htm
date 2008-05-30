@@ -1,0 +1,15 @@
+{if delete_message}
+<div class="a_border a_pad_bottom">
+	<h1 class="a_topic">{glocale.lang('information')}</h1>
+	<div class="a_main" style="text-align: center;">
+		{delete_message}
+		<div class="a_pad_double">
+			<input id="del_yes" type="submit" style="width: 50px;" name="option_yes"
+					value="{glocale.lang('yes')}" onclick="document.location.href = '{yes_url}';" />
+			&nbsp;
+			<input id="del_no" type="submit" style="width: 50px;" name="option_no"
+					value="{glocale.lang('no')}" onclick="document.location.href = '{no_url}';" />
+		</div>
+	</div>
+</div>
+{endif}

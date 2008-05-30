@@ -1,0 +1,55 @@
+{include "inc_header.htm"}
+
+<script type="text/javascript">
+<!--
+self.focus();
+//-->
+</script>
+
+<div class="a_border">
+	<h1 class="a_topic">{data:user_name}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="20%" class="a_coldesc">{glocale.lang('username')}:</td>
+			<td width="45%" class="a_main">{data:user_name}</td>
+			<td width="35%" align="center" class="a_main" rowspan="{avatar_rowspan}">{avatar}</td>
+		</tr>
+		<tr>
+			<td class="a_coldesc">{glocale.lang('user_groups')}:</td>
+			<td class="a_main">{user_groups}</td>
+		</tr>
+		<tr>
+			<td class="a_coldesc">{glocale.lang('email')}:</td>
+			<td class="a_main"><a href="mailto:{data:user_email}">{data:user_email}</a></td>
+		</tr>
+		{loop addfields as field}
+		<tr>
+			<td class="a_coldesc">{field:name}:</td>
+			<td class="a_main">{field:value}</td>
+		</tr>
+		{endloop}
+		<tr>
+			<td class="a_coldesc">{glocale.lang('signature')}:</td>
+			<td colspan="2" class="a_main">{signature}</td>
+		</tr>
+		<tr>
+			<td class="a_coldesc">{glocale.lang('logins')}:</td>
+			<td colspan="2" class="a_main">{data:logins}</td>
+		</tr>
+		<tr>
+			<td class="a_coldesc">{glocale.lang('posts')} | {glocale.lang('points')}:</td>
+			<td colspan="2" class="a_main">{data:posts} | {data:exppoints}</td>
+		</tr>
+		<tr>
+			<td class="a_coldesc">{glocale.lang('rank')}:</td>
+			<td colspan="2" class="a_main">{rank}</td>
+		</tr>
+		<tr>
+			<td align="center" colspan="3" class="a_coldesc">
+			<a href="javascript:self.close();">{glocale.lang('hidedetails')}</a>
+			</td>
+		</tr>
+	</table>
+</div>
+
+{include "inc_footer.htm"}

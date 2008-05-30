@@ -1,0 +1,29 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+<form method="post" action="{target}">
+<div class="a_border">
+	<h1 class="a_topic">{glocale.lang('acpmod_correctmsgs')} :: {position} / {total}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td class="a_main">
+			<p><b>{glocale.lang('type')}:</b> {type}</p>
+			<p>{error}</p>
+			<p><textarea name="text" style="width: 90%;" cols="60" rows="30">{text}</textarea></p>
+			
+			<input type="submit" name="prev" value="{glocale.lang('prev_msg')}" {if prev_disabled} disabled="disabled"{endif}/>
+			<input type="submit" name="test" value="{glocale.lang('test_msg')}" />
+			<input type="submit" name="next" value="{glocale.lang('next_msg')}" {if next_disabled} disabled="disabled"{endif} />
+			&middot;
+			<input type="button" name="back" value="{glocale.lang('back')}"
+				onclick="document.location.href = '{gurl.get_acpmod_url()}';" />
+			</td>
+		</tr>
+	</table>
+</div>
+</form>
+
+{endif}
+
+{include "inc_footer.htm"}

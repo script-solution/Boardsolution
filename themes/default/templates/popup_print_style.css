@@ -1,0 +1,39 @@
+h1.bs_topic {
+	color: #000;
+	background-color: #dbdbdb;
+	background-image: none;
+}
+
+div.bs_border {
+	border: 1px solid #888;
+}
+
+fieldset.bs_form dl {
+	background-color: #fff;
+}
+
+fieldset.bs_form dd {
+	background-color: #fff;
+}
+
+div.bs_board_title {
+	font-size: 1.3em;
+	font-weight: bold;
+}
+
+.bs_main {
+	background-color: #fff;
+}
+
+td.bs_posts_main_1 {
+	background-color: #fff;
+}
+
+.bs_quote_section_top {
+	color: #000;
+	background-color: #dbdbdb;
+}
+
+td.bs_vote_bar {
+	background-color: #888;
+}

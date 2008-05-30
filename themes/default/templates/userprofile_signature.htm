@@ -1,0 +1,22 @@
+<form method="post" action="{target_url}" onsubmit="BS_refresh_text();">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('signature')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('preview')}:</dt>
+			<dd>
+				{if signature_preview != ''}
+				{signature_preview}
+				{else}
+				&nbsp;
+				{endif}
+			</dd>
+		</dl>
+		{include "inc_post_form.htm"}
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="submit" value="{glocale.lang('save')}" />
+</center>
+</form>

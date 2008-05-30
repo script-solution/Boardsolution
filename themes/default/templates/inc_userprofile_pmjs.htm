@@ -1,0 +1,27 @@
+<script type="text/javascript">
+<!--
+function submitForm()
+{
+	var combo = document.getElementById('operation');
+	var url = '{pm_target_url}';
+	switch(combo.selectedIndex)
+	{
+	 	case 0:
+	 		url += '{delete_add}';
+	 		break;
+
+	 	case 1:
+	 		url += '{at_mark_read}';
+	 		break;
+	 	
+	 	case 2:
+	 		url += '{at_mark_unread}';
+	 		break;
+	}
+	
+	var form = document.getElementById('pm_form');
+	form.action = url;
+	form.submit();
+}
+//-->
+</script>

@@ -1,0 +1,136 @@
+<form method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('profileconfig')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('profile_timezone')}:</dt>
+			<dd>
+				{glocale.lang('timezone_current_time')} {current_time}
+				<div class="bs_padtop_big">
+					{form.get_timezone_combo()}
+					<div class="bs_desc">{glocale.lang('profile_timezone_expl')}</div>
+				</div>
+			</dd>
+		</dl>
+		{if allow_custom_lang == 1}
+		<dl>
+			<dt>{glocale.lang('profile_forum_lang')}:</dt>
+			<dd>{form.get_combobox('lang',lang_options,def_lang)}</dd>
+		</dl>
+		{endif}
+		{if allow_custom_style == 1}
+		<dl>
+			<dt>{glocale.lang('profile_forum_style')}:</dt>
+			<dd>{form.get_combobox('theme',theme_options,def_theme)}</dd>
+		</dl>
+		{endif}
+		<div class="bs_coldesc_sep">&nbsp;</div>
+		<dl>
+			<dt>{glocale.lang('email_display_mode')}:</dt>
+			<dd>
+				{form.get_combobox('email_display_mode',email_display_mode_options,def_email_display_mode)}
+				<div class="bs_desc">{glocale.lang('email_jumble_mode_desc')}</div>
+			</dd>
+		</dl>
+		{if allow_board_emails}
+		<dl>
+			<dt>{glocale.lang('allow_board_emails')}:</dt>
+			<dd>
+				{form.get_radio_yesno('allow_board_emails',def_allow_board_emails)}
+				<div class="bs_desc">{glocale.lang('allow_board_emails_desc')}</div>
+			</dd>
+		</dl>
+		{endif}
+		{if enable_email_notification}
+		<dl>
+			<dt>{glocale.lang('default_email_notification')}:</dt>
+			<dd>
+				{form.get_radio_yesno('default_email_notification',def_default_email_notification)}
+				<div class="bs_desc">{glocale.lang('default_email_notification_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('email_notification_type')}:</dt>
+			<dd>
+				{form.get_combobox('email_notification_type',email_notification_type_options,def_email_notification_type)}
+				<div class="bs_desc">{glocale.lang('email_notification_type_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('emails_include_post')}:</dt>
+			<dd>
+				{form.get_radio_yesno('emails_include_post',def_emails_include_post)}
+				<div class="bs_desc">{glocale.lang('emails_include_post_desc')}</div>
+			</dd>
+		</dl>
+		{endif}
+		{if enable_pms}
+		<dl>
+			<dt>{glocale.lang('enable_pm_email')}:</dt>
+			<dd>
+				{form.get_radio_yesno('enable_pm_email',def_enable_pm_email)}
+				<div class="bs_desc">{glocale.lang('enable_pm_email_desc')}</div>
+			</dd>
+		</dl>
+		{endif}
+		<div class="bs_coldesc_sep">&nbsp;</div>
+		{if enable_pms}
+		<dl>
+			<dt>{glocale.lang('allowpms')}:</dt>
+			<dd>{form.get_radio_yesno('allow_pms',def_allow_pms)}</dd>
+		</dl>
+		{endif}
+		{if ghost_mode_allowed}
+		<dl>
+			<dt>{glocale.lang('ghost_mode')}:</dt>
+			<dd>
+				{form.get_radio_yesno('ghost_mode',def_ghost_mode)}
+				<div class="bs_desc">{glocale.lang('ghost_mode_exp')}</div>
+			</dd>
+		</dl>
+		{endif}
+		{if portal_enabled}
+		<dl>
+			<dt>{glocale.lang('startmodule')}:</dt>
+			<dd>
+				{form.get_combobox('startmodule',startmodule_options,def_startmodule)}
+				<div class="bs_desc">{glocale.lang('startmodule_desc')}</div>
+			</dd>
+		</dl>
+		{endif}
+		<dl>
+			<dt>{glocale.lang('posts_order')}:</dt>
+			<dd>
+				{form.get_combobox('posts_order',posts_order_options,def_posts_order)}
+				<div class="bs_desc">{glocale.lang('posts_order_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('default_font')}:</dt>
+			<dd>
+				{form.get_combobox('default_font',default_font_options,def_default_font)}
+				<div class="bs_desc">{glocale.lang('default_font_desc')}</div>
+			</dd>
+		</dl>
+		{if enable_signatures}
+		<dl>
+			<dt>{glocale.lang('attach_signature')}:</dt>
+			<dd>{form.get_radio_yesno('attach_signature',def_attach_signature)}</dd>
+		</dl>
+		{endif}
+		{if enable_bbcode}
+		<dl>
+			<dt>{glocale.lang('bbcode_mode')}:</dt>
+			<dd>
+				{form.get_combobox('bbcode_mode',bbcode_mode_options,def_bbcode_mode)}
+				<div class="bs_desc">{glocale.lang('bbcode_mode_desc')}</div>
+			</dd>
+		</dl>
+		{endif}
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="submit" value="{glocale.lang('save')}" />
+</center>
+</form>

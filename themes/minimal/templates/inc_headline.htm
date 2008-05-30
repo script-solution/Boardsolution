@@ -1,0 +1,55 @@
+<div class="bs_menu_wrapper">
+	<ul class="bs_menu">
+		{loop top_links as id => link}
+		<li><a href="{link:url}">{link:text}</a></li>
+		{endloop}
+	</ul>
+	<br style="clear: both;" />
+	
+	<div class="bs_welcome">
+		<div style="float: left;">
+			{glocale.lang('welcome')}, <b>{username}</b>!
+		</div>
+		<div style="float: right;">
+			{if enable_portal}
+			<a href="{gurl.get_portal_url()}" title="{unread_news_title}">{glocale.lang('portal')}</a>
+			{if gisloggedin}
+			({if unread_news_count > 0}<span class="bs_unread">{unread_news_count}</span>{else}0{endif})
+			{endif}
+			&middot;
+			{endif}
+			
+			{if gisloggedin == false}
+			
+			{if register_link != ''}
+			<a href="{register_link}">{glocale.lang('register')}</a> &middot;
+			{endif}
+			<a href="{login_url}">{glocale.lang('login')}</a> &middot;
+			{if forgotpw_link != ''}
+			<a href="{forgotpw_link}">{glocale.lang('forgetpw')}</a> &middot;
+			{endif}
+			{if resendact_link != ''}
+			<a href="{resendact_link}">{glocale.lang('resend_activation_link')}</a>
+			{endif}
+			
+			{else}
+			
+			{if enable_pms}
+			<a title="{glocale.lang('privatemsgs')} ( {unread_pm_count} {glocale.lang('newmsgs')} )"
+			   href="{gurl.simple_url('userprofile','&amp;$URL_LOC=pmoverview')}">{glocale.lang('privatemsgs')}</a>
+			({if unread_pm_count > 0}<span class="bs_unread">{unread_pm_count}</span>{else}0{endif}) &middot;
+			{endif}
+			<a title="{glocale.lang('unread_threads')}"
+			   href="{gurl.simple_url('unread')}">{glocale.lang('unread_threads')}</a>
+			({if unread_topic_count > 0}<span class="bs_unread">{unread_topic_count}</span>{else}0{endif}) &middot;
+			<a href="{gurl.simple_url(-1,'&amp;$URL_AT=$ACTION_LOGOUT','&amp;',true)}">{glocale.lang('logout')}</a>
+			
+			{endif}
+		</div>
+		<br style="clear: both;" />
+	</div>
+</div>
+
+<div class="bs_border bs_main bs_padbottom">
+	<b>{glocale.lang('position')}:</b> {location}
+</div>

@@ -1,0 +1,78 @@
+{include "inc_delete_message.htm"}
+
+<form method="post" action="{target_url}">
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('availableavatars')}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<th width="35%" class="bs_coldesc" align="left">{glocale.lang('name')}</th>
+			<th width="15%" class="bs_coldesc">{glocale.lang('preview')}</th>
+			<th width="20%" class="bs_coldesc">{glocale.lang('owner')}</th>
+			<th width="18%" class="bs_coldesc">{glocale.lang('use')}</th>
+			<th width="12%" class="bs_coldesc">{glocale.lang('delete')}</th>
+		</tr>
+		{if num == 0}
+		<tr>
+			<td colspan="5" class="bs_main" align="center">{glocale.lang('no_avatars_found')}</td>
+		</tr>
+		{endif}
+		{loop avatars as index => avatar}
+		<tr>
+			<td class="bs_main">{avatar:display_path}</td>
+			<td class="bs_main" align="center">
+			<img src="{avatar:avatar_path}" width="50" height="50" alt="" />
+			</td>
+			<td class="bs_main" align="center">{avatar:user_name}</td>
+			<td class="bs_main" align="center"><a href="{avatar:use_url}">{glocale.lang('use')}</a></td>
+			<td class="bs_main" align="center"
+				onclick="var cb = document.getElementById('avatar_{index}'); cb.checked = cb.checked ? false : true;">
+			{avatar:delete}
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="30%">&nbsp;</td>
+		<td width="40%" align="center"><input type="submit" value="{glocale.lang('delete')}" /></td>
+		<td width="30%" align="right">
+		<a href="Javascript:invertSelection('avatar_');">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+
+<div class="bs_padtop">
+{include "inc_page_split.htm"}
+</div>
+
+<form method="post" enctype="multipart/form-data" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border bs_padtop_big">
+	<h1 class="bs_topic">{glocale.lang('options')}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="50%" class="bs_main" valign="top">
+			<b>{glocale.lang('current_avatar')}</b>:
+			<div class="bs_padtop_big">
+				{current_avatar}
+				{delete_avatar}
+			</div>
+			</td>
+			<td width="50%" class="bs_main" valign="top">
+			<b>{glocale.lang('uploadavatar')}</b>:<br />
+			- {glocale.lang('max')} {CFG:profile_max_img_size}
+			{glocale.lang('pixel')} | {CFG:profile_max_img_filesize}KB<br />
+			- {glocale.lang('maximal')} {CFG:profile_max_avatars} {glocale.lang('avatars')}<br />
+			- jpeg, jpg, gif, png
+			<div class="bs_padtop_big">
+				<input type="file" name="bild_upload" size="35" />
+				<input type="submit" name="submit" value="{glocale.lang('upload')}" />
+			</div>
+			</td>
+		</tr>
+	</table>
+</div>
+</form>

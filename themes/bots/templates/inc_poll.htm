@@ -1,0 +1,8 @@
+	<ul class="bs_poll">
+		{loop poll_options as index => option}
+		<li>
+			<div>{option:option_name} ({option:percent} %, {option:option_value} {glocale.lang('votes')})</div>
+			<div class="bs_poll_bar"><div style="width: {option:percent}%;">&nbsp;</div></div>
+		</li>
+		{endloop}
+	</ul>

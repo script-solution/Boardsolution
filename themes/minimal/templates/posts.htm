@@ -1,0 +1,72 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+{if display_reply}
+<div>
+	<a class="bs_button_big" title="{glocale.lang('answer_desc')}" href="{reply_url}">{glocale.lang('answer')}</a>
+	<br style="clear: both;" />
+</div>
+{endif}
+
+<div class="bs_border">
+	<h2 class="bs_title">
+		{thread_type_ins}: &quot;{threadname_ins}&quot; [ {glocale.lang('page')} {sasinsert} ]
+	</h2>
+	{if show_event}
+	{include "inc_event.htm"}
+	{endif}
+	{if show_poll}
+	{include "inc_poll.htm"}
+	{endif}
+</div>
+
+{if posts.length > 0}
+{loop posts as post}
+<div class="bs_border">
+	<div class="bs_title">
+		<div class="bs_post_username">{if post:is_unread}* {endif}{post:user_name}</div>
+		<div class="bs_post_date">{post:post_date}</div>
+		<br style="clear: both;" />
+	</div>
+	<div class="bs_post">{post:text_ins}</div>
+	<div style="float: right;">{post:bottom_ins}</div>
+	<br style="clear: both;" />
+</div>
+{endloop}
+{endif}
+
+<div class="bs_padtop">
+{include "inc_page_split.htm"}
+</div>
+
+<div class="bs_padtop_big">
+{include "inc_online_user.htm"}
+</div>
+
+{if show_bottom_bar}
+<div class="bs_border bs_padtop">
+	<div class="bs_main">
+		<div style="float: right;">
+			{if display_post_actions}
+			<a href="{gurl.simple_url('manage_posts','&amp;$URL_FID='~fid~'&amp;$URL_TID='~tid)}">{manage_posts_title}</a>
+			{else}
+			&nbsp;
+			{endif}
+		</div>
+		<br style="clear: both;" />
+	</div>
+</div>
+{endif}
+
+{if similar_topics}
+<div class="bs_padtop_big">
+{include "inc_topics.htm"}
+</div>
+{endif}
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

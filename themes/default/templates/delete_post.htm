@@ -1,0 +1,27 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<form method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<input type="hidden" name="selected_posts[]" value="{post_id}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{title}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{user_name}, <span style="font-weight: normal;">{date}</span></dt>
+			<dd>{text}</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{back_url}';" />
+	<input type="submit" name="submit" value="{glocale.lang('delete')}" />
+</center>
+</form>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

@@ -1,0 +1,98 @@
+{include "inc_header.htm"}
+{include "inc_delete_message.htm"}
+
+{if module_error == false}
+{include "inc_js_row_selector.htm"}
+
+<form method="get" action="{search_url}">
+{hidden_fields}
+<div class="a_border" style="width: 60%;">
+	<h1 class="a_topic">{glocale.lang('search')}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('keyword')}:</dt>
+			<dd>{form.get_textbox('keyword',keyword,30,255)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('action')}:</dt>
+			<dd>{form.get_combobox('ipaction',actions,action)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('date')}:</dt>
+			<dd>
+				{glocale.lang('between')} {form.get_date_chooser_textbox('date_from',date_from)}
+				{glocale.lang('and')} {form.get_date_chooser_textbox('date_to',date_to)}
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<table width="60%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="a_body" align="center">
+		<input type="submit" value="{glocale.lang('search')}" />
+		<input type="button" value="{glocale.lang('reset')}" onclick="document.location.href = '{reset_url}';" />
+		</td>
+	</tr>
+</table>
+</form>
+
+<div class="a_block_pad">
+	<div class="a_menubar">
+		<a href="{gurl.get_acpmod_url(0,'&amp;ask=deleteall')}">
+		<img src="{gpath}acp/images/delete.png" alt="{glocale.lang('delete_all_entries')}" />
+		{glocale.lang('delete_all_entries')}
+		</a>
+	</div>
+</div>
+
+<form method="post" action="{form_url}">
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('acpmod_iplog')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="17%" class="a_coldesc">{col_action}</td>
+			<td width="13%" class="a_coldesc" align="center">{col_user_name}</td>
+			<td width="15%" class="a_coldesc" align="center">{col_user_ip}</td>
+			<td width="30%" class="a_coldesc" align="center">{col_user_agent}</td>
+			<td width="20%" class="a_coldesc" align="center">{col_date}</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+		</tr>
+		{if num == 0}
+		<tr>
+			<td colspan="6" class="a_main" align="center">{glocale.lang('no_logs_found')}</td>
+		</tr>
+		{endif}
+		{loop logs as row => log}
+		<tr id="row_{row}" class="hlRow">
+			<td class="hlCol">{log:action}</td>
+			<td class="hlCol" align="center">{log:user_name}</td>
+			<td class="hlCol" align="center">{log:user_ip}</td>
+			<td class="hlCol" align="center">{log:user_agent}</td>
+			<td class="hlCol" align="center">{log:date}</td>
+			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			<input id="check_{row}" type="checkbox" name="delete[]" value="{log:id}" />
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="30%" class="a_body">&nbsp;</td>
+		<td width="40%" align="center" class="a_body">
+		{glocale.lang('marked')}: <input type="submit" value="{glocale.lang('delete')}" />
+		</td>
+		<td width="30%" align="right" class="a_body">
+		<a href="javascript:rowHL.toggleAllSelected();">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+
+<div class="a_pad">
+	{include "inc_page_split.htm"}
+</div>
+
+{endif}
+
+{include "inc_footer.htm"}

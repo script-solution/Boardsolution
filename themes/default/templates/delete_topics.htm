@@ -1,0 +1,38 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<form method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" /><div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('delete_topics')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('selected_topics')}:</dt>
+			<dd>
+				<table cellpadding="2">
+					{loop selected_topics as data}
+					<tr>
+						<td width="20">{data:symbol}</td>
+						<td>{data:topic}</td>
+					</tr>
+					{endloop}
+				</table>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{back_url}'" />
+	<input type="submit" name="submit" value="{glocale.lang('delete')}" />
+</center>
+</form>
+
+<div class="bs_padtop">
+{include "inc_message_review.htm"}
+</div>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

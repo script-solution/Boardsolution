@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<highlighter>
+	<name>SQL</name>
+	<hlNumbers>true</hlNumbers>
+	<escapeChar>\</escapeChar>
+	<stringQuotes>
+		<def id="1">&quot;</def>
+		<def id="2">&#039;</def>
+		<def id="3">`</def>
+	</stringQuotes>
+	<slComments>
+		<def id="1">#</def>
+		<def id="2">--</def>
+	</slComments>
+	<mlComments>
+		<def id="1" start="/*" end="*/"/>
+	</mlComments>
+	<symbols>
+		<kw>(</kw>
+		<kw>)</kw>
+		<kw>=</kw>
+		<kw>&lt;</kw>
+		<kw>&gt;</kw>
+		<kw>|</kw>
+	</symbols>
+	<regexps>
+	</regexps>
+	<keywords>
+		<def id="1" cs="false">
+			<kw>ALL</kw>
+			<kw>ASC</kw>
+			<kw>AS</kw>
+			<kw>ALTER</kw>
+			<kw>AND</kw>
+			<kw>ADD</kw>
+			<kw>AUTO_INCREMENT</kw>
+			<kw>BETWEEN</kw>
+			<kw>BINARY</kw>
+			<kw>BOTH</kw>
+			<kw>BY</kw>
+			<kw>BOOLEAN</kw>
+			<kw>CHANGE</kw>
+			<kw>CHECK</kw>
+			<kw>COLUMNS</kw>
+			<kw>COLUMN</kw>
+			<kw>CROSS</kw>
+			<kw>CREATE</kw>
+			<kw>DATABASES</kw>
+			<kw>DATABASE</kw>
+			<kw>DATA</kw>
+			<kw>DELAYED</kw>
+			<kw>DESCRIBE</kw>
+			<kw>DESC</kw>
+			<kw>DISTINCT</kw>
+			<kw>DELETE</kw>
+			<kw>DROP</kw>
+			<kw>DEFAULT</kw>
+			<kw>ENCLOSED</kw>
+			<kw>ESCAPED</kw>
+			<kw>EXISTS</kw>
+			<kw>EXPLAIN</kw>
+			<kw>FIELDS</kw>
+			<kw>FIELD</kw>
+			<kw>FLUSH</kw>
+			<kw>FOR</kw>
+			<kw>FOREIGN</kw>
+			<kw>FUNCTION</kw>
+			<kw>FROM</kw>
+			<kw>GROUP</kw>
+			<kw>GRANT</kw>
+			<kw>HAVING</kw>
+			<kw>IGNORE</kw>
+			<kw>INDEX</kw>
+			<kw>INFILE</kw>
+			<kw>INSERT</kw>
+			<kw>INNER</kw>
+			<kw>INTO</kw>
+			<kw>IDENTIFIED</kw>
+			<kw>IN</kw>
+			<kw>IS</kw>
+			<kw>IF</kw>
+			<kw>JOIN</kw>
+			<kw>KEYS</kw>
+			<kw>KILL</kw>
+			<kw>KEY</kw>
+			<kw>LEADING</kw>
+			<kw>LIKE</kw>
+			<kw>LIMIT</kw>
+			<kw>LINES</kw>
+			<kw>LOAD</kw>
+			<kw>LOCAL</kw>
+			<kw>LOCK</kw>
+			<kw>LOW_PRIORITY</kw>
+			<kw>LEFT</kw>
+			<kw>LANGUAGE</kw>
+			<kw>MODIFY</kw>
+			<kw>NATURAL</kw>
+			<kw>NOT</kw>
+			<kw>NULL</kw>
+			<kw>NEXTVAL</kw>
+			<kw>OPTIMIZE</kw>
+			<kw>OPTION</kw>
+			<kw>OPTIONALLY</kw>
+			<kw>ORDER</kw>
+			<kw>OUTFILE</kw>
+			<kw>OR</kw>
+			<kw>OUTER</kw>
+			<kw>ON</kw>
+			<kw>PROCEEDURE</kw>
+			<kw>PROCEDURAL</kw>
+			<kw>PRIMARY</kw>
+			<kw>READ</kw>
+			<kw>REFERENCES</kw>
+			<kw>REGEXP</kw>
+			<kw>RENAME</kw>
+			<kw>REPLACE</kw>
+			<kw>RETURN</kw>
+			<kw>REVOKE</kw>
+			<kw>RLIKE</kw>
+			<kw>RIGHT</kw>
+			<kw>SHOW</kw>
+			<kw>SONAME</kw>
+			<kw>STATUS</kw>
+			<kw>STRAIGHT_JOIN</kw>
+			<kw>SELECT</kw>
+			<kw>SETVAL</kw>
+			<kw>SET</kw>
+			<kw>TABLES</kw>
+			<kw>TEMINATED</kw>
+			<kw>TO</kw>
+			<kw>TRAILING</kw>
+			<kw>TRUNCATE</kw>
+			<kw>TABLE</kw>
+			<kw>TEMPORARY</kw>
+			<kw>TRIGGER</kw>
+			<kw>TRUSTED</kw>
+			<kw>UNIQUE</kw>
+			<kw>UNLOCK</kw>
+			<kw>USE</kw>
+			<kw>USING</kw>
+			<kw>UPDATE</kw>
+			<kw>UNSIGNED</kw>
+			<kw>VALUES</kw>
+			<kw>VARIABLES</kw>
+			<kw>VIEW</kw>
+			<kw>WITH</kw>
+			<kw>WRITE</kw>
+			<kw>WHERE</kw>
+			<kw>ZEROFILL</kw>
+			<kw>XOR</kw>
+		</def>
+		
+		<!--<def id="2" cs="false">
+			<kw></kw>
+		</def>-->
+	</keywords>
+	<colors>
+		<keywords id="1">
+			<attr name="fontColor" value="#2E8B57"/>
+			<attr name="bold" value="true"/>
+		</keywords>
+		<numbers>
+			<attr name="fontColor" value="#cc66cc"/>
+		</numbers>
+		<symbols>
+			<attr name="fontColor" value="#66cc66"/>
+		</symbols>
+		<strings id="2">
+			<attr name="fontColor" value="#FF00FF"/>
+		</strings>
+		<strings id="1">
+			<attr name="fontColor" value="#FF00FF"/>
+		</strings>
+		<strings id="3">
+			<attr name="fontColor" value="#FF00FF"/>
+		</strings>
+		<mlComments id="1">
+			<attr name="fontColor" value="#808080"/>
+		</mlComments>
+		<slComments id="1">
+			<attr name="fontColor" value="#0000ff"/>
+		</slComments>
+		<slComments id="2">
+			<attr name="fontColor" value="#0000ff"/>
+		</slComments>
+	</colors>
+</highlighter>

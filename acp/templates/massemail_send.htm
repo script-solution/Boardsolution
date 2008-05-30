@@ -1,0 +1,31 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+{if not_finished}
+<script type="text/javascript" language="javascript">
+function reload()
+{
+	document.location.href='{target_url}';
+}
+
+window.setTimeout('reload()',2000);
+</script>
+{endif}
+
+<div class="a_border a_pad">
+	<h1 class="a_topic">{title}</h1>
+	<div class="a_main">
+		<img alt="{percent}%" src="{gpath}acp/images/topic.gif" width="{percent}%" height="20" />
+	</div>
+	<div class="a_main" style="text-align: center;">
+		{message}
+		{if not_finished == false}
+		<div class="a_body" style="padding-top: 5px;">
+		<a href="{gurl.get_acpmod_url()}">{glocale.lang('back')}</a>
+		</div>
+		{endif}
+	</div>
+</div>
+{endif}
+
+{include "inc_footer.htm"}

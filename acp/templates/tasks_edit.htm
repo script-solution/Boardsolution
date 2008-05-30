@@ -1,0 +1,64 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<p class="a_block">{glocale.lang('add_task_notice')}</p>
+
+<form method="post" action="{form_target}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="a_border">
+	<h1 class="a_topic">{title}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('title')}:</dt>
+			<dd>
+				{if is_def}
+				<i>{default:task_title}</i>
+				{else}
+				{form.get_textbox('task_title',default:task_title,30,255)}
+				{endif}
+				<div class="a_desc">{glocale.lang('task_title_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('filename')}:</dt>
+			<dd>
+				{gpath}src/tasks/
+				{if is_def}
+				<i>{default:task_file}</i>
+				{else}
+				{form.get_textbox('task_file',default:task_file,30,255)}
+				{endif}
+				<div class="a_desc">{glocale.lang('task_file_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('execution')}:</dt>
+			<dd>
+				{form.get_textbox('interval',default:interval,3,10)}
+				{form.get_combobox('interval_type',interval_types,default:interval_type)}
+				<div style="padding-top: 5px;">
+				{glocale.lang('point_of_time')}:
+				{form.get_textbox('time_hour',default:time_hour,2,2)} :
+				{form.get_textbox('time_min',default:time_min,2,2)} :
+				{form.get_textbox('time_sec',default:time_sec,2,2)} GMT
+				<div class="a_desc">{glocale.lang('task_execution_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('enabled')}:</dt>
+			<dd>
+				{form.get_radio_yesno('enabled',default:enabled)}
+				<div class="a_desc">{glocale.lang('task_enabled_desc')}</div>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="submit" value="{glocale.lang('save')}" />
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.get_acpmod_url()}';" />
+</center>
+</form>
+
+{endif}
+
+{include "inc_footer.htm"}

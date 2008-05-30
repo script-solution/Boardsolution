@@ -1,0 +1,48 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+{if not_exported}
+{include "inc_delete_message.htm"}
+{include "inc_js_row_selector.htm"}
+
+<form method="post" action="{gurl.get_acpmod_url()}">
+<div class="a_border">
+	<h1 class="a_topic">{glocale.lang('acpmod_user_activation')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="40%" class="a_coldesc">{glocale.lang('username')}</td>
+			<td width="30%" class="a_coldesc">{glocale.lang('email')}</td>
+			<td width="25%" class="a_coldesc" align="center">{glocale.lang('registeredsince')}</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+		</tr>
+		{if user.length == 0}
+		<tr>
+			<td colspan="4" class="a_main" align="center">{glocale.lang('no_notactivated_user_found')}</td>
+		</tr>
+		{endif}
+		{loop user as row => udata}
+		<tr id="row_{row}" class="hlRow">
+			<td class="hlCol">{udata:user_name}</td>
+			<td class="hlCol">{udata:user_email}</td>
+			<td class="hlCol" align="center">{udata:register_date}</td>
+			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			<input id="check_{row}" type="checkbox" name="delete[]" value="{udata:id}" />
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+<center>
+	{glocale.lang('selected_user')}
+	<select name="action_type">
+		<option value="none">- {glocale.lang('no_action')} -</option>
+		<option value="unblock">{glocale.lang('activate')}</option>
+		<option value="delete">{glocale.lang('delete')}</option>
+	</select>
+	<input type="submit" value="{glocale.lang('submit')}" />
+</center>
+</form>
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

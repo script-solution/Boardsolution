@@ -1,0 +1,179 @@
+gui.dialog.ok = "Ok"
+gui.dialog.cancel = "Abbrechen"
+gui.dialog.search.title = "Suchen & Ersetzen"
+gui.dialog.search.search = "Suchen"
+gui.dialog.search.replace = "Ersetzen"
+gui.dialog.search.scope = "Bereich"
+gui.dialog.search.all = "Alles"
+gui.dialog.search.selection = "Auswahl"
+gui.dialog.search.casesensitive = "Groß-/Kleinschreibung"
+gui.dialog.search.direction = "Richtung"
+gui.dialog.search.backwards = "Rückwärts"
+gui.dialog.search.forward = "Vorwärts"
+gui.dialog.search.replacefind = "Ersetzen & Suchen"
+gui.dialog.search.replaceall = "Alle ersetzen"
+gui.dialog.search.wrapsearch = "Weitersuchen"
+gui.dialog.search.parsebbcode = "BBCode im Ergebnis parsen"
+gui.dialog.search.nomatches = "0 Ergebnisse gefunden"
+gui.dialog.search.xmatches = "Ergebnis %d von %d insgesamt"
+gui.btn.bold.tooltip = "Das fett-Attribut umschalten"
+gui.btn.italic.tooltip = "Das kursiv-Attribut umschalten"
+gui.btn.underline.tooltip = "Das unterstrichen-Attribut umschalten"
+gui.btn.strike.tooltip = "Das durchgestrichen-Attribut umschalten"
+gui.btn.fontcolor.tooltip = "Die Schriftfarbe ändern"
+gui.btn.bgcolor.tooltip = "Die Hintergrundfarbe ändern"
+gui.btn.smiley.tooltip = "Einen Smiley einfügen"
+gui.btn.fontsize.tooltip = "Die Schriftgröße ändern"
+gui.btn.fontfamily.tooltip = "Die Schriftart ändern"
+gui.btn.subscript.tooltip = "Tiefgestellter Text"
+gui.btn.supscript.tooltip = "Hochgestellter Text"
+gui.btn.new.tooltip = "Einen neuen Text beginnen"
+gui.btn.cut.tooltip = "Ausschneiden"
+gui.btn.copy.tooltip = "Kopieren"
+gui.btn.paste.tooltip = "Einfügen"
+gui.btn.searchnreplace.tooltip = "Suchen & Ersetzen"
+gui.btn.undo.tooltip = "Rückgängig"
+gui.btn.redo.tooltip = "Wiederholen"
+gui.btn.alignleft.tooltip = "Ausrichtung links"
+gui.btn.aligncenter.tooltip = "Ausrichtung zentriert"
+gui.btn.alignright.tooltip = "Ausrichtung rechts"
+gui.btn.quote.tooltip = "Ein Zitat einfügen"
+gui.btn.code.tooltip = "Einen Code-Bereich einfügen"
+gui.btn.code.nohl = "-Kein-"
+gui.btn.list.tooltip = "Eine Liste einfügen"
+gui.btn.link.tooltip = "Einen Link einfügen"
+gui.btn.email.tooltip = "Eine Email-Adresse einfügen"
+gui.btn.quote.list.default = "Standard"
+gui.btn.quote.list.userdef = "Mit Autor"
+gui.btn.list.list.default = "Standard"
+gui.btn.list.list.circle = "Kreis"
+gui.btn.list.list.square = "Quadrat"
+gui.btn.list.list.disc = "Scheibe"
+gui.btn.list.list.numeric = "Numerisch"
+gui.btn.list.list.alphas = "Kleinbuchstaben"
+gui.btn.list.list.alphab = "Großbuchstaben"
+gui.btn.list.list.romans = "Kleine römische Zahlen"
+gui.btn.list.list.romanb = "Große römische Zahlen"
+gui.btn.image.tooltip = "Ein Bild einfügen"
+gui.tab.editor.title = "Editor"
+gui.tab.source.title = "Quellcode"
+gui.dialog.color.title = "Farbe auswählen"
+gui.dialog.link.insert.title = "Neuen Link einfügen"
+gui.dialog.link.edit.title = "Link editieren"
+gui.dialog.link.title.field = "Link Titel:"
+gui.dialog.link.link.field = "Link Adresse:"
+gui.dialog.email.insert.title = "Neue Email-Adresse einfügen"
+gui.dialog.email.edit.title = "Email-Adresse editieren"
+gui.dialog.email.title.field = "Email Titel:"
+gui.dialog.email.email.field = "Email Adresse:"
+gui.dialog.image.title = "Neues Bild einfügen"
+gui.dialog.image.url.field = "Bild Adresse:"
+gui.dialog.quote.insert.title = "Ein Zitat einfügen"
+gui.dialog.quote.edit.title = "Zitat editieren"
+gui.dialog.quote.author.field = "Autor:"
+gui.dialog.new.title = "Kompletten Text löschen?"
+gui.dialog.new.message = "Soll der komplette Text wirklich gelöscht werden?"
+gui.popup.cut = "Ausschneiden"
+gui.popup.copy = "Kopieren"
+gui.popup.copy.bbcode = "Als BBCode kopieren"
+gui.popup.copy.html = "Als HTML-Code kopieren"
+gui.popup.copy.plain = "Als plain-text kopieren"
+gui.popup.paste = "Einfügen"
+gui.popup.paste.bbcode = "Als BBCode einfügen"
+gui.popup.paste.html = "Als HTML-Code einfügen (z.B. für Textverarbeitungsprogramme)"
+gui.popup.paste.plain = "Als Plain-Text einfügen"
+gui.popup.paste.plain.html = "Plain-Text als HTML interpretieren (Für kopierten HTML-Code)"
+gui.popup.undo = "Rückgängig"
+gui.popup.redo = "Wiederholen"
+gui.popup.editemail = "Email-Adresse editieren"
+gui.popup.editlink = "Link-Adresse editieren"
+gui.popup.copylink = "Link-Adresse kopieren"
+gui.popup.copyemail = "Email-Adresse kopieren"
+gui.popup.removeformating = "Formatierung entfernen"
+gui.popup.removelinks = "Links entfernen"
+gui.popup.editquoteauthor = "Zitat-Autor editieren"
+gui.popup.editimageurl = "Bild-URL editieren"
+gui.popup.code.changehl = "Highlighting ändern"
+gui.popup.changelisttype = "List-Typ ändern"
+gui.popup.list.type.default = "Standard"
+gui.popup.list.type.circle = "Kreis"
+gui.popup.list.type.square = "Quadrat"
+gui.popup.list.type.disc = "Scheibe"
+gui.popup.list.type.numeric = "Numerisch"
+gui.popup.list.type.alphas = "Kleinbuchstaben"
+gui.popup.list.type.alphab = "Großbuchstaben"
+gui.popup.list.type.romans = "Kleine römische Zahlen"
+gui.popup.list.type.romanb = "Große römische Zahlen"
+parser.err.invalidcontent = "Es sind Tags vor einem Tag geöffnet, die nicht geöffnet sein dürfen"
+parser.err.maxnestlevel = "Die maximale verschaltelungstiefe wurde überschritten"
+parser.err.missopentag = "Es sind mehr schließende als öffnende Tags vorhanden"
+parser.err.nestedtag = "Ein verschachtelter Tag (...[b]...[b]...[/b]...[/b]...)"
+parser.err.wrongcloseorder = "Sie haben Tags in einer falschen Reihenfolge geschlossen"
+parser.err.missingclosingtag = "Mindestens ein schließender Tag fehlt"
+error.invalid_image_url = "Ungültige Bild URL '%s'"
+error.missing_link_address = "Bitte geben Sie eine Link-Adresse ein!"
+error.missing_email_address = "Bitte geben Sie eine Email-Adresse an!"
+gui.statusbar.loading_image = "Lade Bild '%s'"
+gui.dialog.help.title = "Hilfe"
+gui.dialog.help.close = "Schließen"
+gui.dialog.help.text = "[size=20]Einige Tipps und Tricks[/size][list]
+[*]Listen, Zitate und Code-Bereiche funktionieren alle auf die gleiche Art und Weise. Es ist [b]immer[/b] mindestens eine Zeile davor und dahinter! Daher müssen/können diese Bereiche nicht mittels \"Doppelt-Enter\" verlassen werden.
+[*]Neben dem Einfügen von Smileys per Klick können Sie auch einfach den Smiley-Code eintippen. Der Editor erkennt automatisch die Smiley-Codes und wird diesen mit dem entsprechenden Smiley ersetzen.
+[*]Sie können die Größe von Bildern ändern, so dass sie nicht mehr so viel Platz wegnehmen. Beachten Sie, dass dies [b]nicht[/b] die Darstellung im Board beeinflusst!
+[*]Sie können die folgenden Tastatur-Kürzel verwenden:
+[font=courier new][b]Kürzel[/b]					[b]Funktion[/b]
+Strg+Links				Bewegt den Cursor zum vorherigen Wort
+Strg+Rechts				Bewegt den Cursor zum nächsten Wort
+Strg+Hoch				Bewegt den sichtbaren Ausschnitt nach oben
+Strg+Runter				Bewegt den sichtbaren Ausschnitt nach unten
+Strg+Backspace			Entfernt das vorherige Wort
+Strg+Entf				Entfernt das nächste Wort
+Strg+Pos1				Bewegt den Cursor an den Anfang des Textes
+Strg+Ende				Bewegt den Cursor an das Ende des Textes
+Pos1					Bewegt den Cursor an den Anfang der Zeile
+Ende					Bewegt den Cursor an das Ende der Zeile
+Strg+Enter				Fügt eine neue Zeile ohne List-Punkt in Listen ein
+BildHoch				Bewegt den Cursor eine Seite nach oben
+BildRunter				Bewegt den Cursor eine Seite nach unten
+Strg+Z					Macht die letzte Aktion rückgängig
+Strg+Y					Wiederholt die letzte Aktion
+Strg+X					Schneidet den ausgewählten Text aus
+Strg+C					Kopiert den ausgewählten Text
+Strg+V					Fügt den Text aus der Zwischenablage am Cursor ein
+Strg+A					Wählt den kompletten Text aus
+Strg+B					Schaltet das Fett-Attribut um
+Strg+I					Schaltet das Kursiv-Attribut um
+Strg+U					Schaltet das Unterstrichen-Attribut um
+Strg+L					Setzt die Ausrichtung auf \"links\"
+Strg+E					Setzt die Ausrichtung auf \"zentriert\"
+Strg+R					Setzt die Ausrichtung auf \"rechts\"
+Ctrl+O					Fügt eine Liste ein
+Ctrl+P					Fügt eine Code-Sektion ein
+Ctrl+Q					Fügt ein Zitat ein
+Ctrl+S					Splittet Listen, Codes oder Zitate
+[/font]
+[b]Hinweis:[/b] Es kann sein, dass einige Shortcuts deaktiviert sind, da die dazugehörigen Tags deaktiviert sind!
+
+Zusätzlich kann jede Cursor-Bewegung mit Shift kombiniert werden, wodurch die Auswahl verändert werden kann!
+[*]Es kann auch Text aus Textverarbeitungen wie MS Word oder OpenOffice.org eingefügt werden. Oder anders gesagt: Es kann Text mit MimeType \"text/html\" importiert werden.
+Wobei allerdings nicht jede mögliche Formatierung übernommen wird.
+[/list]"
+
+gui.dialog.extra.title = "Text:"
+gui.dialog.extra.links.tooltip = "Spezial-Tags einfügen"
+gui.dialog.extra.post.comboname = "Link zu einem Beitrag"
+gui.dialog.extra.post.title = "Link zu einem Beitrag"
+gui.dialog.extra.post.parameter.title = "Beitrags-ID:"
+gui.dialog.extra.post.desc = "Bitte geben Sie hier die Beitrags-ID an. Diese wird z.B. bei jedem Beitrag rechts in dem Beitrags-Nummer-Link angezeigt (der Teil hinter \"&id=\")"
+gui.dialog.extra.topic.comboname = "Link zu einem Thema"
+gui.dialog.extra.topic.title = "Link zu einem Thema"
+gui.dialog.extra.topic.parameter.title = "Themen-ID:"
+gui.dialog.extra.topic.desc = "Bitte geben Sie hier die Themen-ID an. Diese finden Sie z.B. in der Adresszeile hinter \"&tid=\""
+gui.dialog.extra.att.comboname = "Link zu einem Anhang"
+gui.dialog.extra.att.title = "Link zu einem Anhang"
+gui.dialog.extra.att.parameter.title = "Anhang:"
+gui.dialog.extra.att.desc = "Bitte geben Sie hier die Datei an. Z.B.: uploads/meinedatei.txt"
+gui.dialog.extra.attimg.comboname = "Link zu einem Anhang-Bild"
+gui.dialog.extra.attimg.title = "Link zu einem Anhang-Bild"
+gui.dialog.extra.attimg.parameter.title = "Anhang:"
+gui.dialog.extra.attimg.desc = "Bitte geben Sie hier das Bild an. Z.B.: uploads/meinbild.jpg"

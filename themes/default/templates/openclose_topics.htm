@@ -1,0 +1,57 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+{include "inc_post_preview.htm"}
+
+<form method="post" action="{target_url}" onsubmit="BS_refresh_text();">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{title}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('selected_topics')}:</dt>
+			<dd>
+				<table cellpadding="2">
+					{loop selected_topics as data}
+					<tr>
+						<td width="20">{data:symbol}</td>
+						<td>{data:topic}</td>
+					</tr>
+					{endloop}
+				</table>
+				
+				<div class="bs_padtop_big">
+					{if notices.length > 0}
+					<ul class="bs_none_list">
+						{loop notices as notice}
+						<li>{notice}</li>
+						{endloop}
+					</ul>
+					{endif}
+				</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('post_reason')}:</dt>
+			<dd>{form.get_radio_yesno('post_reason',1)}</dd>
+		</dl>
+		{include "inc_post_form.htm"}
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{back_url}'" />
+	<input type="submit" name="preview" value="{glocale.lang('preview')}" />
+	<input type="submit" name="submit" value="{glocale.lang('submit')}" />
+</center>
+</form>
+
+<div class="bs_padtop">
+{include "inc_message_review.htm"}
+</div>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

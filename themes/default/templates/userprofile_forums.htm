@@ -1,0 +1,50 @@
+{include "inc_delete_message.htm"}
+
+<form method="post" action="{target_url}">
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('subscribed_forums')}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<th width="42%" class="bs_coldesc" align="left">{glocale.lang('forum')}</th>
+			<th width="24%" class="bs_coldesc">{glocale.lang('subscribe_date')}</th>
+			<th width="24%" class="bs_coldesc">{glocale.lang('lastpost')}</th>
+			<th width="10%" class="bs_coldesc">{glocale.lang('delete')}</th>
+		</tr>
+		{if num == 0}
+		<tr>
+			<td colspan="4" align="center" class="bs_main">{glocale.lang('no_subscribed_forums')}</td>
+		</tr>
+		{endif}
+		{loop forums as index => forum}
+		<tr>
+			<td class="bs_main">{forum:position}</td>
+			<td class="bs_main" align="center">{forum:subscribe_date}</td>
+			<td class="bs_main" align="center">{forum:last_post}</td>
+			<td class="bs_main" align="center"
+					onclick="var cb = document.getElementById('subscr_{index}'); cb.checked = cb.checked ? false : true;">
+			<input type="checkbox" id="subscr_{index}" name="delete[]" value="{forum:id}"
+						 onclick="this.checked = this.checked ? false : true;" />
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="30%">&nbsp;</td>
+		<td width="40%" align="center"><input type="submit" value="{glocale.lang('delete')}" /></td>
+		<td width="30%" align="right">
+		<a href="Javascript:invertSelection('subscr_');">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+
+<div class="bs_padtop">
+{include "inc_page_split.htm"}
+</div>
+
+<div class="bs_padtop_big" align="right">
+	<a href="{subscribe_all_url}">{glocale.lang('subscribe_to_all_forums')}</a>
+</div>

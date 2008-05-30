@@ -1,0 +1,72 @@
+{include "inc_header.htm"}
+{include "inc_delete_message.htm"}
+
+{if module_error == false}
+{include "inc_js_row_selector.htm"}
+
+<div class="a_block">
+	<div class="a_menubar">
+		<a href="{gurl.get_acpmod_url(0,'&amp;action=add')}">
+		<img src="{gpath}acp/images/plus.png" alt="{glocale.lang('add_theme')}" />
+		{glocale.lang('add_theme')}
+		</a>
+	</div>
+</div>
+
+<form method="post" action="{gurl.get_acpmod_url()}">
+<input type="hidden" name="action_type" value="{at_update}" />
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('themes')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="50%" class="a_coldesc">{glocale.lang('theme_name')}</td>
+			<td width="40%" class="a_coldesc">{glocale.lang('theme_folder')}</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+		</tr>
+		{loop themes as row => theme}
+		<tr id="row_{row}" class="hlRow">
+			<td class="hlCol">
+			{form.get_textbox('names['~theme:id~']',theme:theme_name,30,50)}
+			</td>
+			<td class="hlCol">
+			{if theme:theme_folder == 'default'}
+			{theme:theme_folder}
+			{else}
+			{form.get_textbox('folders['~theme:id~']',theme:theme_folder,20,20)}
+			{endif}
+			</td>
+			<td class="hlCol" align="center">
+			<a href="{theme:edit_url}">
+			<img src="{gpath}acp/images/edit.png" alt="{glocale.lang('edit')}" title="{glocale.lang('edit')}" />
+			</a>
+			</td>
+			{if theme:theme_folder == 'default'}
+			<td class="hlCol" align="center">
+			-
+			<script type="text/javascript">rowHL.setRowDisabled({row});</script>
+			</td>
+			{else}
+			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			<input id="check_{row}" type="checkbox" name="delete[]" value="{theme:id}" />
+			</td>
+			{endif}
+		</tr>
+		{endloop}
+	</table>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="40%" class="a_body">&nbsp;</td>
+		<td width="20%" align="center" class="a_body">
+		<input type="submit" value="{glocale.lang('save')} / {glocale.lang('delete')}" />
+		</td>
+		<td width="40%" align="right" class="a_body">
+		<a href="javascript:rowHL.toggleAllSelected();">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+{endif}
+
+{include "inc_footer.htm"}

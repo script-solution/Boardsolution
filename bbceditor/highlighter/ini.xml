@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<highlighter>
+	<name>Ini-File</name>
+	<hlNumbers>true</hlNumbers>
+	<escapeChar>\</escapeChar>
+	<stringQuotes>
+		<def id="1">&quot;</def>
+	</stringQuotes>
+	<slComments>
+		<def id="1">;</def>
+	</slComments>
+	<mlComments>
+	</mlComments>
+	<symbols>
+		<kw>=</kw>
+	</symbols>
+	<regexps>
+		<def id="2" pattern="\b(on|off)\b" cs="0"/>
+		<def id="1" pattern="\[.+?\]"/>
+		<def id="3" pattern="([a-zA-Z0-9_]+)\s*=" group="1"/>
+	</regexps>
+	<keywords>
+	</keywords>
+	<colors>
+		<symbols>
+			<attr name="fontColor" value="#000080"/>
+		</symbols>
+		<numbers>
+			<attr name="fontColor" value="#800080"/>
+		</numbers>
+		<strings id="1">
+			<attr name="fontColor" value="#FF00FF"/>
+		</strings>
+		<regexp id="2">
+			<attr name="fontColor" value="#FF0000"/>
+		</regexp>
+		<regexp id="1">
+			<attr name="fontColor" value="#008080"/>
+		</regexp>
+		<regexp id="3">
+			<attr name="fontColor" value="#000099"/>
+		</regexp>
+		<slComments id="1">
+			<attr name="fontColor" value="#008000"/>
+		</slComments>
+	</colors>
+</highlighter>

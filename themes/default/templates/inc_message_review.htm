@@ -1,0 +1,46 @@
+{if messages}
+{if show_quote}
+<script type="text/javascript" src="{gjs.get_file('src/ajax_quote_message.js')}"></script>
+<script type="text/javascript">
+<!--
+var qm = new BS_quoteMessageAJAX('{field_id}','{request_url}');
+//-->
+</script>
+{endif}
+
+<div class="bs_border">
+	<h1 class="bs_topic">{topic_title}</h1>
+	{if limit_height}
+	<div style="overflow: auto; max-height: 500px; width: 100%;">
+	{endif}
+	<table class="bs_table" cellpadding="2" cellspacing="1" style="table-layout: fixed;">
+		{loop messages as message}
+		<tr>
+			<td width="25%" class="bs_left" valign="top">
+				<span id="user_{message:post_id}">{message:user_name}</span> ,
+				<span style="font-weight: normal;">{message:date}</span>
+				{if message:subject}
+				<div class="bs_padtop_big">
+				{message:subject}
+				</div>
+				{endif}
+			</td>
+			<td width="75%" class="bs_main" valign="top">
+				{if show_quote}
+				<a class="bs_button" href="javascript:qm.quoteMessage({message:post_id});">{glocale.lang('quote')}</a>
+				<br style="clear: both;" />
+				{endif}
+				<div id="post_{message:post_id}" class="bs_posts_main_1">{message:text}</div>
+			</td>
+		</tr>
+		{endloop}
+	</table>
+	{if limit_height}
+	</div>
+	{endif}
+</div>
+
+{if page_split}
+{page_split}
+{endif}
+{endif}

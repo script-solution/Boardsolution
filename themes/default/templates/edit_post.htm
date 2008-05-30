@@ -1,0 +1,43 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+{include "inc_post_preview.htm"}
+
+<form method="post" enctype="multipart/form-data" action="{target_url}" onsubmit="BS_refresh_text();">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('edit_post')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('user')}:</dt>
+			<dd>{user_text}</dd>
+		</dl>
+		{if show_lock_post}
+		<dl>
+			<dt>{glocale.lang('lock_post')}:</dt>
+			<dd>
+				{lock_post}
+				<div class="bs_desc">{glocale.lang('lock_post_explain')}</div>
+			</dd>
+		</dl>
+		{endif}
+		{include "inc_post_form.htm"}
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="location.href = '{back_url}'" />
+	<input type="submit" name="preview" value="{glocale.lang('preview')}" />
+	<input type="submit" name="submit" value="{glocale.lang('save')}" accesskey="s" />
+</center>
+</form>
+
+<div class="bs_padtop">
+{include "inc_message_review.htm"}
+</div>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}
