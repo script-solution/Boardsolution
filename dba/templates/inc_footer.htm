@@ -1,0 +1,25 @@
+<div class="bs_border bs_pad">
+	<table width="100%" cellpadding="0" cellspacing="0">
+		<tr>
+			<td class="bs_main">
+			{if debug > 0}
+			<b>{time}</b> Sek., <b>{query_count}</b> Qrys., <b>{memory}</b> Memory
+			{else}
+			&nbsp;
+			{endif}
+			</td>
+			<td class="bs_main" align="right">
+			Boardsolution DB-Admin v1.0 &middot;
+			&copy; Nils Asmussen 2006-2007 &middot;
+			<a href="http://www.script-solution.de">Script-Solution</a>
+			</td>
+		</tr>
+	</table>
+</div>
+
+{if debug > 1}
+{queries}
+{endif}
+
+</body>
+</html>

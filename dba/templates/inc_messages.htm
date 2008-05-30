@@ -1,0 +1,75 @@
+{if messages}
+<div class="bs_border bs_padbottom_big">
+	<h1 class="bs_topic">{title}</h1>
+	<div class="bs_main" style="text-align: center; padding-top: 2.5em; padding-bottom: 2.5em;">
+		{if errors}
+		<div style="padding: 0.3em;">
+		{if errors.length == 1}
+		<p>
+		<span class="bs_msg_error">{glocale.lang('error')}:</span>
+		{loop errors as error}
+		{error}
+		{endloop}
+		</p>
+		{else}
+		<span class="bs_msg_error">{glocale.lang('errors')}:</span>
+		<ul>
+			{loop errors as error}
+			<li>{error}</li>
+			{endloop}
+		</ul>
+		{endif}
+		</div>
+		{endif}
+		
+		{if warnings}
+		<div style="padding: 0.3em;">
+		{if warnings.length == 1}
+		<p>
+		<span class="bs_msg_warning">{glocale.lang('warning')}:</span>
+		{loop warnings as warning}
+		{warning}
+		{endloop}
+		</p>
+		{else}
+		<span class="bs_msg_warning">{glocale.lang('warnings')}:</span>
+		<ul>
+			{loop warnings as warning}
+			<li>{warning}</li>
+			{endloop}
+		</ul>
+		{endif}
+		</div>
+		{endif}
+		
+		{if notices}
+		<div style="padding: 0.3em;">
+		{if notices.length == 1}
+		<p>
+		<span class="bs_msg_notice">{glocale.lang('notice')}:</span>
+		{loop notices as notice}
+		{notice}
+		{endloop}
+		</p>
+		{else}
+		<span class="bs_msg_notice">{glocale.lang('notices')}:</span>
+		<ul>
+			{loop notices as notice}
+			<li>{notice}</li>
+			{endloop}
+		</ul>
+		{endif}
+		</div>
+		{endif}
+		
+		{if links}
+		<p style="padding-top: 0.6em;">
+		{loop links as name => lurl}
+		{if links.current > 0} &middot; {endif}
+		<a href="{lurl}">{name}</a>
+		{endloop}
+		</p>
+		{endif}
+	</div>
+</div>
+{endif}

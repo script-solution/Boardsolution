@@ -1,0 +1,314 @@
+/* ------------ GENERAL ------------ */
+
+form {
+	margin: 0px;
+}
+
+label {
+	cursor: pointer;
+}
+
+ul {
+	padding: 0;
+	margin: 0;
+}
+li {
+	padding: 0;
+	margin: 0.2em;
+	margin-left: 2em;
+}
+
+img {
+	border: 0;
+	vertical-align: text-top;
+}
+
+[title] {
+	cursor: help;
+}
+
+/* ------------ BODY ------------ */
+
+body.bs_body {
+	margin: 1em;
+	font-family: verdana, tahoma, arial, helvetica, sans-serif;
+	font-size: 0.7em;
+	color: #000;
+	background-color: #fff;
+}
+
+.bs_body a {
+	text-decoration: none;
+	color: #3F5E88;
+}
+
+.bs_body a:hover {
+	text-decoration: underline;
+	color: #3F5E88;
+}
+
+/* ------------ PADDING ------------ */
+
+.bs_block, .bs_block_pad {
+	width: 95%;
+	margin: auto;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	display: block;
+}
+
+.bs_pad, .bs_block_pad {
+	margin-top: 0.7em;
+}
+
+.bs_pad_double {
+	margin-top: 1.4em;
+}
+
+.bs_padbottom_big {
+	margin-bottom: 1.5em;
+}
+
+/* ------------ ROW-HIGHLIGHTING ------------ */
+
+td.hlCol {
+	padding: 0.4em;
+	background-color: #ebebeb;
+}
+
+tr.hlRow:hover td.hlCol {
+	background-color: #f5f5f5;
+}
+td.hlCol_sel {
+	padding: 0.4em;
+	background-color: #FFBE5C;
+}
+
+/* ------------ THE DIFFERENT CONTENT-STYLES ------------ */
+
+/* for the main content */
+.bs_main {
+	padding: 0.4em;
+	background-color: #ebebeb;
+}
+.bs_main a {
+	text-decoration: none;
+	color: #3F5E88;
+}
+.bs_main a:hover {
+	text-decoration: underline;
+}
+
+/* the description-columns and something similar */
+.bs_coldesc {
+	padding: 0.3em;
+	font-size: 0.9em;
+	background-color: #DBDBDB;
+	font-weight: bold;
+}
+.bs_coldesc a {
+	text-decoration: none;
+	color: #3F5E88;
+}
+.bs_coldesc a:hover {
+	text-decoration: underline;
+}
+
+/* the topics (titles of areas) */
+.bs_topic {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #fff;
+	padding: 0.4em;
+	background-color: #637591;
+	background-image: url(../images/topic.gif);
+	background-repeat: repeat-x;
+	text-align: center;
+}
+td.bs_topic {
+	padding: 0.3em;
+}
+h1.bs_topic {
+	margin: 0;
+	padding: 0.3em;
+}
+.bs_topic a {
+	background-image: none;
+	text-decoration: underline;
+	color: #fff;
+}
+.bs_topic a:hover {
+	color: #000;
+}
+
+/* small text (often descriptions) */
+.bs_desc {
+	padding-top: 0.5em;
+	font-size: 0.9em;
+	font-weight: normal;
+}
+
+/* ------------ FORMULARS ------------ */
+
+fieldset.bs_form {
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+fieldset.bs_form dl {
+	padding: 0;
+	margin: 0;
+	margin-top: 1px;
+	background-color: #dbdbdb;
+}
+
+fieldset.bs_form dt {
+	display: block;
+	margin: 0;
+	float: left;
+	padding: 0.5em;
+	width: 21%;
+	font-weight: bold;
+	text-align: left;
+	vertical-align: middle;
+}
+
+fieldset.bs_form dd {
+	display: block;
+	margin: 0;
+	padding: 0.5em;
+	margin-left: 23%;
+	background-color: #ebebeb;
+	vertical-align: middle;
+}
+
+/* ------------ TABLE ------------ */
+
+table.bs_table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0;
+	padding: 0;
+}
+table.bs_table > tbody > tr > td {
+	border: 1px solid #fff;
+}
+/* Fix the table-display in firefox and partly in opera */
+table.bs_table > tbody > tr:last-child > td.bs_coldesc {
+	border-bottom: 1px solid #dbdbdb;
+}
+table.bs_table > tbody > tr:last-child > td.bs_main {
+	border-bottom: 1px solid #ebebeb;
+}
+table.bs_table > tbody > tr:last-child > td.bs_topic {
+	border-bottom: 1px solid #637591;
+}
+table.bs_table > tbody > tr > td.bs_coldesc:last-child {
+	border-right: 1px solid #dbdbdb;
+}
+table.bs_table > tbody > tr > td.bs_main:last-child {
+	border-right: 1px solid #ebebeb;
+}
+table.bs_table > tbody > tr > td.bs_topic:last-child {
+	border-right: 1px solid #637591;
+}
+
+/* Fix the table-display in opera >= 9 */
+@media all and (min-width:0px) {
+	table.bs_table > tbody > tr > td.bs_coldesc:first-child {
+		border-left: 1px solid #dbdbdb;
+	}
+	table.bs_table > tbody > tr > td.bs_main:first-child {
+		border-left: 1px solid #ebebeb;
+	}
+	table.bs_table > tbody > tr > td.bs_topic:first-child {
+		border-left: 1px solid #637591;
+	}
+	table.bs_table > tbody > tr:first-child > td.bs_topic {
+		border-top: 1px solid #637591;
+	}
+}
+
+/* Fix the table-display in konqueror >= 3.4.3 */
+html:not(:nth-child(1)) table.bs_table > tbody > tr > td:last-child {
+	border: 1px solid #fff;
+}
+html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_coldesc:first-child {
+	border-left: 1px solid #dbdbdb;
+}
+html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_main:first-child {
+	border-left: 1px solid #ebebeb;
+}
+html:not(:nth-child(1)) table.bs_table > tbody > tr:first-child > td.bs_topic {
+	border-top: 1px solid #637591;
+}
+html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_topic:first-child {
+	border-left: 1px solid #637591;
+}
+
+/* ------------ TABLE BORDER ------------ */
+
+.bs_border {
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-khtml-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	padding: 1px;
+	border: 1px solid #7F90AE;
+}
+
+/* ------------ BUTTON ------------ */
+
+a.bs_button, a.bs_button_big {
+	background-repeat: no-repeat;
+	height: 20px;
+	padding-top: 3px;
+	margin: 0px 2px 0px 2px;
+	display: block;
+	float: right;
+	text-align: center;
+	font-size: 0.9em;
+	text-decoration: none;
+	font-weight: bold;
+	color: #000000;
+}
+a.bs_button {
+	background-image: url(../images/button.gif);
+	width: 80px;
+}
+a.bs_button_big {
+	background-image: url(../images/button_big.gif);
+	width: 120px;
+}
+
+a.bs_button:hover, a.bs_button_big:hover {
+	color: #3F5E88;
+	text-decoration: none;
+}
+
+/* ------------ FORM ELEMENTS ------------ */
+
+input,select,textarea {
+	padding: 0.2em;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 0.9em;
+	color: #000000;
+}
+
+/* ------------ MESSAGES ------------ */
+
+span.bs_msg_error {
+	color: #f00;
+	font-weight: bold;
+}
+
+span.bs_msg_warning {
+	color: #f90;
+	font-weight: bold;
+}
+
+span.bs_msg_notice {
+	color: #008000;
+	font-weight: bold;
+}

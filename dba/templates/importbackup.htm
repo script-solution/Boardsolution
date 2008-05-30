@@ -1,0 +1,31 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+<form method="post" action="{gurl.get_url()}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('import_backup')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('notice')}:</dt>
+			<dd>{glocale.lang('import_backup_notice')}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('prefix')}:</dt>
+			<dd>
+				{form.get_textbox('prefix','',10,20)}
+				<div class="bs_desc">{glocale.lang('import_prefix')}</div>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.get_url('backups')}';" />
+	<input type="submit" name="submit" value="{glocale.lang('submit')}" />
+</center>
+</form>
+
+{endif}
+
+{include "inc_footer.htm"}
