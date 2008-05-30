@@ -1,0 +1,23 @@
+<IfModule mod_rewrite.c>
+RewriteEngine on
+
+# Please specify the path to your board here!
+RewriteBase /scriptsolution/Boardsolution
+
+# forums
+RewriteRule forums\.html$ index.php?action=forums
+RewriteRule forums_s([a-f0-9]{32})\.html$ index.php?action=forums&sid=$1
+
+# portal
+RewriteRule portal\.html$ index.php?action=portal
+RewriteRule portal_s([a-f0-9]{32})\.html$ index.php?action=portal&sid=$1
+
+# topics
+RewriteRule topics_([0-9]+)_([0-9]+)\.html$ index.php?action=topics&fid=$1&site=$2
+RewriteRule topics_([0-9]+)_([0-9]+)_s([a-f0-9]{32})\.html$ index.php?action=topics&fid=$1&site=$2&sid=$3
+
+# posts
+RewriteRule posts_([0-9]+)_([0-9]+)_([0-9]+)\.html$ index.php?action=posts&fid=$1&tid=$2&site=$3
+RewriteRule posts_([0-9]+)_([0-9]+)_([0-9]+)_s([a-f0-9]{32})\.html$ index.php?action=posts&fid=$1&tid=$2&site=$3&sid=$4
+
+</IfModule>
