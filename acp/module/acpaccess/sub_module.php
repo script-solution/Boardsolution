@@ -2,7 +2,7 @@
 /**
  * Contains the module-submodule for acpaccess
  * 
- * @version			$Id: sub_module.php 713 2008-05-20 21:59:54Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

@@ -2,7 +2,7 @@
 /**
  * Contains the upload-avatar-action
  *
- * @version			$Id: action_uploadavatar.php 717 2008-05-21 14:12:53Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

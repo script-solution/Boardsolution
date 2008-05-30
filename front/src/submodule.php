@@ -2,7 +2,7 @@
 /**
  * Contains the front-sub-module-base-class
  * 
- * @version			$Id: submodule.php 543 2008-04-10 07:32:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src
  * @author			Nils Asmussen <nils@script-solution.de>

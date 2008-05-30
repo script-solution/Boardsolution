@@ -2,7 +2,7 @@
 /**
  * Contains the dba-progress-class
  *
- * @version			$Id: progress.php 685 2008-05-10 16:03:25Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	dba.src
  * @author			Nils Asmussen <nils@script-solution.de>

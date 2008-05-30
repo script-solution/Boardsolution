@@ -2,7 +2,7 @@
 /**
  * Contains acp-content-page
  *
- * @version			$Id: content.php 773 2008-05-25 16:13:44Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.src.page
  * @author			Nils Asmussen <nils@script-solution.de>

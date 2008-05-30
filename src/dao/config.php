@@ -2,7 +2,7 @@
 /**
  * Contains the config-dao-class
  *
- * @version			$Id: config.php 799 2008-05-29 20:55:58Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>

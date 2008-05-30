@@ -2,7 +2,7 @@
 /**
  * Contains the registration-task
  * 
- * @version			$Id: registrations.php 757 2008-05-24 18:32:30Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.tasks
  * @author			Nils Asmussen <nils@script-solution.de>

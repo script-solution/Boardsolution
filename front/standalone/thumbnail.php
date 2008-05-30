@@ -2,7 +2,7 @@
 /**
  * Contains the standalone-class for the thumbnail generation
  * 
- * @version			$Id: thumbnail.php 795 2008-05-29 18:22:45Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.standalone
  * @author			Nils Asmussen <nils@script-solution.de>

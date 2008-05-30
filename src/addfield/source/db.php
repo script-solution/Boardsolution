@@ -2,7 +2,7 @@
 /**
  * Contains the db-source-class for the additional-fields
  *
- * @version			$Id: db.php 676 2008-05-08 09:02:28Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.addfield
  * @author			Nils Asmussen <nils@script-solution.de>

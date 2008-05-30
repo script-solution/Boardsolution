@@ -2,7 +2,7 @@
 /**
  * Contains the post-container-class
  *
- * @version			$Id: container.php 785 2008-05-26 17:32:09Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src.post
  * @author			Nils Asmussen <nils@script-solution.de>

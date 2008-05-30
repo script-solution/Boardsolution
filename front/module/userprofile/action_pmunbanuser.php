@@ -2,7 +2,7 @@
 /**
  * Contains the pm-unban-user-action
  *
- * @version			$Id: action_pmunbanuser.php 756 2008-05-24 18:20:13Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

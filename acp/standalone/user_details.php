@@ -2,7 +2,7 @@
 /**
  * Contains the standalone-class for user-details
  * 
- * @version			$Id: user_details.php 713 2008-05-20 21:59:54Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.standalone
  * @author			Nils Asmussen <nils@script-solution.de>

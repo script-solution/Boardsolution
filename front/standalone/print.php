@@ -2,7 +2,7 @@
 /**
  * Contains the standalone-class for the print-popup
  * 
- * @version			$Id: print.php 769 2008-05-25 13:38:35Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.standalone
  * @author			Nils Asmussen <nils@script-solution.de>

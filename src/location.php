@@ -2,7 +2,7 @@
 /**
  * Contains the location-class
  * 
- * @version			$Id: location.php 713 2008-05-20 21:59:54Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

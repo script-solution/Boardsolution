@@ -2,7 +2,7 @@
 /**
  * Contains the standalone-class for the user-experience-image
  * 
- * @version			$Id: user_experience.php 713 2008-05-20 21:59:54Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.standalone
  * @author			Nils Asmussen <nils@script-solution.de>

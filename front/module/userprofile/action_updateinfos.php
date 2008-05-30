@@ -2,7 +2,7 @@
 /**
  * Contains the update-infos-action
  *
- * @version			$Id: action_updateinfos.php 762 2008-05-24 19:13:05Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

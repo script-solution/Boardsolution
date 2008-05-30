@@ -2,7 +2,7 @@
 /**
  * Contains the basic-search-request-class
  *
- * @version			$Id: tpbasic.php 802 2008-05-30 06:51:57Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>

@@ -2,7 +2,7 @@
 /**
  * Contains the optimize-index-action
  *
- * @version			$Id: action_optimize.php 676 2008-05-08 09:02:28Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	dba.module
  * @author			Nils Asmussen <nils@script-solution.de>

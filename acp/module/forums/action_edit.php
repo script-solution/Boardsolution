@@ -2,7 +2,7 @@
 /**
  * Contains the edit-forums-action
  *
- * @version			$Id: action_edit.php 781 2008-05-26 11:54:49Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

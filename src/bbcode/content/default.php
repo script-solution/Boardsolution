@@ -2,7 +2,7 @@
 /**
  * Contains the default-bbcode-content class
  *
- * @version			$Id: default.php 543 2008-04-10 07:32:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.bbcode
  * @author			Nils Asmussen <nils@script-solution.de>

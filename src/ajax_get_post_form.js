@@ -1,7 +1,7 @@
 /**
  * Contains the AJAX-request to change the post-form (BBCode-mode)
  * 
- * @version			$Id: ajax_get_post_form.js 569 2008-04-14 08:59:19Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

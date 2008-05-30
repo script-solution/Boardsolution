@@ -2,7 +2,7 @@
 /**
  * Contains the FAQ-module
  * 
- * @version			$Id: module_faq.php 701 2008-05-14 13:37:15Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

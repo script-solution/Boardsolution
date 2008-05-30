@@ -2,7 +2,7 @@
 /**
  * Contains the team-module
  * 
- * @version			$Id: module_team.php 733 2008-05-23 06:40:04Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

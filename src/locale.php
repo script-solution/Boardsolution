@@ -2,7 +2,7 @@
 /**
  * Contains the default locale
  *
- * @version			$Id: locale.php 787 2008-05-28 14:58:33Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

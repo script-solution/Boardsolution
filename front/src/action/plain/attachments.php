@@ -2,7 +2,7 @@
 /**
  * Contains the plain-attachments-action-class
  *
- * @version			$Id: attachments.php 773 2008-05-25 16:13:44Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src.action
  * @author			Nils Asmussen <nils@script-solution.de>

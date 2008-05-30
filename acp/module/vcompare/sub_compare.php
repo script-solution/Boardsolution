@@ -2,7 +2,7 @@
 /**
  * Contains the compare-submodule for vcompare
  * 
- * @version			$Id: sub_compare.php 679 2008-05-09 12:42:59Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

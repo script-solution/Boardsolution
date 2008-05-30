@@ -2,7 +2,7 @@
 /**
  * Contains the attachment module for the ACP
  * 
- * @version			$Id: module_attachments.php 715 2008-05-21 08:17:05Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

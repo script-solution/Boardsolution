@@ -2,7 +2,7 @@
 /**
  * Contains the register-action
  *
- * @version			$Id: action_default.php 676 2008-05-08 09:02:28Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

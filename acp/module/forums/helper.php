@@ -2,7 +2,7 @@
 /**
  * Contains the helper-class for the forums
  *
- * @version			$Id: helper.php 771 2008-05-25 13:48:03Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

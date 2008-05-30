@@ -3,7 +3,7 @@
  * Some additional settings which may be interesting. These settings are designed to be
  * changed by you
  * 
- * @version			$Id: userdef.php 785 2008-05-26 17:32:09Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	config
  * @author			Nils Asmussen <nils@script-solution.de>

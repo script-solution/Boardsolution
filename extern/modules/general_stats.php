@@ -2,7 +2,7 @@
 /**
  * Contains the general-stats-module
  * 
- * @version			$Id: general_stats.php 713 2008-05-20 21:59:54Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	extern.modules
  * @author			Nils Asmussen <nils@script-solution.de>

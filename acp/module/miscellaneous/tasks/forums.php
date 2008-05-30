@@ -2,7 +2,7 @@
 /**
  * Contains the forums-task for the miscellaneous module
  *
- * @version			$Id: forums.php 741 2008-05-24 12:04:56Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

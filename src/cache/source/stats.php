@@ -2,7 +2,7 @@
 /**
  * Contains the simple-db-implementation for the source
  *
- * @version			$Id: stats.php 798 2008-05-29 20:14:12Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.cache
  * @author			Nils Asmussen <nils@script-solution.de>

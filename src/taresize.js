@@ -1,7 +1,7 @@
 /**
  * Contains the resize-javascript for textareas
  * 
- * @version			$Id: taresize.js 612 2008-04-24 19:33:30Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

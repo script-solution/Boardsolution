@@ -2,7 +2,7 @@
 /**
  * Contains the search-manager-class
  *
- * @version			$Id: manager.php 763 2008-05-24 19:20:12Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>

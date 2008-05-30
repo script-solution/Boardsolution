@@ -2,7 +2,7 @@
 /**
  * Contains the delete-iplogs-action
  *
- * @version			$Id: action_delete.php 749 2008-05-24 15:33:31Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

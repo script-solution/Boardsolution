@@ -2,7 +2,7 @@
 /**
  * Contains the delete-additionalfields-action
  *
- * @version			$Id: action_delete.php 714 2008-05-20 22:14:58Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

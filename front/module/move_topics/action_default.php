@@ -2,7 +2,7 @@
 /**
  * Contains the move-topics-action
  *
- * @version			$Id: action_default.php 785 2008-05-26 17:32:09Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

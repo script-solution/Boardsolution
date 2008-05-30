@@ -2,7 +2,7 @@
 /**
  * Contains some functions for the API
  * 
- * @version			$Id: api_functions.php 543 2008-04-10 07:32:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	extern.src
  * @author			Nils Asmussen <nils@script-solution.de>

@@ -1,7 +1,7 @@
 /**
  * Contains javascript-functions for the BBCode
  * 
- * @version			$Id: bbcode.js 701 2008-05-14 13:37:15Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

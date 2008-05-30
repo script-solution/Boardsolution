@@ -2,7 +2,7 @@
 /**
  * Contains the base-module for the API-modules
  * 
- * @version			$Id: api_module.php 559 2008-04-10 14:45:58Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	extern.src
  * @author			Nils Asmussen <nils@script-solution.de>

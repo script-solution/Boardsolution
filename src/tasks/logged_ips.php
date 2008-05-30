@@ -2,7 +2,7 @@
 /**
  * Contains the blocked-ip-task
  * 
- * @version			$Id: logged_ips.php 749 2008-05-24 15:33:31Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.tasks
  * @author			Nils Asmussen <nils@script-solution.de>

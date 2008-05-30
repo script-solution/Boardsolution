@@ -2,7 +2,7 @@
 /**
  * Contains the choose-favorite-forums-action
  *
- * @version			$Id: action_favforums.php 743 2008-05-24 12:27:36Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

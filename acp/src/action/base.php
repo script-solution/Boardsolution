@@ -2,7 +2,7 @@
 /**
  * Contains the base-action-class for the ACP
  *
- * @version			$Id: base.php 543 2008-04-10 07:32:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.src.action
  * @author			Nils Asmussen <nils@script-solution.de>

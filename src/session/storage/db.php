@@ -2,7 +2,7 @@
 /**
  * Contains the db session-storage-class
  *
- * @version			$Id: db.php 755 2008-05-24 18:07:53Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.session
  * @author			Nils Asmussen <nils@script-solution.de>

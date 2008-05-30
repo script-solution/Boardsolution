@@ -2,7 +2,7 @@
 /**
  * An example to demonstrate the features and usage of the BS-extern-API
  * 
- * @version			$Id: example.php 728 2008-05-22 22:09:30Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	extern
  * @author			Nils Asmussen <nils@script-solution.de>

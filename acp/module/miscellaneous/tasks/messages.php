@@ -2,7 +2,7 @@
 /**
  * Contains the messages-task for the miscellaneous module
  *
- * @version			$Id: messages.php 725 2008-05-22 15:48:16Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

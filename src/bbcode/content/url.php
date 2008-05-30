@@ -2,7 +2,7 @@
 /**
  * Contains the url-bbcode-content class
  *
- * @version			$Id: url.php 795 2008-05-29 18:22:45Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.bbcode
  * @author			Nils Asmussen <nils@script-solution.de>

@@ -2,7 +2,7 @@
 /**
  * Contains the standalone-class for the activation
  * 
- * @version			$Id: activate.php 773 2008-05-25 16:13:44Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.standalone
  * @author			Nils Asmussen <nils@script-solution.de>

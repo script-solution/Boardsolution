@@ -2,7 +2,7 @@
 /**
  * Contains the plain-action-base-class
  *
- * @version			$Id: plain.php 555 2008-04-10 11:50:11Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src.action
  * @author			Nils Asmussen <nils@script-solution.de>

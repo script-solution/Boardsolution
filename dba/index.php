@@ -2,7 +2,7 @@
 /**
  * The index-page for the DB-backup-script
  * 
- * @version			$Id: index.php 745 2008-05-24 15:11:47Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	dba
  * @author			Nils Asmussen <nils@script-solution.de>

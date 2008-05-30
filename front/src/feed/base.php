@@ -2,7 +2,7 @@
 /**
  * Contains the base-feed-class
  * 
- * @version			$Id: base.php 802 2008-05-30 06:51:57Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.feed
  * @author			Nils Asmussen <nils@script-solution.de>

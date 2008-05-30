@@ -2,7 +2,7 @@
 /**
  * Contains the vote-poll-action
  *
- * @version			$Id: action_votepoll.php 761 2008-05-24 19:04:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

@@ -2,7 +2,7 @@
 /**
  * Contains the base-editor-class
  *
- * @version			$Id: base.php 753 2008-05-24 16:04:46Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

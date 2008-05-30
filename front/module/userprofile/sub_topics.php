@@ -2,7 +2,7 @@
 /**
  * Contains the topics-userprofile-submodule
  * 
- * @version			$Id: sub_topics.php 765 2008-05-24 21:14:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

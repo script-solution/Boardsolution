@@ -2,7 +2,7 @@
 /**
  * Contains the acp-navi-page
  * 
- * @version			$Id: navi.php 701 2008-05-14 13:37:15Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.src.page
  * @author			Nils Asmussen <nils@script-solution.de>

@@ -1,7 +1,7 @@
 /**
  * Contains the AJAX-request to show matching users
  * 
- * @version			$Id: ajax_user_matches.js 638 2008-04-30 21:47:33Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

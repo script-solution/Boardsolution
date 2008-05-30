@@ -2,7 +2,7 @@
 /**
  * Contains the helper class for the BS_Actions-class
  * 
- * @version			$Id: helper.php 728 2008-05-22 22:09:30Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.action
  * @author			Nils Asmussen <nils@script-solution.de>

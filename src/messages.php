@@ -2,8 +2,8 @@
 /**
  * Contains the messages-class
  *
- * @version			$Id: messages.php 676 2008-05-08 09:02:28Z nasmussen $
- * @version			$Id: messages.php 676 2008-05-08 09:02:28Z nasmussen $
+ * @version			$Id$
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

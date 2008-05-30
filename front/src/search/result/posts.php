@@ -2,7 +2,7 @@
 /**
  * Contains the posts-search-result-class
  *
- * @version			$Id: posts.php 701 2008-05-14 13:37:15Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>

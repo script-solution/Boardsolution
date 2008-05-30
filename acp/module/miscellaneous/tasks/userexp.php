@@ -2,7 +2,7 @@
 /**
  * Contains the user-experience-task for the miscellaneous module
  *
- * @version			$Id: userexp.php 765 2008-05-24 21:14:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

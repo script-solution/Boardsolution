@@ -2,7 +2,7 @@
 /**
  * Contains the plain-delete-topics-action-class
  *
- * @version			$Id: deletetopics.php 785 2008-05-26 17:32:09Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src.action
  * @author			Nils Asmussen <nils@script-solution.de>

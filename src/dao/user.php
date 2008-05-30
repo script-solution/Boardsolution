@@ -2,7 +2,7 @@
 /**
  * Contains the user-dao-class
  *
- * @version			$Id: user.php 808 2008-05-30 08:53:26Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>

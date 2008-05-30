@@ -2,7 +2,7 @@
 /**
  * Contains the update-userranks-action
  *
- * @version			$Id: action_update.php 765 2008-05-24 21:14:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

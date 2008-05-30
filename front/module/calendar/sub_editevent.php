@@ -2,7 +2,7 @@
 /**
  * Contains the editevent-calendar-submodule
  * 
- * @version			$Id: sub_editevent.php 769 2008-05-25 13:38:35Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

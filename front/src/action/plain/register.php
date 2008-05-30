@@ -2,7 +2,7 @@
 /**
  * Contains the register-plain-action-class
  *
- * @version			$Id: register.php 805 2008-05-30 07:27:54Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src.action
  * @author			Nils Asmussen <nils@script-solution.de>

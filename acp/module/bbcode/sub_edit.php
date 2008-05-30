@@ -2,7 +2,7 @@
 /**
  * Contains the submodule for editing and add bbcodes
  * 
- * @version			$Id: sub_edit.php 796 2008-05-29 18:23:27Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

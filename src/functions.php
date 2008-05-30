@@ -2,7 +2,7 @@
 /**
  * Contains the general functions
  * 
- * @version			$Id: functions.php 787 2008-05-28 14:58:33Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

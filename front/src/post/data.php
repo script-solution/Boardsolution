@@ -2,7 +2,7 @@
 /**
  * Contains the post-data class
  *
- * @version			$Id: data.php 737 2008-05-23 18:26:46Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src.post
  * @author			Nils Asmussen <nils@script-solution.de>

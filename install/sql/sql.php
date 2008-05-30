@@ -2,7 +2,7 @@
 /**
  * Contains the base-SQL-class.
  * 
- * @version			$Id: sql.php 543 2008-04-10 07:32:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	install
  * @author			Nils Asmussen <nils@script-solution.de>

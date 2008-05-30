@@ -2,7 +2,7 @@
 /**
  * Contains the topic-factory
  * 
- * @version			$Id: topicfactory.php 728 2008-05-22 22:09:30Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src
  * @author			Nils Asmussen <nils@script-solution.de>

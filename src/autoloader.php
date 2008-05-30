@@ -2,7 +2,7 @@
 /**
  * Contains the autoloader
  *
- * @version			$Id: autoloader.php 543 2008-04-10 07:32:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

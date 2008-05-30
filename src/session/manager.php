@@ -2,7 +2,7 @@
 /**
  * Contains the session-class
  *
- * @version			$Id: manager.php 713 2008-05-20 21:59:54Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.session
  * @author			Nils Asmussen <nils@script-solution.de>

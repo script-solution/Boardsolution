@@ -2,7 +2,7 @@
 /**
  * Contains the standalone-class for the smiley-popup
  * 
- * @version			$Id: smileys.php 751 2008-05-24 15:51:00Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.standalone
  * @author			Nils Asmussen <nils@script-solution.de>

@@ -2,7 +2,7 @@
 /**
  * Contains the change-password-module
  * 
- * @version			$Id: module_change_password.php 760 2008-05-24 18:57:19Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

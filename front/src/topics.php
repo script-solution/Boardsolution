@@ -2,7 +2,7 @@
 /**
  * Contains the topic-class
  * 
- * @version			$Id: topics.php 802 2008-05-30 06:51:57Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src
  * @author			Nils Asmussen <nils@script-solution.de>

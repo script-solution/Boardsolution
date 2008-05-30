@@ -3,7 +3,7 @@
  * Contains the page-class which is used to display the whole frontend of the board except the
  * popups and so on.
  *
- * @version			$Id: page.php 786 2008-05-28 14:42:14Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src
  * @author			Nils Asmussen <nils@script-solution.de>

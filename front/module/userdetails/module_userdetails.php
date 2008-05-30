@@ -2,7 +2,7 @@
 /**
  * Contains the userdetails-module
  * 
- * @version			$Id: module_userdetails.php 777 2008-05-26 08:16:26Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

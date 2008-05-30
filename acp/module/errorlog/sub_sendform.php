@@ -2,7 +2,7 @@
 /**
  * Contains the sendform-submodule for errorlog
  * 
- * @version			$Id: sub_sendform.php 676 2008-05-08 09:02:28Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

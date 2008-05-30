@@ -2,7 +2,7 @@
 /**
  * Contains the standalone-class for the attachment-download
  * 
- * @version			$Id: download.php 723 2008-05-22 12:29:32Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.standalone
  * @author			Nils Asmussen <nils@script-solution.de>

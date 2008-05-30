@@ -2,7 +2,7 @@
 /**
  * Contains the tasks-db-storage-class
  *
- * @version			$Id: db.php 752 2008-05-24 15:56:30Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.tasks
  * @author			Nils Asmussen <nils@script-solution.de>

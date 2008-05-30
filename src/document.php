@@ -2,7 +2,7 @@
 /**
  * The document-class
  *
- * @version			$Id: document.php 773 2008-05-25 16:13:44Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

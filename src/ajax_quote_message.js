@@ -1,7 +1,7 @@
 /**
  * Contains the AJAX-request to quote a message
  * 
- * @version			$Id: ajax_quote_message.js 543 2008-04-10 07:32:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

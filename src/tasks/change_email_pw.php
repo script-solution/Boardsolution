@@ -2,7 +2,7 @@
 /**
  * Contains the change-pw- and change-email-task
  * 
- * @version			$Id: change_email_pw.php 762 2008-05-24 19:13:05Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.tasks
  * @author			Nils Asmussen <nils@script-solution.de>

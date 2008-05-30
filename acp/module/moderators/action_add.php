@@ -2,7 +2,7 @@
 /**
  * Contains the add-moderators-action
  *
- * @version			$Id: action_add.php 784 2008-05-26 11:57:10Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

@@ -2,7 +2,7 @@
 /**
  * Contains the user-utils-class
  *
- * @version			$Id: userutils.php 767 2008-05-24 22:29:16Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

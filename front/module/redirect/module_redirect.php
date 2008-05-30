@@ -2,7 +2,7 @@
 /**
  * Contains the redirect-module
  * 
- * @version			$Id: module_redirect.php 786 2008-05-28 14:42:14Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

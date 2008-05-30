@@ -2,7 +2,7 @@
 /**
  * Contains the delete-bots-action
  *
- * @version			$Id: action_delete.php 720 2008-05-21 14:44:38Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

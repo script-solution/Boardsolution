@@ -2,7 +2,7 @@
 /**
  * This file contains some general adjustments for boardsolution and some general constants
  * 
- * @version			$Id: general.php 701 2008-05-14 13:37:15Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	config
  * @author			Nils Asmussen <nils@script-solution.de>

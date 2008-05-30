@@ -2,7 +2,7 @@
 /**
  * Contains the ugroups-user-action
  *
- * @version			$Id: action_ugroups.php 737 2008-05-23 18:26:46Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

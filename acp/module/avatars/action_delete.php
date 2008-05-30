@@ -2,7 +2,7 @@
 /**
  * Contains the delete-avatars-action
  *
- * @version			$Id: action_delete.php 717 2008-05-21 14:12:53Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

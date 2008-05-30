@@ -2,7 +2,7 @@
 /**
  * Contains the link-votes-dao-class
  *
- * @version			$Id: linkvotes.php 796 2008-05-29 18:23:27Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>

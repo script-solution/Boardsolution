@@ -2,7 +2,7 @@
 /**
  * Contains the ip-log module for the ACP
  * 
- * @version			$Id: module_iplog.php 749 2008-05-24 15:33:31Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

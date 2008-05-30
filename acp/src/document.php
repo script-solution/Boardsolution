@@ -2,7 +2,7 @@
 /**
  * Contains acp-document-class
  * 
- * @version			$Id: document.php 701 2008-05-14 13:37:15Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.src
  * @author			Nils Asmussen <nils@script-solution.de>

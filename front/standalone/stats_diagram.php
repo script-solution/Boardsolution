@@ -2,7 +2,7 @@
 /**
  * Contains the standalone-class for the statistics-diagram
  * 
- * @version			$Id: stats_diagram.php 755 2008-05-24 18:07:53Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.standalone
  * @author			Nils Asmussen <nils@script-solution.de>

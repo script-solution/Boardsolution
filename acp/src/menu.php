@@ -2,7 +2,7 @@
 /**
  * Contains the acp-menu-class
  * 
- * @version			$Id: menu.php 795 2008-05-29 18:22:45Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.src
  * @author			Nils Asmussen <nils@script-solution.de>

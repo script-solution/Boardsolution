@@ -2,7 +2,7 @@
 /**
  * Contains the edit- and add-task-action
  *
- * @version			$Id: action_edit.php 752 2008-05-24 15:56:30Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

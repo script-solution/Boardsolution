@@ -2,7 +2,7 @@
 /**
  * Contains the additional-fields manager for boardsolution
  *
- * @version			$Id: manager.php 676 2008-05-08 09:02:28Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.addfield
  * @author			Nils Asmussen <nils@script-solution.de>

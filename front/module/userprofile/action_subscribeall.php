@@ -2,7 +2,7 @@
 /**
  * Contains the subscribe-all-action
  *
- * @version			$Id: action_subscribeall.php 737 2008-05-23 18:26:46Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

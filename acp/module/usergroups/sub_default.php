@@ -2,7 +2,7 @@
 /**
  * Contains the default-submodule for usergroups
  * 
- * @version			$Id: sub_default.php 758 2008-05-24 18:41:03Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

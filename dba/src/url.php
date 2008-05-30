@@ -2,7 +2,7 @@
 /**
  * Contains the URL-class for the dbbackup-script
  *
- * @version			$Id: url.php 676 2008-05-08 09:02:28Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	dba.src
  * @author			Nils Asmussen <nils@script-solution.de>

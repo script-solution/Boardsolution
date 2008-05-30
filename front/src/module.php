@@ -3,7 +3,7 @@
  * Contains the module-class which is the base-class for all modules in Boardsolution
  * (A module is a part of the page which will be displayed between header and footer)
  * 
- * @version			$Id: module.php 737 2008-05-23 18:26:46Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src
  * @author			Nils Asmussen <nils@script-solution.de>

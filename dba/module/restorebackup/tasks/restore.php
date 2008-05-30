@@ -2,7 +2,7 @@
 /**
  * Contains the restore-task-class
  *
- * @version			$Id: restore.php 688 2008-05-10 16:04:42Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	dba.module
  * @author			Nils Asmussen <nils@script-solution.de>

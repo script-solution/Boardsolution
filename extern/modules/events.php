@@ -2,7 +2,7 @@
 /**
  * Contains the events-module
  * 
- * @version			$Id: events.php 735 2008-05-23 07:49:54Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	extern.modules
  * @author			Nils Asmussen <nils@script-solution.de>

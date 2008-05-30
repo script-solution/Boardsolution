@@ -2,7 +2,7 @@
 /**
  * Contains the functions for the postings
  * 
- * @version			$Id: postingutils.php 701 2008-05-14 13:37:15Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

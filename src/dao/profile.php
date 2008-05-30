@@ -2,7 +2,7 @@
 /**
  * Contains the profile-dao-class
  * 
- * @version			$Id: profile.php 773 2008-05-25 16:13:44Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>

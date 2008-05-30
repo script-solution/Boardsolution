@@ -2,7 +2,7 @@
 /**
  * Contains the standalone-class for the linklist-redirection
  * 
- * @version			$Id: linklist_redirect.php 725 2008-05-22 15:48:16Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.standalone
  * @author			Nils Asmussen <nils@script-solution.de>

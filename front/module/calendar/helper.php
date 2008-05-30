@@ -2,7 +2,7 @@
 /**
  * Contains the helper-class for the calendar
  *
- * @version			$Id: helper.php 802 2008-05-30 06:51:57Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

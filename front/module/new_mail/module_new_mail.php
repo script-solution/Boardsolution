@@ -2,7 +2,7 @@
 /**
  * Contains the new-mail-module
  * 
- * @version			$Id: module_new_mail.php 713 2008-05-20 21:59:54Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

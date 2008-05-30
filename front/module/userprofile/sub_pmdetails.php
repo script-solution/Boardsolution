@@ -2,7 +2,7 @@
 /**
  * Contains the pmdetails-userprofile-submodule
  * 
- * @version			$Id: sub_pmdetails.php 724 2008-05-22 14:37:18Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

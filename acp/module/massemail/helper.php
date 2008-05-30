@@ -2,7 +2,7 @@
 /**
  * Contains the helper-class for the massemail-module
  *
- * @version			$Id: helper.php 737 2008-05-23 18:26:46Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

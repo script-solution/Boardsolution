@@ -2,7 +2,7 @@
 /**
  * Contains the db-tree-storage implementation
  *
- * @version			$Id: db.php 741 2008-05-24 12:04:56Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.forums
  * @author			Nils Asmussen <nils@script-solution.de>

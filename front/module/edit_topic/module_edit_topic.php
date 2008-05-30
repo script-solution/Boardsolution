@@ -2,7 +2,7 @@
 /**
  * Contains the edit-topic-module
  * 
- * @version			$Id: module_edit_topic.php 735 2008-05-23 07:49:54Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

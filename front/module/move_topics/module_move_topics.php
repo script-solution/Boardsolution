@@ -2,7 +2,7 @@
 /**
  * Contains the move-topics-module
  * 
- * @version			$Id: module_move_topics.php 728 2008-05-22 22:09:30Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

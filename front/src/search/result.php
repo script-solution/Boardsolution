@@ -2,7 +2,7 @@
 /**
  * Contains the search-result-interface
  *
- * @version			$Id: result.php 543 2008-04-10 07:32:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>

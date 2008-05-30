@@ -2,7 +2,7 @@
 /**
  * Contains the week-calendar-submodule
  * 
- * @version			$Id: sub_week.php 806 2008-05-30 07:40:07Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

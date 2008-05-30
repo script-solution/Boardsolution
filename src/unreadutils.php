@@ -2,7 +2,7 @@
 /**
  * Contains the unread-utils-class
  *
- * @version			$Id: unreadutils.php 764 2008-05-24 19:38:53Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

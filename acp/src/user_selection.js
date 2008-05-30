@@ -1,7 +1,7 @@
 /**
  * Contains the javascript-functions to select users in a popup
  * 
- * @version			$Id: user_selection.js 543 2008-04-10 07:32:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.src
  * @author			Nils Asmussen <nils@script-solution.de>

@@ -2,7 +2,7 @@
 /**
  * Contains the formular-class
  *
- * @version			$Id: formular.php 797 2008-05-29 19:43:56Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.html
  * @author			Nils Asmussen <nils@script-solution.de>

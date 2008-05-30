@@ -2,7 +2,7 @@
 /**
  * Contains the pms-search-result-class
  *
- * @version			$Id: pms.php 724 2008-05-22 14:37:18Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>

@@ -2,7 +2,7 @@
 /**
  * Contains the standalone-class for the message-quotation
  * 
- * @version			$Id: ajax_quote_message.php 724 2008-05-22 14:37:18Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.standalone
  * @author			Nils Asmussen <nils@script-solution.de>

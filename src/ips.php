@@ -2,7 +2,7 @@
 /**
  * Contains the ip-class
  * 
- * @version			$Id: ips.php 749 2008-05-24 15:33:31Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

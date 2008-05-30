@@ -2,7 +2,7 @@
 /**
  * Contains the edituser-submodule for moderators
  * 
- * @version			$Id: sub_edituser.php 733 2008-05-23 06:40:04Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

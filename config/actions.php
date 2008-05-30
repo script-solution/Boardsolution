@@ -3,7 +3,7 @@
  * Contains the possible actions of the boardsolution-frontend and the definition after
  * which action should be displayed a status-page
  * 
- * @version			$Id: actions.php 795 2008-05-29 18:22:45Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	config
  * @author			Nils Asmussen <nils@script-solution.de>

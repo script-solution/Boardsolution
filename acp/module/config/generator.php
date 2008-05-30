@@ -3,7 +3,7 @@
  * This is a generator for the config-entries. Will clear the existing entries and insert
  * the default ones.
  *
- * @version			$Id: generator.php 802 2008-05-30 06:51:57Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

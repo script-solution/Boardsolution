@@ -2,7 +2,7 @@
 /**
  * Contains the config-implementation for the source
  *
- * @version			$Id: config.php 722 2008-05-21 15:18:58Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.cache
  * @author			Nils Asmussen <nils@script-solution.de>

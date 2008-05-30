@@ -2,7 +2,7 @@
 /**
  * Contains the user-activation module for the ACP
  * 
- * @version			$Id: module_useractivation.php 745 2008-05-24 15:11:47Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

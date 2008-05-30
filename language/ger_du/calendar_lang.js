@@ -1,7 +1,7 @@
 /**
  * The calendar-language-file
  *
- * @version			$Id: calendar_lang.js 543 2008-04-10 07:32:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	language.ger_du
  * @author			Nils Asmussen <nils@script-solution.de>

@@ -2,7 +2,7 @@
 /**
  * Contains the user-locations-module
  * 
- * @version			$Id: module_user_locations.php 741 2008-05-24 12:04:56Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

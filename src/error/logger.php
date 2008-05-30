@@ -2,7 +2,7 @@
 /**
  * Contains the error-logger-class
  *
- * @version			$Id: logger.php 726 2008-05-22 16:10:43Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.error
  * @author			Nils Asmussen <nils@script-solution.de>

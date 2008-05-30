@@ -2,7 +2,7 @@
 /**
  * Contains the backup-task-class
  *
- * @version			$Id: backup.php 685 2008-05-10 16:03:25Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	dba.module
  * @author			Nils Asmussen <nils@script-solution.de>

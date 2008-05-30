@@ -2,7 +2,7 @@
 /**
  * Contains the linklist-module
  * 
- * @version			$Id: module_linklist.php 705 2008-05-15 10:14:58Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

@@ -2,7 +2,7 @@
 /**
  * Contains the add-ban-action
  *
- * @version			$Id: action_add.php 719 2008-05-21 14:28:56Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

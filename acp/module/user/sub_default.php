@@ -2,7 +2,7 @@
 /**
  * Contains the default-submodule for user
  * 
- * @version			$Id: sub_default.php 805 2008-05-30 07:27:54Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

@@ -2,7 +2,7 @@
 /**
  * Contains the functions for the forums
  * 
- * @version			$Id: forumutils.php 705 2008-05-15 10:14:58Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

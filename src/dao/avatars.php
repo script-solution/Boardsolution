@@ -2,7 +2,7 @@
 /**
  * Contains the avatars-dao-class
  *
- * @version			$Id: avatars.php 737 2008-05-23 18:26:46Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>

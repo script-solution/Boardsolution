@@ -2,7 +2,7 @@
 /**
  * Contains the unread-class
  * 
- * @version			$Id: unread.php 802 2008-05-30 06:51:57Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

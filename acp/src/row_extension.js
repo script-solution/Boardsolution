@@ -1,7 +1,7 @@
 /**
  * Contains javascript-functions to extend and collaps rows
  * 
- * @version			$Id: row_extension.js 543 2008-04-10 07:32:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.src
  * @author			Nils Asmussen <nils@script-solution.de>

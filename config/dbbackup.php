@@ -2,7 +2,7 @@
 /**
  * Contains constants for the dbbackup-script
  *
- * @version			$Id: dbbackup.php 687 2008-05-10 16:04:07Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	config
  * @author			Nils Asmussen <nils@script-solution.de>

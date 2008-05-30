@@ -2,7 +2,7 @@
 /**
  * Contains the edit-submodule for smileys
  * 
- * @version			$Id: sub_edit.php 795 2008-05-29 18:22:45Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

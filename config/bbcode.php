@@ -2,7 +2,7 @@
 /**
  * This file contains the definitions of the BBCode of Boardsolution.
  * 
- * @version			$Id: bbcode.php 795 2008-05-29 18:22:45Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	config
  * @author			Nils Asmussen <nils@script-solution.de>

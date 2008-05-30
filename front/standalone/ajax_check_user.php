@@ -2,7 +2,7 @@
 /**
  * Contains the standalone-class for the ajax-user-search
  * 
- * @version			$Id: ajax_check_user.php 713 2008-05-20 21:59:54Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.standalone
  * @author			Nils Asmussen <nils@script-solution.de>

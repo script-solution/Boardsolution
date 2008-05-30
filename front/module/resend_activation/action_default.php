@@ -2,7 +2,7 @@
 /**
  * Contains the resend_activation-action
  *
- * @version			$Id: action_default.php 757 2008-05-24 18:32:30Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

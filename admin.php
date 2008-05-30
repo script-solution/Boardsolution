@@ -2,7 +2,7 @@
 /**
  * The file for the adminarea which may be called by the browser
  * 
- * @version			$Id: admin.php 745 2008-05-24 15:11:47Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	main
  * @author			Nils Asmussen <nils@script-solution.de>

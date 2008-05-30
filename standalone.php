@@ -2,7 +2,7 @@
 /**
  * The file for the other actions than the frontend like for example popups or the activation-page
  *
- * @version			$Id: standalone.php 745 2008-05-24 15:11:47Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	main
  * @author			Nils Asmussen <nils@script-solution.de>

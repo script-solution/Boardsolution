@@ -2,7 +2,7 @@
 /**
  * Contains the error-log-task
  * 
- * @version			$Id: error_log.php 726 2008-05-22 16:10:43Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.tasks
  * @author			Nils Asmussen <nils@script-solution.de>

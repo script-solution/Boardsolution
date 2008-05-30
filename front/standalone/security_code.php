@@ -2,7 +2,7 @@
 /**
  * Contains the standalone-class for the security-code
  * 
- * @version			$Id: security_code.php 676 2008-05-08 09:02:28Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.standalone
  * @author			Nils Asmussen <nils@script-solution.de>

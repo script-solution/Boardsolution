@@ -2,7 +2,7 @@
 /**
  * Contains the edit-post-action
  *
- * @version			$Id: action_default.php 728 2008-05-22 22:09:30Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

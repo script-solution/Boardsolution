@@ -2,7 +2,7 @@
 /**
  * Contains the edit-event-action
  *
- * @version			$Id: action_event.php 770 2008-05-25 13:41:44Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

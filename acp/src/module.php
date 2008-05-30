@@ -2,7 +2,7 @@
 /**
  * Contains the ACP-module-base-class
  * 
- * @version			$Id: module.php 676 2008-05-08 09:02:28Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.src
  * @author			Nils Asmussen <nils@script-solution.de>

@@ -2,7 +2,7 @@
 /**
  * Contains the edit-submodule for forums
  * 
- * @version			$Id: sub_edit.php 742 2008-05-24 12:18:23Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

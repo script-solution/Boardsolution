@@ -2,7 +2,7 @@
 /**
  * The file for the installation which may be called by the browser
  * 
- * @version			$Id: _install.php 543 2008-04-10 07:32:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	main
  * @author			Nils Asmussen <nils@script-solution.de>

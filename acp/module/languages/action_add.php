@@ -2,7 +2,7 @@
 /**
  * Contains the add-language-action
  *
- * @version			$Id: action_add.php 750 2008-05-24 15:39:08Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

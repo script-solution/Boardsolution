@@ -2,7 +2,7 @@
 /**
  * Contains the standalone-class for the post-form-change
  * 
- * @version			$Id: ajax_get_post_form.php 676 2008-05-08 09:02:28Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.standalone
  * @author			Nils Asmussen <nils@script-solution.de>

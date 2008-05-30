@@ -2,7 +2,7 @@
 /**
  * Contains the email-notification-task
  * 
- * @version			$Id: email_notification.php 786 2008-05-28 14:42:14Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.tasks
  * @author			Nils Asmussen <nils@script-solution.de>

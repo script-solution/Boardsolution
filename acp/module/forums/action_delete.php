@@ -2,7 +2,7 @@
 /**
  * Contains the delete-forums-action
  *
- * @version			$Id: action_delete.php 743 2008-05-24 12:27:36Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

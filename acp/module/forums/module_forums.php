@@ -2,7 +2,7 @@
 /**
  * Contains the forums module for the ACP
  * 
- * @version			$Id: module_forums.php 709 2008-05-15 14:35:04Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

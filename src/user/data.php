@@ -2,7 +2,7 @@
 /**
  * Contains the user-data-class
  *
- * @version			$Id: data.php 724 2008-05-22 14:37:18Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.user
  * @author			Nils Asmussen <nils@script-solution.de>

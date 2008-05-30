@@ -2,7 +2,7 @@
 /**
  * Contains the front-base-action-class
  *
- * @version			$Id: base.php 666 2008-05-04 21:09:43Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src.action
  * @author			Nils Asmussen <nils@script-solution.de>

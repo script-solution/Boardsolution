@@ -2,7 +2,7 @@
 /**
  * Contains the vote-link-action
  *
- * @version			$Id: action_votelink.php 767 2008-05-24 22:29:16Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

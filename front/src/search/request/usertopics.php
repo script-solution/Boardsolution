@@ -2,7 +2,7 @@
 /**
  * Contains the user-topics-request-class for the search
  *
- * @version			$Id: usertopics.php 713 2008-05-20 21:59:54Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>

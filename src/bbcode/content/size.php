@@ -2,7 +2,7 @@
 /**
  * Contains the size-bbcode-content class
  *
- * @version			$Id: size.php 796 2008-05-29 18:23:27Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.bbcode
  * @author			Nils Asmussen <nils@script-solution.de>

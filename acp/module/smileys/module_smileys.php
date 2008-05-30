@@ -2,7 +2,7 @@
 /**
  * Contains the smileys module for the ACP
  * 
- * @version			$Id: module_smileys.php 705 2008-05-15 10:14:58Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

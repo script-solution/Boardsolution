@@ -2,7 +2,7 @@
 /**
  * Contains the user-storage-db-class
  *
- * @version			$Id: db.php 713 2008-05-20 21:59:54Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src.user
  * @author			Nils Asmussen <nils@script-solution.de>

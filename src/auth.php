@@ -2,7 +2,7 @@
 /**
  * Contains the auth-class
  * 
- * @version			$Id: auth.php 741 2008-05-24 12:04:56Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>

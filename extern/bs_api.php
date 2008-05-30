@@ -2,7 +2,7 @@
 /**
  * Includes all important files and instantiates the BS_Base-class
  * 
- * @version			$Id: bs_api.php 745 2008-05-24 15:11:47Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	extern
  * @author			Nils Asmussen <nils@script-solution.de>

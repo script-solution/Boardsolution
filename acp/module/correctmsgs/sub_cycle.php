@@ -2,7 +2,7 @@
 /**
  * Contains the cycle-submodule for correctmsgs
  * 
- * @version			$Id: sub_cycle.php 725 2008-05-22 15:48:16Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

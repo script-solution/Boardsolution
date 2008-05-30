@@ -2,7 +2,7 @@
 /**
  * Contains the portal-module
  * 
- * @version			$Id: module_portal.php 802 2008-05-30 06:51:57Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

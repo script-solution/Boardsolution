@@ -2,7 +2,7 @@
 /**
  * Contains the module for the dbbackup-script
  *
- * @version			$Id: module.php 543 2008-04-10 07:32:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	dba.src
  * @author			Nils Asmussen <nils@script-solution.de>

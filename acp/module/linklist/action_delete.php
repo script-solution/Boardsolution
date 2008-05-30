@@ -2,7 +2,7 @@
 /**
  * Contains the delete-links-action
  *
- * @version			$Id: action_delete.php 767 2008-05-24 22:29:16Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

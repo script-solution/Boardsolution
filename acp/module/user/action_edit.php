@@ -2,7 +2,7 @@
 /**
  * Contains the edit-user-action
  *
- * @version			$Id: action_edit.php 717 2008-05-21 14:12:53Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

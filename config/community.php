@@ -2,7 +2,7 @@
 /**
  * This file contains the definitions to export the community.
  * 
- * @version			$Id: community.php 543 2008-04-10 07:32:51Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	config
  * @author			Nils Asmussen <nils@script-solution.de>

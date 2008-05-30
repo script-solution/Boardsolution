@@ -2,7 +2,7 @@
 /**
  * Contains the delete-user-action
  *
- * @version			$Id: action_delete.php 769 2008-05-25 13:38:35Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
