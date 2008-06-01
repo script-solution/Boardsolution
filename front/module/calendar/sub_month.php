@@ -72,13 +72,14 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 				$days = '';
 				$border = '';
 				$isempty = !(($w == 0 && $d > $month_offset) || ($w != 0 && $day <= $mon_len));
+				$days_ts = 0;
 				
 				if(!$isempty)
 				{
+					$days_ts = PLIB_Date::get_timestamp(array(0,0,0,$month,$day,$year));
 					$sday = PLIB_StringHelper::ensure_2_chars($day);
 					$smonth = PLIB_StringHelper::ensure_2_chars($month);
 					$birthday_index = $sday.$smonth;
-					$days_ts = PLIB_Date::get_timestamp(array(0,0,0,$smonth,$sday,$year));
 					$days = PLIB_Date::get_formated_date('date',$days_ts);
 					$day++;
 					
@@ -90,7 +91,8 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 					'isempty' => $isempty,
 					'border' => $border,
 					'days' => $days,
-					'event' => $event
+					'event' => $event,
+					'timestamp' => $days_ts
 				);
 			}
 	

@@ -21,7 +21,6 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 {
 	public function get_actions()
 	{
-		// TODO finish
 		return array();
 	}
 	
@@ -67,7 +66,8 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 	
 					$weekno = PLIB_Date::get_formated_date('w',$ts);
 					$rows[$l]['day_titles'][] = array(
-						'name' => $wd_detail[$weekno].', '.PLIB_Date::get_formated_date('date',$ts)
+						'name' => $wd_detail[$weekno].', '.PLIB_Date::get_formated_date('date',$ts),
+						'timestamp' => $ts
 					);
 				}
 			}
@@ -93,7 +93,6 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 	
 	public function get_location()
 	{
-		// TODO finish
 		return array();
 	}
 }

@@ -7,7 +7,14 @@
 				{loop rows as row}
 				<tr>
 					{loop row:day_titles as daytitle}
-					<th width="25%" class="bs_coldesc">{daytitle:name}</th>
+					<th width="25%" class="bs_coldesc">
+					<div style="float: right;">
+						<a href="{gurl.simple_url(0,'&amp;$URL_LOC=editevent&amp;$URL_DAY='~daytitle:timestamp)}">
+						<img src="{guser.get_theme_item_path('images/plus.png')}" alt="+" title="{glocale.lang('add_event')}" width="10" />
+						</a>
+					</div>
+					{daytitle:name}
+					</th>
 					{endloop}
 				</tr>
 				<tr>

@@ -48,13 +48,14 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 		}
 		else
 		{
+			$day = $this->input->get_var(BS_URL_DAY,'get',PLIB_Input::INTEGER);
 			$default = array(
 				'user_id' => 0,
 				'max_announcements' => 0,
 				'description' => '',
 				'event_location' => '',
-				'event_begin' => 0,
-				'event_end' => 0,
+				'event_begin' => $day !== null ? $day : 0,
+				'event_end' => $day !== null ? $day : 0,
 				'timeout' => 0,
 				'event_title' => ''
 			);
