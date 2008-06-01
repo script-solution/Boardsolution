@@ -74,7 +74,7 @@ final class BS_Front_Action_Performer extends PLIB_Actions_Performer
 					{
 						$message = $this->_remove_attachment();
 						if($message === '')
-							$this->msgs->add_notice('success_remove_attachment');
+							$this->msgs->add_notice($this->locale->lang('success_remove_attachment'));
 					}
 					break;
 			}
@@ -128,7 +128,7 @@ final class BS_Front_Action_Performer extends PLIB_Actions_Performer
 										 str_replace('|',', ',$this->cfg['attachments_filetypes']));
 	
 		// does the file already exist?
-		$name = $_FILES['attachment']['name'];
+		$name = PLIB_FileUtils::clean_filename($_FILES['attachment']['name']);
 		$ext = PLIB_FileUtils::get_extension($name);
 		$base = PLIB_String::substr($name,0,PLIB_String::strlen($name) - PLIB_String::strlen($ext) - 1);
 		for($i = 1;is_file(PLIB_Path::inner().'uploads/'.$name);$i++)
