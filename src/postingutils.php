@@ -335,10 +335,20 @@ final class BS_PostingUtils extends PLIB_Singleton
 	
 		// not too many smileys and pictures?
 		if($enable_smileys && $bbcode->get_number_of_smileys() > $options['max_smileys'])
+		{
+			if($options['max_smileys'] == 0)
+				return 'no_smileys_in_msg_allowed';
+			
 			return sprintf($this->locale->lang('error_maxsmileys'),$options['max_smileys']);
+		}
 	
 		if($enable_bbcode && $bbcode->get_number_of_images() > $options['max_images'])
+		{
+			if($options['max_images'] == 0)
+				return 'no_imgs_in_msg_allowed';
+			
 			return sprintf($this->locale->lang('error_maxpics'),$options['max_images']);
+		}
 		
 		$text = $temp;
 		return '';
