@@ -43,6 +43,7 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 			}
 			
 			$default = BS_DAO::get_addfields()->get_by_id($id);
+			$default['field_custom_display'] = htmlspecialchars($default['field_custom_display'],ENT_QUOTES);
 		}
 		else
 		{

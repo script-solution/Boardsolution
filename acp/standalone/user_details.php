@@ -29,24 +29,19 @@ final class BS_ACP_Standalone_user_details extends BS_Standalone
 		$this->tpl->set_path(PLIB_Path::inner().'acp/templates/');
 	}
 	
+	public function get_template()
+	{
+		return 'popup_userdetails.htm';
+	}
+	
 	public function run()
 	{
 		if(!$this->auth->has_acp_access())
 			return;
 		
-		$this->tpl->set_template('inc_header.htm');
-		$this->tpl->add_variables(array(
-			'charset' => 'charset='.BS_HTML_CHARSET,
-			'cookie_path' => $this->cfg['cookie_path'],
-			'cookie_domain' => $this->cfg['cookie_domain']
-		));
-		$this->tpl->restore_template();
-		
 		$id = $this->input->get_var('id','get',PLIB_Input::ID);
 		if($id == null)
 			return;
-		
-		$this->tpl->set_template('popup_userdetails.htm');
 		
 		$data = BS_DAO::get_profile()->get_user_by_id($id,-1,-1);
 		if($data === false)
@@ -114,16 +109,6 @@ final class BS_ACP_Standalone_user_details extends BS_Standalone
 			'signature' => $signature,
 			'rank' => $rank_data['rank']
 		));
-		
-		$this->tpl->set_template('inc_footer.htm');
-		$this->tpl->add_variables(array(
-			'render_time' => $this->doc->get_script_time(),
-			'db_queries' => $this->db->get_performed_query_num(),
-			'queries' => PLIB_PrintUtils::to_string($this->db->get_performed_queries())
-		));
-		$this->tpl->restore_template();
-		
-		echo $this->tpl->parse_template();
 	}
 }
 ?>

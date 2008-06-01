@@ -29,6 +29,11 @@ final class BS_ACP_Standalone_user_search extends BS_Standalone
 		$this->tpl->set_path(PLIB_Path::inner().'acp/templates/');
 	}
 	
+	public function get_template()
+	{
+		return 'popup_usersearch.htm';
+	}
+	
 	public function run()
 	{
 		if(!$this->auth->has_acp_access())
@@ -58,15 +63,6 @@ final class BS_ACP_Standalone_user_search extends BS_Standalone
 			));
 		}
 		
-		$this->tpl->set_template('inc_header.htm');
-		$this->tpl->add_variables(array(
-			'charset' => 'charset='.BS_HTML_CHARSET,
-			'cookie_path' => $this->cfg['cookie_path'],
-			'cookie_domain' => $this->cfg['cookie_domain']
-		));
-		$this->tpl->restore_template();
-		
-		$this->tpl->set_template('popup_usersearch.htm',0);
 		$this->_request_formular();
 		
 		$this->tpl->add_variables(array(
@@ -124,16 +120,6 @@ final class BS_ACP_Standalone_user_search extends BS_Standalone
 		}
 		
 		$this->tpl->add_array('users',$users);
-		
-		$this->tpl->set_template('inc_footer.htm');
-		$this->tpl->add_variables(array(
-			'render_time' => $this->doc->get_script_time(),
-			'db_queries' => $this->db->get_performed_query_num(),
-			'queries' => PLIB_PrintUtils::to_string($this->db->get_performed_queries())
-		));
-		$this->tpl->restore_template();
-		
-		echo $this->tpl->parse_template();
 	}
 	
 	public function require_board_access()

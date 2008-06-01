@@ -32,19 +32,23 @@ class BS_DAO_AddFields extends PLIB_Singleton
 	}
 	
 	/**
-	 * Returns all fields of the entry with given id
+	 * Returns the field with given id
 	 *
 	 * @param int $id the id
-	 * @return array the row
+	 * @return array the row or false if not found
 	 */
 	public function get_by_id($id)
 	{
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		return $this->db->sql_rows(
+		$row = $this->db->sql_fetch(
 			'SELECT * FROM '.BS_TB_USER_FIELDS.' WHERE id = '.$id
 		);
+		if(!$row)
+			return false;
+		
+		return $row;
 	}
 	
 	/**
