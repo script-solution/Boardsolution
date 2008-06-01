@@ -49,10 +49,9 @@ final class BS_Front_Action_userprofile_uploadavatar extends BS_Front_Action_Bas
 		$image_size_checked = false;
 		if($imagesize = @getimagesize($_FILES['bild_upload']['tmp_name']))
 		{
-			if($imagesize[0] > $this->cfg['profile_max_img_width'] ||
-				$imagesize[1] > $this->cfg['profile_max_img_height'])
+			list($img_width,$img_height) = explode('x',$this->cfg['profile_max_img_size']);
+			if($imagesize[0] > $img_width || $imagesize[1] > $img_height)
 			{
-				list($img_width,$img_height) = explode('x',$this->cfg['profile_max_img_size']);
 				return sprintf(
 					$this->locale->lang('error_imagetoobig'),$img_width,$img_height
 				);

@@ -3,18 +3,6 @@
 
 {if module_error == false}
 {include "inc_js_row_selector.htm"}
-
-<script type="text/javascript">
-<!--
-function change_avatar(pfad)
-{
-	Zweitbild = new Image();
-	Zweitbild.src = "images/avatars/" + pfad;
-	document.images['img_2'].src = Zweitbild.src;
-}
-//-->
-</script>
-
 <div class="a_block">
 	<div>
 		{glocale.lang('import_avatars_desc')}
@@ -32,20 +20,22 @@ function change_avatar(pfad)
 	<h1 class="a_topic">{glocale.lang('avatars')}</h1>
 	<table class="a_table" cellpadding="2" cellspacing="1">
 		<tr>
-			<td width="60%" class="a_coldesc">{glocale.lang('filename')}</td>
+			<td width="30%" class="a_coldesc">{glocale.lang('preview')}</td>
+			<td width="30%" class="a_coldesc">{glocale.lang('filename')}</td>
 			<td width="35%" class="a_coldesc" align="center">{glocale.lang('owner')}</td>
 			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
 		</tr>
 		{if avatars.length == 0}
 		<tr>
-			<td colspan="3" class="a_main" align="center">{glocale.lang('no_avatars_found')}</td>
+			<td colspan="4" class="a_main" align="center">{glocale.lang('no_avatars_found')}</td>
 		</tr>
 		{endif}
 		{loop avatars as row => avatar}
 		<tr id="row_{row}" class="hlRow">
 			<td class="hlCol">
-			<a href="#" onmouseover="change_avatar('{avatar:av_pfad}');">{avatar:av_pfad}</a>
+			<img src="{gpath}images/avatars/{avatar:av_pfad}" alt="{glocale.lang('preview')}" height="40" />
 			</td>
+			<td class="hlCol">{avatar:av_pfad}</td>
 			<td class="hlCol" align="center">{avatar:owner}</td>
 			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
 			<input id="check_{row}" type="checkbox" name="delete[]" value="{avatar:id}" />
@@ -69,14 +59,6 @@ function change_avatar(pfad)
 
 <div class="a_pad">
 	{include "inc_page_split.htm"}
-</div>
-
-<div class="a_border a_pad_double" style="width: 40%;">
-	<h1 class="a_topic">{glocale.lang('preview')}</h1>
-	<div class="a_main" style="height: 100px; vertical-align: middle; text-align: center;">
-		TODO: improve that!
-		<img id="img_2" src="images/avatars/_blank.jpg" style="vertical-align:middle;"alt="" />
-	</div>
 </div>
 {endif}
 
