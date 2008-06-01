@@ -142,17 +142,17 @@ final class BS_ACP_Menu extends PLIB_Singleton
 						'title' => 'acpmod_user_activation',
 						'access' => BS_ENABLE_EXPORT ? 'no' : 'default',
 					),
-					'acpaccess' => array(
-						'title' => 'acpmod_acpaccess',
-					),
-					'massemail' => array(
-						'title' => 'acpmod_massemail',
-					),
 					'additionalfields' => array(
 						'title' => 'acpmod_addfields',
 					),
 					'userranks' => array(
 						'title' => 'acpmod_userranks'
+					),
+					'acpaccess' => array(
+						'title' => 'acpmod_acpaccess',
+					),
+					'massemail' => array(
+						'title' => 'acpmod_massemail',
 					),
 				),
 			),
