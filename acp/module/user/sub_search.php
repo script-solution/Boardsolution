@@ -67,6 +67,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 			'name_value' => stripslashes($sp['name']),
 			'action_param' => BS_URL_ACTION,
 			'email_value' => stripslashes($sp['email']),
+			'signature_value' => stripslashes($sp['signature']),
 			'user_group_combo' => $form->get_combobox(
 				'user_group[]',$user_group_options,$selected_groups,true,count($user_group_options)
 			),
@@ -188,6 +189,12 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 			$where .= ' AND u.`';
 			$where .= BS_EXPORT_USER_EMAIL."` LIKE '%".$keyword."%'";
 		}
+		
+		if($search_params['signature'])
+		{
+			$keyword = str_replace('*','%',$search_params['signature']);
+			$where .= ' AND p.signature_posted LIKE "%'.$keyword.'%"';
+		}
 
 		if($search_params['group'] != null && PLIB_Array_Utils::is_integer($search_params['group']))
 		{
@@ -303,7 +310,8 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 			'from_reg' => PLIB_StringHelper::get_clean_date($from_reg),
 			'to_reg' => PLIB_StringHelper::get_clean_date($to_reg),
 			'from_lastlogin' => PLIB_StringHelper::get_clean_date($from_lastlogin),
-			'to_lastlogin' => PLIB_StringHelper::get_clean_date($to_lastlogin)
+			'to_lastlogin' => PLIB_StringHelper::get_clean_date($to_lastlogin),
+			'signature' => $this->input->get_var('signature','post',PLIB_Input::STRING)
 		);
 	}
 	
