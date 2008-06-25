@@ -18,6 +18,9 @@
 			</td>
 			<td width="75%" class="{post:posts_var_class}">
 			<b>{glocale.lang('position')}:</b> {post:location}
+			{if post:relevance}
+			&nbsp;&nbsp;({glocale.lang('relevance')}: {post:relevance})
+			{endif}
 			</td>
 		</tr>
 		<tr>

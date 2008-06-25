@@ -88,6 +88,9 @@
 				{if topic:show_forum}
 				<div class="bs_topics_small">{topic:forum_path}</div>
 				{endif}
+				{if topic:show_relevance}
+				<div class="bs_topics_small">{glocale.lang('relevance')}: {topic:relevance}</div>
+				{endif}
 				</td>
 				<td align="center" class="bs_main">
 				{if topic:is_moved}

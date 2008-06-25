@@ -157,12 +157,10 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		));
 		
 		$posts = array();
-		$postcon = new BS_Front_Post_Container(
-			$fid,$tid,null,$pagination,'p.id '.BS_PostingUtils::get_instance()->get_posts_order()
-		);
 		$keywords = $this->functions->get_search_keywords();
-		if($keywords !== null)
-			$postcon->set_highlight_keywords($keywords);
+		$postcon = new BS_Front_Post_Container(
+			$fid,$tid,null,$pagination,'p.id '.BS_PostingUtils::get_instance()->get_posts_order(),'',$keywords
+		);
 		
 		foreach($postcon->get_posts() as $post)
 		{
@@ -203,8 +201,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$this->_add_posting_options_bottom($fid,$tid);
 
 		// show page split
-		$hl = $this->input->get_var(BS_URL_HL,'get',PLIB_Input::STRING);
-		$highlight = ($hl != null) ? '&amp;'.BS_URL_HL.'='.$hl : '';
+		$highlight = ($hl !== null) ? '&amp;'.BS_URL_HL.'='.urlencode($hl) : '';
 		$purl = $this->url->get_url(
 			0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.$highlight.'&amp;'.BS_URL_SITE.'={d}'
 		);

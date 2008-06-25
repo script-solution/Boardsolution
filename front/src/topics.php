@@ -41,7 +41,7 @@ final class BS_Front_Topics extends PLIB_FullObject
 	private $_where_clause;
 
 	/**
-	 * the order: lastpost, topic_name, topic_type, topic_start, replies, views
+	 * the order: lastpost, topic_name, topic_type, topic_start, replies, views, relevance
 	 *
 	 * @var string
 	 */
@@ -131,6 +131,13 @@ final class BS_Front_Topics extends PLIB_FullObject
 	 * @var boolean
 	 */
 	private $_show_views = true;
+	
+	/**
+	 * Wether the relevance should be displayed
+	 *
+	 * @var boolean
+	 */
+	private $_show_relevance = false;
 
 	/**
 	 * an array with the keywords to highlight
@@ -158,7 +165,8 @@ final class BS_Front_Topics extends PLIB_FullObject
 	 *
 	 * @param string $title the title of the topics-table
 	 * @param string $where additional conditions for the query
-	 * @param string $order the order: lastpost, topic_name, topic_type, topic_start, replies, views
+	 * @param string $order the order: lastpost, topic_name, topic_type, topic_start, replies, views,
+	 * 	relevance
 	 * @param string $ad ascending or descending order? (ASC vs. DESC)
 	 * @param int $number the number of topics to display (0 = all)
 	 * @param int $fid the forum-id - if you want to limit it to one forum; otherwise 0
@@ -171,7 +179,8 @@ final class BS_Front_Topics extends PLIB_FullObject
 		
 		$this->_title = $title;
 		$this->_where_clause = $where;
-		if(in_array($order,array('lastpost','topic_name','topic_type','topic_start','replies','views')))
+		$orders = array('lastpost','topic_name','topic_type','topic_start','replies','views','relevance');
+		if(in_array($order,$orders))
 			$this->_order = $order;
 		else
 			$this->_order = 'lastpost';
@@ -219,7 +228,18 @@ final class BS_Front_Topics extends PLIB_FullObject
 	 */
 	public function set_middle_width($width)
 	{
-		$this->_middle_width = (PLIB_Helper::is_integer($width) && $width >= 0 && $width <= 100) ? $width : 50;
+		$w = (PLIB_Helper::is_integer($width) && $width >= 0 && $width <= 100) ? $width : 50;
+		$this->_middle_width = $w;
+	}
+	
+	/**
+	 * Sets wether the relevance should be displayed
+	 *
+	 * @param boolean $show the new value
+	 */
+	public function set_show_relevance($show)
+	{
+		$this->_show_relevance = (bool)$show;
 	}
 
 	/**
@@ -331,6 +351,12 @@ final class BS_Front_Topics extends PLIB_FullObject
 				case 'views':
 					$sql_order = 't.views '.$this->_ad;
 					break;
+				case 'relevance':
+					if($this->_keywords !== null)
+						$sql_order = 'relevance '.$this->_ad;
+					else
+						$sql_order = 't.lastpost_id '.$this->_ad;
+					break;
 				default:
 					$sql_order = 't.lastpost_id '.$this->_ad;
 					break;
@@ -370,7 +396,9 @@ final class BS_Front_Topics extends PLIB_FullObject
 				$count = $this->_number_of_topics;
 			}
 			
-			$topiclist = BS_DAO::get_topics()->get_all_by_search($sql_where,$sql_order,$start,$count);
+			$topiclist = BS_DAO::get_topics()->get_all_by_search(
+				$sql_where,$sql_order,$start,$count,$this->_keywords
+			);
 			
 			$highlight_param = '';
 			if($this->_keywords !== null)
@@ -537,11 +565,25 @@ final class BS_Front_Topics extends PLIB_FullObject
 				$forum_path = '';
 				if($this->_show_forum)
 					$forum_path = BS_ForumUtils::get_instance()->get_forum_path($data['rubrikid'],false);
-
-				$topic_name = BS_TopicUtils::get_instance()->get_displayed_name($data['name']);
+				
+				$relevance = false;
+				if($this->_show_relevance)
+					$relevance = round($data['relevance'],3);
+				
+				// highlight keywords and cut topic-name
 				if(!is_null($this->_keywords))
-					$topic_name['displayed'] = $kwhl->highlight($topic_name['displayed']);
-
+				{
+					$data['name'] = $kwhl->highlight($data['name']);
+					$ls = new PLIB_HTML_LimitedString($data['name'],$this->cfg['thread_max_title_len']);
+					$res = $ls->get();
+					if($ls->has_cut())
+						$topic_name = array('displayed' => $res,'complete' => strip_tags($data['name']));
+					else
+						$topic_name = array('displayed' => $data['name'],'complete' => '');
+				}
+				else
+					$topic_name = BS_TopicUtils::get_instance()->get_displayed_name($data['name']);
+				
 				// special values for shadow-topics
 				if($data['moved_tid'] != 0 && $data['moved_rid'] != 0)
 				{
@@ -591,7 +633,9 @@ final class BS_Front_Topics extends PLIB_FullObject
 					'thread_pic' => BS_TopicUtils::get_instance()->get_symbol(
 						$cache,$data['type'],$data['symbol']
 					),
-					'posts_url' => $posts_url
+					'posts_url' => $posts_url,
+					'show_relevance' => $this->_show_relevance,
+					'relevance' => $relevance
 				);
 				
 				$is_important = $data['important'] == 1;

@@ -30,7 +30,7 @@ final class BS_Front_Search_Result_Posts extends PLIB_FullObject implements BS_F
 		/* @var $request BS_Front_Search_Request */
 		
 		list($order,$ad) = $request->get_order();
-
+		
 		$ids = $search->get_result_ids();
 		$idstr = implode(',',$ids);
 		if($idstr == '')
@@ -53,14 +53,20 @@ final class BS_Front_Search_Result_Posts extends PLIB_FullObject implements BS_F
 		
 		$posts = array();
 		$sql_order = BS_Front_Search_Utils::get_sql_order($order,$ad,'posts');
-		$postcon = new BS_Front_Post_Container(0,0,$ids,$pagination,$sql_order);
 		$keywords = $request->get_highlight_keywords();
-		$postcon->set_highlight_keywords($keywords);
+		$postcon = new BS_Front_Post_Container(0,0,$ids,$pagination,$sql_order,'',$keywords);
 		$hl = new PLIB_KeywordHighlighter($keywords,'<span class="bs_highlight">');
+		
+		// build highlight-param
+		$kws = '';
+		foreach($keywords as $kw)
+			$kws .= '"'.$kw.'" ';
+		$kws = rtrim($kws);
+		$highlight_param = '&amp;'.BS_URL_HL.'='.urlencode($kws);
 		
 		foreach($postcon->get_posts() as $post)
 		{
-			$post_url = $post->get_post_url();
+			$post_url = $post->get_post_url().$highlight_param;
 			$location = BS_ForumUtils::get_instance()->get_forum_path($post->get_field('rubrikid'),false);
 			$topic = $post->get_field('name');
 			$topic = $hl->highlight($topic);
@@ -77,7 +83,8 @@ final class BS_Front_Search_Result_Posts extends PLIB_FullObject implements BS_F
 				'posts_var_class' => $post->get_css_class('bar'),
 				'avatar' => $post->get_avatar(),
 				'show_separator' => !$post->is_last_post(),
-				'text' => $post->get_post_text(false,false,false)
+				'text' => $post->get_post_text(false,false,false),
+				'relevance' => round($post->get_field('relevance'),3)
 			);
 		}
 		

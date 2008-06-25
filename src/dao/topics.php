@@ -90,19 +90,43 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 * @param string $order the value for the ORDER-BY-statement
 	 * @param int $start the start-position (for the LIMIT-statement)
 	 * @param int $count the max. number of rows (for the LIMIT-statement) (0 = unlimited)
+	 * @param array $keywords an array of keywords which will be used for a "fulltext-search".
+	 * 	You may use "relevance" for sorting if the keywords are specified (not null)
 	 * @return array all found topics
 	 */
-	public function get_all_by_search($where,$order = 't.id ASC',$start = 0,$count = 0)
+	public function get_all_by_search($where,$order = 't.id ASC',$start = 0,$count = 0,$keywords = null)
 	{
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);
 		if(!PLIB_Helper::is_integer($count) || $count < 0)
 			PLIB_Helper::def_error('intge0','count',$count);
 		
+		$kw_add = '';
+		if($keywords !== null)
+		{
+			$kw_add = ',(0';
+			$sub = '0';
+			foreach($keywords as $kw)
+			{
+				$kw_add .= ' + (LENGTH(t.name) - LENGTH(REPLACE(LOWER(t.name),LOWER("'.$kw.'"),"")))';
+				$kw_add .= ' / LENGTH("'.$kw.'")';
+				$sub .= '+ ((LENGTH(text_posted) - LENGTH(REPLACE(LOWER(text_posted),';
+				$sub .= 'LOWER("'.$kw.'"),""))) / LENGTH("'.$kw.'"))';
+				// TODO we can't do this with MySQL < 4.1
+				// TODO add a setting to switch between simple sort and this one?
+				//$kw_add .= ' + (SELECT SUM((LENGTH(text_posted) - LENGTH(REPLACE(LOWER(text_posted),';
+				//$kw_add .= 'LOWER("'.$kw.'"),""))) / LENGTH("'.$kw.'"))';
+				//$kw_add .= ' FROM '.BS_TB_POSTS.' WHERE threadid = t.id GROUP BY threadid LIMIT 1)';
+			}
+			$kw_add .= ' + (SELECT SUM('.$sub.') FROM '.BS_TB_POSTS;
+			$kw_add .= ' WHERE threadid = t.id GROUP BY threadid LIMIT 1)';
+			$kw_add .= ') AS relevance';
+		}
+		
 		return $this->db->sql_rows(
 			'SELECT t.*,u.`'.BS_EXPORT_USER_NAME.'` username,
 							u2.`'.BS_EXPORT_USER_NAME.'` lp_username,rt.forum_name rubrikname,
-							p.user_group,p2.user_group lastpost_user_group
+							p.user_group,p2.user_group lastpost_user_group'.$kw_add.'
 			 FROM '.BS_TB_THREADS.' t
 			 LEFT JOIN '.BS_TB_USER.' u ON t.post_user = u.`'.BS_EXPORT_USER_ID.'`
 			 LEFT JOIN '.BS_TB_USER.' u2 ON t.lastpost_user = u2.`'.BS_EXPORT_USER_ID.'`

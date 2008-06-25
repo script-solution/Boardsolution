@@ -370,8 +370,7 @@ final class BS_User_Current extends PLIB_User_Current
 	}
 
 	/**
-	 * calculates the language
-	 *
+	 * Calculates the language
 	 */
 	private function _determine_language()
 	{
@@ -393,10 +392,17 @@ final class BS_User_Current extends PLIB_User_Current
 
 	/**
 	 * Determines the theme that should be used
-	 *
 	 */
 	private function _determine_theme()
 	{
+		// is it a mobile device?
+		if($this->_user->uses_mobile_device())
+		{
+			$this->set_theme('bots');
+			return;
+		}
+		
+		// use theme of user?
 		if($this->is_loggedin() && $this->cfg['allow_custom_style'] == 1)
 		{
 			if($this->get_profile_val('forum_style') > 0)

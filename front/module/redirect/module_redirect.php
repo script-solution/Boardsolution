@@ -84,6 +84,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 			// show post
 			case 'show_post':
 				$pid = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+				$hl = $this->input->get_var(BS_URL_HL,'get',PLIB_Input::STRING);
 				if($pid == null)
 				{
 					$this->_report_error();
@@ -97,6 +98,13 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 					return;
 				}
 				
+				$hl_add = '';
+				if($hl !== null)
+				{
+					$hl = stripslashes(PLIB_StringHelper::htmlspecialchars_back($hl));
+					$hl_add = '&'.BS_URL_HL.'='.$hl;
+				}
+				
 				$post_index = 0;
 				$page = 1;
 				$postlist = BS_DAO::get_posts()->get_all_from_topic(
@@ -108,7 +116,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 					{
 						$url = $this->url->get_url(
 							'posts','&'.BS_URL_FID.'='.$pdata['rubrikid']
-							.'&'.BS_URL_TID.'='.$pdata['threadid'].'&'.BS_URL_SITE.'='.$page,'&'
+							.'&'.BS_URL_TID.'='.$pdata['threadid'].'&'.BS_URL_SITE.'='.$page.$hl_add,'&'
 						);
 						$this->doc->redirect($url.'#b_'.$pid);
 					}

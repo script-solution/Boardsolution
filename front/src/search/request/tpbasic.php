@@ -38,9 +38,10 @@ abstract class BS_Front_Search_Request_TPBasic extends PLIB_FullObject
 	 * @param string $type the type: posts or topics
 	 * @param string $search_cond the search-condition
 	 * @param int $limit the max. number of results
+	 * @param array $keywords you may specify an array with keywords for "MATCH(...) AGAINST ..."
 	 * @return array an array with the found ids
 	 */
-	protected final function _get_result_ids($type = 'posts',$search_cond,$limit)
+	protected final function _get_result_ids($type = 'posts',$search_cond,$limit,$keywords = null)
 	{
 		// limit the search to the allowed forums
 		$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
@@ -51,7 +52,10 @@ abstract class BS_Front_Search_Request_TPBasic extends PLIB_FullObject
 		$sql_order = BS_Front_Search_Utils::get_sql_order($order,$ad,$type);
 		
 		$ids = array();
-		foreach(BS_DAO::get_posts()->get_posts_by_search($search_cond,$sql_order,$type,$limit) as $data)
+		$postlist = BS_DAO::get_posts()->get_posts_by_search(
+			$search_cond,$sql_order,$type,$limit,$keywords
+		);
+		foreach($postlist as $data)
 			$ids[] = $type == 'posts' ? $data['id'] : $data['threadid'];
 		
 		if(count($ids) == 0)

@@ -73,13 +73,18 @@ final class BS_Front_Post_Container extends PLIB_FullObject
 	 * @param PLIB_Pagination $pagination the pagination (null = all posts)
 	 * @param string $order the value for the ORDER BY statement
 	 * @param string $search additional search-conditions for WHERE (not beginning with AND)
+	 * @param array $keywords an numeric array with all keywords
 	 */
-	public function __construct($fid,$tid,$ids,$pagination = null,$order = 'p.id DESC',$search = '')
+	public function __construct($fid,$tid,$ids,$pagination = null,$order = 'p.id DESC',$search = '',
+		$keywords = null)
 	{
 		if(!$ids && !$fid && !$tid && !$search)
 			PLIB_Helper::error('Please provide at least one of the parameters $fid,$tid,$search and $ids!');
+		if($keywords !== null && !is_array($keywords))
+			PLIB_Helper::def_error('array','keywords',$keywords);
 		
 		$this->_pagination = $pagination;
+		$this->_keywords = $keywords;
 		
 		// build where-condition
 		$where = '';
@@ -104,7 +109,9 @@ final class BS_Front_Post_Container extends PLIB_FullObject
 		}
 		$where = 'WHERE '.PLIB_String::substr($where,0,-5);
 		
-		$postlist = BS_DAO::get_posts()->get_posts_for_topic($where,$order,$start,$count);
+		$postlist = BS_DAO::get_posts()->get_posts_for_topic(
+			$where,$order,$start,$count,$this->_keywords
+		);
 		
 		// set pagination if not already done
 		if($pagination === null)
@@ -131,19 +138,6 @@ final class BS_Front_Post_Container extends PLIB_FullObject
 		}
 		
 		return $this->_add_fields;
-	}
-	
-	/**
-	 * Sets the highlighting-keywords
-	 *
-	 * @param array $keywords an numeric array with all keywords
-	 */
-	public function set_highlight_keywords($keywords)
-	{
-		if(!is_array($keywords))
-			PLIB_Helper::def_error('array','keywords',$keywords);
-		
-		$this->_keywords = $keywords;
 	}
 	
 	/**

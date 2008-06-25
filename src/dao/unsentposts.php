@@ -70,6 +70,7 @@ class BS_DAO_UnsentPosts extends PLIB_Singleton
 		if(!PLIB_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
 			PLIB_Helper::def_error('intarray>0','user_ids',$user_ids);
 		
+		// TODO free the result
 		$sql = 'INSERT INTO '.BS_TB_UNSENT_POSTS.' (post_id,user_id) VALUES ';
 		foreach($user_ids as $uid)
 			$sql .= '('.$post_id.','.$uid.'),';

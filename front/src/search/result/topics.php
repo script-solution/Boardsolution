@@ -30,7 +30,7 @@ final class BS_Front_Search_Result_Topics extends PLIB_FullObject implements BS_
 		/* @var $request BS_Front_Search_Request */
 		
 		list($order,$ad) = $request->get_order();
-
+		
 		$ids = $search->get_result_ids();
 		$idstr = implode(',',$ids);
 		if($idstr == '')
@@ -51,6 +51,8 @@ final class BS_Front_Search_Result_Topics extends PLIB_FullObject implements BS_
 		$topics->set_left_content($this->locale->lang('page').' '.$small_page_split);
 		$topics->set_show_topic_action(false);
 		$topics->set_show_important_first(false);
+		// TODO keep that?
+		$topics->set_show_relevance(true);
 		$topics->set_show_forum(true);
 		$topics->set_middle_width(50);
 		$topics->set_keywords($request->get_highlight_keywords());

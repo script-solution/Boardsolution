@@ -86,7 +86,7 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 		);
 		$sql .= ' AND p.threadid = '.$tid;
 		
-		return $this->_get_result_ids('posts',$sql,250);
+		return $this->_get_result_ids('posts',$sql,250,$this->_keywords);
 	}
 	
 	public function get_title($search)

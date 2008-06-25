@@ -513,6 +513,8 @@ final class BS_Functions extends PLIB_FullObject
 		{
 			// undo the stuff of the input-class
 			$hl = stripslashes(str_replace('&quot;','"',$hl));
+			// backslashes are not supported here
+			$hl = str_replace('\\','',$hl);
 			
 			$temp = explode('"',$hl);
 			$keywords = array();
@@ -878,6 +880,37 @@ final class BS_Functions extends PLIB_FullObject
 		}
 		
 		return $c;
+	}
+	
+	/**
+	 * returns the search-ignore words
+	 *
+	 * @return array an associative array with all words to ignore:
+	 * 	<code>
+	 * 		array(<word> => true)
+	 * 	</code>
+	 */
+	public function get_search_ignore_words()
+	{
+		// we use the default-forum-language, because we guess that most of the posts will be in
+		// this language
+		$data = $this->cache->get_cache('languages')->get_element($this->cfg['default_forum_lang']);
+		$lang = $data['lang_folder'];
+		$file = PLIB_Path::inner().'language/'.$lang.'/search_words.txt';
+	
+		if(!file_exists($file))
+			return array();
+	
+		$words = array();
+		$lines = file($file);
+		foreach($lines as $l)
+		{
+			$line = trim($l);
+			if($line != '')
+				$words[$line] = true;
+		}
+	
+		return $words;
 	}
 	
 	protected function _get_print_vars()

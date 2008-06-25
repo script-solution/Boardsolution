@@ -268,17 +268,38 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 * @param string $order the value for the ORDER BY clause
 	 * @param string $type the type: topics or posts
 	 * @param int $number the max. number of results (0 = unlimited)
+	 * @param array $keywords an array of keywords which will be used for a "fulltext-search".
+	 * 	You may use "relevance" for sorting if the keywords are specified (not null)
 	 * @return array all found posts
 	 */
-	public function get_posts_by_search($where,$order = 'p.id ASC',$type = 'topics',$number = 0)
+	public function get_posts_by_search($where,$order = 'p.id ASC',$type = 'topics',$number = 0,
+		$keywords = null)
 	{
 		if(!in_array($type,array('topics','posts')))
 			PLIB_Helper::def_error('inarray','type',array('topics','posts'),$type);
 		if(!PLIB_Helper::is_integer($number) || $number < 0)
 			PLIB_Helper::def_error('intge0','number',$number);
+		if($keywords !== null && !is_array($keywords))
+			PLIB_Helper::def_error('array','keywords',$keywords);
+		
+		$kw_add = '';
+		if($keywords !== null)
+		{
+			$kw_add = ',(0';
+			foreach($keywords as $kw)
+			{
+				$kw_add .= ' + (LENGTH(p.text_posted) - LENGTH(REPLACE(LOWER(p.text_posted)';
+				$kw_add .= ',LOWER("'.$kw.'"),""))) / LENGTH("'.$kw.'")';
+				$kw_add .= ' + (LENGTH(t.name) - LENGTH(REPLACE(LOWER(t.name)';
+				$kw_add .= ',LOWER("'.$kw.'"),""))) / LENGTH("'.$kw.'")';
+			}
+			$kw_add .= ') AS relevance';
+		}
 		
 		return $this->db->sql_rows(
-			'SELECT p.id,p.threadid FROM '.BS_TB_POSTS.' p
+			'SELECT
+			   p.id,p.threadid'.$kw_add.'
+			 FROM '.BS_TB_POSTS.' p
 			 LEFT JOIN '.BS_TB_THREADS.' t ON p.threadid = t.id
 			 LEFT JOIN '.BS_TB_USER.' u ON p.post_user = u.`'.BS_EXPORT_USER_ID.'`
 			 '.$where.'
@@ -296,19 +317,38 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 * @param string $order the value for the ORDER BY clause
 	 * @param int $start the start-position (for the LIMIT-statement)
 	 * @param int $count the max. number of rows (for the LIMIT-statement)
+	 * @param array $keywords an array of keywords which will be used for a "fulltext-search".
+	 * 	You may use "relevance" for sorting if the keywords are specified (not null)
 	 * @return array the found posts
 	 */
-	public function get_posts_for_topic($where,$order = 'p.id ASC',$start = 0,$count = 0)
+	public function get_posts_for_topic($where,$order = 'p.id ASC',$start = 0,$count = 0,$keywords = null)
 	{
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);
 		if(!PLIB_Helper::is_integer($count) || $count < 0)
 			PLIB_Helper::def_error('intge0','count',$count);
+		if($keywords !== null && !is_array($keywords))
+			PLIB_Helper::def_error('array','keywords',$keywords);
+		
+		$kw_add = '';
+		if($keywords !== null)
+		{
+			$kw_add = ',(0';
+			foreach($keywords as $kw)
+			{
+				$kw_add .= ' + (LENGTH(p.text_posted) - LENGTH(REPLACE(LOWER(p.text_posted)';
+				$kw_add .= ',LOWER("'.$kw.'"),""))) / LENGTH("'.$kw.'")';
+				$kw_add .= ' + (LENGTH(t.name) - LENGTH(REPLACE(LOWER(t.name)';
+				$kw_add .= ',LOWER("'.$kw.'"),""))) / LENGTH("'.$kw.'")';
+			}
+			$kw_add .= ') AS relevance';
+		}
 		
 		return $this->db->sql_rows(
 			'SELECT p.*,u.`'.BS_EXPORT_USER_NAME.'` AS user,u.`'.BS_EXPORT_USER_EMAIL.'` email,
 						  pr.*,p.id AS bid,pr.signatur bsignatur,a.av_pfad,a.user AS aowner,
-						  u2.`'.BS_EXPORT_USER_NAME.'` edited_user_name,p2.user_group edited_user_group,t.name
+						  u2.`'.BS_EXPORT_USER_NAME.'` edited_user_name,p2.user_group edited_user_group,
+						  t.name'.$kw_add.'
 			 FROM '.BS_TB_POSTS.' AS p
 			 LEFT JOIN '.BS_TB_USER.' AS u ON ( p.post_user = u.`'.BS_EXPORT_USER_ID.'` )
 			 LEFT JOIN '.BS_TB_PROFILES.' AS pr ON ( u.`'.BS_EXPORT_USER_ID.'` = pr.id )

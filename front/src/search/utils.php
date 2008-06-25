@@ -39,6 +39,8 @@ final class BS_Front_Search_Utils extends PLIB_UtilBase
 				return 't.posts '.$ad;
 			case 'views':
 				return 't.views '.$ad;
+			case 'relevance':
+				return 'relevance '.$ad;
 			default:
 				return ($type == 'posts' ? 'p.post_time ' : 't.lastpost_time ').$ad;
 		}
@@ -98,11 +100,15 @@ final class BS_Front_Search_Utils extends PLIB_UtilBase
 	 */
 	public static function extract_keywords($input)
 	{
+		static $ignore = null;
+		if($ignore === null)
+			$ignore = PLIB_Object::get_prop('functions')->get_search_ignore_words();
+		
 		$sections = array();
 		while(($start = PLIB_String::strpos($input,'"')) !== false)
 		{
 			if(($inter_section = trim(PLIB_String::substr($input,0,$start))) != '')
-				self::_add_words($sections,$inter_section);
+				self::_add_words($sections,$ignore,$inter_section);
 
 			$ende = PLIB_String::strpos(substr($input,$start + 1),'"');
 			if($ende !== false)
@@ -113,21 +119,21 @@ final class BS_Front_Search_Utils extends PLIB_UtilBase
 					$sec = PLIB_String::substr($input,$start + 1,$ende);
 
 				$sec = trim($sec);
-				if(PLIB_String::strlen($sec) >= BS_SEARCH_MIN_KEYWORD_LEN)
+				if(PLIB_String::strlen($sec) >= BS_SEARCH_MIN_KEYWORD_LEN && !isset($ignore[$sec]))
 					$sections[] = $sec;
 
 				$input = PLIB_String::substr($input,$start + 2 + $ende);
 			}
 			else
 			{
-				self::_add_words($sections,trim($input));
+				self::_add_words($sections,$ignore,trim($input));
 				$input = '';
 				break;
 			}
 		}
 
 		if($input != '')
-			self::_add_words($sections,trim($input));
+			self::_add_words($sections,$ignore,trim($input));
 
 		return $sections;
 	}
@@ -175,16 +181,17 @@ final class BS_Front_Search_Utils extends PLIB_UtilBase
 	 * splits the given string by ' ' and adds all parts to the existing sections-array
 	 *
 	 * @param array $sections the sections-array
+	 * @param array words to ignore
 	 * @param string $string the string to parse
 	 */
-	private static function _add_words(&$sections,$string)
+	private static function _add_words(&$sections,$ignore,$string)
 	{
 		$split = explode(' ',$string);
 		$len = count($split);
 		for($i = 0;$i < $len;$i++)
 		{
 			if(($trimmed = trim($split[$i])) != '' &&
-					PLIB_String::strlen($trimmed) >= BS_SEARCH_MIN_KEYWORD_LEN)
+					PLIB_String::strlen($trimmed) >= BS_SEARCH_MIN_KEYWORD_LEN && !isset($ignore[$trimmed]))
 				$sections[] = $trimmed;
 		}
 	}

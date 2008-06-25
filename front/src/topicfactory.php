@@ -44,7 +44,7 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 		$search_string = '';
 		$search_words = array();
 		$words = PLIB_StringHelper::get_words($title);
-		$ignore = $this->_get_search_ignore_words();
+		$ignore = $this->functions->get_search_ignore_words();
 		foreach(array_keys($words) as $k)
 		{
 			if(isset($ignore[$k]))
@@ -83,37 +83,6 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 		$topics->set_tbody_content($clap_data['divparams']);
 		$topics->set_left_content($clap_data['link']);
 		$topics->add_topics();
-	}
-	
-	/**
-	 * returns the search-ignore words
-	 *
-	 * @return array an associative array with all words to ignore:
-	 * 	<code>
-	 * 		array(<word> => true)
-	 * 	</code>
-	 */
-	private function _get_search_ignore_words()
-	{
-		// we use the default-forum-language, because we guess that most of the posts will be in
-		// this language
-		$data = $this->cache->get_cache('languages')->get_element($this->cfg['default_forum_lang']);
-		$lang = $data['lang_folder'];
-		$file = PLIB_Path::inner().'language/'.$lang.'/search_words.txt';
-	
-		if(!file_exists($file))
-			return array();
-	
-		$words = array();
-		$lines = file($file);
-		foreach($lines as $l)
-		{
-			$line = trim($l);
-			if($line != '')
-				$words[$line] = true;
-		}
-	
-		return $words;
 	}
 	
 	/**

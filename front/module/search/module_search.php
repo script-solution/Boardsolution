@@ -64,8 +64,8 @@ final class BS_Front_Module_search extends BS_Front_Module
 			$manager->add_result();
 		else
 		{
-			$order_vals = array('lastpost','topic_name','topic_type','replies','views');
-			$order = $this->input->correct_var('order','post',PLIB_Input::STRING,$order_vals,'lastpost');
+			$order_vals = array('lastpost','topic_name','topic_type','replies','views','relevance');
+			$order = $this->input->correct_var('order','post',PLIB_Input::STRING,$order_vals,'relevance');
 			$ad = $this->input->correct_var('ad','post',PLIB_Input::STRING,array('ASC','DESC'),'DESC');
 			$limit_vals = array(10,25,50,100,250,500);
 			$limit = $this->input->correct_var('limit','post',PLIB_Input::INTEGER,$limit_vals,250);
@@ -81,6 +81,7 @@ final class BS_Front_Module_search extends BS_Front_Module
 			);
 
 			$order_options = array(
+				'relevance' => $this->locale->lang('relevance'),
 				'lastpost' => $this->locale->lang('date'),
 				'topic_name' => $this->locale->lang('name'),
 				'topic_type' => $this->locale->lang('threadtype'),
@@ -103,8 +104,8 @@ final class BS_Front_Module_search extends BS_Front_Module
 			);
 
 			$result_type_options = array(
-				'topics' => $this->locale->lang('threads'),
-				'posts' => $this->locale->lang('posts')
+				'posts' => $this->locale->lang('posts'),
+				'topics' => $this->locale->lang('threads')
 			);
 
 			$keyword = stripslashes($this->input->get_var('keyword','post',PLIB_Input::STRING));
@@ -112,7 +113,7 @@ final class BS_Front_Module_search extends BS_Front_Module
 			
 			$selection = $this->input->get_var('fid','post');
 			$forum_combo = BS_ForumUtils::get_instance()->get_recursive_forum_combo(
-				'fid[]',$selection,-1,true,true
+				'fid[]',$selection === null ? 0 : $selection,-1,true,true
 			);
 			
 			$this->tpl->add_variables(array(

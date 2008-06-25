@@ -77,7 +77,7 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 		$limit = $this->input->correct_var('limit','post',PLIB_Input::INTEGER,$limit_vals,250);
 		
 		$type = $this->_result instanceof BS_Front_Search_Result_Posts ? 'posts' : 'topics';
-		return $this->_get_result_ids($type,$search_cond,$limit);
+		return $this->_get_result_ids($type,$search_cond,$limit,$this->_keywords['kw']);
 	}
 	
 	public function get_title($search)
@@ -123,13 +123,13 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 	
 	public function get_order()
 	{
-		$order_vals = array('topic_name','topic_type','replies','views','date');
+		$order_vals = array('topic_name','topic_type','replies','views','date','relevance');
 		$order = $this->input->get_var('order','post',PLIB_Input::STRING);
 		if($order == null)
 			$order = $this->input->get_var(BS_URL_ORDER,'get',PLIB_Input::STRING);
 
 		if(!in_array($order,$order_vals))
-			$order = 'date';
+			$order = 'relevance';
 
 		$ad_vals = array('ASC','DESC');
 		$ad = $this->input->get_var('ad','post',PLIB_Input::STRING);
