@@ -35,7 +35,7 @@ final class BS_Front_Standalone_ajax_quote_message extends BS_Standalone
 					// check if the post comes from a forum that the user is allowed to view
 					if($this->auth->has_access_to_intern_forum($post_data['rubrikid']))
 					{
-						$username = $post_data['post_user'] != 0 ? $post_data['user'] : $post_data['post_an_user'];
+						$username = $post_data['post_user'] != 0 ? $post_data['user_name'] : $post_data['post_an_user'];
 						$text = BS_PostingUtils::get_instance()->quote_text($post_data['text_posted'],$username);
 						echo PLIB_StringHelper::htmlspecialchars_back($text);
 					}
