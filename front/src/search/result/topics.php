@@ -42,6 +42,8 @@ final class BS_Front_Search_Result_Topics extends PLIB_FullObject implements BS_
 			0,'&amp;'.BS_URL_ID.'='.$search->get_search_id().'&amp;'.BS_URL_MODE.'='.$request->get_name()
 			 .'&amp;'.BS_URL_ORDER.'='.$order.'&amp;'.BS_URL_AD.'='.$ad.'&amp;'.BS_URL_SITE.'={d}'
 		);
+		foreach($request->get_url_params() as $name => $value)
+			$url .= '&amp;'.$name.'='.$value;
 		$small_page_split = $this->functions->get_pagination_small($pagination,$url);
 
 		$sql = ' t.id IN ('.$idstr.') AND moved_tid = 0';
@@ -51,7 +53,6 @@ final class BS_Front_Search_Result_Topics extends PLIB_FullObject implements BS_
 		$topics->set_left_content($this->locale->lang('page').' '.$small_page_split);
 		$topics->set_show_topic_action(false);
 		$topics->set_show_important_first(false);
-		// TODO keep that?
 		$topics->set_show_relevance(true);
 		$topics->set_show_forum(true);
 		$topics->set_middle_width(50);

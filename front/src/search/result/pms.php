@@ -54,15 +54,17 @@ final class BS_Front_Search_Result_PMs extends PLIB_FullObject implements BS_Fro
 		}
 
 		$site = $this->input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
-		
 		$url = $this->url->get_url(
 			0,'&'.BS_URL_LOC.'=pmsearch&'.BS_URL_ID.'='.$search->get_search_id()
-				.'&'.BS_URL_SITE.'='.$site,'&'
+				.'&'.BS_URL_ORDER.'='.$order.'&'.BS_URL_AD.'='.$ad
+				.'&'.BS_URL_MODE.'='.$request->get_name(),'&'
 		);
+		foreach($request->get_url_params() as $name => $value)
+			$url .= '&'.$name.'='.$value;
 		
 		$this->tpl->set_template('inc_userprofile_pmjs.htm');
 		$this->tpl->add_variables(array(
-			'pm_target_url' => $url,
+			'pm_target_url' => $url.'&'.BS_URL_SITE.'='.$site,
 			'delete_add' => '&'.BS_URL_MODE.'=delete',
 			'at_mark_read' => '',
 			'at_mark_unread' => ''
@@ -72,10 +74,7 @@ final class BS_Front_Search_Result_PMs extends PLIB_FullObject implements BS_Fro
 		$this->tpl->set_template('userprofile_pmsearch_result.htm');
 		
 		$this->tpl->add_variables(array(
-			'target_url' => $this->url->get_url(
-				0,'&amp;'.BS_URL_LOC.'=pmsearch&amp;'.BS_URL_ID.'='.$search->get_search_id()
-				 .'&amp;'.BS_URL_MODE.'='.$request->get_name().'&amp;'.BS_URL_SITE.'='.$site
-			),
+			'target_url' => str_replace('&','&amp;',$url).'&amp;'.BS_URL_SITE.'='.$site,
 			'title' => $request->get_title($search)
 		));
 
@@ -147,11 +146,7 @@ final class BS_Front_Search_Result_PMs extends PLIB_FullObject implements BS_Fro
 		
 		$this->tpl->add_array('pms',$pms);
 		
-		$url = $this->url->get_url(
-			0,'&amp;'.BS_URL_LOC.'=pmsearch'.'&amp;'.BS_URL_ID.'='.$search->get_search_id()
-			.'&amp;'.BS_URL_ORDER.'='.$order.'&amp;'.BS_URL_AD.'='.$ad
-			.'&amp;'.BS_URL_MODE.'='.$request->get_name().'&amp;'.BS_URL_SITE.'={d}'
-		);
+		$url = str_replace('&','&amp;',$url).'&amp;'.BS_URL_SITE.'={d}';
 		$this->functions->add_pagination($pagination,$url);
 		
 		$this->tpl->restore_template();

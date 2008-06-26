@@ -22,12 +22,14 @@ final class BS_Front_Module_search extends BS_Front_Module
 	public function run()
 	{
 		// display the search-form
-		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
+		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
 		$modes = array('default','user_posts','user_topics','topic','similar_topics');
 		$mode = $this->input->correct_var(BS_URL_MODE,'get',PLIB_Input::STRING,$modes,'default');
+		$keywords = $this->input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
+		$usernames = $this->input->get_var(BS_URL_UN,'get',PLIB_Input::STRING);
 		
 		$submitted = $this->input->isset_var('submit','post');
-		if($mode != 'default' || $submitted || $id != null)
+		if($mode != 'default' || $submitted || $id != null || $keywords != null || $usernames != null)
 		{
 			switch($mode)
 			{

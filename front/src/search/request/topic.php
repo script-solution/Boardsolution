@@ -47,6 +47,14 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 		return $this->_keywords;
 	}
 	
+	public function get_url_params()
+	{
+		$str = '';
+		foreach($this->_keywords as $kw)
+			$str .= '"'.$kw.'" ';
+		return array(BS_URL_KW => urlencode(rtrim($str)));
+	}
+	
 	public function encode_keywords()
 	{
 		return serialize($this->_keywords);
@@ -67,6 +75,9 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 		}
 		
 		$keyword = $this->input->get_var('keyword','post',PLIB_Input::STRING);
+		if($keyword === null)
+			$keyword = $this->input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
+		
 		if(!BS_Front_Search_Utils::is_valid_keyword($keyword))
 			return null;
 		

@@ -33,7 +33,7 @@ define('BS_FRONTEND_FILE','index.php');
  * 
  * The path to the PHPLibrary (relative) with trailing slash.
  */
-define('BS_LIB_PATH','../PHPLib/');
+define('BS_LIB_PATH','lib/');
 
 /**
  * Hiermit koennen Debug-Infos konfiguriert werden:
@@ -490,6 +490,7 @@ define('BS_URL_LIMIT',							'limit');
 define('BS_URL_DEL',								'del');
 define('BS_URL_HL',									'hl');
 define('BS_URL_KW',									'kw');
+define('BS_URL_UN',									'un');
 define('BS_URL_SID',								'sid');
 define('BS_URL_PAGE',								'page');
 

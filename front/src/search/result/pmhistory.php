@@ -21,7 +21,7 @@ final class BS_Front_Search_Result_PMHistory extends PLIB_FullObject implements 
 {
 	public function get_name()
 	{
-		return 'pmhistory';
+		return 'pm_history';
 	}
 
 	public function get_template()
@@ -107,10 +107,14 @@ final class BS_Front_Search_Result_PMHistory extends PLIB_FullObject implements 
 				.'&amp;'.BS_URL_ORDER.'='.$order.'&amp;'.BS_URL_AD.'='.$ad
 				.'&amp;'.BS_URL_MODE.'='.$request->get_name().'&amp;'.BS_URL_SITE.'={d}'
 		);
+		foreach($request->get_url_params() as $name => $value)
+			$url .= '&amp;'.$name.'='.$value;
+		
 		$this->functions->add_pagination($pagination,$url);
 		
 		$this->tpl->add_array('messages',$messages);
 		$this->tpl->add_variables(array(
+			'page_split' => true,
 			'linewrap' => false,
 			'topic_title' => $request->get_title($search),
 			'limit_height' => false

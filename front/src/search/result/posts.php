@@ -42,6 +42,8 @@ final class BS_Front_Search_Result_Posts extends PLIB_FullObject implements BS_F
 			0,'&amp;'.BS_URL_ID.'='.$search->get_search_id().'&amp;'.BS_URL_MODE.'='.$request->get_name()
 				.'&amp;'.BS_URL_ORDER.'='.$order.'&amp;'.BS_URL_AD.'='.$ad.'&amp;'.BS_URL_SITE.'={d}'
 		);
+		foreach($request->get_url_params() as $name => $value)
+			$url .= '&amp;'.$name.'='.$value;
 		$small_page_split = $this->functions->get_pagination_small($pagination,$url);
 
 		$this->tpl->set_template('search_result_posts.htm');

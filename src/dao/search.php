@@ -51,10 +51,12 @@ class BS_DAO_Search extends PLIB_Singleton
 	 * Creates a new entry with given fields
 	 *
 	 * @param array $fields the fields to set
+	 * @return int the id that has been used
 	 */
 	public function create($fields)
 	{
 		$this->db->sql_insert(BS_TB_SEARCH,$fields);
+		return $this->db->get_last_insert_id();
 	}
 	
 	/**

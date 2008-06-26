@@ -29,12 +29,12 @@ final class BS_Front_Search_Request_PMHistory extends BS_Front_Search_Request_PM
 	
 	public function get_name()
 	{
-		return 'pms';
+		return 'history';
 	}
 
 	public function get_initial_result_type()
 	{
-		return 'pmhistory';
+		return 'pm_history';
 	}
 
 	public function set_result_type($result)
@@ -45,6 +45,12 @@ final class BS_Front_Search_Request_PMHistory extends BS_Front_Search_Request_PM
 	public function get_highlight_keywords()
 	{
 		return array($this->_keyword);
+	}
+	
+	public function get_url_params()
+	{
+		$id = $this->input->get_var(BS_URL_KW,'get',PLIB_Input::ID);
+		return array(BS_URL_KW => $id);
 	}
 	
 	public function encode_keywords()

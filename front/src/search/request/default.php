@@ -56,6 +56,19 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 		return $this->_keywords['kw'];
 	}
 	
+	public function get_url_params()
+	{
+		$params = array();
+		foreach($this->_keywords as $name => $kws)
+		{
+			$str = '';
+			foreach($kws as $kw)
+				$str .= '"'.$kw.'" ';
+			$params[$name == 'kw' ? BS_URL_KW : BS_URL_UN] = urlencode(rtrim($str));
+		}
+		return $params;
+	}
+	
 	public function encode_keywords()
 	{
 		return serialize($this->_keywords);
@@ -150,7 +163,13 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 	private function _get_search_condition()
 	{
 		$keyword = $this->input->get_var('keyword','post',PLIB_Input::STRING);
+		if($keyword === null)
+			$keyword = $this->input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
+		
 		$username = $this->input->get_var('un','post',PLIB_Input::STRING);
+		if($username === null)
+			$username = $this->input->get_var(BS_URL_UN,'get',PLIB_Input::STRING);
+		
 		$keyword_mode = $this->input->get_var('keyword_mode','post',PLIB_Input::STRING);
 		$keyword_mode = ($keyword_mode == 'and') ? 'AND' : 'OR';
 		

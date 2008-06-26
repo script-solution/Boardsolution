@@ -47,6 +47,12 @@ final class BS_Front_Search_Request_UserTopics extends BS_Front_Search_Request_T
 		return array();
 	}
 	
+	public function get_url_params()
+	{
+		$uid = $this->input->get_var(BS_URL_PID,'get',PLIB_Input::ID);
+		return array(BS_URL_PID => $uid);
+	}
+	
 	public function encode_keywords()
 	{
 		$uid = $this->input->get_var(BS_URL_PID,'get',PLIB_Input::ID);

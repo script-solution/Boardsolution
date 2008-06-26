@@ -68,6 +68,11 @@ interface BS_Front_Search_Request
 	public function get_order();
 	
 	/**
+	 * @return array an array of URL-parameters which should be passed during a search
+	 */
+	public function get_url_params();
+	
+	/**
 	 * Should return an array of all keywords that should be highlighted
 	 *
 	 * @return array an numeric array with the keywords to highlight

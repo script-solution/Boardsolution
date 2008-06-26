@@ -112,14 +112,12 @@ class BS_DAO_Topics extends PLIB_Singleton
 				$kw_add .= ' / LENGTH("'.$kw.'")';
 				$sub .= '+ ((LENGTH(text_posted) - LENGTH(REPLACE(LOWER(text_posted),';
 				$sub .= 'LOWER("'.$kw.'"),""))) / LENGTH("'.$kw.'"))';
-				// TODO we can't do this with MySQL < 4.1
-				// TODO add a setting to switch between simple sort and this one?
-				//$kw_add .= ' + (SELECT SUM((LENGTH(text_posted) - LENGTH(REPLACE(LOWER(text_posted),';
-				//$kw_add .= 'LOWER("'.$kw.'"),""))) / LENGTH("'.$kw.'"))';
-				//$kw_add .= ' FROM '.BS_TB_POSTS.' WHERE threadid = t.id GROUP BY threadid LIMIT 1)';
 			}
-			$kw_add .= ' + (SELECT SUM('.$sub.') FROM '.BS_TB_POSTS;
-			$kw_add .= ' WHERE threadid = t.id GROUP BY threadid LIMIT 1)';
+			if($this->db->get_server_version() >= '4.1')
+			{
+				$kw_add .= ' + (SELECT SUM('.$sub.') FROM '.BS_TB_POSTS;
+				$kw_add .= ' WHERE threadid = t.id GROUP BY threadid LIMIT 1)';
+			}
 			$kw_add .= ') AS relevance';
 		}
 		
