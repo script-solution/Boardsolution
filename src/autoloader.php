@@ -18,26 +18,31 @@
  */
 function BS_Autoloader($item)
 {
-	if(PLIB_String::starts_with($item,'BS_'))
+	// Note that we don't use the MB-functions here for performance issues
+	if(substr($item,0,3) == 'BS_')
 	{
-		$nitem = PLIB_String::substr($item,3);
-		$folder = PLIB_String::strtolower(strtok($nitem,'_'));
+		static $folders = null;
+		if($folders === null)
+			$folders = array('front' => 1,'acp' => 1,'install' => 1,'dba' => 1,'extern' => 1);
+		
+		$nitem = substr($item,3);
+		$folder = strtolower(strtok($nitem,'_'));
 		$subfolder = 'src/';
-		if(!in_array($folder,array('front','acp','install','dba','extern')))
+		if(!isset($folders[$folder]))
 			$folder = '';
 		else
 		{
 			// allow includes in the module-folders
 			$parts = explode('_',$nitem);
-			if(count($parts) > 2 && PLIB_String::strtolower($parts[1]) == 'module')
+			if(count($parts) > 2 && strtolower($parts[1]) == 'module')
 				$subfolder = '';
 			
 			$folder .= '/';
-			$nitem = PLIB_String::substr($nitem,PLIB_String::strlen($folder));
+			$nitem = substr($nitem,strlen($folder));
 		}
 		
 		$nitem = str_replace('_','/',$nitem);
-		$nitem = PLIB_String::strtolower($nitem);
+		$nitem = strtolower($nitem);
 		$nitem .= '.php';
 		$path = PLIB_Path::inner().$folder.$subfolder.$nitem;
 		

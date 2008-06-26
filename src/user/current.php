@@ -407,7 +407,9 @@ final class BS_User_Current extends PLIB_User_Current
 		{
 			if($this->get_profile_val('forum_style') > 0)
 			{
-				$this->set_theme($this->get_profile_val('theme_folder'));
+				// just do this if it is a valid theme (if the cache does not exist for example)
+				if(is_string($this->get_profile_val('theme_folder')))
+					$this->set_theme($this->get_profile_val('theme_folder'));
 				return;
 			}
 		}
@@ -415,7 +417,9 @@ final class BS_User_Current extends PLIB_User_Current
 		if($this->cfg['default_forum_style'] > 0)
 		{
 			$data = $this->cache->get_cache('themes')->get_element($this->cfg['default_forum_style']);
-			$this->set_theme($data['theme_folder']);
+			// just do this if it is a valid theme (if the cache does not exist for example)
+			if(is_string($data['theme_folder']))
+				$this->set_theme($data['theme_folder']);
 		}
 	}
 	
