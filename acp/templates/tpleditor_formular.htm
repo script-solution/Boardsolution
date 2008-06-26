@@ -1,21 +1,3 @@
-<script type="text/javascript">
-<!--
-var TextAreaHeight = 400;
-
-function TextAreaExtend()
-{
-	document.getElementById('taedit').style.height = TextAreaHeight + 20 + 'px';
-	TextAreaHeight += 20;
-}
-
-function TextAreaReduce()
-{
-	document.getElementById('taedit').style.height = TextAreaHeight - 20 + 'px';
-	TextAreaHeight -= 20;
-}
-//-->
-</script>
-
 <form method="post" action="{target_url}">
 {if action_type}
 <input type="hidden" name="action_type" value="{action_type}" />
@@ -27,23 +9,30 @@ function TextAreaReduce()
 		<tr>
 			<td class="a_coldesc" style="font-weight: normal;">
 			<b>{glocale.lang('filename')}:</b>
-				<img src="{gpath}images/filetypes/{image}" alt="" /> {filename}<br />
-				<b>{glocale.lang('filesize')}:</b> {filesize} Bytes<br />
-				<b>{glocale.lang('modified')}:</b> {last_modification}
-				</td>
-			<td class="a_coldesc" style="font-weight: normal;" align="right">
-			<a href="Javascript:TextAreaExtend();">{glocale.lang('extend')}</a> |
-			<a href="Javascript:TextAreaReduce();">{glocale.lang('reduce')}</a>
+			<img src="{gpath}images/filetypes/{image}" alt="" /> {filename}
+			</td>
+			<td class="a_coldesc" style="font-weight: normal;">
+			<b>{glocale.lang('filesize')}:</b> {filesize} Bytes
+			</td>
+			<td class="a_coldesc" style="font-weight: normal;">
+			<b>{glocale.lang('modified')}:</b> {last_modification}
 			</td>
 		</tr>
 		<tr>
-			<td colspan="2" class="a_main" align="center">
+			<td colspan="3" class="a_main" align="center">
 			<textarea id="taedit" name="file_content"
 				style="width: 98%; height: 400px;" cols="50" rows="10">{file_content}</textarea>
+			<script type="text/javascript" src="{gjs.get_file('src/taresize.js')}"></script>
+			<script type="text/javascript">
+			<!--
+			BS_taResizer('taedit','bbcode_area_resizer');
+			//-->
+			</script>
+			<div id="bbcode_area_resizer" class="bs_coldesc_sep" style="width: 99%;">&nbsp;</div>
 			</td>
 		</tr>
 		<tr>
-			<td  colspan="2" class="a_coldesc" align="center">
+			<td colspan="3" class="a_coldesc" align="center">
 			<input type="submit" value="{glocale.lang('save')}" />
 			{if back_button}
 			<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{back_url}';" /></td>
