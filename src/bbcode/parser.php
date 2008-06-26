@@ -314,7 +314,7 @@ final class BS_BBCode_Parser extends PLIB_FullObject
 	private function _get_smiley_code($code,$image)
 	{
 		$this->_smiley_count++;
-		return '<img title="'.$code.'" alt="'.$code.'" src="<!--EMP-->'.$image.'" />';
+		return '<img title="'.$code.'" alt="'.$code.'" src="{EMP}'.$image.'" />';
 	}
 
 	/**
