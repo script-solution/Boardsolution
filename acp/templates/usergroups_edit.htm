@@ -43,7 +43,7 @@ var cp = new PLIB_ColorPicker('{glibpath}','group_color');
 				#{form.get_textbox('group_color',default:group_color,6,6)}
 				<img id="colorpicker_image" src="acp/images/color_picker.gif" title="{glocale.lang('color_picker_hint')}"
 						alt="{glocale.lang('color_picker_hint')}" onmouseover="this.style.cursor = 'pointer';"
-						onmouseout="this.style.cursor = 'default';" onclick="cp.toggle(this.id);" />
+						onmouseout="this.style.cursor = 'default';" onclick="cp.toggle(this.id,'rt');" />
 				<div class="a_desc">{glocale.lang('group_color_desc')}</div>
 			</dd>
 		</dl>

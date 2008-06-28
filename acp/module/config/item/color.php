@@ -54,7 +54,7 @@ final class BS_ACP_Config_Item_Color extends PLIB_Config_Item_Line
 		$str .= ' alt="'.$this->locale->lang('color_picker_hint').'"';
 		$str .= ' onmouseover="this.style.cursor = \'pointer\';"';
 		$str .= ' onmouseout="this.style.cursor = \'default\';"';
-		$str .= ' onclick="cp_'.$id.'.toggle(this.id)" />';
+		$str .= ' onclick="cp_'.$id.'.toggle(this.id,\'rt\')" />';
 		return $str;
 	}
 

@@ -695,7 +695,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 		$res .= ' alt="'.$this->locale->lang('color_picker_hint').'"';
 		$res .= ' onmouseover="this.style.cursor = \'pointer\';"';
 		$res .= ' onmouseout="this.style.cursor = \'default\';"';
-		$res .= ' onclick="cp_'.$clearid.'.toggle(this.id);';
+		$res .= ' onclick="cp_'.$clearid.'.toggle(this.id,\'rt\');';
 		$res .= ' PLIB_getElement(\''.$id.'|preview\').style.backgroundColor =';
 		$res .= ' PLIB_getElement(\''.$id.'\').value;" />';
 		
