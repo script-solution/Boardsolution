@@ -29,6 +29,42 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 	}
 	
 	/**
+	 * The topic-data (to grab it just once from the db)
+	 *
+	 * @var array
+	 */
+	private $_topic = false;
+	
+	/**
+	 * Grabs the data of the current topic (uses the topic- and forum-id got via GET), just once,
+	 * from the database and returns it.
+	 *
+	 * @return array the topic-data or null if the parameters are not available
+	 */
+	public function get_current_topic()
+	{
+		if($this->_topic !== false)
+			return $this->_topic;
+		
+		$this->_topic = null;
+		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+	
+		if($tid != null && $fid != null)
+		{
+			$this->_topic = BS_DAO::get_topics()->get_topic_for_cache($fid,$tid);
+			if($this->_topic === false)
+			{
+				$this->_topic = null;
+				return null;
+			}
+			return $this->_topic;
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Builds similar topics based on the given title
 	 *
 	 * @param string $title the title of the current topic

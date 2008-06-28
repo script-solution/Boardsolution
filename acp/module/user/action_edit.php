@@ -145,7 +145,7 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 			if($lang_data != null)
 				$this->locale->add_language_file('email',$lang_data['lang_folder']);
 			else
-				$this->locale->add_language_file('email',$this->cfg['lang_folder']);
+				$this->locale->add_language_file('email',$this->functions->get_def_lang_folder());
 
 			$text = sprintf(
 				$this->locale->lang('userdata_changed_email_text'),

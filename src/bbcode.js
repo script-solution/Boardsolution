@@ -12,30 +12,31 @@
 var bsMarkedTags = new Array();
 var popups = new Array();
 var tagAdded = new Array();
-var cp = null;
+var cp = new Array();
 
 /**
  * Displays the popup for the given tag
  *
+ * @param int number the number of the textarea
  * @param string tag the tag-name
  */
-function showPopup(tag)
+function showPopup(number,tag)
 {
-	var id = 'tag_' + tag + '_popup';
-	if(tagAdded[tag])
+	var id = 'tag_' + tag + '_' + number + '_popup';
+	if(tagAdded[tag + number])
 	{
-		_insertAtCursor('bbcode_area',"[/" + tag + "]");
-		unmarkItem('tag_' + tag);
-		tagAdded[tag] = 0;
-		popups[tag] = 0;
+		_insertAtCursor('bbcode_area' + number,"[/" + tag + "]");
+		unmarkItem('tag_' + tag + '_' + number);
+		tagAdded[tag + number] = 0;
+		popups[tag + number] = 0;
 	}
-	else if(popups[tag])
+	else if(popups[tag + number])
 	{
 		if(tag == 'color')
-			cp.hide();
+			cp[number].hide();
 		else
 			PLIB_hideElement(id);
-		popups[tag] = 0;
+		popups[tag + number] = 0;
 	}
 	else
 	{
@@ -47,7 +48,7 @@ function showPopup(tag)
 			var el = PLIB_getElement(id);
 			if(el != null)
 			{
-				var btn = PLIB_getElement('tag_' + tag);
+				var btn = PLIB_getElement('tag_' + tag + '_' + number);
 				el.parentNode.removeChild(el);
 				el.style.position = 'absolute';
 				el.style.display = 'block';
@@ -57,58 +58,62 @@ function showPopup(tag)
 		}
 	
 		if(tag == 'color')
-			cp.toggle('tag_' + tag,'brl');
+			cp[number].toggle('tag_' + tag + '_' + number,'brl');
 		else
-			PLIB_displayElement(id,'tag_' + tag,'brl');
-		popups[tag] = 1;
+			PLIB_displayElement(id,'tag_' + tag + '_' + number,'brl');
+		popups[tag + number] = 1;
 	}
 }
 
 /**
  * Performs the click-event for the given tag and param
  *
+ * @param int number the number of the textarea
  * @param string tag the tag-name
  * @param string param the parameter of the BBCode-Tag
  */
-function popupElementClick(tag,param)
+function popupElementClick(number,tag,param)
 {
-	PLIB_hideElement('tag_' + tag + '_popup');
-	PLIB_getElement('bbcode_area').focus();
+	PLIB_hideElement('tag_' + tag + '_' + number + '_popup');
+	PLIB_getElement('bbcode_area' + number).focus();
 	
-	var tagimg = PLIB_getElement('tag_' + tag);
+	var tagimg = PLIB_getElement('tag_' + tag + '_' + number);
 	var text = param != '' ? '[' + tag + '=' + param + ']' : '[' + tag + ']';
-	insertBBCode('bbcode_area',text,tag,tagimg);
-	tagAdded[tag] = isItemMarked('tag_' + tag);
-	if(!tagAdded[tag])
-		popups[tag] = 0;
+	insertBBCode(number,'bbcode_area' + number,text,tag,tagimg);
+	tagAdded[tag + number] = isItemMarked('tag_' + tag + '_' + number);
+	if(!tagAdded[tag + number])
+		popups[tag + number] = 0;
 }
 
 /**
  * changes the bbcode-mode to given value
  * 
+ * @param int number the number of the textarea
  * @param string mode the new mode
  * @param object the form-object to send an AJAX-request
  */
-function changeBBCodeMode(mode,form)
+function changeBBCodeMode(number,mode,form)
 {
-	if(BBCodeMode != 'applet' && mode == 'applet')
+	if(BBCodeModes[number] != 'applet' && mode == 'applet')
 		form.getPostForm(mode);
-	else if(BBCodeMode == 'applet' && mode != 'applet')
+	else if(BBCodeModes[number] == 'applet' && mode != 'applet')
 		form.getPostForm(mode);
 	
-	BBCodeMode = mode;
+	BBCodeModes[number] = mode;
 }
 
 /**
  * Hovers over an item with given id
  *
+ * @param int number the number of the textarea
  * @param mixed id the id of the item
+ * @param string hoverText the text to display
  */
-function hoverItem(id,hoverText)
+function hoverItem(number,id,hoverText)
 {
 	var item = document.getElementById(id);
 	item.style.cursor = 'pointer';
-	document.getElementById('explain').value = hoverText;
+	document.getElementById('bbc_explain_' + number).value = hoverText;
 	if(item != null && item.src && !bsMarkedTags.contains(id))
 		item.style.borderColor = '#555555';
 }
@@ -116,13 +121,14 @@ function hoverItem(id,hoverText)
 /**
  * Undos the hover-effect over an item with given id
  *
+ * @param int number the number of the textarea
  * @param mixed id the id of the item
  */
-function unhoverItem(id)
+function unhoverItem(number,id)
 {
 	var item = document.getElementById(id);
 	item.style.cursor = 'default';
-	document.getElementById('explain').value = '';
+	document.getElementById('bbc_explain_' + number).value = '';
 	if(item != null && item.src && !bsMarkedTags.contains(id))
 		item.style.borderColor = '#AAAAAA';
 }
@@ -189,17 +195,18 @@ function insertSmiley(id,smiley)
 /**
  * inserts a bbcode at the current position in the textarea
  *
+ * @param int number the number of the textarea
  * @param int id the id of the textfield
  * @param string text the text to insert (the start-tag)
  * @param string tag the name of the tag
  * @param object object the button or null
  */
-function insertBBCode(id,text,tag,object)
+function insertBBCode(number,id,text,tag,object)
 {
 	var textarea = document.getElementById(id);
 	if(text)
 	{
-		if(BBCodeMode == 'advanced')
+		if(BBCodeModes[number] == 'advanced')
 		{
 			if(!_surroundMarkedText(textarea,tag,text))
 			{
@@ -237,9 +244,10 @@ function insertBBCode(id,text,tag,object)
 /**
  * closes all currently open tags in the textfield with given id
  *
+ * @param int number the number of the textarea
  * @param int id the id of the textfield
  */
-function closeBBCodeTags(id)
+function closeBBCodeTags(number,id)
 {
 	var textarea = document.getElementById(id);
 	var lower_text = textarea.value.toLowerCase();
@@ -296,7 +304,7 @@ function closeBBCodeTags(id)
 	// unmark the buttons
 	for(var i = 0;i < BBCODE.length;i++)
 	{
-		var object = document.getElementById("tag_" + BBCODE[i]["tag"]);
+		var object = document.getElementById("tag_" + BBCODE[i]["tag"] + "_" + number);
 		if(object != null)
 		{
 			if(bsMarkedTags.contains(object.id))

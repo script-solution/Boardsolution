@@ -97,7 +97,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 	{
 		$show_quote = $show_quote && BS_PostingUtils::get_instance()->get_message_option('enable_bbcode');
 	
-		$this->tpl->set_template('inc_message_review.htm',0);
+		$this->tpl->set_template('inc_message_review.htm');
 		
 		$review_title = sprintf($this->locale->lang('topic_review_title'),BS_TOPIC_REVIEW_POST_COUNT);
 		$this->tpl->add_variables(array(
@@ -204,7 +204,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 		}
 	
 		// show template
-		$this->tpl->set_template('inc_post_preview.htm',0);
+		$this->tpl->set_template('inc_post_preview.htm');
 		$this->tpl->add_variables(array(
 			'text' => $res['text']
 		));
@@ -403,7 +403,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 		// add attachments
 	  if($show_attachments && isset($attachments[$post_data['bid']]))
 	  {
-	  	$this->tpl->set_template('inc_attachments_display.htm',0);
+	  	$this->tpl->set_template('inc_attachments_display.htm');
 	  	
 	  	$tplatt = array();
 	  	for($i = 0;$i < count($attachments[$post_data['bid']]);$i++)

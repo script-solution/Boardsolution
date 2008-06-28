@@ -20,6 +20,21 @@
 final class BS_Functions extends PLIB_FullObject
 {
 	/**
+	 * @return string the name of the folder of the default-language
+	 */
+	public function get_def_lang_folder()
+	{
+		static $folder = null;
+		if($folder === null)
+		{
+			$data = $this->cache->get_cache('languages')->get_element($this->cfg['default_forum_lang']);
+			$folder = $data['lang_folder'];
+		}
+		
+		return $folder;
+	}
+	
+	/**
 	 * Checks wether <code>$_GET[BS_URL_SID] == $this->sess->session_id.</code>
 	 *
 	 * @return boolean true if the session-id is equal
@@ -381,7 +396,7 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function add_delete_message($message,$yes_url,$no_url,$delete_target = '')
 	{
-		$this->tpl->set_template('inc_delete_message.htm',0);
+		$this->tpl->set_template('inc_delete_message.htm');
 		$this->tpl->add_variables(array(
 			'delete_target' => $delete_target,
 			'delete_message' => $message,
@@ -894,8 +909,7 @@ final class BS_Functions extends PLIB_FullObject
 	{
 		// we use the default-forum-language, because we guess that most of the posts will be in
 		// this language
-		$data = $this->cache->get_cache('languages')->get_element($this->cfg['default_forum_lang']);
-		$lang = $data['lang_folder'];
+		$lang = $this->functions->get_def_lang_folder();
 		$file = PLIB_Path::inner().'language/'.$lang.'/search_words.txt';
 	
 		if(!file_exists($file))

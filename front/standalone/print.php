@@ -36,10 +36,9 @@ final class BS_Front_Standalone_print extends BS_Standalone
 			return;
 		}
 		
-		$topic_data = $this->cache->get_cache('topic')->current();
-		
 		// check if the topic exists
-		if($topic_data['id'] == '')
+		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		if($topic_data === null)
 		{
 			$this->_report_error(PLIB_Messages::MSG_TYPE_ERROR,$this->locale->lang('thread_not_found'));
 			return;

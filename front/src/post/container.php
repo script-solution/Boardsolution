@@ -198,8 +198,8 @@ final class BS_Front_Post_Container extends PLIB_FullObject
 	private function _load_attachments()
 	{
 		$this->_attachments = array();
-		$topic = $this->cache->get_cache('topic')->current();
-		if($topic['attachment_num'] > 0)
+		$topic = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		if($topic !== null && $topic['attachment_num'] > 0)
 		{
 			foreach(BS_DAO::get_attachments()->get_by_postids($this->_get_post_ids()) as $adata)
 			{

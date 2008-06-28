@@ -11,7 +11,15 @@
  */
 
 /**
- * The posting-form. That means the textfield, BBCode, smileys and attachment-upload
+ * The posting-form. That means the textfield, BBCode, smileys and attachment-upload.
+ * <p>
+ * You may use multiple instances on one page. If you do that call set_name_suffix() to
+ * make sure that the formular-fields are named differently.
+ * Note that the guest-fields are shown just once and an attachment-form can be used just
+ * once, too!
+ * You can use them simply by:
+ * <code>{include "post_form.htm" #&lt;number&gt;}</code>
+ * &lt;number&gt; starts with 1.
  * 
  * @package			Boardsolution
  * @subpackage	src
@@ -19,6 +27,13 @@
  */
 final class BS_PostingForm extends PLIB_FullObject
 {
+	/**
+	 * The template-number to use
+	 *
+	 * @var int
+	 */
+	private static $number = 1;
+	
 	/**
 	 * The attachment-settings
 	 *
@@ -83,6 +98,13 @@ final class BS_PostingForm extends PLIB_FullObject
 	private $_show_options = false;
 	
 	/**
+	 * The suffix for all formular-element-names
+	 *
+	 * @var string
+	 */
+	private $_name_suffix = '';
+	
+	/**
 	 * The formular instance
 	 *
 	 * @var BS_HTML_Formular
@@ -106,7 +128,8 @@ final class BS_PostingForm extends PLIB_FullObject
 	}
 	
 	/**
-	 * Sets wether to show attachments
+	 * Sets wether to show attachments. Note that this enables attachments for all used post-forms
+	 * in this request!
 	 * 
 	 * @param boolean $show show the form?
 	 * @param int $post_id the id of the post (required if $db_attachments is enabled)
@@ -122,6 +145,22 @@ final class BS_PostingForm extends PLIB_FullObject
 			'db_attachments' => $db_attachments,
 			'post_attachments' => $post_attachments
 		);
+	}
+	
+	/**
+	 * Sets the suffix for all formular-element-names. That means you will get:
+	 * <ul>
+	 * 	<li>"text&lt;suffix&gt;"</li>
+	 * 	<li>"use_smileys&lt;suffix&gt;"</li>
+	 * 	<li>"use_bbcode&lt;suffix&gt;"</li>
+	 * </ul>
+	 * Note that this does not affect the guest-fields. These will be shown just once!
+	 *
+	 * @param string $suffix the name suffix
+	 */
+	public function set_name_suffix($suffix)
+	{
+		$this->_name_suffix = $suffix;
 	}
 	
 	/**
@@ -182,6 +221,9 @@ final class BS_PostingForm extends PLIB_FullObject
 		$this->_add_post_form();
 		if($this->_attachments['show'])
 			$this->_add_attachment_form();
+		
+		// increase for the next post-form
+		self::$number++;
 	}
 	
 	/**
@@ -203,6 +245,8 @@ final class BS_PostingForm extends PLIB_FullObject
 		$this->tpl->set_template('inc_textarea.htm');
 		$this->tpl->add_variables(array(
 			'applet' => $use_applet,
+			'number' => self::$number,
+			'name_suffix' => $this->_name_suffix,
 			'enable_smileys' => $options['enable_smileys'],
 			'bbcode_buttons' => $bbcode_buttons,
 			'textarea_height' => $this->_textarea_height,
@@ -228,7 +272,7 @@ final class BS_PostingForm extends PLIB_FullObject
 		if($this->_form === null)
 			$this->_form = new BS_HTML_Formular($this->_attachments['show'],true);
 		
-		$this->tpl->set_template('inc_post_form.htm');
+		$this->tpl->set_template('inc_post_form.htm',self::$number);
 		$this->tpl->add_variables(array('form',$this->_form));
 		$this->tpl->add_allowed_method('form','*');
 	
@@ -238,11 +282,11 @@ final class BS_PostingForm extends PLIB_FullObject
 			if($this->_show_options)
 			{
 				$toggle_smbb .= $this->_form->get_checkbox(
-					'use_bbcode',$this->_use_bbcode,null,$this->locale->lang('use_bbcode')
+					'use_bbcode'.$this->_name_suffix,$this->_use_bbcode,null,$this->locale->lang('use_bbcode')
 				);
 				$toggle_smbb .= '<br />';
 				$toggle_smbb .= $this->_form->get_checkbox(
-					'use_smileys',$this->_use_smileys,null,$this->locale->lang('use_smileys')
+					'use_smileys'.$this->_name_suffix,$this->_use_smileys,null,$this->locale->lang('use_smileys')
 				);
 			}
 		}
@@ -253,7 +297,8 @@ final class BS_PostingForm extends PLIB_FullObject
 				if($this->_show_options)
 				{
 					$toggle_smbb .= $this->_form->get_checkbox(
-						'use_bbcode',$this->_use_bbcode,null,$this->locale->lang('use_bbcode')
+						'use_bbcode'.$this->_name_suffix,$this->_use_bbcode,null,
+						$this->locale->lang('use_bbcode')
 					);
 					$toggle_smbb .= '<br />';
 				}
@@ -264,7 +309,8 @@ final class BS_PostingForm extends PLIB_FullObject
 				if($this->_show_options)
 				{
 					$toggle_smbb .= $this->_form->get_checkbox(
-						'use_smileys',$this->_use_smileys,null,$this->locale->lang('use_smileys')
+						'use_smileys'.$this->_name_suffix,$this->_use_smileys,null,
+						$this->locale->lang('use_smileys')
 					);
 				}
 			}
@@ -296,8 +342,11 @@ final class BS_PostingForm extends PLIB_FullObject
 		}
 		
 		$use_applet = $this->user->use_bbcode_applet();
-		if($this->input->isset_var('bbcode_mode','post'))
-			$use_applet = $this->input->get_var('bbcode_mode','post',PLIB_Input::STRING) == 'applet';
+		if($this->input->isset_var('bbcode_mode_'.self::$number,'post'))
+		{
+			$mode = $this->input->get_var('bbcode_mode_'.self::$number,'post',PLIB_Input::STRING);
+			$use_applet = $mode == 'applet';
+		}
 		
 		$textarea = $this->get_textarea($text,$use_applet);
 		
@@ -351,12 +400,13 @@ final class BS_PostingForm extends PLIB_FullObject
 			$bbcode_mode = $this->user->get_profile_val('bbcode_mode');
 		else
 			$bbcode_mode = $this->cfg['msgs_default_bbcode_mode'];
-		$tpl_bbcode_mode = $this->_form->get_input_value('bbcode_mode',$bbcode_mode);
+		$tpl_bbcode_mode = $this->_form->get_input_value('bbcode_mode_'.self::$number,$bbcode_mode);
 		
 		$this->tpl->add_variables(array(
 			'get_post_form_url' => $this->url->get_standalone_url(
 				'front','ajax_get_post_form','&type='.$this->_type.'&mode=%s%&height='.$this->_textarea_height,'&'
 			),
+			'number' => self::$number,
 			'bbcode_activated' => $bbc_act,
 			'smileys_activated' => $smileys_act,
 			'post_title' => $this->_title,
@@ -471,7 +521,9 @@ final class BS_PostingForm extends PLIB_FullObject
 		
 		$total = count($smileys);
 		$res['more_smileys'] = $total > $base_num;
-		$res['smiley_popup_url'] = $this->url->get_standalone_url('front','smileys');
+		$res['smiley_popup_url'] = $this->url->get_standalone_url(
+			'front','smileys','&amp;'.BS_URL_ID.'='.self::$number
+		);
 		$res['smiley_popup_height'] = $total * 28 + 120;
 	
 		return $res;
@@ -487,25 +539,29 @@ final class BS_PostingForm extends PLIB_FullObject
 	{
 		$allowed = PLIB_Array_Utils::advanced_explode(',',$sallowed);
 		
-		$bbcode_data = 'var BBCODE = new Array();'."\n";
-		
-		$i = 0;
-		foreach(BS_BBCode_Helper::get_instance()->get_tags() as $row)
+		// once is enough :)
+		$bbcode_data = '';
+		if(self::$number == 1)
 		{
-			if(in_array($row['name'],$allowed))
+			$bbcode_data = 'var BBCODE = new Array();'."\n";
+			$i = 0;
+			foreach(BS_BBCode_Helper::get_instance()->get_tags() as $row)
 			{
-				$bbcode_data .= 'BBCODE['.$i.'] = new Array();'."\n";
-				$bbcode_data .= 'BBCODE['.$i.']["tag"] = "'.$row['name'].'";'."\n";
-				$bbcode_data .= 'BBCODE['.$i.']["param"] = "'.$row['param'].'";'."\n";
-				$bbcode_data .= 'BBCODE['.$i.']["prompt_text"] = "';
-				if($this->locale->contains_lang('bbcode_prompt_'.$row['name']))
-					$bbcode_data .= $this->locale->lang('bbcode_prompt_'.$row['name']);
-				$bbcode_data .= '";'."\n";
-				$bbcode_data .= 'BBCODE['.$i.']["prompt_param_text"] = "';
-				if($this->locale->contains_lang('bbcode_prompt_param_'.$row['name']))
-					$bbcode_data .= $this->locale->lang('bbcode_prompt_param_'.$row['name']);
-				$bbcode_data .= '";'."\n\n";
-				$i++;
+				if(in_array($row['name'],$allowed))
+				{
+					$bbcode_data .= 'BBCODE['.$i.'] = new Array();'."\n";
+					$bbcode_data .= 'BBCODE['.$i.']["tag"] = "'.$row['name'].'";'."\n";
+					$bbcode_data .= 'BBCODE['.$i.']["param"] = "'.$row['param'].'";'."\n";
+					$bbcode_data .= 'BBCODE['.$i.']["prompt_text"] = "';
+					if($this->locale->contains_lang('bbcode_prompt_'.$row['name']))
+						$bbcode_data .= $this->locale->lang('bbcode_prompt_'.$row['name']);
+					$bbcode_data .= '";'."\n";
+					$bbcode_data .= 'BBCODE['.$i.']["prompt_param_text"] = "';
+					if($this->locale->contains_lang('bbcode_prompt_param_'.$row['name']))
+						$bbcode_data .= $this->locale->lang('bbcode_prompt_param_'.$row['name']);
+					$bbcode_data .= '";'."\n\n";
+					$i++;
+				}
 			}
 		}
 		
@@ -515,6 +571,8 @@ final class BS_PostingForm extends PLIB_FullObject
 		PLIB_Highlighting_Languages::ensure_inited($hldir.'languages.xml');
 		
 		$this->tpl->add_variables(array(
+			'textarea_id' => 'bbcode_area'.self::$number,
+			'number' => self::$number,
 			'bbcode' => $this,
 			'hllangs' => PLIB_Highlighting_Languages::get_languages(),
 			'bbcode_data' => $bbcode_data,

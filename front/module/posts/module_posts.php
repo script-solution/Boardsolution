@@ -61,10 +61,9 @@ final class BS_Front_Module_posts extends BS_Front_Module
 			}
 		}
 
-		$topic_data = $this->cache->get_cache('topic')->current();
-
 		// check if the topic exists
-		if($topic_data['id'] == '')
+		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		if($topic_data === null)
 		{
 			// send 404 for search-engines and such
 			header('HTTP/1.0 404 Not Found');
@@ -298,7 +297,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	 */
 	private function _add_posting_options_bottom($fid,$tid)
 	{
-		$topic_data = $this->cache->get_cache('topic')->current();
+		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		$display_subscribe = ($this->cfg['display_denied_options'] || $this->user->is_loggedin()) &&
 			$this->cfg['enable_email_notification'] && !$topic_data['thread_closed'] &&
 			!$this->forums->forum_is_closed($fid);
@@ -318,7 +317,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	{
 		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
 		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$topic_data = $this->cache->get_cache('topic')->current();
+		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 	
 		$user_voted = BS_UserUtils::get_instance()->user_voted_for_poll($topic_data['type']);
 		$result_url = $this->url->get_url(

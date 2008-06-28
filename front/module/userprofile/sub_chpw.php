@@ -42,7 +42,7 @@ final class BS_Front_SubModule_userprofile_chpw extends BS_Front_SubModule
 			$max_changes_notice = sprintf($this->locale->lang('max_username_changes_notice'),$left);
 		}
 
-		$this->tpl->set_template('inc_pw_complexity_js.htm',0);
+		$this->tpl->set_template('inc_pw_complexity_js.htm');
 		$js_script = $this->tpl->parse_template();
 		
 		$this->tpl->add_variables(array(

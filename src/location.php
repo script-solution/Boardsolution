@@ -31,8 +31,6 @@ final class BS_Location extends PLIB_FullObject
 	{
 		// cache some properties
 		$input = PLIB_Object::get_prop('input');
-		$db = PLIB_Object::get_prop('db');
-		$cache = PLIB_Object::get_prop('cache');
 		$doc = PLIB_Object::get_prop('doc');
 		
 		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
@@ -74,8 +72,11 @@ final class BS_Location extends PLIB_FullObject
 				$location = $action.':'.$fid;
 			else if($fid != null && $tid != null)
 			{
-				$topic_data = $cache->get_cache('topic')->current();
-				$location = $action.':'.$fid.':'.$tid.':'.$topic_data['name'];
+				$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
+				if($topic_data !== null)
+					$location = $action.':'.$fid.':'.$tid.':'.$topic_data['name'];
+				else
+					$location = $action;
 			}
 			else
 				$location = $action;

@@ -37,7 +37,7 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 	{
 		$online = $this->get_currently_online_user($loc);
 		
-		$this->tpl->set_template('inc_online_user.htm',0);
+		$this->tpl->set_template('inc_online_user.htm');
 		$this->tpl->add_variables(array(
 			'can_view_locations' => $this->auth->has_global_permission('view_online_locations'),
 			'conclusion_list' => $online['conclusion'],

@@ -23,12 +23,8 @@
 			<textarea id="taedit" name="file_content"
 				style="width: 98%; height: 400px;" cols="50" rows="10">{file_content}</textarea>
 			<script type="text/javascript" src="{gjs.get_file('src/taresize.js')}"></script>
-			<script type="text/javascript">
-			<!--
-			BS_taResizer('taedit','bbcode_area_resizer');
-			//-->
-			</script>
-			<div id="bbcode_area_resizer" class="bs_coldesc_sep" style="width: 99%;">&nbsp;</div>
+			<div id="bbcode_area_resizer" class="bs_coldesc_sep"
+				onmousedown="BS_set_textarea_ids('taedit',this.id);" style="width: 99%;">&nbsp;</div>
 			</td>
 		</tr>
 		<tr>

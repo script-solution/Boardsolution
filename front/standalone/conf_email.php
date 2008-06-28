@@ -61,7 +61,7 @@ final class BS_Front_Standalone_conf_email extends BS_Standalone
 			$success = true;
 		}
 		
-		$this->tpl->set_template('extern_conf.htm',0);
+		$this->tpl->set_template('extern_conf.htm');
 		$this->tpl->add_variables(array(
 			'message' => $message,
 			'success' => $success,

@@ -19,7 +19,7 @@ class BS_Install_intro extends BS_Install
 {
 	public function run()
 	{
-		$this->tpl->set_template('step_intro.htm',0);
+		$this->tpl->set_template('step_intro.htm');
 		echo $this->tpl->parse_template();
 	}
 }

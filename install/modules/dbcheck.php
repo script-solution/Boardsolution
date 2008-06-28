@@ -22,7 +22,7 @@ class BS_Install_dbcheck extends BS_Install
 		$prefix = $this->functions->get_session_var('table_prefix');
 		$type = $this->functions->get_session_var('install_type');
 		
-		$this->tpl->set_template('step_config.htm',0);
+		$this->tpl->set_template('step_config.htm');
 		
 		$configs = array();
 		$configs[] = array('type' => 'separator');

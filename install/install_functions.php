@@ -264,7 +264,7 @@ class BS_InstallFunctions extends BS_Functions
 		}
 		
 		$phpself = $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING);
-		$this->tpl->set_template('navigation.htm',0);
+		$this->tpl->set_template('navigation.htm');
 		$this->tpl->add_variables(array(
 			'loc' => $loc,
 			'show_refresh' => $show_refresh,

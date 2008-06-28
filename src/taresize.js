@@ -19,7 +19,7 @@ var ta_resizer_id;
  * @param mixed id the id of the textarea
  * @param mixed rid the id of the resizer
  */
-function BS_taResizer(id,rid)
+function BS_set_textarea_ids(id,rid)
 {
 	ta_id = id;
 	ta_resizer_id = rid;

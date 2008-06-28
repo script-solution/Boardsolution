@@ -19,7 +19,7 @@ class BS_Install_finished extends BS_Install
 {
 	public function run()
 	{
-		$this->tpl->set_template('step_finished.htm',0);
+		$this->tpl->set_template('step_finished.htm');
 		$this->tpl->add_variables(array(
 			'type' => $this->functions->get_session_var('install_type')
 		));

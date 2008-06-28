@@ -120,10 +120,8 @@ abstract class BS_Document extends PLIB_Document
 		$list = parent::_get_init_dependency_list();
 		
 		// add additional properties
-		$list['user'][] = 'cache';
 		$list['auth'] = array('user','sessions');
 		$list['unread'] = array('user');
-		$list['cache'] = array();
 		return $list;
 	}
 	
@@ -170,11 +168,69 @@ abstract class BS_Document extends PLIB_Document
 	/**
 	 * Loads the cache property
 	 *
-	 * @return BS_Cache_Container the property
+	 * @return PLIB_Cache_Container the property
 	 */
 	protected function _load_cache()
 	{
-		return new BS_Cache_Container();
+		$storage = new PLIB_Cache_Storage_DB(BS_TB_CACHE,'table_name','table_content');
+		$cache = new PLIB_Cache_Container($storage);
+		
+		// config
+		$s = new BS_Cache_Source_Config();
+		$cache->init_content('config',$s);
+		
+		$config = $cache->get_cache('config');
+		if($config->get_element_count() == 0)
+			PLIB_Helper::error('The Config-entries are missing',false);
+		
+		// stats
+		$s = new BS_Cache_Source_Stats();
+		$cache->init_content('stats',$s);
+		
+		// default ones without key
+		$defs = array(
+			'config' =>				BS_TB_DESIGN,
+			'acp_access' =>		BS_TB_ACP_ACCESS,
+		);
+		foreach($defs as $name => $table)
+		{
+			$s = new PLIB_Cache_Source_SimpleDB($table,null,null);
+			$cache->init_content($name,$s);
+		}
+		
+		// default ones with id as key
+		$defids = array(
+			'banlist' =>			BS_TB_BANS,
+			'themes' =>				BS_TB_THEMES,
+			'languages' =>		BS_TB_LANGS,
+			'bots' =>					BS_TB_BOTS,
+			'intern' =>				BS_TB_INTERN,
+			'user_groups' =>	BS_TB_USER_GROUPS,
+			'tasks' =>				BS_TB_TASKS
+		);
+		foreach($defids as $name => $table)
+		{
+			$s = new PLIB_Cache_Source_SimpleDB($table);
+			$cache->init_content($name,$s);
+		}
+		
+		// user-fields
+		$s = new PLIB_Cache_Source_SimpleDB(BS_TB_USER_FIELDS,'id','field_sort','ASC');
+		$cache->init_content('user_fields',$s);
+		
+		// user_ranks
+		$s = new PLIB_Cache_Source_SimpleDB(BS_TB_RANKS,'id','post_from','ASC');
+		$cache->init_content('user_ranks',$s);
+		
+		// moderators
+		$s = new BS_Cache_Source_CustomDB(
+			"SELECT m.id,m.user_id,m.rid,u.`".BS_EXPORT_USER_NAME."` user_name
+			 FROM ".BS_TB_MODS." m
+ 			 LEFT JOIN ".BS_TB_USER." u ON m.user_id = u.`".BS_EXPORT_USER_ID."`"
+		);
+		$cache->init_content('moderators',$s);
+		
+		return $cache;
 	}
 	
 	/**
@@ -199,6 +255,7 @@ abstract class BS_Document extends PLIB_Document
 		
 		$js = PLIB_Javascript::get_instance();
 		$js->set_cache_folder(PLIB_Path::inner().'cache/');
+		$js->set_shrink(BS_DEBUG <= 1);
 		$c->add_global_ref('gjs',$js);
 		$c->add_global_ref('glocale',$this->locale);
 		$c->add_global_ref('gurl',$this->url);

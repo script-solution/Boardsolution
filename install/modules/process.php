@@ -35,7 +35,7 @@ class BS_Install_process extends BS_Install
 		
 		$install->start();
 		
-		$this->tpl->set_template('step_process.htm',0);
+		$this->tpl->set_template('step_process.htm');
 		$this->tpl->add_variables(array(
 			'log' => $install->get_log()
 		));

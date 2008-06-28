@@ -123,7 +123,7 @@ abstract class PLIB_FullObject extends PLIB_Object
 	/**
 	 * The cache-container
 	 *
-	 * @var BS_Cache_Container
+	 * @var PLIB_Cache_Container
 	 */
 	private $cache;
 	

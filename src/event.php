@@ -130,7 +130,7 @@ final class BS_Event extends PLIB_FullObject
 		
 		if($this->_event['tid'] > 0)
 		{
-			$tdata = $this->cache->get_cache('topic')->current();
+			$tdata = BS_Front_TopicFactory::get_instance()->get_current_topic();
 			if($tdata === null || $tdata['thread_closed'] == 1)
 				return false;
 		}

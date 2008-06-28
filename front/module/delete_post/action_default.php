@@ -46,7 +46,7 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 			return 'You are no admin and the forum is closed';
 
 		// does the topic exist?
-		$topic_data = $this->cache->get_cache('topic')->current();
+		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		if($topic_data == null)
 			return 'The topic has not been found';
 

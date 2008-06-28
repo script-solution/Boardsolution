@@ -51,11 +51,12 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 			$this->_report_error(PLIB_Messages::MSG_TYPE_ERROR,$this->locale->lang('forum_is_closed'));
 			return;
 		}
-
+		
 		// check if the topic is valid
-		$topicdata = $this->cache->get_cache('topic')->current();
-		if(!isset($topicdata['id']) || !$topicdata['id'] || $topicdata['comallow'] == 0 || 
-			 (!$this->user->is_admin() && $topicdata['thread_closed'] == 1) || $topicdata['rubrikid'] != $fid)
+		$topicdata = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		if($topicdata === null || $topicdata['comallow'] == 0 || 
+			 (!$this->user->is_admin() && $topicdata['thread_closed'] == 1) ||
+			 $topicdata['rubrikid'] != $fid)
 		{
 			$this->_report_error();
 			return;
@@ -85,8 +86,7 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 			0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_SITE.'='.$site
 				.'&amp;'.BS_URL_PID.'='
 		);
-		$topic_data = $this->cache->get_cache('topic')->current();
-		BS_PostingUtils::get_instance()->add_topic_review($topic_data,true,$url);
+		BS_PostingUtils::get_instance()->add_topic_review($topicdata,true,$url);
 	}
 
 	public function get_location()

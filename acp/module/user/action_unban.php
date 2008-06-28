@@ -29,7 +29,7 @@ final class BS_ACP_Action_user_unban extends BS_ACP_Action_Base
 		BS_DAO::get_profile()->update_users_by_ids(array('banned' => 0),$ids);
 
 		// build email
-		$this->locale->add_language_file('email',$this->cfg['lang_folder']);
+		$this->locale->add_language_file('email',$this->functions->get_def_lang_folder());
 		$url = $this->url->get_frontend_url('','&',false);
 		$msg = sprintf($this->locale->lang('account_reactivated_text'),$url);
 		$email = $this->functions->get_mailer('',$this->locale->lang('account_reactivated_title'),$msg);

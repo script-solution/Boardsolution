@@ -55,7 +55,7 @@ final class BS_ACP_Page_FrameSet extends BS_ACP_Document
 				$content_file = PLIB_Path::inner().'admin.php?page=content&amp;';
 				$content_file .= BS_URL_SID.'='.$this->user->get_session_id();
 				
-			  $this->tpl->set_template('frameset.htm',0);
+			  $this->tpl->set_template('frameset.htm');
 			  $this->tpl->add_variables(array(
 			  	'navi_file' => $navi_file,
 			  	'content_file' => $content_file,
@@ -66,7 +66,7 @@ final class BS_ACP_Page_FrameSet extends BS_ACP_Document
 			}
 			else
 			{
-			  $this->tpl->set_template('login.htm',0);
+			  $this->tpl->set_template('login.htm');
 			  $this->tpl->add_variables(array(
 			  	'login_target' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
 			  	'error_msg' => $error_msg,

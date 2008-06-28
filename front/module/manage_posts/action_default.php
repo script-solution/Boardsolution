@@ -43,9 +43,9 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 		// forum closed?
 		if(!$this->user->is_admin() && $this->forums->forum_is_closed($fid))
 			return 'You are no admin and the forum is closed';
-
+		
 		// does the topic exist?
-		$topic_data = $this->cache->get_cache('topic')->current();
+		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		if($topic_data == null)
 			return 'The topic doesn\'t exist';
 

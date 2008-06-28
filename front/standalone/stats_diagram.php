@@ -118,7 +118,7 @@ final class BS_Front_Standalone_stats_diagram extends BS_Standalone
 		if(!BS_DAO::get_sessions()->check_sessionip_key($id,$key))
 			die('Invalid parameters');
 		
-		$this->locale->add_language_file('index',$this->cfg['lang_folder']);
+		$this->locale->add_language_file('index',$this->functions->get_def_lang_folder());
 		
 		####################### grab data from db #######################
 		

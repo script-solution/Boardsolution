@@ -341,7 +341,7 @@ ul.bs_bbcode_helper {
 	display: block;
 }
 
-#bbcode_area_resizer {
+.bbcode_area_resizer {
 	width: 91%;
 	margin: 0;
 	padding: 0;
@@ -350,7 +350,7 @@ ul.bs_bbcode_helper {
 }
 
 /* Fix for konqueror */
-html:not(:nth-child(1)) #bbcode_area_resizer {
+html:not(:nth-child(1)) .bbcode_area_resizer {
 	width: 90%;
 }
 

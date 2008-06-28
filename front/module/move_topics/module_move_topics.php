@@ -82,7 +82,7 @@ final class BS_Front_Module_move_topics extends BS_Front_Module
 		$pform = new BS_PostingForm($this->locale->lang('reasonformove').':');
 		$pform->set_show_options(true);
 		$pform->add_form();
-	
+		
 		if(count($selected_topic_ids) == 1)
 		{
 			$url = $this->url->get_url(

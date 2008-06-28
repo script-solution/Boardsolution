@@ -82,7 +82,7 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 		// send email if required
 		if($notify == 1)
 		{
-			$this->locale->add_language_file('email',$this->cfg['lang_folder']);
+			$this->locale->add_language_file('email',$this->functions->get_def_lang_folder());
 
 			$text = sprintf(
 				$this->locale->lang('new_registration_email_text'),

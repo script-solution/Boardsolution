@@ -55,7 +55,7 @@ function getPostForm(type)
 			var myint = window.setInterval(function() {
 				field = document.getElementById(self.bbcFieldID);
 				// we have to "wait" until the applet is loaded
-				if(self.type != 'applet' || typeof field.insertText == 'function')
+				if(field != null && (self.type != 'applet' || typeof field.insertText == 'function'))
 				{
 					if(self.type == 'applet')
 						field.insertText(ftext);

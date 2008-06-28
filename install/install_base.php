@@ -120,7 +120,7 @@ class BS_Install extends BS_Base
 	public function _display_head()
 	{
 		$phpself = $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING);
-		$this->tpl->set_template('inc_header.htm',0);
+		$this->tpl->set_template('inc_header.htm');
 		$this->tpl->add_variables(array(
 			'show_lang_choose' => $this->step < 5,
 			'target_url' => $phpself.'?step='.$this->step.'&amp;lang='.$this->lang_name,
@@ -144,7 +144,7 @@ class BS_Install extends BS_Base
 				$errors .= '<li>'.$value.'</li>'."\n";
 			$errors .= '</ul>'."\n";
 		
-			$this->tpl->set_template('errors.htm',0);
+			$this->tpl->set_template('errors.htm');
 			$this->tpl->add_variables(array(
 				'errors' => $errors
 			));
@@ -161,7 +161,7 @@ class BS_Install extends BS_Base
 		if($this->step < 5)
 			$this->functions->display_navigation('bottom');
 		
-		$this->tpl->set_template('inc_footer.htm',0);
+		$this->tpl->set_template('inc_footer.htm');
 		echo $this->tpl->parse_template();
 	}
 	

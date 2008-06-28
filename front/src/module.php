@@ -114,10 +114,9 @@ abstract class BS_Front_Module extends PLIB_Module
 	 */
 	protected final function _add_loc_topic(&$result)
 	{
-		$topic = $this->cache->get_cache('topic');
-		if($topic !== null)
+		$tdata = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		if($tdata !== null)
 		{
-			$tdata = $topic->current();
 			$url = $this->url->get_posts_url($tdata['rubrikid'],$tdata['id'],'&amp;',1);
 			$result[$tdata['name']] = $url;
 		}

@@ -1,6 +1,6 @@
 {if applet}
-<input id="hiddenText" type="hidden" name="text" value="" />
-<applet id="bbcode_area" code="bbcodeeditor.gui.WysiwygBBCodeEditor.class"
+<input id="hiddenText{number}" type="hidden" name="text{name_suffix}" value="" />
+<applet id="bbcode_area{number}" code="bbcodeeditor.gui.WysiwygBBCodeEditor.class"
 	alt="{glocale.lang('bbceditor_no_java')}" archive="{gpath}bbceditor/bbcapplet.jar"
 	width="100%" height="{textarea_height + 150}">
 	<param name="path" value="{gpath}bbceditor/" />
@@ -25,23 +25,19 @@
 {else}
 {bbcode_buttons}
 
-<textarea id="bbcode_area" style="width: 90%; height: {textarea_height}"
-	name="text" rows="10" cols="10">{text}</textarea>
+<textarea id="bbcode_area{number}" style="width: 90%; height: {textarea_height}"
+	name="text{name_suffix}" rows="10" cols="10">{text}</textarea>
 {endif}
 
 <script type="text/javascript" src="{gjs.get_file('src/taresize.js')}"></script>
-<script type="text/javascript">
-<!--
-BS_taResizer('bbcode_area','bbcode_area_resizer');
-//-->
-</script>
-<div id="bbcode_area_resizer" class="bs_coldesc_sep">&nbsp;</div>
+<div id="bbcode_area{number}_resizer" class="bs_coldesc_sep bbcode_area_resizer"
+	onmousedown="BS_set_textarea_ids('bbcode_area{number}','bbcode_area{number}_resizer');">&nbsp;</div>
 
 {if applet == false && enable_smileys}
 <div class="bs_padtop">
 {loop smileys as smiley}
 {if smiley:is_base}
-<a href="javascript:insertSmiley('bbcode_area','{smiley:prim_code_insert}');">
+<a href="javascript:insertSmiley('bbcode_area{number}','{smiley:prim_code_insert}');">
 <img alt="{smiley:primary_code}" src="{gpath}images/smileys/{smiley:smiley_path}" />
 </a>
 {endif}

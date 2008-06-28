@@ -488,7 +488,7 @@ final class BS_Front_Page extends BS_Document
 		$this->tpl->restore_template();
 		
 		// show footer
-		$this->tpl->set_template('inc_footer.htm',0);
+		$this->tpl->set_template('inc_footer.htm');
 		$this->tpl->add_variables(array(
 			'queries' => BS_DEBUG == 2 ? PLIB_PrintUtils::to_string($this->db->get_performed_queries()) : ''
 		));

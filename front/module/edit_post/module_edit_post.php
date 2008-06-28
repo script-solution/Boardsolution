@@ -78,6 +78,14 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 			);
 			return;
 		}
+		
+		// topic-data available?
+		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		if($topic_data === null)
+		{
+			$this->_report_error();
+			return;
+		}
 
 		$form = $this->_request_formular(true,true);
 
@@ -119,7 +127,6 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 			0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_ID.'='.$id
 				.'&amp;'.BS_URL_SITE.'='.$site.'&amp;'.BS_URL_PID.'='
 		);
-		$topic_data = $this->cache->get_cache('topic')->current();
 		BS_PostingUtils::get_instance()->add_topic_review($topic_data,true,$url);
 	}
 

@@ -382,8 +382,7 @@ final class BS_BBCode_Parser extends PLIB_FullObject
 		$replace = array();
 
 		$badwords_highlight = PLIB_StringHelper::htmlspecialchars_back($this->cfg['badwords_highlight']);
-
-		foreach($this->cache->get_cache('badwords') as $data)
+		foreach($this->_get_badwords() as $data)
 		{
 			if($data['word'] != '')
 			{
@@ -406,6 +405,40 @@ final class BS_BBCode_Parser extends PLIB_FullObject
 			$input = preg_replace($search,$replace,$input);
 
 		return $input;
+	}
+	
+	/**
+	 * @return array the badword-list
+	 */
+	private function _get_badwords()
+	{
+		static $badwords = null;
+		if($badwords === null)
+		{
+			$badwords = array();
+			$repl = $this->cfg['badwords_default_replacement'];
+			$lines = explode("\n",$this->cfg['badwords_definitions']);
+			foreach($lines as $line)
+			{
+				$split = explode('=',$line);
+				if(isset($split[1]))
+				{
+					$badwords[] = array(
+						'word' => trim($split[0]),
+						'replacement' => trim($split[1])
+					);
+				}
+				else
+				{
+					$badwords[] = array(
+						'word' => trim($split[0]),
+						'replacement' => $repl
+					);
+				}
+			}
+		}
+		
+		return $badwords;
 	}
 
 	/**

@@ -53,7 +53,7 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 		}
 		
 		// does the topic exist?
-		$topic_data = $this->cache->get_cache('topic')->current();
+		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		if($topic_data == null)
 		{
 			$this->_report_error();

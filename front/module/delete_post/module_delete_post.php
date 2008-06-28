@@ -66,7 +66,15 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 			$this->_report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS,$this->locale->lang('permission_denied'));
 			return;
 		}
-
+		
+		// topic-data available?
+		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		if($topic_data === null)
+		{
+			$this->_report_error();
+			return;
+		}
+		
 		$text = BS_PostingUtils::get_instance()->get_post_text($post_data);
 
 		if($post_data['post_user'] > 0)
@@ -77,8 +85,7 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 		}
 		else
 			$user = $post_data['post_an_user'];
-
-		$topic_data = $this->cache->get_cache('topic')->current();
+		
 		$this->tpl->add_variables(array(
 			'title' => sprintf($this->locale->lang('selected_post_from_topic'),$topic_data['name']),
 			'target_url' => $this->url->get_url(

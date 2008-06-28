@@ -41,12 +41,6 @@ final class BS_User_Data extends PLIB_User_Data
 		else
 			$this->_data['unread_pms'] = 0;
 
-		$lang_data = $this->cache->get_cache('languages')->get_element($this->_data['forum_lang']);
-		$this->_data['lang_folder'] = $lang_data['lang_folder'];
-
-		$theme_data = $this->cache->get_cache('themes')->get_element($this->_data['forum_style']);
-		$this->_data['theme_folder'] = $theme_data['theme_folder'];
-		
 		// ensure that we have no null-values in the array
 		// TODO keep that or should #get_profile_val() return null / '' if a value is not set?
 		foreach($this->_data as $name => $val)

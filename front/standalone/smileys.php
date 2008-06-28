@@ -26,6 +26,8 @@ final class BS_Front_Standalone_smileys extends BS_Standalone
 	
 	public function run()
 	{
+		$number = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		
 		$smileys = array();
 		foreach(BS_DAO::get_smileys()->get_all() as $data)
 		{
@@ -38,6 +40,9 @@ final class BS_Front_Standalone_smileys extends BS_Standalone
 		}
 		
 		$this->tpl->add_array('smileys',$smileys);
+		$this->tpl->add_variables(array(
+			'number' => $number
+		));
 	}
 }
 ?>

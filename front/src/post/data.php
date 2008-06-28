@@ -425,7 +425,7 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 				'site'							=> $this->_container->get_pagination()->get_page(),
 				'total_pages'				=> $this->_container->get_pagination()->get_page_count(),
 				'total_posts'				=> $this->_container->get_post_count(),
-				'topic'							=> $this->cache->get_cache('topic')->current(),
+				'topic'							=> BS_Front_TopicFactory::get_instance()->get_current_topic(),
 				'posts_order'				=> BS_PostingUtils::get_instance()->get_posts_order(),
 				'is_admin'					=> $this->user->is_admin()
 			);

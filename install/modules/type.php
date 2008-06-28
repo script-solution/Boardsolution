@@ -25,7 +25,7 @@ class BS_Install_type extends BS_Install
 			'update' => $this->locale->lang('update')
 		);
 		
-		$this->tpl->set_template('step_type.htm',0);
+		$this->tpl->set_template('step_type.htm');
 		$this->tpl->add_variables(array(
 			'install_type_combo' => $this->html->get_combobox($options,$type,'install_type')
 		));

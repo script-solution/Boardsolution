@@ -70,7 +70,7 @@ final class BS_ForumUtils extends PLIB_Singleton
 		}
 		else
 		{
-			$this->tpl->set_template('inc_forums.htm',0);
+			$this->tpl->set_template('inc_forums.htm');
 			
 			$this->tpl->add_variables(array(
 				'title' => ($parent_id == 0) ? $this->locale->lang('forums') : $this->locale->lang('subdirs'),

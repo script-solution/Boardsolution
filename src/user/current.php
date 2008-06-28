@@ -378,16 +378,15 @@ final class BS_User_Current extends PLIB_User_Current
 		{
 			if($this->get_profile_val('forum_lang') > 0)
 			{
-				$this->_language = $this->get_profile_val('lang_folder');
+				$lang = $this->get_profile_val('forum_lang');
+				$lang_data = $this->cache->get_cache('languages')->get_element($lang);
+				$this->_language = $lang_data['lang_folder'];
 				return;
 			}
 		}
 
 		if($this->cfg['default_forum_lang'] > 0)
-		{
-			$data = $this->cache->get_cache('languages')->get_element($this->cfg['default_forum_lang']);
-			$this->_language = $data['lang_folder'];
-		}
+			$this->_language = $this->functions->get_def_lang_folder();
 	}
 
 	/**
@@ -407,9 +406,11 @@ final class BS_User_Current extends PLIB_User_Current
 		{
 			if($this->get_profile_val('forum_style') > 0)
 			{
+				$theme = $this->get_profile_val('forum_style');
+				$theme_data = $this->cache->get_cache('themes')->get_element($theme);
 				// just do this if it is a valid theme (if the cache does not exist for example)
-				if(is_string($this->get_profile_val('theme_folder')))
-					$this->set_theme($this->get_profile_val('theme_folder'));
+				if(is_string($theme_data['theme_folder']))
+					$this->set_theme($theme_data['theme_folder']);
 				return;
 			}
 		}
