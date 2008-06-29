@@ -719,6 +719,14 @@ Bitte haben Sie Verständnis."
 						'default' => 500
 					),
 					array(
+						'name' => 'sig_max_height',
+						'type' => 'int',
+						'properties' => "size=4\nmaxlen=9",
+						'suffix' => '%pixel',
+						'affects_msgs' => 0,
+						'default' => 100
+					),
+					array(
 						'name' => 'sig_allowed_tags',
 						'custom_title' => 'allowed_tags',
 						'type' => 'line',

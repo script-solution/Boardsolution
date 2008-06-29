@@ -239,6 +239,7 @@ final class BS_Front_Page extends BS_Document
 			'charset' => 'charset='.BS_HTML_CHARSET,
 			'rss20_feed' => $this->url->get_standalone_url('front','news_feed','&amp;'.BS_URL_MODE.'=rss20'),
 			'atom_feed' => $this->url->get_standalone_url('front','news_feed','&amp;'.BS_URL_MODE.'=atom'),
+			'sig_max_height' => $this->cfg['sig_max_height']
 		));
 		$this->tpl->restore_template();
 

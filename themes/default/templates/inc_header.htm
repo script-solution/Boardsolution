@@ -17,6 +17,15 @@
 <link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('basic.css')}" />
 <link rel="alternate" type="application/rss+xml" title="RSS 2.0 Newsfeed" href="{rss20_feed}" />
 <link rel="alternate" type="application/atom+xml" title="Atom Newsfeed" href="{atom_feed}" />
+<style type="text/css">
+div.bs_signature {
+	{if sig_max_height > 0}
+	height: expression( this.scrollHeight > {sig_max_height - 1} ? "{sig_max_height}px" : "auto" );
+	max-height: {sig_max_height}px;
+	overflow: hidden;
+	{endif}
+}
+</style>
 <script type="text/javascript">
 <!--
 var myAjax = new PLIB_Ajax();
