@@ -25,26 +25,18 @@ final class BS_Front_Action_sendpw_default extends BS_Front_Action_Base
 		if((BS_ENABLE_EXPORT && BS_EXPORT_SEND_PW_TYPE != 'enabled') || $this->user->is_loggedin())
 			return 'The community is exported and the send-pw-type is not enabled or you are a guest';
 
-		$this->locale->add_language_file('email');
-
-		$email_address = $this->input->get_var('email','post',PLIB_Input::STRING);
-
 		if(!$this->functions->check_security_code())
 			return 'invalid_security_code';
 
 		// check if the email exists
+		$email_address = $this->input->get_var('email','post',PLIB_Input::STRING);
 		$data = BS_DAO::get_user()->get_user_by_email($email_address);
 		if($data === false)
 			return 'sendpw_invalid_email';
 		
 		// send the email
 		$key = PLIB_StringHelper::generate_random_key();
-		$url = $this->url->get_frontend_url(
-			'&'.BS_URL_ACTION.'=change_password&'.BS_URL_ID.'='.$data['id'].'&'.BS_URL_KW.'='.$key,'&',false
-		);
-		$subject = sprintf($this->locale->lang('pw_change_title'),$this->cfg['forum_title']);
-		$text = sprintf($this->locale->lang('pw_change_text'),$url);
-		$email = $this->functions->get_mailer($email_address,$subject,$text);
+		$email = BS_EmailFactory::get_instance()->get_change_pw_mail($data['id'],$email_address,$key);
 		if(!$email->send_mail())
 			return sprintf($this->locale->lang('error_mail_error'),$email->get_error_message());
 

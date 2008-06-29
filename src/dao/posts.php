@@ -450,9 +450,10 @@ class BS_DAO_Posts extends PLIB_Singleton
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
 		return $this->db->sql_rows(
-			'SELECT p.*,t.name
+			'SELECT p.*,t.name,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_POSTS.' p
 			 LEFT JOIN '.BS_TB_THREADS.' t ON p.threadid = t.id
+			 LEFT JOIN '.BS_TB_USER.' u ON u.`'.BS_EXPORT_USER_ID.'` = p.post_user
 			 WHERE p.id IN ('.implode(',',$ids).')
 			 ORDER BY p.threadid ASC,p.post_time ASC'
 		);

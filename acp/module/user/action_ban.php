@@ -25,14 +25,8 @@ final class BS_ACP_Action_user_ban extends BS_ACP_Action_Base
 		if(!($ids = PLIB_StringHelper::get_ids($idstr)))
 			return 'Got an invalid id-string via GET';
 
-		// build email-text
-		$this->locale->add_language_file('email');
-		$subject = $this->locale->lang('account_deactivated_title');
-		$url = $this->url->get_frontend_url('','&',false);
-		$text = sprintf($this->locale->lang('account_deactivated_text'),$url);
-		$email = $this->functions->get_mailer('',$subject,$text,'From: '.$this->cfg['board_email']);
-
 		// grab the users from the database
+		$email = BS_EmailFactory::get_instance()->get_account_deactivated_mail();
 		$existing_ids = array();
 		foreach(BS_DAO::get_user()->get_users_by_ids($ids) as $data)
 		{

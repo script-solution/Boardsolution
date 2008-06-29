@@ -123,6 +123,13 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 	private $_user_id;
 	
 	/**
+	 * The name of the user
+	 *
+	 * @var string
+	 */
+	private $_user_name = null;
+	
+	/**
 	 * The name of the guest (NULL for users)
 	 *
 	 * @var string
@@ -241,7 +248,11 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 			$data = BS_DAO::get_user()->get_user_by_id($this->_user_id);
 			if($data === false)
 				return 'A user with id "'.$this->_user_id.'" does not exist';
+			
+			$this->_user_name = $data['user_name'];
 		}
+		else if($this->user->get_user_id() == $this->_user_id)
+			$this->_user_name = $this->user->get_user_name();
 		
 		// does the forum exist?
 		$forum_data = $this->forums->get_node_data($this->_fid);
@@ -306,39 +317,18 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 			$userlist = BS_DAO::get_subscr()->get_subscribed_users($this->_fid,$this->_tid,$this->_user_id);
 			if(count($userlist) > 0)
 			{
-				// TODO we are sending the email in the language the user who posted has selected
-				$this->locale->add_language_file('email');
+				$name = $this->_user_name !== null ? $this->_user_name : $this->_guest_name;
+				$einfo = BS_EmailFactory::get_instance()->get_new_post_texts(
+					$this->_fid,$this->_tid,$postid,$this->_post_text,$name
+				);
 	
-				$url = $this->url->get_frontend_url(
-					'&'.BS_URL_ACTION.'=posts&'.BS_URL_FID.'='.$this->_fid
-						.'&'.BS_URL_TID.'='.$this->_tid,'&',false
-				);
-				if(BS_PostingUtils::get_instance()->get_posts_order() == 'ASC')
-				{
-					$post_num = BS_DAO::get_posts()->get_count_in_topic($this->_tid);
-					if($post_num > $this->cfg['posts_per_page'])
-					{
-						$params = $this->functions->get_page_params($this->cfg['posts_per_page'],$post_num);
-						$url .= '&'.BS_URL_SITE.'='.$params['final'];
-					}
-				}
-				$url .= '#b_'.$postid;
-				$message_def = sprintf(
-					$this->locale->lang('new_entry_text'),$this->cfg['forum_title'],$url,''
-				);
-				$email_text = PLIB_StringHelper::htmlspecialchars_back($this->_post_text);
-				$message_post = sprintf(
-					$this->locale->lang('new_entry_text'),$this->cfg['forum_title'],$url,"\n\n".$email_text
-				);
-				$email_title = sprintf($this->locale->lang('new_entry_title'),$this->cfg['forum_title']);
-				$email = $this->functions->get_mailer('',$email_title,'');
-	
+				$email = $this->functions->get_mailer('',$einfo['subject'],'');
 				foreach($userlist as $data)
 				{
 					if($data['emails_include_post'] == 1)
-						$email->set_message($message_post);
+						$email->set_message($einfo['text_post']);
 					else
-						$email->set_message($message_def);
+						$email->set_message($einfo['text_def']);
 	
 					$email->set_recipient($data['user_email']);
 					$email->send_mail();

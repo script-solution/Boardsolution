@@ -136,22 +136,20 @@ final class BS_ACP_Utils extends PLIB_Singleton
 	}
 	
 	/**
-	 * Sends an email with the given subject and message to all given users.
+	 * Sends an email with the mail-instance to all given users.
 	 *
+	 * @param PLIB_Email_Base $mail the email-instance
 	 * @param array $user_ids all user-ids
-	 * @param string $subject the subject of the email
-	 * @param string $text the text of the email
 	 */
-	public function send_email_to_user($user_ids,$subject,$text)
+	public function send_email_to_user($mail,$user_ids)
 	{
 		$error_msgs = array();
-		$email = $this->functions->get_mailer('',$subject,$text);
 		foreach(BS_DAO::get_user()->get_users_by_ids($user_ids) as $data)
 		{
-			$email->set_recipient($data['user_email']);
-			if(!$email->send_mail())
+			$mail->set_recipient($data['user_email']);
+			if(!$mail->send_mail())
 			{
-				$error = $email->get_error_message();
+				$error = $mail->get_error_message();
 				if(!isset($error_msgs[$error]))
 					$error_msgs[$error] = true;
 			}

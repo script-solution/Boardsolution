@@ -45,19 +45,11 @@ final class BS_Front_Action_resend_activation_default extends BS_Front_Action_Ba
 		if($act === false)
 			return 'No activation-entry found';
 		
-		$this->locale->add_language_file('email');
-
-		// send the email
-		$url = $this->url->get_standalone_url(
-			'front','activate','&user_id='.$user['id'].'&user_key='.$act['user_key'],'&',true
+		$mail = BS_EmailFactory::get_instance()->get_account_activation_mail(
+			$user['id'],$email,$act['user_key']
 		);
-		$message = sprintf($this->locale->lang('account_activation_email_text'),
-			$this->cfg['forum_title'],$url);
-		$subject = $this->locale->lang('account_activation_email_title');
-
-		$email = $this->functions->get_mailer($email,$subject,$message);
-		if(!$email->send_mail())
-			return sprintf($this->locale->lang('error_mail_error'),$email->get_error_message());
+		if(!$mail->send_mail())
+			return sprintf($this->locale->lang('error_mail_error'),$mail->get_error_message());
 
 		$this->set_action_performed(true);
 		$this->add_link($this->locale->lang('back'),$this->functions->get_start_url());

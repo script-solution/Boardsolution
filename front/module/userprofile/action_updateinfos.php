@@ -79,16 +79,8 @@ final class BS_Front_Action_userprofile_updateinfos extends BS_Front_Action_Base
 				$key = PLIB_StringHelper::generate_random_key();
 				BS_DAO::get_changeemail()->create($this->user->get_user_id(),$key,$email);
 
-				// send mail
-				$this->locale->add_language_file('email');
-				$title = sprintf($this->locale->lang('change_email_email_title'),$this->cfg['forum_title']);
 				$uid = $this->user->get_user_id();
-				$url = $this->url->get_standalone_url(
-					'front','conf_email','&'.BS_URL_ID.'='.$uid.'&'.BS_URL_PID.'='.$key,'&',true
-				);
-				$text = sprintf($this->locale->lang('change_email_email_text'),$url,$email);
-				$mail = $this->functions->get_mailer($email,$title,$text);
-
+				$mail = BS_EmailFactory::get_instance()->get_change_email_mail($uid,$email,$key);
 				if(!$mail->send_mail())
 					$this->msgs->add_error($mail->get_error_message());
 			}

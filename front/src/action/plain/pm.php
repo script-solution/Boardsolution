@@ -225,14 +225,9 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 			// do we have to send an email?
 			if(isset($this->_receiver_email[$this->_receiver_ids[$i]]))
 			{
-				$this->locale->add_language_file('email');
-				$email = $this->functions->get_mailer($this->_receiver_email[$this->_receiver_ids[$i]],
-					sprintf($this->locale->lang('new_pm_email_title'),$this->cfg['forum_title']),
-					sprintf(
-						$this->locale->lang('new_pm_email_text'),$this->cfg['forum_title'],$this->cfg['board_url']
-					)
+				$email = BS_EmailFactory::get_instance()->get_new_pm_mail(
+					$this->_receiver_email[$this->_receiver_ids[$i]]
 				);
-
 				if(!$email->send_mail())
 					$this->msgs->add_error($email->get_error_message());
 			}

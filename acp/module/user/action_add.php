@@ -82,21 +82,9 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 		// send email if required
 		if($notify == 1)
 		{
-			$this->locale->add_language_file('email',$this->functions->get_def_lang_folder());
-
-			$text = sprintf(
-				$this->locale->lang('new_registration_email_text'),
-				$this->cfg['forum_title'],
-				$user_name,
-				$user_pw
+			$email = BS_EmailFactory::get_instance()->get_new_registration_mail(
+				$user_name,$user_email,$user_pw
 			);
-			
-			$title = sprintf(
-				$this->locale->lang('new_registration_email_title'),
-				$this->cfg['forum_title']
-			);
-			
-			$email = $this->functions->get_mailer($user_email,$title,$text);
 			if(!$email->send_mail())
 			{
 				$msg = $email->get_error_message();

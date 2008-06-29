@@ -28,13 +28,8 @@ final class BS_ACP_Action_user_unban extends BS_ACP_Action_Base
 		// reactivate the user
 		BS_DAO::get_profile()->update_users_by_ids(array('banned' => 0),$ids);
 
-		// build email
-		$this->locale->add_language_file('email',$this->functions->get_def_lang_folder());
-		$url = $this->url->get_frontend_url('','&',false);
-		$msg = sprintf($this->locale->lang('account_reactivated_text'),$url);
-		$email = $this->functions->get_mailer('',$this->locale->lang('account_reactivated_title'),$msg);
-
 		// send the emails and collect errors
+		$email = BS_EmailFactory::get_instance()->get_reaccount_activated_mail();
 		$error_msgs = array();
 		foreach(BS_DAO::get_user()->get_users_by_ids($ids) as $data)
 		{

@@ -141,26 +141,9 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 		// send email if required
 		if($notify == 1)
 		{
-			$lang_data = $this->cache->get_cache('languages')->get_element($data['forum_lang']);
-			if($lang_data != null)
-				$this->locale->add_language_file('email',$lang_data['lang_folder']);
-			else
-				$this->locale->add_language_file('email',$this->functions->get_def_lang_folder());
-
-			$text = sprintf(
-				$this->locale->lang('userdata_changed_email_text'),
-				$this->cfg['forum_title'],
-				($data['user_name'] != $user_name) ? $this->locale->lang('username').': '.$user_name."\n" : '',
-				($user_pw != '') ? $this->locale->lang('password').': '.$user_pw."\n" : '',
-				($data['user_email'] != $user_email) ? $this->locale->lang('email').': '.$user_email."\n" : ''
+			$email = BS_EmailFactory::get_instance()->get_account_changed_mail(
+				$data['forum_lang'],$data['user_name'],$user_name,$data['user_email'],$user_email,$user_pw
 			);
-			
-			$title = sprintf(
-				$this->locale->lang('userdata_changed_email_title'),
-				$this->cfg['forum_title']
-			);
-			
-			$email = $this->functions->get_mailer($data['user_email'],$title,$text);
 			if(!$email->send_mail())
 			{
 				$msg = $email->get_error_message();

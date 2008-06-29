@@ -878,21 +878,19 @@ final class BS_Functions extends PLIB_FullObject
 		if($this->cfg['mail_method'] == 'mail')
 			$c = new PLIB_Email_PHP($receiver,$subject,$message);
 		else
-			$c = new PLIB_Email_SMTP($receiver,$subject,$message);
-
-		// set basic properties for BS
-		$c->set_xmailer(BS_VERSION);
-		$c->set_from($this->cfg['board_email']);
-		$c->set_charset(BS_HTML_CHARSET);
-		
-		// set SMTP-properties
-		if($this->cfg['mail_method'] != 'mail')
 		{
+			$c = new PLIB_Email_SMTP($receiver,$subject,$message);
+			// set SMTP-properties
 			$c->set_smtp_host($this->cfg['smtp_host']);
 			$c->set_smtp_port($this->cfg['smtp_port']);
 			$c->set_smtp_login($this->cfg['smtp_login']);
 			$c->set_smtp_password($this->cfg['smtp_password']);
 		}
+
+		// set basic properties for BS
+		$c->set_xmailer(BS_VERSION);
+		$c->set_from($this->cfg['board_email']);
+		$c->set_charset(BS_HTML_CHARSET);
 		
 		return $c;
 	}

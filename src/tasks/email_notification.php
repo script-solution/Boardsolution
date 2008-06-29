@@ -55,15 +55,15 @@ final class BS_Tasks_email_notification extends PLIB_Tasks_Base
 		{
 			foreach(BS_DAO::get_posts()->get_posts_for_email($post_ids) as $data)
 			{
+				$url = $this->url->get_frontend_url(
+					'&'.BS_URL_ACTION.'=posts&'.BS_URL_FID.'='.$data['rubrikid']
+						.'&'.BS_URL_TID.'='.$data['threadid'],
+					'&',false
+				);
+				
 				foreach($posts_to_user[$data['id']] as $user_id)
 				{
 					$udata = &$user_emails[$user_id];
-
-					$url = $this->url->get_frontend_url(
-						'&'.BS_URL_ACTION.'=posts&'.BS_URL_FID.'='.$data['rubrikid']
-							.'&'.BS_URL_TID.'='.$data['threadid'],
-						'&',false
-					);
 
 					// include the post?
 					if($udata['include_post'])
@@ -71,21 +71,28 @@ final class BS_Tasks_email_notification extends PLIB_Tasks_Base
 						// we want to add the topic-name just once...
 						if($data['threadid'] != $udata['last_topic'])
 						{
-							$udata['mail_text'] .= "\n".'=================================================='."\n";
-							$udata['mail_text'] .= ':: '.$data['name']." :: \n";
-							$udata['mail_text'] .= ':: '.$url." :: \n";
-							$udata['mail_text'] .= '=================================================='."\n";
-							$udata['mail_text'] .= "\n";
+							$udata['topics'][] = array(
+								'include_post' => true,
+								'name' => $data['name'],
+								'url' => $url,
+								'posts' => array()
+							);
 						}
 
 						// add the post-text
-						$udata['mail_text'] .= PLIB_StringHelper::htmlspecialchars_back($data['text_posted'])."\n";
-						$udata['mail_text'] .= '--------------------------------------------------'."\n\n";
+						$text = PLIB_StringHelper::htmlspecialchars_back($data['text_posted']);
+						$udata['topics'][count($udata['topics']) - 1]['posts'][] = array(
+							'text' => $text,
+							'user_name' => $data['user_name'] ? $data['user_name'] : $data['post_an_user']
+						);
 					}
 					else if($data['threadid'] != $udata['last_topic'])
 					{
 						// just add the topic-URL
-						$udata['mail_text'] .= $url."\n";
+						$udata['topics'][] = array(
+							'include_post' => false,
+							'url' => $url
+						);
 					}
 
 					$udata['last_topic'] = $data['threadid'];
@@ -96,18 +103,13 @@ final class BS_Tasks_email_notification extends PLIB_Tasks_Base
 			foreach($user_emails as $data)
 			{
 				$lang_entry = $this->_get_email_language_data($data['language']);
-
-				// build text and title
-				$text = sprintf(
+				$email = BS_EmailFactory::get_instance()->get_delayed_email_notification_mail(
+					$lang_entry['delayed_email_notification_title'],
 					$lang_entry['delayed_email_notification_text'],
 					$data['user_name'],
-					$this->cfg['forum_title'],
-					$data['mail_text']
+					$data['user_email'],
+					$data['topics']
 				);
-				$title = sprintf($lang_entry['delayed_email_notification_title'],$this->cfg['forum_title']);
-
-				// send email
-				$email = $this->functions->get_mailer($data['user_email'],$title,$text);
 				$email->send_mail();
 			}
 

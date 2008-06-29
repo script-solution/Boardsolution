@@ -78,16 +78,7 @@ final class BS_Front_Action_linklist_addlink extends BS_Front_Action_Base
 		// write PM's to the admins if enabled
 		if($this->cfg['get_email_new_link'] == 1 && $active == 0)
 		{
-			$this->locale->add_language_file('email');
-
-			$post_title = addslashes(sprintf(
-				$this->locale->lang('link_email_title'),$this->cfg['forum_title']
-			));
-			$post_text = addslashes(sprintf(
-				$this->locale->lang('link_email_text'),$this->cfg['forum_title'],$this->cfg['board_url']
-			));
-			$email = $this->functions->get_mailer('',$post_title,$post_text);
-
+			$email = BS_EmailFactory::get_instance()->get_new_link_mail();
 			foreach(BS_DAO::get_user()->get_users_by_groups(array(BS_STATUS_ADMIN)) as $adata)
 			{
 				$email->set_recipient($adata['user_email']);

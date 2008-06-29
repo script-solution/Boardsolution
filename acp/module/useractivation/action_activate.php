@@ -35,11 +35,9 @@ final class BS_ACP_Action_useractivation_activate extends BS_ACP_Action_Base
 		BS_DAO::get_activation()->delete_by_users($ids);
 
 		// send emails
-		$url = $this->url->get_frontend_url('','&',false);
 		BS_ACP_Utils::get_instance()->send_email_to_user(
-			$ids,
-			$this->locale->lang('account_activated_title'),
-			sprintf($this->locale->lang('account_activated_text'),$url)
+			BS_EmailFactory::get_instance()->get_account_activated_mail(),
+			$ids
 		);
 		
 		$this->set_success_msg($this->locale->lang('accounts_activated_success'));

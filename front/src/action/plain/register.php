@@ -299,18 +299,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		// send the administrators a PM
 		if($this->cfg['get_email_new_account'] == 1)
 		{
-			$this->locale->add_language_file('email');
-
-			$post_title = addslashes(sprintf(
-				$this->locale->lang('newaccount_email_title'),
-				$this->cfg['forum_title'],
-				$this->_user_name
-			));
-			$post_text = addslashes(sprintf(
-				$this->locale->lang('newaccount_email_text'),$this->cfg['forum_title'],$this->cfg['board_url']
-			));
-			$mail = $this->functions->get_mailer('',$post_title,$post_text);
-
+			$mail = BS_EmailFactory::get_instance()->get_new_account_mail($this->_user_name);
 			$mail_errors = array();
 			foreach(BS_DAO::get_user()->get_users_by_groups(array(BS_STATUS_ADMIN)) as $adata)
 			{
@@ -335,40 +324,18 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 			$this->cookies->set_cookie('user',$this->_user_name);
 			$this->cookies->set_cookie('pw',md5($this->_user_pw));
 		}
-		
-		// send an email to the user
-		$this->locale->add_language_file('lang_email.php');
 
-		$typemsg = '';
-		switch($this->cfg['account_activation'])
+		$user_key = '';
+		if($this->cfg['account_activation'] == 'email')
 		{
-			case 'email':
-				$user_key = PLIB_StringHelper::generate_random_key();
-				BS_DAO::get_activation()->create($this->_user_id,$user_key);
-				$url = $this->url->get_standalone_url(
-					'front','activate','&user_id='.$this->_user_id.'&user_key='.$user_key,'&',true
-				);
-				
-				$typemsg = sprintf($this->locale->lang('account_registration_type_email'),$url);
-				break;
-			
-			case 'admin':
-				$typemsg = $this->locale->lang('account_registration_type_admin');
-				break;
-			
-			case 'none':
-				$typemsg = $this->locale->lang('account_registration_type_no');
-				break;
+			$user_key = PLIB_StringHelper::generate_random_key();
+			BS_DAO::get_activation()->create($this->_user_id,$user_key);
 		}
 		
-		$subject = sprintf(
-			$this->locale->lang('account_registration_email_title'),$this->cfg['forum_title']
+		// send an email to the user
+		$mail = BS_EmailFactory::get_instance()->get_register_mail(
+			$this->_user_id,$this->_user_name,$this->_user_email,$this->_user_pw,$user_key
 		);
-		$message = sprintf(
-			$this->locale->lang('account_registration_email_text'),$this->_user_name,$this->_user_pw,$typemsg
-		);
-		
-		$mail = $this->functions->get_mailer($this->_user_email,$subject,$message);
 		if(!$mail->send_mail())
 		{
 			$msg = sprintf($this->locale->lang('error_mail_error'),$mail->get_error_message());
