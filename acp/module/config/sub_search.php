@@ -109,9 +109,14 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 	{
 		$keyword = PLIB_String::strtolower($keyword);
 		// replace german umlaute
-		$uml = array("\xE3\xA4","\xE3\xB6","\xE3\xBC","\xE3\x84","\xE3\x96","\xE3\x9C","\xE3\x9F");
-		$repl = array('&auml;','&ouml;','&uuml;','&Auml;','&Ouml;','&Uuml;','&szlig');
-		return str_replace($uml,$repl,$keyword);
+		$uml = array("\xE3\xA4","\xE3\xB6","\xE3\xBC","\xE3\x9F");
+		$repl = array('&auml;','&ouml;','&uuml;','&szlig');
+		$keyword = str_replace($uml,$repl,$keyword);
+		
+		$uml = array('ä','ö','ü','ß');
+		$repl = array('&auml;','&ouml;','&uuml;','&szlig');
+		$keyword = str_replace($uml,$repl,$keyword);
+		return $keyword;
 	}
 	
 	public function get_location()
