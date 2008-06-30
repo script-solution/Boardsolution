@@ -38,6 +38,13 @@ var cp = new PLIB_ColorPicker('{glibpath}','group_color');
 			</dd>
 		</dl>
 		<dl>
+			<dt>{glocale.lang('group_is_team')}:</dt>
+			<dd>
+				{form.get_radio_yesno('is_team',default:is_team)}
+				<div class="a_desc">{glocale.lang('group_is_team_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
 			<dt>{glocale.lang('group_color')}:</dt>
 			<dd>
 				#{form.get_textbox('group_color',default:group_color,6,6)}

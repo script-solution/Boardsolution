@@ -46,6 +46,7 @@ final class BS_ACP_Action_usergroups_edit extends BS_ACP_Action_Base
 			$gr_filled_image = $this->input->get_var('group_rank_filled_image','post',PLIB_Input::STRING);
 			$gr_empty_image = $this->input->get_var('group_rank_empty_image','post',PLIB_Input::STRING);
 			$is_visible = $this->input->get_var('is_visible','post',PLIB_Input::INT_BOOL);
+			$is_team = $this->input->get_var('is_team','post',PLIB_Input::INT_BOOL);
 
 			$values['group_color'] = $group_color;
 			$values['group_rank_filled_image'] = $gr_filled_image;
@@ -55,6 +56,7 @@ final class BS_ACP_Action_usergroups_edit extends BS_ACP_Action_Base
 				$values['is_visible'] = 1;
 			else
 				$values['is_visible'] = $is_visible;
+			$values['is_team'] = $is_team;
 		}
 
 		$helper = BS_ACP_Module_UserGroups_Helper::get_instance();

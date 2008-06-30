@@ -81,6 +81,30 @@ function toggleForumList(id)
 </div>
 {endif}
 
+{loop other as name => user}
+<div class="bs_border bs_padtop">
+	<h1 class="bs_topic">{name}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<th width="30%" class="bs_coldesc" align="left">{glocale.lang('username')}</th>
+			<th width="50%" class="bs_coldesc">{glocale.lang('mod_forums')}</th>
+			<th width="20%" class="bs_coldesc">{glocale.lang('pm')}</th>
+		</tr>
+		<tr>
+			<td class="bs_main">{user:user_name}</td>
+			<td class="bs_main">-</td>
+			<td class="bs_main" align="center">
+			{if show_pm}
+			<a class="bs_button" style="float: none;" href="{user:pm_url}">{glocale.lang('pm_short')}</a>
+			{else}
+			{glocale.lang('notavailable')}
+			{endif}
+			</td>
+		</tr>
+	</table>
+</div>
+{endloop}
+
 {endif}
 {endif}
 

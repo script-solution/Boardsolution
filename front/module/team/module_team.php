@@ -89,6 +89,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 		}
 		
 		// look for super-moderator-groups
+		$team_groups = array();
 		foreach($this->cache->get_cache('user_groups') as $data)
 		{
 			// no admin and super-mod?
@@ -118,9 +119,58 @@ final class BS_Front_Module_team extends BS_Front_Module
 					);
 				}
 			}
+			else if($data['is_team'] == 1 && $data['id'] != BS_STATUS_GUEST &&
+				$data['id'] != BS_STATUS_ADMIN)
+			{
+				$team_groups[] = $data['id'];
+			}
+		}
+		
+		// add team-groups
+		$other = array();
+		if(count($team_groups))
+		{
+			// grab all members of the group
+			foreach(BS_DAO::get_profile()->get_users_by_groups($team_groups) as $udata)
+			{
+				$url = $this->url->get_url(
+					'userprofile','&amp;'.BS_URL_LOC.'=pmcompose&amp;'.BS_URL_ID.'='.$udata['id']
+				);
+				$gname = $this->get_group_name($udata['user_group']);
+				if(!isset($other[$gname]))
+					$other[$gname] = array();
+				
+				$other[$gname] = array(
+					'user_name' => BS_UserUtils::get_instance()->get_link($udata['id'],$udata['user_name'],
+						$udata['user_group']),
+					'id' => $udata['id'],
+					'pm_url' => $url
+				);
+			}
 		}
 		
 		$this->tpl->add_array('mods',$mods);
+		$this->tpl->add_array('other',$other);
+	}
+	
+	/**
+	 * Determines the group-name of the group that should be taken from the given group-list
+	 *
+	 * @param string $groups a comma-separated list of group-ids
+	 * @return string the name of the group or null if not found
+	 */
+	private function get_group_name($groups)
+	{
+		$gcache = $this->cache->get_cache('user_groups');
+		$agroups = PLIB_Array_Utils::advanced_explode(',',$groups);
+		foreach($agroups as $gid)
+		{
+			if($gid != BS_STATUS_ADMIN && ($gdata = $gcache->get_element($gid)) !== null &&
+					$gdata['is_team'] == 1)
+				return $gdata['group_title'];
+		}
+		
+		return null;
 	}
 	
 	/**

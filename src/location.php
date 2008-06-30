@@ -168,12 +168,9 @@ final class BS_Location extends PLIB_FullObject
 					return $this->locale->lang('loc_hidden');
 	
 				if($enable_links)
-				{
-					$forum_url = $this->url->get_topics_url($parts[1]);
-					$forum = '<a href="'.$forum_url.'">'.$forum_data->get_name().'</a>';
-				}
+					$forum = BS_ForumUtils::get_instance()->get_forum_path($parts[1],false);
 				else
-					$forum = $forum_data->get_name();
+					$forum = strip_tags(BS_ForumUtils::get_instance()->get_forum_path($parts[1],false));
 	
 				return sprintf($this->locale->lang('loc_'.$parts[0]),$forum);
 	
