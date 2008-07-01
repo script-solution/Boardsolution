@@ -79,6 +79,17 @@ final class BS_User_Current extends PLIB_User_Current
 	
 	public function init()
 	{
+		// we disable cookies if the user wants to get logged out. because if the session
+		// doesn't exist anymore we assign a new sid, login the user again and the logout fails
+		// because of a wrong session-id
+		if($this->input->get_var(BS_URL_AT,'get',PLIB_Input::INTEGER) === BS_ACTION_LOGOUT)
+		{
+			// delete the cookies, too
+			$this->cookies->delete_cookie('user');
+	    $this->cookies->delete_cookie('pw');
+			$this->set_use_cookies(false);
+		}
+		
 		parent::init();
 		
 		$this->_determine_language();
