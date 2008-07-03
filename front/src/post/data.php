@@ -486,8 +486,10 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	    	$url = $this->url->get_url('new_post','&amp;'.BS_URL_FID.'='.$cache['fid']
 	    		.'&amp;'.BS_URL_TID.'='.$cache['tid'].$add_url);
 	    	
-	      $btns .= '<a class="bs_button" title="'.$this->locale->lang('quotethispost');
-				$btns .= '" href="'.$url.'">'.$this->locale->lang('quote').'</a>';
+	      $btns .= '<a id="quote_link_'.$this->_data['bid'].'" class="bs_button"';
+	      $btns .= ' title="'.$this->locale->lang('quotethispost').'"';
+				$btns .= ' href="'.$url.'" onclick="toggleQuote('.$this->_data['bid'].'); return false;">';
+				$btns .= $this->locale->lang('quote').'+</a>';
 	    }
 	  }
 	  

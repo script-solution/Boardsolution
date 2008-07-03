@@ -45,7 +45,7 @@ function addUserToCombo(comboID,selectedUser)
 		combo.value = combo.value.trim();
 		if(combo.value.length > 0 && !combo.value.endsWith(','))
 			combo.value += ',';
-		combo.value += user.implode(', ');
+		combo.value += user.join(', ');
 	}
 }
 

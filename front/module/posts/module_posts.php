@@ -122,7 +122,11 @@ final class BS_Front_Module_posts extends BS_Front_Module
 			'sasinsert' => $this->functions->get_pagination_small($pagination,$spagiurl),
 			'threadname_ins' => $topic_data['name'],
 			'show_poll' => $topic_data['type'] > 0,
-			'show_event' => $topic_data['type'] == -1
+			'show_event' => $topic_data['type'] == -1,
+			'quoteLink' => $this->url->get_url(
+	    	'new_post','&'.BS_URL_FID.'='.$fid.'&'.BS_URL_TID.'='.$tid
+					.'&'.BS_URL_SITE.'='.$site.'&'.BS_URL_PID.'=','&'
+	    )
 		));
 
 		// display poll / event info

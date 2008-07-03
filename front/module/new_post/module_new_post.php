@@ -69,7 +69,29 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 		if($this->input->isset_var('preview','post'))
 			BS_PostingUtils::get_instance()->add_post_preview();
 		
-		$form = new BS_PostingForm($this->locale->lang('post').':');
+		$text = '';
+		
+		// quote posts
+		$ids = $this->input->get_var(BS_URL_PID,'get',PLIB_Input::STRING);
+		if($ids != null)
+		{
+			$aids = PLIB_Array_Utils::advanced_explode(',',$ids);
+			foreach(BS_DAO::get_posts()->get_posts_by_ids($aids) as $post)
+			{
+				// check if the post comes from a forum that the user is allowed to view
+				if($this->auth->has_access_to_intern_forum($post['rubrikid']))
+				{
+					$username = $post['post_user'] != 0 ? $post['user_name'] : $post['post_an_user'];
+					$quote = BS_PostingUtils::get_instance()->quote_text($post['text_posted'],$username);
+					if($this->user->use_bbcode_applet())
+						$text .= $quote;
+					else
+						$text .= "\n".$quote."\n";
+				}
+			}
+		}
+		
+		$form = new BS_PostingForm($this->locale->lang('post').':',$text);
 		$form->set_show_attachments(true);
 		$form->set_show_options(true);
 		$form->add_form();

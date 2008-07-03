@@ -12,12 +12,14 @@
 /**
  * constructor for the quote-message (post,pm) AJAX-request
  *
+ * @param int number the number of the textarea
  * @param string fieldID the id of the textarea
  * @param string requestURL the url of the PHP-script
  */
-function BS_quoteMessageAJAX(fieldID,requestURL)
+function BS_quoteMessageAJAX(number,fieldID,requestURL)
 {
 	// fields
+	this.number = number;
 	this.bbcFieldID = fieldID;
 	this.requestURL = requestURL;
 	
@@ -38,7 +40,7 @@ function quoteMessage(mID)
 		var field = document.getElementById(self.bbcFieldID);
 		if(field != null)
 		{
-			if(BBCodeMode == 'applet')
+			if(BBCodeModes[self.number] == 'applet')
 			{
 				var applet = document.getElementById(self.bbcFieldID);
 				applet.insertText(text);

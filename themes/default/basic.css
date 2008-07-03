@@ -541,3 +541,18 @@ a.bs_button_big:hover {
 	color: #3F5E88;
 	text-decoration: none;
 }
+
+a.bs_button_selected {
+	background-image: url(images/button_selected.gif);
+	background-repeat: no-repeat;
+	text-align: center;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 0.9em;
+	color: #000000;
+}
+
+a.bs_button_selected:hover {
+	color: #d75858;
+	text-decoration: none;
+}

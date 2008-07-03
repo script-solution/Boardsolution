@@ -91,9 +91,10 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 * @param array $topic_data a reference to the topic-data
 	 * @param boolean $show_quote do you want to show the quote-button?
 	 * @param string $quote_post_url the url to quote a post (e.g.: index.php?...&amp;BS_URL_ID=)
+	 * @param int $number the number of the bbcode-area (default 1)
 	 * @return string the html-code
 	 */
-	public function add_topic_review($topic_data,$show_quote = true,$quote_post_url = '')
+	public function add_topic_review($topic_data,$show_quote = true,$quote_post_url = '',$number = 1)
 	{
 		$show_quote = $show_quote && BS_PostingUtils::get_instance()->get_message_option('enable_bbcode');
 	
@@ -102,7 +103,8 @@ final class BS_PostingUtils extends PLIB_Singleton
 		$review_title = sprintf($this->locale->lang('topic_review_title'),BS_TOPIC_REVIEW_POST_COUNT);
 		$this->tpl->add_variables(array(
 			'show_quote' => $show_quote,
-			'field_id' => 'bbcode_area',
+			'field_id' => 'bbcode_area'.$number,
+			'number' => $number,
 			'request_url' => $this->url->get_standalone_url(
 				'front','ajax_quote_message','&id=%d%&type=post','&'
 			),

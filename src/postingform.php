@@ -320,27 +320,6 @@ final class BS_PostingForm extends PLIB_FullObject
 	
 		$text = $this->_form->get_input_value('text',$this->_text);
 		
-		// quote post
-		$id = $this->input->get_var(BS_URL_PID,'get',PLIB_Input::ID);
-		if($this->_type == 'posts' && $id != null)
-		{
-			$post_data = BS_DAO::get_posts()->get_post_by_id($id);
-			// check if the post exist
-			if($post_data !== false)
-			{
-				// check if the post comes from a forum that the user is allowed to view
-				if($this->auth->has_access_to_intern_forum($post_data['rubrikid']))
-				{
-					$username = $post_data['post_user'] != 0 ? $post_data['user'] : $post_data['post_an_user'];
-					$quote = BS_PostingUtils::get_instance()->quote_text($post_data['text_posted'],$username);
-					if($this->user->use_bbcode_applet())
-						$text .= $quote;
-					else
-						$text .= "\n".$quote."\n";
-				}
-			}
-		}
-		
 		$use_applet = $this->user->use_bbcode_applet();
 		if($this->input->isset_var('bbcode_mode_'.self::$number,'post'))
 		{
