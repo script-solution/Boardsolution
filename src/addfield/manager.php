@@ -34,5 +34,24 @@ final class BS_AddField_Manager extends PLIB_AddField_Manager
 	{
 		parent::__construct(new BS_AddField_Source_DB());
 	}
+	
+	/**
+	 * Checks wether any required field is empty, that can be edited in the profile
+	 *
+	 * @return boolean true if so
+	 */
+	public function is_any_required_field_empty()
+	{
+		foreach($this->get_fields_at(BS_UF_LOC_USER_PROFILE) as $field)
+		{
+			/* @var $field PLIB_AddField_Field */
+			$data = $field->get_data();
+			$stored_val = $this->user->get_profile_val('add_'.$data->get_name());
+			if($data->is_required() && $field->is_empty($stored_val))
+				return true;
+		}
+		
+		return false;
+	}
 }
 ?>

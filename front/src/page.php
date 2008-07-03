@@ -49,6 +49,8 @@ final class BS_Front_Page extends BS_Document
 			
 			parent::__construct();
 			
+			$this->_check_addfields();
+			
 			$this->_module = $this->_load_module();
 			
 			if(BS_DEBUG > 1)
@@ -113,6 +115,27 @@ final class BS_Front_Page extends BS_Document
 		catch(PLIB_Exceptions_Critical $e)
 		{
 			echo $e;
+		}
+	}
+	
+	/**
+	 * Checks wether any required additional field is empty. If so the user will be redirected
+	 * to the profile-info-page (if he/she is not already there).
+	 */
+	private function _check_addfields()
+	{
+		if($this->cfg['force_fill_of_empty_req_fields'] == 1)
+		{
+			$action = $this->input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING);
+			$loc = $this->input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING);
+			if($this->user->is_loggedin() && ($action != 'userprofile' || $loc != 'infos'))
+			{
+				if(BS_AddField_Manager::get_instance()->is_any_required_field_empty())
+				{
+					$url = $this->url->get_url('userprofile','&'.BS_URL_LOC.'=infos&'.BS_URL_MODE.'=1','&');
+					$this->redirect($url);
+				}
+			}
 		}
 	}
 

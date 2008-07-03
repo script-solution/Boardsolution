@@ -30,6 +30,9 @@ final class BS_Front_SubModule_userprofile_infos extends BS_Front_SubModule
 	{
 		$loc = $this->input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING);
 		
+		if($this->input->get_var(BS_URL_MODE,'get') == 1)
+			$this->msgs->add_notice($this->locale->lang('fill_required_fields_notice'));
+		
 		$form = $this->_request_formular(false);
 		
 		$email_change = BS_DAO::get_changeemail()->get_by_user($this->user->get_user_id());

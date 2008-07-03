@@ -1167,6 +1167,14 @@ Bitte haben Sie Verständnis."
 				'title' => '',
 				'items' => array(
 					array(
+						'name' => 'force_fill_of_empty_req_fields',
+						'type' => 'yesno',
+						'properties' => "",
+						'suffix' => '',
+						'affects_msgs' => 0,
+						'default' => 1
+					),
+					array(
 						'name' => 'always_color_usernames',
 						'type' => 'yesno',
 						'properties' => "",
