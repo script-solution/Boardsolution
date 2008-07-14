@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<highlighter>
+<highlighter xmlns="http://www.script-solution.de/schemas/bs/bbc/language"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.script-solution.de/schemas/bs/bbc/language language.xsd">
 	<name>Ini-File</name>
 	<hlNumbers>true</hlNumbers>
 	<escapeChar>\</escapeChar>
@@ -22,15 +24,18 @@
 	<keywords>
 	</keywords>
 	<colors>
-		<symbols>
-			<attr name="fontColor" value="#000080"/>
-		</symbols>
 		<numbers>
 			<attr name="fontColor" value="#800080"/>
 		</numbers>
 		<strings id="1">
 			<attr name="fontColor" value="#FF00FF"/>
 		</strings>
+		<slComments id="1">
+			<attr name="fontColor" value="#008000"/>
+		</slComments>
+		<symbols>
+			<attr name="fontColor" value="#000080"/>
+		</symbols>
 		<regexp id="2">
 			<attr name="fontColor" value="#FF0000"/>
 		</regexp>
@@ -40,8 +45,5 @@
 		<regexp id="3">
 			<attr name="fontColor" value="#000099"/>
 		</regexp>
-		<slComments id="1">
-			<attr name="fontColor" value="#008000"/>
-		</slComments>
 	</colors>
 </highlighter>

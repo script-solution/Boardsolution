@@ -48,7 +48,7 @@ class BS_DAO_Forums extends PLIB_Singleton
 	 * @param int $count the number of avatars (for the LIMIT-statement). 0 = unlimited
 	 * @return array the forums
 	 */
-	public function get_all($sort = 'id',$order = 'ASC',$start = 0,$count = 0)
+	public function get_list($sort = 'id',$order = 'ASC',$start = 0,$count = 0)
 	{
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);

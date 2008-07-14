@@ -62,10 +62,6 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$hidden_fields = '';
-		foreach($this->input->get_vars_from_method('get') as $key => $value)
-			$hidden_fields .= '<input type="hidden" name="'.$key.'" value="'.$value.'" />'."\n";
-		
 		if($search != '')
 			$num = BS_DAO::get_logerrors()->get_count_by_keyword($search);
 		else
@@ -74,6 +70,10 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 		$pagination = new BS_ACP_Pagination($end,$num);
 		
 		$url = $this->url->get_acpmod_url(0,'&amp;search='.$search.'&amp;');
+		$hidden = $this->input->get_vars_from_method('get');
+		unset($hidden['site']);
+		unset($hidden['search']);
+		unset($hidden['at']);
 		$this->tpl->add_variables(array(
 			'form_url' => $this->url->get_acpmod_url(0,$params),
 			'col_error' => BS_ACP_Utils::get_instance()->get_order_column(
@@ -86,7 +86,7 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 				$this->locale->lang('username'),'user','ASC',$order,$url
 			),
 			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
-			'hidden_fields' => $hidden_fields,
+			'hidden' => $hidden,
 			'search_val' => $search,
 			'delete_all_url' => $this->url->get_acpmod_url(0,$params.'&amp;ask=deleteall')
 		));
@@ -107,14 +107,14 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 		$logs = array();
 		if($search != '')
 		{
-			$loglist = BS_DAO::get_logerrors()->get_all_by_keyword(
+			$loglist = BS_DAO::get_logerrors()->get_list_by_keyword(
 				$search,$sql_order,$ad,$pagination->get_start(),$end
 			);
 		}
 		else
-			$loglist = BS_DAO::get_logerrors()->get_all($sql_order,$ad,$pagination->get_start(),$end);
+			$loglist = BS_DAO::get_logerrors()->get_list($sql_order,$ad,$pagination->get_start(),$end);
 		
-		foreach($loglist as $i => $data)
+		foreach($loglist as $data)
 		{
 			if($data['user_id'] > 0)
 				$user = BS_ACP_Utils::get_instance()->get_userlink($data['user_id'],$data['user_name']);
@@ -141,7 +141,7 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 		
 		$this->tpl->add_array('logs',$logs);
 		$this->tpl->add_variables(array(
-			'count' => $i
+			'count' => count($loglist)
 		));
 		
 		$url = $this->url->get_acpmod_url(

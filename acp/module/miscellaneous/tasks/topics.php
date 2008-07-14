@@ -37,7 +37,7 @@ final class BS_ACP_Miscellaneous_Tasks_Topics extends PLIB_FullObject implements
 	 */
 	public function run($pos,$ops)
 	{
-		foreach(BS_DAO::get_topics()->get_all($pos,$ops) as $data)
+		foreach(BS_DAO::get_topics()->get_list($pos,$ops) as $data)
 		{
 			$posts = BS_DAO::get_posts()->get_count_in_topic($data['id']);
 			$lastpost = BS_DAO::get_posts()->get_lastpost_data_in_topic($data['id']);

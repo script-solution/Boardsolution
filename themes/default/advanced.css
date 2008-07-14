@@ -15,6 +15,16 @@ div#ajax_wait_bar {
 	border: 1px dotted #fff;
 }
 
+#plib_image_viewer {
+	border: 1px dotted #444;
+	background-color: #fff;
+	padding: 5px;
+	cursor: pointer;
+}
+#plib_image_viewer_bg {
+	background-color: #444;
+}
+
 img {
 	border: 0;
 	vertical-align: text-top;
@@ -46,6 +56,7 @@ table.bs_table {
 	margin: 0;
 	padding: 0;
 }
+
 table.bs_table > tbody > tr > td, table.bs_table > tbody > tr > th {
 	border: 1px solid #fff;
 }
@@ -110,7 +121,6 @@ html:not(:nth-child(1)) table.bs_table > tbody > tr:first-child > td.bs_topic {
 html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_topic:first-child {
 	border-left: 1px solid #637591;
 }
-
 /* ------------ PORTAL ------------ */
 
 .bs_portal_left {

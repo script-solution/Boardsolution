@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<highlighter>
+<highlighter xmlns="http://www.script-solution.de/schemas/bs/bbc/language"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.script-solution.de/schemas/bs/bbc/language language.xsd">
 	<name>CSS</name>
 	<hlNumbers>false</hlNumbers>
 	<escapeChar>\</escapeChar>
@@ -351,24 +353,21 @@
 		</def>
 	</keywords>
 	<colors>
-		<keywords id="2">
-			<attr name="fontColor" value="#993333"/>
-		</keywords>
-		<keywords id="1">
-			<attr name="fontColor" value="#000000"/>
-			<attr name="bold" value="true"/>
-		</keywords>
-		<symbols>
-			<attr name="fontColor" value="#000080"/>
-		</symbols>
-		<numbers>
-		</numbers>
 		<strings id="2">
 			<attr name="fontColor" value="#FF00FF"/>
 		</strings>
 		<strings id="1">
 			<attr name="fontColor" value="#FF00FF"/>
 		</strings>
+		<slComments id="1">
+			<attr name="fontColor" value="#008000"/>
+		</slComments>
+		<mlComments id="1">
+			<attr name="fontColor" value="#0000FF"/>
+		</mlComments>
+		<symbols>
+			<attr name="fontColor" value="#000080"/>
+		</symbols>
 		<regexp id="3">
 			<attr name="fontColor" value="#3333FF"/>
 		</regexp>
@@ -387,11 +386,12 @@
 		<regexp id="6">
 			<attr name="fontColor" value="#ff0000"/>
 		</regexp>
-		<mlComments id="1">
-			<attr name="fontColor" value="#0000FF"/>
-		</mlComments>
-		<slComments id="1">
-			<attr name="fontColor" value="#008000"/>
-		</slComments>
+		<keywords id="2">
+			<attr name="fontColor" value="#993333"/>
+		</keywords>
+		<keywords id="1">
+			<attr name="fontColor" value="#000000"/>
+			<attr name="bold" value="true"/>
+		</keywords>
 	</colors>
 </highlighter>

@@ -140,7 +140,7 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 * @param int $count the max. number of rows (for the LIMIT-statement) (0 = unlimited)
 	 * @return array all found PMs
 	 */
-	public function get_all($sort = 'id',$order = 'ASC',$start = 0,$count = 0)
+	public function get_list($sort = 'id',$order = 'ASC',$start = 0,$count = 0)
 	{
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);

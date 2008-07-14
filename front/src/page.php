@@ -362,7 +362,6 @@ final class BS_Front_Page extends BS_Document
 	
 		$username = '';
 		$sendpw_url = '';
-		$reg_url = '';
 		$resend_url = '';
 		$unread_news_title = '';
 		if($this->user->is_loggedin())
@@ -385,14 +384,6 @@ final class BS_Front_Page extends BS_Document
 					$sendpw_url = $this->url->get_url('sendpw');
 				else
 					$sendpw_url = BS_EXPORT_SEND_PW_LINK;
-			}
-	
-			if($this->cfg['enable_registrations'] && (!BS_ENABLE_EXPORT || BS_EXPORT_REGISTER_TYPE == 'link'))
-			{
-				if(!BS_ENABLE_EXPORT)
-					$reg_url = $this->url->get_url('register');
-				else
-					$reg_url = BS_EXPORT_REGISTER_LINK;
 			}
 			
 			if(!BS_ENABLE_EXPORT || BS_EXPORT_RESEND_ACT_TYPE == 'link')
@@ -422,7 +413,6 @@ final class BS_Front_Page extends BS_Document
 			'unread_pm_count' => $this->user->is_loggedin() ? $this->user->get_profile_val('unread_pms') : 0,
 			'unread_news_count' => $this->unread->get_unread_news_num(),
 			'username' => $username,
-			'register_link' => $reg_url,
 			'forgotpw_link' => $sendpw_url,
 			'resendact_link' => $resend_url,
 			'current_date' => $cdate->to_format('longdate',true),

@@ -45,15 +45,26 @@ final class BS_ACP_SubModule_bots_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$num = $this->cache->get_cache('bots')->get_element_count();
+		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
+		$bots = array();
+		foreach($this->cache->get_cache('bots') as $data)
+		{
+			if(!$search || stripos($data['bot_name'],$search) !== false ||
+				stripos($data['bot_match'],$search) !== false ||
+				stripos($data['bot_ip_start'],$search) !== false ||
+				stripos($data['bot_ip_end'],$search) !== false)
+				$bots[] = $data;
+		}
+		
+		$num = count($bots);
 		$end = 15;
 		$pagination = new BS_ACP_Pagination($end,$num);
 		$site = $pagination->get_page();
 
 		$row = 0;
-		$bots = array();
+		$tplbots = array();
 		$start = $site > 1 ? (($site - 1) * $end) : 0;
-		foreach($this->cache->get_cache('bots') as $data)
+		foreach($bots as $data)
 		{
 			if($row >= $start + $end)
 				break;
@@ -67,7 +78,7 @@ final class BS_ACP_SubModule_bots_default extends BS_ACP_SubModule
 				else
 					$ip_range = $data['bot_ip_start'].' ... '.$data['bot_ip_end'];
 				
-				$bots[] = array(
+				$tplbots[] = array(
 					'id' => $data['id'],
 					'name' => $data['bot_name'],
 					'match' => $data['bot_match'],
@@ -79,11 +90,21 @@ final class BS_ACP_SubModule_bots_default extends BS_ACP_SubModule
 			$row++;
 		}
 		
-		$this->tpl->add_array('bots',$bots);
+		$this->tpl->add_array('bots',$tplbots);
+		
+		$hidden = $this->input->get_vars_from_method('get');
+		unset($hidden['site']);
+		unset($hidden['search']);
+		unset($hidden['at']);
 		$this->tpl->add_variables(array(
-			'site' => $site
+			'site' => $site,
+			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'hidden' => $hidden,
+			'search_val' => $search
 		));
-		$this->functions->add_pagination($pagination,$this->url->get_acpmod_url(0,'&amp;site={d}'));
+		
+		$url = $this->url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
+		$this->functions->add_pagination($pagination,$url);
 	}
 	
 	public function get_location()

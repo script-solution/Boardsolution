@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<highlighter>
+<highlighter xmlns="http://www.script-solution.de/schemas/bs/bbc/language"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.script-solution.de/schemas/bs/bbc/language language.xsd">
 	<name>Bash</name>
 	<hlNumbers>true</hlNumbers>
 	<escapeChar>\</escapeChar>
@@ -29,11 +31,11 @@
 		<kw>;;</kw>
 	</symbols>
 	<regexps>
-		<regexp id="1" pattern="\$\{[a-zA-Z_][a-zA-Z0-9_]*?\}" cs="0"/>
-		<regexp id="2" pattern="\$[a-zA-Z_][a-zA-Z0-9_]*" cs="0"/>
-		<regexp id="3" pattern="([a-zA-Z_][a-zA-Z0-9_]*)=" cs="0"/>
-		<regexp id="4" pattern="(?&lt;!\$)#[^\n]*" cs="0"/>
-		<regexp id="5" pattern="\$#" cs="0"/>
+		<def id="1" pattern="\$\{[a-zA-Z_][a-zA-Z0-9_]*?\}" cs="0"/>
+		<def id="2" pattern="\$[a-zA-Z_][a-zA-Z0-9_]*" cs="0"/>
+		<def id="3" pattern="([a-zA-Z_][a-zA-Z0-9_]*)=" cs="0"/>
+		<def id="4" pattern="(?&lt;!\$)#[^\n]*" cs="0"/>
+		<def id="5" pattern="\$#" cs="0"/>
 	</regexps>
 	<keywords>
 		<def id="2" cs="false">
@@ -411,18 +413,23 @@
 		</def>
 	</keywords>
 	<colors>
-		<keywords id="1">
-			<attr name="fontColor" value="#A52A2A"/>
+		<numbers>
+			<attr name="fontColor" value="#800080"/>
+		</numbers>
+		<strings id="2">
+			<attr name="fontColor" value="#FF00FF"/>
+		</strings>
+		<strings id="1">
+			<attr name="fontColor" value="#FF00FF"/>
+		</strings>
+		<slComments id="1">
+			<attr name="fontColor" value="#0000ff"/>
+			<attr name="italic" value="true"/>
+		</slComments>
+		<symbols>
+			<attr name="fontColor" value="#000000"/>
 			<attr name="bold" value="true"/>
-		</keywords>
-		<keywords id="2">
-			<attr name="fontColor" value="#A52A2A"/>
-			<attr name="bold" value="true"/>
-		</keywords>
-		<keywords id="3">
-			<attr name="fontColor" value="#A52A2A"/>
-			<attr name="bold" value="true"/>
-		</keywords>
+		</symbols>
 		<regexp id="1">
 			<attr name="fontColor" value="#007800"/>
 		</regexp>
@@ -439,22 +446,17 @@
 		<regexp id="5">
 			<attr name="fontColor" value="#007800"/>
 		</regexp>
-		<symbols>
-			<attr name="fontColor" value="#000000"/>
+		<keywords id="1">
+			<attr name="fontColor" value="#A52A2A"/>
 			<attr name="bold" value="true"/>
-		</symbols>
-		<numbers>
-			<attr name="fontColor" value="#800080"/>
-		</numbers>
-		<strings id="2">
-			<attr name="fontColor" value="#FF00FF"/>
-		</strings>
-		<strings id="1">
-			<attr name="fontColor" value="#FF00FF"/>
-		</strings>
-		<slComments id="1">
-			<attr name="fontColor" value="#0000ff"/>
-			<attr name="italic" value="true"/>
-		</slComments>
+		</keywords>
+		<keywords id="2">
+			<attr name="fontColor" value="#A52A2A"/>
+			<attr name="bold" value="true"/>
+		</keywords>
+		<keywords id="3">
+			<attr name="fontColor" value="#A52A2A"/>
+			<attr name="bold" value="true"/>
+		</keywords>
 	</colors>
 </highlighter>

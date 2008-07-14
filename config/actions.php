@@ -377,6 +377,7 @@ define('BS_ACP_ACTION_CONFIG_MOD_FORUMS',						83);
 define('BS_ACP_ACTION_ADD_BBCODE',									84);
 define('BS_ACP_ACTION_EDIT_BBCODE',									85);
 define('BS_ACP_ACTION_DELETE_BBCODES',							86);
+define('BS_ACP_ACTION_RESORT_SMILEYS',							87);
 
 # The actions for the dbbackup-script
 define('BS_DBA_ACTION_DELETE_BACKUPS',							1);

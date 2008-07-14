@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<languages>
+<languages xmlns="http://www.script-solution.de/schemas/bs/bbc/languages"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.script-solution.de/schemas/bs/bbc/languages languages.xsd">
 	<language id="c" name="C" file="c.xml"/>
 	<language id="cpp" name="C++" file="cpp.xml"/>
 	<language id="php" name="PHP" file="php.xml"/>

@@ -51,13 +51,17 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$num = BS_DAO::get_links()->get_count();
+		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
+		if($search != '')
+			$num = BS_DAO::get_links()->get_count_by_keyword($search);
+		else
+			$num = BS_DAO::get_links()->get_count();
 		$end = 15;
 
 		$order = $this->input->correct_var(BS_URL_ORDER,'get',PLIB_Input::STRING,
 			array('url','category','clicks','date','act'),'date');
 		$ad = $this->input->correct_var(BS_URL_AD,'get',PLIB_Input::STRING,array('ASC','DESC'),'DESC');
-		$url = $this->url->get_acpmod_url(0,'&amp;');
+		$url = $this->url->get_acpmod_url(0,'&amp;search='.$search.'&amp;');
 		$pagination = new BS_ACP_Pagination($end,$num);
 		
 		$this->tpl->add_variables(array(
@@ -100,8 +104,17 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 		$enable_bbcode = BS_PostingUtils::get_instance()->get_message_option('enable_bbcode','lnkdesc');
 		$enable_smileys = BS_PostingUtils::get_instance()->get_message_option('enable_smileys','lnkdesc');
 
+		if($search != '')
+		{
+			$list = BS_DAO::get_links()->get_list_by_keyword(
+				$search,-1,$sql_order,$ad,$pagination->get_start(),$end
+			);
+		}
+		else
+			$list = BS_DAO::get_links()->get_list(-1,$sql_order,$ad,$pagination->get_start(),$end);
+		
 		$links = array();
-		foreach(BS_DAO::get_links()->get_all(-1,$sql_order,$ad,$pagination->get_start(),$end) as $data)
+		foreach($list as $data)
 		{
 			$link_date = PLIB_Date::get_date($data['link_date'],false);
 			$link_rating = $this->functions->get_link_rating($data['vote_points'],$data['votes'],0,1,'');
@@ -125,12 +138,21 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 			);
 		}
 
+		$hidden = $this->input->get_vars_from_method('get');
+		unset($hidden['site']);
+		unset($hidden['search']);
+		unset($hidden['at']);
 		$this->tpl->add_array('links',$links);
 		$this->tpl->add_variables(array(
 			'at_activate' => BS_ACP_ACTION_ACTIVATE_LINKS,
-			'at_deactivate' => BS_ACP_ACTION_DEACTIVATE_LINKS
+			'at_deactivate' => BS_ACP_ACTION_DEACTIVATE_LINKS,
+			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'hidden' => $hidden,
+			'search_val' => $search
 		));
-		$this->functions->add_pagination($pagination,$url.'order='.$order.'&amp;ad='.$ad.'&amp;site={d}');
+		
+		$purl = $url.'order='.$order.'&amp;ad='.$ad.'&amp;site={d}';
+		$this->functions->add_pagination($pagination,$purl);
 	}
 	
 	public function get_location()

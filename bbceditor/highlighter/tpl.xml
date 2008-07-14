@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<highlighter>
+<highlighter xmlns="http://www.script-solution.de/schemas/bs/bbc/language"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.script-solution.de/schemas/bs/bbc/language language.xsd">
 	<name>BS-Template</name>
 	<hlNumbers>false</hlNumbers>
 	<escapeChar>\</escapeChar>
@@ -511,31 +513,29 @@
 		</def>
 	</keywords>
 	<colors>
-		<keywords id="2">
-			<attr name="fontColor" value="#6a5ada"/>
-		</keywords>
-		<keywords id="1">
-			<attr name="fontColor" value="#008a8c"/>
-		</keywords>
-		<symbols>
-			<attr name="fontColor" value="#000080"/>
-		</symbols>
-		<numbers>
-		</numbers>
 		<strings id="2">
 			<attr name="fontColor" value="#FF00FF"/>
 		</strings>
 		<strings id="1">
 			<attr name="fontColor" value="#FF00FF"/>
 		</strings>
+		<mlComments id="1">
+			<attr name="fontColor" value="#0000FF"/>
+		</mlComments>
+		<symbols>
+			<attr name="fontColor" value="#000080"/>
+		</symbols>
 		<regexp id="2">
 			<attr name="fontColor" value="#a04bf8"/>
 		</regexp>
 		<regexp id="1">
 			<attr name="fontColor" value="#FF0000"/>
 		</regexp>
-		<mlComments id="1">
-			<attr name="fontColor" value="#0000FF"/>
-		</mlComments>
+		<keywords id="2">
+			<attr name="fontColor" value="#6a5ada"/>
+		</keywords>
+		<keywords id="1">
+			<attr name="fontColor" value="#008a8c"/>
+		</keywords>
 	</colors>
 </highlighter>

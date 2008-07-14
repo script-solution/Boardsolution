@@ -154,7 +154,7 @@ function markItem(id)
 	if(item != null)
 	{
 		item.style.borderColor = '#FF0000';
-		if(!window.opera)
+		if(!Browser.isOpera)
 			item.style.borderStyle = 'dotted';
 		bsMarkedTags.push(id);
 	}
@@ -395,7 +395,7 @@ function moveCursorForward(id,count)
 {
 	var textarea = document.getElementById(id);
 	// for opera
-	if(typeof document.selection != 'undefined' && window.opera)
+	if(typeof document.selection != 'undefined' && Browser.isOpera)
 		range.move('character',count);
 	// for the gecko-engine
 	else if(typeof textarea.selectionStart != 'undefined')

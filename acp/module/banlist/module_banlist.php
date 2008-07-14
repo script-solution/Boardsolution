@@ -44,6 +44,7 @@ final class BS_ACP_Module_banlist extends BS_ACP_Module
 			);
 		}
 		
+		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
 		$this->_request_formular();
 		
 		$type_array = array(
@@ -51,12 +52,27 @@ final class BS_ACP_Module_banlist extends BS_ACP_Module
 			'user' => $this->locale->lang('username'),
 			'mail' => $this->locale->lang('email_adress')
 		);
-
+	
+		$entries = array();
+		foreach($this->cache->get_cache('banlist')->get_elements() as $lang)
+		{
+			if(!$search || stripos($lang['bann_name'],$search) !== false ||
+					stripos($lang['bann_type'],$search) !== false)
+				$entries[] = $lang;
+		}
+		
+		$hidden = $this->input->get_vars_from_method('get');
+		unset($hidden['site']);
+		unset($hidden['at']);
+		unset($hidden['search']);
 		$this->tpl->add_variables(array(
 			'types' => $type_array,
-			'entries' => $this->cache->get_cache('banlist')->get_elements(),
+			'entries' => $entries,
 			'action_type_update' => BS_ACP_ACTION_UPDATE_BANS,
-			'action_type_add' => BS_ACP_ACTION_ADD_BAN
+			'action_type_add' => BS_ACP_ACTION_ADD_BAN,
+			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'hidden' => $hidden,
+			'search_val' => $search
 		));
 	}
 	

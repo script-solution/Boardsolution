@@ -43,6 +43,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 			);
 		}
 		
+		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
 		$fields = $this->cache->get_cache('user_fields');
 		
 		$sort_options = array();
@@ -56,7 +57,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 		$i = 0;
 		$tplfields = array();
 		$elements = array_values($fields->get_elements());
-		foreach($elements as $data)
+		foreach($this->_filter_fields($elements,$search) as $data)
 		{
 			$field_type = $this->_get_field_type_name($data['field_type']);
 			if($data['field_type'] != 'enum' && $data['field_type'] != 'text' && $data['field_type'] != 'date')
@@ -98,7 +99,40 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 			$i++;
 		}
 		
+		$hidden = $this->input->get_vars_from_method('get');
+		unset($hidden['site']);
+		unset($hidden['search']);
+		unset($hidden['at']);
 		$this->tpl->add_array('fields',$tplfields);
+		$this->tpl->add_variables(array(
+			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'hidden' => $hidden,
+			'search_val' => $search
+		));
+	}
+	
+	/**
+	 * Filters the given fields for the given keyword
+	 *
+	 * @param array $fields all fields
+	 * @param string $keyword the keyword
+	 */
+	private function _filter_fields($fields,$keyword)
+	{
+		if(!$keyword)
+			return $fields;
+		
+		$res = array();
+		foreach($fields as $field)
+		{
+			if(stripos($field['field_name'],$keyword) !== false)
+				$res[] = $field;
+			else if(stripos($field['field_type'],$keyword) !== false)
+				$res[] = $field;
+			else if(stripos($field['display_name'],$keyword) !== false)
+				$res[] = $field;
+		}
+		return $res;
 	}
 
 	/**

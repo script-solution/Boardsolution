@@ -39,13 +39,34 @@ class BS_DAO_Links extends PLIB_Singleton
 	 */
 	public function get_count($active = -1)
 	{
+		return $this->get_count_by_keyword('',$active);
+	}
+	
+	/**
+	 * Returns the total number of links. Activated, not activated or all.
+	 *
+	 * @param string $keyword the keyword
+	 * @param int $active wether they are activated: -1 = indifferent, 0 = no, 1 = yes
+	 * @return int the link-count
+	 */
+	public function get_count_by_keyword($keyword,$active = -1)
+	{
 		if(!in_array($active,array(-1,0,1)))
 			PLIB_Helper::def_error('inarray','active',array(-1,0,1),$active);
 		
 		$where = '';
+		if($keyword)
+			$where .= 'LEFT JOIN '.BS_TB_USER.' u ON l.user_id = u.`'.BS_EXPORT_USER_ID.'`';
+		$where .= ' WHERE 1';
 		if($active >= 0)
-			$where = ' WHERE active = '.$active;
-		return $this->db->sql_num(BS_TB_LINKS,'id',$where);
+			$where .= ' AND active = '.$active;
+		if($keyword)
+		{
+			$where .= ' AND (u.`'.BS_EXPORT_USER_NAME.'` LIKE "%'.$keyword.'%"';
+			$where .= ' OR category LIKE "%'.$keyword.'%" OR link_url LIKE "%'.$keyword.'%"';
+			$where .= ' OR link_desc_posted LIKE "%'.$keyword.'%")';
+		}
+		return $this->db->sql_num(BS_TB_LINKS.' l','l.id',$where);
 	}
 	
 	/**
@@ -118,7 +139,25 @@ class BS_DAO_Links extends PLIB_Singleton
 	 * @param int $count the max. number of rows (for the LIMIT-statement) (0 = unlimited)
 	 * @return array the found links
 	 */
-	public function get_all($active = -1,$sort = 'l.id',$order = 'ASC',$start = 0,$count = 0)
+	public function get_list($active = -1,$sort = 'l.id',$order = 'ASC',$start = 0,$count = 0)
+	{
+		return $this->get_list_by_keyword('',$active,$sort,$order,$start,$count);
+	}
+	
+	/**
+	 * Returns all links that match the keyword and are activated, not activated or both.
+	 * You can also specify the sort and range.
+	 *
+	 * @param string $keyword the keyword
+	 * @param int $active wether they are activated: -1 = indifferent, 0 = no, 1 = yes
+	 * @param string $sort the sort-column
+	 * @param string $order the order: ASC or DESC
+	 * @param int $start the start-position (for the LIMIT-statement)
+	 * @param int $count the max. number of rows (for the LIMIT-statement) (0 = unlimited)
+	 * @return array the found links
+	 */
+	public function get_list_by_keyword($keyword,$active = -1,$sort = 'l.id',$order = 'ASC',
+		$start = 0,$count = 0)
 	{
 		if(!in_array($active,array(-1,0,1)))
 			PLIB_Helper::def_error('inarray','active',array(-1,0,1),$active);
@@ -127,9 +166,14 @@ class BS_DAO_Links extends PLIB_Singleton
 		if(!PLIB_Helper::is_integer($count) || $count < 0)
 			PLIB_Helper::def_error('intge0','count',$count);
 		
-		$where = '';
+		$where = 'WHERE 1';
 		if($active >= 0)
-			$where = ' WHERE l.active = '.$active;
+			$where .= ' AND l.active = '.$active;
+		if($keyword)
+		{
+			$where .= ' AND (user_name LIKE "%'.$keyword.'%" OR category LIKE "%'.$keyword.'%"';
+			$where .= ' OR link_url LIKE "%'.$keyword.'%" OR link_desc_posted LIKE "%'.$keyword.'%")';
+		}
 		return $this->db->sql_rows(
 			'SELECT l.*,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.user_group
 			 FROM '.BS_TB_LINKS.' l

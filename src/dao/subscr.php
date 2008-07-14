@@ -40,6 +40,21 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	}
 	
 	/**
+	 * @param string $keyword the keyword you want to search for
+	 * @return int the total number of subscriptions
+	 */
+	public function get_count_by_keyword($keyword)
+	{
+		return $this->db->sql_num(
+			BS_TB_SUBSCR.' s','s.id','LEFT JOIN '.BS_TB_FORUMS.' f ON f.id = s.forum_id
+			 LEFT JOIN '.BS_TB_THREADS.' t ON t.id = s.topic_id
+			 LEFT JOIN '.BS_TB_USER.' u ON u.`'.BS_EXPORT_USER_ID.'` = s.user_id
+			 WHERE f.forum_name LIKE "%'.$keyword.'%" OR t.name LIKE "%'.$keyword.'%"
+			 	OR u.`'.BS_EXPORT_USER_NAME.'` LIKE "%'.$keyword.'%"'
+		);
+	}
+	
+	/**
 	 * The number of topic-subscriptions of the given user
 	 *
 	 * @param int $user_id the user-id
@@ -118,13 +133,14 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 * 	)
 	 * </code>
 	 *
+	 * @param string $keyword the keyword you want to search for (empty = all)
 	 * @param string $sort the sort-column
 	 * @param string $order the order: ASC or DESC
 	 * @param int $start the start-position (for the LIMIT-statement)
 	 * @param int $count the max. number of rows (for the LIMIT-statement) (0 = unlimited)
 	 * @return array the subscriptions
 	 */
-	public function get_all($sort = 'id',$order = 'ASC',$start = 0,$count = 0)
+	public function get_list($keyword,$sort = 'id',$order = 'ASC',$start = 0,$count = 0)
 	{
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);
@@ -141,6 +157,8 @@ class BS_DAO_Subscr extends PLIB_Singleton
 			 LEFT JOIN '.BS_TB_USER.' u ON u.`'.BS_EXPORT_USER_ID.'` = s.user_id
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON p.id = s.user_id
 			 LEFT JOIN '.BS_TB_POSTS.' po ON f.lastpost_id = po.id
+			 '.($keyword ? 'WHERE f.forum_name LIKE "%'.$keyword.'%" OR t.name LIKE "%'.$keyword.'%"
+			 	OR user_name LIKE "%'.$keyword.'%"' : '').'
 			 ORDER BY '.$sort.' '.$order.'
 			 '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
 		);

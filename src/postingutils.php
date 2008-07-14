@@ -417,7 +417,6 @@ final class BS_PostingUtils extends PLIB_Singleton
 	      );
 				$image_url = '';
 				$image_title = '';
-				$fileicon = '';
 	
 	      $is_image = $this->cfg['attachments_images_show'] == 1 &&
 	      	($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif');
@@ -432,21 +431,15 @@ final class BS_PostingUtils extends PLIB_Singleton
 	      	$image_url = $this->url->get_standalone_url('front','thumbnail',$params);
 	        $image_title = sprintf($this->locale->lang('download_image'),
 	        	basename($attachment['attachment_path']));
-	        $attachment_name = '';
-	      }
-	      else
-	      {
-	      	$fileicon = $this->functions->get_attachment_icon($ext);
-	      	$attachment_name = basename($attachment['attachment_path']);
 	      }
 	
 				$tplatt[] = array(
 					'is_image' => $is_image,
-					'fileicon' => $fileicon,
+					'fileicon' => $this->functions->get_attachment_icon($ext),
 					'image_url' => $image_url,
 					'image_title' => $image_title,
 					'attachment_url' => $attachment_url,
-					'attachment_name' => $attachment_name,
+					'attachment_name' => basename($attachment['attachment_path']),
 					'attachment_size' => number_format($attachment['attachment_size'],0,',','.'),
 					'downloads' => $attachment['downloads']
 				);

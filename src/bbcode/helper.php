@@ -32,7 +32,7 @@ final class BS_BBCode_Helper extends PLIB_Singleton
 	 *
 	 * @var array
 	 */
-	private $_tags = array();
+	private $_tags = null;
 	
 	/**
 	 * A storage for every kind of variable that should be valid for the whole text
@@ -47,22 +47,6 @@ final class BS_BBCode_Helper extends PLIB_Singleton
 	 * @var string
 	 */
 	private $_replacements = array();
-	
-	/**
-	 * Constructor
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		
-		$this->_tags = array();
-		foreach(BS_DAO::get_bbcodes()->get_all() as $tag)
-		{
-			$con = PLIB_Array_Utils::advanced_explode(',',$tag['allowed_content']);
-			$tag['allowed_content'] = PLIB_Array_Utils::get_fast_access($con);
-			$this->_tags[$tag['name']] = $tag;
-		}
-	}
 	
 	/**
 	 * Resets everything for a new text to parse
@@ -146,6 +130,9 @@ final class BS_BBCode_Helper extends PLIB_Singleton
 	 */
 	public function remove_disallowed_tags($location)
 	{
+		if($this->_tags === null)
+			$this->_load_tags();
+		
 		$sallowed = BS_PostingUtils::get_instance()->get_message_option('allowed_tags',$location);
 		$allowed = PLIB_Array_Utils::advanced_explode(',',$sallowed);
 		foreach(array_keys($this->_tags) as $name)
@@ -160,6 +147,9 @@ final class BS_BBCode_Helper extends PLIB_Singleton
 	 */
 	public function get_tags()
 	{
+		if($this->_tags === null)
+			$this->_load_tags();
+		
 		return $this->_tags;
 	}
 	
@@ -171,6 +161,9 @@ final class BS_BBCode_Helper extends PLIB_Singleton
 	 */
 	public function get_tag($name)
 	{
+		if($this->_tags === null)
+			$this->_load_tags();
+		
 		if(isset($this->_tags[$name]))
 			return $this->_tags[$name];
 		
@@ -198,6 +191,20 @@ final class BS_BBCode_Helper extends PLIB_Singleton
 		}
 
 		return $url;
+	}
+	
+	/**
+	 * Loads the tags from the database
+	 */
+	private function _load_tags()
+	{
+		$this->_tags = array();
+		foreach(BS_DAO::get_bbcodes()->get_list() as $tag)
+		{
+			$con = PLIB_Array_Utils::advanced_explode(',',$tag['allowed_content']);
+			$tag['allowed_content'] = PLIB_Array_Utils::get_fast_access($con);
+			$this->_tags[$tag['name']] = $tag;
+		}
 	}
 	
 	protected function _get_print_vars()

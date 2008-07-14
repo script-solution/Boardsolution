@@ -29,7 +29,11 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 	public function run()
 	{
 		$end = 15;
-		$num = BS_DAO::get_subscr()->get_count();
+		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
+		if($search != '')
+			$num = BS_DAO::get_subscr()->get_count_by_keyword($search);
+		else
+			$num = BS_DAO::get_subscr()->get_count();
 		$pagination = new BS_ACP_Pagination($end,$num);
 		$site = $pagination->get_page();
 		
@@ -52,7 +56,7 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 			);
 		}
 	
-		$base_url = $this->url->get_acpmod_url(0,'&amp;site='.$site.'&amp;');
+		$base_url = $this->url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site='.$site.'&amp;');
 		$this->tpl->add_variables(array(
 			'target_url' => $base_url.'order='.$order.'&amp;ad='.$ad,
 			'username_col' => BS_ACP_Utils::get_instance()->get_order_column(
@@ -86,7 +90,7 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		}
 		
 		$subscriptions = array();
-		$sublist = BS_DAO::get_subscr()->get_all($sql_order,$ad,$pagination->get_start(),$end);
+		$sublist = BS_DAO::get_subscr()->get_list($search,$sql_order,$ad,$pagination->get_start(),$end);
 		foreach($sublist as $data)
 		{
 			if($data['forum_id'] > 0)
@@ -127,8 +131,20 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		}
 
 		$this->tpl->add_array('subscriptions',$subscriptions);
+		
+		$hidden = $this->input->get_vars_from_method('get');
+		unset($hidden['site']);
+		unset($hidden['search']);
+		unset($hidden['at']);
+		$this->tpl->add_variables(array(
+			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'hidden' => $hidden,
+			'search_val' => $search
+		));
 
-		$url = $this->url->get_acpmod_url(0,'&amp;order='.$order.'&amp;ad='.$ad.'&amp;site={d}');
+		$url = $this->url->get_acpmod_url(
+			0,'&amp;search='.$search.'&amp;order='.$order.'&amp;ad='.$ad.'&amp;site={d}'
+		);
 		$this->functions->add_pagination($pagination,$url);
 	}
 	

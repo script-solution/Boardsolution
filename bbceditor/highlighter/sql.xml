@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<highlighter>
+<highlighter xmlns="http://www.script-solution.de/schemas/bs/bbc/language"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.script-solution.de/schemas/bs/bbc/language language.xsd">
 	<name>SQL</name>
 	<hlNumbers>true</hlNumbers>
 	<escapeChar>\</escapeChar>
@@ -149,22 +151,11 @@
 			<kw>ZEROFILL</kw>
 			<kw>XOR</kw>
 		</def>
-		
-		<!--<def id="2" cs="false">
-			<kw></kw>
-		</def>-->
 	</keywords>
 	<colors>
-		<keywords id="1">
-			<attr name="fontColor" value="#2E8B57"/>
-			<attr name="bold" value="true"/>
-		</keywords>
 		<numbers>
 			<attr name="fontColor" value="#cc66cc"/>
 		</numbers>
-		<symbols>
-			<attr name="fontColor" value="#66cc66"/>
-		</symbols>
 		<strings id="2">
 			<attr name="fontColor" value="#FF00FF"/>
 		</strings>
@@ -174,14 +165,21 @@
 		<strings id="3">
 			<attr name="fontColor" value="#FF00FF"/>
 		</strings>
-		<mlComments id="1">
-			<attr name="fontColor" value="#808080"/>
-		</mlComments>
 		<slComments id="1">
 			<attr name="fontColor" value="#0000ff"/>
 		</slComments>
 		<slComments id="2">
 			<attr name="fontColor" value="#0000ff"/>
 		</slComments>
+		<mlComments id="1">
+			<attr name="fontColor" value="#808080"/>
+		</mlComments>
+		<symbols>
+			<attr name="fontColor" value="#66cc66"/>
+		</symbols>
+		<keywords id="1">
+			<attr name="fontColor" value="#2E8B57"/>
+			<attr name="bold" value="true"/>
+		</keywords>
 	</colors>
 </highlighter>

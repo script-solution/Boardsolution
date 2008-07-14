@@ -40,6 +40,18 @@ class BS_DAO_Avatars extends PLIB_Singleton
 	}
 	
 	/**
+	 * @param string $keyword the keyword
+	 * @return int the number of avatars that match the given keyword
+	 */
+	public function get_count_for_keyword($keyword)
+	{
+		return $this->db->sql_num(
+			BS_TB_AVATARS.' a','a.id','LEFT JOIN '.BS_TB_USER.' u ON a.user = u.`'.BS_EXPORT_USER_ID.'`
+				WHERE u.`'.BS_EXPORT_USER_NAME.'` LIKE "%'.$keyword.'%" OR av_pfad LIKE "%'.$keyword.'%"'
+		);
+	}
+	
+	/**
 	 * @param int $user_id the user-id
 	 * @return int the number of avatars of the given user
 	 */
@@ -82,6 +94,22 @@ class BS_DAO_Avatars extends PLIB_Singleton
 	public function get_list($start = 0,$count = 0)
 	{
 		return $this->_get_list('',$start,$count);
+	}
+	
+	/**
+	 * Returns a list with all avatars that match the given keyword from <var>$start</var> to
+	 * <var>$start + $count</var>.
+	 *
+	 * @param string $keyword the keyword
+	 * @param int $start the start-position (for the LIMIT-statement)
+	 * @param int $count the number of avatars (for the LIMIT-statement). 0 = unlimited
+	 * @return array the avatar-list
+	 */
+	public function get_list_for_keyword($keyword,$start = 0,$count = 0)
+	{
+		return $this->_get_list(
+			'WHERE user_name LIKE "%'.$keyword.'%" OR av_pfad LIKE "%'.$keyword.'%"',$start,$count
+		);
 	}
 	
 	/**

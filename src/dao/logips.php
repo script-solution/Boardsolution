@@ -79,7 +79,7 @@ class BS_DAO_LogIPs extends PLIB_Singleton
 	 * @param int $count the max. number of rows (for the LIMIT-statement) (0 = unlimited)
 	 * @return array all found logs
 	 */
-	public function get_all_by_search($where,$sort = 'l.id',$order = 'ASC',$start = 0,$count = 0)
+	public function get_list_by_search($where,$sort = 'l.id',$order = 'ASC',$start = 0,$count = 0)
 	{
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);

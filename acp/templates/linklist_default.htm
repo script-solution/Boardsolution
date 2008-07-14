@@ -5,6 +5,25 @@
 {include "inc_js_row_selector.htm"}
 <script type="text/javascript" src="{gjs.get_file('acp/src/row_extension.js')}"></script>
 
+<div class="a_block">{glocale.lang('bbcode_tags_desc')}</div>
+<form method="get" action="{search_url}">
+{loop hidden as k => v}
+<input type="hidden" name="{k}" value="{v}" />
+{endloop}
+<div class="a_block">
+	<div class="a_menubar">
+		<div class="a_menubar_left">
+			{glocale.lang('search')}:
+			<input class="a_searchtb" type="text" name="search" size="20" maxlength="255" value="{search_val}" />
+			<input class="a_searchbtn" type="submit" value="{glocale.lang('search')}" />
+		</div>
+		<div class="a_menubar_right">
+			&nbsp;
+		</div>
+	</div>
+</div>
+</form>
+
 <form method="post" action="{gurl.get_acpmod_url()}">
 <div class="a_border a_pad">
 	<h1 class="a_topic">{glocale.lang('acpmod_links')}</h1>

@@ -45,12 +45,26 @@ final class BS_ACP_Module_languages extends BS_ACP_Module
 			);
 		}
 		
+		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
+		$hidden = $this->input->get_vars_from_method('get');
+		unset($hidden['site']);
+		unset($hidden['search']);
+		unset($hidden['at']);
 		$this->tpl->add_variables(array(
 			'action_type' => BS_ACP_ACTION_UPDATE_LANGUAGES,
-			'action_type_add' => BS_ACP_ACTION_ADD_LANGUAGE
+			'action_type_add' => BS_ACP_ACTION_ADD_LANGUAGE,
+			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'hidden' => $hidden,
+			'search_val' => $search
 		));
 
-		$languages = $this->cache->get_cache('languages')->get_elements();
+		$languages = array();
+		foreach($this->cache->get_cache('languages')->get_elements() as $lang)
+		{
+			if(!$search || stripos($lang['lang_name'],$search) !== false ||
+					stripos($lang['lang_folder'],$search) !== false)
+				$languages[] = $lang;
+		}
 		$this->tpl->add_array('languages',$languages);
 	}
 

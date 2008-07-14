@@ -217,6 +217,15 @@ span.a_msg_notice {
 	text-decoration: none;
 }
 
+.a_menubar_left {
+	float: left;
+	position: relative;
+	top: -3px;
+}
+.a_menubar_right {
+	
+}
+
 /* ------------ FORM ELEMENTS ------------ */
 
 input,select,textarea {
@@ -224,6 +233,20 @@ input,select,textarea {
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 0.9em;
 	color: #000000;
+}
+
+input.a_searchtb {
+	height: 13px;
+	padding: 1px;
+	margin: 0px;
+}
+html:not(:nth-child(1)) input.a_searchtb {
+	height: 18px;
+}
+input.a_searchbtn {
+	height: 22px;
+	padding: 0px;
+	margin: 0px;
 }
 
 /* ------------ PADDING ------------ */

@@ -120,7 +120,7 @@ class BS_DAO_Smileys extends PLIB_Singleton
 	 * @param int $count the max. number of rows (for the LIMIT-statement) (0 = unlimited)
 	 * @return array all smileys sorted by sort_key ascending
 	 */
-	public function get_all($start = 0,$count = 0)
+	public function get_list($start = 0,$count = 0)
 	{
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);

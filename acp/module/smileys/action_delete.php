@@ -25,7 +25,7 @@ final class BS_ACP_Action_smileys_delete extends BS_ACP_Action_Base
 		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
 			return 'Got an invalid id-string via GET';
 		
-		foreach(BS_DAO::get_smileys()->get_all() as $data)
+		foreach(BS_DAO::get_smileys()->get_list() as $data)
 		{
 			if(in_array($data['id'],$ids))
 				@unlink('images/smileys/'.$data['smiley_path']);

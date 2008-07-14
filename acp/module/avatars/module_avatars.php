@@ -47,17 +47,34 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 			);
 		}
 		
-		$num = BS_DAO::get_avatars()->get_count();
+		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
+		if($search != '')
+			$num = BS_DAO::get_avatars()->get_count_for_keyword($search);
+		else
+			$num = BS_DAO::get_avatars()->get_count();
+		
+		$hidden = $this->input->get_vars_from_method('get');
+		unset($hidden['site']);
+		unset($hidden['search']);
+		unset($hidden['at']);
 		$this->tpl->add_variables(array(
 			'num' => $num,
-			'action_type_import' => BS_ACP_ACTION_IMPORT_AVATARS
+			'action_type_import' => BS_ACP_ACTION_IMPORT_AVATARS,
+			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'hidden' => $hidden,
+			'search_val' => $search
 		));
 
 		$end = 10;
 		$pagination = new BS_ACP_Pagination($end,$num);
 		
 		$avatars = array();
-		foreach(BS_DAO::get_avatars()->get_list($pagination->get_start(),$end) as $data)
+		if($search != '')
+			$list = BS_DAO::get_avatars()->get_list_for_keyword($search,$pagination->get_start(),$end);
+		else
+			$list = BS_DAO::get_avatars()->get_list($pagination->get_start(),$end);
+		
+		foreach($list as $data)
 		{
 			if($data['user'] == 0)
 				$data['owner'] = $this->locale->lang('administrator');
@@ -67,7 +84,8 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 		}
 
 		$this->tpl->add_array('avatars',$avatars);
-		$this->functions->add_pagination($pagination,$this->url->get_acpmod_url(0,'&amp;site={d}'));
+		$url = $this->url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
+		$this->functions->add_pagination($pagination,$url);
 	}
 	
 	public function get_location()

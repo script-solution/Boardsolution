@@ -62,10 +62,5 @@ final class BS_Front_Module_unread extends BS_Front_Module
 	{
 		return array($this->locale->lang('unread_threads') => $this->url->get_url('unread'));
 	}
-
-	public function has_access()
-	{
-		return $this->user->is_loggedin();
-	}
 }
 ?>

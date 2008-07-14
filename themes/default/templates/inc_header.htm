@@ -12,6 +12,7 @@
 <script type="text/javascript" src="{gjs.get_file('js/basic.js','lib')}"></script>
 <script type="text/javascript" src="{gjs.get_file('js/ajax.js','lib')}"></script>
 <script type="text/javascript" src="{gjs.get_file('src/functions.js')}"></script>
+<script type="text/javascript" src="{gjs.get_file('js/imgviewer.js','lib')}"></script>
 
 <link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('advanced.css')}" />
 <link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('basic.css')}" />
@@ -36,6 +37,8 @@ myAjax.setEventHandler('onstart',function() {
 myAjax.setEventHandler('onfinish',function() {
 	PLIB_hideElement('ajax_wait_bar');
 });
+
+PLIB_configureImageViewer(true,80,10,10,10,'30px','{guser.get_theme_item_path("images/wait.gif")}',5);
 
 function setCookie(name,value,lifetime)
 {

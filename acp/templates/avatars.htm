@@ -3,17 +3,30 @@
 
 {if module_error == false}
 {include "inc_js_row_selector.htm"}
+
+<form method="get" action="{search_url}">
+{loop hidden as k => v}
+<input type="hidden" name="{k}" value="{v}" />
+{endloop}
 <div class="a_block">
 	<div>
 		{glocale.lang('import_avatars_desc')}
 	</div>
 	<div class="a_menubar a_pad">
-		<a href="{gurl.get_acpmod_url(0,'&amp;at='~action_type_import)}">
-		<img src="{gpath}acp/images/plus.png" alt="{glocale.lang('import_avatars')}" />
-		{glocale.lang('import_avatars')}
-		</a>
+		<div class="a_menubar_left">
+			{glocale.lang('search')}:
+			<input class="a_searchtb" type="text" name="search" size="20" maxlength="255" value="{search_val}" />
+			<input class="a_searchbtn" type="submit" value="{glocale.lang('search')}" />
+		</div>
+		<div class="a_menubar_right">
+			<a href="{gurl.get_acpmod_url(0,'&amp;at='~action_type_import)}">
+			<img src="{gpath}acp/images/plus.png" alt="{glocale.lang('import_avatars')}" />
+			{glocale.lang('import_avatars')}
+			</a>
+		</div>
 	</div>
 </div>
+</form>
 
 <form name="avatars" method="post" action="{gurl.get_acpmod_url()}">
 <div class="a_border a_pad">

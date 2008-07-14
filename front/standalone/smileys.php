@@ -29,7 +29,7 @@ final class BS_Front_Standalone_smileys extends BS_Standalone
 		$number = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
 		
 		$smileys = array();
-		foreach(BS_DAO::get_smileys()->get_all() as $data)
+		foreach(BS_DAO::get_smileys()->get_list() as $data)
 		{
 			$primcode = $data['primary_code'];
 			$smileys[] = array(

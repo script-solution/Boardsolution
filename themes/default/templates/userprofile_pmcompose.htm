@@ -77,7 +77,7 @@ function user_search_callback(selectedUser)
 new BS_AJAXUserSearch('{gpath}','new_receiver','{action_param}','{glocale.lang('matching_user')}',
 	true,false,',');
 
-if(!document.all || window.opera)
+if(!Browser.isIE)
 {
     for(var i = 0;;i++)
     {

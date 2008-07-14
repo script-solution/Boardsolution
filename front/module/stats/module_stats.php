@@ -130,26 +130,26 @@ final class BS_Front_Module_stats extends BS_Front_Module
 				
 				$stats[] = $posts_stats;
 	
-				########################## points ##########################
+				########################## topics ##########################
 				
 				$points_stats = array(
-					'title' => $this->locale->lang('points'),
+					'title' => $this->locale->lang('threads'),
 					'align' => 'right',
 					'new_row' => true,
 					'data' => array()
 				);
 	
-				foreach(BS_DAO::get_profile()->get_users('p.exppoints','DESC',0,$limit) as $i => $data)
+				foreach(BS_DAO::get_topics()->get_topic_creation_stats($limit) as $i => $data)
 				{
 					if($i == 0)
-						$max = $data['exppoints'];
+						$max = $data['num'];
 
-					$percent = $data['exppoints'] == 0 ? 0 : round(100 / ($max / $data['exppoints']),2);
-					$text = $data['exppoints'].' ';
-					$text .= ($data['exppoints'] == 1) ? $this->locale->lang('point') : $this->locale->lang('points');
+					$percent = $data['num'] == 0 ? 0 : round(100 / ($max / $data['num']),2);
+					$text = $data['num'].' ';
+					$text .= ($data['num'] == 1) ? $this->locale->lang('thread') : $this->locale->lang('threads');
 
 					$points_stats['data'][] = $this->_get_stats_data(
-						$i,$percent,$data['id'],$data['user_name'],$data['user_group'],$text
+						$i,$percent,$data['user_id'],$data['user_name'],$data['user_group'],$text
 					);
 				}
 				
@@ -178,33 +178,32 @@ final class BS_Front_Module_stats extends BS_Front_Module
 				}
 				
 				$stats[] = $perday_stats;
-			}
 	
-			########################## registered since ##########################
-			
-			$reg_stats = array(
-				'title' => $this->locale->lang('registeredsince'),
-				'align' => $this->cfg['enable_post_count'] == 1 ? 'right' : 'left',
-				'new_row' => true,
-				'data' => array()
-			);
-			
-			foreach(BS_DAO::get_profile()->get_users('p.registerdate','ASC',0,$limit) as $i => $data)
-			{
-				if($i == 0)
-					$max = ($time - $data['registerdate']);
-	
-				$percent = round(100 / ($max / ($time - $data['registerdate'])),2);
-				$days = round((($time - $data['registerdate']) / (3600 * 24)),0);
-				$text = $days.' '.(($days == 1) ? $this->locale->lang('day') : $this->locale->lang('days')).' , ';
-				$text .= PLIB_Date::get_date($data['registerdate'],false);
+				########################## points ##########################
 				
-				$reg_stats['data'][] = $this->_get_stats_data(
-					$i,$percent,$data['id'],$data['user_name'],$data['user_group'],$text
+				$points_stats = array(
+					'title' => $this->locale->lang('points'),
+					'align' => 'right',
+					'new_row' => true,
+					'data' => array()
 				);
+	
+				foreach(BS_DAO::get_profile()->get_users('p.exppoints','DESC',0,$limit) as $i => $data)
+				{
+					if($i == 0)
+						$max = $data['exppoints'];
+
+					$percent = $data['exppoints'] == 0 ? 0 : round(100 / ($max / $data['exppoints']),2);
+					$text = $data['exppoints'].' ';
+					$text .= ($data['exppoints'] == 1) ? $this->locale->lang('point') : $this->locale->lang('points');
+
+					$points_stats['data'][] = $this->_get_stats_data(
+						$i,$percent,$data['id'],$data['user_name'],$data['user_group'],$text
+					);
+				}
+				
+				$stats[] = $points_stats;
 			}
-			
-			$stats[] = $reg_stats;
 	
 			$url = '';
 			if($this->user->is_loggedin() && $this->cfg['enable_post_count'] == 1)

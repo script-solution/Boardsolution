@@ -12,9 +12,9 @@
 			<textarea name="text" style="width: 90%;" rows="30">{text}</textarea>
 			<br />
 			
-			<button id="btnPrev{loc}"{back_disabled} style="margin-right: 2px;" class="bs_button_big" type="submit" name="prev" value="prev" onclick="if(document.all && !window.opera) { ieSubmit('prev'); return false; }">{glocale.lang('previous_message')}</button>
-			<button id="btnTest{loc}" style="margin-right: 2px;" class="bs_button_big" type="submit" name="test" value="test" onclick="if(document.all && !window.opera) { ieSubmit('test'); return false; }">{glocale.lang('edit_message')}</button>
-			<button id="btnNext{loc}"{forward_disabled} class="bs_button_big" type="submit" name="next" value="next" onclick="if(document.all && !window.opera) { ieSubmit('next'); return false; }">{glocale.lang('next_message')}</button>
+			<button id="btnPrev{loc}"{back_disabled} style="margin-right: 2px;" class="bs_button_big" type="submit" name="prev" value="prev" onclick="if(Browser.isIE) { ieSubmit('prev'); return false; }">{glocale.lang('previous_message')}</button>
+			<button id="btnTest{loc}" style="margin-right: 2px;" class="bs_button_big" type="submit" name="test" value="test" onclick="if(Browser.isIE) { ieSubmit('test'); return false; }">{glocale.lang('edit_message')}</button>
+			<button id="btnNext{loc}"{forward_disabled} class="bs_button_big" type="submit" name="next" value="next" onclick="if(Browser.isIE) { ieSubmit('next'); return false; }">{glocale.lang('next_message')}</button>
 			
 			<script type="text/javascript">
 			<!--

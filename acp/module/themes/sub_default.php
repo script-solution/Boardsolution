@@ -44,6 +44,7 @@ final class BS_ACP_SubModule_themes_default extends BS_ACP_SubModule
 			);
 		}
 		
+		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
 		$this->_request_formular();
 		
 		$this->tpl->add_variables(array(
@@ -53,14 +54,28 @@ final class BS_ACP_SubModule_themes_default extends BS_ACP_SubModule
 		$themes = array();
 		foreach($this->cache->get_cache('themes') as $data)
 		{
-			$themes[] = array(
-				'id' => $data['id'],
-				'theme_name' => $data['theme_name'],
-				'theme_folder' => $data['theme_folder'],
-				'edit_url' => $this->url->get_acpmod_url(0,'&amp;action=editor&amp;theme='.$data['theme_folder'])
-			);
+			if(!$search || stripos($data['theme_name'],$search) !== false ||
+				stripos($data['theme_folder'],$search) !== false)
+			{
+				$themes[] = array(
+					'id' => $data['id'],
+					'theme_name' => $data['theme_name'],
+					'theme_folder' => $data['theme_folder'],
+					'edit_url' => $this->url->get_acpmod_url(0,'&amp;action=editor&amp;theme='.$data['theme_folder'])
+				);
+			}
 		}
+		
+		$hidden = $this->input->get_vars_from_method('get');
+		unset($hidden['site']);
+		unset($hidden['search']);
+		unset($hidden['at']);
 		$this->tpl->add_array('themes',$themes);
+		$this->tpl->add_variables(array(
+			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'hidden' => $hidden,
+			'search_val' => $search
+		));
 	}
 	
 	public function get_location()

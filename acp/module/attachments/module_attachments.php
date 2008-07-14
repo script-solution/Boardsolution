@@ -45,6 +45,24 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 			);
 		}
 
+		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
+		if($search != '')
+		{
+			foreach($files as $pos => $file)
+			{
+				if(stripos($file,$search) !== false)
+					continue;
+				
+				$data = $attachments->get_element('uploads/'.$file);
+				if(stripos($data['user_name'],$search) !== false)
+					continue;
+				if(stripos($data['name'],$search) !== false)
+					continue;
+				
+				unset($files[$pos]);
+			}
+		}
+		
 		$end = 15;
 		$num = count($files);
 		$pagination = new BS_ACP_Pagination($end,$num);
@@ -70,8 +88,8 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 				if($data == null && preg_match('/.+_thumb\.(jpeg|jpg|png)$/',$filename))
 				{
 					$pos = PLIB_String::strpos($filename,'_thumb');
-					$start = PLIB_String::substr($filename,0,$pos);
-					$target = PLIB_String::strtolower('uploads/'.$start.'.'.$ext);
+					$startp = PLIB_String::substr($filename,0,$pos);
+					$target = PLIB_String::strtolower('uploads/'.$startp.'.'.$ext);
 
 					// does the original picture exist?
 					foreach($attachments as $dba)
@@ -105,7 +123,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 					else
 						$d = &$data;
 
-					$owner_name = $d[BS_EXPORT_USER_NAME];
+					$owner_name = $d['user_name'];
 
 					if($d['post_id'] != '')
 					{
@@ -158,14 +176,23 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 			}
 			$index++;
 		}
-
+		
 		$this->tpl->add_array('attachments',$tplatt);
+		
+		$hidden = $this->input->get_vars_from_method('get');
+		unset($hidden['site']);
+		unset($hidden['search']);
+		unset($hidden['at']);
 		$this->tpl->add_variables(array(
 			'failed' => $failed,
-			'site' => $site
+			'site' => $site,
+			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'hidden' => $hidden,
+			'search_val' => $search
 		));
 
-		$this->functions->add_pagination($pagination,$this->url->get_acpmod_url(0,'&amp;site={d}'));
+		$url = $this->url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
+		$this->functions->add_pagination($pagination,$url);
 	}
 	
 	/**

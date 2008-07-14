@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<highlighter>
+<highlighter xmlns="http://www.script-solution.de/schemas/bs/bbc/language"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.script-solution.de/schemas/bs/bbc/language language.xsd">
 	<name>PHP</name>
 	<hlNumbers>true</hlNumbers>
 	<escapeChar>\</escapeChar>
@@ -1170,23 +1172,10 @@
 			<kw>parent</kw>
 			<kw>const</kw>
 			<kw>static</kw>
+			<kw>final</kw>
 		</def>
 	</keywords>
 	<colors>
-		<keywords id="3">
-			<attr name="fontColor" value="#FF0000"/>
-			<attr name="URL" value="http://www.php.net/{text}"/>
-		</keywords>
-		<keywords id="2">
-			<attr name="fontColor" value="#000080"/>
-		</keywords>
-		<keywords id="1">
-			<attr name="fontColor" value="#0000FF"/>
-			<attr name="bold" value="true"/>
-		</keywords>
-		<symbols>
-			<attr name="fontColor" value="#800000"/>
-		</symbols>
 		<numbers>
 			<attr name="fontColor" value="#800080"/>
 		</numbers>
@@ -1196,6 +1185,21 @@
 		<strings id="1">
 			<attr name="fontColor" value="#FF00FF"/>
 		</strings>
+		<slComments id="2">
+			<attr name="fontColor" value="#008000"/>
+		</slComments>
+		<slComments id="1">
+			<attr name="fontColor" value="#008000"/>
+		</slComments>
+		<mlComments id="2">
+			<attr name="fontColor" value="#008000"/>
+		</mlComments>
+		<mlComments id="1">
+			<attr name="fontColor" value="#3F5FBF"/>
+		</mlComments>
+		<symbols>
+			<attr name="fontColor" value="#800000"/>
+		</symbols>
 		<regexp id="3">
 			<attr name="fontColor" value="#FF0000"/>
 		</regexp>
@@ -1214,17 +1218,16 @@
 		<regexp id="4">
 			<attr name="fontColor" value="#FF0000"/>
 		</regexp>
-		<mlComments id="2">
-			<attr name="fontColor" value="#008000"/>
-		</mlComments>
-		<mlComments id="1">
-			<attr name="fontColor" value="#3F5FBF"/>
-		</mlComments>
-		<slComments id="2">
-			<attr name="fontColor" value="#008000"/>
-		</slComments>
-		<slComments id="1">
-			<attr name="fontColor" value="#008000"/>
-		</slComments>
+		<keywords id="3">
+			<attr name="fontColor" value="#FF0000"/>
+			<attr name="URL" value="http://www.php.net/{text}"/>
+		</keywords>
+		<keywords id="2">
+			<attr name="fontColor" value="#000080"/>
+		</keywords>
+		<keywords id="1">
+			<attr name="fontColor" value="#0000FF"/>
+			<attr name="bold" value="true"/>
+		</keywords>
 	</colors>
 </highlighter>

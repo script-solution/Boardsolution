@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extraTags>
+<extraTags xmlns="http://www.script-solution.de/schemas/bs/bbc/extra_tags"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.script-solution.de/schemas/bs/bbc/extra_tags extra_tags.xsd">
 	<buttons>
 		<button name="b1">
 			<tooltip>gui.dialog.extra.links.tooltip</tooltip>

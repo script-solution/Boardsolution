@@ -20,6 +20,13 @@
 final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 {
 	/**
+	 * The unread-storage-implementation
+	 *
+	 * @var BS_UnreadStorage
+	 */
+	private $_storage;
+	
+	/**
 	 * The unread threads:
 	 * <code>
 	 * 	array(
@@ -64,26 +71,13 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 	public function init()
 	{
 		if($this->user->is_loggedin())
-		{
-			foreach(BS_DAO::get_unread()->get_all_of_user($this->user->get_user_id()) as $data)
-			{
-				// is the post not available anymore?
-				if($data['rubrikid'] == '')
-					continue;
-				
-				if($data['is_news'])
-					$this->_unread_news[$data['threadid']] = true;
-				
-				if(!isset($this->_unread_threads[$data['threadid']]))
-					$this->_unread_threads[$data['threadid']] = array($data['post_id'],$data['rubrikid']);
-				else if($data['post_id'] < $this->_unread_threads[$data['threadid']][0])
-					$this->_unread_threads[$data['threadid']][0] = $data['post_id'];
-				
-				if(!isset($this->_unread_forums[$data['rubrikid']][$data['threadid']]))
-					$this->_unread_forums[$data['rubrikid']][$data['threadid']] = array();
-				$this->_unread_forums[$data['rubrikid']][$data['threadid']][] = $data['post_id'];
-			}
-		}
+			$this->_storage = new BS_UnreadStorage_User();
+		else
+			$this->_storage = new BS_UnreadStorage_Guest();
+		
+		$this->_unread_news = $this->_storage->get_news();
+		$this->_unread_threads = $this->_storage->get_topics();
+		$this->_unread_forums = $this->_storage->get_forums();
 		
 		$this->update_unread();
 	}
@@ -172,9 +166,6 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function update_unread()
 	{
-		if(!$this->user->is_loggedin())
-			return;
-		
 		$update = false;
 		if($this->user->force_unread_update())
 			$update = true;
@@ -191,8 +182,7 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function mark_news_read()
 	{
-		if($this->user->is_loggedin())
-			BS_DAO::get_unread()->delete_news_of_user($this->user->get_user_id());
+		$this->_storage->remove_all_news();
 		
 		$this->_unread_news = array();
 	}
@@ -327,7 +317,7 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 		$this->_unread_news = array();
 		$this->_lastpost_time = time();
 		
-		BS_DAO::get_unread()->delete_by_user($this->user->get_user_id());
+		$this->_storage->remove_all();
 	}
 
 	// ---- PRIVATE METHODS ----
@@ -339,7 +329,7 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 	 */
 	private function _create_list()
 	{
-		$last_update = $this->user->get_profile_val('last_unread_update');
+		$last_update = $this->_storage->get_last_update();
 		$stats = $this->cache->get_cache('stats')->get_element(0,false);
 		$last_post = max($stats['posts_last'],$stats['last_edit']);
 	
@@ -349,8 +339,11 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 		
 		// select the NOT-favorite-forums for the current user
 		$forum_ids = array();
-		foreach(BS_DAO::get_unreadhide()->get_all_of_user($this->user->get_user_id()) as $data)
-			$forum_ids[] = $data['forum_id'];
+		if($this->user->is_loggedin())
+		{
+			foreach(BS_DAO::get_unreadhide()->get_all_of_user($this->user->get_user_id()) as $data)
+				$forum_ids[] = $data['forum_id'];
+		}
 
 		// don't add denied topics to the unread-topics
 		$excl_fids = array();
@@ -411,13 +404,9 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 		}
 		
 		$this->_add_post_ids($post_ids);
+		$this->_storage->set_last_update(time());
 		
 		// we update the topics to the db at this point. Therefore we don't set _unread_update to true.
-		$now = time();
-		BS_DAO::get_profile()->update_user_by_id(
-			array('last_unread_update' => $now),$this->user->get_user_id()
-		);
-		$this->user->set_profile_val('last_unread_update',$now);
 
 		return true;
 	}
@@ -432,7 +421,7 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 		if(count($ids) == 0)
 			return;
 		
-		BS_DAO::get_unread()->create($this->user->get_user_id(),$ids);
+		$this->_storage->add_post_ids($ids);
 	}
 	
 	/**
@@ -445,7 +434,7 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 		if(count($ids) == 0)
 			return;
 		
-		BS_DAO::get_unread()->delete_posts_of_user($this->user->get_user_id(),$ids);
+		$this->_storage->remove_post_ids($ids);
 	}
 	
 	protected function _get_print_vars()

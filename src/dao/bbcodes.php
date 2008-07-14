@@ -40,6 +40,19 @@ class BS_DAO_BBCodes extends PLIB_Singleton
 	}
 	
 	/**
+	 * @param string $keyword the keyword
+	 * @return int the number of bbcodes which match the given keyword
+	 */
+	public function get_count_by_keyword($keyword)
+	{
+		return $this->db->sql_num(BS_TB_BBCODES,'*',
+			' WHERE name LIKE "%'.$keyword.'%" OR type LIKE "%'.$keyword.'%" OR
+			 		content LIKE "%'.$keyword.'%" OR replacement LIKE "%'.$keyword.'%" OR
+			 		replacement_param LIKE "%'.$keyword.'%" OR param LIKE "%'.$keyword.'%" OR
+					param_type LIKE "%'.$keyword.'%" OR allowed_content LIKE "%'.$keyword.'%"');
+	}
+	
+	/**
 	 * Checks wether a tag with the given name exists. Optional you can specify a tag-id which
 	 * will be excluded from the check.
 	 *
@@ -93,7 +106,7 @@ class BS_DAO_BBCodes extends PLIB_Singleton
 	 * @param int $count the max. number of rows (for the LIMIT-statement) (0 = unlimited)
 	 * @return array the bbcode-tags
 	 */
-	public function get_all($start = 0,$count = 0)
+	public function get_list($start = 0,$count = 0)
 	{
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);
@@ -102,6 +115,32 @@ class BS_DAO_BBCodes extends PLIB_Singleton
 		
 		return $this->db->sql_rows(
 			'SELECT * FROM '.BS_TB_BBCODES.'
+		  '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
+		);
+	}
+	
+	/**
+	 * Returns a list with all bbcode-tags which match the given keyword
+	 *
+	 * @param string $keyword the keyword
+	 * @param int $start the start-position (for the LIMIT-statement)
+	 * @param int $count the max. number of rows (for the LIMIT-statement) (0 = unlimited)
+	 * @return array the bbcode-tags
+	 */
+	public function get_list_by_keyword($keyword,$start = 0,$count = 0)
+	{
+		if(!PLIB_Helper::is_integer($start) || $start < 0)
+			PLIB_Helper::def_error('intge0','start',$start);
+		if(!PLIB_Helper::is_integer($count) || $count < 0)
+			PLIB_Helper::def_error('intge0','count',$count);
+		
+		return $this->db->sql_rows(
+			'SELECT * FROM '.BS_TB_BBCODES.'
+			 WHERE
+			 	name LIKE "%'.$keyword.'%" OR type LIKE "%'.$keyword.'%" OR
+			 	content LIKE "%'.$keyword.'%" OR replacement LIKE "%'.$keyword.'%" OR
+			 	replacement_param LIKE "%'.$keyword.'%" OR param LIKE "%'.$keyword.'%" OR
+			 	param_type LIKE "%'.$keyword.'%" OR allowed_content LIKE "%'.$keyword.'%"
 		  '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
 		);
 	}

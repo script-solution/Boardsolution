@@ -53,7 +53,7 @@ function clapArea(id,img_id,cookie_name,display_value)
 	if(area.style.display == 'none')
 	{
 		if(display_value != 'block')
-			display = document.all && !window.opera ? 'block' : display_value;
+			display = Browser.isIE ? 'block' : display_value;
 		else
 			display = display_value;
 	}

@@ -70,7 +70,7 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 * @param int $count the max. number of rows (for the LIMIT-statement) (0 = unlimited)
 	 * @return array all found topics
 	 */
-	public function get_all($start = 0,$count = 0)
+	public function get_list($start = 0,$count = 0)
 	{
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);
@@ -94,7 +94,7 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 * 	You may use "relevance" for sorting if the keywords are specified (not null)
 	 * @return array all found topics
 	 */
-	public function get_all_by_search($where,$order = 't.id ASC',$start = 0,$count = 0,$keywords = null)
+	public function get_list_by_search($where,$order = 't.id ASC',$start = 0,$count = 0,$keywords = null)
 	{
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);
@@ -282,6 +282,36 @@ class BS_DAO_Topics extends PLIB_Singleton
 			 LEFT JOIN '.BS_TB_FORUMS.' f ON t.rubrikid = f.id
 			 WHERE post_user IN ('.implode(',',$user_ids).') AND f.increase_experience = 1
 			 GROUP BY post_user'
+		);
+	}
+	
+	/**
+	 * Returns a list of users sorted descending by the number of created topics. You'll get the
+	 * fields:
+	 * <code>array(
+	 * 	'num' => <numberOfTopics>,
+	 * 	'user_name' => <userName>,
+	 * 	'user_id' => <userId>,
+	 * 	'user_group' => <userGroupList>
+	 * )</code>
+	 *
+	 * @param int $number the max. number of users
+	 * @return array all found entries
+	 */
+	public function get_topic_creation_stats($number)
+	{
+		if(!PLIB_Helper::is_integer($number) || $number <= 0)
+			PLIB_Helper::def_error('intgt0','number',$number);
+		
+		return $this->db->sql_rows(
+			'SELECT COUNT(*) num,t.post_user user_id,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.user_group
+			 FROM '.BS_TB_THREADS.' t
+			 LEFT JOIN '.BS_TB_USER.' u ON t.post_user = u.`'.BS_EXPORT_USER_ID.'`
+			 LEFT JOIN '.BS_TB_PROFILES.' p ON t.post_user = p.id
+			 WHERE post_user > 0
+			 GROUP BY post_user
+			 ORDER BY num DESC
+			 LIMIT '.$number
 		);
 	}
 	

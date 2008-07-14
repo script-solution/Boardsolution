@@ -50,12 +50,21 @@ final class BS_ACP_SubModule_bbcode_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$num = BS_DAO::get_bbcodes()->get_count();
+		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
+		if($search != '')
+			$num = BS_DAO::get_bbcodes()->get_count_by_keyword($search);
+		else
+			$num = BS_DAO::get_bbcodes()->get_count();
 		$end = 15;
 		$pagination = new BS_ACP_Pagination($end,$num);
 		
+		if($search != '')
+			$bbclist = BS_DAO::get_bbcodes()->get_list_by_keyword($search,$pagination->get_start(),$end);
+		else
+			$bbclist = BS_DAO::get_bbcodes()->get_list($pagination->get_start(),$end);
+		
 		$tags = array();
-		foreach(BS_DAO::get_bbcodes()->get_all($pagination->get_start(),$end) as $data)
+		foreach($bbclist as $data)
 		{
 			if($this->locale->contains_lang('tag_type_'.$data['type']))
 				$type = $this->locale->lang('tag_type_'.$data['type']);
@@ -71,12 +80,19 @@ final class BS_ACP_SubModule_bbcode_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$url = $this->url->get_acpmod_url(0,'&amp;site={d}');
+		$url = $this->url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
 		$this->functions->add_pagination($pagination,$url);
 		
+		$hidden = $this->input->get_vars_from_method('get');
+		unset($hidden['site']);
+		unset($hidden['search']);
+		unset($hidden['at']);
 		$this->tpl->add_array('tags',$tags);
 		$this->tpl->add_variables(array(
-			'site' => $site
+			'site' => $site,
+			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'hidden' => $hidden,
+			'search_val' => $search
 		));
 	}
 	

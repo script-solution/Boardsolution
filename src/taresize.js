@@ -40,7 +40,7 @@ function BS_startDrag(ev)
 		return;
 	
 	// determine positions
-	var evy = (document.all && !window.opera) ? ev.clientY + document.documentElement.scrollTop : ev.pageY;
+	var evy = Browser.isIE ? ev.clientY + document.documentElement.scrollTop : ev.pageY;
 	var tary = PLIB_getPageOffsetTop(tar);
 	
 	// just move if we are over the resizer-element (with a little bit tolerance)
@@ -77,7 +77,7 @@ function BS_moveMouse(ev)
 		return;
 	
 	// determine positions
-	var evy = (document.all && !window.opera) ? ev.clientY + document.documentElement.scrollTop : ev.pageY;
+	var evy = Browser.isIE ? ev.clientY + document.documentElement.scrollTop : ev.pageY;
 	var tay = PLIB_getPageOffsetTop(ta);
 	
 	// set new height
@@ -85,7 +85,7 @@ function BS_moveMouse(ev)
 	ta.style.height = newHeight + "px";
 	
 	// clear selection in IE (very annoying there..)
-	if(document.all && !window.opera)
+	if(Browser.isIE)
 		document.selection.clear();
 }
 

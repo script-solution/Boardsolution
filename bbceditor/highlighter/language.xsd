@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.script-solution.de/schemas/bs/bbc/language"
+	xmlns:tns="http://www.script-solution.de/schemas/bs/bbc/language"
+	elementFormDefault="qualified">
+	<!-- Type definitions -->
+	<complexType name="highlighterType">
+		<sequence>
+			<!-- The name of the language / format -->
+			<element name="name" type="string"/>
+			<!-- Wether numbers should be highlighted -->
+			<element name="hlNumbers" type="boolean"/>
+			<!-- What character is used to escape other ones? -->
+			<element name="escapeChar" type="string"/>
+			<!-- Quotes that encapsulate strings -->
+			<element name="stringQuotes" type="tns:defsType"/>
+			<!-- Single-line comments -->
+			<element name="slComments" type="tns:defsType"/>
+			<!-- Multi-line comments -->
+			<element name="mlComments" type="tns:mlDefsType"/>
+			<!-- Symbols -->
+			<element name="symbols" type="tns:kwsType"/>
+			<!-- Regular expressions -->
+			<element name="regexps" type="tns:regexpsType"/>
+			<!-- Keywords -->
+			<element name="keywords" type="tns:keywordsType"/>
+			<!-- Colors. To define the style for the elements above -->
+			<element name="colors" type="tns:colorsType"/>
+		</sequence>
+	</complexType>
+	
+	<!-- a list of def-elements -->
+	<complexType name="defsType">
+		<sequence>
+			<element name="def" type="tns:defType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<!-- the base def-element -->
+	<complexType name="defType">
+		<simpleContent>
+			<extension base="string">
+				<attribute name="id" type="string" use="required"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	
+	<!-- a list of def-elements for the multiline-comments -->
+	<complexType name="mlDefsType">
+		<sequence>
+			<element name="def" type="tns:mlDefType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<!-- the def-element for multiline-comments -->
+	<complexType name="mlDefType">
+		<simpleContent>
+			<extension base="tns:defType">
+				<attribute name="start" type="string" use="required"/>
+				<attribute name="end" type="string" use="required"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+
+	<!-- a list of kw-elements -->
+	<complexType name="kwsType">
+		<sequence>
+			<element name="kw" type="string" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<!-- the regex element -->
+	<complexType name="regexpsType">
+		<sequence>
+			<element name="def" type="tns:regexpDefType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<!-- the def-element for the regexps -->
+	<complexType name="regexpDefType">
+		<simpleContent>
+			<extension base="tns:defType">
+				<attribute name="pattern" type="string" use="required"/>
+				<attribute name="cs" type="boolean"/>
+				<attribute name="group" type="integer"/>
+			</extension>
+		</simpleContent>
+	</complexType>
+	
+	<!-- the keywords-element -->
+	<complexType name="keywordsType">
+		<sequence>
+			<element name="def" type="tns:keywordDefType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<!-- the def-element for the keywords -->
+	<complexType name="keywordDefType">
+		<sequence>
+			<element name="kw" type="string" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="id" type="string" use="required"/>
+		<attribute name="cs" type="boolean"/>
+		<attribute name="reqWord" type="boolean"/>
+	</complexType>
+	
+	<!-- the color-element -->
+	<complexType name="colorsType">
+		<sequence>
+			<element name="numbers" type="tns:simpleStylesType" minOccurs="0"/>
+			<element name="strings" type="tns:idStylesType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="slComments" type="tns:idStylesType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="mlComments" type="tns:idStylesType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="symbols" type="tns:simpleStylesType" minOccurs="0"/>
+			<element name="regexp" type="tns:idStylesType" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="keywords" type="tns:idStylesType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<!-- a list of attr-elements for an element with no id -->
+	<complexType name="simpleStylesType">
+		<sequence>
+			<element name="attr" type="tns:styleType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<!-- a list of attr-elements for an element with id -->
+	<complexType name="idStylesType">
+		<sequence>
+			<element name="attr" type="tns:styleType" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+		<attribute name="id" type="string" use="required"/>
+	</complexType>
+	
+	<!-- the attr-element -->
+	<complexType name="styleType">
+		<attribute name="name" type="tns:styleNameType" use="required"/>
+		<attribute name="value" type="string" use="required"/>
+	</complexType>
+	
+	<!-- The styles that can be used -->
+	<simpleType name="styleNameType">
+		<restriction base="string">
+			<!-- toggle-attributes (true/false) -->
+			<enumeration value="bold"/>
+			<enumeration value="italic"/>
+			<enumeration value="underline"/>
+			<enumeration value="strike"/>
+			<!-- The position (sup,sub) -->
+			<enumeration value="pos"/>
+			<!-- A link/email with an URL. You may use {text} in the value which will be the matched text -->
+			<enumeration value="URL"/>
+			<enumeration value="email"/>
+			<!-- Colors (#[a-fA-F]{6}) -->
+			<enumeration value="bgColor"/>
+			<enumeration value="fontColor"/>
+			<!-- Font family -->
+			<enumeration value="fontFamily"/>
+			<!-- Font size (pixel) -->
+			<enumeration value="fontSize"/>
+		</restriction>
+	</simpleType>
+	
+	<!-- Content -->
+	<element name="highlighter" type="tns:highlighterType"/>
+</schema>

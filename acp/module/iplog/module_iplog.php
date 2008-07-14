@@ -168,7 +168,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 		}
 		
 		$logs = array();
-		$loglist = BS_DAO::get_logips()->get_all_by_search(
+		$loglist = BS_DAO::get_logips()->get_list_by_search(
 			$where,$sql_order,$ad,$pagination->get_start(),$end
 		);
 		foreach($loglist as $data)

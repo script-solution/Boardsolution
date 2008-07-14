@@ -158,7 +158,7 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 * @param int $count the max. number of rows (for the LIMIT-statement)
 	 * @return array all found posts
 	 */
-	public function get_all($sort = 'id',$order = 'ASC',$start = 0,$count = 0)
+	public function get_list($sort = 'id',$order = 'ASC',$start = 0,$count = 0)
 	{
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);
@@ -480,7 +480,8 @@ class BS_DAO_Posts extends PLIB_Singleton
 			PLIB_Helper::def_error('intarray>0','tids',$tids);
 		
 		return $this->db->sql_rows(
-			'SELECT t.id,p.rubrikid,moved_tid,MIN(p.id) first_post,posts FROM '.BS_TB_POSTS.' p
+			'SELECT t.id,p.rubrikid,p.threadid,moved_tid,MIN(p.id) first_post,posts
+			 FROM '.BS_TB_POSTS.' p
 			 LEFT JOIN '.BS_TB_THREADS.' t ON p.threadid = t.id
 			 WHERE p.threadid IN ('.implode(',',$tids).') AND moved_tid = 0
 			 GROUP BY t.id'
@@ -589,7 +590,7 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 * forums and specify a max. number of rows.
 	 *
 	 * @param int $since the since-date (as timestamp)
-	 * @param int $user_id the user-id
+	 * @param int $user_id the user-id (0 = doesn't matter)
 	 * @param array $excl_fids an array of forums to exclude
 	 * @param array $excl_tids an array of topics to exclude
 	 * @param int $limit a max. number of rows (0 = unlimited)
@@ -599,8 +600,8 @@ class BS_DAO_Posts extends PLIB_Singleton
 	{
 		if(!PLIB_Helper::is_integer($since) || $since < 0)
 			PLIB_Helper::def_error('intge0','since',$since);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!PLIB_Helper::is_integer($user_id) || $user_id < 0)
+			PLIB_Helper::def_error('intge0','user_id',$user_id);
 		if(!PLIB_Array_Utils::is_integer($excl_fids))
 			PLIB_Helper::def_error('intarray','excl_fids',$excl_fids);
 		if(!PLIB_Array_Utils::is_integer($excl_tids))
@@ -610,8 +611,8 @@ class BS_DAO_Posts extends PLIB_Singleton
 		
 		return $this->db->sql_rows(
 			'SELECT MIN(id) AS first_unread_post,threadid,rubrikid FROM '.BS_TB_POSTS.'
-			 WHERE ((post_time > '.$since.' AND post_user != '.$user_id.') OR
-			 			 (edited_date > '.$since.' AND edited_user != '.$user_id.'))
+			 WHERE ((post_time > '.$since.($user_id > 0 ? ' AND post_user != '.$user_id : '').') OR
+			 			 (edited_date > '.$since.($user_id > 0 ? ' AND edited_user != '.$user_id : '').'))
 						 '.(count($excl_fids) > 0 ? 'AND rubrikid NOT IN ('.implode(',',$excl_fids).')' : '').'
 						 '.(count($excl_tids) > 0 ? 'AND threadid NOT IN ('.implode(',',$excl_tids).')' : '').'
 			 GROUP BY threadid

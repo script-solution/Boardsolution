@@ -20,7 +20,7 @@ function showEntry(rowId,detailId,imgId)
 	var row = document.getElementById(rowId);
 	var det = document.getElementById(detailId);
 
-	det.style.display = det.style.display == 'none' ? (document.all && !window.opera ? 'block' : 'table-row') : 'none';
+	det.style.display = det.style.display == 'none' ? (Browser.isIE ? 'block' : 'table-row') : 'none';
 
 	var border = det.style.display == 'none' ? '0px' : '2px solid #777777';
 	var cols = getColumnsOfRow(row);

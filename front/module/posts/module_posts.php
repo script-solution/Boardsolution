@@ -222,8 +222,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		));
 		
 		// mark topic read
-		if($this->user->is_loggedin())
-			$this->unread->mark_topics_read(array($topic_data['id']));
+		$this->unread->mark_topics_read(array($topic_data['id']));
 
 		// show bottom bar?
 		if($show_bottom_bar)

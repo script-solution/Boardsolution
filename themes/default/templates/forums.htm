@@ -12,7 +12,6 @@
 {include "inc_forums.htm"}
 
 <div>
-	{if gisloggedin}
 	<span style="float: left;">
 	<img src="{guser.get_theme_item_path('images/unread/forum_unread.gif')}" alt="{glocale.lang('forum_is_unread')}" /> = <span style="line-height: 18px;">{glocale.lang('forum_is_unread')}</span>
 	</span>
@@ -27,7 +26,6 @@
 	<a href="{gurl.simple_url('unread')}">{glocale.lang('showunread')}</a>
 	</span>
 	<br style="clear: both;" />
-	{endif}
 	<span style="float: left;">
 	<img src="{guser.get_theme_item_path('images/unread/forum_read_closed.gif')}" alt="{glocale.lang('forum_is_closed_msg')}" /> = <span style="line-height: 18px;">{glocale.lang('forum_is_closed_msg')}</span>
 	</span>

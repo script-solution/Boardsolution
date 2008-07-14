@@ -396,7 +396,7 @@ final class BS_Front_Topics extends PLIB_FullObject
 				$count = $this->_number_of_topics;
 			}
 			
-			$topiclist = BS_DAO::get_topics()->get_all_by_search(
+			$topiclist = BS_DAO::get_topics()->get_list_by_search(
 				$sql_where,$sql_order,$start,$count,$this->_keywords
 			);
 			

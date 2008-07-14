@@ -77,20 +77,9 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 * @param int $count the max. number of rows (for the LIMIT-statement) (0 = unlimited)
 	 * @return array all found logs
 	 */
-	public function get_all($sort = 'l.id',$order = 'ASC',$start = 0,$count = 0)
+	public function get_list($sort = 'l.id',$order = 'ASC',$start = 0,$count = 0)
 	{
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
-		
-		return $this->db->sql_rows(
-			'SELECT l.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
-			 FROM '.BS_TB_LOG_ERRORS.' l
-			 LEFT JOIN '.BS_TB_USER.' u ON u.`'.BS_EXPORT_USER_ID.'` = l.user_id
-			 ORDER BY '.$sort.' '.$order.'
-			 '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
-		);
+		return $this->get_list_by_keyword('',$sort,$order,$start,$count);
 	}
 	
 	/**
@@ -104,14 +93,14 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 * @param int $count the max. number of rows (for the LIMIT-statement) (0 = unlimited)
 	 * @return array all found logs
 	 */
-	public function get_all_by_keyword($keyword,$sort = 'id',$order = 'ASC',$start = 0,$count = 0)
+	public function get_list_by_keyword($keyword,$sort = 'id',$order = 'ASC',$start = 0,$count = 0)
 	{
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);
 		if(!PLIB_Helper::is_integer($count) || $count < 0)
 			PLIB_Helper::def_error('intge0','count',$count);
 		
-		$where = $this->_get_keyword_where($keyword);
+		$where = $keyword ? $this->_get_keyword_where($keyword) : '';
 		return $this->db->sql_rows(
 			'SELECT l.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_LOG_ERRORS.' l

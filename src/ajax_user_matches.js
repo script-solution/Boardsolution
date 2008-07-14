@@ -12,6 +12,7 @@
 // the current object of AJAXUserSearchConstr
 var __currentObj = null;
 var __objects = new Array();
+var _isReqPending = false;
 
 /**
  * The constructor for the AJAX user search
@@ -65,7 +66,7 @@ function BS_AJAXUserSearch(root,inputId,actionParam,matchText,multiple,quotesAll
 	
 	var linputId = this.inputId;
 	PLIB_addEvent(inputField,'focus',function() {
-		if(document.all && !window.opera)
+		if(Browser.isIE)
 			this.id = linputId;
 		__currentObj = __objects[this.id];
 	});
@@ -75,7 +76,7 @@ function BS_AJAXUserSearch(root,inputId,actionParam,matchText,multiple,quotesAll
 	
 	// add onkeyup event
 	PLIB_addEvent(inputField,'keyup',function() {
-		if(document.all && !window.opera)
+		if(Browser.isIE)
 			this.id = linputId;
 		__objects[this.id].findMatchingUser();
 	});
@@ -87,6 +88,10 @@ function BS_AJAXUserSearch(root,inputId,actionParam,matchText,multiple,quotesAll
  */
 function findMatchingUser()
 {
+	// reject requests if another one is running
+	if(_isReqPending)
+		return;
+
 	var field = document.getElementById(this.inputId);
 	if(field.value == '')
 		return;
@@ -122,9 +127,11 @@ function findMatchingUser()
 	
 	myAjax.setEventHandler('onstart',function() {
 		tempref.displayWaitCursor();
+		_isReqPending = true;
 	});
 	myAjax.setEventHandler('onfinish',function() {
 		PLIB_hideElement(tempref.waitId);
+		_isReqPending = false;
 	});
 	
 	myAjax.sendGetRequest(url,function(text) {

@@ -51,7 +51,7 @@ final class BS_ACP_Action_errorlog_send extends BS_ACP_Action_Base
 		$xml .= '	<email>'.htmlspecialchars($email,ENT_QUOTES).'</email>'."\n";
 		$xml .= '	<text>'.htmlspecialchars($text,ENT_QUOTES).'</text>'."\n";
 
-		foreach(BS_DAO::get_logerrors()->get_all('id','DESC',0,1000) as $data)
+		foreach(BS_DAO::get_logerrors()->get_list('id','DESC',0,1000) as $data)
 		{
 			$xml .= '	<error>'."\n";
 			$xml .= '		<id>'.$data['id'].'</id>'."\n";

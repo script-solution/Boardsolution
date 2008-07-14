@@ -73,7 +73,7 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends PLIB_FullObject implemen
 		// we can refresh the linklist-descriptions in one step
 		if($pos == 0)
 		{
-			foreach(BS_DAO::get_links()->get_all() as $data)
+			foreach(BS_DAO::get_links()->get_list() as $data)
 			{
 				$text = '';
 				BS_PostingUtils::get_instance()->prepare_message_for_db(
@@ -87,7 +87,7 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends PLIB_FullObject implemen
 		// refresh posts
 		if($pos < $this->_posts)
 		{
-			foreach(BS_DAO::get_posts()->get_all('id','ASC',$pos,$ops) as $data)
+			foreach(BS_DAO::get_posts()->get_list('id','ASC',$pos,$ops) as $data)
 			{
 				$text = '';
 				BS_PostingUtils::get_instance()->prepare_message_for_db(
@@ -101,7 +101,7 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends PLIB_FullObject implemen
 		// refresh PMs
 		if($pos < $this->_pms)
 		{
-			foreach(BS_DAO::get_pms()->get_all('id','ASC',$pos,$ops) as $data)
+			foreach(BS_DAO::get_pms()->get_list('id','ASC',$pos,$ops) as $data)
 			{
 				$text = '';
 				BS_PostingUtils::get_instance()->prepare_message_for_db(

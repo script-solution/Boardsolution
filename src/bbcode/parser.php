@@ -355,7 +355,7 @@ final class BS_BBCode_Parser extends PLIB_FullObject
 		if($smileys === null)
 		{
 			$smileys = array();
-			foreach(BS_DAO::get_smileys()->get_all() as $row)
+			foreach(BS_DAO::get_smileys()->get_list() as $row)
 			{
 				if($row['primary_code'] != '')
 				{

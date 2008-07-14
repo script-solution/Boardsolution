@@ -44,22 +44,35 @@ final class BS_ACP_SubModule_usergroups_default extends BS_ACP_SubModule
 			);
 		}
 		
+		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
 		$helper = BS_ACP_Module_UserGroups_Helper::get_instance();
 		$predef_groups = $helper->get_predef_groups();
 		
 		$groups = array();
 		foreach($this->cache->get_cache('user_groups') as $data)
 		{
-			$groups[] = array(
-				'id' => $data['id'],
-				'group_name' => $this->auth->get_colored_groupname($data['id']),
-				'is_visible' => BS_ACP_Utils::get_instance()->get_yesno($data['is_visible']),
-				'is_super_mod' => BS_ACP_Utils::get_instance()->get_yesno($data['is_super_mod']),
-				'is_no_predefined_group' => !in_array($data['id'],$predef_groups)
-			);
+			if(!$search || stripos($data['group_title'],$search) !== false)
+			{
+				$groups[] = array(
+					'id' => $data['id'],
+					'group_name' => $this->auth->get_colored_groupname($data['id']),
+					'is_visible' => BS_ACP_Utils::get_instance()->get_yesno($data['is_visible']),
+					'is_super_mod' => BS_ACP_Utils::get_instance()->get_yesno($data['is_super_mod']),
+					'is_no_predefined_group' => !in_array($data['id'],$predef_groups)
+				);
+			}
 		}
 
+		$hidden = $this->input->get_vars_from_method('get');
+		unset($hidden['site']);
+		unset($hidden['search']);
+		unset($hidden['at']);
 		$this->tpl->add_array('groups',$groups);
+		$this->tpl->add_variables(array(
+			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'hidden' => $hidden,
+			'search_val' => $search
+		));
 	}
 	
 	public function get_location()

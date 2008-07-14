@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<highlighter>
+<highlighter xmlns="http://www.script-solution.de/schemas/bs/bbc/language"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.script-solution.de/schemas/bs/bbc/language language.xsd">
 	<name>XML</name>
 	<hlNumbers>false</hlNumbers>
 	<escapeChar>\</escapeChar>
@@ -31,6 +33,9 @@
 		<strings id="1">
 			<attr name="fontColor" value="#FF00FF"/>
 		</strings>
+		<mlComments id="1">
+			<attr name="fontColor" value="#0000FF"/>
+		</mlComments>
 		<regexp id="1">
 			<attr name="fontColor" value="#6a5ada"/>
 		</regexp>
@@ -43,8 +48,5 @@
 		<regexp id="4">
 			<attr name="fontColor" value="#a04bf8"/>
 		</regexp>
-		<mlComments id="1">
-			<attr name="fontColor" value="#0000FF"/>
-		</mlComments>
 	</colors>
 </highlighter>

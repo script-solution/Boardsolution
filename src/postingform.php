@@ -482,7 +482,7 @@ final class BS_PostingForm extends PLIB_FullObject
 		
 		// collect base-smileys
 		$base_num = 0;
-		$smileys = BS_DAO::get_smileys()->get_all();
+		$smileys = BS_DAO::get_smileys()->get_list();
 		foreach($smileys as $data)
 		{
 			if($data['is_base'] == 1)

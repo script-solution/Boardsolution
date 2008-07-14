@@ -21,10 +21,6 @@ final class BS_Front_Action_chg_read_status extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		// the user has to be logged in
-		if(!$this->user->is_loggedin())
-			return 'You are a guest';
-
 		// check if the session-id is valid
 		if(!$this->functions->has_valid_get_sid())
 			return 'Invalid session-id';

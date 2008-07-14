@@ -43,7 +43,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 			$enable_smileys = BS_PostingUtils::get_instance()->get_message_option('enable_smileys','lnkdesc');
 			$enable_bbcode = BS_PostingUtils::get_instance()->get_message_option('enable_bbcode','lnkdesc');
 			
-			$linklist = BS_DAO::get_links()->get_all(1,'l.category','ASC',$pagination->get_start(),$end);
+			$linklist = BS_DAO::get_links()->get_list(1,'l.category','ASC',$pagination->get_start(),$end);
 			$qry_num = count($linklist);
 			if($qry_num)
 			{
