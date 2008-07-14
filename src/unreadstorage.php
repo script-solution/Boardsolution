@@ -1,15 +1,23 @@
 <?php
 /**
- * TODO: describe the file
+ * Contains the unread-storage-interface
  *
  * @version			$Id$
  * @package			Boardsolution
- * @subpackage	main
+ * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  * @copyright		2003-2008 Nils Asmussen
  * @link				http://www.script-solution.de
  */
 
+/**
+ * The interface for all unread-storage-implementations. They decide where and how to store
+ * the unread data and also the last update timestamp.
+ *
+ * @package			Boardsolution
+ * @subpackage	src
+ * @author			Nils Asmussen <nils@script-solution.de>
+ */
 interface BS_UnreadStorage
 {
 	/**
