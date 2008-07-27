@@ -21,7 +21,7 @@ final class BS_Tasks_attachments extends PLIB_Tasks_Base
 {
 	public function run()
 	{
-		if($handle = @opendir(PLIB_Path::inner().'uploads'))
+		if($handle = @opendir(PLIB_Path::server_app().'uploads'))
 		{
 			// grab all attachments from the database
 			$attachments = array();
@@ -67,7 +67,7 @@ final class BS_Tasks_attachments extends PLIB_Tasks_Base
 						continue;
 				}
 
-				@unlink(PLIB_Path::inner().'uploads/'.$file);
+				@unlink(PLIB_Path::server_app().'uploads/'.$file);
 			}
 		}
 	}

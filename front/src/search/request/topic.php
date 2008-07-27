@@ -67,16 +67,20 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 	
 	public function get_result_ids()
 	{
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
 		if($tid == null)
 		{
-			$this->msgs->add_error($this->locale->lang('no_posts_found'));
+			$msgs->add_error($locale->lang('no_posts_found'));
 			return null;
 		}
 		
-		$keyword = $this->input->get_var('keyword','post',PLIB_Input::STRING);
+		$keyword = $input->get_var('keyword','post',PLIB_Input::STRING);
 		if($keyword === null)
-			$keyword = $this->input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
+			$keyword = $input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
 		
 		if(!BS_Front_Search_Utils::is_valid_keyword($keyword))
 			return null;
@@ -86,8 +90,8 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 	
 		if(count($this->_keywords) == 0)
 		{
-			$this->msgs->add_error(
-				sprintf($this->locale->lang('search_missing_keyword'),BS_SEARCH_MIN_KEYWORD_LEN)
+			$msgs->add_error(
+				sprintf($locale->lang('search_missing_keyword'),BS_SEARCH_MIN_KEYWORD_LEN)
 			);
 			return null;
 		}
@@ -97,13 +101,15 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 		);
 		$sql .= ' AND p.threadid = '.$tid;
 		
-		return $this->_get_result_ids('posts',$sql,250,$this->_keywords);
+		return $this->get_result_ids_impl('posts',$sql,250,$this->_keywords);
 	}
 	
 	public function get_title($search)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		return sprintf(
-			$this->locale->lang('search_topic_for_posts'),
+			$locale->lang('search_topic_for_posts'),
 			count($search->get_result_ids()),
 			stripslashes(implode('", "',$this->_keywords))
 		);
@@ -114,7 +120,7 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 		return array('date','DESC');
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

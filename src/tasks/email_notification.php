@@ -21,8 +21,11 @@ final class BS_Tasks_email_notification extends PLIB_Tasks_Base
 {
 	public function run()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$url = PLIB_Props::get()->url();
+
 		// can we stop here?
-		if($this->cfg['enable_email_notification'] == 0)
+		if($cfg['enable_email_notification'] == 0)
 			return;
 
 		$posts_to_user = array();
@@ -42,7 +45,7 @@ final class BS_Tasks_email_notification extends PLIB_Tasks_Base
 					'user_name' => $row['user_name'],
 					'user_email' => $row['user_email'],
 					'include_post' => $row['emails_include_post'],
-					'language' => $row['forum_lang'] > 0 ? $row['forum_lang'] : $this->cfg['default_forum_lang'],
+					'language' => $row['forum_lang'] > 0 ? $row['forum_lang'] : $cfg['default_forum_lang'],
 					'mail_text' => '',
 					'last_topic' => -1
 				);
@@ -55,7 +58,7 @@ final class BS_Tasks_email_notification extends PLIB_Tasks_Base
 		{
 			foreach(BS_DAO::get_posts()->get_posts_for_email($post_ids) as $data)
 			{
-				$url = $this->url->get_frontend_url(
+				$murl = $url->get_frontend_url(
 					'&'.BS_URL_ACTION.'=posts&'.BS_URL_FID.'='.$data['rubrikid']
 						.'&'.BS_URL_TID.'='.$data['threadid'],
 					'&',false
@@ -74,7 +77,7 @@ final class BS_Tasks_email_notification extends PLIB_Tasks_Base
 							$udata['topics'][] = array(
 								'include_post' => true,
 								'name' => $data['name'],
-								'url' => $url,
+								'url' => $murl,
 								'posts' => array()
 							);
 						}
@@ -91,7 +94,7 @@ final class BS_Tasks_email_notification extends PLIB_Tasks_Base
 						// just add the topic-URL
 						$udata['topics'][] = array(
 							'include_post' => false,
-							'url' => $url
+							'url' => $murl
 						);
 					}
 
@@ -132,14 +135,17 @@ final class BS_Tasks_email_notification extends PLIB_Tasks_Base
 	 */
 	private function _get_email_language_data($language)
 	{
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+
 		static $languages = array();
 
-		$data = $this->cache->get_cache('languages')->get_element($language);
+		$data = $cache->get_cache('languages')->get_element($language);
 		$lang_folder = $data['lang_folder'];
 
 		if(!isset($languages[$lang_folder]))
 		{
-			$lang = $this->locale->get_language_entries('email',$lang_folder);
+			$lang = $locale->get_language_entries('email',$lang_folder);
 			$languages[$lang_folder] = array(
 				'delayed_email_notification_text' => $lang['delayed_email_notification_text'],
 				'delayed_email_notification_title' => $lang['delayed_email_notification_title']

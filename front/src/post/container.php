@@ -18,7 +18,7 @@
  * @subpackage	front.src.post
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Post_Container extends PLIB_FullObject
+final class BS_Front_Post_Container extends PLIB_Object
 {
 	/**
 	 * All posts in BS_Front_Post_Data objects
@@ -224,7 +224,7 @@ final class BS_Front_Post_Container extends PLIB_FullObject
 		return $ids;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

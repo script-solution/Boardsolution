@@ -39,7 +39,9 @@ class BS_DAO_ACPAccess extends PLIB_Singleton
 	 */
 	public function get_all()
 	{
-		return $this->db->sql_rows(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
 			'SELECT a.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_ACP_ACCESS.' a
 			 LEFT JOIN '.BS_TB_USER.' u ON u.`'.BS_EXPORT_USER_ID.'` = a.access_value'
@@ -54,7 +56,9 @@ class BS_DAO_ACPAccess extends PLIB_Singleton
 	 */
 	public function get_by_module($module)
 	{
-		return $this->db->sql_rows(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
 			'SELECT a.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_ACP_ACCESS.' a
 			 LEFT JOIN '.BS_TB_USER.' u ON u.`'.BS_EXPORT_USER_ID.'` = a.access_value
@@ -72,17 +76,19 @@ class BS_DAO_ACPAccess extends PLIB_Singleton
 	 */
 	public function create($module,$type,$id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!in_array($type,array('user','group')))
 			PLIB_Helper::def_error('inarray','type',array('user','group'),$type);
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$this->db->sql_insert(BS_TB_ACP_ACCESS,array(
+		$db->sql_insert(BS_TB_ACP_ACCESS,array(
 			'module' => $module,
 			'access_type' => $type,
 			'access_value' => $id
 		));
-		return $this->db->get_last_insert_id();
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -94,16 +100,18 @@ class BS_DAO_ACPAccess extends PLIB_Singleton
 	 */
 	public function delete($type,$ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!in_array($type,array('user','group')))
 			PLIB_Helper::def_error('inarray','type',array('user','group'),$type);
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_ACP_ACCESS.'
 			 WHERE access_type = "'.$type.'" AND access_value IN ('.implode(',',$ids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -114,10 +122,12 @@ class BS_DAO_ACPAccess extends PLIB_Singleton
 	 */
 	public function delete_module($module)
 	{
-		$this->db->sql_qry(
+		$db = PLIB_Props::get()->db();
+
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_ACP_ACCESS.' WHERE module = "'.$module.'"'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

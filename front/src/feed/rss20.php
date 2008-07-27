@@ -19,15 +19,19 @@
  */
 final class BS_Front_Feed_RSS20 extends BS_Front_Feed_Base
 {
-	protected function _get_news_XML($news)
+	protected function get_news_XML($news)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		$date = PLIB_Date::get_formated_date('D, j M Y G:i:s T',time());
 		
 		$xml = '<?xml version="1.0" encoding="'.BS_RSS_FEED_ENCODING.'"?>'."\n";
 		$xml .= '<rss version="2.0">'."\n";
 		$xml .= '	<channel>'."\n";
-		$xml .= '		<title>'.$this->cfg['forum_title'].' :: '.$this->locale->lang('news').'</title>'."\n";
-		$xml .= '		<link>'.$this->url->get_frontend_url('','&amp;',false).'</link>'."\n";
+		$xml .= '		<title>'.$cfg['forum_title'].' :: '.$locale->lang('news').'</title>'."\n";
+		$xml .= '		<link>'.$url->get_frontend_url('','&amp;',false).'</link>'."\n";
 		$xml .= '		<description></description>'."\n";
 		$xml .= '		<pubDate>'.$date.'</pubDate>'."\n";
 		$xml .= "\n";
@@ -45,8 +49,8 @@ final class BS_Front_Feed_RSS20 extends BS_Front_Feed_Base
 			
 			$xml .= '		<item>'."\n";
 			$xml .= '			<title>'.$data['name'].'</title>'."\n";
-			$xml .= '			<description><![CDATA['.$this->_get_formated_text($data).']]></description>'."\n";
-			$xml .= '			<link>'.$this->_get_topic_url($data['rubrikid'],$data['threadid']).'</link>'."\n";
+			$xml .= '			<description><![CDATA['.$this->get_formated_text($data).']]></description>'."\n";
+			$xml .= '			<link>'.$this->get_topic_url($data['rubrikid'],$data['threadid']).'</link>'."\n";
 			$xml .= '			<author>'.$username.'</author>'."\n";
 			$xml .= '			<pubDate>'.$pub_date.'</pubDate>'."\n";
 			$xml .= '			<guid>'.$data['threadid'].'</guid>'."\n";

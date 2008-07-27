@@ -19,30 +19,29 @@
  */
 final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 {
-	public function get_actions()
-	{
-		return array();
-	}
-	
 	public function run()
 	{
+		$url = PLIB_Props::get()->url();
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+
 		$helper = BS_Front_Module_Calendar_Helper::get_instance();
 		$week_start = $helper->get_week_timestamp();
 		
 		$back = $week_start - (86400 * 7);
-		$back_url = $this->url->get_url(
+		$back_url = $url->get_url(
 			'calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_WEEK.'='.$back
 		);
 	
 		$forward = $week_start + (86400 * 7);
-		$forward_url = $this->url->get_url(
+		$forward_url = $url->get_url(
 			'calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_WEEK.'='.$forward
 		);
 	
 		$weekname = PLIB_Date::get_formated_date('W',$week_start);
 		$year = PLIB_Date::get_formated_date('o',$week_start);
-		$this->tpl->add_variables(array(
-			'title' => sprintf($this->locale->lang('week_in_year'),$weekname,$year),
+		$tpl->add_variables(array(
+			'title' => sprintf($locale->lang('week_in_year'),$weekname,$year),
 			'back' => $back_url,
 			'forward' => $forward_url
 		));
@@ -88,12 +87,7 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 			}
 		}
 		
-		$this->tpl->add_array('rows',$rows);
-	}
-	
-	public function get_location()
-	{
-		return array();
+		$tpl->add_array('rows',$rows);
 	}
 }
 ?>

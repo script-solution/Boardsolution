@@ -19,58 +19,73 @@
  */
 final class BS_DBA_Module_backups extends BS_DBA_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_DBA_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_DBA_ACTION_DELETE_BACKUPS => 'delete'
-		);
+		parent::init($doc);
+		
+		$doc->add_action(BS_DBA_ACTION_DELETE_BACKUPS,'delete');
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		unset($_SESSION['BS_restore']);
-		unset($_SESSION['BS_backup']);
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$functions = PLIB_Props::get()->functions();
+		$tpl = PLIB_Props::get()->tpl();
+		$backups = PLIB_Props::get()->backups();
+		$user = PLIB_Props::get()->user();
 		
-		$mode = $this->input->get_var('mode','get',PLIB_Input::STRING);
+		$user->delete_session_data('BS_restore');
+		$user->delete_session_data('BS_backup');
+		
+		$mode = $input->get_var('mode','get',PLIB_Input::STRING);
 		
 		// show delete message?
-		if(($delete = $this->input->get_var('delete','post')) != null)
+		if(($delete = $input->get_var('delete','post')) != null)
 		{
-			$message = sprintf($this->locale->lang('delete_backups'),'"'.implode('","',$delete).'"');
-			$yes_url = $this->url->get_url(
+			$message = sprintf($locale->lang('delete_backups'),'"'.implode('","',$delete).'"');
+			$yes_url = $url->get_url(
 				0,'&amp;at='.BS_DBA_ACTION_DELETE_BACKUPS.'&amp;backups='.implode(',',$delete)
 			);
-			$no_url = $this->url->get_url(0);
+			$no_url = $url->get_url(0);
 			
-			$this->functions->add_delete_message($message,$yes_url,$no_url,'');
+			$functions->add_delete_message($message,$yes_url,$no_url,'');
 		}
 		
 		// show restore-message?
 		if($mode == 'qrestore')
 		{
 			$selected_db = BS_DBA_Utils::get_instance()->get_selected_database();
-			$backup = $this->input->get_var('backup','get',PLIB_Input::STRING);
-			$message = sprintf($this->locale->lang('restore_backup_question'),$backup,$selected_db);
-			$yes_url = $this->url->get_url('restorebackup','&amp;backup='.$backup);
-			$no_url = $this->url->get_url(0);
+			$backup = $input->get_var('backup','get',PLIB_Input::STRING);
+			$message = sprintf($locale->lang('restore_backup_question'),$backup,$selected_db);
+			$yes_url = $url->get_url('restorebackup','&amp;backup='.$backup);
+			$no_url = $url->get_url(0);
 			
-			$this->functions->add_delete_message($message,$yes_url,$no_url,'');
+			$functions->add_delete_message($message,$yes_url,$no_url,'');
 		}
 		
 		$tpl_backups = array();
-		$backups = $this->backups->get_backups();
-		foreach($backups as $backup)
+		foreach($backups->get_backups() as $backup)
 		{
 			$tpl_backups[] = array(
 				'backup_prefix' => $backup->prefix,
 				'date' => PLIB_Date::get_date($backup->date),
 				'files' => $backup->files,
 				'size' => PLIB_StringHelper::get_formated_data_size((int)$backup->size,BS_DBA_LANGUAGE),
-				'restore_url' => $this->url->get_url(0,'&amp;mode=qrestore&amp;backup='.$backup->prefix)
+				'restore_url' => $url->get_url(0,'&amp;mode=qrestore&amp;backup='.$backup->prefix)
 			);
 		}
 		
-		$this->tpl->add_array('backups',$tpl_backups);
+		$tpl->add_array('backups',$tpl_backups);
 	}
 }
 ?>

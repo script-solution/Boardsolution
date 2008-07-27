@@ -17,7 +17,7 @@
  * @subpackage	dba.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DBA_Progress extends PLIB_FullObject implements PLIB_Progress_Listener
+final class BS_DBA_Progress extends PLIB_Object implements PLIB_Progress_Listener
 {
 	/**
 	 * Clears the progress (ensures that the next progress starts at position 0)
@@ -117,10 +117,13 @@ final class BS_DBA_Progress extends PLIB_FullObject implements PLIB_Progress_Lis
 	 */
 	public function progress_finished()
 	{
+		$locale = PLIB_Props::get()->locale();
+		$msgs = PLIB_Props::get()->msgs();
+
 		$msg = $this->_success_msg;
 		$msg .= '<p class="bs_block_pad"><a href="'.$this->_back_url.'">';
-		$msg .= $this->locale->lang('back').'</a></p>';
-		$this->msgs->add_message($msg);
+		$msg .= $locale->lang('back').'</a></p>';
+		$msgs->add_message($msg);
 		
 		$this->_populate_template();
 	}
@@ -130,18 +133,20 @@ final class BS_DBA_Progress extends PLIB_FullObject implements PLIB_Progress_Lis
 	 */
 	private function _populate_template()
 	{
-		$this->tpl->set_template('inc_progress.htm');
-		$this->tpl->add_variables(array(
+		$tpl = PLIB_Props::get()->tpl();
+
+		$tpl->set_template('inc_progress.htm');
+		$tpl->add_variables(array(
 			'not_finished' => !$this->_pm->is_finished(),
 			'title' => $this->_title,
 			'img_percent' => round($this->_pm->get_percentage(),0),
 			'percent' => round($this->_pm->get_percentage(),1),
 			'target_url' => $this->_next_url
 		));
-		$this->tpl->restore_template();
+		$tpl->restore_template();
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

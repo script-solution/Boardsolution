@@ -29,6 +29,8 @@ final class BS_ACP_Config_Item_Color extends PLIB_Config_Item_Line
 	
 	public function get_control($form)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		$str = '#'.parent::get_control($form);
 		
 		// add color-picker javascript?
@@ -43,15 +45,15 @@ final class BS_ACP_Config_Item_Color extends PLIB_Config_Item_Line
 		$id = $this->_data->get_id();
 		$str .= '<script type="text/javascript">'."\n";
 		$str .= '<!--'."\n";
-		$str .= 'var cp_'.$id.' = new PLIB_ColorPicker("'.PLIB_Path::lib().'",';
+		$str .= 'var cp_'.$id.' = new PLIB_ColorPicker("'.PLIB_Path::client_lib().'",';
 		$str .= '"'.$this->_data->get_name().'");'."\n";
 		$str .= '//-->'."\n";
 		$str .= '</script>'."\n";
 		
 		// build image
 		$str .= '&nbsp;<img id="cp_image_'.$id.'" src="acp/images/color_picker.gif" title="';
-		$str .= $this->locale->lang('color_picker_hint').'"';
-		$str .= ' alt="'.$this->locale->lang('color_picker_hint').'"';
+		$str .= $locale->lang('color_picker_hint').'"';
+		$str .= ' alt="'.$locale->lang('color_picker_hint').'"';
 		$str .= ' onmouseover="this.style.cursor = \'pointer\';"';
 		$str .= ' onmouseout="this.style.cursor = \'default\';"';
 		$str .= ' onclick="cp_'.$id.'.toggle(this.id,\'rt\')" />';

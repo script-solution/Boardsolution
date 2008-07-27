@@ -17,7 +17,7 @@
  * @subpackage	src.error
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Error_Logger extends PLIB_FullObject implements PLIB_Error_Logger
+final class BS_Error_Logger extends PLIB_Object implements PLIB_Error_Logger
 {
 	/**
 	 * Limit the number of logs. This stores the number of already logged errors
@@ -37,12 +37,16 @@ final class BS_Error_Logger extends PLIB_FullObject implements PLIB_Error_Logger
 	 */
 	public function log($no,$msg,$file,$line,$backtrace)
 	{
-		if(method_exists($this->db,'sql_qry') && isset($this->cfg['enable_error_log']))
+		$cfg = PLIB_Props::get()->cfg();
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+
+		if(isset($cfg['enable_error_log']))
 		{
-			if($this->cfg['enable_error_log'] && $this->_log_count < 5)
+			if($cfg['enable_error_log'] && $this->_log_count < 5)
 			{
-				$phpself = $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING);
-				$querystr = $this->input->get_var('QUERY_STRING','server',PLIB_Input::STRING);
+				$phpself = $input->get_var('PHP_SELF','server',PLIB_Input::STRING);
+				$querystr = $input->get_var('QUERY_STRING','server',PLIB_Input::STRING);
 				$query = $phpself.'?'.$querystr;
 				
 				$msg = ($no > 0 ? $no.': ' : '').$msg;
@@ -58,7 +62,7 @@ final class BS_Error_Logger extends PLIB_FullObject implements PLIB_Error_Logger
 				
 				BS_DAO::get_logerrors()->create(array(
 					'query' => $query,
-					'user_id' => $this->user->get_user_id(),
+					'user_id' => $user->get_user_id(),
 					'date' => time(),
 					'message' => addslashes($msg),
 					'backtrace' => addslashes($sbacktrace)
@@ -69,11 +73,11 @@ final class BS_Error_Logger extends PLIB_FullObject implements PLIB_Error_Logger
 	}
 
 	/**
-	 * @see PLIB_Object::_get_print_vars()
+	 * @see PLIB_Object::get_print_vars()
 	 *
 	 * @return array
 	 */
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

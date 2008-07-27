@@ -32,7 +32,12 @@ final class BS_DBA_Utils extends PLIB_Singleton
 	 */
 	public function get_selected_database()
 	{
-		return isset($_SESSION['database']) ? $_SESSION['database'] : BS_MYSQL_DATABASE;
+		$user = PLIB_Props::get()->user();
+		$db = $user->get_session_data('database');
+		if($db === false)
+			$db = BS_MYSQL_DATABASE;
+		
+		return $db;
 	}
 	
 	/**
@@ -43,19 +48,10 @@ final class BS_DBA_Utils extends PLIB_Singleton
 	 */
 	public function mysql_date_to_time($date)
 	{
-		// TODO finish!
-		/*if(!$date)
-			return -1;
-		
-		list($date_str,$time_str) = explode(' ',$date);
-		list($year,$month,$day) = explode('-',$date_str);
-		list($hour,$min,$sec) = explode(':',$time_str);*/
-		
 		return PLIB_Date::get_timestamp($date,PLIB_Date::TZ_GMT);
-		//return mktime($hour,$min,$sec,$month,$day,$year);
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

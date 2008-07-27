@@ -21,26 +21,33 @@ final class BS_Front_Action_userprofile_pmunbanuser extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
+		$user = PLIB_Props::get()->user();
+		$cfg = PLIB_Props::get()->cfg();
+		$functions = PLIB_Props::get()->functions();
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		// check if we are allowed to unban a user
-		if(!$this->user->is_loggedin() || $this->cfg['enable_pms'] == 0 ||
-				$this->user->get_profile_val('allow_pms') == 0)
+		if(!$user->is_loggedin() || $cfg['enable_pms'] == 0 ||
+				$user->get_profile_val('allow_pms') == 0)
 			return 'You are a guest, PMs are disabled or you\'ve disabled PMs';
 
 		// check if the session-id is valid
-		if(!$this->functions->has_valid_get_sid())
+		if(!$functions->has_valid_get_sid())
 			return 'Invalid session-id';
 
 		// check parameter
-		$ids = $this->input->get_var(BS_URL_DEL,'get',PLIB_Input::STRING);
+		$ids = $input->get_var(BS_URL_DEL,'get',PLIB_Input::STRING);
 		if(!($ids = PLIB_StringHelper::get_ids($ids)))
 			return 'Invalid id-sstring got via GET';
 
 		// delete the user from our banlist
-		BS_DAO::get_userbans()->delete_bans_of_user($this->user->get_user_id(),$ids);
+		BS_DAO::get_userbans()->delete_bans_of_user($user->get_user_id(),$ids);
 
 		$this->set_action_performed(true);
 		$this->add_link(
-			$this->locale->lang('back'),$this->url->get_url('userprofile','&amp;'.BS_URL_LOC.'=pmbanlist')
+			$locale->lang('back'),$url->get_url('userprofile','&amp;'.BS_URL_LOC.'=pmbanlist')
 		);
 		
 		return '';

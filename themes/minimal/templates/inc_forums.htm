@@ -1,18 +1,14 @@
 {if forums}
 <div class="bs_border bs_padtop">
 	<h2 class="bs_title">{title}</h2>
+	<ul>
 	{loop forums as forum}
-		{loop forum:path_images as pimage}
-		<div style="padding-left: 25px;">
-		{endloop}
-		
-		<ul>
 		{if forum:contains_forums}
-		<li>
+		<li style="margin-left: {forum:path_images.length * 25}px;">
 			<a href="{forum:forum_url}"><b>{forum:forum_name_ins}</b></a>
 		</li>
 		{else}
-		<li>
+		<li style="margin-left: {forum:path_images.length * 25}px;">
 			{if forum:is_unread}*{endif}
 			<a href="{forum:forum_url}">{forum:forum_name_ins}</a>
 			{if forum:sub_forums}
@@ -22,11 +18,7 @@
 			{endif}
 		</li>
 		{endif}
-		</ul>
-	
-		{loop forum:path_images as pimage}
-		</div>
-		{endloop}
 	{endloop}
+	</ul>
 </div>
 {endif}

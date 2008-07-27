@@ -58,36 +58,38 @@ class BS_InstallFunctions extends BS_Functions
 	 */
 	public function transfer_to_session()
 	{
+		$input = PLIB_Props::get()->input();
+
 		if(!isset($_SESSION['BS11_install']))
 			$this->_init_session();
 		
-		$step_submit = $this->input->get_var('step_submit','post',PLIB_Input::INTEGER);
+		$step_submit = $input->get_var('step_submit','post',PLIB_Input::INTEGER);
 		if($step_submit === null)
 			return;
 		
 		switch($step_submit)
 		{
 			case 1:
-				$install_type = $this->input->correct_var(
+				$install_type = $input->correct_var(
 					'install_type','post',PLIB_Input::STRING,array('full','update'),'full'
 				);
 				$this->set_session_var('install_type',$install_type);
 				break;
 			
 			case 2:
-				$this->set_session_var('host',$this->input->get_var('host','post',PLIB_Input::STRING));
-				$this->set_session_var('login',$this->input->get_var('login','post',PLIB_Input::STRING));
-				$this->set_session_var('password',$this->input->get_var('password','post',PLIB_Input::STRING));
-				$this->set_session_var('database',$this->input->get_var('database','post',PLIB_Input::STRING));
+				$this->set_session_var('host',$input->get_var('host','post',PLIB_Input::STRING));
+				$this->set_session_var('login',$input->get_var('login','post',PLIB_Input::STRING));
+				$this->set_session_var('password',$input->get_var('password','post',PLIB_Input::STRING));
+				$this->set_session_var('database',$input->get_var('database','post',PLIB_Input::STRING));
 				
-				$this->set_session_var('admin_login',$this->input->get_var('admin_login','post',PLIB_Input::STRING));
-				$this->set_session_var('admin_pw',$this->input->get_var('admin_pw','post',PLIB_Input::STRING));
-				$this->set_session_var('admin_email',$this->input->get_var('admin_email','post',PLIB_Input::STRING));
-				$this->set_session_var('board_url',$this->input->get_var('board_url','post',PLIB_Input::STRING));
+				$this->set_session_var('admin_login',$input->get_var('admin_login','post',PLIB_Input::STRING));
+				$this->set_session_var('admin_pw',$input->get_var('admin_pw','post',PLIB_Input::STRING));
+				$this->set_session_var('admin_email',$input->get_var('admin_email','post',PLIB_Input::STRING));
+				$this->set_session_var('board_url',$input->get_var('board_url','post',PLIB_Input::STRING));
 				break;
 			
 			case 3:
-				$this->set_session_var('table_prefix',$this->input->get_var('table_prefix','post',PLIB_Input::STRING));
+				$this->set_session_var('table_prefix',$input->get_var('table_prefix','post',PLIB_Input::STRING));
 				break;
 		}
 	}
@@ -141,8 +143,10 @@ class BS_InstallFunctions extends BS_Functions
 	 */
 	public function get_calculated_path()
 	{
-		$host = $this->input->get_var('HTTP_HOST','server',PLIB_Input::STRING);
-		$phpself = $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+
+		$host = $input->get_var('HTTP_HOST','server',PLIB_Input::STRING);
+		$phpself = $input->get_var('PHP_SELF','server',PLIB_Input::STRING);
 		$path = $host.dirname($phpself);
 		if(PLIB_String::substr($path,0,7) != 'http://')
 			$path = 'http://'.$path;
@@ -254,6 +258,9 @@ class BS_InstallFunctions extends BS_Functions
 	 */
 	public function display_navigation($loc)
 	{
+		$input = PLIB_Props::get()->input();
+		$tpl = PLIB_Props::get()->tpl();
+
 		$show_refresh = false;
 	
 		switch($this->step)
@@ -263,9 +270,9 @@ class BS_InstallFunctions extends BS_Functions
 				$show_refresh = true;
 		}
 		
-		$phpself = $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING);
-		$this->tpl->set_template('navigation.htm');
-		$this->tpl->add_variables(array(
+		$phpself = $input->get_var('PHP_SELF','server',PLIB_Input::STRING);
+		$tpl->set_template('navigation.htm');
+		$tpl->add_variables(array(
 			'loc' => $loc,
 			'show_refresh' => $show_refresh,
 			'back_url' => $phpself.'?step='.($this->step - 1)
@@ -274,7 +281,7 @@ class BS_InstallFunctions extends BS_Functions
 			'forward_url' => $phpself.'?step='.$this->step
 				.'&amp;forward=1&amp;lang='.$this->lang_name
 		));
-		echo $this->tpl->parse_template();
+		echo $tpl->parse_template();
 	}
 
 	/**
@@ -291,8 +298,10 @@ class BS_InstallFunctions extends BS_Functions
 	public function get_config_status($title,$check,$in_ok = 0,$in_nok = 0,$title_out = 0,
 		$description = '',$failed_img = 'failed')
 	{
-		$ok = ($in_ok === 0) ? $this->locale->lang('ok') : $in_ok;
-		$notok = ($in_nok === 0) ? $this->locale->lang('notok') : $in_nok;
+		$locale = PLIB_Props::get()->locale();
+
+		$ok = ($in_ok === 0) ? $locale->lang('ok') : $in_ok;
+		$notok = ($in_nok === 0) ? $locale->lang('notok') : $in_nok;
 		
 		if($description != '')
 			$title .= '<br /><span style="font-size: 7pt; font-weight: normal;">'.$description.'</span>';

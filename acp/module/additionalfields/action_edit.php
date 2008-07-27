@@ -21,7 +21,11 @@ final class BS_ACP_Action_additionalfields_edit extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+
+		$id = $input->get_var('id','get',PLIB_Input::ID);
 		if($id == null)
 			return 'Invalid id "'.$id.'"';
 		
@@ -32,7 +36,7 @@ final class BS_ACP_Action_additionalfields_edit extends BS_ACP_Action_Base
 		if($result != '')
 			return $result;
 
-		$data = $this->cache->get_cache('user_fields')->get_element($id);
+		$data = $cache->get_cache('user_fields')->get_element($id);
 		if($data['field_name'] != 'birthday' && 
 				($data['field_name'] != $values['field_name'] ||
 			 	$data['field_type'] != $values['field_type'] ||
@@ -44,9 +48,9 @@ final class BS_ACP_Action_additionalfields_edit extends BS_ACP_Action_Base
 		}
 
 		BS_DAO::get_addfields()->update($id,$values);
-		$this->cache->refresh('user_fields');
+		$cache->refresh('user_fields');
 		
-		$this->set_success_msg($this->locale->lang('field_edit_success'));
+		$this->set_success_msg($locale->lang('field_edit_success'));
 		$this->set_action_performed(true);
 
 		return '';

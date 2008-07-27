@@ -49,7 +49,9 @@ final class BS_Front_Search_Request_PMHistory extends BS_Front_Search_Request_PM
 	
 	public function get_url_params()
 	{
-		$id = $this->input->get_var(BS_URL_KW,'get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+
+		$id = $input->get_var(BS_URL_KW,'get',PLIB_Input::ID);
 		return array(BS_URL_KW => $id);
 	}
 	
@@ -65,15 +67,17 @@ final class BS_Front_Search_Request_PMHistory extends BS_Front_Search_Request_PM
 
 	public function get_order()
 	{
+		$input = PLIB_Props::get()->input();
+
 		$order_vals = array('subject','folder','date');
-		$order = $this->input->get_var('order','post',PLIB_Input::STRING);
+		$order = $input->get_var('order','post',PLIB_Input::STRING);
 		if($order == null)
-			$order = $this->input->get_var(BS_URL_ORDER,'get',PLIB_Input::STRING);
+			$order = $input->get_var(BS_URL_ORDER,'get',PLIB_Input::STRING);
 		$order = in_array($order,$order_vals) ? $order : 'date';
 		
-		$ad = $this->input->get_var('ad','post',PLIB_Input::STRING);
+		$ad = $input->get_var('ad','post',PLIB_Input::STRING);
 		if($ad == null)
-			$ad = $this->input->get_var(BS_URL_AD,'get',PLIB_Input::STRING);
+			$ad = $input->get_var(BS_URL_AD,'get',PLIB_Input::STRING);
 		$ad = $ad == 'ASC' ? 'ASC' : 'DESC';
 		
 		return array($order,$ad);
@@ -85,13 +89,15 @@ final class BS_Front_Search_Request_PMHistory extends BS_Front_Search_Request_PM
 		if($search_cond === null)
 			return null;
 		
-		return $this->_get_result_ids($search_cond);
+		return $this->get_result_ids_impl($search_cond);
 	}
 
 	public function get_title($search)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		return sprintf(
-			$this->locale->lang('search_result_pm_history'),
+			$locale->lang('search_result_pm_history'),
 			$this->_keyword
 		);
 	}
@@ -103,33 +109,38 @@ final class BS_Front_Search_Request_PMHistory extends BS_Front_Search_Request_PM
 	 */
 	private function _get_search_condition()
 	{
-		$id = $this->input->get_var(BS_URL_KW,'get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+		$user = PLIB_Props::get()->user();
+
+		$id = $input->get_var(BS_URL_KW,'get',PLIB_Input::ID);
 		if($id == null)
 		{
-			$this->msgs->add_error($this->locale->lang('search_pm_id_invalid'));
+			$msgs->add_error($locale->lang('search_pm_id_invalid'));
 			return null;
 		}
 
 		$data = BS_DAO::get_pms()->get_by_id($id);
 		if($data === false)
 		{
-			$this->msgs->add_error($this->locale->lang('search_pm_id_invalid'));
+			$msgs->add_error($locale->lang('search_pm_id_invalid'));
 			return null;
 		}
 
 		$subject = preg_replace('/^(RE: )*(.*)/','\\2',$data['pm_title']);
-		if($data['receiver_id'] == $this->user->get_user_id())
+		if($data['receiver_id'] == $user->get_user_id())
 			$other_user = $data['sender_id'];
 		else
 			$other_user = $data['receiver_id'];
-		$users = 'IN ('.$this->user->get_user_id().','.$other_user.')';
+		$users = 'IN ('.$user->get_user_id().','.$other_user.')';
 
 		$this->_keyword = $subject;
 		return ' WHERE p.pm_title LIKE \'%'.addslashes($subject)."' AND p.receiver_id ".$users
 			." AND p.sender_id ".$users;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

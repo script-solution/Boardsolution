@@ -18,7 +18,7 @@
  * @subpackage	src.bbcode
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_BBCode_Section extends PLIB_FullObject
+final class BS_BBCode_Section extends PLIB_Object
 {
 	/**
 	 * The id of the tag
@@ -217,7 +217,7 @@ final class BS_BBCode_Section extends PLIB_FullObject
 		return '['.$this->_name.$param.']'.$result.'[/'.$this->_name.']';
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

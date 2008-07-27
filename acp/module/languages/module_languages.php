@@ -19,60 +19,73 @@
  */
 final class BS_ACP_Module_languages extends BS_ACP_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_ADD_LANGUAGE => 'add',
-			BS_ACP_ACTION_DELETE_LANGUAGES => 'delete',
-			BS_ACP_ACTION_UPDATE_LANGUAGES => 'update'
-		);
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_ADD_LANGUAGE,'add');
+		$doc->add_action(BS_ACP_ACTION_DELETE_LANGUAGES,'delete');
+		$doc->add_action(BS_ACP_ACTION_UPDATE_LANGUAGES,'update');
+
+		$doc->add_breadcrumb($locale->lang('acpmod_languages'),$url->get_acpmod_url());
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		if($this->input->isset_var('delete','post'))
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$url = PLIB_Props::get()->url();
+		$tpl = PLIB_Props::get()->tpl();
+
+		if($input->isset_var('delete','post'))
 		{
-			$ids = $this->input->get_var('delete','post');
-			$names = $this->cache->get_cache('languages')->get_field_vals_of_keys($ids,'lang_name');
-			$namelist = PLIB_StringHelper::get_enum($names,$this->locale->lang('and'));
+			$ids = $input->get_var('delete','post');
+			$names = $cache->get_cache('languages')->get_field_vals_of_keys($ids,'lang_name');
+			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
 			
-			$this->functions->add_delete_message(
-				sprintf($this->locale->lang('delete_message'),$namelist),
-				$this->url->get_acpmod_url(0,
+			$functions->add_delete_message(
+				sprintf($locale->lang('delete_message'),$namelist),
+				$url->get_acpmod_url(0,
 					'&amp;at='.BS_ACP_ACTION_DELETE_LANGUAGES.'&amp;ids='.implode(',',$ids)
 				),
-				$this->url->get_acpmod_url()
+				$url->get_acpmod_url()
 			);
 		}
 		
-		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
-		$hidden = $this->input->get_vars_from_method('get');
+		$search = $input->get_var('search','get',PLIB_Input::STRING);
+		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);
 		unset($hidden['search']);
 		unset($hidden['at']);
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'action_type' => BS_ACP_ACTION_UPDATE_LANGUAGES,
 			'action_type_add' => BS_ACP_ACTION_ADD_LANGUAGE,
-			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));
 
 		$languages = array();
-		foreach($this->cache->get_cache('languages')->get_elements() as $lang)
+		foreach($cache->get_cache('languages')->get_elements() as $lang)
 		{
 			if(!$search || stripos($lang['lang_name'],$search) !== false ||
 					stripos($lang['lang_folder'],$search) !== false)
 				$languages[] = $lang;
 		}
-		$this->tpl->add_array('languages',$languages);
-	}
-
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('acpmod_languages') => $this->url->get_acpmod_url()
-		);
+		$tpl->add_array('languages',$languages);
 	}
 }
 ?>

@@ -21,8 +21,18 @@ final class BS_Front_Action_calendar_editevent extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		$auth = PLIB_Props::get()->auth();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		// nothing to do?
+		if(!$input->isset_var('submit','post',PLIB_Input::STRING))
+			return '';
+		
 		// check parameter
-		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
 		if($id == null)
 			return 'Invalid id "'.$id.'"';
 
@@ -32,25 +42,25 @@ final class BS_Front_Action_calendar_editevent extends BS_Front_Action_Base
 			return 'Event with id "'.$id.'" not found or no calendar-event';
 
 		// check permission
-		if(!$this->user->is_admin())
+		if(!$user->is_admin())
 		{
-			if($event_data['user_id'] != $this->user->get_user_id() ||
-				!$this->auth->has_global_permission('edit_cal_event'))
+			if($event_data['user_id'] != $user->get_user_id() ||
+				!$auth->has_global_permission('edit_cal_event'))
 				return 'Not your own event or no permission to edit events';
 		}
 
 		// is the topic or the location empty?
-		$topic_name = $this->input->get_var('topic_name','post',PLIB_Input::STRING);
-		$location = $this->input->get_var('location','post',PLIB_Input::STRING);
+		$topic_name = $input->get_var('topic_name','post',PLIB_Input::STRING);
+		$location = $input->get_var('location','post',PLIB_Input::STRING);
 		if(trim($topic_name) == '' || trim($location) == '')
 			return 'terminleer';
 
 		// get form variables
-		$open_end = $this->input->get_var('open_end','post',PLIB_Input::STRING);
-		$max_announcements = $this->input->get_var('max_announcements','post',PLIB_Input::INTEGER);
-		$timeout_type = $this->input->correct_var('timeout_type','post',PLIB_Input::STRING,array('begin','custom'),'begin');
-		$enable_announcements = $this->input->get_var('enable_announcements','post',PLIB_Input::INT_BOOL);
-		$description = $this->input->get_var('description','post',PLIB_Input::STRING);
+		$open_end = $input->get_var('open_end','post',PLIB_Input::STRING);
+		$max_announcements = $input->get_var('max_announcements','post',PLIB_Input::INTEGER);
+		$timeout_type = $input->correct_var('timeout_type','post',PLIB_Input::STRING,array('begin','custom'),'begin');
+		$enable_announcements = $input->get_var('enable_announcements','post',PLIB_Input::INT_BOOL);
+		$description_posted = $input->get_var('text','post',PLIB_Input::STRING);
 
 		$form = new BS_HTML_Formular();
 		
@@ -74,6 +84,13 @@ final class BS_Front_Action_calendar_editevent extends BS_Front_Action_Base
 		else
 			$max_announcements = ($max_announcements < 0) ? 0 : $max_announcements;
 
+		$description = '';
+		$error = BS_PostingUtils::get_instance()->prepare_message_for_db(
+			$description,$description_posted,'desc',true,true
+		);
+		if($error != '')
+			return $error;
+		
 		// edit event
 		$fields = array(
 			'event_title' => $topic_name,
@@ -82,12 +99,13 @@ final class BS_Front_Action_calendar_editevent extends BS_Front_Action_Base
 			'timeout' => $timeout,
 			'max_announcements' => $max_announcements,
 			'description' => $description,
+			'description_posted' => $description_posted,
 			'event_location' => $location
 		);
 		BS_DAO::get_events()->update($id,$fields);
 
-		$url = $this->url->get_url('calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id);
-		$this->add_link($this->locale->lang('back'),$url);
+		$murl = $url->get_url('calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id);
+		$this->add_link($locale->lang('back'),$murl);
 		$this->set_action_performed(true);
 
 		return '';

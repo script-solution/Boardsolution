@@ -28,50 +28,36 @@ abstract class BS_Front_SubModuleContainer extends BS_Front_Module
 	protected $_sub;
 	
 	/**
-	 * Constructor
+	 * The init
 	 * 
 	 * @param string $module your module-name
-	 * @param array $actions the sub-module names that are possible
+	 * @param array $submodules the sub-module names that are possible
 	 * @param string $default the default sub-module
 	 */
-	public function __construct($module,$actions = array(),$default = 'default')
+	public function __construct($module,$submodules = array(),$default = 'default')
 	{
-		if(count($actions) == 0)
+		$input = PLIB_Props::get()->input();
+
+		if(count($submodules) == 0)
 			PLIB_Helper::error('Please provide the possible submodules of this module!');
 		
-		$action = $this->input->correct_var(BS_URL_LOC,'get',PLIB_Input::STRING,$actions,$default);
+		$sub = $input->correct_var(BS_URL_LOC,'get',PLIB_Input::STRING,$submodules,$default);
 		
 		// include the sub-module and create it
-		include_once(PLIB_Path::inner().'front/module/'.$module.'/sub_'.$action.'.php');
-		$classname = 'BS_Front_SubModule_'.$module.'_'.$action;
+		include_once(PLIB_Path::server_app().'front/module/'.$module.'/sub_'.$sub.'.php');
+		$classname = 'BS_Front_SubModule_'.$module.'_'.$sub;
 		$this->_sub = new $classname();
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$diff = $this->get_template() != $this->_sub->get_template();
-		if($diff)
-			$this->tpl->set_template($this->_sub->get_template());
-		
+		$tpl = PLIB_Props::get()->tpl();
+		$tpl->set_template($this->_sub->get_template());
 		$this->_sub->run();
-		
-		if($diff)
-			$this->tpl->restore_template();
-	}
-	
-	public function error_occurred()
-	{
-		return parent::error_occurred() || $this->_sub->error_occurred();
-	}
-	
-	public function get_actions()
-	{
-		return $this->_sub->get_actions();
-	}
-	
-	public function get_template()
-	{
-		return $this->_sub->get_template();
+		$tpl->restore_template();
 	}
 }
 ?>

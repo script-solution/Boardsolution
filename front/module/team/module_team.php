@@ -19,19 +19,43 @@
  */
 final class BS_Front_Module_team extends BS_Front_Module
 {
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
+	{
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_breadcrumb($locale->lang('the_team'),$url->get_url('team'));
+	}
+	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$tpl = PLIB_Props::get()->tpl();
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+		$cache = PLIB_Props::get()->cache();
+		$url = PLIB_Props::get()->url();
+
 		$admins = array();
 		
-		$this->tpl->add_variables(array(
-			'show_pm' => $this->cfg['display_denied_options'] || $this->user->is_loggedin()
+		$tpl->add_variables(array(
+			'show_pm' => $cfg['display_denied_options'] || $user->is_loggedin()
 		));
 		
 		// collect admins
 		$admin_ids = array();
 		foreach(BS_DAO::get_profile()->get_users_by_groups(array(BS_STATUS_ADMIN)) as $data)
 		{
-			$url = $this->url->get_url(
+			$purl = $url->get_url(
 				'userprofile','&amp;'.BS_URL_LOC.'=pmcompose&amp;'.BS_URL_ID.'='.$data['id']
 			);
 			
@@ -42,13 +66,13 @@ final class BS_Front_Module_team extends BS_Front_Module
 			$admins[] = array(
 				'user_name' => BS_UserUtils::get_instance()->get_link($data['id'],$data['user_name'],$data['user_group']),
 				'id' => $data['id'],
-				'pm_url' => $url,
+				'pm_url' => $purl,
 				'forum_count' => $count,
 				'forum_list' => $list
 			);
 		}
 		
-		$this->tpl->add_array('admins',$admins);
+		$tpl->add_array('admins',$admins);
 		
 		// determine moderators
 		$mods = array();
@@ -62,7 +86,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 			$is_super_mod = false;
 			foreach($user_groups as $gid)
 			{
-				$gdata = $this->cache->get_cache('user_groups')->get_element($gid);
+				$gdata = $cache->get_cache('user_groups')->get_element($gid);
 				if($gdata['is_super_mod'] == 1)
 				{
 					$is_super_mod = true;
@@ -73,7 +97,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 			// don't add mods twice
 			$admin_ids[$data['user_id']] = true;
 			
-			$url = $this->url->get_url(
+			$purl = $url->get_url(
 				'userprofile','&amp;'.BS_URL_LOC.'=pmcompose&amp;'.BS_URL_ID.'='.$data['user_id']
 			);
 			
@@ -82,7 +106,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 				'user_name' => BS_UserUtils::get_instance()->get_link($data['user_id'],$data['user_name'],
 					$data['user_group']),
 				'id' => $data['user_id'],
-				'pm_url' => $url,
+				'pm_url' => $purl,
 				'forum_count' => $count,
 				'forum_list' => $list
 			);
@@ -90,7 +114,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 		
 		// look for super-moderator-groups
 		$team_groups = array();
-		foreach($this->cache->get_cache('user_groups') as $data)
+		foreach($cache->get_cache('user_groups') as $data)
 		{
 			// no admin and super-mod?
 			if($data['id'] != BS_STATUS_ADMIN && $data['is_super_mod'] == 1)
@@ -105,7 +129,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 					if(isset($admin_ids[$udata['id']]))
 						continue;
 					
-					$url = $this->url->get_url(
+					$purl = $url->get_url(
 						'userprofile','&amp;'.BS_URL_LOC.'=pmcompose&amp;'.BS_URL_ID.'='.$udata['id']
 					);
 					
@@ -113,7 +137,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 						'user_name' => BS_UserUtils::get_instance()->get_link($udata['id'],$udata['user_name'],
 							$udata['user_group']),
 						'id' => $udata['id'],
-						'pm_url' => $url,
+						'pm_url' => $purl,
 						'forum_count' => $count,
 						'forum_list' => $list
 					);
@@ -133,7 +157,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 			// grab all members of the group
 			foreach(BS_DAO::get_profile()->get_users_by_groups($team_groups) as $udata)
 			{
-				$url = $this->url->get_url(
+				$purl = $url->get_url(
 					'userprofile','&amp;'.BS_URL_LOC.'=pmcompose&amp;'.BS_URL_ID.'='.$udata['id']
 				);
 				$gname = $this->get_group_name($udata['user_group']);
@@ -144,13 +168,13 @@ final class BS_Front_Module_team extends BS_Front_Module
 					'user_name' => BS_UserUtils::get_instance()->get_link($udata['id'],$udata['user_name'],
 						$udata['user_group']),
 					'id' => $udata['id'],
-					'pm_url' => $url
+					'pm_url' => $purl
 				);
 			}
 		}
 		
-		$this->tpl->add_array('mods',$mods);
-		$this->tpl->add_array('other',$other);
+		$tpl->add_array('mods',$mods);
+		$tpl->add_array('other',$other);
 	}
 	
 	/**
@@ -161,7 +185,9 @@ final class BS_Front_Module_team extends BS_Front_Module
 	 */
 	private function get_group_name($groups)
 	{
-		$gcache = $this->cache->get_cache('user_groups');
+		$cache = PLIB_Props::get()->cache();
+
+		$gcache = $cache->get_cache('user_groups');
 		$agroups = PLIB_Array_Utils::advanced_explode(',',$groups);
 		foreach($agroups as $gid)
 		{
@@ -181,31 +207,36 @@ final class BS_Front_Module_team extends BS_Front_Module
 	 */
 	private function _get_forum_list($user_id)
 	{
+		$cache = PLIB_Props::get()->cache();
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+		$forums = PLIB_Props::get()->forums();
+
 		$count = 0;
 		$forum_list = '';
 		
 		// grab all forums
 		if($user_id == 0)
 		{
-			$forums = array();
-			$fids = $this->forums->get_sub_node_ids(0);
+			$nodes = array();
+			$fids = $forums->get_sub_node_ids(0);
 			foreach($fids as $fid)
 			{
-				if($this->forums->get_forum_type($fid) == 'contains_cats')
+				if($forums->get_forum_type($fid) == 'contains_cats')
 					continue;
 				
-				$forums[] = array('rid' => $fid);
+				$nodes[] = array('rid' => $fid);
 			}
 		}
 		// grab the moderated forums
 		else
-			$forums = $this->cache->get_cache('moderators')->get_elements_with(array('user_id' => $user_id));
+			$nodes = $cache->get_cache('moderators')->get_elements_with(array('user_id' => $user_id));
 		
 		// determine the visible forums
 		$visible_forums = array();
-		foreach($forums as $forum)
+		foreach($nodes as $forum)
 		{
-			if($this->cfg['hide_denied_forums'] && !$this->auth->has_access_to_intern_forum($forum['rid']))
+			if($cfg['hide_denied_forums'] && !$auth->has_access_to_intern_forum($forum['rid']))
 				continue;
 			
 			$visible_forums[] = $forum;
@@ -225,16 +256,6 @@ final class BS_Front_Module_team extends BS_Front_Module
 			$forum_list = '-';
 		
 		return array($forum_list,$count);
-	}
-	
-	public function get_location()
-	{
-		return array($this->locale->lang('the_team') => $this->url->get_url('team'));
-	}
-	
-	public function has_access()
-	{
-		return true;
 	}
 }
 ?>

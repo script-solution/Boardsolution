@@ -42,11 +42,13 @@ final class BS_AddField_Manager extends PLIB_AddField_Manager
 	 */
 	public function is_any_required_field_empty()
 	{
+		$user = PLIB_Props::get()->user();
+
 		foreach($this->get_fields_at(BS_UF_LOC_USER_PROFILE) as $field)
 		{
 			/* @var $field PLIB_AddField_Field */
 			$data = $field->get_data();
-			$stored_val = $this->user->get_profile_val('add_'.$data->get_name());
+			$stored_val = $user->get_profile_val('add_'.$data->get_name());
 			if($data->is_required() && $field->is_empty($stored_val))
 				return true;
 		}

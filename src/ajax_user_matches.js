@@ -122,7 +122,7 @@ function findMatchingUser()
 	
 	var tempref = this;
 	
-	var url = this.root + "standalone.php?" + this.actionParam + "=ajax_check_user&kw=";
+	var url = this.root + "index.php?" + this.actionParam + "=ajax_get_user&kw=";
 	url += encodeURIComponent(keyword);
 	
 	myAjax.setEventHandler('onstart',function() {

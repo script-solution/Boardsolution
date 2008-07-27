@@ -17,7 +17,7 @@
  * @subpackage	dba.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends PLIB_FullObject
+final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends PLIB_Object
 	implements PLIB_Progress_Task
 {
 	/**
@@ -25,48 +25,61 @@ final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends PLIB_FullObject
 	 */
 	public function __construct()
 	{
+		$input = PLIB_Props::get()->input();
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+		$user = PLIB_Props::get()->user();
+		$backups = PLIB_Props::get()->backups();
+
 		parent::__construct();
 		
 		// init session
-		if(!isset($_SESSION['BS_restore']))
+		if($user->get_session_data('BS_restore') === false)
 		{
 			// ensure that we start a new progress
 			BS_DBA_Progress::clear_progress();
 			
-			$prefix = $this->input->get_var('backup','get',PLIB_Input::STRING);
-			$backup = $this->backups->get_backup($prefix);
+			$prefix = $input->get_var('backup','get',PLIB_Input::STRING);
+			$backup = $backups->get_backup($prefix);
 			if($backup == null)
 			{
-				$this->msgs->add_error($this->locale->lang('invalid_parameters'));
+				$msgs->add_error($locale->lang('invalid_parameters'));
 				return;
 			}
 			
-			$_SESSION['BS_restore'] = array();
-			$_SESSION['BS_restore']['prefix'] = $prefix;
-			$_SESSION['BS_restore']['file'] = 0;
-			$_SESSION['BS_restore']['total'] = $backup->files;
+			$user->set_session_data('BS_restore',array(
+				'prefix' => $prefix,
+				'file' => 0,
+				'total' => $backup->files
+			));
 		}
 	}
 	
 	public function get_total_operations()
 	{
-		return $_SESSION['BS_restore']['total'];
+		$user = PLIB_Props::get()->user();
+		$data = $user->get_session_data('BS_restore');
+		return $data['total'];
 	}
 
 	public function run($pos,$ops)
 	{
+		$db = PLIB_Props::get()->db();
+		$user = PLIB_Props::get()->user();
+		$data = $user->get_session_data('BS_restore');
+
 		// import file
 		$filename = $this->_get_next_file($pos);
 		if($filename != '')
 		{
 			$statements = PLIB_SQLParser::get_statements_from_File('backups/'.$filename);
 			foreach($statements as $sql)
-				$this->db->sql_qry($sql);
+				$db->sql_qry($sql);
 		}
 		
 		// are we finished?
-		if($pos >= $_SESSION['BS_restore']['total'])
-			unset($_SESSION['BS_restore']);
+		if($pos >= $data['total'])
+			$user->delete_session_data('BS_restore');
 	}
 	
 	/**
@@ -77,10 +90,13 @@ final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends PLIB_FullObject
 	 */
 	private function _get_next_file($pos)
 	{
+		$user = PLIB_Props::get()->user();
+		$data = $user->get_session_data('BS_restore');
+		
 		if($handle = @opendir('backups'))
 		{
 			if($pos == 0)
-				return $_SESSION['BS_restore']['prefix'].'structure.sql';
+				return $data['prefix'].'structure.sql';
 		
 			$files = array();
 			while($file = readdir($handle))
@@ -88,7 +104,7 @@ final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends PLIB_FullObject
 				if($file == '.' || $file == '..')
 					continue;
 				
-				if(preg_match('/^'.preg_quote($_SESSION['BS_restore']['prefix'],'/').'data\d+\.sql$/',$file))
+				if(preg_match('/^'.preg_quote($data['prefix'],'/').'data\d+\.sql$/',$file))
 					$files[] = $file;
 			}
 			closedir($handle);
@@ -101,7 +117,7 @@ final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends PLIB_FullObject
 		return false;
 	}
 
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

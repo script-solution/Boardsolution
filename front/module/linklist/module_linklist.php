@@ -19,22 +19,35 @@
  */
 final class BS_Front_Module_linklist extends BS_Front_SubModuleContainer
 {
+	/**
+	 * Constructor
+	 */
 	public function __construct()
 	{
 		parent::__construct('linklist',array('default','add'),'default');
 	}
 	
-	public function get_location()
+	/**
+	 * @see BS_Front_SubModuleContainer::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
 	{
-		$loc = array(
-			$this->locale->lang('linklist') => $this->url->get_url()
-		);
-		return array_merge($loc,$this->_sub->get_location());
-	}
-	
-	public function has_access()
-	{
-		return $this->cfg['enable_linklist'] == 1 && $this->auth->has_global_permission('view_linklist');
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+		
+		$doc->set_has_access($cfg['enable_linklist'] == 1 && $auth->has_global_permission('view_linklist'));
+		$doc->add_breadcrumb($locale->lang('linklist'),$url->get_url());
+		
+		// init submodule
+		$this->_sub->init($doc);
+		
+		$doc->set_template($this->_sub->get_template());
 	}
 }
 ?>

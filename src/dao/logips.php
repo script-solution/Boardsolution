@@ -39,7 +39,9 @@ class BS_DAO_LogIPs extends PLIB_Singleton
 	 */
 	public function get_count_by_search($where)
 	{
-		return $this->db->sql_num(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_num(
 			BS_TB_LOG_IPS.' l','l.id',
 			' LEFT JOIN '.BS_TB_USER.' u ON l.user_id = u.`'.BS_EXPORT_USER_ID.'`
 			'.$where
@@ -56,10 +58,12 @@ class BS_DAO_LogIPs extends PLIB_Singleton
 	 */
 	public function get_by_action_for_ip($action,$ip,$timeout = 0)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($timeout) || $timeout < 0)
 			PLIB_Helper::def_error('intge0','timeout',$timeout);
 		
-		$data = $this->db->sql_fetch(
+		$data = $db->sql_fetch(
 			'SELECT * FROM '.BS_TB_LOG_IPS.'
 			 WHERE action = "'.$action.'" AND user_ip = "'.$ip.'"
 			 '.($timeout > 0 ? 'AND date > '.(time() - $timeout) : '')
@@ -81,12 +85,14 @@ class BS_DAO_LogIPs extends PLIB_Singleton
 	 */
 	public function get_list_by_search($where,$sort = 'l.id',$order = 'ASC',$start = 0,$count = 0)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);
 		if(!PLIB_Helper::is_integer($count) || $count < 0)
 			PLIB_Helper::def_error('intge0','count',$count);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT l.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_LOG_IPS.' l
 			 LEFT JOIN '.BS_TB_USER.' u ON l.user_id = u.`'.BS_EXPORT_USER_ID.'`
@@ -104,14 +110,17 @@ class BS_DAO_LogIPs extends PLIB_Singleton
 	 */
 	public function create($action)
 	{
-		$this->db->sql_insert(BS_TB_LOG_IPS,array(
-			'user_ip' => $this->user->get_user_ip(),
-			'user_id' => $this->user->get_user_id(),
-			'user_agent' => $this->user->get_user_agent(),
+		$db = PLIB_Props::get()->db();
+		$user = PLIB_Props::get()->user();
+
+		$db->sql_insert(BS_TB_LOG_IPS,array(
+			'user_ip' => $user->get_user_ip(),
+			'user_id' => $user->get_user_id(),
+			'user_agent' => $user->get_user_agent(),
 			'date' => time(),
 			'action' => $action
 		));
-		return $this->db->get_last_insert_id();
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -119,7 +128,9 @@ class BS_DAO_LogIPs extends PLIB_Singleton
 	 */
 	public function clear()
 	{
-		$this->db->sql_qry('TRUNCATE TABLE '.BS_TB_LOG_IPS);
+		$db = PLIB_Props::get()->db();
+
+		$db->sql_qry('TRUNCATE TABLE '.BS_TB_LOG_IPS);
 	}
 	
 	/**
@@ -130,13 +141,15 @@ class BS_DAO_LogIPs extends PLIB_Singleton
 	 */
 	public function delete_by_ids($ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_LOG_IPS.' WHERE id IN ('.implode(',',$ids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -147,13 +160,15 @@ class BS_DAO_LogIPs extends PLIB_Singleton
 	 */
 	public function delete_timedout($timeout)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($timeout) || $timeout <= 0)
 			PLIB_Helper::def_error('intgt0','timeout',$timeout);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_LOG_ERRORS.' WHERE date < '.(time() - $timeout)
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

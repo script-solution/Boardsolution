@@ -21,19 +21,26 @@ final class BS_ACP_Action_user_delete extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+		$user = PLIB_Props::get()->user();
+
 		if(BS_ENABLE_EXPORT)
 			return 'The community is exported';
 	
-		$idstr = $this->input->get_var('ids','get',PLIB_Input::STRING);
+		$idstr = $input->get_var('ids','get',PLIB_Input::STRING);
 		if(!($ids = PLIB_StringHelper::get_ids($idstr)))
 			return 'Got an invalid id-string via GET';
+		
+		$userdatas = array();
 		
 		// at first e collect all existing users and update their topics and posts so that they
 		// have been created by guests (with the corresponding name)
 		$existing_ids = array();
 		foreach(BS_DAO::get_user()->get_users_by_ids($ids) as $data)
 		{
-			if($data['id'] == $this->user->get_user_id())
+			if($data['id'] == $user->get_user_id())
 				continue;
 
 			$user_name = addslashes($data['user_name']);
@@ -42,6 +49,7 @@ final class BS_ACP_Action_user_delete extends BS_ACP_Action_Base
 			BS_DAO::get_topics()->assign_topics_to_guest($data['id'],$user_name);
 
 			$existing_ids[] = $data['id'];
+			$userdatas[] = $data;
 		}
 
 		// do we have any existing user?
@@ -64,13 +72,19 @@ final class BS_ACP_Action_user_delete extends BS_ACP_Action_Base
 		BS_DAO::get_user()->delete($existing_ids);
 		BS_DAO::get_profile()->delete($existing_ids);
 		
-		$this->cache->refresh('moderators');
-		$this->cache->refresh('intern');
-		$this->cache->refresh('acp_access');
+		$cache->refresh('moderators');
+		$cache->refresh('intern');
+		$cache->refresh('acp_access');
 		
+		// fire community-event
+		foreach($userdatas as $data)
+		{
+			$u = BS_Community_User::get_instance_from_data($data);
+			BS_Community_Manager::get_instance()->fire_user_deleted($u);
+		}
 		
 		// finish
-		$this->set_success_msg($this->locale->lang('user_deleted_success'));
+		$this->set_success_msg($locale->lang('user_deleted_success'));
 		$this->set_action_performed(true);
 
 		return '';

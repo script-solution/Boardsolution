@@ -82,17 +82,23 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 	private $_error = true;
 	
 	/**
-	 * Constructor
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
 	 */
-	public function __construct()
+	public function init($doc)
 	{
-		parent::__construct();
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		
+		$doc->add_breadcrumb(BS_VERSION.' vs. '.$this->_compare_version);
 		
 		$http = new PLIB_HTTP('www.script-solution.de');
 		$this->_versions = $http->get('/bsversions/versions.xml');
 		if($this->_versions === false)
 		{
-			$this->_report_error(
+			$this->report_error(
 				PLIB_Messages::MSG_TYPE_ERROR,$http->get_error_code().': '.$http->get_error_message()
 			);
 			return;
@@ -103,10 +109,10 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		foreach($xml->version as $v)
 			$cbversions[(string)$v['id']] = (string)$v['name'];
 		
-		$compare = $this->input->get_var('compare','post',PLIB_Input::STRING);
+		$compare = $input->get_var('compare','post',PLIB_Input::STRING);
 		if(!isset($cbversions[$compare]))
 		{
-			$this->_report_error(
+			$this->report_error(
 				PLIB_Messages::MSG_TYPE_ERROR,'Version with id "'.$compare.'" doesn\'t exist!'
 			);
 			return;
@@ -126,19 +132,25 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		$this->_error = false;
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$input = PLIB_Props::get()->input();
+		$tpl = PLIB_Props::get()->tpl();
+
 		if($this->_error)
 			return;
 		
-		$compare = $this->input->get_var('compare','post',PLIB_Input::STRING);
+		$compare = $input->get_var('compare','post',PLIB_Input::STRING);
 		
 		// now load the xml-document for that version
 		$http = new PLIB_HTTP('www.script-solution.de');
 		$versioninfo = $http->get('/bsversions/v'.$this->_file.'.txt');
 		if($versioninfo === false)
 		{
-			$this->_report_error(
+			$this->report_error(
 				PLIB_Messages::MSG_TYPE_ERROR,$http->get_error_code().': '.$http->get_error_message()
 			);
 			return;
@@ -185,8 +197,8 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		// now build the array for the templates
 		$items = array();
 		$this->_build_items($items,$structure,'');
-		$this->tpl->add_array('items',$items);
-		$this->tpl->add_variables(array(
+		$tpl->add_array('items',$items);
+		$tpl->add_variables(array(
 			'current_version' => BS_VERSION,
 			'compare_version' => $this->_compare_version,
 			'download_changes_url' => 'http://www.script-solution.de/cgi-bin/genzip.php?id='.$compare,
@@ -195,13 +207,6 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 			'remove_color' => $this->_get_color(self::REMOVE),
 			'changed_paths' => $this->_changed
 		));
-	}
-	
-	public function get_location()
-	{
-		return array(
-			BS_VERSION.' vs. '.$this->_compare_version => ''
-		);
 	}
 	
 	/**
@@ -276,6 +281,8 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 	 */
 	private function _build_items(&$items,$folder,$name,$layer = 0)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		// we don't want to have a root-folder for all
 		if($layer > 0)
 		{
@@ -302,8 +309,8 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 					$size = number_format(
 						filesize($path),
 						0,
-						$this->locale->get_thousands_separator(),
-						$this->locale->get_dec_separator()
+						$locale->get_thousands_separator(),
+						$locale->get_dec_separator()
 					);
 					$changed = PLIB_Date::get_date(filemtime($path));
 				}
@@ -316,8 +323,8 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 					'id' => str_replace('/','_',$path),
 					'layerend' => false,
 					'color' => $this->_get_color($item),
-					'size' => $item == self::ADD ? $this->locale->lang('notavailable') : $size.' Bytes',
-					'changed' => $item == self::ADD ? $this->locale->lang('notavailable') : $changed
+					'size' => $item == self::ADD ? $locale->lang('notavailable') : $size.' Bytes',
+					'changed' => $item == self::ADD ? $locale->lang('notavailable') : $changed
 				);
 			}
 		}

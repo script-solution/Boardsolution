@@ -17,7 +17,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Event extends PLIB_FullObject
+final class BS_Event extends PLIB_Object
 {
 	/**
 	 * The event-data
@@ -47,6 +47,8 @@ final class BS_Event extends PLIB_FullObject
 	 */
 	public function __construct($event)
 	{
+		$user = PLIB_Props::get()->user();
+		
 		if(!is_array($event))
 			PLIB_Helper::def_error('array','event',$event);
 		
@@ -55,10 +57,10 @@ final class BS_Event extends PLIB_FullObject
 		$this->_event = $event;
 		$this->_ann = BS_DAO::get_eventann()->get_user_of_event($event['id']);
 		
-		$uid = $this->user->get_user_id();
-		foreach($this->_ann as $user)
+		$uid = $user->get_user_id();
+		foreach($this->_ann as $userdata)
 		{
-			if($uid == $user['user_id'])
+			if($uid == $userdata['user_id'])
 			{
 				$this->_is_announced = true;
 				break;
@@ -125,7 +127,9 @@ final class BS_Event extends PLIB_FullObject
 	 */
 	public function is_open()
 	{
-		if(!$this->user->is_loggedin())
+		$user = PLIB_Props::get()->user();
+
+		if(!$user->is_loggedin())
 			return false;
 		
 		if($this->_event['tid'] > 0)
@@ -167,7 +171,7 @@ final class BS_Event extends PLIB_FullObject
 		return false;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

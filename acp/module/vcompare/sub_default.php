@@ -19,15 +19,20 @@
  */
 final class BS_ACP_SubModule_vcompare_default extends BS_ACP_SubModule
 {
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$this->_request_formular();
+		$tpl = PLIB_Props::get()->tpl();
+
+		$this->request_formular();
 		
 		$http = new PLIB_HTTP('www.script-solution.de');
 		$versions = $http->get('/bsversions/versions.xml');
 		if($versions === false)
 		{
-			$this->_report_error(
+			$this->report_error(
 				PLIB_Messages::MSG_TYPE_ERROR,$http->get_error_code().': '.$http->get_error_message()
 			);
 			return;
@@ -38,15 +43,10 @@ final class BS_ACP_SubModule_vcompare_default extends BS_ACP_SubModule
 		foreach($xml->version as $v)
 			$cbversions[(string)$v['id']] = (string)$v;
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'current_version' => BS_VERSION,
 			'versions' => $cbversions
 		));
-	}
-	
-	public function get_location()
-	{
-		return array();
 	}
 }
 ?>

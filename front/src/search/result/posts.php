@@ -17,7 +17,7 @@
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Search_Result_Posts extends PLIB_FullObject implements BS_Front_Search_Result
+final class BS_Front_Search_Result_Posts extends PLIB_Object implements BS_Front_Search_Result
 {
 	public function get_name()
 	{
@@ -26,6 +26,12 @@ final class BS_Front_Search_Result_Posts extends PLIB_FullObject implements BS_F
 	
 	public function display_result($search,$request)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$functions = PLIB_Props::get()->functions();
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		/* @var $search BS_Front_Search_Manager */
 		/* @var $request BS_Front_Search_Request */
 		
@@ -36,19 +42,19 @@ final class BS_Front_Search_Result_Posts extends PLIB_FullObject implements BS_F
 		if($idstr == '')
 			return;
 		
-		$end = $this->cfg['posts_per_page'];
+		$end = $cfg['posts_per_page'];
 		$pagination = new BS_Pagination($end,count($ids));
-		$url = $this->url->get_url(
+		$murl = $url->get_url(
 			0,'&amp;'.BS_URL_ID.'='.$search->get_search_id().'&amp;'.BS_URL_MODE.'='.$request->get_name()
 				.'&amp;'.BS_URL_ORDER.'='.$order.'&amp;'.BS_URL_AD.'='.$ad.'&amp;'.BS_URL_SITE.'={d}'
 		);
 		foreach($request->get_url_params() as $name => $value)
-			$url .= '&amp;'.$name.'='.$value;
-		$small_page_split = $this->functions->get_pagination_small($pagination,$url);
+			$murl .= '&amp;'.$name.'='.$value;
+		$small_page_split = $functions->get_pagination_small($pagination,$murl);
 
-		$this->tpl->set_template('search_result_posts.htm');
-		$this->tpl->add_variables(array(
-			'small_page_split' => $this->locale->lang('page').' '.$small_page_split,
+		$tpl->set_template('search_result_posts.htm');
+		$tpl->add_variables(array(
+			'small_page_split' => $locale->lang('page').' '.$small_page_split,
 			'result_title' => '',
 			'result_title' => $request->get_title($search)
 		));
@@ -90,10 +96,10 @@ final class BS_Front_Search_Result_Posts extends PLIB_FullObject implements BS_F
 			);
 		}
 		
-		$this->functions->add_pagination($pagination,$url);
-		$this->tpl->add_array('posts',$posts);
+		$functions->add_pagination($pagination,$murl);
+		$tpl->add_array('posts',$posts);
 		
-		$this->tpl->restore_template();
+		$tpl->restore_template();
 	}
 	
 	public function get_template()
@@ -103,10 +109,12 @@ final class BS_Front_Search_Result_Posts extends PLIB_FullObject implements BS_F
 	
 	public function get_noresults_message()
 	{
-		return $this->locale->lang('no_posts_found');
+		$locale = PLIB_Props::get()->locale();
+
+		return $locale->lang('no_posts_found');
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

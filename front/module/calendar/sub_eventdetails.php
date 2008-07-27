@@ -19,53 +19,77 @@
  */
 final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param PLIB_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACTION_CAL_JOIN_EVENT => 'joinevent',
-			BS_ACTION_CAL_LEAVE_EVENT => 'leaveevent'
+		parent::init($doc);
+		
+		$doc->add_action(BS_ACTION_CAL_JOIN_EVENT,'joinevent');
+		$doc->add_action(BS_ACTION_CAL_LEAVE_EVENT,'leaveevent');
+		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$doc->add_breadcrumb(
+			$locale->lang('event_details'),
+			$url->get_url(0,'&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id)
 		);
 	}
 	
 	public function run()
 	{
-		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		$auth = PLIB_Props::get()->auth();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$functions = PLIB_Props::get()->functions();
+		$tpl = PLIB_Props::get()->tpl();
+		$cfg = PLIB_Props::get()->cfg();
+
+		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
 	
 		$event_data = BS_DAO::get_events()->get_by_id($id);
 		
 		// does the event exist?
 		if($event_data === false)
 		{
-			$this->_report_error(PLIB_Messages::MSG_TYPE_ERROR,'');
+			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,'');
 			return;
 		}
 	
 		// check permission
-		$mode = $this->input->get_var(BS_URL_MODE,'get',PLIB_Input::STRING);
+		$mode = $input->get_var(BS_URL_MODE,'get',PLIB_Input::STRING);
 		if($mode == 'delete')
 		{
-			if(!$this->user->is_admin())
+			if(!$user->is_admin())
 			{
-				if($event_data['user_id'] != $this->user->get_user_id() ||
-					!$this->auth->has_global_permission('delete_cal_event'))
+				if($event_data['user_id'] != $user->get_user_id() ||
+					!$auth->has_global_permission('delete_cal_event'))
 				{
-					$this->_report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS,'');
+					$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS,'');
 					return;
 				}
 			}
 			
-			$message = sprintf($this->locale->lang('delete_event_msg'),$event_data['event_title']);
-			$yes_url = $this->url->get_url(
+			$message = sprintf($locale->lang('delete_event_msg'),$event_data['event_title']);
+			$yes_url = $url->get_url(
 				'calendar','&amp;'.BS_URL_AT.'='.BS_ACTION_CAL_DEL_EVENT.'&amp;'.BS_URL_DEL.'='.$id,'&amp;',true
 			);
-			$no_url = $this->url->get_url(
+			$no_url = $url->get_url(
 				'calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id
 			);
-			$target = $this->url->get_url(
+			$target = $url->get_url(
 				'redirect','&amp;'.BS_URL_LOC.'=del_cal_event&amp;'.BS_URL_ID.'='.$id
 			);
 			
-			$this->functions->add_delete_message($message,$yes_url,$no_url,$target);
+			$functions->add_delete_message($message,$yes_url,$no_url,$target);
 		}
 		
 		if($event_data['event_end'] == 0)
@@ -78,18 +102,23 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 		else
 			$timeout = PLIB_Date::get_date($event_data['timeout']);
 		
-		$this->tpl->add_variables(array(
+		$bbcode = new BS_BBCode_Parser(
+			$event_data['description'],'desc',true,true
+		);
+		$text = $bbcode->get_message_for_output();
+		
+		$tpl->add_variables(array(
 			'event_title' => $event_data['event_title'],
 			'location' => $event_data['event_location'],
 			'event_begin' => PLIB_Date::get_date($event_data['event_begin']),
 			'event_end' => $event_end,
-			'description' => nl2br($event_data['description'])
+			'description' => $text
 		));
 		
 		if($event_data['max_announcements'] >= 0)
 		{
 			$event = new BS_Event($event_data);
-			$this->tpl->add_variables(array(
+			$tpl->add_variables(array(
 				'id' => $event_data['id'],
 				'can_leave' => $event->can_leave(),
 				'can_announce' => $event->can_announce(),
@@ -100,29 +129,19 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 			));
 		}
 		
-		$delete_perm = $this->cfg['display_denied_options'] || $this->auth->has_global_permission('delete_cal_event');
-		$edit_perm = $this->cfg['display_denied_options'] || $this->auth->has_global_permission('edit_cal_event');
-		$this->tpl->add_variables(array(
+		$delete_perm = $cfg['display_denied_options'] || $auth->has_global_permission('delete_cal_event');
+		$edit_perm = $cfg['display_denied_options'] || $auth->has_global_permission('edit_cal_event');
+		$tpl->add_variables(array(
 			'announcements_enabled' => $event_data['max_announcements'] >= 0,
 			'display_edit_event' => $edit_perm,
 			'display_delete_event' => $delete_perm,
-			'edit_event' => $this->url->get_url(
+			'edit_event' => $url->get_url(
 				'calendar','&amp;'.BS_URL_LOC.'=editevent&amp;'.BS_URL_ID.'='.$id
 			),
-			'delete_event' => $this->url->get_url(
+			'delete_event' => $url->get_url(
 				'calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_MODE.'=delete&amp;'.BS_URL_ID.'='.$id
 			)
 		));
-	}
-	
-	public function get_location()
-	{
-		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		return array(
-			$this->locale->lang('event_details') => $this->url->get_url(
-				0,'&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id
-			)
-		);
 	}
 }
 ?>

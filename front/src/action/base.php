@@ -32,7 +32,7 @@ abstract class BS_Front_Action_Base extends PLIB_Actions_Base
 	public static function load_actions()
 	{
 		$action_msgs = array();
-		include_once(PLIB_Path::inner().'config/actions.php');
+		include_once(PLIB_Path::server_app().'config/actions.php');
 		self::$_action_msgs = $action_msgs;
 	}
 	

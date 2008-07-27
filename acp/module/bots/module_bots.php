@@ -19,17 +19,30 @@
  */
 final class BS_ACP_Module_bots extends BS_ACP_SubModuleContainer
 {
+	/**
+	 * Constructor
+	 */
 	public function __construct()
 	{
 		parent::__construct('bots',array('default','add','edit'),'default');
 	}
 
-	public function get_location()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		$loc = array(
-			$this->locale->lang('acpmod_bots') => $this->url->get_acpmod_url()
-		);
-		return array_merge($loc,$this->_sub->get_location());
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		$doc->add_breadcrumb($locale->lang('acpmod_bots'),$url->get_acpmod_url());
+		
+		// init submodule
+		$this->_sub->init($doc);
 	}
 	
 	/**
@@ -40,7 +53,8 @@ final class BS_ACP_Module_bots extends BS_ACP_SubModuleContainer
 	 */
 	public static function check_values()
 	{
-		$input = PLIB_Object::get_prop('input');
+		$input = PLIB_Props::get()->input();
+		
 		$bot_name = $input->get_var('bot_name','post',PLIB_Input::STRING);
 		$bot_match = $input->get_var('bot_match','post',PLIB_Input::STRING);
 		$bot_ip_start = $input->get_var('bot_ip_start','post',PLIB_Input::STRING);

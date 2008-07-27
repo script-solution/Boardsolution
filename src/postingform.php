@@ -25,7 +25,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_PostingForm extends PLIB_FullObject
+final class BS_PostingForm extends PLIB_Object
 {
 	/**
 	 * The template-number to use
@@ -54,7 +54,7 @@ final class BS_PostingForm extends PLIB_FullObject
 	private $_title;
 	
 	/**
-	 * The message-type: posts, lnkdesc, sig, pm
+	 * The message-type: posts, desc, sig, pm
 	 *
 	 * @var string
 	 */
@@ -116,7 +116,7 @@ final class BS_PostingForm extends PLIB_FullObject
 	 * 
 	 * @param string $title the title of the form (e.g. "Text")
 	 * @param string $text the text which the textarea will contain at beginning
-	 * @param string $type the type: 'posts','sig','lnkdesc','pm'
+	 * @param string $type the type: 'posts','sig','desc','pm'
 	 */
 	public function __construct($title,$text = '',$type = 'posts')
 	{
@@ -235,6 +235,9 @@ final class BS_PostingForm extends PLIB_FullObject
 	 */
 	public function get_textarea($text,$use_applet)
 	{
+		$tpl = PLIB_Props::get()->tpl();
+		$cfg = PLIB_Props::get()->cfg();
+
 		$options = BS_PostingUtils::get_instance()->get_message_options($this->_type);
 		$sallowed = BS_PostingUtils::get_instance()->get_message_option('allowed_tags',$this->_type);
 		
@@ -242,22 +245,22 @@ final class BS_PostingForm extends PLIB_FullObject
 		if(!$use_applet && $options['enable_bbcode'])
 			$bbcode_buttons = $this->_get_bbcode_for_post($sallowed);
 		
-		$this->tpl->set_template('inc_textarea.htm');
-		$this->tpl->add_variables(array(
+		$tpl->set_template('inc_textarea.htm');
+		$tpl->add_variables(array(
 			'applet' => $use_applet,
 			'number' => self::$number,
 			'name_suffix' => $this->_name_suffix,
 			'enable_smileys' => $options['enable_smileys'],
 			'bbcode_buttons' => $bbcode_buttons,
 			'textarea_height' => $this->_textarea_height,
-			'max_line_length' => $this->cfg['msgs_max_line_length'],
-			'code_line_numbers' => $this->cfg['msgs_code_line_numbers'],
+			'max_line_length' => $cfg['msgs_max_line_length'],
+			'code_line_numbers' => $cfg['msgs_code_line_numbers'],
 			'allowed_tags' => $sallowed,
 			'text' => $text,
 			'applet_text' => str_replace("\t","%t%",str_replace("\n","%n%",$text))
 		));
-		$this->tpl->add_variables($this->_get_smileys_for_post());
-		return $this->tpl->parse_template();
+		$tpl->add_variables($this->_get_smileys_for_post());
+		return $tpl->parse_template();
 	}
 	
 	/**
@@ -266,27 +269,36 @@ final class BS_PostingForm extends PLIB_FullObject
 	 */
 	private function _add_post_form()
 	{
+		$tpl = PLIB_Props::get()->tpl();
+		$user = PLIB_Props::get()->user();
+		$locale = PLIB_Props::get()->locale();
+		$input = PLIB_Props::get()->input();
+		$cfg = PLIB_Props::get()->cfg();
+		$doc = PLIB_Props::get()->doc();
+		$functions = PLIB_Props::get()->functions();
+		$url = PLIB_Props::get()->url();
+
 		$options = BS_PostingUtils::get_instance()->get_message_options($this->_type);
 	
 		// instantiate form-var-helper?
 		if($this->_form === null)
 			$this->_form = new BS_HTML_Formular($this->_attachments['show'],true);
 		
-		$this->tpl->set_template('inc_post_form.htm',self::$number);
-		$this->tpl->add_variables(array('form',$this->_form));
-		$this->tpl->add_allowed_method('form','*');
+		$tpl->set_template('inc_post_form.htm',self::$number);
+		$tpl->add_variables(array('form',$this->_form));
+		$tpl->add_allowed_method('form','*');
 	
 		$toggle_smbb = '';
-		if($this->user->use_bbcode_applet())
+		if($user->use_bbcode_applet())
 		{
 			if($this->_show_options)
 			{
 				$toggle_smbb .= $this->_form->get_checkbox(
-					'use_bbcode'.$this->_name_suffix,$this->_use_bbcode,null,$this->locale->lang('use_bbcode')
+					'use_bbcode'.$this->_name_suffix,$this->_use_bbcode,null,$locale->lang('use_bbcode')
 				);
 				$toggle_smbb .= '<br />';
 				$toggle_smbb .= $this->_form->get_checkbox(
-					'use_smileys'.$this->_name_suffix,$this->_use_smileys,null,$this->locale->lang('use_smileys')
+					'use_smileys'.$this->_name_suffix,$this->_use_smileys,null,$locale->lang('use_smileys')
 				);
 			}
 		}
@@ -298,7 +310,7 @@ final class BS_PostingForm extends PLIB_FullObject
 				{
 					$toggle_smbb .= $this->_form->get_checkbox(
 						'use_bbcode'.$this->_name_suffix,$this->_use_bbcode,null,
-						$this->locale->lang('use_bbcode')
+						$locale->lang('use_bbcode')
 					);
 					$toggle_smbb .= '<br />';
 				}
@@ -310,7 +322,7 @@ final class BS_PostingForm extends PLIB_FullObject
 				{
 					$toggle_smbb .= $this->_form->get_checkbox(
 						'use_smileys'.$this->_name_suffix,$this->_use_smileys,null,
-						$this->locale->lang('use_smileys')
+						$locale->lang('use_smileys')
 					);
 				}
 			}
@@ -320,70 +332,70 @@ final class BS_PostingForm extends PLIB_FullObject
 	
 		$text = $this->_form->get_input_value('text',$this->_text);
 		
-		$use_applet = $this->user->use_bbcode_applet();
-		if($this->input->isset_var('bbcode_mode_'.self::$number,'post'))
+		$use_applet = $user->use_bbcode_applet();
+		if($input->isset_var('bbcode_mode_'.self::$number,'post'))
 		{
-			$mode = $this->input->get_var('bbcode_mode_'.self::$number,'post',PLIB_Input::STRING);
+			$mode = $input->get_var('bbcode_mode_'.self::$number,'post',PLIB_Input::STRING);
 			$use_applet = $mode == 'applet';
 		}
 		
 		$textarea = $this->get_textarea($text,$use_applet);
 		
-		if(!$this->user->is_loggedin())
+		if(!$user->is_loggedin())
 		{
 			$sec_code_field = PLIB_StringHelper::generate_random_key(15);
-			$this->user->set_session_data('sec_code_field',$sec_code_field);
+			$user->set_session_data('sec_code_field',$sec_code_field);
 			
-			$this->tpl->add_variables(array(
+			$tpl->add_variables(array(
 				'user_name_value' => $this->_form->get_input_value('user_name'),
-				'user_maxlength' => max(10,min(30,$this->cfg['profile_max_user_len'])),
+				'user_maxlength' => max(10,min(30,$cfg['profile_max_user_len'])),
 				'email_value' => $this->_form->get_input_value('email_adr'),
-				'security_code_img' => $this->url->get_standalone_url('front','security_code'),
-				'enable_security_code' => $this->cfg['use_captcha_for_guests'],
+				'security_code_img' => $url->get_url('security_code'),
+				'enable_security_code' => $cfg['use_captcha_for_guests'],
 				'sec_code_field' => $sec_code_field
 			));
 		}
 		
-		if($this->doc->is_acp())
-			$url = $this->functions->get_board_file(true).BS_URL_ACTION.'=faq#f_11';
+		if($doc->is_acp())
+			$murl = $functions->get_board_file(true).BS_URL_ACTION.'=faq#f_11';
 		else
-			$url = $this->url->get_url('faq').'#f_11';
+			$murl = $url->get_url('faq').'#f_11';
 		
 		if($options['enable_bbcode'])
 		{
-			if($this->cfg['enable_faq'])
-				$bbc_act = sprintf($this->locale->lang('bbcode_activated'),$url);
+			if($cfg['enable_faq'])
+				$bbc_act = sprintf($locale->lang('bbcode_activated'),$murl);
 			else
-				$bbc_act = sprintf($this->locale->lang('bbcode_activated_no_link'),$url);
+				$bbc_act = sprintf($locale->lang('bbcode_activated_no_link'),$murl);
 		}
 		else
 		{
-			if($this->cfg['enable_faq'])
-				$bbc_act = sprintf($this->locale->lang('bbcode_not_activated'),$url);
+			if($cfg['enable_faq'])
+				$bbc_act = sprintf($locale->lang('bbcode_not_activated'),$murl);
 			else
-				$bbc_act = sprintf($this->locale->lang('bbcode_not_activated_no_link'),$url);
+				$bbc_act = sprintf($locale->lang('bbcode_not_activated_no_link'),$murl);
 		}
 		
 		if($options['enable_smileys'])
-			$smileys_act = $this->locale->lang('smileys_activated');
+			$smileys_act = $locale->lang('smileys_activated');
 		else
-			$smileys_act = $this->locale->lang('smileys_not_activated');
+			$smileys_act = $locale->lang('smileys_not_activated');
 
-		if(!$this->user->use_bbcode_applet()) {
-			$this->tpl->add_variables(array(
+		if(!$user->use_bbcode_applet()) {
+			$tpl->add_variables(array(
 				'text' => $text
 			));
 		}
 	
-		if($this->user->is_loggedin())
-			$bbcode_mode = $this->user->get_profile_val('bbcode_mode');
+		if($user->is_loggedin())
+			$bbcode_mode = $user->get_profile_val('bbcode_mode');
 		else
-			$bbcode_mode = $this->cfg['msgs_default_bbcode_mode'];
+			$bbcode_mode = $cfg['msgs_default_bbcode_mode'];
 		$tpl_bbcode_mode = $this->_form->get_input_value('bbcode_mode_'.self::$number,$bbcode_mode);
 		
-		$this->tpl->add_variables(array(
-			'get_post_form_url' => $this->url->get_standalone_url(
-				'front','ajax_get_post_form','&type='.$this->_type.'&mode=%s%&height='.$this->_textarea_height,'&'
+		$tpl->add_variables(array(
+			'get_post_form_url' => $url->get_url(
+				'ajax_get_postform','&type='.$this->_type.'&mode=%s%&height='.$this->_textarea_height,'&'
 			),
 			'number' => self::$number,
 			'bbcode_activated' => $bbc_act,
@@ -397,7 +409,7 @@ final class BS_PostingForm extends PLIB_FullObject
 			'bb_app_checked' => $tpl_bbcode_mode == 'applet' ? ' checked="checked"' : ''
 		));
 		
-		$this->tpl->restore_template();
+		$tpl->restore_template();
 	}
 	
 	/**
@@ -405,19 +417,25 @@ final class BS_PostingForm extends PLIB_FullObject
 	 */
 	private function _add_attachment_form()
 	{
-		if($this->cfg['attachments_enable'] == 1 &&
-			 $this->auth->has_global_permission('attachments_add'))
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+		$tpl = PLIB_Props::get()->tpl();
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+
+		if($cfg['attachments_enable'] == 1 &&
+			 $auth->has_global_permission('attachments_add'))
 		{
-			$this->tpl->set_template('inc_attachments.htm');
+			$tpl->set_template('inc_attachments.htm');
 			
-			$file_paths = $this->input->get_var('attached_file_paths','post');
+			$file_paths = $input->get_var('attached_file_paths','post');
 			
 			// determine hint
-			if($this->input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING) == 'edit_post' &&
-				 $this->input->isset_var('attached_file_paths','post') &&
-				 ($this->input->isset_var('add_attachment','post') ||
-				 	$this->input->isset_var('remove_attachment','post')) && count($file_paths) > 0)
-				$hint = $this->locale->lang('press_upload_to_finish');
+			if($input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING) == 'edit_post' &&
+				 $input->isset_var('attached_file_paths','post') &&
+				 ($input->isset_var('add_attachment','post') ||
+				 	$input->isset_var('remove_attachment','post')) && count($file_paths) > 0)
+				$hint = $locale->lang('press_upload_to_finish');
 			else
 				$hint = '';
 			
@@ -430,7 +448,7 @@ final class BS_PostingForm extends PLIB_FullObject
 					$attachments[] = array(
 						'attached_file' => $data['attachment_path'],
 						'input_stuff' => '<input type="submit" name="remove_attachment[db|'.$data['id'].']"'
-														.' value="'.$this->locale->lang('delete').'" />'
+														.' value="'.$locale->lang('delete').'" />'
 					);
 				}
 			}
@@ -442,7 +460,7 @@ final class BS_PostingForm extends PLIB_FullObject
 					$input_stuff = '<input type="hidden" name="attached_file_paths['.$index.']"';
 					$input_stuff .= ' value="'.$attached_file.'" />'."\n";
 					$input_stuff .= ' <input type="submit" name="remove_attachment[file|'.$index.']"';
-					$input_stuff .= ' value="'.$this->locale->lang('delete').'" />';
+					$input_stuff .= ' value="'.$locale->lang('delete').'" />';
 	
 					$attachments[] = array(
 						'attached_file' => $attached_file,
@@ -452,20 +470,20 @@ final class BS_PostingForm extends PLIB_FullObject
 			}
 			
 			$attachment_limits = sprintf(
-				$this->locale->lang('attachment_limits'),
-				$this->cfg['attachments_max_per_post'],
-				$this->cfg['attachments_max_filesize'],
-				str_replace('|',',',$this->cfg['attachments_filetypes'])
+				$locale->lang('attachment_limits'),
+				$cfg['attachments_max_per_post'],
+				$cfg['attachments_max_filesize'],
+				str_replace('|',',',$cfg['attachments_filetypes'])
 			);
 	
-			$this->tpl->add_variables(array(
+			$tpl->add_variables(array(
 				'attachment_limits' => $attachment_limits,
 				'show_attachments' => count($attachments) > 0,
 				'hint' => $hint
 			));
-			$this->tpl->add_array('attachments',$attachments,false);
+			$tpl->add_array('attachments',$attachments,false);
 			
-			$this->tpl->restore_template();
+			$tpl->restore_template();
 		}
 	}
 	
@@ -476,6 +494,8 @@ final class BS_PostingForm extends PLIB_FullObject
 	 */
 	private function _get_smileys_for_post()
 	{
+		$url = PLIB_Props::get()->url();
+
 		$res = array(
 			'smileys' => array()
 		);
@@ -500,9 +520,7 @@ final class BS_PostingForm extends PLIB_FullObject
 		
 		$total = count($smileys);
 		$res['more_smileys'] = $total > $base_num;
-		$res['smiley_popup_url'] = $this->url->get_standalone_url(
-			'front','smileys','&amp;'.BS_URL_ID.'='.self::$number
-		);
+		$res['smiley_popup_url'] = $url->get_url('smileys','&amp;'.BS_URL_ID.'='.self::$number);
 		$res['smiley_popup_height'] = $total * 28 + 120;
 	
 		return $res;
@@ -516,6 +534,9 @@ final class BS_PostingForm extends PLIB_FullObject
 	 */
 	private function _get_bbcode_for_post($sallowed)
 	{
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+
 		$allowed = PLIB_Array_Utils::advanced_explode(',',$sallowed);
 		
 		// once is enough :)
@@ -532,34 +553,33 @@ final class BS_PostingForm extends PLIB_FullObject
 					$bbcode_data .= 'BBCODE['.$i.']["tag"] = "'.$row['name'].'";'."\n";
 					$bbcode_data .= 'BBCODE['.$i.']["param"] = "'.$row['param'].'";'."\n";
 					$bbcode_data .= 'BBCODE['.$i.']["prompt_text"] = "';
-					if($this->locale->contains_lang('bbcode_prompt_'.$row['name']))
-						$bbcode_data .= $this->locale->lang('bbcode_prompt_'.$row['name']);
+					if($locale->contains_lang('bbcode_prompt_'.$row['name']))
+						$bbcode_data .= $locale->lang('bbcode_prompt_'.$row['name']);
 					$bbcode_data .= '";'."\n";
 					$bbcode_data .= 'BBCODE['.$i.']["prompt_param_text"] = "';
-					if($this->locale->contains_lang('bbcode_prompt_param_'.$row['name']))
-						$bbcode_data .= $this->locale->lang('bbcode_prompt_param_'.$row['name']);
+					if($locale->contains_lang('bbcode_prompt_param_'.$row['name']))
+						$bbcode_data .= $locale->lang('bbcode_prompt_param_'.$row['name']);
 					$bbcode_data .= '";'."\n\n";
 					$i++;
 				}
 			}
 		}
 		
-		$this->tpl->set_template('inc_bbcode.htm');
+		$tpl->set_template('inc_bbcode.htm');
 		
-		$hldir = PLIB_Path::inner().'bbceditor/highlighter/';
+		$hldir = PLIB_Path::server_app().'bbceditor/highlighter/';
 		PLIB_Highlighting_Languages::ensure_inited($hldir.'languages.xml');
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'textarea_id' => 'bbcode_area'.self::$number,
 			'number' => self::$number,
 			'bbcode' => $this,
 			'hllangs' => PLIB_Highlighting_Languages::get_languages(),
-			'bbcode_data' => $bbcode_data,
-			'root' => PLIB_Path::inner()
+			'bbcode_data' => $bbcode_data
 		));
-		$this->tpl->add_allowed_method('bbcode','is_allowed');
+		$tpl->add_allowed_method('bbcode','is_allowed');
 	
-		return $this->tpl->parse_template();
+		return $tpl->parse_template();
 	}
 	
 	/**
@@ -591,7 +611,7 @@ final class BS_PostingForm extends PLIB_FullObject
 		return in_array($tag,$allowed);
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

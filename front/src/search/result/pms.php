@@ -17,7 +17,7 @@
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Search_Result_PMs extends PLIB_FullObject implements BS_Front_Search_Result
+final class BS_Front_Search_Result_PMs extends PLIB_Object implements BS_Front_Search_Result
 {
 	public function get_name()
 	{
@@ -31,8 +31,15 @@ final class BS_Front_Search_Result_PMs extends PLIB_FullObject implements BS_Fro
 
 	public function display_result($search,$request)
 	{
-		$img_pm_read = $this->user->get_theme_item_path('images/unread/pm_read.gif');
-		$img_pm_unread = $this->user->get_theme_item_path('images/unread/pm_unread.gif');
+		$input = PLIB_Props::get()->input();
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$user = PLIB_Props::get()->user();
+		$url = PLIB_Props::get()->url();
+
+		$img_pm_read = $user->get_theme_item_path('images/unread/pm_read.gif');
+		$img_pm_unread = $user->get_theme_item_path('images/unread/pm_unread.gif');
 
 		list($order,$ad) = $request->get_order();
 		$ids = $search->get_result_ids();
@@ -53,28 +60,28 @@ final class BS_Front_Search_Result_PMs extends PLIB_FullObject implements BS_Fro
 				break;
 		}
 
-		$site = $this->input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
-		$url = $this->url->get_url(
+		$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+		$murl = $url->get_url(
 			0,'&'.BS_URL_LOC.'=pmsearch&'.BS_URL_ID.'='.$search->get_search_id()
 				.'&'.BS_URL_ORDER.'='.$order.'&'.BS_URL_AD.'='.$ad
 				.'&'.BS_URL_MODE.'='.$request->get_name(),'&'
 		);
 		foreach($request->get_url_params() as $name => $value)
-			$url .= '&'.$name.'='.$value;
+			$murl .= '&'.$name.'='.$value;
 		
-		$this->tpl->set_template('inc_userprofile_pmjs.htm');
-		$this->tpl->add_variables(array(
-			'pm_target_url' => $url.'&'.BS_URL_SITE.'='.$site,
+		$tpl->set_template('inc_userprofile_pmjs.htm');
+		$tpl->add_variables(array(
+			'pm_target_url' => $murl.'&'.BS_URL_SITE.'='.$site,
 			'delete_add' => '&'.BS_URL_MODE.'=delete',
 			'at_mark_read' => '',
 			'at_mark_unread' => ''
 		));
-		$this->tpl->restore_template();
+		$tpl->restore_template();
 
-		$this->tpl->set_template('userprofile_pmsearch_result.htm');
+		$tpl->set_template('userprofile_pmsearch_result.htm');
 		
-		$this->tpl->add_variables(array(
-			'target_url' => str_replace('&','&amp;',$url).'&amp;'.BS_URL_SITE.'='.$site,
+		$tpl->add_variables(array(
+			'target_url' => str_replace('&','&amp;',$murl).'&amp;'.BS_URL_SITE.'='.$site,
 			'title' => $request->get_title($search)
 		));
 
@@ -92,7 +99,7 @@ final class BS_Front_Search_Result_PMs extends PLIB_FullObject implements BS_Fro
 		
 		$pms = array();
 		$pmlist = BS_DAO::get_pms()->get_pms_of_user_by_ids(
-			$this->user->get_user_id(),$ids,$sql_order,$ad,$pagination->get_start(),$end
+			$user->get_user_id(),$ids,$sql_order,$ad,$pagination->get_start(),$end
 		);
 		foreach($pmlist as $data)
 		{
@@ -109,55 +116,57 @@ final class BS_Front_Search_Result_PMs extends PLIB_FullObject implements BS_Fro
 
 			if($data['user_name'] != '')
 			{
-				$user = BS_UserUtils::get_instance()->get_link(
+				$username = BS_UserUtils::get_instance()->get_link(
 					$data['sender_id'],$data['user_name'],$data['user_group']
 				);
 			}
 			else
-				$user = 'Boardsolution';
+				$username = 'Boardsolution';
 
 			if($data['pm_read'] == 0 && $data['pm_type'] == 'inbox')
 			{
 				$status_picture = $img_pm_unread;
-				$status_title = $this->locale->lang('unread_pm');
+				$status_title = $locale->lang('unread_pm');
 			}
 			else
 			{
 				$status_picture = $img_pm_read;
-				$status_title = $this->locale->lang('read_pm');
+				$status_title = $locale->lang('read_pm');
 			}
 
 			$pms[] = array(
-				'prefix' => $this->functions->get_pm_attachment_prefix($data['attachment_count']),
+				'prefix' => $functions->get_pm_attachment_prefix($data['attachment_count']),
 				'pm_title' => $title,
 				'complete_title' => $complete_title,
 				'date' => PLIB_Date::get_date($data['pm_date']),
-				'details_link' => $this->url->get_url(
+				'details_link' => $url->get_url(
 					0,'&amp;'.BS_URL_LOC.'=pmdetails&amp;'.BS_URL_ID.'='.$data['id'].$hl
 				),
 				'status_title' => $status_title,
 				'status_picture' => $status_picture,
-				'sender' => $user,
+				'sender' => $username,
 				'pm_id' => $data['id'],
-				'folder' => $data['pm_type'] == 'inbox' ? $this->locale->lang('pminbox')
-					: $this->locale->lang('pmoutbox')
+				'folder' => $data['pm_type'] == 'inbox' ? $locale->lang('pminbox')
+					: $locale->lang('pmoutbox')
 			);
 		}
 		
-		$this->tpl->add_array('pms',$pms);
+		$tpl->add_array('pms',$pms);
 		
-		$url = str_replace('&','&amp;',$url).'&amp;'.BS_URL_SITE.'={d}';
-		$this->functions->add_pagination($pagination,$url);
+		$purl = str_replace('&','&amp;',$murl).'&amp;'.BS_URL_SITE.'={d}';
+		$functions->add_pagination($pagination,$purl);
 		
-		$this->tpl->restore_template();
+		$tpl->restore_template();
 	}
 	
 	public function get_noresults_message()
 	{
-		return $this->locale->lang('no_pms_found');
+		$locale = PLIB_Props::get()->locale();
+
+		return $locale->lang('no_pms_found');
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

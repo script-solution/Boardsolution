@@ -17,12 +17,14 @@
  * @subpackage	src.addfield
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_AddField_Source_DB extends PLIB_FullObject implements PLIB_AddField_Source
+final class BS_AddField_Source_DB extends PLIB_Object implements PLIB_AddField_Source
 {
 	public function get_fields()
 	{
+		$cache = PLIB_Props::get()->cache();
+
 		$fields = array();
-		foreach($this->cache->get_cache('user_fields') as $data)
+		foreach($cache->get_cache('user_fields') as $data)
 		{
 			$fields[] = new BS_AddField_Data(
 				$data['id'],$data['field_type'],$data['field_show_type'],$data['field_name'],
@@ -55,7 +57,7 @@ final class BS_AddField_Source_DB extends PLIB_FullObject implements PLIB_AddFie
 		}
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

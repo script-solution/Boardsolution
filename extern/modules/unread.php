@@ -49,12 +49,15 @@ final class BS_API_Module_unread extends BS_API_Module
 	
 	public function run()
 	{
-		if($this->user->is_loggedin())
+		$user = PLIB_Props::get()->user();
+		$unread = PLIB_Props::get()->unread();
+
+		if($user->is_loggedin())
 		{
-			$this->unread_pms = $this->user->get_profile_val('unread_pms');
-			$this->unread_forums = $this->unread->get_unread_forums();
+			$this->unread_pms = $user->get_profile_val('unread_pms');
+			$this->unread_forums = $unread->get_unread_forums();
 			
-			$topics = $this->unread->get_unread_topics();
+			$topics = $unread->get_unread_topics();
 			if(is_array($topics))
 			{
 				foreach($topics as $tid => $udata)

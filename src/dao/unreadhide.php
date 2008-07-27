@@ -39,10 +39,12 @@ class BS_DAO_UnreadHide extends PLIB_Singleton
 	 */
 	public function get_all_of_user($uid)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($uid) || $uid <= 0)
 			PLIB_Helper::def_error('intgt0','uid',$uid);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_UNREAD_HIDE.'
 			 WHERE user_id = '.$uid
 		);
@@ -56,6 +58,8 @@ class BS_DAO_UnreadHide extends PLIB_Singleton
 	 */
 	public function create($uid,$fids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(count($fids) == 0)
 			return;
 		
@@ -68,7 +72,7 @@ class BS_DAO_UnreadHide extends PLIB_Singleton
 		foreach($fids as $fid)
 			$sql .= '('.$fid.','.$uid.'),';
 		$sql = PLIB_String::substr($sql,0,-1);
-		$this->db->sql_qry($sql);
+		$db->sql_qry($sql);
 	}
 	
 	/**
@@ -79,13 +83,15 @@ class BS_DAO_UnreadHide extends PLIB_Singleton
 	 */
 	public function delete_by_users($uids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($uids) || count($uids) == 0)
 			PLIB_Helper::def_error('intarray>0','uids',$uids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_UNREAD_HIDE.' WHERE user_id IN ('.implode(',',$uids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -96,13 +102,15 @@ class BS_DAO_UnreadHide extends PLIB_Singleton
 	 */
 	public function delete_by_forums($fids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($fids) || count($fids) == 0)
 			PLIB_Helper::def_error('intarray>0','fids',$fids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_UNREAD_HIDE.' WHERE forum_id IN ('.implode(',',$fids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

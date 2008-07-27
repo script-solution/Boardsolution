@@ -21,15 +21,19 @@ final class BS_ACP_Action_userranks_delete extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$id_str = $this->input->get_var('ids','get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+
+		$id_str = $input->get_var('ids','get',PLIB_Input::STRING);
 		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
 			return 'Got an invalid id-string via GET';
 		
 		$rows = BS_DAO::get_ranks()->delete_by_ids($ids);
 		if($rows > 0)
-			$this->cache->refresh('user_ranks');
+			$cache->refresh('user_ranks');
 		
-		$this->set_success_msg($this->locale->lang('user_ranks_delete_success'));
+		$this->set_success_msg($locale->lang('user_ranks_delete_success'));
 		$this->set_action_performed(true);
 
 		return '';

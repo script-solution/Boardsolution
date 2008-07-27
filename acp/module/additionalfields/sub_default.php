@@ -19,40 +19,55 @@
  */
 final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_DELETE_ADDFIELDS => 'delete',
-			BS_ACP_ACTION_SWITCH_ADDFIELDS => 'switch'
-		);
+		parent::init($doc);
+		
+		$doc->add_action(BS_ACP_ACTION_DELETE_ADDFIELDS,'delete');
+		$doc->add_action(BS_ACP_ACTION_SWITCH_ADDFIELDS,'switch');
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		if(($delete = $this->input->get_var('delete','post')) != null)
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$url = PLIB_Props::get()->url();
+		$tpl = PLIB_Props::get()->tpl();
+
+		if(($delete = $input->get_var('delete','post')) != null)
 		{
-			$rows = $this->cache->get_cache('user_fields')->get_field_vals_of_keys($delete,'display_name');
-			$namelist = PLIB_StringHelper::get_enum($rows,$this->locale->lang('and'));
+			$rows = $cache->get_cache('user_fields')->get_field_vals_of_keys($delete,'display_name');
+			$namelist = PLIB_StringHelper::get_enum($rows,$locale->lang('and'));
 			
-			$this->functions->add_delete_message(
-				sprintf($this->locale->lang('delete_message'),$namelist),
-				$this->url->get_acpmod_url(
+			$functions->add_delete_message(
+				sprintf($locale->lang('delete_message'),$namelist),
+				$url->get_acpmod_url(
 					0,'&amp;at='.BS_ACP_ACTION_DELETE_ADDFIELDS.'&amp;ids='.implode(',',$delete)
 				),
-				$this->url->get_acpmod_url()
+				$url->get_acpmod_url()
 			);
 		}
 		
-		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
-		$fields = $this->cache->get_cache('user_fields');
+		$search = $input->get_var('search','get',PLIB_Input::STRING);
+		$fields = $cache->get_cache('user_fields');
 		
 		$sort_options = array();
 		$num = $fields->get_element_count();
 		for($i = 1;$i <= $num;$i++)
 			$sort_options[$i] = $i;
 		
-		$this->tpl->add_array('sort_options',$sort_options);
-		$this->_request_formular();
+		$tpl->add_array('sort_options',$sort_options);
+		$this->request_formular();
 		
 		$i = 0;
 		$tplfields = array();
@@ -67,7 +82,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 			if($i > 0)
 			{
 				$up_ids = $elements[$i - 1]['id'].','.$data['id'];
-				$switch_up_url = $this->url->get_acpmod_url(
+				$switch_up_url = $url->get_acpmod_url(
 					0,'&amp;at='.BS_ACP_ACTION_SWITCH_ADDFIELDS.'&amp;ids='.$up_ids
 				);
 			}
@@ -77,7 +92,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 			if($i < count($elements) - 1)
 			{
 				$down_ids = $elements[$i + 1]['id'].','.$data['id'];
-				$switch_down_url = $this->url->get_acpmod_url(
+				$switch_down_url = $url->get_acpmod_url(
 					0,'&amp;at='.BS_ACP_ACTION_SWITCH_ADDFIELDS.'&amp;ids='.$down_ids
 				);
 			}
@@ -99,13 +114,13 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 			$i++;
 		}
 		
-		$hidden = $this->input->get_vars_from_method('get');
+		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);
 		unset($hidden['search']);
 		unset($hidden['at']);
-		$this->tpl->add_array('fields',$tplfields);
-		$this->tpl->add_variables(array(
-			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+		$tpl->add_array('fields',$tplfields);
+		$tpl->add_variables(array(
+			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));
@@ -143,22 +158,24 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 	 */
 	private function _get_field_type_name($type)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		switch($type)
 		{
 			case 'date':
-				return $this->locale->lang('field_type_date');
+				return $locale->lang('field_type_date');
 			
 			case 'int':
-				return $this->locale->lang('field_type_int');
+				return $locale->lang('field_type_int');
 
 			case 'line':
-				return $this->locale->lang('field_type_line');
+				return $locale->lang('field_type_line');
 
 			case 'text':
-				return $this->locale->lang('field_type_text');
+				return $locale->lang('field_type_text');
 
 			default:
-				return $this->locale->lang('field_type_enum');
+				return $locale->lang('field_type_enum');
 		}
 	}
 
@@ -175,17 +192,12 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 		foreach($helper->get_locations() as $loc)
 		{
 			if(($display & $loc) != 0)
-				$result[] = '<img src="'.PLIB_Path::inner().'acp/images/ok.gif" alt="ok" />';
+				$result[] = '<img src="'.PLIB_Path::client_app().'acp/images/ok.gif" alt="ok" />';
 			else
-				$result[] = '<img src="'.PLIB_Path::inner().'acp/images/failed.gif" alt="failed" />';
+				$result[] = '<img src="'.PLIB_Path::client_app().'acp/images/failed.gif" alt="failed" />';
 		}
 
 		return $result;
-	}
-	
-	public function get_location()
-	{
-		return array();
 	}
 }
 ?>

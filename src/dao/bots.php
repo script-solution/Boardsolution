@@ -39,8 +39,10 @@ class BS_DAO_Bots extends PLIB_Singleton
 	 */
 	public function create($fields)
 	{
-		$this->db->sql_insert(BS_TB_BOTS,$fields);
-		return $this->db->get_last_insert_id();
+		$db = PLIB_Props::get()->db();
+
+		$db->sql_insert(BS_TB_BOTS,$fields);
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -52,11 +54,13 @@ class BS_DAO_Bots extends PLIB_Singleton
 	 */
 	public function update($id,$fields)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$this->db->sql_update(BS_TB_BOTS,'WHERE id = '.$id,$fields);
-		return $this->db->get_affected_rows();
+		$db->sql_update(BS_TB_BOTS,'WHERE id = '.$id,$fields);
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -67,13 +71,15 @@ class BS_DAO_Bots extends PLIB_Singleton
 	 */
 	public function delete_by_ids($ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_BOTS.' WHERE id IN ('.implode(',',$ids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

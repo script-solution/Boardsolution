@@ -17,7 +17,7 @@
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Search_Manager extends PLIB_FullObject
+final class BS_Front_Search_Manager extends PLIB_Object
 {
 	/**
 	 * An array of all found ids
@@ -98,18 +98,25 @@ final class BS_Front_Search_Manager extends PLIB_FullObject
 	 */
 	private function _perform_search()
 	{
-		$spam_enabled = $this->auth->is_ipblock_enabled('spam_search');
+		$auth = PLIB_Props::get()->auth();
+		$ips = PLIB_Props::get()->ips();
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+
+		$spam_enabled = $auth->is_ipblock_enabled('spam_search');
 		
 		if($spam_enabled)
 		{
 			// at first delete the "dead" entries
 			// check if an entry exists for the current user
-			$ip_entry = $this->ips->get_entry('search');
+			$ip_entry = $ips->get_entry('search');
 			if($ip_entry['date'] != '')
 			{
-				$this->msgs->add_error(sprintf(
-					$this->locale->lang('spam_search_detected'),
-					$this->cfg['spam_search'] - (time() - $ip_entry['date'])
+				$msgs->add_error(sprintf(
+					$locale->lang('spam_search_detected'),
+					$cfg['spam_search'] - (time() - $ip_entry['date'])
 				));
 				return;
 			}
@@ -123,12 +130,12 @@ final class BS_Front_Search_Manager extends PLIB_FullObject
 			return;
 
 		// create ip-table entry
-		$this->ips->add_entry('search');
+		$ips->add_entry('search');
 		
 		// store all found ids in the db
 		$mode = $this->_request->get_name();
 		$search = array(
-			'session_id' => $this->user->get_session_id(),
+			'session_id' => $user->get_session_id(),
 			'search_date' => time(),
 			'search_mode' => $mode,
 			'result_ids' => implode(',',$ids),
@@ -149,8 +156,10 @@ final class BS_Front_Search_Manager extends PLIB_FullObject
 	 */
 	private function _init_existing_search($search_id)
 	{
+		$user = PLIB_Props::get()->user();
+
 		$data = BS_DAO::get_search()->get_by_id($search_id);
-		if($data === false || $data['session_id'] != $this->user->get_session_id())
+		if($data === false || $data['session_id'] != $user->get_session_id())
 			return false;
 
 		if($this->_request->get_name() != $data['search_mode'])
@@ -162,7 +171,7 @@ final class BS_Front_Search_Manager extends PLIB_FullObject
 		return true;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

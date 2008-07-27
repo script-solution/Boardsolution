@@ -18,7 +18,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_IPs extends PLIB_FullObject
+final class BS_IPs extends PLIB_Object
 {
 	/**
 	 * Returns the data of the entry of given action (and the current user)
@@ -28,9 +28,11 @@ final class BS_IPs extends PLIB_FullObject
 	 */
 	public function get_entry($action)
 	{
+		$user = PLIB_Props::get()->user();
+
 		$name = strtok($action,'_');
 		$timeout = $this->get_timeout($name);
-		$ip = $this->user->get_user_ip();
+		$ip = $user->get_user_ip();
 		return BS_DAO::get_logips()->get_by_action_for_ip($action,$ip,$timeout);
 	}
 	
@@ -63,46 +65,48 @@ final class BS_IPs extends PLIB_FullObject
 	 */
 	public function get_timeout($action)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		switch($action)
 		{
 			case 'post':
-				if($this->cfg['spam_post'] > 0)
-					return $this->cfg['spam_post'];
+				if($cfg['spam_post'] > 0)
+					return $cfg['spam_post'];
 				break;
 			
 			case 'topic':
-				if($this->cfg['spam_thread'] > 0)
-					return $this->cfg['spam_thread'];
+				if($cfg['spam_thread'] > 0)
+					return $cfg['spam_thread'];
 				break;
 				
 			case 'pm':
-				if($this->cfg['spam_pm'] > 0)
-					return $this->cfg['spam_pm'];
+				if($cfg['spam_pm'] > 0)
+					return $cfg['spam_pm'];
 				break;
 			
 			case 'reg':
-				if($this->cfg['spam_reg'] > 0)
-					return $this->cfg['spam_reg'];
+				if($cfg['spam_reg'] > 0)
+					return $cfg['spam_reg'];
 				break;
 			
 			case 'mail':
-				if($this->cfg['spam_email'] > 0)
-					return $this->cfg['spam_email'];
+				if($cfg['spam_email'] > 0)
+					return $cfg['spam_email'];
 				break;
 			
 			case 'linkadd':
-				if($this->cfg['spam_linkadd'] > 0)
-					return $this->cfg['spam_linkadd'];
+				if($cfg['spam_linkadd'] > 0)
+					return $cfg['spam_linkadd'];
 				break;
 			
 			case 'linkre':
-				if($this->cfg['spam_linkview'] > 0)
-					return $this->cfg['spam_linkview'];
+				if($cfg['spam_linkview'] > 0)
+					return $cfg['spam_linkview'];
 				break;
 			
 			case 'search':
-				if($this->cfg['spam_search'] > 0)
-					return $this->cfg['spam_search'];
+				if($cfg['spam_search'] > 0)
+					return $cfg['spam_search'];
 				break;
 			
 			case 'adl':
@@ -112,7 +116,7 @@ final class BS_IPs extends PLIB_FullObject
 		return 0;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

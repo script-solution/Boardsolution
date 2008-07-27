@@ -53,16 +53,20 @@ class BS_Install extends BS_Base
 	 */
 	public function BS_Install($path,$step)
 	{
+		$input = PLIB_Props::get()->input();
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+
 		BS_Base::BS_Base($path,array('sql_helper','sess','url','unread','forums','cache','db'));
 		
-		$this->lang_name = $this->input->correct_var(
+		$this->lang_name = $input->correct_var(
 			'lang','get',PLIB_Input::STRING,array('en','ger_du','ger_sie'),'ger_du'
 		);
 		$this->step = $step;
 		$this->_log = '';
 		
-		$this->tpl->set_path($path.'install/templates/');
-		$this->locale->add_language_file('lang_install.php',$this->lang_name);
+		$tpl->set_path($path.'install/templates/');
+		$locale->add_language_file('lang_install.php',$this->lang_name);
 		
 		include_once($path.'install/install_functions.php');
 		$this->functions = &new BS_InstallFunctions($this);
@@ -74,15 +78,18 @@ class BS_Install extends BS_Base
 	 */
 	public function display()
 	{
+		$functions = PLIB_Props::get()->functions();
+		$input = PLIB_Props::get()->input();
+
 		session_name('PHPSESSID');
 		session_start();
 		
-		$this->functions->transfer_to_session();
+		$functions->transfer_to_session();
 		
 		// navigate backwards?
-		if($this->input->isset_var('back','post') && $this->step > 0)
+		if($input->isset_var('back','post') && $this->step > 0)
 		{
-			$phpself = $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING);
+			$phpself = $input->get_var('PHP_SELF','server',PLIB_Input::STRING);
 			// we can't use functions->redirect() here because BS_FOLDER_URL is not set yet
 			header('Location: '.$phpself.'?step='.($this->step - 1).'&lang='.$this->lang_name);
 			exit;
@@ -91,18 +98,18 @@ class BS_Install extends BS_Base
 		// check the current step
 		$this->_check = array();
 		$this->_check_result = $this->check_inputs($this->_check);
-		$redirect = $this->input->isset_var('forward','post') ||
-			$this->input->get_var('forward','get',PLIB_Input::INTEGER) == 1;
+		$redirect = $input->isset_var('forward','post') ||
+			$input->get_var('forward','get',PLIB_Input::INTEGER) == 1;
 		
 		// navigate forwards?
 		if($this->_check_result[0] && $redirect)
 		{
-			$phpself = $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING);
+			$phpself = $input->get_var('PHP_SELF','server',PLIB_Input::STRING);
 			header('Location: '.$phpself.'?step='.($this->step + 1).'&lang='.$this->lang_name);
 			exit;
 		}
 		
-		$this->functions->start_document();
+		$functions->start_document();
 		
 		$this->_display_head();
 		$this->run();
@@ -110,7 +117,7 @@ class BS_Install extends BS_Base
 		
 		$this->finish();
 		
-		$this->functions->send_document();
+		$functions->send_document();
 	}
 	
 	/**
@@ -119,9 +126,13 @@ class BS_Install extends BS_Base
 	 */
 	public function _display_head()
 	{
-		$phpself = $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING);
-		$this->tpl->set_template('inc_header.htm');
-		$this->tpl->add_variables(array(
+		$input = PLIB_Props::get()->input();
+		$tpl = PLIB_Props::get()->tpl();
+		$functions = PLIB_Props::get()->functions();
+
+		$phpself = $input->get_var('PHP_SELF','server',PLIB_Input::STRING);
+		$tpl->set_template('inc_header.htm');
+		$tpl->add_variables(array(
 			'show_lang_choose' => $this->step < 5,
 			'target_url' => $phpself.'?step='.$this->step.'&amp;lang='.$this->lang_name,
 			'step' => $this->step,
@@ -131,10 +142,10 @@ class BS_Install extends BS_Base
 			'show_form' => $this->step < 5,
 			'charset' => 'charset='.BS_HTML_CHARSET
 		));
-		echo $this->tpl->parse_template();
+		echo $tpl->parse_template();
 		
 		if($this->step < 5)
-			$this->functions->display_navigation('top');
+			$functions->display_navigation('top');
 		
 		// display errors?
 		if(!$this->_check_result[0])
@@ -144,11 +155,11 @@ class BS_Install extends BS_Base
 				$errors .= '<li>'.$value.'</li>'."\n";
 			$errors .= '</ul>'."\n";
 		
-			$this->tpl->set_template('errors.htm');
-			$this->tpl->add_variables(array(
+			$tpl->set_template('errors.htm');
+			$tpl->add_variables(array(
 				'errors' => $errors
 			));
-			echo $this->tpl->parse_template();
+			echo $tpl->parse_template();
 		}
 	}
 	
@@ -158,11 +169,14 @@ class BS_Install extends BS_Base
 	 */
 	public function _display_foot()
 	{
+		$functions = PLIB_Props::get()->functions();
+		$tpl = PLIB_Props::get()->tpl();
+
 		if($this->step < 5)
-			$this->functions->display_navigation('bottom');
+			$functions->display_navigation('bottom');
 		
-		$this->tpl->set_template('inc_footer.htm');
-		echo $this->tpl->parse_template();
+		$tpl->set_template('inc_footer.htm');
+		echo $tpl->parse_template();
 	}
 	
 	/**

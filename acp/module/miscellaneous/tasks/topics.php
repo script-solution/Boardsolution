@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Miscellaneous_Tasks_Topics extends PLIB_FullObject implements PLIB_Progress_Task
+final class BS_ACP_Miscellaneous_Tasks_Topics extends PLIB_Object implements PLIB_Progress_Task
 {
 	/**
 	 * @see PLIB_Progress_Task::get_total_operations()
@@ -46,7 +46,7 @@ final class BS_ACP_Miscellaneous_Tasks_Topics extends PLIB_FullObject implements
 		}
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

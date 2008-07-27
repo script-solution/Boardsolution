@@ -183,7 +183,9 @@ final class BS_Session_Data extends PLIB_Session_Data
 	 */
 	private function _get_bot_name($agent,$ip)
 	{
-		foreach($this->cache->get_cache('bots') as $bot)
+		$cache = PLIB_Props::get()->cache();
+
+		foreach($cache->get_cache('bots') as $bot)
 		{
 			if(PLIB_String::strpos($agent,$bot['bot_match']) !== false)
 			{
@@ -204,9 +206,9 @@ final class BS_Session_Data extends PLIB_Session_Data
 		return null;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
-		return array_merge(parent::_get_print_vars(),get_object_vars($this));
+		return array_merge(parent::get_print_vars(),get_object_vars($this));
 	}
 }
 ?>

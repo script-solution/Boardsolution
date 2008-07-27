@@ -64,7 +64,11 @@ final class BS_API_Module_online_user extends BS_API_Module
 
 	public function run()
 	{
-		$online = $this->sessions->get_user_at_location();
+		$sessions = PLIB_Props::get()->sessions();
+		$user = PLIB_Props::get()->user();
+		$cfg = PLIB_Props::get()->cfg();
+
+		$online = $sessions->get_user_at_location();
 
 		$this->total_online = count($online);
 		foreach($online as $data)
@@ -73,8 +77,8 @@ final class BS_API_Module_online_user extends BS_API_Module
 				$this->online_bots[] = $data['bot_name'];
 			else if($data['user_id'] == 0)
 				$this->online_guest_num++;
-			else if(!$this->user->is_admin() && $data['ghost_mode'] == 1 &&
-					$this->cfg['allow_ghost_mode'] == 1)
+			else if(!$user->is_admin() && $data['ghost_mode'] == 1 &&
+					$cfg['allow_ghost_mode'] == 1)
 				$this->online_ghost_num++;
 			else
 			{

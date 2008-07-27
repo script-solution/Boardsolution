@@ -20,20 +20,23 @@
  */
 final class BS_Messages extends PLIB_Messages
 {
-	public function print_messages()
+	public function add_messages()
 	{
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+
 		$msgs = $this->get_all_messages();
 		$links = $this->get_links();
-		$this->tpl->set_template('inc_messages.htm');
-		$this->tpl->add_array('errors',$msgs[self::MSG_TYPE_ERROR]);
-		$this->tpl->add_array('warnings',$msgs[self::MSG_TYPE_WARNING]);
-		$this->tpl->add_array('notices',$msgs[self::MSG_TYPE_NOTICE]);
-		$this->tpl->add_array('links',$links);
-		$this->tpl->add_variables(array(
-			'title' => $this->locale->lang('information'),
-			'messages' => $this->containsError() || $this->containsNotice() || $this->containsWarning()
+		$tpl->set_template('inc_messages.htm');
+		$tpl->add_array('errors',$msgs[self::MSG_TYPE_ERROR]);
+		$tpl->add_array('warnings',$msgs[self::MSG_TYPE_WARNING]);
+		$tpl->add_array('notices',$msgs[self::MSG_TYPE_NOTICE]);
+		$tpl->add_array('links',$links);
+		$tpl->add_variables(array(
+			'title' => $locale->lang('information'),
+			'messages' => $this->contains_error() || $this->contains_notice() || $this->contains_warning()
 		));
-		$this->tpl->restore_template();
+		$tpl->restore_template();
 	}
 }
 ?>

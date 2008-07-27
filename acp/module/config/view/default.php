@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_Config_View_Default extends PLIB_FullObject implements PLIB_Config_View
+final class BS_ACP_Module_Config_View_Default extends PLIB_Object implements PLIB_Config_View
 {
 	/**
 	 * The items for the template
@@ -86,6 +86,8 @@ final class BS_ACP_Module_Config_View_Default extends PLIB_FullObject implements
 	 */
 	public function begin_group($item,$group)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		// ignore the group for the first entry
 		if($this->_mode != 'search' && count($this->_items) <= 1)
 			return;
@@ -103,14 +105,14 @@ final class BS_ACP_Module_Config_View_Default extends PLIB_FullObject implements
 			if(($pid = $group->get_parent_id()) > 0)
 			{
 				$pgroup = $manager->get_group($pid);
-				$a['separator'] .= $this->locale->lang($pgroup->get_title(),false);
+				$a['separator'] .= $locale->lang($pgroup->get_title(),false);
 			}
 			if($pid > 0 && $group->get_title())
 				$a['separator'] .= ' &raquo; ';
-			$a['separator'] .= $this->locale->lang($group->get_title(),false);
+			$a['separator'] .= $locale->lang($group->get_title(),false);
 		}
 		else
-			$a['separator'] = $this->locale->lang($group->get_title(),false);
+			$a['separator'] = $locale->lang($group->get_title(),false);
 	}
 
 	public function end_group($item,$group)
@@ -125,6 +127,8 @@ final class BS_ACP_Module_Config_View_Default extends PLIB_FullObject implements
 	 */
 	public function show_item($item)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		$data = $item->get_data();
 		if(!isset($this->_items[$data->get_id()]))
 			$this->_items[$data->get_id()] = array();
@@ -137,12 +141,12 @@ final class BS_ACP_Module_Config_View_Default extends PLIB_FullObject implements
 		$a['is_default'] = $data->get_value() == $data->get_default();
 		$a['content'] = $item->get_control($this->_form);
 		$name = $data->get_title_name();
-		$a['title'] = $this->locale->lang($name);
-		if($this->locale->contains_lang($name.'_desc'))
-			$a['description'] = $this->locale->lang($name.'_desc');
+		$a['title'] = $locale->lang($name);
+		if($locale->contains_lang($name.'_desc'))
+			$a['description'] = $locale->lang($name.'_desc');
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

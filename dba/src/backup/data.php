@@ -17,7 +17,7 @@
  * @subpackage	dba.src.backup
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DBA_Backup_Data extends PLIB_FullObject
+final class BS_DBA_Backup_Data extends PLIB_Object
 {
 	/**
 	 * the prefix of the backup
@@ -59,7 +59,7 @@ final class BS_DBA_Backup_Data extends PLIB_FullObject
 		list($this->prefix,$this->date,$this->files,$this->size) = $parts;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

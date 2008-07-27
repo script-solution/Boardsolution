@@ -10,6 +10,9 @@
  * @link				http://www.script-solution.de
  */
 
+// we are in the frontend
+define('BS_FRONTEND',true);
+
 /**
  * Tries to build a path from the one path to the other
  * 
@@ -62,10 +65,10 @@ function BS_synchronize_path($path1,$path2)
 
 	return $sync;
 }
-$bspath = BS_synchronize_path(__FILE__,$_SERVER['PHP_SELF']);
+define('BS_PATH',BS_synchronize_path(__FILE__,$_SERVER['PHP_SELF']));
 
 // check if the calculated path is correct
-if(!is_file($bspath.'config/general.php'))
+if(!is_file(BS_PATH.'config/general.php'))
 {
 	die(
 		'<div style="font-size: 12px; font-family: verdana, tahoma, arial, helvetica, sans-serif;">
@@ -92,14 +95,14 @@ if(!is_file($bspath.'config/general.php'))
 }
 
 // Not yet installed?
-if(!is_file($bspath.'config/mysql.php'))
+if(!is_file(BS_PATH.'config/mysql.php'))
 {
-	header('Location: '.$bspath.'install.php');
+	header('Location: '.BS_PATH.'install.php');
 	exit;
 }
 
 // does the install.php exist?
-if(is_file($bspath.'install.php'))
+if(is_file(BS_PATH.'install.php'))
 {
 	die(
 		'<center><b>Bitte l&ouml;schen Sie zun&auml;chst die install.php!<br />
@@ -107,26 +110,38 @@ if(is_file($bspath.'install.php'))
 	);
 }
 
-
-include_once($bspath.'config/userdef.php');
+include_once(BS_PATH.'config/userdef.php');
 
 // define libpath for init.php
-define('PLIB_PATH',BS_LIB_PATH);
+if(!defined('PLIB_PATH'))
+	define('PLIB_PATH',BS_PATH.BS_LIB_PATH);
 
 // init the library
-include_once(BS_LIB_PATH.'init.php');
-
-// if somebody specifies "bspath" via GET/POST/... the init.php would delete it
-if(!isset($bspath))
-	PLIB_Helper::error('Invalid request!');
+include_once(PLIB_PATH.'init.php');
 
 // set the path
-PLIB_Path::set_inner($bspath);
+PLIB_Path::set_server_app(BS_PATH);
+// TODO change!
+if(defined('_JEXEC'))
+{
+	PLIB_Path::set_client_app(JURI::base(true).'/bs/');
+	PLIB_Path::set_client_lib(JURI::base(true).'/bs/lib/');
+}
+else
+	PLIB_Path::set_client_app(BS_PATH);
 
-// init the autoloader
-include_once(PLIB_Path::inner().'src/autoloader.php');
-PLIB_AutoLoader::register_loader('BS_Autoloader');
+// init boardsolution
+include_once(BS_PATH.'src/init.php');
 
-// ok, now show the page
-new BS_Front_Page();
+// TODO remove!
+if(defined('_JEXEC'))
+{
+	jimport('scso.community');
+	BS_Community_Manager::get_instance()->register_export(new BS_ComExport());
+}
+
+// show the page
+$page = new BS_Front_Page();
+echo $page->render();
+return $page;
 ?>

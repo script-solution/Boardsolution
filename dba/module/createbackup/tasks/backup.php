@@ -17,7 +17,7 @@
  * @subpackage	dba.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_FullObject
+final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_Object
 	implements PLIB_Progress_Task
 {
 	/**
@@ -25,29 +25,33 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_FullObject
 	 */
 	public function __construct()
 	{
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+
 		parent::__construct();
 		
-		if(!isset($_SESSION['BS_backup']))
+		if($user->get_session_data('BS_backup') === false)
 		{
-			$structure = $this->input->isset_var('structure','post');
-			$data = $this->input->isset_var('data','post');
-			$tables = $this->input->get_var('tables','post');
-			$prefix = $this->input->get_var('prefix','post',PLIB_Input::STRING);
+			$structure = $input->isset_var('structure','post');
+			$data = $input->isset_var('data','post');
+			$tables = $input->get_var('tables','post');
+			$prefix = $input->get_var('prefix','post',PLIB_Input::STRING);
 			
 			if(!$data && !$tables)
 			{
-				$this->_report_error();
+				$this->report_error();
 				return;
 			}
 			
-			$_SESSION['BS_backup'] = array();
-			$_SESSION['BS_backup']['tables'] = $tables;
-			$_SESSION['BS_backup']['prefix'] = $prefix;
-			$_SESSION['BS_backup']['data'] = $data ? 1 : 0;
-			$_SESSION['BS_backup']['structure'] = $structure ? 1 : 0;
-			$_SESSION['BS_backup']['file'] = 1;
-			$_SESSION['BS_backup']['total_files'] = 0;
-			$_SESSION['BS_backup']['backup_size'] = 0;
+			$user->set_session_data('BS_backup',array(
+				'tables' => $tables,
+				'prefix' => $prefix,
+				'data' => $data ? 1 : 0,
+				'structure' => $structure ? 1 : 0,
+				'file' => 1,
+				'total_files' => 0,
+				'backup_size' => 0
+			));
 		}
 	}
 	
@@ -59,27 +63,32 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_FullObject
 
 	public function run($pos,$ops)
 	{
-		$len = count($_SESSION['BS_backup']['tables']);
+		$db = PLIB_Props::get()->db();
+		$user = PLIB_Props::get()->user();
+		
+		$data = $user->get_session_data('BS_backup');
+		
+		$len = count($data['tables']);
 
 		// write db-structure to file?
-		if($pos == 0 && $_SESSION['BS_backup']['structure'])
+		if($pos == 0 && $data['structure'])
 		{
 			// the structure should not be so much...therefore we store it in a single file
 			$content = "";
 			for($x = 0;$x < $len;$x++)
 			{
-				$content .= '# ------------------ Structure of '.$_SESSION['BS_backup']['tables'][$x];
+				$content .= '# ------------------ Structure of '.$data['tables'][$x];
 				$content .= " ------------------".BS_DBA_LINE_WRAP;
-				$content .= 'DROP TABLE IF EXISTS '.$_SESSION['BS_backup']['tables'][$x].";".BS_DBA_LINE_WRAP;
+				$content .= 'DROP TABLE IF EXISTS '.$data['tables'][$x].";".BS_DBA_LINE_WRAP;
 				
-				$res = $this->db->sql_fetch_array($this->db->sql_qry(
-					'SHOW CREATE TABLE '.$_SESSION['BS_backup']['tables'][$x]
+				$res = $db->sql_fetch_array($db->sql_qry(
+					'SHOW CREATE TABLE '.$data['tables'][$x]
 				));
 				$create_syntax = $res[1];
 				$create_syntax = str_replace("\r\n",BS_DBA_LINE_WRAP,$create_syntax);
 				$create_syntax = str_replace("\n",BS_DBA_LINE_WRAP,$create_syntax);
 				$create_syntax = str_replace("\r",BS_DBA_LINE_WRAP,$create_syntax);
-				if($this->db->get_server_version() < '4.1')
+				if($db->get_server_version() < '4.1')
 					$create_syntax = preg_replace('/\) ENGINE=.*/',') TYPE=MyISAM;',$create_syntax);
 				
 				$create_syntax = trim($create_syntax);
@@ -90,20 +99,20 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_FullObject
 			}
 			
 			// store to file
-			$prefix = $_SESSION['BS_backup']['prefix'];
-			$filename = PLIB_Path::inner().'dba/backups/'.$prefix.'structure.sql';
+			$prefix = $data['prefix'];
+			$filename = PLIB_Path::server_app().'dba/backups/'.$prefix.'structure.sql';
 			if($this->_store_to_file($filename,$content))
 			{
-				$_SESSION['BS_backup']['total_files']++;
-				$_SESSION['BS_backup']['backup_size'] += @filesize($filename);
+				$data['total_files']++;
+				$data['backup_size'] += @filesize($filename);
 			}
 		}
 
 		// backup the data
 		$content = "";
-		if($_SESSION['BS_backup']['data'])
+		if($data['data'])
 		{
-			$db = BS_DBA_Utils::get_instance()->get_selected_database();
+			$dbname = BS_DBA_Utils::get_instance()->get_selected_database();
 			list($total,$num) = $this->_count_rows();
 			$step_count = ceil($total / $ops) + 1;
 			
@@ -111,9 +120,9 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_FullObject
 			$cpos = 0;
 			for($x = 0;$x < $len;$x++)
 			{
-				if($pos > $cpos + $num[$_SESSION['BS_backup']['tables'][$x]])
+				if($pos > $cpos + $num[$data['tables'][$x]])
 				{
-					$cpos += $num[$_SESSION['BS_backup']['tables'][$x]];
+					$cpos += $num[$data['tables'][$x]];
 					continue;
 				}
 				
@@ -126,30 +135,30 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_FullObject
 				
 				if($start == 0)
 				{
-					$content .= '# ------------------ Data of '.$_SESSION['BS_backup']['tables'][$x];
+					$content .= '# ------------------ Data of '.$data['tables'][$x];
 					$content .= " ------------------".BS_DBA_LINE_WRAP.BS_DBA_LINE_WRAP;
 				}
 				
 				$order = ' ORDER BY ';
-				$fqry = mysql_list_fields($db,$_SESSION['BS_backup']['tables'][$x]);
-				$field_num = $this->db->sql_num_fields($fqry);
+				$fqry = mysql_list_fields($dbname,$data['tables'][$x]);
+				$field_num = $db->sql_num_fields($fqry);
 				for($i = 0;$i < $field_num;$i++)
-					$order .= '`'.$this->db->sql_field_name($fqry,$i).'` ASC,';
+					$order .= '`'.$db->sql_field_name($fqry,$i).'` ASC,';
 				$order = PLIB_String::substr($order,0,PLIB_String::strlen($order) - 1);
 				
-				$query = $this->db->sql_qry(
-					'SELECT * FROM '.$_SESSION['BS_backup']['tables'][$x].' '.$order.'
+				$query = $db->sql_qry(
+					'SELECT * FROM '.$data['tables'][$x].' '.$order.'
 					 LIMIT '.$start.','.$length
 				);
-				while($data = $this->db->sql_fetch_assoc($query))
+				while($row = $db->sql_fetch_assoc($query))
 				{
 					$fields_tmp = '';
 					$values_tmp = '';
 					for($i = 0;$i < $field_num;$i++)
 					{
-						$field_name = $this->db->sql_field_name($query,$i);
+						$field_name = $db->sql_field_name($query,$i);
 						$fields_tmp .= '`'.$field_name.'`,';
-						$value = addslashes($data[$field_name]);
+						$value = addslashes($row[$field_name]);
 						$value = str_replace("\r\n","\\r\\n",$value);
 						$value = str_replace("\n","\\n",$value);
 						$value = str_replace("\r","\\r",$value);
@@ -159,40 +168,41 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_FullObject
 					$fields = PLIB_String::substr($fields_tmp,0,PLIB_String::strlen($fields_tmp) - 1);
 					$values = PLIB_String::substr($values_tmp,0,PLIB_String::strlen($values_tmp) - 1);
 	
-					$content .= 'INSERT INTO '.$_SESSION['BS_backup']['tables'][$x];
+					$content .= 'INSERT INTO '.$data['tables'][$x];
 					$content .= ' ('.$fields.') VALUES ('.$values.");".BS_DBA_LINE_WRAP;
 					$lines++;
 				}
-				$this->db->sql_free($query);
+				$db->sql_free($query);
 				
-				$cpos += $num[$_SESSION['BS_backup']['tables'][$x]];
+				$cpos += $num[$data['tables'][$x]];
 				
 				if($lines > 0 && $lines < $ops)
 					$content .= BS_DBA_LINE_WRAP.BS_DBA_LINE_WRAP;
 			}
 			
 			// store the file
-			$prefix = $_SESSION['BS_backup']['prefix'];
-			$file = $_SESSION['BS_backup']['file'];
-			$filename = PLIB_Path::inner().'dba/backups/'.$prefix.'data'.$file.'.sql';
+			$prefix = $data['prefix'];
+			$file = $data['file'];
+			$filename = PLIB_Path::server_app().'dba/backups/'.$prefix.'data'.$file.'.sql';
 			if($this->_store_to_file($filename,$content))
 			{
-				$_SESSION['BS_backup']['total_files']++;
-				$_SESSION['BS_backup']['backup_size'] += @filesize($filename);
+				$data['total_files']++;
+				$data['backup_size'] += @filesize($filename);
 			}
 			
-			$_SESSION['BS_backup']['file']++;
+			$data['file']++;
 		}
 		
 		// are we finished?
-		if(!$_SESSION['BS_backup']['data'] || $_SESSION['BS_backup']['file'] >= $step_count)
+		if(!$data['data'] || $data['file'] >= $step_count)
 		{
-			$this->backups->add_backup(
-				$_SESSION['BS_backup']['prefix'],$_SESSION['BS_backup']['total_files'],
-				$_SESSION['BS_backup']['backup_size']
+			$backups = PLIB_Props::get()->backups();
+			$backups->add_backup(
+				$data['prefix'],$data['total_files'],
+				$data['backup_size']
 			);
 			
-			unset($_SESSION['BS_backup']);
+			$user->delete_session_data('BS_backup');
 		}
 	}
 	
@@ -203,22 +213,26 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_FullObject
 	 */
 	private function _count_rows()
 	{
-		if(!$_SESSION['BS_backup']['data'])
+		$db = PLIB_Props::get()->db();
+		$user = PLIB_Props::get()->user();
+		
+		$data = $user->get_session_data('BS_backup');
+		if(!$data['data'])
 			return array(0,array());
 		
 		$total = 0;
 		$num = array();
-		$db = BS_DBA_Utils::get_instance()->get_selected_database();
-		$qry = $this->db->sql_qry('SHOW TABLE STATUS FROM `'.$db.'`');
-		while($data = $this->db->sql_fetch_assoc($qry))
+		$dbname = BS_DBA_Utils::get_instance()->get_selected_database();
+		$qry = $db->sql_qry('SHOW TABLE STATUS FROM `'.$dbname.'`');
+		while($row = $db->sql_fetch_assoc($qry))
 		{
-			if(in_array($data['Name'],$_SESSION['BS_backup']['tables']))
+			if(in_array($row['Name'],$data['tables']))
 			{
-				$num[$data['Name']] = $data['Rows'];
-				$total += $data['Rows'];
+				$num[$row['Name']] = $row['Rows'];
+				$total += $row['Rows'];
 			}
 		}
-		$this->db->sql_free($qry);
+		$db->sql_free($qry);
 		return array($total,$num);
 	}
 	
@@ -237,7 +251,7 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_FullObject
 		return $res;
 	}
 
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

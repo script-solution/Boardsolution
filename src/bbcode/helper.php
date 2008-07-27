@@ -207,7 +207,7 @@ final class BS_BBCode_Helper extends PLIB_Singleton
 		}
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

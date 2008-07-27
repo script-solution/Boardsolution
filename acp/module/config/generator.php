@@ -742,7 +742,7 @@ Bitte haben Sie Verständnis."
 				'title' => 'linklist_descriptions',
 				'items' => array(
 					array(
-						'name' => 'lnkdesc_enable_bbcode',
+						'name' => 'desc_enable_bbcode',
 						'custom_title' => 'enable_bbcode',
 						'type' => 'yesno',
 						'properties' => "",
@@ -751,7 +751,7 @@ Bitte haben Sie Verständnis."
 						'default' => 1
 					),
 					array(
-						'name' => 'lnkdesc_enable_smileys',
+						'name' => 'desc_enable_smileys',
 						'custom_title' => 'enable_smileys',
 						'type' => 'yesno',
 						'properties' => "",
@@ -760,7 +760,7 @@ Bitte haben Sie Verständnis."
 						'default' => 1
 					),
 					array(
-						'name' => 'lnkdesc_max_images',
+						'name' => 'desc_max_images',
 						'custom_title' => 'max_images',
 						'type' => 'int',
 						'properties' => "size=4\nmaxlen=4",
@@ -769,7 +769,7 @@ Bitte haben Sie Verständnis."
 						'default' => 1
 					),
 					array(
-						'name' => 'lnkdesc_max_smileys',
+						'name' => 'desc_max_smileys',
 						'custom_title' => 'max_smileys',
 						'type' => 'int',
 						'properties' => "size=4\nmaxlen=4",
@@ -778,7 +778,7 @@ Bitte haben Sie Verständnis."
 						'default' => 3
 					),
 					array(
-						'name' => 'lnkdesc_max_length',
+						'name' => 'desc_max_length',
 						'custom_title' => 'max_length',
 						'type' => 'int',
 						'properties' => "size=4\nmaxlen=9",
@@ -787,7 +787,7 @@ Bitte haben Sie Verständnis."
 						'default' => 500
 					),
 					array(
-						'name' => 'lnkdesc_allowed_tags',
+						'name' => 'desc_allowed_tags',
 						'custom_title' => 'allowed_tags',
 						'type' => 'line',
 						'properties' => "size=70\nmaxlen=20000",
@@ -1659,8 +1659,8 @@ foreach($groups as $group)
 }
 
 // This may produce errors because the cache doesn't exist
-@$bs = include_once(BS_PATH.'extern/bs_api.php');
-/* @var $bs PLIB_FullObject */
+@include_once(BS_PATH.'extern/bs_api.php');
+@$bs = new BS_Extern_Document();
 
 // build the cache
 $bs->cache->refresh_all();

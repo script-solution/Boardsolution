@@ -21,8 +21,10 @@ final class BS_Tasks_error_log extends PLIB_Tasks_Base
 {
 	public function run()
 	{
-		if($this->cfg['error_log_days'] > 0)
-			BS_DAO::get_logerrors()->delete_timedout(3600 * 24 * $this->cfg['error_log_days']);
+		$cfg = PLIB_Props::get()->cfg();
+
+		if($cfg['error_log_days'] > 0)
+			BS_DAO::get_logerrors()->delete_timedout(3600 * 24 * $cfg['error_log_days']);
 	}
 }
 ?>

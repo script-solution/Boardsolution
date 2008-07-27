@@ -21,7 +21,10 @@ final class BS_ACP_Action_attachments_delete extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$path_str = $this->input->get_var('ids','get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+
+		$path_str = $input->get_var('ids','get',PLIB_Input::STRING);
 		$paths = PLIB_Array_Utils::advanced_explode('|',$path_str);
 		if(count($paths) == 0)
 			return 'Got no paths via GET ("ids")';
@@ -37,13 +40,13 @@ final class BS_ACP_Action_attachments_delete extends BS_ACP_Action_Base
 		
 		// delete files
 		foreach($paths as $path)
-			@unlink(PLIB_Path::inner().$path);
+			@unlink(PLIB_Path::server_app().$path);
 		
 		// delete db-attachments
 		if(count($ids) > 0)
 			BS_DAO::get_attachments()->delete_by_ids($ids);
 
-		$this->set_success_msg($this->locale->lang('attachments_delete_successfull'));
+		$this->set_success_msg($locale->lang('attachments_delete_successfull'));
 		$this->set_action_performed(true);
 
 		return '';

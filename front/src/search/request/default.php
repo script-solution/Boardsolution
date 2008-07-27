@@ -29,8 +29,10 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 	
 	public function get_initial_result_type()
 	{
+		$input = PLIB_Props::get()->input();
+
 		$result_types = array('topics','posts');
-		return $this->input->correct_var('result_type','post',PLIB_Input::STRING,$result_types,'topics');
+		return $input->correct_var('result_type','post',PLIB_Input::STRING,$result_types,'topics');
 	}
 	
 	public function set_result_type($result)
@@ -81,27 +83,31 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 	
 	public function get_result_ids()
 	{
+		$input = PLIB_Props::get()->input();
+
 		$search_cond = $this->_get_search_condition();
 		if($search_cond === null)
 			return null;
 		
 		// TODO allow unlimited results?
 		$limit_vals = array(10,25,50,100,250,500);
-		$limit = $this->input->correct_var('limit','post',PLIB_Input::INTEGER,$limit_vals,250);
+		$limit = $input->correct_var('limit','post',PLIB_Input::INTEGER,$limit_vals,250);
 		
 		$type = $this->_result instanceof BS_Front_Search_Result_Posts ? 'posts' : 'topics';
-		return $this->_get_result_ids($type,$search_cond,$limit,$this->_keywords['kw']);
+		return $this->get_result_ids_impl($type,$search_cond,$limit,$this->_keywords['kw']);
 	}
 	
 	public function get_title($search)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		$num = count($search->get_result_ids());
 		$username_count = count($this->_keywords['un']);
 		
 		if($this->_result instanceof BS_Front_Search_Result_Posts && $username_count == 0)
 		{
 			return sprintf(
-				$this->locale->lang('search_result_posts'),
+				$locale->lang('search_result_posts'),
 				stripslashes(implode('", "',$this->_keywords['kw'])),
 				$num
 			);
@@ -109,7 +115,7 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 		else if($this->_result instanceof BS_Front_Search_Result_Posts)
 		{
 			return sprintf(
-				$this->locale->lang('search_result_posts_usernames'),
+				$locale->lang('search_result_posts_usernames'),
 				stripslashes(implode('", "',$this->_keywords['kw'])),
 				stripslashes(implode('", "',$this->_keywords['un'])),
 				$num
@@ -118,7 +124,7 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 		else if($this->_result instanceof BS_Front_Search_Result_Topics && $username_count == 0)
 		{
 			return sprintf(
-				$this->locale->lang('search_result_topics'),
+				$locale->lang('search_result_topics'),
 				stripslashes(implode('", "',$this->_keywords['kw'])),
 				$num
 			);
@@ -126,7 +132,7 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 		else
 		{
 			return sprintf(
-				$this->locale->lang('search_result_topics_usernames'),
+				$locale->lang('search_result_topics_usernames'),
 				stripslashes(implode('", "',$this->_keywords['kw'])),
 				stripslashes(implode('", "',$this->_keywords['un'])),
 				$num
@@ -136,18 +142,20 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 	
 	public function get_order()
 	{
+		$input = PLIB_Props::get()->input();
+
 		$order_vals = array('topic_name','topic_type','replies','views','date','relevance');
-		$order = $this->input->get_var('order','post',PLIB_Input::STRING);
+		$order = $input->get_var('order','post',PLIB_Input::STRING);
 		if($order == null)
-			$order = $this->input->get_var(BS_URL_ORDER,'get',PLIB_Input::STRING);
+			$order = $input->get_var(BS_URL_ORDER,'get',PLIB_Input::STRING);
 
 		if(!in_array($order,$order_vals))
 			$order = 'relevance';
 
 		$ad_vals = array('ASC','DESC');
-		$ad = $this->input->get_var('ad','post',PLIB_Input::STRING);
+		$ad = $input->get_var('ad','post',PLIB_Input::STRING);
 		if($ad == null)
-			$ad = $this->input->get_var(BS_URL_AD,'get',PLIB_Input::STRING);
+			$ad = $input->get_var(BS_URL_AD,'get',PLIB_Input::STRING);
 
 		if(!in_array($ad,$ad_vals))
 			$ad = 'DESC';
@@ -162,29 +170,33 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 	 */
 	private function _get_search_condition()
 	{
-		$keyword = $this->input->get_var('keyword','post',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+
+		$keyword = $input->get_var('keyword','post',PLIB_Input::STRING);
 		if($keyword === null)
-			$keyword = $this->input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
+			$keyword = $input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
 		
-		$username = $this->input->get_var('un','post',PLIB_Input::STRING);
+		$username = $input->get_var('un','post',PLIB_Input::STRING);
 		if($username === null)
-			$username = $this->input->get_var(BS_URL_UN,'get',PLIB_Input::STRING);
+			$username = $input->get_var(BS_URL_UN,'get',PLIB_Input::STRING);
 		
-		$keyword_mode = $this->input->get_var('keyword_mode','post',PLIB_Input::STRING);
+		$keyword_mode = $input->get_var('keyword_mode','post',PLIB_Input::STRING);
 		$keyword_mode = ($keyword_mode == 'and') ? 'AND' : 'OR';
 		
 		$keyword_len = PLIB_String::strlen($keyword);
 		if($keyword_len == 0 && $username == '')
 		{
-			$this->msgs->add_error(
-				sprintf($this->locale->lang('search_missing_keyword'),BS_SEARCH_MIN_KEYWORD_LEN)
+			$msgs->add_error(
+				sprintf($locale->lang('search_missing_keyword'),BS_SEARCH_MIN_KEYWORD_LEN)
 			);
 			return null;
 		}
 
 		if($keyword_len > 255 || PLIB_String::strlen($username) > 255)
 		{
-			$this->msgs->add_error($this->locale->lang('keyword_max_length'));
+			$msgs->add_error($locale->lang('keyword_max_length'));
 			return null;
 		}
 
@@ -195,13 +207,13 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 
 		if(count($this->_keywords['kw']) == 0 && count($this->_keywords['un']) == 0)
 		{
-			$this->msgs->add_error(
-				sprintf($this->locale->lang('search_missing_keyword'),BS_SEARCH_MIN_KEYWORD_LEN)
+			$msgs->add_error(
+				sprintf($locale->lang('search_missing_keyword'),BS_SEARCH_MIN_KEYWORD_LEN)
 			);
 			return null;
 		}
 
-		$fid = $this->input->get_var('fid','post');
+		$fid = $input->get_var('fid','post');
 		$sql = '';
 
 		// parse keywords
@@ -232,7 +244,7 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 		return $sql;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

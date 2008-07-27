@@ -21,17 +21,26 @@ final class BS_Front_Action_posts_subscribetopic extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		// has the user the permission to subscribe the topic?
-		if(!$this->user->is_loggedin() || $this->cfg['enable_email_notification'] == 0)
-			return 'You are not loggedin or subscriptions are disabled';
+		$user = PLIB_Props::get()->user();
+		$cfg = PLIB_Props::get()->cfg();
+		$functions = PLIB_Props::get()->functions();
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		if(!$user->is_loggedin())
+			return 'nichteingeloggt';
+
+		if($cfg['enable_email_notification'] == 0)
+			return 'Subscriptions are disabled';
 
 		// check if the session-id is valid
-		if(!$this->functions->has_valid_get_sid())
+		if(!$functions->has_valid_get_sid())
 			return 'Invalid session-id';
 
 		// are the parameters valid?
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
 		if($fid == null || $tid == null)
 			return 'The forum-id or topic-id is invalid';
 
@@ -48,11 +57,11 @@ final class BS_Front_Action_posts_subscribetopic extends BS_Front_Action_Base
 		$sub->perform_action();
 
 		$this->set_action_performed(true);
-		$this->add_link($this->locale->lang('back'),$this->url->get_posts_url($fid,$tid));
-		$url = $this->url->get_url('userprofile','&amp;'.BS_URL_LOC.'=topics');
-		$this->add_link($this->locale->lang('to_profile_subscr'),$url);
+		$this->add_link($locale->lang('back'),$url->get_posts_url($fid,$tid));
+		$murl = $url->get_url('userprofile','&amp;'.BS_URL_LOC.'=topics');
+		$this->add_link($locale->lang('to_profile_subscr'),$murl);
 		$this->set_success_msg(
-			sprintf($this->locale->lang('subscription_desc_topic'),$sub->get_topic_name())
+			sprintf($locale->lang('subscription_desc_topic'),$sub->get_topic_name())
 		);
 
 		return '';

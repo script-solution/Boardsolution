@@ -48,27 +48,28 @@ final class BS_Front_Search_Utils extends PLIB_UtilBase
 	
 	/**
 	 * Checks wether the given keyword is valid. If not a message will be added to
-	 * <var>$this->msgs</var> and false will be returned.
+	 * <var>PLIB_Props::get()->msgs()</var> and false will be returned.
 	 *
 	 * @param string $keyword the entered keyword
 	 * @return boolean true if ok, false otherwise
 	 */
 	public static function is_valid_keyword($keyword)
 	{
+		$locale = PLIB_Props::get()->locale();
+		$msgs = PLIB_Props::get()->msgs();
+		
 		$keyword_len = PLIB_String::strlen($keyword);
 		if($keyword_len == 0)
 		{
-			$locale = PLIB_Object::get_prop('locale');
-			PLIB_Object::get_prop('msgs')->add_error(
-				sprintf($this->locale->lang('search_missing_keyword'),BS_SEARCH_MIN_KEYWORD_LEN)
+			$msgs->add_error(
+				sprintf($locale->lang('search_missing_keyword'),BS_SEARCH_MIN_KEYWORD_LEN)
 			);
 			return false;
 		}
 
 		if($keyword_len > 255)
 		{
-			$locale = PLIB_Object::get_prop('locale');
-			PLIB_Object::get_prop('msgs')->add_error($locale->lang('keyword_max_length'));
+			$msgs->add_error($locale->lang('keyword_max_length'));
 			return false;
 		}
 		
@@ -76,8 +77,8 @@ final class BS_Front_Search_Utils extends PLIB_UtilBase
 	}
 	
 	/**
-	 * Expects that the given string comes from e.g. <var>$this->input->get_var()</var> and
-	 * escapes / prepares it to be passed to {@link extract_keywords}.
+	 * Expects that the given string comes from e.g. <var>PLIB_Props::get()->input()->get_var()</var>
+	 * and escapes / prepares it to be passed to {@link extract_keywords}.
 	 * That means the method expects that addslashes() and htmlspecialchars() have been done.
 	 * 
 	 * @param string $input the input-string
@@ -100,9 +101,11 @@ final class BS_Front_Search_Utils extends PLIB_UtilBase
 	 */
 	public static function extract_keywords($input)
 	{
+		$functions = PLIB_Props::get()->functions();
+		
 		static $ignore = null;
 		if($ignore === null)
-			$ignore = PLIB_Object::get_prop('functions')->get_search_ignore_words();
+			$ignore = $functions->get_search_ignore_words();
 		
 		$sections = array();
 		while(($start = PLIB_String::strpos($input,'"')) !== false)

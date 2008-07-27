@@ -25,13 +25,18 @@ final class BS_ACP_Config_Item_Forums extends PLIB_Config_Item_Default
 		$str = BS_ForumUtils::get_instance()->get_recursive_forum_combo(
 			$this->_data->get_name().'[]',explode(',',$this->_data->get_value()),0,false,false
 		);
-		$str .= $this->_get_suffix();
+		$str .= $this->get_suffix();
 		return $str;
 	}
 
 	public function get_value()
 	{
-		return implode(',',$this->input->get_var($this->_data->get_name(),'post'));
+		$input = PLIB_Props::get()->input();
+
+		$value = $input->get_var($this->_data->get_name(),'post');
+		if($value !== null)
+			return implode(',',$value);
+		return '';
 	}
 }
 ?>

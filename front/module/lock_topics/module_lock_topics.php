@@ -19,27 +19,59 @@
  */
 final class BS_Front_Module_lock_topics extends BS_Front_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACTION_LOCK_TOPICS => 'default'
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$user = PLIB_Props::get()->user();
+		
+		$doc->set_has_access($user->is_loggedin());
+		
+		$doc->add_action(BS_ACTION_LOCK_TOPICS,'default');
+		
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$ids = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
+
+		$this->add_loc_forum_path($fid);
+		$doc->add_breadcrumb(
+			$locale->lang('lock_topics'),
+			$url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids)
 		);
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$input = PLIB_Props::get()->input();
+		$auth = PLIB_Props::get()->auth();
+		$user = PLIB_Props::get()->user();
+		$forums = PLIB_Props::get()->forums();
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
 		// check parameters
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$id_str = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$id_str = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
 		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 
 		if($fid == null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
@@ -50,11 +82,11 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 		foreach(BS_DAO::get_topics()->get_by_ids($ids,$fid) as $data)
 		{
 			// skip this topic if the user is not allowed to delete it
-			if(!$this->auth->has_current_forum_perm(BS_MODE_LOCK_TOPICS))
+			if(!$auth->has_current_forum_perm(BS_MODE_LOCK_TOPICS))
 				continue;
 			
 			// forum closed?
-			if(!$this->user->is_admin() && $this->forums->forum_is_closed($data['rubrikid']))
+			if(!$user->is_admin() && $forums->forum_is_closed($data['rubrikid']))
 				continue;
 			
 			// check if this is a shadow topic
@@ -70,11 +102,11 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 		$selected_topics = BS_TopicUtils::get_instance()->get_selected_topics($selected_topic_data);
 		if(count($selected_topics) == 0)
 		{
-			$this->_report_error(PLIB_Messages::MSG_TYPE_ERROR,$this->locale->lang('no_topics_chosen'));
+			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('no_topics_chosen'));
 			return;
 		}
 
-		$this->_request_formular(false,false);
+		$this->request_formular(false,false);
 		
 		$edit_topic_vals = $this->_get_vals($selected_topic_data,BS_LOCK_TOPIC_EDIT);
 		$openclose_topic_vals = $this->_get_vals($selected_topic_data,BS_LOCK_TOPIC_OPENCLOSE);
@@ -83,9 +115,9 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 		if(count($selected_topic_ids) == 1 && $last_data['moved_tid'] == 0)
 			BS_PostingUtils::get_instance()->add_topic_review($last_data,false);
 
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_LOCK_TOPICS,
-			'target_url' => $this->url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id_str,'&amp;',true),
+			'target_url' => $url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id_str,'&amp;',true),
 			'selected_topics' => $selected_topics,
 			'edit_topic_def' => $edit_topic_vals['val'],
 			'openclose_topic_def' => $openclose_topic_vals['val'],
@@ -94,7 +126,7 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 			'openclose_topic_diffs' => $openclose_topic_vals['diffs'],
 			'posts_topic_diffs' => $posts_topic_vals['diffs'],
 			'show_diff_hint' => count($selected_topic_ids) > 1,
-			'back_url' => $this->url->get_topics_url($fid)
+			'back_url' => $url->get_topics_url($fid)
 		));
 	}
 	
@@ -134,24 +166,6 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 			'diffs' => $cval_diffs,
 			'val' => $cval
 		);
-	}
-
-	public function get_location()
-	{
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$ids = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
-
-		$result = array();
-		$this->_add_loc_forum_path($result,$fid);
-		$url = $this->url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids);
-		$result[$this->locale->lang('lock_topics')] = $url;
-
-		return $result;
-	}
-
-	public function has_access()
-	{
-		return $this->user->is_loggedin();
 	}
 }
 ?>

@@ -21,8 +21,11 @@ final class BS_ACP_Action_themes_update extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$names = $this->input->get_var('names','post');
-		$folders = $this->input->get_var('folders','post');
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+
+		$names = $input->get_var('names','post');
+		$folders = $input->get_var('folders','post');
 		if(!is_array($names) || !is_array($folders))
 			return 'Invalid POST-variables "names" or "folders"';
 		
@@ -37,7 +40,7 @@ final class BS_ACP_Action_themes_update extends BS_ACP_Action_Base
 		}
 
 		if($c > 0)
-			$this->cache->refresh('themes');
+			$cache->refresh('themes');
 		
 		$this->set_show_status_page(false);
 		$this->set_action_performed(true);

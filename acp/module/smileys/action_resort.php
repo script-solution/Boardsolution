@@ -21,6 +21,8 @@ final class BS_ACP_Action_smileys_resort extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		$i = 1;
 		foreach(BS_DAO::get_smileys()->get_list() as $smiley)
 		{
@@ -30,7 +32,7 @@ final class BS_ACP_Action_smileys_resort extends BS_ACP_Action_Base
 			BS_DAO::get_smileys()->update_by_id($smiley['id'],$fields);
 		}
 		
-		$this->set_success_msg($this->locale->lang('sort_successfully_corrected'));
+		$this->set_success_msg($locale->lang('sort_successfully_corrected'));
 		$this->set_action_performed(true);
 
 		return '';

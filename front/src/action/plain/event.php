@@ -27,8 +27,8 @@ final class BS_Front_Action_Plain_Event extends BS_Front_Action_Plain
 	 */
 	public static function get_default()
 	{
-		$input = PLIB_Object::get_prop('input');
-		$user = PLIB_Object::get_prop('user');
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
 		
 		// grab variables from POST
 		$topic_name = $input->get_var('topic_name','post',PLIB_Input::STRING);
@@ -39,7 +39,7 @@ final class BS_Front_Action_Plain_Event extends BS_Front_Action_Plain
 			'timeout_type','post',PLIB_Input::STRING,array('begin','self'),'begin'
 		);
 		$enable_announcements = $input->get_var('enable_announcements','post',PLIB_Input::INT_BOOL);
-		$description = $input->get_var('description','post',PLIB_Input::STRING);
+		$description = $input->get_var('text','post',PLIB_Input::STRING);
 
 		$form = new BS_HTML_Formular(true,true);
 		
@@ -104,6 +104,13 @@ final class BS_Front_Action_Plain_Event extends BS_Front_Action_Plain
 	private $_description;
 	
 	/**
+	 * The posted description
+	 *
+	 * @var string
+	 */
+	private $_description_posted;
+	
+	/**
 	 * The timestamp for the event-begin
 	 *
 	 * @var int
@@ -153,7 +160,7 @@ final class BS_Front_Action_Plain_Event extends BS_Front_Action_Plain
 		$this->_user_id = (int)$user_id;
 		$this->_name = (string)$name;
 		$this->_location = (string)$location;
-		$this->_description = (string)$description;
+		$this->_description_posted = (string)$description;
 		$this->_begin = (int)$begin;
 		$this->_end = (int)$end;
 		$this->_timeout = (int)$timeout;
@@ -172,6 +179,8 @@ final class BS_Front_Action_Plain_Event extends BS_Front_Action_Plain
 	
 	public function check_data()
 	{
+		$user = PLIB_Props::get()->user();
+
 		if($this->_tid === null || $this->_tid < 0)
 			return 'Invalid topic-id "'.$this->_tid.'"';
 		
@@ -180,7 +189,7 @@ final class BS_Front_Action_Plain_Event extends BS_Front_Action_Plain
 			return 'terminleer';
 		
 		// check the user-id if it is not the current one and no guest
-		if($this->user->get_user_id() != $this->_user_id && $this->_user_id > 0)
+		if($user->get_user_id() != $this->_user_id && $this->_user_id > 0)
 		{
 			$data = BS_DAO::get_user()->get_user_by_id($this->_user_id);
 			if($data === false)
@@ -196,15 +205,32 @@ final class BS_Front_Action_Plain_Event extends BS_Front_Action_Plain
 		
 		if($this->_max_announcements < -1)
 			return 'Invalid number of max-announcements';
+		
+		// convert and check text
+		if($this->_tid == 0)
+		{
+			$error = BS_PostingUtils::get_instance()->prepare_message_for_db(
+				$this->_description,$this->_description_posted,'desc',true,true
+			);
+			if($error != '')
+				return $error;
+		}
+		else
+		{
+			$this->_description = '';
+			$this->_description_posted = '';
+		}
 
 		return parent::check_data();
 	}
 	
 	public function perform_action()
 	{
+		$db = PLIB_Props::get()->db();
+
 		parent::perform_action();
 		
-		$this->db->start_transaction();
+		$db->start_transaction();
 		
 		$fields = array(
 			'tid' => $this->_tid,
@@ -214,15 +240,16 @@ final class BS_Front_Action_Plain_Event extends BS_Front_Action_Plain
 			'event_end' => $this->_end,
 			'max_announcements' => $this->_max_announcements,
 			'description' => $this->_description,
+			'description_posted' => $this->_description_posted,
 			'event_location' => $this->_location,
 			'timeout' => $this->_timeout
 		);
 		BS_DAO::get_events()->create($fields);
 		
-		$this->db->commit_transaction();
+		$db->commit_transaction();
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

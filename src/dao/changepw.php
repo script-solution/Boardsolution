@@ -40,10 +40,12 @@ class BS_DAO_ChangePW extends PLIB_Singleton
 	 */
 	public function exists($id,$key = '')
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		return $this->db->sql_num(
+		return $db->sql_num(
 			BS_TB_CHANGE_PW,'user_id',' WHERE user_id = '.$id.($key ? ' AND user_key = "'.$key.'"' : '')
 		) > 0;
 	}
@@ -57,15 +59,17 @@ class BS_DAO_ChangePW extends PLIB_Singleton
 	 */
 	public function create($user_id,$key)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
 			PLIB_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$this->db->sql_insert(BS_TB_CHANGE_PW,array(
+		$db->sql_insert(BS_TB_CHANGE_PW,array(
 			'user_id' => $user_id,
 			'user_key' => $key,
 			'email_date' => time()
 		));
-		return $this->db->get_last_insert_id();
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -77,14 +81,16 @@ class BS_DAO_ChangePW extends PLIB_Singleton
 	 */
 	public function update_by_user($user_id,$key)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
 			PLIB_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$this->db->sql_update(BS_TB_CHANGE_PW,'WHERE user_id = '.$user_id,array(
+		$db->sql_update(BS_TB_CHANGE_PW,'WHERE user_id = '.$user_id,array(
 			'user_key' => $key,
 			'email_date' => time()
 		));
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -95,11 +101,13 @@ class BS_DAO_ChangePW extends PLIB_Singleton
 	 */
 	public function delete_by_user($id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$this->db->sql_qry('DELETE FROM '.BS_TB_CHANGE_PW.' WHERE user_id = '.$id);
-		return $this->db->get_affected_rows();
+		$db->sql_qry('DELETE FROM '.BS_TB_CHANGE_PW.' WHERE user_id = '.$id);
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -110,14 +118,16 @@ class BS_DAO_ChangePW extends PLIB_Singleton
 	 */
 	public function delete_timedout($timeout)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($timeout) || $timeout <= 0)
 			PLIB_Helper::def_error('intgt0','timeout',$timeout);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_CHANGE_PW.'
 			 WHERE email_date < '.(time() - $timeout)
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

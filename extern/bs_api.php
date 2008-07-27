@@ -23,32 +23,35 @@ if(!defined('PLIB_PATH'))
 include_once(PLIB_PATH.'init.php');
 
 // set the path
-PLIB_Path::set_inner(BS_PATH);
+PLIB_Path::set_server_app(BS_PATH);
+PLIB_Path::set_client_app(BS_PATH);
 
-// init the autoloader
-include_once(PLIB_Path::inner().'src/autoloader.php');
-PLIB_AutoLoader::register_loader('BS_Autoloader');
+// init boardsolution
+include_once(BS_PATH.'src/init.php');
+$cfg = PLIB_Props::get()->cfg();
+$locale = PLIB_Props::get()->locale();
+PLIB_Path::set_outer($cfg['board_url'].'/');
+PLIB_Error_Handler::get_instance()->set_logger(new BS_Error_Logger());
+$locale->add_language_file('index');
 
-// create document class
-class BS_Extern_Document extends BS_Document
-{
-	public function finish()
-	{
-		$this->_finish();
-	}
-	
-	protected function _get_print_vars()
-	{
-		return get_object_vars($this);
-	}
-}
-
+// load extern-API stuff
 include_once(BS_PATH.'extern/src/api_functions.php');
 include_once(BS_PATH.'extern/src/api_module.php');
 
-$doc = new BS_Extern_Document();
-// TODO keep that?
-//register_shutdown_function(array($doc,'finish'));
+ob_start();
 
-return $doc;
+/**
+ * Should be called when you're done so that the db-connection can be closed, the session-data
+ * can be written do db and so on
+ */
+function BS_finish()
+{
+	$db = PLIB_Props::get()->db();
+	$sessions = PLIB_Props::get()->sessions();
+	
+	$sessions->finalize();
+	$db->disconnect();
+	
+	ob_end_flush();
+}
 ?>

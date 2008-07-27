@@ -17,7 +17,7 @@
  * @subpackage	acp.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_MenuItem extends PLIB_FullObject
+final class BS_ACP_MenuItem extends PLIB_Object
 {
 	/**
 	 * The name of the module
@@ -49,6 +49,8 @@ final class BS_ACP_MenuItem extends PLIB_FullObject
 	 */
 	public function __construct($module,$frame = null,$url = null)
 	{
+		$user = PLIB_Props::get()->user();
+
 		parent::__construct();
 		
 		if(!is_string($module))
@@ -62,7 +64,7 @@ final class BS_ACP_MenuItem extends PLIB_FullObject
 		$this->_frame = $frame;
 		if($url === null)
 			$this->_url = 'admin.php?page=content&amp;loc='.$this->_module.'&amp;'
-				.BS_URL_SID.'='.$this->user->get_session_id();
+				.BS_URL_SID.'='.$user->get_session_id();
 		else
 			$this->_url = $url;
 	}
@@ -94,7 +96,7 @@ final class BS_ACP_MenuItem extends PLIB_FullObject
 		return "parent.".$this->_frame.".location.href = '".$this->get_url()."'";
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

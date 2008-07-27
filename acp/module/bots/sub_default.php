@@ -19,35 +19,50 @@
  */
 final class BS_ACP_SubModule_bots_default extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_DELETE_BOTS => 'delete'
-		);
+		parent::init($doc);
+		
+		$doc->add_action(BS_ACP_ACTION_DELETE_BOTS,'delete');
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
 		// display delete-message?
-		if($this->input->isset_var('delete','post'))
+		if($input->isset_var('delete','post'))
 		{
-			$ids = $this->input->get_var('delete','post');
-			$site = $this->input->get_var('site','get',PLIB_Input::ID);
-			$names = $this->cache->get_cache('bots')->get_field_vals_of_keys($ids,'bot_name');
-			$namelist = PLIB_StringHelper::get_enum($names,$this->locale->lang('and'));
+			$ids = $input->get_var('delete','post');
+			$site = $input->get_var('site','get',PLIB_Input::ID);
+			$names = $cache->get_cache('bots')->get_field_vals_of_keys($ids,'bot_name');
+			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
 			
-			$this->functions->add_delete_message(
-				sprintf($this->locale->lang('delete_message'),$namelist),
-				$this->url->get_acpmod_url(
+			$functions->add_delete_message(
+				sprintf($locale->lang('delete_message'),$namelist),
+				$url->get_acpmod_url(
 					0,'&amp;at='.BS_ACP_ACTION_DELETE_BOTS.'&amp;ids='.implode(',',$ids).'&amp;site='.$site
 				),
-				$this->url->get_acpmod_url(0,'&amp;site='.$site)
+				$url->get_acpmod_url(0,'&amp;site='.$site)
 			);
 		}
 		
-		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
+		$search = $input->get_var('search','get',PLIB_Input::STRING);
 		$bots = array();
-		foreach($this->cache->get_cache('bots') as $data)
+		foreach($cache->get_cache('bots') as $data)
 		{
 			if(!$search || stripos($data['bot_name'],$search) !== false ||
 				stripos($data['bot_match'],$search) !== false ||
@@ -72,7 +87,7 @@ final class BS_ACP_SubModule_bots_default extends BS_ACP_SubModule
 			if($row >= $start)
 			{
 				if($data['bot_ip_start'] == '')
-					$ip_range = $this->locale->lang('notavailable');
+					$ip_range = $locale->lang('notavailable');
 				else if($data['bot_ip_start'] == $data['bot_ip_end'])
 					$ip_range = $data['bot_ip_start'];
 				else
@@ -90,26 +105,21 @@ final class BS_ACP_SubModule_bots_default extends BS_ACP_SubModule
 			$row++;
 		}
 		
-		$this->tpl->add_array('bots',$tplbots);
+		$tpl->add_array('bots',$tplbots);
 		
-		$hidden = $this->input->get_vars_from_method('get');
+		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);
 		unset($hidden['search']);
 		unset($hidden['at']);
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'site' => $site,
-			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));
 		
-		$url = $this->url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
-		$this->functions->add_pagination($pagination,$url);
-	}
-	
-	public function get_location()
-	{
-		return array();
+		$murl = $url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
+		$functions->add_pagination($pagination,$murl);
 	}
 }
 ?>

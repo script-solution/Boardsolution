@@ -34,6 +34,9 @@ final class BS_ACP_Menu extends PLIB_Singleton
 	 */
 	public function get_menu_items()
 	{
+		$url = PLIB_Props::get()->url();
+		$user = PLIB_Props::get()->user();
+
 		// All available items. In the following form:
 		// array(
 		// 	'<catName>' => array(
@@ -206,13 +209,13 @@ final class BS_ACP_Menu extends PLIB_Singleton
 					),
 					'back_to_frontend' => array(
 						'title' => 'back_to_frontend',
-						'url' => $this->url->get_frontend_url(),
+						'url' => $url->get_frontend_url(),
 						'access' => 'all',
 						'frame' => 'document',
 					),
 					'logout' => array(
 						'title' => 'logout',
-						'url' => 'admin.php?logout=1&amp;'.BS_URL_SID.'='.$this->user->get_session_id(),
+						'url' => 'admin.php?logout=1&amp;'.BS_URL_SID.'='.$user->get_session_id(),
 						'access' => 'all',
 						'frame' => 'document',
 					),

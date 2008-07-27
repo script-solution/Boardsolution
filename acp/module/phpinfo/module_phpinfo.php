@@ -20,16 +20,32 @@
 final class BS_ACP_Module_phpinfo extends BS_ACP_Module
 {
 	/**
-	 * Constructor
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
 	 */
-	public function __construct()
+	public function init($doc)
 	{
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_ACPACCESS_MODULE,'module');
+		
 		// disable gzip here
-		$this->doc->set_use_gzip(false);
+		$doc->set_gzip(false);
+
+		$doc->add_breadcrumb($locale->lang('acpmod_phpinfo'),$url->get_acpmod_url());
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$tpl = PLIB_Props::get()->tpl();
+
 		ob_start();
 		phpinfo(INFO_GENERAL | INFO_CONFIGURATION | INFO_MODULES | INFO_VARIABLES);
 		$phpinfo = ob_get_contents();
@@ -59,14 +75,9 @@ final class BS_ACP_Module_phpinfo extends BS_ACP_Module
 		$phpinfo = str_replace('<font','<span',$phpinfo);
 		$phpinfo = str_replace('</font>','</span>',$phpinfo);
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'phpinfo' => $phpinfo
 		));
-	}
-	
-	public function get_location()
-	{
-		return array($this->locale->lang('acpmod_phpinfo') => $this->url->get_acpmod_url());
 	}
 }
 ?>

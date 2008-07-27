@@ -71,15 +71,17 @@ final class BS_Front_Search_Request_PMSearch extends BS_Front_Search_Request_PMB
 
 	public function get_order()
 	{
+		$input = PLIB_Props::get()->input();
+
 		$order_vals = array('subject','folder','date');
-		$order = $this->input->get_var('order','post',PLIB_Input::STRING);
+		$order = $input->get_var('order','post',PLIB_Input::STRING);
 		if($order == null)
-			$order = $this->input->get_var(BS_URL_ORDER,'get',PLIB_Input::STRING);
+			$order = $input->get_var(BS_URL_ORDER,'get',PLIB_Input::STRING);
 		$order = in_array($order,$order_vals) ? $order : 'date';
 		
-		$ad = $this->input->get_var('ad','post',PLIB_Input::STRING);
+		$ad = $input->get_var('ad','post',PLIB_Input::STRING);
 		if($ad == null)
-			$ad = $this->input->get_var(BS_URL_AD,'get',PLIB_Input::STRING);
+			$ad = $input->get_var(BS_URL_AD,'get',PLIB_Input::STRING);
 		$ad = $ad == 'ASC' ? 'ASC' : 'DESC';
 		
 		return array($order,$ad);
@@ -91,24 +93,26 @@ final class BS_Front_Search_Request_PMSearch extends BS_Front_Search_Request_PMB
 		if($search_cond === null)
 			return null;
 		
-		return $this->_get_result_ids($search_cond);
+		return $this->get_result_ids_impl($search_cond);
 	}
 
 	public function get_title($search)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		$num = count($search->get_result_ids());
 		
 		if(count($this->_keywords['un']) == 0)
 		{
 			return sprintf(
-				$this->locale->lang('search_result_pms'),
+				$locale->lang('search_result_pms'),
 				stripslashes(implode('", "',$this->_keywords['kw'])),
 				$num
 			);
 		}
 
 		return sprintf(
-			$this->locale->lang('search_result_pms_usernames'),
+			$locale->lang('search_result_pms_usernames'),
 			stripslashes(implode('", "',$this->_keywords['kw'])),
 			stripslashes(implode('", "',$this->_keywords['un'])),
 			$num
@@ -122,29 +126,33 @@ final class BS_Front_Search_Request_PMSearch extends BS_Front_Search_Request_PMB
 	 */
 	private function _get_search_condition()
 	{
-		$keyword = $this->input->get_var('keyword','post',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+
+		$keyword = $input->get_var('keyword','post',PLIB_Input::STRING);
 		if($keyword === null)
-			$keyword = $this->input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
+			$keyword = $input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
 		
-		$username = $this->input->get_var('un','post',PLIB_Input::STRING);
+		$username = $input->get_var('un','post',PLIB_Input::STRING);
 		if($username === null)
-			$username = $this->input->get_var(BS_URL_UN,'get',PLIB_Input::STRING);
+			$username = $input->get_var(BS_URL_UN,'get',PLIB_Input::STRING);
 		
-		$keyword_mode = $this->input->get_var('keyword_mode','post',PLIB_Input::STRING);
+		$keyword_mode = $input->get_var('keyword_mode','post',PLIB_Input::STRING);
 		$keyword_mode = ($keyword_mode == 'and') ? 'AND' : 'OR';
 		
 		$keyword_len = PLIB_String::strlen($keyword);
 		if($keyword_len == 0 && $username == '')
 		{
-			$this->msgs->add_error(
-				sprintf($this->locale->lang('search_missing_keyword'),BS_SEARCH_MIN_KEYWORD_LEN)
+			$msgs->add_error(
+				sprintf($locale->lang('search_missing_keyword'),BS_SEARCH_MIN_KEYWORD_LEN)
 			);
 			return null;
 		}
 
 		if($keyword_len > 255 || PLIB_String::strlen($username) > 255)
 		{
-			$this->msgs->add_error($this->locale->lang('keyword_max_length'));
+			$msgs->add_error($locale->lang('keyword_max_length'));
 			return null;
 		}
 
@@ -155,8 +163,8 @@ final class BS_Front_Search_Request_PMSearch extends BS_Front_Search_Request_PMB
 
 		if(count($this->_keywords['kw']) == 0 && count($this->_keywords['un']) == 0)
 		{
-			$this->msgs->add_error(
-				sprintf($this->locale->lang('search_missing_keyword'),BS_SEARCH_MIN_KEYWORD_LEN)
+			$msgs->add_error(
+				sprintf($locale->lang('search_missing_keyword'),BS_SEARCH_MIN_KEYWORD_LEN)
 			);
 			return null;
 		}
@@ -189,7 +197,7 @@ final class BS_Front_Search_Request_PMSearch extends BS_Front_Search_Request_PMB
 		return $sql;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

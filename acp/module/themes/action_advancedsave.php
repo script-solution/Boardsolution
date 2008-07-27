@@ -21,20 +21,23 @@ final class BS_ACP_Action_themes_advancedsave extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$theme = $this->input->get_var('theme','get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+
+		$theme = $input->get_var('theme','get',PLIB_Input::STRING);
 		if($theme == null)
 			return 'Invalid theme "'.$theme.'"';
 		
-		$file = PLIB_Path::inner().'themes/'.$theme.'/style.css';
+		$file = PLIB_Path::server_app().'themes/'.$theme.'/style.css';
 		
-		$content = $this->input->get_var('file_content','post',PLIB_Input::STRING);
+		$content = $input->get_var('file_content','post',PLIB_Input::STRING);
 		$content = PLIB_StringHelper::htmlspecialchars_back(stripslashes(trim($content)),ENT_QUOTES);
 		
 		if(!PLIB_FileUtils::write($file,$content))
-			return sprintf($this->locale->lang('file_not_saved'),$file);
+			return sprintf($locale->lang('file_not_saved'),$file);
 		
 		$this->set_action_performed(true);
-		$this->set_success_msg($this->locale->lang('file_saved'));
+		$this->set_success_msg($locale->lang('file_saved'));
 
 		return '';
 	}

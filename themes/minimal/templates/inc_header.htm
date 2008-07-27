@@ -12,9 +12,21 @@
 <script type="text/javascript" src="{gjs.get_file('js/basic.js','lib')}"></script>
 <script type="text/javascript" src="{gjs.get_file('js/ajax.js','lib')}"></script>
 <script type="text/javascript" src="{gjs.get_file('src/functions.js')}"></script>
+<script type="text/javascript" src="{gjs.get_file('js/imgviewer.js','lib')}"></script>
 
 <link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('advanced.css')}" />
 <link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('basic.css')}" />
+<link rel="alternate" type="application/rss+xml" title="RSS 2.0 Newsfeed" href="{rss20_feed}" />
+<link rel="alternate" type="application/atom+xml" title="Atom Newsfeed" href="{atom_feed}" />
+<style type="text/css">
+div.bs_signature {
+	{if sig_max_height > 0}
+	height: expression( this.scrollHeight > {sig_max_height - 1} ? "{sig_max_height}px" : "auto" );
+	max-height: {sig_max_height}px;
+	overflow: hidden;
+	{endif}
+}
+</style>
 <script type="text/javascript">
 <!--
 var myAjax = new PLIB_Ajax();
@@ -25,6 +37,11 @@ myAjax.setEventHandler('onstart',function() {
 myAjax.setEventHandler('onfinish',function() {
 	PLIB_hideElement('ajax_wait_bar');
 });
+
+PLIB_configureImageViewer(
+	true,80,10,10,10,5,'30px','{guser.get_theme_item_path("images/wait.gif")}',5,
+	'{glocale.lang("imgviewer_load_error")}'
+);
 
 function setCookie(name,value,lifetime)
 {

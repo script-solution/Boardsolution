@@ -29,7 +29,7 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	 * @param array $user_groups an array with group-ids
 	 * @return string the WHERE-clause
 	 */
-	protected function _get_search_where_clause($user_name = '',$user_email = '',$register_date = 0,
+	protected function get_search_where_clause($user_name = '',$user_email = '',$register_date = 0,
 		$user_groups = array())
 	{
 		$user_name = str_replace('*','%',(string)$user_name);
@@ -67,11 +67,13 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	 * @param int $count the number of elements (for the LIMIT-statement). 0 = all
 	 * @return array all found users
 	 */
-	protected function _get_users_by_groups($fields,$group_ids,$user_ids,$start = 0,$count = 0)
+	protected function get_users_by_groups_impl($fields,$group_ids,$user_ids,$start = 0,$count = 0)
 	{
-		$where = $this->_get_user_by_groups_where($group_ids,$user_ids);
-		$limit = $this->_get_limit($start,$count);
-		return $this->db->sql_rows(
+		$db = PLIB_Props::get()->db();
+
+		$where = $this->get_user_by_groups_where($group_ids,$user_ids);
+		$limit = $this->get_limit($start,$count);
+		return $db->sql_rows(
 			'SELECT '.$fields.'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
@@ -87,7 +89,7 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	 * @param array $user_ids an array of user-ids
 	 * @return string the WHERE-clause
 	 */
-	protected function _get_user_by_groups_where($group_ids,$user_ids)
+	protected function get_user_by_groups_where($group_ids,$user_ids)
 	{
 		if(!PLIB_Array_Utils::is_integer($group_ids))
 			PLIB_Helper::def_error('intarray','group_ids',$group_ids);
@@ -120,9 +122,11 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	 * @param string $email the email-address
 	 * @return array the user-data
 	 */
-	protected function _get_user_by_email($fields,$email)
+	protected function get_user_by_email_impl($fields,$email)
 	{
-		return $this->db->sql_fetch(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_fetch(
 			'SELECT '.$fields.'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
@@ -138,8 +142,10 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	 * @param array $names an array with all user-names (case-sensitive and complete!)
 	 * @return array all found users
 	 */
-	protected function _get_users_by_names($fields,$names)
+	protected function get_users_by_names_impl($fields,$names)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!is_array($names))
 			PLIB_Helper::def_error('array','names',$names);
 		
@@ -147,7 +153,7 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 		if(count($names) == 0)
 			return array();
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT '.$fields.'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
@@ -163,7 +169,7 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	 * @param int $banned wether the user has to be banned: -1 = indifferent, 0 = no, 1 = yes
 	 * @return string the WHERE-clause (contains at least "WHERE 1")
 	 */
-	protected function _get_activenbanned($active,$banned)
+	protected function get_activenbanned($active,$banned)
 	{
 		if(!PLIB_Helper::is_integer($active) || !in_array($active,array(-1,0,1)))
 			PLIB_Helper::def_error('numbetween','active',-1,1,$active);
@@ -186,7 +192,7 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	 * @param string $order the order of the elements: ASC or DESC
 	 * @return string the ORDER BY statement
 	 */
-	protected function _get_sort($sort,$order)
+	protected function get_sort($sort,$order)
 	{
 		if(!in_array($order,array('ASC','DESC')))
 			PLIB_Helper::def_error('in_array','order',array('ASC','DESC'),$order);
@@ -201,7 +207,7 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	 * @param int $count the number of elements (for the LIMIT-statement). 0 = all
 	 * @return string the LIMIT-statement
 	 */
-	protected function _get_limit($start,$count)
+	protected function get_limit($start,$count)
 	{
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);

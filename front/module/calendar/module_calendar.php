@@ -27,21 +27,41 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		parent::__construct('calendar',array('month','week','eventdetails','editevent'),'month');
 	}
 	
-	public function get_template()
+	/**
+	 * @see BS_Front_SubModuleContainer::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
 	{
-		return 'calendar.htm';
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+		
+		$doc->set_has_access($cfg['enable_calendar'] == 1 && $auth->has_global_permission('view_calendar'));
+		
+		$doc->add_breadcrumb($locale->lang('calendar'),$url->get_url());
+		$doc->set_template('calendar.htm');
+		$doc->add_action(BS_ACTION_CAL_DEL_EVENT,'deleteevent');
+		
+		// init submodule
+		$this->_sub->init($doc);
 	}
 	
-	public function get_actions()
-	{
-		$actions = array(BS_ACTION_CAL_DEL_EVENT => 'deleteevent');
-		foreach($this->_sub->get_actions() as $id => $name)
-			$actions[$id] = $name;
-		return $actions;
-	}
-	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$input = PLIB_Props::get()->input();
+		$url = PLIB_Props::get()->url();
+		$tpl = PLIB_Props::get()->tpl();
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+
 		// run submodule
 		parent::run();
 		
@@ -50,25 +70,25 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		
 		// generate hidden-fields
 		$hidden_fields = array();
-		$hidden_fields[BS_URL_ACTION] = $this->input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING);
-		if(($sid = $this->url->get_splitted_session_id()) != 0)
+		$hidden_fields[BS_URL_ACTION] = $input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING);
+		if(($sid = $url->get_splitted_session_id()) != 0)
 			$hidden_fields[$sid[0]] = $sid[1];
-		$extern = $this->url->get_extern_vars();
+		$extern = $url->get_extern_vars();
 		$hidden_fields = array_merge($hidden_fields,$extern);
 	
 		$years = array();
 		for($y = 1990;$y <= 2020;$y++)
 			$years[$y] = $y;
 		
-		$form = $this->_request_formular(false,false);
-		$this->tpl->add_variables(array(
-			'target' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+		$form = $this->request_formular(false,false);
+		$tpl->add_variables(array(
+			'target' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
 			'hidden_fields' => $hidden_fields,
 			'month_combo' => $form->get_combobox(BS_URL_MONTH,$helper->get_months(),$month),
 			'year_combo' => $form->get_combobox(BS_URL_YEAR,$years,$year),
-			'view_add_event' => $this->cfg['enable_calendar_events'] &&
-				($this->cfg['display_denied_options'] || $this->auth->has_global_permission('add_cal_event')),
-			'add_event_url' => $this->url->get_url(0,'&amp;'.BS_URL_LOC.'=editevent'),
+			'view_add_event' => $cfg['enable_calendar_events'] &&
+				($cfg['display_denied_options'] || $auth->has_global_permission('add_cal_event')),
+			'add_event_url' => $url->get_url(0,'&amp;'.BS_URL_LOC.'=editevent'),
 			'submoduletpl' => $this->_sub->get_template()
 		));
 	
@@ -79,20 +99,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 			$months_small[] = $this->_get_month_small($syear,$smonth);
 		}
 	
-		$this->tpl->add_array('months',$months_small);
-	}
-	
-	public function has_access()
-	{
-		return $this->cfg['enable_calendar'] == 1 && $this->auth->has_global_permission('view_calendar');
-	}
-	
-	public function get_location()
-	{
-		$loc = array(
-			$this->locale->lang('calendar') => $this->url->get_url()
-		);
-		return array_merge($loc,$this->_sub->get_location());
+		$tpl->add_array('months',$months_small);
 	}
 	
 	/**
@@ -104,6 +111,9 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 	 */
 	private function _get_month_small($year,$month)
 	{
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
 		$helper = BS_Front_Module_Calendar_Helper::get_instance();
 		$monthdata = array();
 		
@@ -111,16 +121,16 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		$mon_len = PLIB_Date::get_formated_date('t',$day_ts);
 	
 		$wd_short = $helper->get_weekdays_short();
-		$this->tpl->add_array('wd_short',$wd_short,false);
+		$tpl->add_array('wd_short',$wd_short,false);
 		
 		$months = $helper->get_months();
-		$monthdata['url'] = $this->url->get_url('calendar','&amp;'.BS_URL_MONTH.'='.$month
+		$monthdata['url'] = $url->get_url('calendar','&amp;'.BS_URL_MONTH.'='.$month
 			.'&amp;'.BS_URL_YEAR.'='.$year);
 		$monthdata['title'] = $months[abs($month)].' '.$year;
 		$monthdata['weeks'] = array();
 		
-		$daybaseurl = $this->url->get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_DAY.'=');
-		$weekbaseurl = $this->url->get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_WEEK.'=');
+		$daybaseurl = $url->get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_DAY.'=');
+		$weekbaseurl = $url->get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_WEEK.'=');
 		$today = PLIB_Date::get_formated_date('jnY');
 		$month_offset = $helper->get_month_offset(PLIB_Date::get_formated_date('w',$day_ts));
 		$day = 1;

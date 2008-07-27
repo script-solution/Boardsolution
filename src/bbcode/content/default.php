@@ -17,7 +17,7 @@
  * @subpackage	src.bbcode
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_BBCode_Content_Default extends PLIB_FullObject implements BS_BBCode_Content
+class BS_BBCode_Content_Default extends PLIB_Object implements BS_BBCode_Content
 {
 	/**
 	 * The tag-id
@@ -48,7 +48,7 @@ class BS_BBCode_Content_Default extends PLIB_FullObject implements BS_BBCode_Con
 		return $param;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

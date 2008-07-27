@@ -17,51 +17,46 @@
  * @subpackage	acp.src.page
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Page_Navi extends BS_ACP_Document
+final class BS_ACP_Page_Navi extends BS_ACP_Page
 {
 	/**
-	 * Constructor
+	 * @see PLIB_Document::content()
 	 */
-	public function __construct()
+	protected function content()
 	{
-		try
-		{
-			parent::__construct();
+		$input = PLIB_Props::get()->input();
+		$tpl = PLIB_Props::get()->tpl();
+		$cfg = PLIB_Props::get()->cfg();
+		$locale = PLIB_Props::get()->locale();
+
+		$menu = $input->get_var(BS_COOKIE_PREFIX.'acp_menu','cookie',PLIB_Input::STRING);
 			
-			$this->_start_document(BS_ENABLE_ADMIN_GZIP);
-			
-			$menu = $this->input->get_var(BS_COOKIE_PREFIX.'acp_menu','cookie',PLIB_Input::STRING);
-			
-			$this->tpl->set_template('navi.htm');
-			$this->tpl->add_variables(array(
-				'charset' => 'charset='.BS_HTML_CHARSET,
-				'cookie_prefix' => BS_COOKIE_PREFIX,
-				'cookie_init_value' => ($menu != null) ? $menu : '',
-				'cookie_path' => $this->cfg['cookie_path'],
-				'cookie_domain' => $this->cfg['cookie_domain'],
-			  'page_title' => sprintf($this->locale->lang('page_title'),BS_VERSION)
-			));
-			
-			$this->_load_modules();
-			
-			echo $this->tpl->parse_template();
-			
-			$this->_finish();
-	
-			$this->_send_document(BS_ENABLE_ADMIN_GZIP);
-		}
-		catch(PLIB_Exceptions_Critical $e)
-		{
-			echo $e;
-		}
+		$tpl->set_template('navi.htm');
+		$tpl->add_variables(array(
+			'charset' => 'charset='.BS_HTML_CHARSET,
+			'cookie_prefix' => BS_COOKIE_PREFIX,
+			'cookie_init_value' => ($menu != null) ? $menu : '',
+			'cookie_path' => $cfg['cookie_path'],
+			'cookie_domain' => $cfg['cookie_domain'],
+		  'page_title' => sprintf($locale->lang('page_title'),BS_VERSION)
+		));
+		$tpl->restore_template();
+		
+		$this->_load_modules();
+		
+		$this->set_template('navi.htm');
 	}
 	
 	/**
 	 * Loads all modules for the menu
-	 *
 	 */
 	private function _load_modules()
 	{
+		$locale = PLIB_Props::get()->locale();
+		$auth = PLIB_Props::get()->auth();
+		$user = PLIB_Props::get()->user();
+		$tpl = PLIB_Props::get()->tpl();
+
 		$c = 0;
 		$m = 0;
 		$tpl_categories = array();
@@ -70,7 +65,7 @@ final class BS_ACP_Page_Navi extends BS_ACP_Document
 		{
 			$tpl_categories[$c] = array(
 				'id' => $c,
-				'title' => $this->locale->lang($cat['title']),
+				'title' => $locale->lang($cat['title']),
 				'modules' => array()
 			);
 			
@@ -85,9 +80,9 @@ final class BS_ACP_Page_Navi extends BS_ACP_Document
 				$has_access = $access == 'all';
 				if(!$has_access)
 				{
-					if($access == 'default' && $this->auth->has_access_to_module($mod))
+					if($access == 'default' && $auth->has_access_to_module($mod))
 						$has_access = true;
-					else if($access = 'admin' && $this->user->is_admin())
+					else if($access = 'admin' && $user->is_admin())
 						$has_access = true;
 				}
 				
@@ -107,7 +102,7 @@ final class BS_ACP_Page_Navi extends BS_ACP_Document
 					$js = !isset($data['target']) || $data['target'] != '_blank' ? $item->get_javascript() : '';
 					$tpl_categories[$c]['modules'][] = array(
 						'id' => $m++,
-						'title' => $this->locale->lang($data['title']),
+						'title' => $locale->lang($data['title']),
 						'url' => $item->get_url(),
 						'frame' => $target,
 						'javascript' => $js
@@ -122,10 +117,26 @@ final class BS_ACP_Page_Navi extends BS_ACP_Document
 				$c++;
 		}
 		
-		$this->tpl->add_array('categories',$tpl_categories);
+		$tpl->add_array('categories',$tpl_categories);
+	}
+
+	/**
+	 * @see PLIB_Page::footer()
+	 */
+	protected function footer()
+	{
+		// do nothing
+	}
+
+	/**
+	 * @see PLIB_Page::header()
+	 */
+	protected function header()
+	{
+		// do nothing
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

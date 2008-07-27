@@ -19,36 +19,70 @@
  */
 final class BS_Front_Module_manage_posts extends BS_Front_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
 	{
-		$action = $this->doc->load_module_action(
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$user = PLIB_Props::get()->user();
+		$auth = PLIB_Props::get()->auth();
+
+		$doc->set_has_access($user->is_loggedin() && $auth->has_current_forum_perm(BS_MODE_SPLIT_POSTS));
+		
+		// add actions
+		$doc->add_action(BS_ACTION_MERGE_POSTS,array('default','merge'));
+		$doc->add_action(BS_ACTION_SPLIT_POSTS,array('default','split'));
+		$doc->add_module_action(
 			BS_ACTION_DELETE_POSTS,'delete_post','default','front/module/'
 		);
-		$this->doc->add_action($action);
 		
-		return array(
-			BS_ACTION_MERGE_POSTS => array('default','merge'),
-			BS_ACTION_SPLIT_POSTS => array('default','split')
+		// add bread crumbs
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		
+		$this->add_loc_forum_path($fid);
+		$this->add_loc_topic();
+		$doc->add_breadcrumb(
+			$locale->lang('manage_posts'),
+			$url->get_url('manage_posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid)
 		);
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$mode = $this->input->correct_var(BS_URL_MODE,-1,PLIB_Input::STRING,array('delete','split','merge'),'delete');
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		$forums = PLIB_Props::get()->forums();
+		$locale = PLIB_Props::get()->locale();
+		$auth = PLIB_Props::get()->auth();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$mode = $input->correct_var(BS_URL_MODE,-1,PLIB_Input::STRING,array('delete','split','merge'),'delete');
 	
 		// check other parameters
 		if($fid == null || $tid == null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
 		// forum closed?
-		if(!$this->user->is_admin() && $this->forums->forum_is_closed($fid))
+		if(!$user->is_admin() && $forums->forum_is_closed($fid))
 		{
-			$this->_report_error(PLIB_Messages::MSG_TYPE_ERROR,$this->locale->lang('forum_is_closed'));
+			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('forum_is_closed'));
 			return;
 		}
 		
@@ -56,23 +90,23 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		if($topic_data == null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 	
 		// topic closed?
-		if($topic_data['thread_closed'] == 1 && !$this->user->is_admin())
+		if($topic_data['thread_closed'] == 1 && !$user->is_admin())
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
-		$form = $this->_request_formular(false,false);
+		$form = $this->request_formular(false,false);
 		
 		// correct the mode if we don't have the permission to do the selected operation
-		if($mode == 'delete' && !$this->auth->has_current_forum_perm(BS_MODE_DELETE_POSTS))
+		if($mode == 'delete' && !$auth->has_current_forum_perm(BS_MODE_DELETE_POSTS))
 			$mode = 'split';
-		else if($mode != 'delete' && !$this->auth->has_current_forum_perm(BS_MODE_SPLIT_POSTS))
+		else if($mode != 'delete' && !$auth->has_current_forum_perm(BS_MODE_SPLIT_POSTS))
 			$mode = 'delete';
 		
 		switch($mode)
@@ -88,7 +122,7 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 				break;
 		}
 		
-		$keyword = $this->input->get_var('keyword','post',PLIB_Input::STRING);
+		$keyword = $input->get_var('keyword','post',PLIB_Input::STRING);
 		if($keyword === null)
 		{
 			$start = time() - (3600 * 24 * 7);
@@ -102,19 +136,19 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 		}
 		
 		$split_options = array(
-			'selected' => $this->locale->lang('split_selected'),
-			'following' => $this->locale->lang('split_following')
+			'selected' => $locale->lang('split_selected'),
+			'following' => $locale->lang('split_following')
 		);
 		
 		$params = '&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid;
 		$target_forum = $form->get_input_value('target_forum',0);
 		
-		$this->tpl->add_variables(array(
-			'show_delete' => $this->auth->has_current_forum_perm(BS_MODE_DELETE_POSTS),
-			'show_move' => $this->auth->has_current_forum_perm(BS_MODE_SPLIT_POSTS),
-			'delete_posts_url' => $this->url->get_url(0,$params.'&amp;'.BS_URL_MODE.'=delete'),
-			'split_posts_url' => $this->url->get_url(0,$params.'&amp;'.BS_URL_MODE.'=split'),
-			'merge_posts_url' => $this->url->get_url(0,$params.'&amp;'.BS_URL_MODE.'=merge'),
+		$tpl->add_variables(array(
+			'show_delete' => $auth->has_current_forum_perm(BS_MODE_DELETE_POSTS),
+			'show_move' => $auth->has_current_forum_perm(BS_MODE_SPLIT_POSTS),
+			'delete_posts_url' => $url->get_url(0,$params.'&amp;'.BS_URL_MODE.'=delete'),
+			'split_posts_url' => $url->get_url(0,$params.'&amp;'.BS_URL_MODE.'=split'),
+			'merge_posts_url' => $url->get_url(0,$params.'&amp;'.BS_URL_MODE.'=merge'),
 			'delete_bold' => $mode == 'delete' ? ' style="font-weight: bold;"' : '',
 			'split_bold' => $mode == 'split' ? ' style="font-weight: bold;"' : '',
 			'merge_bold' => $mode == 'merge' ? ' style="font-weight: bold;"' : '',
@@ -124,8 +158,8 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 			'forum_combo' => BS_ForumUtils::get_instance()->get_recursive_forum_combo(
 				'target_forum',$target_forum,0
 			),
-			'back_url' => $this->url->get_url('posts',$params),
-			'target_url' => $this->url->get_url(0,$params),
+			'back_url' => $url->get_url('posts',$params),
+			'target_url' => $url->get_url(0,$params),
 			'at_merge' => BS_ACTION_MERGE_POSTS,
 			'at_delete' => BS_ACTION_DELETE_POSTS,
 			'at_split' => BS_ACTION_SPLIT_POSTS,
@@ -133,12 +167,12 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 			'action_type' => $action_type,
 			'start_date' => $form->get_date_chooser('start_',$start,false),
 			'end_date' => $form->get_date_chooser('end_',$end,false),
-			'display_target' => $this->url->get_url(0,$params),
+			'display_target' => $url->get_url(0,$params),
 			'keyword' => $keyword,
 			'merge_split_options' => $split_options
 		));
 		
-		$post_ids = $this->input->get_var('selected_posts','post');
+		$post_ids = $input->get_var('selected_posts','post');
 		if(!is_array($post_ids))
 			$post_ids = array();
 		
@@ -164,32 +198,10 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 			);
 		}
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'is_first_post' => count($posts) > 0 && $posts[0]['post_id'] == $first_post ? '1' : '0'
 		)); 
-		$this->tpl->add_array('posts',$posts);
-	}
-	
-	public function get_location()
-	{
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		
-		$result = array();
-		$this->_add_loc_forum_path($result,$fid);
-		$this->_add_loc_topic($result);
-		
-		$url = $this->url->get_url(
-			'manage_posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
-		);
-		$result[$this->locale->lang('manage_posts')] = $url;
-		
-		return $result;
-	}
-	
-	public function has_access()
-	{
-		return $this->user->is_loggedin() && $this->auth->has_current_forum_perm(BS_MODE_SPLIT_POSTS);
+		$tpl->add_array('posts',$posts);
 	}
 }
 ?>

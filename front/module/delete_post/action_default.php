@@ -21,14 +21,23 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		if(!$this->input->isset_var('submit','post'))
+		$input = PLIB_Props::get()->input();
+		$forums = PLIB_Props::get()->forums();
+		$user = PLIB_Props::get()->user();
+		$auth = PLIB_Props::get()->auth();
+		$functions = PLIB_Props::get()->functions();
+		$cfg = PLIB_Props::get()->cfg();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		if(!$input->isset_var('submit','post'))
 			return '';
 
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
 
 		// check ids of the posts to delete
-		$ids = $this->input->get_var('selected_posts','post');
+		$ids = $input->get_var('selected_posts','post');
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			return 'split_no_posts_selected';
 
@@ -37,12 +46,12 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 			return 'Invalid forum-id or topic-id';
 
 		// does the forum exist?
-		$forum_data = $this->forums->get_node_data($fid);
+		$forum_data = $forums->get_node_data($fid);
 		if($forum_data === null)
 			return 'Forum with id "'.$fid.'" not found';
 
 		// forum closed?
-		if(!$this->user->is_admin() && $this->forums->forum_is_closed($fid))
+		if(!$user->is_admin() && $forums->forum_is_closed($fid))
 			return 'You are no admin and the forum is closed';
 
 		// does the topic exist?
@@ -51,7 +60,7 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 			return 'The topic has not been found';
 
 		// topic closed?
-		if($topic_data['thread_closed'] == 1 && !$this->user->is_admin())
+		if($topic_data['thread_closed'] == 1 && !$user->is_admin())
 			return 'You are no admin and the topic is closed';
 
 		// collect deleteable posts
@@ -66,7 +75,7 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 				continue;
 
 			// check if the user has permission to perform the action
-			if(!$this->auth->has_current_forum_perm(BS_MODE_DELETE_POSTS,$data['post_user']))
+			if(!$auth->has_current_forum_perm(BS_MODE_DELETE_POSTS,$data['post_user']))
 				continue;
 
 			$selected_posts[] = $data;
@@ -136,7 +145,7 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 		BS_DAO::get_topics()->update($tid,$topic_fields);
 		BS_DAO::get_forums()->update_by_id($fid,$forum_fields);
 		
-		$forum_data = $this->forums->get_node_data($fid);
+		$forum_data = $forums->get_node_data($fid);
 
 		// decrease the posts of the user
 		foreach($user_posts as $user_id => $number)
@@ -155,7 +164,7 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 			
 			// remove attachments
 			foreach(BS_DAO::get_attachments()->get_by_postids($post_ids) as $adata)
-				$this->functions->delete_attachment($adata['attachment_path']);
+				$functions->delete_attachment($adata['attachment_path']);
 
 			BS_DAO::get_attachments()->delete_by_postids($post_ids);
 			
@@ -170,17 +179,17 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 		if(BS_PostingUtils::get_instance()->get_posts_order() == 'ASC')
 		{
 			$post_num = BS_DAO::get_posts()->get_count_in_topic($tid);
-			if($post_num > $this->cfg['posts_per_page'])
+			if($post_num > $cfg['posts_per_page'])
 			{
-				$pagination = new BS_Pagination($this->cfg['posts_per_page'],$post_num);
+				$pagination = new BS_Pagination($cfg['posts_per_page'],$post_num);
 				$header_add = '&'.BS_URL_SITE.'='.$pagination->get_page_count();
 			}
 		}
 		
-		$url = $this->url->get_url(
+		$murl = $url->get_url(
 			'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.$header_add
 		).'#b_'.$lastpost['id'];
-		$this->add_link($this->locale->lang('go_to_topic'),$url);
+		$this->add_link($locale->lang('go_to_topic'),$murl);
 		$this->set_action_performed(true);
 
 		return '';

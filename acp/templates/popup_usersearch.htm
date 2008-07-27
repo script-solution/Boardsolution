@@ -1,4 +1,6 @@
-{include "inc_popup_header.htm"}
+{include "inc_header.htm"}
+
+{if module_error == false}
 
 {include "inc_js_row_selector.htm"}
 <script type="text/javascript">
@@ -108,5 +110,6 @@ new BS_AJAXUserSearch('{gpath}','user_name_input','{action_param}','{glocale.lan
 <p class="a_block_pad" align="center">
 	<a href="Javascript:self.close();">{glocale.lang('close')}</a>
 </p>
+{endif}
 
-{include "inc_popup_footer.htm"}
+{include "inc_footer.htm"}

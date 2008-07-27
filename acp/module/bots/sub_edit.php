@@ -19,49 +19,64 @@
  */
 final class BS_ACP_SubModule_bots_edit extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_EDIT_BOT => 'edit'
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$input = PLIB_Props::get()->input();
+		
+		$doc->add_action(BS_ACP_ACTION_EDIT_BOT,'edit');
+		$doc->set_template('bots_edit.htm');
+		
+		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$doc->add_breadcrumb(
+			$locale->lang('edit_bot'),
+			$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
 		);
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		$id = $input->get_var('id','get',PLIB_Input::ID);
 		if($id == null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
-		$data = $this->cache->get_cache('bots')->get_element($id);
+		$data = $cache->get_cache('bots')->get_element($id);
 		if($data === null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
-		$this->_request_formular();
+		$this->request_formular();
 		
-		$site = $this->input->get_var('site','get',PLIB_Input::INTEGER);
-		$this->tpl->add_variables(array(
+		$site = $input->get_var('site','get',PLIB_Input::INTEGER);
+		$tpl->add_variables(array(
 			'default' => $data,
 			'site' => $site,
 			'action_type' => BS_ACP_ACTION_EDIT_BOT,
-			'title' => $this->locale->lang('edit_bot'),
-			'form_target' => $this->url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id.'&amp;site='.$site)
+			'title' => $locale->lang('edit_bot'),
+			'form_target' => $url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id.'&amp;site='.$site)
 		));
-	}
-	
-	public function get_location()
-	{
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
-		return array(
-			$this->locale->lang('edit_bot') => $this->url->get_acpmod_url(
-				0,'&amp;action=edit&amp;id='.$id
-			)
-		);
 	}
 }
 ?>

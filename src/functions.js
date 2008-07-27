@@ -87,23 +87,30 @@ function clapForum(id,cookiePrefix)
 	
 	if(subForums.style.display == 'none')
 	{
-		var cookieParts = global_cookie.split(',');
-		for(var i = 0;i < cookieParts.length;i++)
+		if(typeof cookiePrefix != 'undefined')
 		{
-			if(cookieParts[i] != '' && cookieParts[i] != id)
-				setcookies += cookieParts[i] + ',';
+			var cookieParts = global_cookie.split(',');
+			for(var i = 0;i < cookieParts.length;i++)
+			{
+				if(cookieParts[i] != '' && cookieParts[i] != id)
+					setcookies += cookieParts[i] + ',';
+			}
 		}
 		
 		subForums.style.display = 'block';
 	}
 	else
 	{
-		setcookies = global_cookie + id + ',';
+		if(typeof cookiePrefix != 'undefined')
+			setcookies = global_cookie + id + ',';
 		subForums.style.display = 'none';
 	}
 
-	setCookie(cookiePrefix + 'hidden_forums',setcookies,86400 * 30);
-	global_cookie = setcookies;
+	if(typeof cookiePrefix != 'undefined')
+	{
+		setCookie(cookiePrefix + 'hidden_forums',setcookies,86400 * 30);
+		global_cookie = setcookies;
+	}
 	
 	var image = document.getElementById('cross_' + id);
 	if(subForums.style.display == "none")

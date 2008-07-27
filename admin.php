@@ -10,29 +10,37 @@
  * @link				http://www.script-solution.de
  */
 
-$bspath = '';
-include_once($bspath.'config/userdef.php');
+// we are in the ACP
+define('BS_ACP',true);
+
+define('BS_PATH','');
+
+include_once(BS_PATH.'config/userdef.php');
 
 // define libpath for init.php
-define('PLIB_PATH',BS_LIB_PATH);
+if(!defined('PLIB_PATH'))
+	define('PLIB_PATH',BS_PATH.BS_LIB_PATH);
 
 // init the library
-include_once(BS_LIB_PATH.'init.php');
+include_once(PLIB_PATH.'init.php');
 
 // set the path
-PLIB_Path::set_inner($bspath);
+PLIB_Path::set_server_app(BS_PATH);
+PLIB_Path::set_client_app(BS_PATH);
 
-// init the autoloader
-include_once(PLIB_Path::inner().'src/autoloader.php');
-PLIB_AutoLoader::register_loader('BS_autoloader');
+// init boardsolution
+include_once(BS_PATH.'src/init.php');
 
-$input = PLIB_Input::get_instance();
+$input = PLIB_Props::get()->input();
 $pages = array('navi','content','frameset');
 $page = $input->correct_var('page','get',PLIB_Input::IDENTIFIER,$pages,'frameset');
 
 $class = 'BS_ACP_Page_'.$page;
 if(class_exists($class))
-	new $class();
+{
+	$page = new $class();
+	echo $page->render();
+}
 else
 	PLIB_Helper::error('The class "'.$class.'" does not exist!');
 ?>

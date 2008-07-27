@@ -21,12 +21,17 @@ final class BS_ACP_Action_moderators_add extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$new_mods = $this->input->get_var('user_add','post');
-		$forums = $this->forums->get_all_nodes();
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+		$forums = PLIB_Props::get()->forums();
+
+		$new_mods = $input->get_var('user_add','post');
+		$nodes = $forums->get_all_nodes();
 		$mods = array();
-		for($i = 0;$i < count($forums);$i++)
+		for($i = 0;$i < count($nodes);$i++)
 		{
-			$node = $forums[$i];
+			$node = $nodes[$i];
 			$data = $node->get_data();
 			if($data->get_forum_type() == 'contains_threads')
 				$mods[$data->get_id()] = PLIB_Array_Utils::advanced_explode(',',$new_mods[$data->get_id()]);
@@ -51,8 +56,8 @@ final class BS_ACP_Action_moderators_add extends BS_ACP_Action_Base
 
 		if($count > 0)
 		{
-			$this->cache->refresh('moderators');
-			$this->set_success_msg($this->locale->lang('add_moderators_success'));
+			$cache->refresh('moderators');
+			$this->set_success_msg($locale->lang('add_moderators_success'));
 			$this->set_action_performed(true);
 		}
 

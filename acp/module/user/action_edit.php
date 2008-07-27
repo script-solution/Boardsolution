@@ -21,7 +21,14 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$functions = PLIB_Props::get()->functions();
+		$locale = PLIB_Props::get()->locale();
+		$cache = PLIB_Props::get()->cache();
+		$msgs = PLIB_Props::get()->msgs();
+		$user = PLIB_Props::get()->user();
+
+		$id = $input->get_var('id','get',PLIB_Input::ID);
 		if($id == null)
 			return 'Invalid id "'.$id.'"';
 		
@@ -31,20 +38,20 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 		
 		if(!BS_ENABLE_EXPORT)
 		{
-			$user_name = $this->input->get_var('user_name','post',PLIB_Input::STRING);
+			$user_name = $input->get_var('user_name','post',PLIB_Input::STRING);
 			// check username
 			if(!BS_UserUtils::get_instance()->check_username($user_name))
 				return 'usernamenotallowed';
 
-			if($this->functions->is_banned('user',$user_name))
+			if($functions->is_banned('user',$user_name))
 				return 'user_name_banned';
 
 			if(BS_DAO::get_user()->name_exists($user_name,$id))
 				return 'registeruservorhanden';
 
-			$user_pw = $this->input->get_var('user_pw','post',PLIB_Input::STRING);
-			$user_pw_conf = $this->input->get_var('user_pw_conf','post',PLIB_Input::STRING);
-			$user_email = $this->input->get_var('user_email','post',PLIB_Input::STRING);
+			$user_pw = $input->get_var('user_pw','post',PLIB_Input::STRING);
+			$user_pw_conf = $input->get_var('user_pw_conf','post',PLIB_Input::STRING);
+			$user_email = $input->get_var('user_email','post',PLIB_Input::STRING);
 
 			// check inputs
 			if($user_pw != '' && $user_pw != $user_pw_conf)
@@ -55,18 +62,18 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 			if(!PLIB_StringHelper::is_valid_email($user_email))
 				return 'mailnotallowed';
 
-			if($this->functions->is_banned('mail',$user_email))
+			if($functions->is_banned('mail',$user_email))
 				return 'email_is_banned';
 
 			// does the email already exist?
 			if(BS_DAO::get_user()->email_exists($user_email,$id))
 				return 'email_exists';
 		}
-		$main_group = $this->input->get_var('main_group','post',PLIB_Input::ID);
-		$other_groups = $this->input->get_var('other_groups','post');
-		$post_text = $this->input->get_var('text','post',PLIB_Input::STRING);
-		$notify = $this->input->get_var('notify','post',PLIB_Input::INT_BOOL);
-		$remove_avatar = $this->input->get_var('remove_avatar','post',PLIB_Input::INT_BOOL);
+		$main_group = $input->get_var('main_group','post',PLIB_Input::ID);
+		$other_groups = $input->get_var('other_groups','post');
+		$post_text = $input->get_var('text','post',PLIB_Input::STRING);
+		$notify = $input->get_var('notify','post',PLIB_Input::INT_BOOL);
+		$remove_avatar = $input->get_var('remove_avatar','post',PLIB_Input::INT_BOOL);
 
 		$text = '';
 		$error = BS_PostingUtils::get_instance()->prepare_message_for_db($text,$post_text,'sig');
@@ -87,7 +94,7 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 			
 			// admins may leave required fields empty
 			if(!$field->is_empty($value) && ($error = $field->is_valid_value($value)) !== '')
-				return sprintf($this->locale->lang('error_add_field_'.$error),$fdata->get_title());
+				return sprintf($locale->lang('error_add_field_'.$error),$fdata->get_title());
 			
 			$sql_val = $field->get_value_to_store($value);
 			$sql_fields['add_'.$fdata->get_name()] = $sql_val;
@@ -98,11 +105,11 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 			BS_DAO::get_user()->update($id,$user_name,$user_pw,$user_email);
 
 		$groups = array();
-		if($this->user->get_user_id() == $id)
+		if($user->get_user_id() == $id)
 			$groups[] = (int)$data['user_group'];
 		else
 		{
-			$gdata = $this->cache->get_cache('user_groups')->get_element($main_group);
+			$gdata = $cache->get_cache('user_groups')->get_element($main_group);
 			if($gdata === null)
 				return 'The group "'.$main_group.'" doesn\'t exist!';
 			if($gdata['is_visible'] == 0)
@@ -115,7 +122,7 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 		{
 			foreach($other_groups as $gid)
 			{
-				if($this->cache->get_cache('user_groups')->key_exists($gid))
+				if($cache->get_cache('user_groups')->key_exists($gid))
 					$groups[] = $gid;
 			}
 		}
@@ -128,7 +135,7 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 
 			$avdata = BS_DAO::get_avatars()->get_by_id($data['avatar']);
 			if($avdata !== false)
-				@unlink(PLIB_Path::inner().'images/avatars/'.$avdata['av_pfad']);
+				@unlink(PLIB_Path::server_app().'images/avatars/'.$avdata['av_pfad']);
 
 			BS_DAO::get_avatars()->delete_by_ids(array($data['avatar']));
 		}
@@ -137,7 +144,16 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 		$sql_fields['signatur'] = $text;
 		$sql_fields['signature_posted'] = $post_text;
 		BS_DAO::get_profile()->update_user_by_id($sql_fields,$id);
-
+		
+		// fire community-event
+		$status = BS_Community_User::get_status_from_groups($groups);
+		$u = new BS_Community_User(
+			$id,$input->unescape_value($user_name,'post'),
+			$input->unescape_value($user_email,'post'),$status,md5($user_pw),
+			$input->unescape_value($user_pw,'post')
+		);
+		BS_Community_Manager::get_instance()->fire_user_changed($u);
+		
 		// send email if required
 		if($notify == 1)
 		{
@@ -147,11 +163,11 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 			if(!$email->send_mail())
 			{
 				$msg = $email->get_error_message();
-				$this->msgs->add_error(sprintf($this->locale->lang('email_send_error'),$msg));
+				$msgs->add_error(sprintf($locale->lang('email_send_error'),$msg));
 			}
 		}
 		
-		$this->set_success_msg($this->locale->lang('edit_user_success'));
+		$this->set_success_msg($locale->lang('edit_user_success'));
 		$this->set_action_performed(true);
 
 		return '';

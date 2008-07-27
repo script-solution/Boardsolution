@@ -20,38 +20,58 @@
 final class BS_ACP_SubModule_themes_editor extends BS_ACP_SubModule
 {
 	/**
-	 * Constructor
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
 	 */
-	public function __construct()
+	public function init($doc)
 	{
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		// hack which changes the action-type if we want to add an attribute instead of saving the form
-		if($this->input->isset_var('add','post'))
-			$this->input->set_var('action_type','post',BS_ACP_ACTION_THEME_EDITOR_SIMPLE_ADD);
-	}
-	
-	public function get_actions()
-	{
-		return array(
-			BS_ACP_ACTION_THEME_EDITOR_SIMPLE_SAVE => 'simplesave',
-			BS_ACP_ACTION_THEME_EDITOR_ADVANCED_SAVE => 'advancedsave',
-			BS_ACP_ACTION_THEME_EDITOR_SIMPLE_DELETE => 'simpledelete',
-			BS_ACP_ACTION_THEME_EDITOR_SIMPLE_ADD => 'simpleadd',
-		);
-	}
-	
-	public function run()
-	{
-		$mode = $this->input->correct_var(
+		if($input->isset_var('add','post'))
+			$input->set_var('action_type','post',BS_ACP_ACTION_THEME_EDITOR_SIMPLE_ADD);
+		
+		$doc->add_action(BS_ACP_ACTION_THEME_EDITOR_SIMPLE_SAVE,'simplesave');
+		$doc->add_action(BS_ACP_ACTION_THEME_EDITOR_ADVANCED_SAVE,'advancedsave');
+		$doc->add_action(BS_ACP_ACTION_THEME_EDITOR_SIMPLE_DELETE,'simpledelete');
+		$doc->add_action(BS_ACP_ACTION_THEME_EDITOR_SIMPLE_ADD,'simpleadd');
+
+		$mode = $input->correct_var(
 			'mode','get',PLIB_Input::STRING,array('simple','advanced'),'simple'
 		);
-		$theme = $this->input->get_var('theme','get',PLIB_Input::STRING);
+		$theme = $input->get_var('theme','get',PLIB_Input::STRING);
+		$doc->add_breadcrumb($theme,'');
+		$doc->add_breadcrumb(
+			$locale->lang($mode.'_mode'),
+			$url->get_acpmod_url(0,'&amp;action=editor&amp;theme='.$theme.'&amp;mode='.$mode)
+		);
+	}
+	
+	/**
+	 * @see PLIB_Module::run()
+	 */
+	public function run()
+	{
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+
+		$mode = $input->correct_var(
+			'mode','get',PLIB_Input::STRING,array('simple','advanced'),'simple'
+		);
+		$theme = $input->get_var('theme','get',PLIB_Input::STRING);
 		
-		$stylefile = PLIB_Path::inner().'themes/'.$theme.'/style.css';
+		$stylefile = PLIB_Path::server_app().'themes/'.$theme.'/style.css';
 		if(!is_file($stylefile))
 		{
-			$this->_report_error(
+			$this->report_error(
 				PLIB_Messages::MSG_TYPE_ERROR,
-				sprintf($this->locale->lang('file_not_exists'),$stylefile)
+				sprintf($locale->lang('file_not_exists'),$stylefile)
 			);
 			return;
 		}
@@ -63,23 +83,10 @@ final class BS_ACP_SubModule_themes_editor extends BS_ACP_SubModule
 		
 		$editor->display();
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'theme' => $theme,
 			'editor_tpl' => $editor->get_template()
 		));
-	}
-	
-	public function get_location()
-	{
-		$mode = $this->input->correct_var(
-			'mode','get',PLIB_Input::STRING,array('simple','advanced'),'simple'
-		);
-		$theme = $this->input->get_var('theme','get',PLIB_Input::STRING);
-		return array(
-			$theme => '',
-			$this->locale->lang($mode.'_mode') =>
-				$this->url->get_acpmod_url(0,'&amp;action=editor&amp;theme='.$theme.'&amp;mode='.$mode)
-		);
 	}
 }
 ?>

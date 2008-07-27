@@ -21,10 +21,13 @@ final class BS_ACP_Action_useractivation_activate extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+
 		if(BS_ENABLE_EXPORT)
 			return 'The community is exported';
 		
-		$idstr = $this->input->get_var('ids','get',PLIB_Input::STRING);
+		$idstr = $input->get_var('ids','get',PLIB_Input::STRING);
 		if(!($ids = PLIB_StringHelper::get_ids($idstr)))
 			return 'Got an invalid id-string via GET';
 		
@@ -33,6 +36,13 @@ final class BS_ACP_Action_useractivation_activate extends BS_ACP_Action_Base
 		
 		// delete from activation-table
 		BS_DAO::get_activation()->delete_by_users($ids);
+		
+		// fire community-event
+		foreach(BS_DAO::get_profile()->get_users_by_ids($ids) as $data)
+		{
+			$user = BS_Community_User::get_instance_from_data($data);
+			BS_Community_Manager::get_instance()->fire_user_registered($user);
+		}
 
 		// send emails
 		BS_ACP_Utils::get_instance()->send_email_to_user(
@@ -40,7 +50,7 @@ final class BS_ACP_Action_useractivation_activate extends BS_ACP_Action_Base
 			$ids
 		);
 		
-		$this->set_success_msg($this->locale->lang('accounts_activated_success'));
+		$this->set_success_msg($locale->lang('accounts_activated_success'));
 		$this->set_action_performed(true);
 
 		return '';

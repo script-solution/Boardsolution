@@ -81,11 +81,15 @@ final class BS_Front_Action_Plain_DeleteTopics extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
+		$db = PLIB_Props::get()->db();
+		$forums = PLIB_Props::get()->forums();
+		$functions = PLIB_Props::get()->functions();
+
 		parent::perform_action();
 		
-		$this->db->start_transaction();
+		$db->start_transaction();
 
-		$forum_data = $this->forums->get_node_data($this->_fid);
+		$forum_data = $forums->get_node_data($this->_fid);
 	
 		// collect some values
 		$refresh_last_post = false;
@@ -247,17 +251,17 @@ final class BS_Front_Action_Plain_DeleteTopics extends BS_Front_Action_Plain
 			if($total_default_topics > 0)
 			{
 				foreach(BS_DAO::get_attachments()->get_by_topicids($default_topics) as $adata)
-					$this->functions->delete_attachment($adata['attachment_path']);
+					$functions->delete_attachment($adata['attachment_path']);
 	
 				// delete attachments in the db
 				BS_DAO::get_attachments()->delete_by_topicids($default_topics);
 			}
 		}
 		
-		$this->db->commit_transaction();
+		$db->commit_transaction();
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

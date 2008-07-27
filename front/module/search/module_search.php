@@ -19,16 +19,43 @@
  */
 final class BS_Front_Module_search extends BS_Front_Module
 {
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
+	{
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+		
+		$doc->set_has_access($cfg['enable_search'] == 1 && $auth->has_global_permission('view_search'));
+		
+		$doc->add_breadcrumb($locale->lang('search'),$url->get_url('search'));
+	}
+	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$input = PLIB_Props::get()->input();
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		// display the search-form
-		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
 		$modes = array('default','user_posts','user_topics','topic','similar_topics');
-		$mode = $this->input->correct_var(BS_URL_MODE,'get',PLIB_Input::STRING,$modes,'default');
-		$keywords = $this->input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
-		$usernames = $this->input->get_var(BS_URL_UN,'get',PLIB_Input::STRING);
+		$mode = $input->correct_var(BS_URL_MODE,'get',PLIB_Input::STRING,$modes,'default');
+		$keywords = $input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
+		$usernames = $input->get_var(BS_URL_UN,'get',PLIB_Input::STRING);
 		
-		$submitted = $this->input->isset_var('submit','post');
+		$submitted = $input->isset_var('submit','post');
 		if($mode != 'default' || $submitted || $id != null || $keywords != null || $usernames != null)
 		{
 			switch($mode)
@@ -54,7 +81,7 @@ final class BS_Front_Module_search extends BS_Front_Module
 			$result_num = count($manager->get_result_ids());
 			$result = $request->get_result();
 		
-			$this->tpl->add_variables(array(
+			$tpl->add_variables(array(
 				'result_tpl' => $result !== null ? $result->get_template() : '',
 				'result_num' => $result_num
 			));
@@ -67,33 +94,33 @@ final class BS_Front_Module_search extends BS_Front_Module
 		else
 		{
 			$order_vals = array('lastpost','topic_name','topic_type','replies','views','relevance');
-			$order = $this->input->correct_var('order','post',PLIB_Input::STRING,$order_vals,'relevance');
-			$ad = $this->input->correct_var('ad','post',PLIB_Input::STRING,array('ASC','DESC'),'DESC');
+			$order = $input->correct_var('order','post',PLIB_Input::STRING,$order_vals,'relevance');
+			$ad = $input->correct_var('ad','post',PLIB_Input::STRING,array('ASC','DESC'),'DESC');
 			$limit_vals = array(10,25,50,100,250,500);
-			$limit = $this->input->correct_var('limit','post',PLIB_Input::INTEGER,$limit_vals,250);
+			$limit = $input->correct_var('limit','post',PLIB_Input::INTEGER,$limit_vals,250);
 
 			// the condition is true if we should have been displayed the result but
 			// there has occurred an error
-			$form = $this->_request_formular(false,false);
+			$form = $this->request_formular(false,false);
 			$form->set_condition($mode != 'default' || $submitted || $id != null);
 			
 			$keyword_mode_options = array(
-				'and' => $this->locale->lang('keyword_mode_and'),
-				'or' => $this->locale->lang('keyword_mode_or')
+				'and' => $locale->lang('keyword_mode_and'),
+				'or' => $locale->lang('keyword_mode_or')
 			);
 
 			$order_options = array(
-				'relevance' => $this->locale->lang('relevance'),
-				'lastpost' => $this->locale->lang('date'),
-				'topic_name' => $this->locale->lang('name'),
-				'topic_type' => $this->locale->lang('threadtype'),
-				'replies' => $this->locale->lang('posts'),
-				'views' => $this->locale->lang('hits')
+				'relevance' => $locale->lang('relevance'),
+				'lastpost' => $locale->lang('date'),
+				'topic_name' => $locale->lang('name'),
+				'topic_type' => $locale->lang('threadtype'),
+				'replies' => $locale->lang('posts'),
+				'views' => $locale->lang('hits')
 			);
 
 			$ad_options = array(
-				'DESC' => $this->locale->lang('descending'),
-				'ASC' => $this->locale->lang('ascending')
+				'DESC' => $locale->lang('descending'),
+				'ASC' => $locale->lang('ascending')
 			);
 
 			$limit_options = array(
@@ -106,29 +133,29 @@ final class BS_Front_Module_search extends BS_Front_Module
 			);
 
 			$result_type_options = array(
-				'posts' => $this->locale->lang('posts'),
-				'topics' => $this->locale->lang('threads')
+				'posts' => $locale->lang('posts'),
+				'topics' => $locale->lang('threads')
 			);
 
-			$keyword = stripslashes($this->input->get_var('keyword','post',PLIB_Input::STRING));
-			$username = stripslashes($this->input->get_var('un','post',PLIB_Input::STRING));
+			$keyword = stripslashes($input->get_var('keyword','post',PLIB_Input::STRING));
+			$username = stripslashes($input->get_var('un','post',PLIB_Input::STRING));
 			
-			$selection = $this->input->get_var('fid','post');
+			$selection = $input->get_var('fid','post');
 			$forum_combo = BS_ForumUtils::get_instance()->get_recursive_forum_combo(
 				'fid[]',$selection === null ? 0 : $selection,-1,true,true
 			);
 			
-			$this->tpl->add_variables(array(
+			$tpl->add_variables(array(
 				'action_param' => BS_URL_ACTION,
 				'search_explain_keyword' => sprintf(
-					$this->locale->lang('search_explain_keyword'),
-					$this->url->get_url('faq').'#f_9',
+					$locale->lang('search_explain_keyword'),
+					$url->get_url('faq').'#f_9',
 					BS_SEARCH_MIN_KEYWORD_LEN
 				),
 				'search_explain_user' => sprintf(
-					$this->locale->lang('search_explain_user'),$this->url->get_url('faq').'#f_9'
+					$locale->lang('search_explain_user'),$url->get_url('faq').'#f_9'
 				),
-				'target_url' => $this->url->get_url(0),
+				'target_url' => $url->get_url(0),
 				'keyword' => $keyword,
 				'keyword_mode_options' => $keyword_mode_options,
 				'keyword_mode' => 'and',
@@ -143,16 +170,6 @@ final class BS_Front_Module_search extends BS_Front_Module
 				'forum_combo' => $forum_combo
 			));
 		}
-	}
-
-	public function get_location()
-	{
-		return array($this->locale->lang('search') => $this->url->get_url('search'));
-	}
-
-	public function has_access()
-	{
-		return $this->cfg['enable_search'] == 1 && $this->auth->has_global_permission('view_search');
 	}
 }
 ?>

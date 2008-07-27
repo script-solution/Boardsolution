@@ -30,6 +30,15 @@ img {
 	vertical-align: text-top;
 }
 
+img[onclick] {
+	cursor: pointer;
+}
+
+code {
+	font-family: monospace;
+	font-size: 12px;
+}
+
 /* ------------ PADDING ------------ */
 
 .bs_padtop {
@@ -73,6 +82,9 @@ table.bs_table > tbody > tr > td, table.bs_table > tbody > tr > th {
 table.bs_table > tbody > tr:last-child > td.bs_coldesc {
 	border-bottom: 1px solid #dbdbdb;
 }
+table.bs_table > tbody > tr:last-child > td.bs_left {
+	border-bottom: 1px solid #dbdbdb;
+}
 table.bs_table > tbody > tr:last-child > td.bs_main {
 	border-bottom: 1px solid #ebebeb;
 }
@@ -80,6 +92,9 @@ table.bs_table > tbody > tr:last-child > td.bs_topic {
 	border-bottom: 1px solid #637591;
 }
 table.bs_table > tbody > tr > td.bs_coldesc:last-child {
+	border-right: 1px solid #dbdbdb;
+}
+table.bs_table > tbody > tr > td.bs_left:last-child {
 	border-right: 1px solid #dbdbdb;
 }
 table.bs_table > tbody > tr > td.bs_main:last-child {
@@ -92,6 +107,9 @@ table.bs_table > tbody > tr > td.bs_topic:last-child {
 /* Fix the table-display in opera >= 9 */
 @media all and (min-width:0px) {
 	table.bs_table > tbody > tr > td.bs_coldesc:first-child {
+		border-left: 1px solid #dbdbdb;
+	}
+	table.bs_table > tbody > tr > td.bs_left:first-child {
 		border-left: 1px solid #dbdbdb;
 	}
 	table.bs_table > tbody > tr > td.bs_main:first-child {
@@ -110,6 +128,9 @@ html:not(:nth-child(1)) table.bs_table > tbody > tr > td:last-child {
 	border: 1px solid #fff;
 }
 html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_coldesc:first-child {
+	border-left: 1px solid #dbdbdb;
+}
+html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_left:first-child {
 	border-left: 1px solid #dbdbdb;
 }
 html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_main:first-child {

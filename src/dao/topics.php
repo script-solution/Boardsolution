@@ -36,7 +36,9 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_count()
 	{
-		return $this->db->sql_num(BS_TB_THREADS,'id','');
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_num(BS_TB_THREADS,'id','');
 	}
 	
 	/**
@@ -45,10 +47,12 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_count_in_forum($fid)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
 			PLIB_Helper::def_error('intgt0','fid',$fid);
 		
-		return $this->db->sql_num(BS_TB_THREADS,'id',' WHERE rubrikid = '.$fid);
+		return $db->sql_num(BS_TB_THREADS,'id',' WHERE rubrikid = '.$fid);
 	}
 	
 	/**
@@ -60,7 +64,9 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_count_by_search($where)
 	{
-		return $this->db->sql_num(BS_TB_THREADS.' t','t.id',$where);
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_num(BS_TB_THREADS.' t','t.id',$where);
 	}
 	
 	/**
@@ -72,12 +78,14 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_list($start = 0,$count = 0)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);
 		if(!PLIB_Helper::is_integer($count) || $count < 0)
 			PLIB_Helper::def_error('intge0','count',$count);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT id FROM '.BS_TB_THREADS.'
 			 '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
 		);
@@ -96,6 +104,8 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_list_by_search($where,$order = 't.id ASC',$start = 0,$count = 0,$keywords = null)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);
 		if(!PLIB_Helper::is_integer($count) || $count < 0)
@@ -113,7 +123,7 @@ class BS_DAO_Topics extends PLIB_Singleton
 				$sub .= '+ ((LENGTH(text_posted) - LENGTH(REPLACE(LOWER(text_posted),';
 				$sub .= 'LOWER("'.$kw.'"),""))) / LENGTH("'.$kw.'"))';
 			}
-			if($this->db->get_server_version() >= '4.1')
+			if($db->get_server_version() >= '4.1')
 			{
 				$kw_add .= ' + (SELECT SUM('.$sub.') FROM '.BS_TB_POSTS;
 				$kw_add .= ' WHERE threadid = t.id GROUP BY threadid LIMIT 1)';
@@ -121,7 +131,7 @@ class BS_DAO_Topics extends PLIB_Singleton
 			$kw_add .= ') AS relevance';
 		}
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT t.*,u.`'.BS_EXPORT_USER_NAME.'` username,
 							u2.`'.BS_EXPORT_USER_NAME.'` lp_username,rt.forum_name rubrikname,
 							p.user_group,p2.user_group lastpost_user_group'.$kw_add.'
@@ -161,12 +171,14 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_by_ids($tids,$fid = 0)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($tids) || count($tids) == 0)
 			PLIB_Helper::def_error('intarray>0','tids',$tids);
 		if(!PLIB_Helper::is_integer($fid) || $fid < 0)
 			PLIB_Helper::def_error('intge0','fid',$fid);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_THREADS.'
 			 WHERE id IN ('.implode(',',$tids).')
 			 '.($fid > 0 ? ' AND rubrikid = '.$fid : '')
@@ -182,10 +194,12 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_by_forums($fids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($fids) || count($fids) == 0)
 			PLIB_Helper::def_error('intarray>0','fids',$fids);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT t.*,increase_experience
 			 FROM '.BS_TB_THREADS.' t
 			 LEFT JOIN '.BS_TB_FORUMS.' f ON t.rubrikid = f.id
@@ -201,10 +215,12 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_by_moved_ids($tids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($tids) || count($tids) == 0)
 			PLIB_Helper::def_error('intarray>0','tids',$tids);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_THREADS.'
 			 WHERE moved_tid IN ('.implode(',',$tids).')'
 		);
@@ -219,12 +235,14 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_latest_topics($number = 0,$excl_fids = array())
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($number) || $number < 0)
 			PLIB_Helper::def_error('intge0','number',$number);
 		if(!PLIB_Array_Utils::is_integer($excl_fids))
 			PLIB_Helper::def_error('intarray','excl_fids',$excl_fids);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT t.*,u.`'.BS_EXPORT_USER_NAME.'` username,u2.`'.BS_EXPORT_USER_NAME.'` lp_username,
 							f.forum_name rubrikname,p.user_group
 			 FROM '.BS_TB_THREADS.' t
@@ -248,12 +266,14 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_topics_by_date($user_id,$start)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
 			PLIB_Helper::def_error('intgt0','user_id',$user_id);
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_THREADS.'
 			 WHERE post_time >= '.$start.' AND post_user = '.$user_id
 		);
@@ -274,10 +294,12 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_topics_of_users($user_ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
 			PLIB_Helper::def_error('intarray>0','user_ids',$user_ids);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT post_user,COUNT(t.id) topics FROM '.BS_TB_THREADS.' t
 			 LEFT JOIN '.BS_TB_FORUMS.' f ON t.rubrikid = f.id
 			 WHERE post_user IN ('.implode(',',$user_ids).') AND f.increase_experience = 1
@@ -300,10 +322,12 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_topic_creation_stats($number)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($number) || $number <= 0)
 			PLIB_Helper::def_error('intgt0','number',$number);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT COUNT(*) num,t.post_user user_id,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.user_group
 			 FROM '.BS_TB_THREADS.' t
 			 LEFT JOIN '.BS_TB_USER.' u ON t.post_user = u.`'.BS_EXPORT_USER_ID.'`
@@ -330,7 +354,9 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_topic_stats_grouped_by_date()
 	{
-		return $this->db->sql_rows(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
 			'SELECT post_time,COUNT(id) num,
 							CONCAT(YEAR(FROM_UNIXTIME(post_time)),MONTH(FROM_UNIXTIME(post_time))) date
 			 FROM '.BS_TB_THREADS.'
@@ -350,12 +376,14 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_topic_for_cache($fid,$tid)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
 			PLIB_Helper::def_error('intgt0','fid',$fid);
 		if(!PLIB_Helper::is_integer($tid) || $tid <= 0)
 			PLIB_Helper::def_error('intgt0','tid',$tid);
 		
-		$row = $this->db->sql_fetch(
+		$row = $db->sql_fetch(
 			'SELECT t.*,r.forum_name,r.forum_type,COUNT(a.id) as attachment_num
 			 FROM '.BS_TB_THREADS." AS t
 			 LEFT JOIN ".BS_TB_FORUMS." AS r ON ( t.rubrikid = r.id )
@@ -374,7 +402,9 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_last_post_time()
 	{
-		$data = $this->db->sql_fetch(
+		$db = PLIB_Props::get()->db();
+
+		$data = $db->sql_fetch(
 			'SELECT lastpost_time FROM '.BS_TB_THREADS.'
 			 ORDER BY lastpost_id DESC'
 		);
@@ -389,8 +419,10 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_next_id()
 	{
-		$info = $this->db->sql_fetch_assoc(
-			$this->db->sql_qry('SHOW TABLE STATUS LIKE "'.BS_TB_THREADS.'"')
+		$db = PLIB_Props::get()->db();
+
+		$info = $db->sql_fetch_assoc(
+			$db->sql_qry('SHOW TABLE STATUS LIKE "'.BS_TB_THREADS.'"')
 		);
 		return $info['Auto_increment'];
 	}
@@ -403,8 +435,10 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function create($fields)
 	{
-		$this->db->sql_insert(BS_TB_THREADS,$fields);
-		return $this->db->get_last_insert_id();
+		$db = PLIB_Props::get()->db();
+
+		$db->sql_insert(BS_TB_THREADS,$fields);
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -415,14 +449,16 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function assign_topics_to_guest($user_id,$user_name)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
 			PLIB_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$this->db->sql_update(BS_TB_THREADS,'WHERE post_user = '.$user_id,array(
+		$db->sql_update(BS_TB_THREADS,'WHERE post_user = '.$user_id,array(
 			'post_user' => 0,
 			'post_an_user' => $user_name
 		));
-		$this->db->sql_update(BS_TB_THREADS,'WHERE lastpost_user = '.$user_id,array(
+		$db->sql_update(BS_TB_THREADS,'WHERE lastpost_user = '.$user_id,array(
 			'lastpost_user' => 0,
 			'lastpost_an_user' => $user_name
 		));
@@ -449,11 +485,13 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function update_by_ids($tids,$fields)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($tids) || count($tids) == 0)
 			PLIB_Helper::def_error('intarray>0','tids',$tids);
 		
-		$this->db->sql_update(BS_TB_THREADS,'WHERE id IN ('.implode(',',$tids).')',$fields);
-		return $this->db->get_affected_rows();
+		$db->sql_update(BS_TB_THREADS,'WHERE id IN ('.implode(',',$tids).')',$fields);
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -465,11 +503,13 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function update_shadows_by_ids($tids,$fields)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($tids) || count($tids) == 0)
 			PLIB_Helper::def_error('intarray>0','tids',$tids);
 		
-		$this->db->sql_update(BS_TB_THREADS,'WHERE moved_tid IN ('.implode(',',$tids).')',$fields);
-		return $this->db->get_affected_rows();
+		$db->sql_update(BS_TB_THREADS,'WHERE moved_tid IN ('.implode(',',$tids).')',$fields);
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -484,6 +524,8 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function update_properties($tid,$lastpost,$replies)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($tid) || $tid <= 0)
 			PLIB_Helper::def_error('intgt0','tid',$tid);
 		if(!PLIB_Helper::is_integer($replies) || $replies < 0)
@@ -500,8 +542,8 @@ class BS_DAO_Topics extends PLIB_Singleton
 		else
 			$fields['lastpost_an_user'] = $lastpost['post_an_user'];
 		
-		$this->db->sql_update(BS_TB_THREADS,'WHERE id = '.$tid,$fields);
-		return $this->db->get_affected_rows();
+		$db->sql_update(BS_TB_THREADS,'WHERE id = '.$tid,$fields);
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -512,7 +554,7 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function delete_by_ids($ids)
 	{
-		return $this->_delete_by('id',$ids);
+		return $this->delete_by('id',$ids);
 	}
 	
 	/**
@@ -523,7 +565,7 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function delete_by_forums($fids)
 	{
-		return $this->_delete_by('rubrikid',$fids);
+		return $this->delete_by('rubrikid',$fids);
 	}
 	
 	/**
@@ -534,7 +576,7 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function delete_shadow_topics($tids)
 	{
-		return $this->_delete_by('moved_tid',$tids);
+		return $this->delete_by('moved_tid',$tids);
 	}
 	
 	/**
@@ -544,16 +586,18 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 * @param array $ids the ids
 	 * @return unknown
 	 */
-	protected function _delete_by($field,$ids)
+	protected function delete_by($field,$ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_THREADS.'
 			 WHERE '.$field.' IN ('.implode(',',$ids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

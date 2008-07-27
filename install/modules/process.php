@@ -19,27 +19,30 @@ class BS_Install_process extends BS_Install
 {
 	public function run()
 	{
-		$type = $this->functions->get_session_var('install_type');
+		$functions = PLIB_Props::get()->functions();
+		$tpl = PLIB_Props::get()->tpl();
+
+		$type = $functions->get_session_var('install_type');
 		
-		include_once(PLIB_Path::inner().'install/sql/sql.php');
+		include_once(PLIB_Path::server_app().'install/sql/sql.php');
 		if($type == 'full')
 		{
-			include_once(PLIB_Path::inner().'install/sql/full.php');
+			include_once(PLIB_Path::server_app().'install/sql/full.php');
 			$install = new BS_InstallSQL_full($this);
 		}
 		else
 		{
-			include_once(PLIB_Path::inner().'install/sql/update.php');
+			include_once(PLIB_Path::server_app().'install/sql/update.php');
 			$install = new BS_InstallSQL_update($this);
 		}
 		
 		$install->start();
 		
-		$this->tpl->set_template('step_process.htm');
-		$this->tpl->add_variables(array(
+		$tpl->set_template('step_process.htm');
+		$tpl->add_variables(array(
 			'log' => $install->get_log()
 		));
-		echo $this->tpl->parse_template();
+		echo $tpl->parse_template();
 	}
 }
 ?>

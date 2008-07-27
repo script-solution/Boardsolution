@@ -21,10 +21,13 @@ final class BS_ACP_Action_userranks_add extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+
 		BS_DAO::get_ranks()->create();
-		$this->cache->refresh('user_ranks');
+		$cache->refresh('user_ranks');
 		
-		$this->set_success_msg($this->locale->lang('user_rank_added'));
+		$this->set_success_msg($locale->lang('user_rank_added'));
 		$this->set_action_performed(true);
 
 		return '';

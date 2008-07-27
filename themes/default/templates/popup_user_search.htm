@@ -1,15 +1,10 @@
-{include "inc_popup_header.htm"}
+{include "inc_header.htm"}
 
 {if module_error == false}
 
-<script type="text/javascript" src="{gjs.get_file('js/basic.js','lib')}"></script>
-<script type="text/javascript" src="{gjs.get_file('js/ajax.js','lib')}"></script>
 <script type="text/javascript" src="{gjs.get_file('src/ajax_user_matches.js')}"></script>
 <script type="text/javascript">
 <!--
-var myAjax = new PLIB_Ajax();
-myAjax.setMimeType('text/plain; {charset}');
-
 function finish()
 {
 	var number = 0;
@@ -102,4 +97,4 @@ new BS_AJAXUserSearch('{gpath}','user_input_field','{action_param}','{glocale.la
 
 {endif}
 
-{include "inc_popup_footer.htm"}
+{include "inc_footer.htm"}

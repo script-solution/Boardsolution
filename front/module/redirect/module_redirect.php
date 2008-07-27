@@ -19,82 +19,92 @@
  */
 final class BS_Front_Module_redirect extends BS_Front_Module
 {
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$loc = $this->input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		$locale = PLIB_Props::get()->locale();
+		$doc = PLIB_Props::get()->doc();
+		$cfg = PLIB_Props::get()->cfg();
+		$url = PLIB_Props::get()->url();
+
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$loc = $input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING);
 
 		switch($loc)
 		{
 			// PMs: naviate back and forward
 			case 'pm_navigate':
-				$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-				$mode = $this->input->correct_var(
+				$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+				$mode = $input->correct_var(
 					BS_URL_MODE,'get',PLIB_Input::STRING,array('back','forward'),'back'
 				);
-				$location = $this->input->correct_var(
+				$location = $input->correct_var(
 					BS_URL_KW,'get',PLIB_Input::STRING,array('inbox','outbox'),'inbox'
 				);
 				
-				if($id == null || !$this->user->is_loggedin())
+				if($id == null || !$user->is_loggedin())
 				{
-					$this->_report_error();
+					$this->report_error();
 					return;
 				}
 				
 				if($mode == 'back')
-					$pmid = BS_DAO::get_pms()->get_prev_pm_id_of_user($id,$this->user->get_user_id(),$location);
+					$pmid = BS_DAO::get_pms()->get_prev_pm_id_of_user($id,$user->get_user_id(),$location);
 				else
-					$pmid = BS_DAO::get_pms()->get_next_pm_id_of_user($id,$this->user->get_user_id(),$location);
+					$pmid = BS_DAO::get_pms()->get_next_pm_id_of_user($id,$user->get_user_id(),$location);
 				
 				if($pmid === false)
 				{
-					$this->_report_error(
-						PLIB_Messages::MSG_TYPE_ERROR,$this->locale->lang('pm_navigation_failed_'.$mode)
+					$this->report_error(
+						PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('pm_navigation_failed_'.$mode)
 					);
 					return;
 				}
 				
-				$this->doc->redirect(
-					$this->url->get_url('userprofile','&'.BS_URL_LOC.'=pmdetails&'.BS_URL_ID.'='.$pmid,'&')
+				$doc->redirect(
+					$url->get_url('userprofile','&'.BS_URL_LOC.'=pmdetails&'.BS_URL_ID.'='.$pmid,'&')
 				);
-				exit;
+				break;
 			
 			// show topic
 			case 'show_topic':
-				$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+				$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
 				if($tid == null)
 				{
-					$this->_report_error();
+					$this->report_error();
 					return;
 				}
 				
 				$tdata = BS_DAO::get_topics()->get_by_id($tid);
 				if($tdata === false)
 				{
-					$this->_report_error();
+					$this->report_error();
 					return;
 				}
 				
-				$this->doc->redirect(
-					$this->url->get_url('posts','&'.BS_URL_FID.'='.$tdata['rubrikid'].'&'.BS_URL_TID.'='.$tid,'&')
+				$doc->redirect(
+					$url->get_url('posts','&'.BS_URL_FID.'='.$tdata['rubrikid'].'&'.BS_URL_TID.'='.$tid,'&')
 				);
-				exit;
+				break;
 			
 			// show post
 			case 'show_post':
-				$pid = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-				$hl = $this->input->get_var(BS_URL_HL,'get',PLIB_Input::STRING);
+				$pid = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+				$hl = $input->get_var(BS_URL_HL,'get',PLIB_Input::STRING);
 				if($pid == null)
 				{
-					$this->_report_error();
+					$this->report_error();
 					return;
 				}
 				
 				$pdata = BS_DAO::get_posts()->get_post_by_id($pid);
 				if($pdata === false)
 				{
-					$this->_report_error();
+					$this->report_error();
 					return;
 				}
 				
@@ -114,15 +124,15 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				{
 					if($data['id'] == $pid)
 					{
-						$url = $this->url->get_url(
+						$murl = $url->get_url(
 							'posts','&'.BS_URL_FID.'='.$pdata['rubrikid']
 							.'&'.BS_URL_TID.'='.$pdata['threadid'].'&'.BS_URL_SITE.'='.$page.$hl_add,'&'
 						);
-						$this->doc->redirect($url.'#b_'.$pid);
+						$doc->redirect($murl.'#b_'.$pid);
 					}
 		
 					$post_index++;
-					if(($post_index % $this->cfg['posts_per_page']) == 0)
+					if(($post_index % $cfg['posts_per_page']) == 0)
 						$page++;
 				}
 				break;
@@ -130,79 +140,80 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 			// redirect to the corresponding posts-action
 			// TODO is this still used?
 			case 'posts_action':
-				$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+				$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
 	
 				// check the selected posts
-				$posts = $this->input->get_var('selected_posts','post');
+				$posts = $input->get_var('selected_posts','post');
 				if(!PLIB_Array_Utils::is_integer($posts))
 				{
-					$this->_report_error();
+					$this->report_error();
 					return;
 				}
 	
-				$type = $this->input->correct_var('posts_action','post',PLIB_Input::STRING,
+				$type = $input->correct_var('posts_action','post',PLIB_Input::STRING,
 					array('delete_posts','split_posts'),'delete_posts');
-				$url = $this->url->get_url(
+				$murl = $url->get_url(
 					$type,'&'.BS_URL_FID.'='.$fid.'&'.BS_URL_TID.'='.$tid.'&'.BS_URL_ID.'='.implode(',',$posts),'&'
 				);
-				$this->doc->redirect($url);
+				$doc->redirect($murl);
+				break;
 
 			// redirect to the corresponding topic-action
 			case 'topic_action':
 				// check the selected topics
-				$selected_topics = $this->input->get_var('selected_topics','post');
+				$selected_topics = $input->get_var('selected_topics','post');
 				if(!PLIB_Array_Utils::is_integer($selected_topics))
 				{
-					$this->_report_error();
+					$this->report_error();
 					return;
 				}
 	
 				$ids = implode(',',$selected_topics);
 	
 				// build the url
-				$url = '';
-				$topic_action = $this->input->get_var('topic_action','post',PLIB_Input::STRING);
+				$murl = '';
+				$topic_action = $input->get_var('topic_action','post',PLIB_Input::STRING);
 				switch($topic_action)
 				{
 					case 'edit':
-						$url = $this->url->get_url(
+						$murl = $url->get_url(
 							'edit_topic','&'.BS_URL_FID.'='.$fid.'&'.BS_URL_ID.'='.$ids,'&'
 						);
 						break;
 					case 'open':
-						$url = $this->url->get_url(
+						$murl = $url->get_url(
 							'openclose_topics','&'.BS_URL_MODE.'=open&'.BS_URL_FID.'='.$fid.'&'.BS_URL_ID.'='.$ids,'&'
 						);
 						break;
 					case 'close':
-						$url = $this->url->get_url(
+						$murl = $url->get_url(
 							'openclose_topics','&'.BS_URL_MODE.'=close&'.BS_URL_FID.'='.$fid.'&'.BS_URL_ID.'='.$ids,'&'
 						);
 						break;
 					case 'delete':
-						$url = $this->url->get_url(
+						$murl = $url->get_url(
 							'delete_topics','&'.BS_URL_FID.'='.$fid.'&'.BS_URL_ID.'='.$ids,'&'
 						);
 						break;
 					case 'move':
-						$url = $this->url->get_url(
+						$murl = $url->get_url(
 							'move_topics','&'.BS_URL_FID.'='.$fid.'&'.BS_URL_ID.'='.$ids,'&'
 						);
 						break;
 					case 'mark_read':
-						$site = $this->input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+						$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
 						$action_type = BS_URL_AT.'='.BS_ACTION_CHANGE_READ_STATUS;
 						$fid_param = ($fid != null) ? '&'.BS_URL_FID.'='.$fid : '';
-						$url = $this->url->get_url(
+						$murl = $url->get_url(
 							0,'&'.$action_type.'&'.BS_URL_LOC.'=read&'.BS_URL_MODE.'=topics'
 							.$fid_param.'&'.BS_URL_ID.'='.$ids.'&'.BS_URL_SITE.'='.$site,'&',true
 						);
 						break;
 					case 'mark_unread':
-						$site = $this->input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+						$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
 						$action_type = BS_URL_AT.'='.BS_ACTION_CHANGE_READ_STATUS;
 						$fid_param = ($fid != null) ? '&'.BS_URL_FID.'='.$fid : '';
-						$url = $this->url->get_url(
+						$murl = $url->get_url(
 							0,'&'.$action_type.'&'.BS_URL_LOC.'=unread&'.BS_URL_MODE.'=topics'
 							.$fid_param.'&'.BS_URL_ID.'='.$ids.'&'.BS_URL_SITE.'='.$site,'&',true
 						);
@@ -210,33 +221,34 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				}
 	
 				// invalid mode?
-				if($url == '')
+				if($murl == '')
 				{
-					$this->_report_error();
+					$this->report_error();
 					return;
 				}
 	
-				$this->doc->redirect($url);
+				$doc->redirect($murl);
+				break;
 	
 			// delete-messages in the user-profile
 			case 'pms':
 				// check ids
-				$ids = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
+				$ids = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
 				$id_array = explode(',',$ids);
 				if(!PLIB_Array_Utils::is_integer($id_array))
 				{
-					$this->_report_error();
+					$this->report_error();
 					return;
 				}
 				
-				$site = $this->input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
-				$mode = $this->input->get_var(BS_URL_MODE,'get',PLIB_Input::STRING);
-				$operation = $this->input->get_var('operation','post',PLIB_Input::STRING);
+				$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+				$mode = $input->get_var(BS_URL_MODE,'get',PLIB_Input::STRING);
+				$operation = $input->get_var('operation','post',PLIB_Input::STRING);
 				
 				// check other parameter
 				if($mode == null || $operation == null)
 				{
-					$this->_report_error();
+					$this->report_error();
 					return;
 				}
 				
@@ -255,14 +267,15 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 						break;
 					
 					default:
-						$this->_report_error();
+						$this->report_error();
 						return;
 				}
 				
 				// redirect
 				$params = '&'.BS_URL_LOC.'='.$mode.'&'.BS_URL_SITE.'='.$site.$action_type.'&'.BS_URL_DEL.'='.$ids;
-				$url = $this->url->get_url('userprofile',$params,'&');
-				$this->doc->redirect($url);
+				$murl = $url->get_url('userprofile',$params,'&');
+				$doc->redirect($murl);
+				break;
 	
 			// delete-messages at other locations
 			case 'del_pm_ban':
@@ -270,9 +283,9 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 			case 'del_subscr':
 			case 'del_avatars':
 			case 'del_cal_event':
-				$ids = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
-				$site = $this->input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
-				$option = $this->input->isset_var('option_yes','post') ? 'yes' : 'no';
+				$ids = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
+				$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+				$option = $input->isset_var('option_yes','post') ? 'yes' : 'no';
 				switch($loc)
 				{
 					case 'del_subscr':
@@ -309,7 +322,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				// check parameter
 				if($ids == null || !PLIB_Array_Utils::is_integer(PLIB_Array_Utils::advanced_explode(',',$ids)))
 				{
-					$this->_report_error();
+					$this->report_error();
 					return;
 				}
 
@@ -318,91 +331,88 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				// build url
 				if($option == 'yes')
 				{
-					$url = $this->url->get_url(
+					$murl = $url->get_url(
 						$action,$loc_param.'&'.BS_URL_AT.'='.$action_type.'&'.BS_URL_DEL.'='.$ids.$site_param,'&',true
 					);
 				}
 				else
 				{
-					$url = $this->url->get_url(
+					$murl = $url->get_url(
 						$action,$loc_param.$site_param,'&',true
 					);
 				}
 				
-				$this->doc->redirect($url);
+				$doc->redirect($murl);
+				break;
 	
 			// redirect to a module or forum
 			case 'forum_jump':
-				$forum_jump = $this->input->get_var('forum_jump','post',PLIB_Input::STRING);
-				$url = '';
+				$forum_jump = $input->get_var('forum_jump','post',PLIB_Input::STRING);
+				$murl = '';
 				switch($forum_jump)
 				{
 					case 'index':
-						$url = $this->url->get_url('forums','','&');
+						$murl = $url->get_url('forums','','&');
 						break;
 					case 'admin':
-						$url = str_replace('&amp;','&',$this->url->get_admin_url());
+						$murl = str_replace('&amp;','&',$url->get_admin_url());
 						break;
 					case 'memberlist':
-						$url = $this->url->get_url('memberlist','','&');
+						$murl = $url->get_url('memberlist','','&');
 						break;
 					case 'linklist':
-						$url = $this->url->get_url('linklist','','&');
+						$murl = $url->get_url('linklist','','&');
 						break;
 					case 'faq':
-						$url = $this->url->get_url('faq','','&');
+						$murl = $url->get_url('faq','','&');
 						break;
 					case 'stats':
-						$url = $this->url->get_url('stats','','&');
+						$murl = $url->get_url('stats','','&');
 						break;
 					case 'calendar':
-						$url = $this->url->get_url('calendar','','&');
+						$murl = $url->get_url('calendar','','&');
 						break;
 					case 'search':
-						$url = $this->url->get_url('search','','&');
+						$murl = $url->get_url('search','','&');
 						break;
 					case 'profile':
-						$url = $this->url->get_url('userprofile','&'.BS_URL_LOC.'=pr_infos','&');
+						$murl = $url->get_url('userprofile','&'.BS_URL_LOC.'=pr_infos','&');
 						break;
 					case 'pms':
-						$url = $this->url->get_url('userprofile','&'.BS_URL_LOC.'=pmoverview','&');
+						$murl = $url->get_url('userprofile','&'.BS_URL_LOC.'=pmoverview','&');
 						break;
 					case 'register':
-						$url = $this->url->get_url('register','','&');
+						$murl = $url->get_url('register','','&');
 						break;
 					case 'unread':
-						$url = $this->url->get_url('unread','','&');
+						$murl = $url->get_url('unread','','&');
 						break;
 					case 'team':
-						$url = $this->url->get_url('team','','&');
+						$murl = $url->get_url('team','','&');
 						break;
 					case 'userloc':
-						$url = $this->url->get_url('user_locations','','&');
+						$murl = $url->get_url('user_locations','','&');
 						break;
 					default:
 						$parts = explode('_',$forum_jump);
 						if(count($parts) == 2 && $parts[0] == 'f' && PLIB_Helper::is_integer($parts[1]))
-							$url = $this->url->get_topics_url($parts[1],'&');
+							$murl = $url->get_topics_url($parts[1],'&');
 						break;
 				}
 	
-				if($url == '')
+				if($murl == '')
 				{
-					$this->_report_error();
+					$this->report_error();
 					return;
 				}
 	
-				$this->doc->redirect($url);
+				$doc->redirect($murl);
+				break;
 	
 			default:
-				$this->_report_error();
+				$this->report_error();
 				break;
 		}
-	}
-	
-	public function get_location()
-	{
-		return array(); // we don't need a location here
 	}
 }
 ?>

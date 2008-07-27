@@ -26,13 +26,26 @@
 abstract class BS_Front_Module extends PLIB_Module
 {
 	/**
+	 * Should return wether this module is viewable by guests only. The default value is "false".
+	 * Please overwrite the method if you want to change it.
+	 * 
+	 * @return boolean true if it is only for guests
+	 */
+	public function is_guest_only()
+	{
+		return false;
+	}
+	
+	/**
 	 * Creates the formular, adds it to the template and allows all methods of it
 	 * to be called.
 	 *
 	 * @return BS_HTML_Formular the created formular
 	 */
-	protected final function _request_formular()
+	protected final function request_formular()
 	{
+		$tpl = PLIB_Props::get()->tpl();
+
 		$args = func_get_args();
 		switch(count($args))
 		{
@@ -50,75 +63,67 @@ abstract class BS_Front_Module extends PLIB_Module
 				break;
 		}
 		
-		$this->tpl->add_variables(array('form' => $form));
-		$this->tpl->add_allowed_method('form','*');
+		$tpl->add_variables(array('form' => $form));
+		$tpl->add_allowed_method('form','*');
 		return $form;
 	}
+	
+	/**
+	 * Reports an error and stores that the module has not finished in a correct way.
+	 * Note that you have to specify a message if the type is no error and no no-access-msg!
+	 *
+	 * @param int $type the type. see PLIB_Messages::MSG_TYPE_*
+	 * @param string $message you can specify the message to display here, if you like
+	 */
+	protected final function report_error($type = PLIB_Messages::MSG_TYPE_ERROR,$message = '')
+	{
+		$functions = PLIB_Props::get()->functions();
+		$doc = PLIB_Props::get()->doc();
 
-	/**
-	 * returns if this module is only for guests
-	 * 
-	 * @return boolean true if it is only for guests
-	 */
-	public function is_guest_only()
-	{
-		return false;
-	}
-	
-	/**
-	 * Should return the value for the meta-tag "robots".
-	 * That means if you for example return "noindex" the meta-tag would look like:
-	 * <code>
-	 * 	<meta name="robots" content="noindex" />
-	 * </code>
-	 * By default the value is "noindex,nofollow".
-	 * 
-	 * @return string the value for the meta-tag "follow"
-	 */
-	public function get_robots_value()
-	{
-		return "noindex,nofollow";
-	}
-	
-	protected final function _report_error($type = PLIB_Messages::MSG_TYPE_ERROR,$message = '')
-	{
 		// if a no-access-message has been added we want to show the login form
 		if($message == '' && $type == PLIB_Messages::MSG_TYPE_NO_ACCESS)
-			$this->functions->show_login_form();
+		{
+			$functions->show_login_form();
+			$doc->set_error();
+		}
 		else
-			parent::_report_error($type,$message);
+			$doc->report_error($type,$message);
 	}
 	
 	/**
-	 * adds the forum-location-path for given id to the given array
-	 * can be used in modules which belong to a forum or topic
+	 * Adds the forum-location-path to the breadcrumbs. Can be used in modules which belong
+	 * to a forum or topic.
 	 * 
-	 * @param array $result the path-array to which the forum-path should be added
 	 * @param int $id the forum-id
 	 */
-	protected final function _add_loc_forum_path(&$result,$id)
+	protected final function add_loc_forum_path($id)
 	{
+		$forums = PLIB_Props::get()->forums();
+		$url = PLIB_Props::get()->url();
+		$doc = PLIB_Props::get()->doc();
+
 		if(PLIB_Helper::is_integer($id) && $id > 0)
 		{
-			$path = $this->forums->get_path($id);
+			$path = $forums->get_path($id);
 			for($i = count($path) - 1;$i >= 0;$i--)
-				$result[$path[$i][0]] = $this->url->get_topics_url($path[$i][1],'&amp;',1);
+				$doc->add_breadcrumb($path[$i][0],$url->get_topics_url($path[$i][1],'&amp;',1));
 		}
 	}
 	
 	/**
-	 * adds the topic-location to the given array
-	 * can be used in modules which belong to a topic
-	 * 
-	 * @param array $result the path-array to which the topic should be added
+	 * Adds the topic-location to the breadcrumbs. Can be used in modules which belong
+	 * to a topic.
 	 */
-	protected final function _add_loc_topic(&$result)
+	protected final function add_loc_topic()
 	{
+		$url = PLIB_Props::get()->url();
+		$doc = PLIB_Props::get()->doc();
+		
 		$tdata = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		if($tdata !== null)
 		{
-			$url = $this->url->get_posts_url($tdata['rubrikid'],$tdata['id'],'&amp;',1);
-			$result[$tdata['name']] = $url;
+			$murl = $url->get_posts_url($tdata['rubrikid'],$tdata['id'],'&amp;',1);
+			$doc->add_breadcrumb($tdata['name'],$murl);
 		}
 	}
 }

@@ -21,7 +21,11 @@ final class BS_ACP_Action_usergroups_delete extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$id_str = $this->input->get_var('ids','get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+
+		$id_str = $input->get_var('ids','get',PLIB_Input::STRING);
 		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
 			return 'Got an invalid id-string via GET';
 		
@@ -55,13 +59,13 @@ final class BS_ACP_Action_usergroups_delete extends BS_ACP_Action_Base
 		$rows = BS_DAO::get_usergroups()->delete_by_ids($ids);
 		
 		// we have to refresh the cache
-		$this->cache->refresh('intern');
-		$this->cache->refresh('acp_access');
+		$cache->refresh('intern');
+		$cache->refresh('acp_access');
 		
 		if($rows > 0)
-			$this->cache->refresh('user_groups');
+			$cache->refresh('user_groups');
 		
-		$this->set_success_msg($this->locale->lang('groups_delete_success'));
+		$this->set_success_msg($locale->lang('groups_delete_success'));
 		$this->set_action_performed(true);
 
 		return '';

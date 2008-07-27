@@ -33,51 +33,71 @@ final class BS_ACP_Module_faq extends BS_ACP_Module
 	 */
 	private $_entries = array();
 
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
+	{
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		
+		$doc->add_breadcrumb($locale->lang('acpmod_adminfaq'));
+	}
+	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$this->locale->add_language_file('lang_admin_faq.php');
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+
+		$locale->add_language_file('lang_admin_faq.php');
 
 		$this->_add_entry(
-			$this->locale->lang('faq_q_board_logo'),$this->locale->lang('faq_a_board_logo')
+			$locale->lang('faq_q_board_logo'),$locale->lang('faq_a_board_logo')
 		);
 		$this->_add_entry(
-			$this->locale->lang('faq_q_moderators'),$this->locale->lang('faq_a_moderators')
+			$locale->lang('faq_q_moderators'),$locale->lang('faq_a_moderators')
 		);
 		$this->_add_entry(
-			$this->locale->lang('faq_q_gzip'),$this->locale->lang('faq_a_gzip')
+			$locale->lang('faq_q_gzip'),$locale->lang('faq_a_gzip')
 		);
 		$this->_add_entry(
-			$this->locale->lang('faq_q_link_to_hp'),$this->locale->lang('faq_a_link_to_hp')
+			$locale->lang('faq_q_link_to_hp'),$locale->lang('faq_a_link_to_hp')
 		);
 		$this->_add_entry(
-			$this->locale->lang('faq_q_status_messages'),$this->locale->lang('faq_a_status_messages')
+			$locale->lang('faq_q_status_messages'),$locale->lang('faq_a_status_messages')
 		);
 		$this->_add_entry(
-			$this->locale->lang('faq_q_add_bbcode'),$this->locale->lang('faq_a_add_bbcode')
+			$locale->lang('faq_q_add_bbcode'),$locale->lang('faq_a_add_bbcode')
 		);
 		$this->_add_entry(
-			$this->locale->lang('faq_q_subforums'),$this->locale->lang('faq_a_subforums')
+			$locale->lang('faq_q_subforums'),$locale->lang('faq_a_subforums')
 		);
 		$this->_add_entry(
-			$this->locale->lang('faq_q_reduce_userdata'),$this->locale->lang('faq_a_reduce_userdata')
+			$locale->lang('faq_q_reduce_userdata'),$locale->lang('faq_a_reduce_userdata')
 		);
 		$this->_add_entry(
-			$this->locale->lang('faq_q_templates'),$this->locale->lang('faq_a_templates')
+			$locale->lang('faq_q_templates'),$locale->lang('faq_a_templates')
 		);
 		$this->_add_entry(
-			$this->locale->lang('faq_q_logout'),$this->locale->lang('faq_a_logout')
+			$locale->lang('faq_q_logout'),$locale->lang('faq_a_logout')
 		);
 		$this->_add_entry(
-			$this->locale->lang('faq_q_emails_spam'),$this->locale->lang('faq_a_emails_spam')
+			$locale->lang('faq_q_emails_spam'),$locale->lang('faq_a_emails_spam')
 		);
 		$this->_add_entry(
-			$this->locale->lang('faq_q_bs_api'),$this->locale->lang('faq_a_bs_api')
+			$locale->lang('faq_q_bs_api'),$locale->lang('faq_a_bs_api')
 		);
 		$this->_add_entry(
-			$this->locale->lang('faq_q_bbceditor_extra_tags'),$this->locale->lang('faq_a_bbceditor_extra_tags')
+			$locale->lang('faq_q_bbceditor_extra_tags'),$locale->lang('faq_a_bbceditor_extra_tags')
 		);
 		
-		$this->tpl->add_array('questions',$this->_entries);
+		$tpl->add_array('questions',$this->_entries);
 	}
 
 	/**
@@ -93,13 +113,6 @@ final class BS_ACP_Module_faq extends BS_ACP_Module
 			'question' => $question,
 			'answer' => $answer
 		);
-	}
-
-	public function get_location()
-	{
-		$location = array();
-		$location[$this->locale->lang('acpmod_adminfaq')] = '';
-		return $location;
 	}
 }
 ?>

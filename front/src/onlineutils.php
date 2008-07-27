@@ -35,17 +35,21 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 	 */
 	public function add_currently_online($loc = 'forums')
 	{
+		$tpl = PLIB_Props::get()->tpl();
+		$auth = PLIB_Props::get()->auth();
+		$locale = PLIB_Props::get()->locale();
+
 		$online = $this->get_currently_online_user($loc);
 		
-		$this->tpl->set_template('inc_online_user.htm');
-		$this->tpl->add_variables(array(
-			'can_view_locations' => $this->auth->has_global_permission('view_online_locations'),
+		$tpl->set_template('inc_online_user.htm');
+		$tpl->add_variables(array(
+			'can_view_locations' => $auth->has_global_permission('view_online_locations'),
 			'conclusion_list' => $online['conclusion'],
-			'title' => $this->locale->lang('currently_online_'.$loc),
+			'title' => $locale->lang('currently_online_'.$loc),
 			'user_list' => $online['online_reg'],
 			'legend' => $this->get_usergroup_legend()
 		));
-		$this->tpl->restore_template();
+		$tpl->restore_template();
 	}
 	
 	/**
@@ -67,6 +71,14 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 	 */
 	public function get_currently_online_user($location = 'forums')
 	{
+		$sessions = PLIB_Props::get()->sessions();
+		$input = PLIB_Props::get()->input();
+		$auth = PLIB_Props::get()->auth();
+		$user = PLIB_Props::get()->user();
+		$cfg = PLIB_Props::get()->cfg();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		// user online
 		$useronline = '';
 		$guests = 0;
@@ -78,21 +90,21 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 		{
 			case 'all':
 			case 'forums':
-				$users = $this->sessions->get_user_at_location($location);
+				$users = $sessions->get_user_at_location($location);
 				break;
 			case 'topics':
-				$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-				$users = $this->sessions->get_user_at_location($location,$fid);
+				$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+				$users = $sessions->get_user_at_location($location,$fid);
 				break;
 			case 'posts':
-				$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-				$users = $this->sessions->get_user_at_location($location,$tid);
+				$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+				$users = $sessions->get_user_at_location($location,$tid);
 				break;
 		}
 		
 		// sort user by date descending
 		usort($users,array($this,'_sort_user_by_date_callback'));
-		$permission_to_view_location = $this->auth->has_global_permission('view_online_locations');
+		$permission_to_view_location = $auth->has_global_permission('view_online_locations');
 		foreach($users as $daten)
 		{
 			if($daten['bot_name'] != '')
@@ -107,8 +119,8 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 			{
 				$guests++;
 			}
-			else if($this->user->is_admin() || $daten['ghost_mode'] == 0 ||
-				$this->cfg['allow_ghost_mode'] == 0)
+			else if($user->is_admin() || $daten['ghost_mode'] == 0 ||
+				$cfg['allow_ghost_mode'] == 0)
 			{
 				$location = '';
 				if($permission_to_view_location)
@@ -120,12 +132,12 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 				}
 	
 				$time = strip_tags(PLIB_Date::get_date($daten['date']));
-				$url = $this->url->get_url('userdetails','&amp;'.BS_URL_ID.'='.$daten['user_id']);
-				$name = $this->auth->get_colored_username(
+				$murl = $url->get_url('userdetails','&amp;'.BS_URL_ID.'='.$daten['user_id']);
+				$name = $auth->get_colored_username(
 					$daten['user_id'],$daten['user_name'],$daten['user_group']
 				);
 				
-				$useronline .= '<a title="'.$location.' ('.$time.')" href="'.$url.'">';
+				$useronline .= '<a title="'.$location.' ('.$time.')" href="'.$murl.'">';
 				$useronline .= $name.'</a>';
 				if($daten['duplicates'] > 0)
 					$useronline .= ' ('.($daten['duplicates'] + 1).'x)';
@@ -142,20 +154,20 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 		if($useronline != '')
 			$user_names = PLIB_String::substr($useronline,0,PLIB_String::strlen($useronline) - 2);
 		else
-			$user_names = '<i>'.$this->locale->lang('none').'</i>';
+			$user_names = '<i>'.$locale->lang('none').'</i>';
 		
 		// build conclusion
 		$conc = '<b>'.$registered.'</b> ';
-		$conc .= ($registered == 1) ? $this->locale->lang('Registered1') : $this->locale->lang('Registered');
-		if($this->cfg['allow_ghost_mode'] == 1)
+		$conc .= ($registered == 1) ? $locale->lang('Registered1') : $locale->lang('Registered');
+		if($cfg['allow_ghost_mode'] == 1)
 		{
 			$conc .= ', <b>'.$ghosts.'</b> ';
-			$conc .= ($ghosts == 1) ? $this->locale->lang('hiddenuser1') : $this->locale->lang('hiddenuser');
+			$conc .= ($ghosts == 1) ? $locale->lang('hiddenuser1') : $locale->lang('hiddenuser');
 		}
 		$conc .= ', <b>'.$guests.'</b> ';
-		$conc .= ($guests == 1) ? $this->locale->lang('guest') : $this->locale->lang('guests');
+		$conc .= ($guests == 1) ? $locale->lang('guest') : $locale->lang('guests');
 		$conc .= ', <b>'.$bots.'</b> ';
-		$conc .= ($bots == 1) ? $this->locale->lang('bot') : $this->locale->lang('bots');
+		$conc .= ($bots == 1) ? $locale->lang('bot') : $locale->lang('bots');
 		
 		return array(
 			'conclusion' => $conc,
@@ -175,20 +187,26 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 	 */
 	public function get_usergroup_legend()
 	{
+		$cache = PLIB_Props::get()->cache();
+		$auth = PLIB_Props::get()->auth();
+		$cfg = PLIB_Props::get()->cfg();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		$legend = '';
-		$groups = $this->cache->get_cache('user_groups');
+		$groups = $cache->get_cache('user_groups');
 		foreach($groups as $gdata)
 		{
 			if($gdata['id'] != BS_STATUS_GUEST && $gdata['is_visible'] == 1)
 			{
-				$gname = $this->auth->get_colored_groupname($gdata['id']);
-				if($this->cfg['enable_memberlist'] == 1)
+				$gname = $auth->get_colored_groupname($gdata['id']);
+				if($cfg['enable_memberlist'] == 1)
 				{
-					$url = $this->url->get_url(
+					$murl = $url->get_url(
 						'memberlist',
 						'&amp;'.BS_URL_MS_GROUP.urlencode('[]').'='.$gdata['id']
 					);
-					$legend .= '<a href="'.$url.'">'.$gname.'</a>, ';
+					$legend .= '<a href="'.$murl.'">'.$gname.'</a>, ';
 				}
 				else
 					$legend .= $gname.', ';
@@ -196,11 +214,11 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 		}
 		
 		// add moderator
-		if($this->cfg['enable_moderators'])
+		if($cfg['enable_moderators'])
 		{
-			$url = $this->url->get_url('memberlist','&amp;'.BS_URL_MS_MODS.'=1');
-			$legend .= '<a href="'.$url.'"><span style="color: #'.$this->cfg['mod_color'].';">';
-			$legend .= $this->locale->lang('moderators').'</span></a>';
+			$murl = $url->get_url('memberlist','&amp;'.BS_URL_MS_MODS.'=1');
+			$legend .= '<a href="'.$murl.'"><span style="color: #'.$cfg['mod_color'].';">';
+			$legend .= $locale->lang('moderators').'</span></a>';
 		}
 		else
 			$legend = PLIB_String::substr($legend,0,PLIB_String::strlen($legend) - 2);
@@ -215,10 +233,13 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 	 */
 	public function get_last_activity()
 	{
-		$last = $this->sessions->get_last_login();
+		$sessions = PLIB_Props::get()->sessions();
+		$locale = PLIB_Props::get()->locale();
+
+		$last = $sessions->get_last_login();
 		if($last['id'] != '' && $last['lastlogin'] > 0)
 		{
-			$lastlogin = PLIB_Date::get_date($last['lastlogin']).' '.$this->locale->lang('of').' ';
+			$lastlogin = PLIB_Date::get_date($last['lastlogin']).' '.$locale->lang('of').' ';
 			$lastlogin .= BS_UserUtils::get_instance()->get_link($last['id'],$last['user_name'],$last['user_group']);
 		}
 		else
@@ -243,7 +264,7 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 		return 0;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

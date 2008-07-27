@@ -24,7 +24,8 @@
  * You can also add parameters if this is required. For example if you call the board with
  * "page.php?site=forum" you have to use the value "page.php?site=forum".
  */
-define('BS_FRONTEND_FILE','index.php');
+// TODO changed for joomla
+define('BS_FRONTEND_FILE','index.php?option=com_joobs&amp;Itemid=26');
 
 ############################ GENERAL ############################
 
@@ -341,6 +342,20 @@ define('BS_MAX_PM_TITLE_LEN',45);
  * The maximum number of receivers per PM
  */
 define('BS_MAX_PM_RECEIVER',5);
+
+/**
+ * Ab wieviel Prozent der erlaubten Emails in der PM-Inbox soll dem User bei weiteren PMs
+ * eine Email geschickt werden? D.h. wenn der Wert auf 90 steht und die max. PMs in der Inbox
+ * auf 100 gestellt sind, wird dem User ab 90 PMs in der Inbox bei jeder weiteren PM eine Email
+ * geschickt, die darauf aufmerksam macht, dass PMs gel&ouml;scht werden sollten, damit weitere
+ * empfangen werden koennen.
+ *
+ * The minimum percentage of allowed PMs in the inbox to send the user an email. That means if
+ * the value is set to 90 and the max. PMs in the inbox is set to 100 the user will get an email
+ * as soon as she/he has at least 90 PMs in the inbox. For every PM she/he will get an email
+ * that contains a notice that the user should delete some PMs to receive new ones.
+ */
+define('BS_PM_INBOX_FULL_EMAIL_SINCE',90);
 
 /**
  * Die Anzahl der Themen bei "Letzte Aktivitaet" in den Userdetails

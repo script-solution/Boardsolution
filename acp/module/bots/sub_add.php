@@ -19,20 +19,33 @@
  */
 final class BS_ACP_SubModule_bots_add extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_ADD_BOT => 'add'
-		);
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_ADD_BOT,'add');
+		$doc->set_template('bots_edit.htm');
+		$doc->add_breadcrumb($locale->lang('add_bot'),$url->get_acpmod_url(0,'&amp;action=add'));
 	}
 	
-	public function get_template()
-	{
-		return 'bots_edit.htm';
-	}
-	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$input = PLIB_Props::get()->input();
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		$data = array(
 			'bot_name' => '',
 			'bot_match' => '',
@@ -41,23 +54,16 @@ final class BS_ACP_SubModule_bots_add extends BS_ACP_SubModule
 			'bot_access' => 1
 		);
 		
-		$this->_request_formular();
+		$this->request_formular();
 		
-		$site = $this->input->get_var('site','get',PLIB_Input::INTEGER);
-		$this->tpl->add_variables(array(
+		$site = $input->get_var('site','get',PLIB_Input::INTEGER);
+		$tpl->add_variables(array(
 			'default' => $data,
 			'site' => $site,
 			'action_type' => BS_ACP_ACTION_ADD_BOT,
-			'title' => $this->locale->lang('add_bot'),
-			'form_target' => $this->url->get_acpmod_url(0,'&amp;action=add&amp;site='.$site)
+			'title' => $locale->lang('add_bot'),
+			'form_target' => $url->get_acpmod_url(0,'&amp;action=add&amp;site='.$site)
 		));
-	}
-	
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('add_bot') => $this->url->get_acpmod_url(0,'&amp;action=add')
-		);
 	}
 }
 ?>

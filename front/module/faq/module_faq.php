@@ -19,9 +19,37 @@
  */
 final class BS_Front_Module_faq extends BS_Front_Module
 {
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
+	{
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$cfg = PLIB_Props::get()->cfg();
+		
+		$doc->set_has_access($cfg['enable_faq'] == 1);
+		
+		$doc->add_breadcrumb($locale->lang('faq'),$url->get_url('faq'));
+	}
+	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$this->locale->add_language_file('faq');
+		$locale = PLIB_Props::get()->locale();
+		$cfg = PLIB_Props::get()->cfg();
+		$tpl = PLIB_Props::get()->tpl();
+		$cache = PLIB_Props::get()->cache();
+		$functions = PLIB_Props::get()->functions();
+		$url = PLIB_Props::get()->url();
+
+		$locale->add_language_file('faq');
 
 		$rank_names = array(
 			'experience_bar' => 1,
@@ -38,30 +66,30 @@ final class BS_Front_Module_faq extends BS_Front_Module
 			'bbcode' =>	12
 		);
 		
-		$enable_bbcode = $this->cfg['posts_enable_bbcode'] || $this->cfg['sig_enable_bbcode'] ||
-			$this->cfg['lnkdesc_enable_bbcode'];
+		$enable_bbcode = $cfg['posts_enable_bbcode'] || $cfg['sig_enable_bbcode'] ||
+			$cfg['desc_enable_bbcode'];
 		
 		$conditions = array(
-			$rank_names['moderators'] => $this->cfg['enable_moderators'] == 1,
-			$rank_names['pms'] => $this->cfg['enable_pms'] == 1,
+			$rank_names['moderators'] => $cfg['enable_moderators'] == 1,
+			$rank_names['pms'] => $cfg['enable_pms'] == 1,
 			$rank_names['bbcode'] => $enable_bbcode,
-			$rank_names['ranks'] => $this->cfg['enable_user_ranks'] == 1,
-			$rank_names['experience_bar'] => $this->cfg['post_stats_type'] != 'disabled' && $this->cfg['enable_post_count'] == 1
+			$rank_names['ranks'] => $cfg['enable_user_ranks'] == 1,
+			$rank_names['experience_bar'] => $cfg['post_stats_type'] != 'disabled' && $cfg['enable_post_count'] == 1
 		);
 
 		$faq_titles = array();
-		$count = $this->locale->lang('faq_item_count');
+		$count = $locale->lang('faq_item_count');
 		for($i = 1;$i <= $count;$i++)
 		{
 			if(!$this->_is_enabled($conditions,$i))
 				continue;
 			
 			$faq_titles[] = array(
-				'title' => $this->locale->lang('faq_title_'.$i)
+				'title' => $locale->lang('faq_title_'.$i)
 			);
 		}
 		
-		$this->tpl->add_array('faq_titles',$faq_titles,false);
+		$tpl->add_array('faq_titles',$faq_titles,false);
 		
 		$faqs = array();
 		for($i = 1;$i <= $count;$i++)
@@ -76,36 +104,36 @@ final class BS_Front_Module_faq extends BS_Front_Module
 			{
 				case $rank_names['ranks']:
 					// add the ranks
-					$num = $this->cache->get_cache('user_ranks')->get_element_count();
+					$num = $cache->get_cache('user_ranks')->get_element_count();
 					$a = 1;
-					foreach($this->cache->get_cache('user_ranks') as $data)
+					foreach($cache->get_cache('user_ranks') as $data)
 					{
 						$ranks[] = array(
-							'points' => $data['post_from'].' - '.$data['post_to']." ".$this->locale->lang('points'),
-							'image' => $this->functions->get_rank_images($num,$a,-1,BS_STATUS_USER),
+							'points' => $data['post_from'].' - '.$data['post_to']." ".$locale->lang('points'),
+							'image' => $functions->get_rank_images($num,$a,-1,BS_STATUS_USER),
 							'title' => $data['rank']
 						);
 						$a++;
 					}
 	
-					if($this->cfg['enable_moderators'])
+					if($cfg['enable_moderators'])
 					{
 						$ranks[] = array(
 							'points' => '-',
-							'image' => $this->functions->get_rank_images($num,$num,-1,-1,true),
-							'title' => $this->locale->lang('moderator')
+							'image' => $functions->get_rank_images($num,$num,-1,-1,true),
+							'title' => $locale->lang('moderator')
 						);
 					}
 	
 					// add admin
 					$ranks[] = array(
 						'points' => '-',
-						'image' => $this->functions->get_rank_images($num,$num,-1,BS_STATUS_ADMIN),
-						'title' => $this->locale->lang('administrator')
+						'image' => $functions->get_rank_images($num,$num,-1,BS_STATUS_ADMIN),
+						'title' => $locale->lang('administrator')
 					);
 					
 					$faq_text = sprintf(
-						$this->locale->lang('faq_text_'.$i),
+						$locale->lang('faq_text_'.$i),
 						BS_EXPERIENCE_FOR_POST,
 						BS_EXPERIENCE_FOR_TOPIC
 					);
@@ -113,37 +141,37 @@ final class BS_Front_Module_faq extends BS_Front_Module
 				
 				case $rank_names['experience_bar']:
 					$faq_text = sprintf(
-						$this->locale->lang('faq_text_'.$i.'_'.$this->cfg['post_stats_type']),
-						$this->url->get_standalone_url('front','user_experience','&amp;'.BS_URL_ID.'=0')
+						$locale->lang('faq_text_'.$i.'_'.$cfg['post_stats_type']),
+						$url->get_url('user_experience','&amp;'.BS_URL_ID.'=0')
 					);
 					break;
 				
 				case $rank_names['bbcode']:
 					$faq_text = sprintf(
-						$this->locale->lang('faq_text_'.$i),
-						$this->url->get_url('redirect','&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'=1'),
-						$this->url->get_url('redirect','&amp;'.BS_URL_LOC.'=show_topic&amp;'.BS_URL_TID.'=1'),
-						$this->url->get_standalone_url('front','download','&amp;path=uploads/file.txt'),
-						$this->url->get_standalone_url('front','download','&amp;path=image.jpg'),
+						$locale->lang('faq_text_'.$i),
+						$url->get_url('redirect','&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'=1'),
+						$url->get_url('redirect','&amp;'.BS_URL_LOC.'=show_topic&amp;'.BS_URL_TID.'=1'),
+						$url->get_url('download','&amp;path=uploads/file.txt'),
+						$url->get_url('download','&amp;path=image.jpg'),
 						highlight_string("<?php\necho \"test\";\n?>",1)
 					);
 					break;
 				
 				default:
-					$faq_text = $this->locale->lang('faq_text_'.$i);
+					$faq_text = $locale->lang('faq_text_'.$i);
 					break;
 			}
 			
 			$faqs[] = array(
 				'key' => $i,
-				'title' => $this->locale->lang('faq_title_'.$i),
+				'title' => $locale->lang('faq_title_'.$i),
 				'text' => $faq_text,
 				'show_ranks' => $i == $rank_names['ranks'],
 				'ranks' => $ranks
 			);
 		}
 		
-		$this->tpl->add_array('faqs',$faqs,false);
+		$tpl->add_array('faqs',$faqs,false);
 	}
 
 	/**
@@ -159,16 +187,6 @@ final class BS_Front_Module_faq extends BS_Front_Module
 			return $conditions[$key];
 
 		return true;
-	}
-
-	public function get_location()
-	{
-		return array($this->locale->lang('faq') => $this->url->get_url('faq'));
-	}
-
-	public function has_access()
-	{
-		return $this->cfg['enable_faq'] == 1;
 	}
 }
 ?>

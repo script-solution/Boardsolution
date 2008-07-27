@@ -72,6 +72,8 @@ final class BS_Front_Action_Plain_Poll extends BS_Front_Action_Plain
 	
 	public function check_data()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		// calculate the options
 		$this->_option_lines = array();
 		$lines = explode("\n",$this->_options);
@@ -86,7 +88,7 @@ final class BS_Front_Action_Plain_Poll extends BS_Front_Action_Plain
 		if($number_of_lines < 2)
 			return 'pollmoeglichkeitenleer';
 
-		if($number_of_lines > $this->cfg['max_poll_options'])
+		if($number_of_lines > $cfg['max_poll_options'])
 			return 'max_poll_options';
 		
 		$this->_poll_id = BS_DAO::get_polls()->get_next_id();
@@ -96,18 +98,20 @@ final class BS_Front_Action_Plain_Poll extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
+		$db = PLIB_Props::get()->db();
+
 		parent::perform_action();
 
-		$this->db->start_transaction();
+		$db->start_transaction();
 		
 		// insert the poll-options
 		foreach($this->_option_lines as $option)
 			BS_DAO::get_polls()->create($this->_poll_id,$option,$this->_multichoice);
 		
-		$this->db->commit_transaction();
+		$db->commit_transaction();
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

@@ -4,9 +4,24 @@
 	cursor: help;
 }
 
+#plib_image_viewer {
+	border: 1px dotted #444;
+	background-color: #fff;
+	padding: 5px;
+	cursor: pointer;
+}
+#plib_image_viewer_bg {
+	background-color: #444;
+}
+
 img {
 	border: 0;
 	vertical-align: text-top;
+}
+
+code {
+	font-family: monospace;
+	font-size: 12px;
 }
 
 form {

@@ -27,31 +27,40 @@ final class BS_HTML_Formular extends PLIB_HTML_Formular
 	 */
 	public function __construct($check_attachments = true,$check_preview = false)
 	{
-		$condition = $this->doc->get_action_result() === -1;
+		$doc = PLIB_Props::get()->doc();
+		$input = PLIB_Props::get()->input();
+
+		$condition = $doc->get_action_result() === -1;
 		if(!$condition && $check_attachments)
-			$condition |= $this->input->isset_var('add_attachment','post') ||
-						$this->input->isset_var('remove_attachment','post');
+			$condition |= $input->isset_var('add_attachment','post') ||
+						$input->isset_var('remove_attachment','post');
 		if(!$condition && $check_preview)
-			$condition |= $this->input->isset_var('preview','post');
+			$condition |= $input->isset_var('preview','post');
 		
 		parent::__construct($condition);
 	}
 	
-	protected function _get_js_calendar_style()
+	protected function get_js_calendar_style()
 	{
-		return $this->user->get_theme_item_path('calendar.css');
+		$user = PLIB_Props::get()->user();
+
+		return $user->get_theme_item_path('calendar.css');
 	}
 	
-	protected function _get_js_calendar_lang()
+	protected function get_js_calendar_lang()
 	{
+		$user = PLIB_Props::get()->user();
+
 		return PLIB_Javascript::get_instance()->get_file(
-			'language/'.$this->user->get_language().'/calendar_lang.js'
+			'language/'.$user->get_language().'/calendar_lang.js'
 		);
 	}
 	
-	protected function _get_js_calendar_image()
+	protected function get_js_calendar_image()
 	{
-		return $this->user->get_theme_item_path('images/calendar.png');
+		$user = PLIB_Props::get()->user();
+
+		return $user->get_theme_item_path('images/calendar.png');
 	}
 
 	/**
@@ -63,6 +72,8 @@ final class BS_HTML_Formular extends PLIB_HTML_Formular
 	 */
 	public function get_timezone_combo($name = 'timezone',$default = 0)
 	{
+		$user = PLIB_Props::get()->user();
+
 		$tz = timezone_identifiers_list();
 		$zones = array();
 		foreach($tz as $zone)
@@ -86,7 +97,7 @@ final class BS_HTML_Formular extends PLIB_HTML_Formular
 			$zones[$continent][] = array($zone,str_replace('_',' ',$cname));
 		}
 		
-		$default = ($default == 0) ? $this->user->get_profile_val('timezone') : $default;
+		$default = ($default == 0) ? $user->get_profile_val('timezone') : $default;
 		$html = '<select name="'.$name.'">'."\n";
 		foreach($zones as $continent => $cities)
 		{

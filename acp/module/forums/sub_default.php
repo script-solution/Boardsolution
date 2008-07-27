@@ -19,45 +19,62 @@
  */
 final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_DELETE_FORUMS => array('delete','delete'),
-			BS_ACP_ACTION_TRUNCATE_FORUMS => array('delete','truncate'),
-			BS_ACP_ACTION_SWITCH_FORUMS => 'switch',
-			BS_ACP_ACTION_RESORT_FORUMS => 'resort'
-		);
+		parent::init($doc);
+		
+		$doc->add_action(BS_ACP_ACTION_DELETE_FORUMS,array('delete','delete'));
+		$doc->add_action(BS_ACP_ACTION_TRUNCATE_FORUMS,array('delete','truncate'));
+		$doc->add_action(BS_ACP_ACTION_SWITCH_FORUMS,'switch');
+		$doc->add_action(BS_ACP_ACTION_RESORT_FORUMS,'resort');
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		if(($delete = $this->input->get_var('delete','post')) != null)
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$url = PLIB_Props::get()->url();
+		$cache = PLIB_Props::get()->cache();
+		$auth = PLIB_Props::get()->auth();
+		$tpl = PLIB_Props::get()->tpl();
+		$forums = PLIB_Props::get()->forums();
+
+		if(($delete = $input->get_var('delete','post')) != null)
 		{
 			$ids = implode(',',$delete);
-			$action_type = $this->input->get_var('action_type','post',PLIB_Input::STRING);
+			$action_type = $input->get_var('action_type','post',PLIB_Input::STRING);
 			$names = array();
-			foreach($this->forums->get_nodes_with_ids($delete) as $node)
+			foreach($forums->get_nodes_with_ids($delete) as $node)
 				$names[] = $node->get_name();
-			$namelist = PLIB_StringHelper::get_enum($names,$this->locale->lang('and'));
+			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
 			
 			if($action_type == 'delete')
 			{
-				$this->functions->add_delete_message(
-					sprintf($this->locale->lang('delete_forums'),$namelist),
-					$this->url->get_acpmod_url(
+				$functions->add_delete_message(
+					sprintf($locale->lang('delete_forums'),$namelist),
+					$url->get_acpmod_url(
 						0,'&amp;at='.BS_ACP_ACTION_DELETE_FORUMS.'&amp;ids='.$ids
 					),
-					$this->url->get_acpmod_url()
+					$url->get_acpmod_url()
 				);
 			}
 			else if($action_type == 'empty')
 			{
-				$this->functions->add_delete_message(
-					sprintf($this->locale->lang('empty_forum_msg'),$namelist),
-					$this->url->get_acpmod_url(
+				$functions->add_delete_message(
+					sprintf($locale->lang('empty_forum_msg'),$namelist),
+					$url->get_acpmod_url(
 						0,'&amp;at='.BS_ACP_ACTION_TRUNCATE_FORUMS.'&amp;ids='.$ids
 					),
-					$this->url->get_acpmod_url()
+					$url->get_acpmod_url()
 				);
 			}
 		}
@@ -66,15 +83,15 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 		$sub_cats = array();
 		
 		$shortcuts = $this->_get_usergroup_shortcuts();
-		$usergroups = $this->cache->get_cache('user_groups');
+		$usergroups = $cache->get_cache('user_groups');
 		$tplshortcuts = array();
 		foreach($shortcuts as $gid => $sc)
 		{
 			$gdata = $usergroups->get_element($gid);
-			$tplshortcuts[$sc] = $this->auth->get_colored_groupname($gdata['id']);
+			$tplshortcuts[$sc] = $auth->get_colored_groupname($gdata['id']);
 		}
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'at_update' => BS_ACP_ACTION_UPDATE_FORUMS,
 			'shortcuts' => $tplshortcuts
 		));
@@ -88,11 +105,11 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 		
 		$tplforums = array();
 		$last_parent = -1;
-		$forums = $this->forums->get_all_nodes();
-		$num = count($forums);
+		$nodes = $forums->get_all_nodes();
+		$num = count($nodes);
 		for($row = 0;$row < $num;$row++)
 		{
-			$node = $forums[$row];
+			$node = $nodes[$row];
 			$data = $node->get_data();
 
 			if(!isset($sub_cats[$data->get_parent_id()]))
@@ -101,7 +118,7 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 				$sub_cats[$data->get_parent_id()]++;
 
 			$sort_options = array();
-			$sub_cat_num = $this->forums->get_child_count($data->get_parent_id());
+			$sub_cat_num = $forums->get_child_count($data->get_parent_id());
 			for($b = 1;$b <= $sub_cat_num;$b++)
 				$sort_options[$b] = $b;
 
@@ -110,28 +127,28 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 			$forum_name = $data->get_name();
 			if($data->get_forum_is_intern())
 				$forum_name = '<i>'.$forum_name.'</i>';
-			$forum_type_title = $this->locale->lang($data->get_forum_type());
+			$forum_type_title = $locale->lang($data->get_forum_type());
 
 			if($data->get_parent_id() == 0)
-				$parent = '<i>'.$this->locale->lang('main_forum').'</i>';
+				$parent = '<i>'.$locale->lang('main_forum').'</i>';
 			else
-				$parent = $this->forums->get_forum_name($data->get_parent_id());
+				$parent = $forums->get_forum_name($data->get_parent_id());
 
 			$switch_up_url = '';
-			$up_index = $this->_is_same_parent_above($forums,$row,$data->get_parent_id());
+			$up_index = $this->_is_same_parent_above($nodes,$row,$data->get_parent_id());
 			if($up_index >= 0)
 			{
-				$switch_up_url = $this->url->get_acpmod_url(
-					0,'&amp;at='.BS_ACP_ACTION_SWITCH_FORUMS.'&amp;ids='.$fid.','.$forums[$up_index]->get_id()
+				$switch_up_url = $url->get_acpmod_url(
+					0,'&amp;at='.BS_ACP_ACTION_SWITCH_FORUMS.'&amp;ids='.$fid.','.$nodes[$up_index]->get_id()
 				);
 			}
 
 			$switch_down_url = '';
-			$down_index = $this->_is_same_parent_below($forums,$row,$data->get_parent_id());
+			$down_index = $this->_is_same_parent_below($nodes,$row,$data->get_parent_id());
 			if($down_index > 0)
 			{
-				$switch_down_url = $this->url->get_acpmod_url(
-					0,'&amp;at='.BS_ACP_ACTION_SWITCH_FORUMS.'&amp;ids='.$forums[$down_index]->get_id().','.$fid
+				$switch_down_url = $url->get_acpmod_url(
+					0,'&amp;at='.BS_ACP_ACTION_SWITCH_FORUMS.'&amp;ids='.$nodes[$down_index]->get_id().','.$fid
 				);
 			}
 
@@ -149,7 +166,7 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 				'parent' => $parent,
 				'switch_up_url' => $switch_up_url,
 				'switch_down_url' => $switch_down_url,
-				'options_url' => $this->url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$fid),
+				'options_url' => $url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$fid),
 				'up_index' => $up_index,
 				'down_index' => $down_index,
 				'fid' => $fid
@@ -158,9 +175,9 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 			$last_parent = $data->get_parent_id();
 		}
 		
-		$this->tpl->add_array('forums',$tplforums);
-		$this->tpl->add_variables(array(
-			'correct_sort_url' => $this->url->get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_RESORT_FORUMS)
+		$tpl->add_array('forums',$tplforums);
+		$tpl->add_variables(array(
+			'correct_sort_url' => $url->get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_RESORT_FORUMS)
 		));
 	}
 
@@ -210,9 +227,11 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 	 */
 	private function _get_usergroup_shortcuts()
 	{
+		$cache = PLIB_Props::get()->cache();
+
 		$c = 0;
 		$shortcuts = array();
-		foreach($this->cache->get_cache('user_groups') as $gdata)
+		foreach($cache->get_cache('user_groups') as $gdata)
 		{
 			if($gdata['id'] == BS_STATUS_ADMIN)
 				continue;
@@ -257,7 +276,10 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 	 */
 	private function _get_forum_permissions($data,$shortcuts)
 	{
-		$usergroups = $this->cache->get_cache('user_groups');
+		$cache = PLIB_Props::get()->cache();
+		$auth = PLIB_Props::get()->auth();
+
+		$usergroups = $cache->get_cache('user_groups');
 		$permissions = array();
 		
 		// build basic permissions
@@ -270,7 +292,7 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 		foreach($permission_map as $tplname => $mode)
 		{
 			$permissions[$tplname] = '';
-			$gids = $this->auth->get_permissions_in_forum($mode,$data->get_id());
+			$gids = $auth->get_permissions_in_forum($mode,$data->get_id());
 			foreach($gids as $gid)
 			{
 				if($gid == BS_STATUS_ADMIN)
@@ -291,7 +313,7 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 		// calculate access-permissions for this forum
 		$intern_more = false;
 		$permissions['intern'] = '';
-		$intern_perm = $this->cache->get_cache('intern')->get_elements_with(array('fid' => $data->get_id()));
+		$intern_perm = $cache->get_cache('intern')->get_elements_with(array('fid' => $data->get_id()));
 		foreach($intern_perm as $intern)
 		{
 			if($intern['access_type'] == 'user')
@@ -307,11 +329,6 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 			$permissions['intern'] = PLIB_String::substr($permissions['intern'],0,-1);
 		
 		return $permissions;
-	}
-	
-	public function get_location()
-	{
-		return array();
 	}
 }
 ?>

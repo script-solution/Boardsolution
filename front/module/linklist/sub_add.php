@@ -19,52 +19,65 @@
  */
 final class BS_Front_SubModule_linklist_add extends BS_Front_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACTION_ADD_LINK => 'addlink'
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACTION_ADD_LINK,'addlink');
+
+		$doc->add_breadcrumb(
+			$locale->lang('addnewlink'),
+			$url->get_url('linklist','&amp;'.BS_URL_LOC.'=add')
 		);
 	}
 	
 	/**
-	 * Displays the formular to add a link
+	 * @see PLIB_Module::run()
 	 */
 	public function run()
 	{
-		if(!$this->auth->has_global_permission('add_new_link'))
+		$auth = PLIB_Props::get()->auth();
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
+		if(!$auth->has_global_permission('add_new_link'))
 		{
-			$this->_report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
 			return;
 		}
 		
-		$form = $this->_request_formular(false,true);
+		$form = $this->request_formular(false,true);
 	
 		// show the preview
-		if($this->input->isset_var('preview','post'))
-			BS_PostingUtils::get_instance()->add_post_preview('lnkdesc');
+		if($input->isset_var('preview','post'))
+			BS_PostingUtils::get_instance()->add_post_preview('desc');
 	
 		// collect the categories
 		$categories = array();
 		foreach(BS_DAO::get_links()->get_categories() as $name)
 			$categories[$name] =$name;
 	
-		$pform = new BS_PostingForm($this->locale->lang('description'),'','lnkdesc');
+		$pform = new BS_PostingForm($locale->lang('description'),'','desc');
 		$pform->set_textarea_height('100px');
 		$pform->add_form();
 		
-		$this->tpl->add_variables(array(
-			'target_url' => $this->url->get_url(0,'&amp;'.BS_URL_LOC.'=add'),
+		$tpl->add_variables(array(
+			'target_url' => $url->get_url(0,'&amp;'.BS_URL_LOC.'=add'),
 			'category_combo' => $form->get_combobox('link_category',$categories,''),
 			'action_type' => BS_ACTION_ADD_LINK,
-			'back_url' => $this->url->get_url(0)
+			'back_url' => $url->get_url(0)
 		));
 	}
 	
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('addnewlink') => $this->url->get_url('linklist','&amp;'.BS_URL_LOC.'=add')
-		);
-	}
 }
 ?>

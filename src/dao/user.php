@@ -43,8 +43,10 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function get_user_count($active = -1,$banned = -1)
 	{
-		return $this->db->sql_num(
-			BS_TB_PROFILES.' p','p.id',$this->_get_activenbanned($active,$banned)
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_num(
+			BS_TB_PROFILES.' p','p.id',$this->get_activenbanned($active,$banned)
 		);
 	}
 	
@@ -56,10 +58,12 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function id_exists($user_id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
 			PLIB_Helper::def_error('intgt0','user_id',$user_id);
 		
-		return $this->db->sql_num(BS_TB_PROFILES,'id',' WHERE id = '.$user_id) > 0;
+		return $db->sql_num(BS_TB_PROFILES,'id',' WHERE id = '.$user_id) > 0;
 	}
 	
 	/**
@@ -71,7 +75,9 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function name_exists($user_name,$user_id = 0)
 	{
-		return $this->db->sql_num(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_num(
 			BS_TB_USER,
 			'id',
 			' WHERE `'.BS_EXPORT_USER_NAME."` = '".$user_name."' AND
@@ -88,7 +94,9 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function email_exists($user_email,$user_id = 0)
 	{
-		return $this->db->sql_num(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_num(
 			BS_TB_USER,
 			'id',
 			' WHERE `'.BS_EXPORT_USER_EMAIL."` = '".$user_email."' AND
@@ -121,6 +129,8 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function get_users_by_ids($ids,$active = 1,$banned = 0)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids))
 			PLIB_Helper::def_error('intarray','ids',$ids);
 		
@@ -128,9 +138,9 @@ class BS_DAO_User extends BS_DAO_UserBase
 		if(count($ids) == 0)
 			return array();
 		
-		$where = $this->_get_activenbanned($active,$banned);
-		return $this->db->sql_rows(
-			'SELECT '.$this->_get_fields().'
+		$where = $this->get_activenbanned($active,$banned);
+		return $db->sql_rows(
+			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
 			 '.$where.' AND p.id IN ('.implode(',',$ids).')'
@@ -160,7 +170,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function get_users_by_names($names)
 	{
-		return $this->_get_users_by_names($this->_get_fields(),$names);
+		return $this->get_users_by_names_impl($this->get_fields(),$names);
 	}
 	
 	/**
@@ -171,7 +181,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function get_user_by_email($email)
 	{
-		return $this->_get_user_by_email($this->_get_fields(),$email);
+		return $this->get_user_by_email_impl($this->get_fields(),$email);
 	}
 	
 	/**
@@ -184,8 +194,10 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function get_users_like_name($name,$max = 6)
 	{
-		return $this->db->sql_rows(
-			'SELECT '.$this->_get_fields().'
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
+			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
 			 WHERE p.active = 1 AND p.banned = 0 AND u.`'.BS_EXPORT_USER_NAME.'` LIKE "%'.$name.'%"
@@ -204,8 +216,10 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function get_users_by_groups_count($group_ids,$user_ids = array())
 	{
-		$where = $this->_get_user_by_groups_where($group_ids,$user_ids);
-		return $this->db->sql_num(BS_TB_PROFILES,'id',$where);
+		$db = PLIB_Props::get()->db();
+
+		$where = $this->get_user_by_groups_where($group_ids,$user_ids);
+		return $db->sql_num(BS_TB_PROFILES,'id',$where);
 	}
 	
 	/**
@@ -221,7 +235,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function get_users_by_groups($group_ids,$user_ids = array(),$start = 0,$count = 0)
 	{
-		return $this->_get_users_by_groups($this->_get_fields(),$group_ids,$user_ids,$start,$count);
+		return $this->get_users_by_groups_impl($this->get_fields(),$group_ids,$user_ids,$start,$count);
 	}
 	
 	/**
@@ -236,8 +250,10 @@ class BS_DAO_User extends BS_DAO_UserBase
 	public function get_search_user_count($user_name = '',$user_email = '',$register_date = 0,
 		$user_groups = array())
 	{
-		$where = $this->_get_search_where_clause($user_name,$user_email,$register_date,$user_groups);
-		return $this->db->sql_num(
+		$db = PLIB_Props::get()->db();
+
+		$where = $this->get_search_where_clause($user_name,$user_email,$register_date,$user_groups);
+		return $db->sql_num(
 			BS_TB_PROFILES.' p',
 			'p.id',
 			' LEFT JOIN '.BS_TB_USER.' u ON p.id = u.`'.BS_EXPORT_USER_ID.'` '.$where
@@ -252,7 +268,9 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function get_custom_search_user_count($where)
 	{
-		return $this->db->sql_num(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_num(
 			BS_TB_PROFILES.' p',
 			'p.id',
 			' LEFT JOIN '.BS_TB_USER.' AS u ON p.id = u.`'.BS_EXPORT_USER_ID.'` '.$where
@@ -269,6 +287,8 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function create($user_name,$user_email,$user_pw)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(empty($user_name))
 			PLIB_Helper::def_error('notempty','user_name',$user_name);
 		if(empty($user_email))
@@ -276,12 +296,12 @@ class BS_DAO_User extends BS_DAO_UserBase
 		if(empty($user_pw))
 			PLIB_Helper::def_error('notempty','user_pw',$user_pw);
 		
-		$this->db->sql_insert(BS_TB_USER,array(
+		$db->sql_insert(BS_TB_USER,array(
 			BS_EXPORT_USER_NAME => $user_name,
 			BS_EXPORT_USER_EMAIL => $user_email,
 			BS_EXPORT_USER_PW => md5($user_pw)
 		));
-		return $this->db->get_last_insert_id();
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -295,6 +315,8 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function update($id,$user_name = '',$user_pw = '',$user_email = '')
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
@@ -311,8 +333,8 @@ class BS_DAO_User extends BS_DAO_UserBase
 		if(!empty($user_pw))
 			$fields[BS_EXPORT_USER_PW] = md5($user_pw);
 		
-		$this->db->sql_update(BS_TB_USER,'WHERE `'.BS_EXPORT_USER_ID.'` = '.$id,$fields);
-		return $this->db->get_affected_rows();
+		$db->sql_update(BS_TB_USER,'WHERE `'.BS_EXPORT_USER_ID.'` = '.$id,$fields);
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -323,22 +345,24 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function delete($ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_USER.' WHERE `'.BS_EXPORT_USER_ID.'` IN ('.implode(',',$ids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
 	 * @return string the fields for a "not-full" user
 	 */
-	protected function _get_fields()
+	protected function get_fields()
 	{
 		return 'u.`'.BS_EXPORT_USER_ID.'` id,u.`'.BS_EXPORT_USER_NAME.'` user_name,'
-			.'u.`'.BS_EXPORT_USER_EMAIL.'` user_email';
+			.'u.`'.BS_EXPORT_USER_EMAIL.'` user_email,u.`'.BS_EXPORT_USER_PW.'` user_pw';
 	}
 }
 ?>

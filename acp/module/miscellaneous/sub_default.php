@@ -19,25 +19,20 @@
  */
 final class BS_ACP_SubModule_miscellaneous_default extends BS_ACP_SubModule
 {
-	public function get_actions()
-	{
-		return array();
-	}
-	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$tpl = PLIB_Props::get()->tpl();
+
 		// we have to clear the position here to ensure that we will start again
 		// if the last progress hasn't be cleaned up, however.
 		$storage = new PLIB_Progress_Storage_Session('misc_');
 		$storage->clear();
 		
 		$tasks = BS_ACP_Module_miscellaneous::get_tasks();
-		$this->tpl->add_array('tasks',$tasks);
-	}
-	
-	public function get_location()
-	{
-		return array();
+		$tpl->add_array('tasks',$tasks);
 	}
 }
 ?>

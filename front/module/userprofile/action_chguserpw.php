@@ -21,8 +21,17 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
+		$input = PLIB_Props::get()->input();
+		$cfg = PLIB_Props::get()->cfg();
+		$functions = PLIB_Props::get()->functions();
+		$locale = PLIB_Props::get()->locale();
+		$cache = PLIB_Props::get()->cache();
+		$cookies = PLIB_Props::get()->cookies();
+		$url = PLIB_Props::get()->url();
+		$user = PLIB_Props::get()->user();
+
 		// nothing to do?
-		if(!$this->input->isset_var('submit','post'))
+		if(!$input->isset_var('submit','post'))
 			return '';
 
 		// this is not allowed if the community has been exported
@@ -30,19 +39,19 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 			return 'The community is exported';
 
 		// is the user loggedin?
-		if(!$this->user->is_loggedin())
+		if(!$user->is_loggedin())
 			return 'You are a guest';
 
-		$user_name = $this->input->get_var('user_name','post',PLIB_Input::STRING);
-		$new_password = $this->input->get_var('new_password','post',PLIB_Input::STRING);
-		$new_password_conf = $this->input->get_var('new_password_conf','post',PLIB_Input::STRING);
-		$current_password = $this->input->get_var('current_password','post',PLIB_Input::STRING);
+		$user_name = $input->get_var('user_name','post',PLIB_Input::STRING);
+		$new_password = $input->get_var('new_password','post',PLIB_Input::STRING);
+		$new_password_conf = $input->get_var('new_password_conf','post',PLIB_Input::STRING);
+		$current_password = $input->get_var('current_password','post',PLIB_Input::STRING);
 
 		$change_username = false;
 		$change_password = false;
 
 		// check if the username is valid
-		if($user_name != $this->user->get_profile_val('user_name') && $this->cfg['profile_max_user_changes'] != 0)
+		if($user_name != $user->get_profile_val('user_name') && $cfg['profile_max_user_changes'] != 0)
 		{
 			// is the username empty?
 			if(trim($user_name) == '')
@@ -51,20 +60,20 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 			if(!BS_UserUtils::get_instance()->check_username($user_name))
 				return 'usernamenotallowed';
 
-			if($this->functions->is_banned('user',$user_name))
+			if($functions->is_banned('user',$user_name))
 				return 'usernamenotallowed';
 
-			if(BS_DAO::get_user()->name_exists($user_name,$this->user->get_user_id()))
+			if(BS_DAO::get_user()->name_exists($user_name,$user->get_user_id()))
 				return 'registeruservorhanden';
 
 			$len = PLIB_String::strlen($user_name);
-			if($len < $this->cfg['profile_min_user_len'] && $len > $this->cfg['profile_max_user_len'])
-				return sprintf($this->locale->lang('error_wronguserlen'),
-											 $this->cfg['profile_min_user_len'],
-											 $this->cfg['profile_max_user_len']);
+			if($len < $cfg['profile_min_user_len'] && $len > $cfg['profile_max_user_len'])
+				return sprintf($locale->lang('error_wronguserlen'),
+											 $cfg['profile_min_user_len'],
+											 $cfg['profile_max_user_len']);
 
-			if($this->cfg['profile_max_user_changes'] > 0 &&
-				 $this->user->get_profile_val('username_changes') >= $this->cfg['profile_max_user_changes'])
+			if($cfg['profile_max_user_changes'] > 0 &&
+				 $user->get_profile_val('username_changes') >= $cfg['profile_max_user_changes'])
 				return 'max_username_changes';
 
 			$change_username = true;
@@ -76,7 +85,7 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 			if($new_password != $new_password_conf)
 				return 'pwchangefailed';
 
-			if(md5($current_password) != $this->user->get_profile_val('user_pw'))
+			if(md5($current_password) != $user->get_profile_val('user_pw'))
 				return 'pwchangefailed';
 
 			$change_password = true;
@@ -91,10 +100,10 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 		// build the query
 		if($change_username)
 		{
-			if($this->cfg['profile_max_user_changes'] > 0)
+			if($cfg['profile_max_user_changes'] > 0)
 			{
 				BS_DAO::get_profile()->update_user_by_id(
-					array('username_changes' => array('username_changes + 1')),$this->user->get_user_id()
+					array('username_changes' => array('username_changes + 1')),$user->get_user_id()
 				);
 			}
 		}
@@ -104,34 +113,43 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 		if(!$change_password)
 			$password = '';
 		
-		BS_DAO::get_user()->update($this->user->get_user_id(),$user_name,'',$password);
+		BS_DAO::get_user()->update($user->get_user_id(),$user_name,'',$password);
 
 		// if this user is a moderator, we have to change the user-name there, too.
-		$moderators = $this->cache->get_cache('moderators');
-		$mod_rows = $moderators->get_elements_with(array('user_id' => $this->user->get_user_id()));
+		$moderators = $cache->get_cache('moderators');
+		$mod_rows = $moderators->get_elements_with(array('user_id' => $user->get_user_id()));
 		$mod_len = count($mod_rows);
 		if($mod_len > 0)
 		{
 			foreach(array_keys($mod_rows) as $key)
 				$moderators->set_element_field($key,'user_name',$user_name);
-			$this->cache->store('moderators');
+			$cache->store('moderators');
 		}
 
 		if($change_username)
 		{
-			$this->user->set_profile_val('user_name',$user_name);
-			$this->cookies->set_cookie('user',$user_name);
+			$user->set_profile_val('user_name',$user_name);
+			$cookies->set_cookie('user',$user_name);
 		}
 
 		if($change_password)
 		{
-			$this->user->set_profile_val('user_pw',$password);
-			$this->cookies->set_cookie('pw',$password);
+			$user->set_profile_val('user_pw',$password);
+			$cookies->set_cookie('pw',$password);
 		}
+		
+		// fire community-event
+		$status = BS_Community_User::get_status_from_groups($user->get_all_user_groups());
+		$u = new BS_Community_User(
+			$user->get_user_id(),$user->get_user_name(),
+			$user->get_profile_val('user_email'),$status,$password,
+			$input->unescape_value($new_password,'post')
+		);
+		BS_Community_Manager::get_instance()->fire_user_changed($u);
 		
 		$this->set_action_performed(true);
 		$this->add_link(
-			$this->locale->lang('back'),$this->url->get_url(0,'&'.BS_URL_LOC.'=chpw','&')
+			$locale->lang('back'),$url->get_url(0,'&'.BS_URL_LOC.'=chpw','&')
 		);
 
 		return '';

@@ -105,7 +105,7 @@ interface BS_Front_Search_Request
 	
 	/**
 	 * Should build the SQL-statement, search and return an array of all found ids.
-	 * If an error occurrs it has to add it via <var>$this->msgs->add_<type>()</var>!
+	 * If an error occurrs it has to add it via <var>PLIB_Props::get()->msgs()->add_<type>()</var>!
 	 * 
 	 * @return array an array with the found ids or null if an error occurred
 	 */

@@ -17,17 +17,20 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Functions extends PLIB_FullObject
+final class BS_Functions extends PLIB_Object
 {
 	/**
 	 * @return string the name of the folder of the default-language
 	 */
 	public function get_def_lang_folder()
 	{
+		$cache = PLIB_Props::get()->cache();
+		$cfg = PLIB_Props::get()->cfg();
+
 		static $folder = null;
 		if($folder === null)
 		{
-			$data = $this->cache->get_cache('languages')->get_element($this->cfg['default_forum_lang']);
+			$data = $cache->get_cache('languages')->get_element($cfg['default_forum_lang']);
 			$folder = $data['lang_folder'];
 		}
 		
@@ -41,8 +44,11 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function has_valid_get_sid()
 	{
-		$get_sid = $this->input->get_var(BS_URL_SID,'get',PLIB_Input::STRING);
-		return $get_sid == $this->user->get_session_id();
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+
+		$get_sid = $input->get_var(BS_URL_SID,'get',PLIB_Input::STRING);
+		return $get_sid == $user->get_session_id();
 	}
 	
 	/**
@@ -52,11 +58,15 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function get_start_url()
 	{
-		if($this->cfg['enable_portal'] == 1 &&
-			($this->user->is_loggedin() || $this->user->get_profile_val('startmodule') == 'portal'))
-			return $this->url->get_portal_url();
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+		$url = PLIB_Props::get()->url();
+
+		if($cfg['enable_portal'] == 1 &&
+			($user->is_loggedin() || $user->get_profile_val('startmodule') == 'portal'))
+			return $url->get_portal_url();
 		
-		return $this->url->get_forums_url();
+		return $url->get_forums_url();
 	}
 	
 	/**
@@ -65,25 +75,29 @@ final class BS_Functions extends PLIB_FullObject
 	 * the post-field has to have the name "security_code"
 	 *
 	 * @param boolean $require_enabled turn this on if you want to require that
-	 * 								$this->cfg['enable_security_code'] is 1
+	 * 								PLIB_Props::get()->cfg()['enable_security_code'] is 1
 	 * @return boolean true if the code is equal
 	 */
 	public function check_security_code($require_enabled = true)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+		$input = PLIB_Props::get()->input();
+
 		// is the security-code disabled?
-		if($require_enabled && $this->cfg['enable_security_code'] == 0)
+		if($require_enabled && $cfg['enable_security_code'] == 0)
 			return true;
 
 		// check the security-code
-		$name = $this->user->get_session_data('sec_code_field');
-		$security_code = $this->input->get_var($name,'post',PLIB_Input::STRING);
-		$session_code = $this->user->get_session_data('security_code');
+		$name = $user->get_session_data('sec_code_field');
+		$security_code = $input->get_var($name,'post',PLIB_Input::STRING);
+		$session_code = $user->get_session_data('security_code');
 		if($session_code != null)
 		{
 			if($session_code != PLIB_String::strtoupper($security_code))
 				return false;
 
-			$this->user->delete_session_data('security_code');
+			$user->delete_session_data('security_code');
 		}
 		else
 			return false;
@@ -100,13 +114,16 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function add_pagination($pagination,$url)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$tpl = PLIB_Props::get()->tpl();
+
 		if(!($pagination instanceof PLIB_Pagination))
 			PLIB_Helper::def_error('instance','pagination','PLIB_Pagination',$pagination);
 		
 		if(empty($url))
 			PLIB_Helper::def_error('empty','url',$url);
 		
-		if($this->cfg['show_always_page_split'] == 1 || $pagination->get_page_count() > 1)
+		if($cfg['show_always_page_split'] == 1 || $pagination->get_page_count() > 1)
 		{
 			$page = $pagination->get_page();
 			$numbers = $pagination->get_page_numbers();
@@ -129,9 +146,9 @@ final class BS_Functions extends PLIB_FullObject
 			$end_item = $start_item + $pagination->get_per_page() - 1;
 			$end_item = ($end_item > $pagination->get_num()) ? $pagination->get_num() : $end_item;
 			
-			$this->tpl->set_template('inc_page_split.htm');
-			$this->tpl->add_array('numbers',$tnumbers);
-			$this->tpl->add_variables(array(
+			$tpl->set_template('inc_page_split.htm');
+			$tpl->add_array('numbers',$tnumbers);
+			$tpl->add_variables(array(
 				'page' => $page,
 				'total_pages' => $pagination->get_page_count(),
 				'start_item' => $start_item,
@@ -142,7 +159,7 @@ final class BS_Functions extends PLIB_FullObject
 				'first_url' => str_replace('{d}',1,$url),
 				'last_url' => str_replace('{d}',$pagination->get_page_count(),$url)
 			));
-			$this->tpl->restore_template();
+			$tpl->restore_template();
 		}
 	}
 	
@@ -183,10 +200,12 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function get_page_split_tiny($total_pages,$link)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		$result = '';
 		if($total_pages > 1)
 		{
-			$result = '[ '.$this->locale->lang('pages').': ';
+			$result = '[ '.$locale->lang('pages').': ';
 			for($i = 1;$i <= $total_pages;$i++)
 			{
 				if($i < 5)
@@ -215,14 +234,18 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function get_stats($complete = true)
 	{
-		$stats_data = $this->cache->get_cache('stats')->current();
+		$cache = PLIB_Props::get()->cache();
+		$forums = PLIB_Props::get()->forums();
+		$locale = PLIB_Props::get()->locale();
+
+		$stats_data = $cache->get_cache('stats')->current();
 		
 		// count user, forums, topics and posts
 		$stats_data['total_users'] = BS_DAO::get_user()->get_user_count(1,0);
 		$stats_data['total_topics'] = 0;
 		$stats_data['posts_total'] = 0;
 		$stats_data['total_forums'] = 0;
-		foreach($this->forums->get_all_nodes() as $node)
+		foreach($forums->get_all_nodes() as $node)
 		{
 			$ndata = $node->get_data();
 			$stats_data['total_topics'] += $ndata->get_threads();
@@ -238,12 +261,12 @@ final class BS_Functions extends PLIB_FullObject
 			if($stats_data['posts_last'] > 0)
 				$stats_data['posts_last'] = PLIB_Date::get_date($stats_data['posts_last']);
 			else
-				$stats_data['posts_last'] = $this->locale->lang('no_posts_found');
+				$stats_data['posts_last'] = $locale->lang('no_posts_found');
 		
 			if($stats_data['logins_last'] > 0)
 				$stats_data['logins_last'] = PLIB_Date::get_date($stats_data['logins_last']);
 			else
-				$stats_data['logins_last'] = $this->locale->lang('no_logins_found');
+				$stats_data['logins_last'] = $locale->lang('no_logins_found');
 		}
 		
 		return $stats_data;
@@ -281,13 +304,16 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function clap_area($name)
 	{
-		$display = $this->input->get_var(BS_COOKIE_PREFIX.$name,'cookie',PLIB_Input::INT_BOOL);
+		$input = PLIB_Props::get()->input();
+		$cookies = PLIB_Props::get()->cookies();
+
+		$display = $input->get_var(BS_COOKIE_PREFIX.$name,'cookie',PLIB_Input::INT_BOOL);
 		if($display !== null && $display == 0)
 			$display = 1;
 		else
 			$display = 0;
 	
-		$this->cookies->set_cookie($name,$display,86400 * 30);
+		$cookies->set_cookie($name,$display,86400 * 30);
 	}
 	
 	/**
@@ -306,11 +332,14 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function get_clap_data($name,$url,$display = 'table-row-group')
 	{
-		$clap_cookie = $this->input->get_var(BS_COOKIE_PREFIX.$name,'cookie',PLIB_Input::INT_BOOL);
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+
+		$clap_cookie = $input->get_var(BS_COOKIE_PREFIX.$name,'cookie',PLIB_Input::INT_BOOL);
 		$hide = ($clap_cookie === null || $clap_cookie == 1) ? '' : ' style="display: none;"';
 	
 		$clap_image = ($clap_cookie === null || $clap_cookie == 1) ? 'open' : 'closed';
-		$image = $this->user->get_theme_item_path('images/cross'.$clap_image.'.gif');
+		$image = $user->get_theme_item_path('images/cross'.$clap_image.'.gif');
 		
 		$link = '<a href="'.$url.'" onclick="clapArea(\''.$name.'\',\'clap_image_'.$name.'\'';
 		$link .= ',\''.BS_COOKIE_PREFIX.$name.'\',\''.$display.'\'); return false;">';
@@ -329,7 +358,9 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function clap_forum($id)
 	{
-		$hidden_forums = $this->input->get_var(
+		$input = PLIB_Props::get()->input();
+
+		$hidden_forums = $input->get_var(
 			BS_COOKIE_PREFIX.'hidden_forums','cookie',PLIB_Input::STRING
 		);
 		if(!$hidden_forums)
@@ -359,7 +390,9 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function is_banned($type,$value)
 	{
-		foreach($this->cache->get_cache('banlist') as $data)
+		$cache = PLIB_Props::get()->cache();
+
+		foreach($cache->get_cache('banlist') as $data)
 		{
 			if($data['bann_type'] == $type)
 			{
@@ -396,14 +429,16 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function add_delete_message($message,$yes_url,$no_url,$delete_target = '')
 	{
-		$this->tpl->set_template('inc_delete_message.htm');
-		$this->tpl->add_variables(array(
+		$tpl = PLIB_Props::get()->tpl();
+
+		$tpl->set_template('inc_delete_message.htm');
+		$tpl->add_variables(array(
 			'delete_target' => $delete_target,
 			'delete_message' => $message,
 			'yes_url' => $yes_url,
 			'no_url' => $no_url
 		));
-		$this->tpl->restore_template();
+		$tpl->restore_template();
 	}
 	
 	/**
@@ -416,24 +451,33 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function show_login_form($display_denied_reasons = true)
 	{
-		if(!$this->user->is_loggedin())
+		$user = PLIB_Props::get()->user();
+		$cfg = PLIB_Props::get()->cfg();
+		$url = PLIB_Props::get()->url();
+		$locale = PLIB_Props::get()->locale();
+		$input = PLIB_Props::get()->input();
+		$tpl = PLIB_Props::get()->tpl();
+		$msgs = PLIB_Props::get()->msgs();
+		$doc = PLIB_Props::get()->doc();
+
+		if(!$user->is_loggedin())
 		{
-			if($this->cfg['enable_registrations'] && !BS_ENABLE_EXPORT)
-				$register_url = $this->url->get_url('register');
-			else if($this->cfg['enable_registrations'] && BS_EXPORT_REGISTER_TYPE == 'link')
+			if($cfg['enable_registrations'] && !BS_ENABLE_EXPORT)
+				$register_url = $url->get_url('register');
+			else if($cfg['enable_registrations'] && BS_EXPORT_REGISTER_TYPE == 'link')
 				$register_url = BS_EXPORT_REGISTER_LINK;
 			else
 				$register_url = '';
 	
 			if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE == 'enabled')
-				$send_pw_url = $this->url->get_url('sendpw');
+				$send_pw_url = $url->get_url('sendpw');
 			else if(BS_EXPORT_SEND_PW_TYPE == 'link')
 				$send_pw_url = BS_EXPORT_SEND_PW_LINK;
 			else
 				$send_pw_url = '';
 			
 			if(!BS_ENABLE_EXPORT)
-				$resend_act_link_url = $this->url->get_url('resend_activation');
+				$resend_act_link_url = $url->get_url('resend_activation');
 			else if(BS_EXPORT_RESEND_ACT_TYPE == 'link')
 				$resend_act_link_url = BS_EXPORT_RESEND_ACT_LINK;
 			else
@@ -444,7 +488,7 @@ final class BS_Functions extends PLIB_FullObject
 			{
 				$denied = '<ul>'."\n";
 				foreach(array('intern','usergroup','deactivated') as $type)
-					$denied .= '<li>'.$this->locale->lang('access_denied_reason_'.$type).'</li>'."\n";
+					$denied .= '<li>'.$locale->lang('access_denied_reason_'.$type).'</li>'."\n";
 				$denied .= '</ul>'."\n";
 			}
 	
@@ -454,52 +498,52 @@ final class BS_Functions extends PLIB_FullObject
 				switch($type)
 				{
 					case 'register':
-						if($this->cfg['enable_registrations'] &&
+						if($cfg['enable_registrations'] &&
 							(!BS_ENABLE_EXPORT || BS_EXPORT_REGISTER_TYPE == 'link'))
 						{
 							$login_msg .= sprintf(
-								' '.$this->locale->lang('login_message_'.$type),
-								'<a href="'.$register_url.'">'.$this->locale->lang('here').'</a>'
+								' '.$locale->lang('login_message_'.$type),
+								'<a href="'.$register_url.'">'.$locale->lang('here').'</a>'
 							);
 						}
 						break;
 	
 					case 'forgot_pw':
 						if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE != 'disabled')
-							$login_msg .= $this->locale->lang('login_message_'.$type);
+							$login_msg .= $locale->lang('login_message_'.$type);
 						break;
 	
 					case 'activate':
 						if(!BS_ENABLE_EXPORT || BS_EXPORT_RESEND_ACT_TYPE == 'link')
 						{
-							if($this->cfg['account_activation'] == 'email')
+							if($cfg['account_activation'] == 'email')
 							{
 								$login_msg .= sprintf(
-									$this->locale->lang('login_message_'.$type),
+									$locale->lang('login_message_'.$type),
 									'<a href="'.$resend_act_link_url.'">'
-										.$this->locale->lang('here').'</a>'
+										.$locale->lang('here').'</a>'
 								);
 							}
 						}
 						break;
 	
 					default:
-						$login_msg .= $this->locale->lang('login_message_'.$type);
+						$login_msg .= $locale->lang('login_message_'.$type);
 						break;
 				}
 			}
 	
-			if($this->input->isset_var('login','post') || $display_denied_reasons)
-				$title = $this->locale->lang('login_access_denied');
+			if($input->isset_var('login','post') || $display_denied_reasons)
+				$title = $locale->lang('login_access_denied');
 			else
-				$title = $this->locale->lang('loginform');
+				$title = $locale->lang('loginform');
 	
-			$this->tpl->set_template('login.htm');
-			$this->tpl->add_variables(array(
+			$tpl->set_template('login.htm');
+			$tpl->add_variables(array(
 				'action_type' => BS_ACTION_LOGIN,
-				'target_url' => $this->url->get_url('login'),
+				'target_url' => $url->get_url('login'),
 				'show_sendpw_link' => !BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE != 'disabled',
-				'show_register_link' => $this->cfg['enable_registrations'] &&
+				'show_register_link' => $cfg['enable_registrations'] &&
 					(!BS_ENABLE_EXPORT || BS_EXPORT_REGISTER_TYPE == 'link'),
 				'register_url' => $register_url,
 				'send_pw_url' => $send_pw_url,
@@ -507,13 +551,13 @@ final class BS_Functions extends PLIB_FullObject
 				'login_msg' => $login_msg,
 				'denied_msg' => $denied
 			));
-			$this->tpl->restore_template();
+			$tpl->restore_template();
 		}
 		// if the user is loggedin we simply set an error-message
 		else
-			$this->msgs->add_error($this->locale->lang('permission_denied'));
+			$msgs->add_error($locale->lang('permission_denied'));
 		
-		$this->doc->set_base_template('login.htm');
+		$doc->set_template('login.htm');
 	}
 	
 	/**
@@ -523,7 +567,9 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function get_search_keywords()
 	{
-		$hl = $this->input->get_var(BS_URL_HL,'get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+
+		$hl = $input->get_var(BS_URL_HL,'get',PLIB_Input::STRING);
 		if($hl !== null)
 		{
 			// undo the stuff of the input-class
@@ -557,11 +603,13 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function get_order_column($title,$order_value,$def_ascdesc,$order,$url)
 	{
+		$user = PLIB_Props::get()->user();
+
 		$preurl = $url.BS_URL_ORDER.'='.$order_value.'&amp;'.BS_URL_AD.'=';
 		if($order == $order_value)
 		{
-			$asc_img = $this->user->get_theme_item_path('images/asc.gif');
-			$desc_img = $this->user->get_theme_item_path('images/desc.gif');
+			$asc_img = $user->get_theme_item_path('images/asc.gif');
+			$desc_img = $user->get_theme_item_path('images/desc.gif');
 			$result = $title.' <a href="'.$preurl.'ASC">';
 			$result .= '<img src="'.$asc_img.'" alt="ASC" />';
 			$result .= '</a> ';
@@ -614,8 +662,10 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function get_rank_data($points)
 	{
+		$cache = PLIB_Props::get()->cache();
+
 		// points = 0 is a special case
-		$ranks = $this->cache->get_cache('user_ranks');
+		$ranks = $cache->get_cache('user_ranks');
 		if($points == 0)
 		{
 			$ranks->rewind();
@@ -653,34 +703,39 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function get_rank_images($ranknum,$rank_pos,$user_id,$group_ids,$is_mod = false)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+		$locale = PLIB_Props::get()->locale();
+		$user = PLIB_Props::get()->user();
+
 		$result = '';
 		
 		if($is_mod)
 		{
 			$images = array(
 				'is_mod' => true,
-				'filled' => $this->cfg['mod_rank_filled_image'],
-				'empty' => $this->cfg['mod_rank_empty_image']
+				'filled' => $cfg['mod_rank_filled_image'],
+				'empty' => $cfg['mod_rank_empty_image']
 			);
 		}
 		else
-			$images = $this->auth->get_user_images($user_id,$group_ids);
+			$images = $auth->get_user_images($user_id,$group_ids);
 		
 		if($images['is_mod'])
-			$title = $this->locale->lang('moderators');
+			$title = $locale->lang('moderators');
 		else
-			$title = $this->auth->get_groupname((int)$group_ids);
+			$title = $auth->get_groupname((int)$group_ids);
 		
 		for($i = 0;$i < $rank_pos;$i++)
 		{
 			$result .= '<img alt="*" title="'.$title.'"';
-			$result .= ' src="'.$this->user->get_theme_item_path($images['filled']).'" /> ';
+			$result .= ' src="'.$user->get_theme_item_path($images['filled']).'" /> ';
 		}
 	
 		for($i = 0;$i < ($ranknum - $rank_pos);$i++)
 		{
 			$result .= '<img alt="O" title="'.$title.'"';
-			$result .= ' src="'.$this->user->get_theme_item_path($images['empty']).'" /> ';
+			$result .= ' src="'.$user->get_theme_item_path($images['empty']).'" /> ';
 		}
 	
 		return $result;
@@ -700,33 +755,33 @@ final class BS_Functions extends PLIB_FullObject
 			case 'jpeg':
 			case 'jpg':
 			case 'png':
-				return PLIB_Path::inner().'images/filetypes/image.gif';
+				return PLIB_Path::client_app().'images/filetypes/image.gif';
 	
 			case 'txt':
 			case 'ini':
-				return PLIB_Path::inner().'images/filetypes/text.gif';
+				return PLIB_Path::client_app().'images/filetypes/text.gif';
 	
 			case 'pdf':
-				return PLIB_Path::inner().'images/filetypes/pdf.gif';
+				return PLIB_Path::client_app().'images/filetypes/pdf.gif';
 	
 			case 'htm':
 			case 'html':
-				return PLIB_Path::inner().'images/filetypes/html.gif';
+				return PLIB_Path::client_app().'images/filetypes/html.gif';
 	
 			case 'zip':
 			case 'rar':
 			case 'tar':
 			case 'gzip':
-				return PLIB_Path::inner().'images/filetypes/archive.gif';
+				return PLIB_Path::client_app().'images/filetypes/archive.gif';
 	
 			case 'css':
-				return PLIB_Path::inner().'images/filetypes/css.gif';
+				return PLIB_Path::client_app().'images/filetypes/css.gif';
 	
 			case 'js':
-				return PLIB_Path::inner().'images/filetypes/js.gif';
+				return PLIB_Path::client_app().'images/filetypes/js.gif';
 	
 			default:
-				return PLIB_Path::inner().'images/filetypes/unknown.gif';
+				return PLIB_Path::client_app().'images/filetypes/unknown.gif';
 		}
 	}
 	
@@ -738,11 +793,13 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function check_attachment_extension($attachment)
 	{
-		if($this->cfg['attachments_filetypes'] == '')
+		$cfg = PLIB_Props::get()->cfg();
+
+		if($cfg['attachments_filetypes'] == '')
 			return false;
 	
 		$extension = PLIB_FileUtils::get_extension($attachment);
-		$types = explode('|',PLIB_String::strtolower($this->cfg['attachments_filetypes']));
+		$types = explode('|',PLIB_String::strtolower($cfg['attachments_filetypes']));
 		return in_array($extension,$types);
 	}
 	
@@ -754,16 +811,19 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function get_pm_attachment_prefix($attachments)
 	{
+		$user = PLIB_Props::get()->user();
+		$locale = PLIB_Props::get()->locale();
+
 		static $img_attachment = '';
 		if(!$img_attachment)
-			$img_attachment = $this->user->get_theme_item_path('images/attachment.gif');
+			$img_attachment = $user->get_theme_item_path('images/attachment.gif');
 		
 		if($attachments > 0)
 		{
 			if($attachments == 1)
-				$a_title = $attachments.' '.$this->locale->lang('attachment');
+				$a_title = $attachments.' '.$locale->lang('attachment');
 			else
-				$a_title = $attachments.' '.$this->locale->lang('attachments');
+				$a_title = $attachments.' '.$locale->lang('attachments');
 			
 			$prefix = '<img src="'.$img_attachment.'" alt="'.$a_title.'" title="'.$a_title.'" /> ';
 		}
@@ -776,17 +836,17 @@ final class BS_Functions extends PLIB_FullObject
 	/**
 	 * deletes the attachment with given path including the thumbnail
 	 *
-	 * @param string $path the path of the attachment (without PLIB_Path::inner())
+	 * @param string $path the path of the attachment (without PLIB_Path::server_app())
 	 */
 	public function delete_attachment($path)
 	{
 		// delete the thumbnail, if it exists
 		$ext = PLIB_FileUtils::get_extension($path,false);
 		$start = PLIB_String::substr($path,0,PLIB_String::strlen($path) - PLIB_String::strlen($ext) - 1);
-		if(is_file(PLIB_Path::inner().$start.'_thumb.'.$ext))
-			@unlink(PLIB_Path::inner().$start.'_thumb.'.$ext);
+		if(is_file(PLIB_Path::server_app().$start.'_thumb.'.$ext))
+			@unlink(PLIB_Path::server_app().$start.'_thumb.'.$ext);
 	
-		@unlink(PLIB_Path::inner().$path);
+		@unlink(PLIB_Path::server_app().$path);
 	}
 	
 	/**
@@ -800,14 +860,17 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function get_link_rating($total,$votes,$text = 1,$multi = 2)
 	{
+		$user = PLIB_Props::get()->user();
+		$locale = PLIB_Props::get()->locale();
+
 		static $images = null;
 		if($images === null)
 		{
 			$images = array(
-				'rate_back' => $this->user->get_theme_item_path('images/diagrams/rate_back.gif'),
-				'rate_grey' => $this->user->get_theme_item_path('images/diagrams/rate_grey.gif'),
-				'rate_red' => $this->user->get_theme_item_path('images/diagrams/rate_red.gif'),
-				'rate_blue' => $this->user->get_theme_item_path('images/diagrams/rate_blue.gif')
+				'rate_back' => $user->get_theme_item_path('images/diagrams/rate_back.gif'),
+				'rate_grey' => $user->get_theme_item_path('images/diagrams/rate_grey.gif'),
+				'rate_red' => $user->get_theme_item_path('images/diagrams/rate_red.gif'),
+				'rate_blue' => $user->get_theme_item_path('images/diagrams/rate_blue.gif')
 			);
 		}
 		
@@ -817,8 +880,8 @@ final class BS_Functions extends PLIB_FullObject
 			$result = 5 - (@round($total / $votes,2) - 1);
 		
 		$pro = @round(100 / (5 / $result),0) * $multi;
-		$text_ins = '( '.$this->locale->lang('school_grade').': '.abs($result - 6).' | ';
-		$text_ins .= $votes.' '.$this->locale->lang('votes').' )';
+		$text_ins = '( '.$locale->lang('school_grade').': '.abs($result - 6).' | ';
+		$text_ins .= $votes.' '.$locale->lang('votes').' )';
 		
 		$img = ($votes == 0) ? 'grey' : 'red';
 		if($votes == 0)
@@ -831,9 +894,9 @@ final class BS_Functions extends PLIB_FullObject
 		$res .= ' height="10" width="'.(($multi * 100) - $pro).'"';
 		$res .= ($text == 0) ? ' title="'.$text_ins.'" alt="'.$text_ins.'"' : '';
 		$res .= ' /><img src="'.$images['rate_back'].'" alt="" /> ( ';
-		$res .= ($text == 1) ? $this->locale->lang('school_grade').': ' : ' ';
+		$res .= ($text == 1) ? $locale->lang('school_grade').': ' : ' ';
 		$res .= abs($result - 6).' | '.$votes.' ';
-		$res .= ($text == 1) ? $this->locale->lang('votes') : '';
+		$res .= ($text == 1) ? $locale->lang('votes') : '';
 		$res .= ' )';
 		
 		return $res;
@@ -874,22 +937,24 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function get_mailer($receiver = '',$subject = '',$message = '')
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		// use php-mail()?
-		if($this->cfg['mail_method'] == 'mail')
+		if($cfg['mail_method'] == 'mail')
 			$c = new PLIB_Email_PHP($receiver,$subject,$message);
 		else
 		{
 			$c = new PLIB_Email_SMTP($receiver,$subject,$message);
 			// set SMTP-properties
-			$c->set_smtp_host($this->cfg['smtp_host']);
-			$c->set_smtp_port($this->cfg['smtp_port']);
-			$c->set_smtp_login($this->cfg['smtp_login']);
-			$c->set_smtp_password($this->cfg['smtp_password']);
+			$c->set_smtp_host($cfg['smtp_host']);
+			$c->set_smtp_port($cfg['smtp_port']);
+			$c->set_smtp_login($cfg['smtp_login']);
+			$c->set_smtp_password($cfg['smtp_password']);
 		}
 
 		// set basic properties for BS
 		$c->set_xmailer(BS_VERSION);
-		$c->set_from($this->cfg['board_email']);
+		$c->set_from($cfg['board_email']);
 		$c->set_charset(BS_HTML_CHARSET);
 		
 		return $c;
@@ -905,10 +970,12 @@ final class BS_Functions extends PLIB_FullObject
 	 */
 	public function get_search_ignore_words()
 	{
+		$functions = PLIB_Props::get()->functions();
+
 		// we use the default-forum-language, because we guess that most of the posts will be in
 		// this language
-		$lang = $this->functions->get_def_lang_folder();
-		$file = PLIB_Path::inner().'language/'.$lang.'/search_words.txt';
+		$lang = $functions->get_def_lang_folder();
+		$file = PLIB_Path::server_app().'language/'.$lang.'/search_words.txt';
 	
 		if(!file_exists($file))
 			return array();
@@ -925,7 +992,7 @@ final class BS_Functions extends PLIB_FullObject
 		return $words;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

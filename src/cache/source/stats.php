@@ -17,7 +17,7 @@
  * @subpackage	src.cache
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Cache_Source_Stats extends PLIB_FullObject implements PLIB_Cache_Source
+final class BS_Cache_Source_Stats extends PLIB_Object implements PLIB_Cache_Source
 {
 	public function get_content()
 	{
@@ -37,7 +37,7 @@ final class BS_Cache_Source_Stats extends PLIB_FullObject implements PLIB_Cache_
 		));
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

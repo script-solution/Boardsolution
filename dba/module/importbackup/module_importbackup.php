@@ -19,20 +19,31 @@
  */
 final class BS_DBA_Module_importbackup extends BS_DBA_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_DBA_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_DBA_ACTION_IMPORT_BACKUP => 'import'
-		);
+		parent::init($doc);
+		
+		$doc->add_action(BS_DBA_ACTION_IMPORT_BACKUP,'import');
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		unset($_SESSION['BS_restore']);
-		unset($_SESSION['BS_backup']);
+		$tpl = PLIB_Props::get()->tpl();
+		$user = PLIB_Props::get()->user();
+
+		$user->delete_session_data('BS_restore');
+		$user->delete_session_data('BS_backup');
 		
-		$this->_request_formular();
-		$this->tpl->add_variables(array(
+		$this->request_formular();
+		$tpl->add_variables(array(
 			'action_type' => BS_DBA_ACTION_IMPORT_BACKUP
 		));
 	}

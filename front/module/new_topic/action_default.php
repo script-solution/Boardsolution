@@ -21,36 +21,46 @@ final class BS_Front_Action_new_topic_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
+		$input = PLIB_Props::get()->input();
+		$forums = PLIB_Props::get()->forums();
+		$user = PLIB_Props::get()->user();
+		$auth = PLIB_Props::get()->auth();
+		$cfg = PLIB_Props::get()->cfg();
+		$functions = PLIB_Props::get()->functions();
+		$ips = PLIB_Props::get()->ips();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		// nothing to do?
-		if(!$this->input->isset_var('submit','post'))
+		if(!$input->isset_var('submit','post'))
 			return '';
 
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		
 		// closed?
-		$forum_data = $this->forums->get_node_data($fid);
-		if(!$this->user->is_admin() && $forum_data->get_forum_is_closed())
+		$forum_data = $forums->get_node_data($fid);
+		if(!$user->is_admin() && $forum_data->get_forum_is_closed())
 			return 'You are no admin and the forum is closed';
 
 		// check if the user has permission to start a topic
-		if(!$this->auth->has_current_forum_perm(BS_MODE_START_TOPIC))
+		if(!$auth->has_current_forum_perm(BS_MODE_START_TOPIC))
 			return 'You have no permission to start topics in this forum';
 		
 		// check security-code
-		if(!$this->user->is_loggedin())
+		if(!$user->is_loggedin())
 		{
-			if($this->cfg['use_captcha_for_guests'] == 1 && !$this->functions->check_security_code(false))
+			if($cfg['use_captcha_for_guests'] == 1 && !$functions->check_security_code(false))
 				return 'invalid_security_code';
 		}
 
 		// has the user just created a topic?
-		$spam_thread_on = $this->auth->is_ipblock_enabled('spam_thread');
+		$spam_thread_on = $auth->is_ipblock_enabled('spam_thread');
 		if($spam_thread_on)
 		{
-			if($this->ips->entry_exists('topic'))
+			if($ips->entry_exists('topic'))
 			{
 				return sprintf(
-					$this->locale->lang('error_threadpollipsperre'),$this
+					$locale->lang('error_threadpollipsperre'),$this
 					->ips->get_timeout('topic') / 60
 				);
 			}
@@ -66,7 +76,7 @@ final class BS_Front_Action_new_topic_default extends BS_Front_Action_Base
 			return $res;
 		
 		// check attachments
-		$attachments = $this->user->is_loggedin() && $this->auth->has_global_permission('attachments_add');
+		$attachments = $user->is_loggedin() && $auth->has_global_permission('attachments_add');
 		if($attachments)
 		{
 			$att = BS_Front_Action_Plain_Attachments::get_default();
@@ -77,7 +87,7 @@ final class BS_Front_Action_new_topic_default extends BS_Front_Action_Base
 		}
 		
 		// check subscriptions
-		$subscribe = $this->input->get_var('subscribe_topic','post',PLIB_Input::INT_BOOL);
+		$subscribe = $input->get_var('subscribe_topic','post',PLIB_Input::INT_BOOL);
 		if($subscribe)
 		{
 			$sub = BS_Front_Action_Plain_SubscribeTopic::get_default($topic->get_topic_id(),false);
@@ -96,12 +106,12 @@ final class BS_Front_Action_new_topic_default extends BS_Front_Action_Base
 			$att->perform_action();
 		}
 
-		$this->ips->add_entry('topic');
+		$ips->add_entry('topic');
 
-		$url = $this->url->get_url(
+		$murl = $url->get_url(
 			'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$topic->get_topic_id()
 		);
-		$this->add_link($this->locale->lang('go_to_created_topic'),$url);
+		$this->add_link($locale->lang('go_to_created_topic'),$murl);
 		$this->set_action_performed(true);
 
 		return '';

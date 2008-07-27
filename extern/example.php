@@ -14,10 +14,8 @@
 // this is required for the bs_api.php
 define('BS_PATH','../');
 
-// include bs_api.php, which initializes all required stuff
-// After this call you can use $bs which has access to all objects of BS
-/* @var $bs BS_Extern_Document */
-$bs = include_once('bs_api.php');
+// include bs_api.php, which loads all required stuff
+include_once(BS_PATH.'extern/bs_api.php');
 
 // we have to set the charset here to force the browser to use the selected charset
 header('Content-Type: text/html; charset='.BS_HTML_CHARSET);
@@ -35,14 +33,16 @@ header('Content-Type: text/html; charset='.BS_HTML_CHARSET);
 
 ######################## OTHER ########################
 
+$user = PLIB_Props::get()->user();
+
 echo '<h2>Demonstration der BS-Extern-API</h2>'."\n";
 // the API logs the user in if the autologin-cookies are set (and valid)
 // therefore we have also access to the username, unread topics and other things which
 // belong to the user
 
 // check if the user is logged in?
-if($bs->user->is_loggedin())
-	echo 'Eingeloggt als <b>'.$bs->user->get_user_name().'</b>.';
+if($user->is_loggedin())
+	echo 'Eingeloggt als <b>'.$user->get_user_name().'</b>.';
 else
 	echo 'Nicht eingeloggt.';
 echo '<br />';
@@ -80,10 +80,11 @@ echo '<br />'."\n";
 echo 'Das neueste Mitglied ist: ';
 if($stats->newest_member_id)
 {
-	$url = $bs->url->get_frontend_url(
+	$url = PLIB_Props::get()->url();
+	$murl = $url->get_frontend_url(
 		'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$stats->newest_member_id
 	);
-	echo '<a href="'.$url.'">'.$stats->newest_member_name.'</a>';
+	echo '<a href="'.$murl.'">'.$stats->newest_member_name.'</a>';
 }
 else
 	echo '<i>n/a</i>';
@@ -96,16 +97,18 @@ echo '<br />'."\n";
 // request module "online_user" to get the currently online user in the board
 $online = BS_API_get_module('online_user');
 
+$url = PLIB_Props::get()->url();
+
 // collect the registered user
 $i = 0;
 $registered = '';
 foreach($online->online_user as $reg)
 {
 	// build url to the user-details
-	$url = $bs->url->get_frontend_url(
+	$murl = $url->get_frontend_url(
 		'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$reg['id']
 	);
-	$registered .= '<a title="'.$reg['location'].'" href="'.$url.'">'.$reg['name'].'</a>';
+	$registered .= '<a title="'.$reg['location'].'" href="'.$murl.'">'.$reg['name'].'</a>';
 	if($i < count($online->online_user) - 1)
 		$registered .= ', ';
 	$i++;
@@ -134,6 +137,8 @@ echo '<br />'."\n";
 // request "latest_topics" module
 $topics = BS_API_get_module('latest_topics');
 
+$url = PLIB_Props::get()->url();
+
 // print header
 echo '<hr />'."\n";
 echo '<b>Die aktuellen Themen:</b><br /><br />';
@@ -154,10 +159,10 @@ foreach($topics->latest_topics as $topic)
 	if($topic['creation_user_id'] > 0)
 	{
 		// build url to the user who created the topic
-		$url = $bs->url->get_frontend_url(
+		$murl = $url->get_frontend_url(
 			'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$topic['creation_user_id']
 		);
-		$creation .= '<br />Von: <a href="'.$url.'">'.$topic['creation_user_name'].'</a>';
+		$creation .= '<br />Von: <a href="'.$murl.'">'.$topic['creation_user_name'].'</a>';
 	}
 	// or by a guest?
 	else
@@ -168,27 +173,29 @@ foreach($topics->latest_topics as $topic)
 	// last post by a registered user?
 	if($topic['lastpost_user_id'] > 0)
 	{
-		$url = $bs->url->get_frontend_url(
+		$murl = $url->get_frontend_url(
 			'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$topic['lastpost_user_id']
 		);
-		$lastpost .= '<br />Von: <a href="'.$url.'">'.$topic['lastpost_user_name'].'</a>';
+		$lastpost .= '<br />Von: <a href="'.$murl.'">'.$topic['lastpost_user_name'].'</a>';
 	}
 	// or by a guest
 	else
 		$lastpost .= '<br />Von: '.$topic['lastpost_user_name'];
 	
 	// add link to last post
-	$lastpost_url = $bs->url->get_frontend_url(
-		'&amp;'.BS_URL_ACTION.'=redirect&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'='.$topic['lastpost_id']
+	$lastpost_url = $url->get_frontend_url(
+		'&amp;'.BS_URL_ACTION.'=redirect&amp;'.BS_URL_LOC.'=show_post&amp;'
+			.BS_URL_ID.'='.$topic['lastpost_id']
 	);
 	$lastpost .= ' <a href="'.$lastpost_url.'">&raquo;&raquo;</a>';
 	
 	// build url to topic
-	$turl = $bs->url->get_frontend_url(
-		'&amp;'.BS_URL_ACTION.'=posts&amp;'.BS_URL_FID.'='.$topic['forum_id'].'&amp;'.BS_URL_TID.'='.$topic['id']
+	$turl = $url->get_frontend_url(
+		'&amp;'.BS_URL_ACTION.'=posts&amp;'.BS_URL_FID.'='.$topic['forum_id']
+			.'&amp;'.BS_URL_TID.'='.$topic['id']
 	);
 	// build url to forum
-	$furl = $bs->url->get_frontend_url(
+	$furl = $url->get_frontend_url(
 		'&amp;'.BS_URL_ACTION.'=topics&amp;'.BS_URL_FID.'='.$topic['forum_id']
 	);
 	$forum = '<a style="font-size: 11px;" href="'.$furl.'">'.$topic['forum_name'].'</a>';
@@ -216,6 +223,8 @@ echo '<b>Ungelesene Themen / PMs:</b><br />';
 // request "unread"-module
 $unread = BS_API_get_module('unread');
 
+$url = PLIB_Props::get()->url();
+
 echo '<ul>'."\n";
 echo '	<li>Ungelesene Foren: ';
 
@@ -226,10 +235,10 @@ if(count($unread->unread_forums) > 0)
 	for($i = 0,$len = count($unread->unread_forums);$i < $len;$i++)
 	{
 		// build the url to the forum
-		$url = $bs->url->get_frontend_url(
+		$murl = $url->get_frontend_url(
 			'&amp;'.BS_URL_ACTION.'=topics&amp;'.BS_URL_ID.'='.$unread->unread_forums[$i]
 		);
-		echo '<a href="'.$url.'">'.$bs->forums->get_forum_name($unread->unread_forums[$i]).'</a>';
+		echo '<a href="'.$murl.'">'.$bs->forums->get_forum_name($unread->unread_forums[$i]).'</a>';
 		// print separator if not the last one
 		if($i < $len - 1)
 			echo ', ';
@@ -254,10 +263,11 @@ if(count($topic_ids) > 0)
 	foreach(BS_DAO::get_topics()->get_by_ids($topic_ids) as $utdata)
 	{
 		// build topic-url
-		$url = $bs->url->get_frontend_url(
-			'&amp;'.BS_URL_ACTION.'=posts&amp;'.BS_URL_FID.'='.$utdata['fid'].'&amp;'.BS_URL_TID.'='.$utdata['id']
+		$murl = $url->get_frontend_url(
+			'&amp;'.BS_URL_ACTION.'=posts&amp;'.BS_URL_FID.'='.$utdata['fid']
+				.'&amp;'.BS_URL_TID.'='.$utdata['id']
 		);
-		echo '		<li><a href="'.$url.'">'.$utdata['name'].'</a></li>'."\n";
+		echo '		<li><a href="'.$murl.'">'.$utdata['name'].'</a></li>'."\n";
 	}
 	echo '	</ul>'."\n";
 }
@@ -281,6 +291,8 @@ echo '<b>Termine in den n&auml;chsten 5 Tagen:</b><br />';
 // to the module with 5 days in seconds
 $events = BS_API_get_module('events',array('event_timeout' => 3600 * 24 * 5));
 
+$url = PLIB_Props::get()->url();
+
 // are there any events?
 if(count($events->events) > 0)
 {
@@ -289,21 +301,22 @@ if(count($events->events) > 0)
 		// is it an event in the calendar?
 		if($edata['topic_id'] == 0)
 		{
-			$url = $bs->url->get_frontend_url(
-				'&amp;'.BS_URL_ACTION.'=calendar&amp;'.BS_URL_MODE.'=event_detail&amp;'.BS_URL_ID.'='.$edata['id']
+			$murl = $url->get_frontend_url(
+				'&amp;'.BS_URL_ACTION.'=calendar&amp;'.BS_URL_MODE.'=event_detail&amp;'
+					.BS_URL_ID.'='.$edata['id']
 			);
 		}
 		// or an event in a forum?
 		else
 		{
-			$url = $bs->url->get_frontend_url(
+			$murl = $url->get_frontend_url(
 				'&amp;'.BS_URL_ACTION.'=posts&amp;'.BS_URL_FID.'='.$edata['forum_id']
 				.'&amp;'.BS_URL_TID.'='.$edata['topic_id']
 			);
 		}
 		
 		// print the link to the topic / event-details and append the date of the event
-		echo '<a href="'.$url.'">'.$edata['title'].'</a> ('.PLIB_Date::get_date($edata['begin'],false).')';
+		echo '<a href="'.$murl.'">'.$edata['title'].'</a> ('.PLIB_Date::get_date($edata['begin'],false).')';
 		
 		// the separator
 		if($i < count($events->events) - 1)
@@ -323,11 +336,11 @@ if(count($events->birthdays) > 0)
 	foreach($events->birthdays as $i => $bdata)
 	{
 		// build userdetails-url
-		$url = $bs->url->get_frontend_url(
+		$murl = $url->get_frontend_url(
 			'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$bdata['id']
 		);
 		// print link to user
-		echo '<a href="'.$url.'">'.$bdata['user_name'].'</a>';
+		echo '<a href="'.$murl.'">'.$bdata['user_name'].'</a>';
 		
 		// $bdata['birthday'] has the format YYYY-MM-DD. therefore we split it at "-" to get the parts of it
 		$parts = explode('-',$bdata['add_birthday']);
@@ -343,7 +356,10 @@ if(count($events->birthdays) > 0)
 else
 	echo '<i>Keine</i>';
 
-$bs->finish();
 ?>
 </body>
 </html>
+<?php
+// IMPORTANT!
+BS_finish();
+?>

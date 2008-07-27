@@ -21,17 +21,21 @@ final class BS_ACP_Action_themes_delete extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$id_str = $this->input->get_var('ids','get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+
+		$id_str = $input->get_var('ids','get',PLIB_Input::STRING);
 		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
 			return 'Got an invalid id-string via GET';
 		
 		// try to delete the directories
 		$res = true;
-		foreach($this->cache->get_cache('themes') as $data)
+		foreach($cache->get_cache('themes') as $data)
 		{
 			if(in_array($data['id'],$ids))
 			{
-				$folder = PLIB_Path::inner().'themes/'.$data['theme_folder'];
+				$folder = PLIB_Path::server_app().'themes/'.$data['theme_folder'];
 				if(is_dir($folder))
 				{
 					if(!PLIB_FileUtils::delete_folder($folder))
@@ -45,12 +49,12 @@ final class BS_ACP_Action_themes_delete extends BS_ACP_Action_Base
 		// use the default-theme instead of the themes which have been deleted
 		BS_DAO::get_profile()->update_theme_to_default($ids);
 
-		$this->cache->refresh('themes');
+		$cache->refresh('themes');
 		
 		if(!$res)
 			return 'theme_folder_delete_failed';
 		
-		$this->set_success_msg($this->locale->lang('theme_delete_success'));
+		$this->set_success_msg($locale->lang('theme_delete_success'));
 		$this->set_action_performed(true);
 
 		return '';

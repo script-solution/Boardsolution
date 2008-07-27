@@ -37,10 +37,13 @@ final class BS_DBA_URL extends PLIB_Singleton
 	 */
 	public function get_url($target = 0,$additional = '',$separator = '&amp;')
 	{
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+
 		// always pass the session-id via URL
-		$session_id = $separator.session_name().'='.session_id();
+		$session_id = $separator.'sid='.$user->get_session_id();
 		
-		$action_param = $this->input->get_var('action','get',PLIB_Input::STRING);
+		$action_param = $input->get_var('action','get',PLIB_Input::STRING);
 		if($target === 0)
 			$action = 'action='.$action_param;
 		else if($target === -1)
@@ -51,14 +54,14 @@ final class BS_DBA_URL extends PLIB_Singleton
 		$parameters = $action.$session_id.$additional;
 		if(PLIB_String::starts_with($parameters,$separator))
 			$parameters = PLIB_String::substr($parameters,strlen($separator));
-		$url = $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING);
+		$url = $input->get_var('PHP_SELF','server',PLIB_Input::STRING);
 		if($parameters != '')
 			$url .= '?'.$parameters;
 		
 		return $url;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

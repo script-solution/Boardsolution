@@ -21,11 +21,15 @@ final class BS_ACP_Action_moderators_edituser extends BS_ACP_Action_Base
 {
 	function perform_action()
 	{
-		$user = $this->input->get_var('user','post');
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+
+		$user = $input->get_var('user','post');
 		if(!is_array($user) || count($user) == 0 || !PLIB_Array_Utils::is_integer($user))
 			return 'Got an invalid user-array from POST';
 		
-		$forums = $this->input->get_var('forums','post');
+		$forums = $input->get_var('forums','post');
 		if(!is_array($forums))
 			$forums = array();
 
@@ -46,9 +50,9 @@ final class BS_ACP_Action_moderators_edituser extends BS_ACP_Action_Base
 			BS_DAO::get_mods()->create_multiple($fids,$uid);
 		
 		// refresh cache
-		$this->cache->refresh('moderators');
+		$cache->refresh('moderators');
 		
-		$this->set_success_msg($this->locale->lang('mod_forums_saved'));
+		$this->set_success_msg($locale->lang('mod_forums_saved'));
 		$this->set_action_performed(true);
 
 		return '';

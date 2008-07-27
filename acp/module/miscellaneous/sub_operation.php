@@ -38,8 +38,27 @@ final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
 	 */
 	private $_name;
 	
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
+	{
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		
+		$doc->add_breadcrumb($locale->lang('miscellaneous_in_progress'));
+	}
+	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$input = PLIB_Props::get()->input();
+
 		$storage = new PLIB_Progress_Storage_Session('misc_');
 		$this->_pm = new PLIB_Progress_Manager($storage);
 		$this->_pm->set_ops_per_cycle(BS_MM_OPERATIONS_PER_CYCLE);
@@ -47,17 +66,17 @@ final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
 		
 		if(!$this->_pm->is_running())
 		{
-			$refresh = $this->input->get_var('refresh','post');
+			$refresh = $input->get_var('refresh','post');
 			$this->_name = key($refresh);
 		}
 		else
-			$this->_name = $this->input->get_var('name','get',PLIB_Input::STRING);
+			$this->_name = $input->get_var('name','get',PLIB_Input::STRING);
 		
 		$tasks = BS_ACP_Module_miscellaneous::get_tasks();
 		if(!isset($tasks[$this->_name]))
 			PLIB_Helper::error('The task "'.$this->_name.'" does not exist!');
 		
-		$file = PLIB_Path::inner().'acp/module/miscellaneous/tasks/'.$this->_name.'.php';
+		$file = PLIB_Path::server_app().'acp/module/miscellaneous/tasks/'.$this->_name.'.php';
 		if(is_file($file))
 		{
 			include_once($file);
@@ -89,11 +108,15 @@ final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
 	 */
 	public function progress_finished()
 	{
-		$url = $this->url->get_acpmod_url();
-		$msg = $this->locale->lang('maintenance_misc_success');
-		$msg .= '<p align="center" class="a_block_pad"><a href="'.$url.'">';
-		$msg .= $this->locale->lang('back').'</a></p>';
-		$this->msgs->add_message($msg);
+		$locale = PLIB_Props::get()->locale();
+		$msgs = PLIB_Props::get()->msgs();
+		$url = PLIB_Props::get()->url();
+
+		$murl = $url->get_acpmod_url();
+		$msg = $locale->lang('maintenance_misc_success');
+		$msg .= '<p align="center" class="a_block_pad"><a href="'.$murl.'">';
+		$msg .= $locale->lang('back').'</a></p>';
+		$msgs->add_message($msg);
 		
 		$this->_populate_template();
 	}
@@ -103,22 +126,19 @@ final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
 	 */
 	private function _populate_template()
 	{
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		$tasks = BS_ACP_Module_miscellaneous::get_tasks();
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'not_finished' => !$this->_pm->is_finished(),
 			'title' => sprintf(
-				$this->locale->lang('mm_action_in_progress'),$this->locale->lang('title_'.$tasks[$this->_name])
+				$locale->lang('mm_action_in_progress'),$locale->lang('title_'.$tasks[$this->_name])
 			),
 			'percent' => round($this->_pm->get_percentage(),1),
-			'target_url' => $this->url->get_acpmod_url(0,'&action=operation&name='.$this->_name,'&')
+			'target_url' => $url->get_acpmod_url(0,'&action=operation&name='.$this->_name,'&')
 		));
-	}
-	
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('miscellaneous_in_progress') => ''
-		);
 	}
 }
 ?>

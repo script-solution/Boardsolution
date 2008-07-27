@@ -88,21 +88,23 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	 */
 	public function get_months()
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		if($this->_months === null)
 		{
 			$this->_months = array(
-				1 => $this->locale->lang('january'),
-				$this->locale->lang('february'),
-				$this->locale->lang('march'),
-				$this->locale->lang('april'),
-				$this->locale->lang('may'),
-				$this->locale->lang('june'),
-				$this->locale->lang('july'),
-				$this->locale->lang('august'),
-				$this->locale->lang('september'),
-				$this->locale->lang('october'),
-				$this->locale->lang('november'),
-				$this->locale->lang('december')
+				1 => $locale->lang('january'),
+				$locale->lang('february'),
+				$locale->lang('march'),
+				$locale->lang('april'),
+				$locale->lang('may'),
+				$locale->lang('june'),
+				$locale->lang('july'),
+				$locale->lang('august'),
+				$locale->lang('september'),
+				$locale->lang('october'),
+				$locale->lang('november'),
+				$locale->lang('december')
 			);
 		}
 		return $this->_months;
@@ -113,16 +115,18 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	 */
 	public function get_weekdays_short()
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		if($this->_weekdays_short === null)
 		{
 			$this->_weekdays_short = array(
-				1 => $this->locale->lang('mo'),
-				$this->locale->lang('tu'),
-				$this->locale->lang('we'),
-				$this->locale->lang('th'),
-				$this->locale->lang('fr'),
-				$this->locale->lang('sa'),
-				0 => $this->locale->lang('su')
+				1 => $locale->lang('mo'),
+				$locale->lang('tu'),
+				$locale->lang('we'),
+				$locale->lang('th'),
+				$locale->lang('fr'),
+				$locale->lang('sa'),
+				0 => $locale->lang('su')
 			);
 		}
 		return $this->_weekdays_short;
@@ -133,16 +137,18 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	 */
 	public function get_weekdays()
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		if($this->_weekdays === null)
 		{
 			$this->_weekdays = array(
-				1 => $this->locale->lang('monday'),
-				$this->locale->lang('tuesday'),
-				$this->locale->lang('wednesday'),
-				$this->locale->lang('thursday'),
-				$this->locale->lang('friday'),
-				$this->locale->lang('saturday'),
-				0 => $this->locale->lang('sunday')
+				1 => $locale->lang('monday'),
+				$locale->lang('tuesday'),
+				$locale->lang('wednesday'),
+				$locale->lang('thursday'),
+				$locale->lang('friday'),
+				$locale->lang('saturday'),
+				0 => $locale->lang('sunday')
 			);
 		}
 		return $this->_weekdays;
@@ -155,10 +161,12 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	 */
 	public function get_week_timestamp()
 	{
+		$input = PLIB_Props::get()->input();
+
 		if($this->_week === null)
 		{
-			$uday = $this->input->get_var(BS_URL_DAY,'get',PLIB_Input::INTEGER);
-			$uweek = $this->input->get_var(BS_URL_WEEK,'get',PLIB_Input::INTEGER);
+			$uday = $input->get_var(BS_URL_DAY,'get',PLIB_Input::INTEGER);
+			$uweek = $input->get_var(BS_URL_WEEK,'get',PLIB_Input::INTEGER);
 			
 			// ensure that all parameters are valid
 			$this->_week = $uday !== null ? $uday : $uweek;
@@ -190,16 +198,18 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	 */
 	public function get_date()
 	{
+		$input = PLIB_Props::get()->input();
+
 		if($this->_month === null)
 		{
-			$month = $this->input->get_var(BS_URL_MONTH,'get',PLIB_Input::INTEGER);
-			$year = $this->input->get_var(BS_URL_YEAR,'get',PLIB_Input::INTEGER);
+			$month = $input->get_var(BS_URL_MONTH,'get',PLIB_Input::INTEGER);
+			$year = $input->get_var(BS_URL_YEAR,'get',PLIB_Input::INTEGER);
 			
 			// no month and year given but day/week instead?
 			if($month == null && $year == null)
 			{
-				$day = $this->input->get_var(BS_URL_DAY,'get',PLIB_Input::INTEGER);
-				$week = $this->input->get_var(BS_URL_WEEK,'get',PLIB_Input::INTEGER);
+				$day = $input->get_var(BS_URL_DAY,'get',PLIB_Input::INTEGER);
+				$week = $input->get_var(BS_URL_WEEK,'get',PLIB_Input::INTEGER);
 				$ts = $day != null ? $day : $week;
 				if(!PLIB_Date::is_valid_timestamp($ts))
 					$ts = time();
@@ -286,10 +296,12 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	 */
 	public function get_events()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		if($this->_events === null)
 		{
 			$denied = array();
-			if($this->cfg['hide_denied_forums'] == 1)
+			if($cfg['hide_denied_forums'] == 1)
 				$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
 			
 			list($year,$month) = $this->get_date();
@@ -375,6 +387,8 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	 */
 	public function get_events_of($date,$max_name_len = 10,$max_events = 3)
 	{
+		$url = PLIB_Props::get()->url();
+		
 		$birthdays = $this->get_birthdays();
 		$events = $this->get_events();
 		
@@ -439,13 +453,13 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	
 				if($content['tid'])
 				{
-					$url = $this->url->get_url(
+					$purl = $url->get_url(
 						'posts','&amp;'.BS_URL_FID.'='.$content['rid'].'&amp;'.BS_URL_TID.'='.$content['tid']
 					);
 				}
 				else
 				{
-					$url = $this->url->get_url(
+					$purl = $url->get_url(
 						'calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$content['id']
 					);
 				}
@@ -453,7 +467,7 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 				$res['ev'][] = array(
 					'name_complete' => $name,
 					'name' => $name_strip,
-					'url' => $url
+					'url' => $purl
 				);
 				$count++;
 			}
@@ -467,8 +481,8 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 				PLIB_String::substr($date,0,2),
 				$year
 			));
-			$url = $this->url->get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_DAY.'='.$loc);
-			$res['toomany'] = $url;
+			$curl = $url->get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_DAY.'='.$loc);
+			$res['toomany'] = $curl;
 		}
 		
 		return $res;
@@ -530,7 +544,7 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 		return $year - $birthday[0];
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

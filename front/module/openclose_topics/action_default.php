@@ -21,33 +21,39 @@ final class BS_Front_Action_openclose_topics_default extends BS_Front_Action_Bas
 {
 	public function perform_action($mode = 'open')
 	{
+		$input = PLIB_Props::get()->input();
+		$forums = PLIB_Props::get()->forums();
+		$auth = PLIB_Props::get()->auth();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		// nothing to do?
-		if(!$this->input->isset_var('submit','post'))
+		if(!$input->isset_var('submit','post'))
 			return '';
 
 		// check parameter
-		$id_str = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
+		$id_str = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
 		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
 			return 'Got an invalid id-string via GET';
 
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		if($fid == null)
 			return 'The forum-id "'.$fid.'" is invalid';
 
 		// does the forum exist?
-		if(!$this->forums->node_exists($fid))
+		if(!$forums->node_exists($fid))
 			return 'The forum with id "'.$fid.'" doesn\'t exist';
 
 		// save the topics which have been opened / closed
 		$topic_names = array();
 		$topic_ids = array();
-		$post_reason = $this->input->get_var('post_reason','post',PLIB_Input::INT_BOOL);
+		$post_reason = $input->get_var('post_reason','post',PLIB_Input::INT_BOOL);
 
 		// grab the topics from database
 		foreach(BS_DAO::get_topics()->get_by_ids($ids,$fid) as $data)
 		{
 			// skip this topic, if the user has no permission to open / close it
-			if(!$this->auth->has_current_forum_perm(BS_MODE_OPENCLOSE_TOPICS,$data['post_user']))
+			if(!$auth->has_current_forum_perm(BS_MODE_OPENCLOSE_TOPICS,$data['post_user']))
 				continue;
 
 			// skip this topic if it is a shadow-topic
@@ -85,14 +91,14 @@ final class BS_Front_Action_openclose_topics_default extends BS_Front_Action_Bas
 			BS_DAO::get_topics()->update_by_ids($topic_ids,array('thread_closed' => $new_status));
 
 			$msg_type = $mode== 'open' ? BS_ACTION_OPEN_TOPICS : BS_ACTION_CLOSE_TOPICS;
-			$message = $this->locale->lang('success_'.$msg_type);
+			$message = $locale->lang('success_'.$msg_type);
 			$this->set_success_msg(sprintf($message,implode('", "',$topic_names)));
 		}
 		else
-			$this->set_success_msg($this->locale->lang('error_no_topics_opened_closed'));
+			$this->set_success_msg($locale->lang('error_no_topics_opened_closed'));
 
 		$this->set_action_performed(true);
-		$this->add_link($this->locale->lang('back_to_forum'),$this->url->get_topics_url($fid));
+		$this->add_link($locale->lang('back_to_forum'),$url->get_topics_url($fid));
 
 		return '';
 	}

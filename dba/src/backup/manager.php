@@ -17,7 +17,7 @@
  * @subpackage	dba.src.backup
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DBA_Backup_Manager extends PLIB_FullObject
+final class BS_DBA_Backup_Manager extends PLIB_Object
 {
 	/**
 	 * The file which contains the backups
@@ -84,7 +84,7 @@ final class BS_DBA_Backup_Manager extends PLIB_FullObject
 		{
 			if($backup->prefix == $prefix)
 			{
-				if($dir = opendir(PLIB_Path::inner().'dba/backups'))
+				if($dir = opendir(PLIB_Path::server_app().'dba/backups'))
 				{
 					while($file = readdir($dir))
 					{
@@ -92,7 +92,7 @@ final class BS_DBA_Backup_Manager extends PLIB_FullObject
 						{
 							if(PLIB_FileUtils::get_extension($file) == 'sql' &&
 									PLIB_String::starts_with($file,$prefix))
-								@unlink(PLIB_Path::inner().'dba/backups/'.$file);
+								@unlink(PLIB_Path::server_app().'dba/backups/'.$file);
 						}
 					}
 					closedir($dir);
@@ -140,7 +140,7 @@ final class BS_DBA_Backup_Manager extends PLIB_FullObject
 			$str .= BS_DBA_LINE_WRAP;
 		}
 		
-		$file = PLIB_Path::inner().'dba/backups/backups.txt';
+		$file = PLIB_Path::server_app().'dba/backups/backups.txt';
 		$res = PLIB_FileUtils::write($file,$str);
 		@chmod($file,0666);
 		return $res;
@@ -164,7 +164,7 @@ final class BS_DBA_Backup_Manager extends PLIB_FullObject
 		}
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

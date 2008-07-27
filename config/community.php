@@ -40,7 +40,8 @@ function BS_Ex_get_stored_password($password,$data)
  * If the table is in another database just put the name of the database in front
  * followed by a dot.
  */
-define('BS_TB_USER','ssf_user');
+define('BS_TB_USER','ssf_user');
+
 /**
  * The user-id field
  */

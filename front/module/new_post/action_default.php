@@ -21,34 +21,43 @@ final class BS_Front_Action_new_post_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
+		$input = PLIB_Props::get()->input();
+		$auth = PLIB_Props::get()->auth();
+		$forums = PLIB_Props::get()->forums();
+		$user = PLIB_Props::get()->user();
+		$ips = PLIB_Props::get()->ips();
+		$locale = PLIB_Props::get()->locale();
+		$cfg = PLIB_Props::get()->cfg();
+		$url = PLIB_Props::get()->url();
+
 		// anything to do?
-		if(!$this->input->isset_var('submit','post'))
+		if(!$input->isset_var('submit','post'))
 			return '';
 
 		// has the user the permission to reply in this forum?
-		if(!$this->auth->has_current_forum_perm(BS_MODE_REPLY))
+		if(!$auth->has_current_forum_perm(BS_MODE_REPLY))
 			return 'You have no permission to reply in this forum';
 
 		// are all parameters valid?
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
 		
 		// closed?
-		$forum_data = $this->forums->get_node_data($fid);
-		if(!$this->user->is_admin() && $forum_data->get_forum_is_closed())
+		$forum_data = $forums->get_node_data($fid);
+		if(!$user->is_admin() && $forum_data->get_forum_is_closed())
 			return 'You are no admin and the forum is closed';
 
 		// check if the user has just made a post
-		$spam_post_on = $this->auth->is_ipblock_enabled('spam_post');
+		$spam_post_on = $auth->is_ipblock_enabled('spam_post');
 		if($spam_post_on)
 		{
-			if($this->ips->entry_exists('post'))
-				return sprintf($this->locale->lang('error_postipsperre'),($this->ips->get_timeout('post') / 60));
+			if($ips->entry_exists('post'))
+				return sprintf($locale->lang('error_postipsperre'),($ips->get_timeout('post') / 60));
 		}
 
 		// does the topic exist and is it open?
 		$topic_data = BS_DAO::get_topics()->get_by_id($tid);
-		if(!$this->user->is_admin() && $topic_data['thread_closed'] == 1)
+		if(!$user->is_admin() && $topic_data['thread_closed'] == 1)
 			return 'You are no admin and the topic is closed';
 
 		// build plain-action
@@ -60,7 +69,7 @@ final class BS_Front_Action_new_post_default extends BS_Front_Action_Base
 			return $res;
 		
 		// check attachments
-		$attachments = $this->user->is_loggedin() && $this->auth->has_global_permission('attachments_add');
+		$attachments = $user->is_loggedin() && $auth->has_global_permission('attachments_add');
 		if($attachments)
 		{
 			$att = BS_Front_Action_Plain_Attachments::get_default();
@@ -78,24 +87,24 @@ final class BS_Front_Action_new_post_default extends BS_Front_Action_Base
 			$att->perform_action();
 		}
 
-		$this->ips->add_entry('post');
+		$ips->add_entry('post');
 
 		// generate the redirect-url
 		$header_add = '';
 		if(BS_PostingUtils::get_instance()->get_posts_order() == 'ASC')
 		{
 			$post_num = BS_DAO::get_posts()->get_count_in_topic($tid);
-			if($post_num > $this->cfg['posts_per_page'])
+			if($post_num > $cfg['posts_per_page'])
 			{
-				$params = $this->functions->get_page_params($this->cfg['posts_per_page'],$post_num);
-				$header_add = '&'.BS_URL_SITE.'='.$params['final'];
+				$pagination = new BS_Pagination($cfg['posts_per_page'],$post_num);
+				$header_add = '&'.BS_URL_SITE.'='.$pagination->get_page_count();
 			}
 		}
 
-		$url = $this->url->get_url(
+		$murl = $url->get_url(
 			'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.$header_add
 		).'#b_'.$post->get_post_id();
-		$this->add_link($this->locale->lang('go_to_post'),$url);
+		$this->add_link($locale->lang('go_to_post'),$murl);
 		$this->set_action_performed(true);
 
 		return '';

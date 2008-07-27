@@ -42,13 +42,13 @@ final class BS_ACP_Module_UserGroups_Helper extends PLIB_Singleton
 	 * @var array
 	 */
 	private $_permissions = array(
-		'is_super_mod','enter_board','view_memberlist', 'view_linklist',
-		'view_stats', 'view_calendar', 'view_search', 'view_userdetails',
-		'view_online_locations', 'edit_own_posts', 'delete_own_posts', 'edit_own_threads',
-		'delete_own_threads','openclose_own_threads', 'send_mails','always_edit_poll_options',
-		'add_new_link','attachments_add', 'attachments_download','add_cal_event',
-		'edit_cal_event','delete_cal_event','subscribe_forums','disable_ip_blocks',
-		'view_user_ip','view_user_online_detail'
+		'is_super_mod','enter_board','view_memberlist','view_linklist',
+		'view_stats','view_calendar','view_search','view_userdetails','view_useronline_list',
+		'view_online_locations','view_user_online_detail','edit_own_posts',
+		'delete_own_posts','edit_own_threads','delete_own_threads','openclose_own_threads',
+		'send_mails','always_edit_poll_options','add_new_link','attachments_add',
+		'attachments_download','add_cal_event','edit_cal_event','delete_cal_event',
+		'subscribe_forums','disable_ip_blocks','view_user_ip',
 	);
 
 	/**
@@ -57,7 +57,7 @@ final class BS_ACP_Module_UserGroups_Helper extends PLIB_Singleton
 	 * @var array
 	 */
 	private $_guest_disallowed = array(
-		'is_super_mod','edit_own_posts', 'delete_own_posts', 'edit_own_threads',
+		'is_super_mod','edit_own_posts','delete_own_posts','edit_own_threads',
 		 'delete_own_threads','openclose_own_threads','add_new_link','attachments_add',
 		 'add_cal_event','edit_cal_event','delete_cal_event','subscribe_forums',
 		 'view_user_ip','always_edit_poll_options'
@@ -87,7 +87,7 @@ final class BS_ACP_Module_UserGroups_Helper extends PLIB_Singleton
 		return $this->_guest_disallowed;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

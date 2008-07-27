@@ -19,43 +19,59 @@
  */
 final class BS_ACP_SubModule_usergroups_default extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_DELETE_USER_GROUPS => 'delete'
-		);
+		parent::init($doc);
+		
+		$doc->add_action(BS_ACP_ACTION_DELETE_USER_GROUPS,'delete');
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		if(($delete = $this->input->get_var('delete','post')) != null)
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$url = PLIB_Props::get()->url();
+		$cache = PLIB_Props::get()->cache();
+		$auth = PLIB_Props::get()->auth();
+		$tpl = PLIB_Props::get()->tpl();
+
+		if(($delete = $input->get_var('delete','post')) != null)
 		{
 			$ids = implode(',',$delete);
 			$names = array();
 			foreach(BS_DAO::get_usergroups()->get_by_ids($delete) as $group)
 				$names[] = $group['group_title'];
-			$namelist = PLIB_StringHelper::get_enum($names,$this->locale->lang('and'));
+			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
 			
-			$this->functions->add_delete_message(
-				$this->locale->lang('delete_group_notice').'<br /><br />'
-					.sprintf($this->locale->lang('delete_message'),$namelist),
-				$this->url->get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_DELETE_USER_GROUPS.'&amp;ids='.$ids),
-				$this->url->get_acpmod_url()
+			$functions->add_delete_message(
+				$locale->lang('delete_group_notice').'<br /><br />'
+					.sprintf($locale->lang('delete_message'),$namelist),
+				$url->get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_DELETE_USER_GROUPS.'&amp;ids='.$ids),
+				$url->get_acpmod_url()
 			);
 		}
 		
-		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
+		$search = $input->get_var('search','get',PLIB_Input::STRING);
 		$helper = BS_ACP_Module_UserGroups_Helper::get_instance();
 		$predef_groups = $helper->get_predef_groups();
 		
 		$groups = array();
-		foreach($this->cache->get_cache('user_groups') as $data)
+		foreach($cache->get_cache('user_groups') as $data)
 		{
 			if(!$search || stripos($data['group_title'],$search) !== false)
 			{
 				$groups[] = array(
 					'id' => $data['id'],
-					'group_name' => $this->auth->get_colored_groupname($data['id']),
+					'group_name' => $auth->get_colored_groupname($data['id']),
 					'is_visible' => BS_ACP_Utils::get_instance()->get_yesno($data['is_visible']),
 					'is_super_mod' => BS_ACP_Utils::get_instance()->get_yesno($data['is_super_mod']),
 					'is_no_predefined_group' => !in_array($data['id'],$predef_groups)
@@ -63,21 +79,16 @@ final class BS_ACP_SubModule_usergroups_default extends BS_ACP_SubModule
 			}
 		}
 
-		$hidden = $this->input->get_vars_from_method('get');
+		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);
 		unset($hidden['search']);
 		unset($hidden['at']);
-		$this->tpl->add_array('groups',$groups);
-		$this->tpl->add_variables(array(
-			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+		$tpl->add_array('groups',$groups);
+		$tpl->add_variables(array(
+			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));
-	}
-	
-	public function get_location()
-	{
-		return array();
 	}
 }
 ?>

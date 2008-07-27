@@ -36,35 +36,40 @@ abstract class BS_ACP_SubModuleContainer extends BS_ACP_Module
 	 */
 	public function __construct($module,$actions = array(),$default = 'default')
 	{
+		$input = PLIB_Props::get()->input();
+
 		if(count($actions) == 0)
 			PLIB_Helper::error('Please provide the possible submodules of this module!');
 		
-		$action = $this->input->correct_var('action','get',PLIB_Input::STRING,$actions,$default);
+		$action = $input->correct_var('action','get',PLIB_Input::STRING,$actions,$default);
 		
 		// include the sub-module and create it
-		include_once(PLIB_Path::inner().'acp/module/'.$module.'/sub_'.$action.'.php');
+		include_once(PLIB_Path::server_app().'acp/module/'.$module.'/sub_'.$action.'.php');
 		$classname = 'BS_ACP_SubModule_'.$module.'_'.$action;
 		$this->_sub = new $classname();
 	}
+
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
+	{
+		parent::init($doc);
+		
+		$classname = get_class($this->_sub);
+		$lastus = strrpos($classname,'_');
+		$prevlastus = strrpos(PLIB_String::substr($classname,0,$lastus),'_');
+		$doc->set_template(PLIB_String::strtolower(PLIB_String::substr($classname,$prevlastus + 1)).'.htm');
+	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
 		$this->_sub->run();
-	}
-	
-	public function error_occurred()
-	{
-		return parent::error_occurred() || $this->_sub->error_occurred();
-	}
-	
-	public function get_actions()
-	{
-		return $this->_sub->get_actions();
-	}
-	
-	public function get_template()
-	{
-		return $this->_sub->get_template();
 	}
 }
 ?>

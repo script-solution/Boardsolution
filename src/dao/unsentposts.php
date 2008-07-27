@@ -40,8 +40,10 @@ class BS_DAO_UnsentPosts extends PLIB_Singleton
 	 */
 	public function get_notification_list()
 	{
+		$db = PLIB_Props::get()->db();
+
 		$time = time();
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT p.id,up.post_id,u.`'.BS_EXPORT_USER_EMAIL.'` user_email,
 							u.`'.BS_EXPORT_USER_NAME.'` user_name,p.emails_include_post,p.forum_lang
 			 FROM '.BS_TB_PROFILES.' p
@@ -65,6 +67,8 @@ class BS_DAO_UnsentPosts extends PLIB_Singleton
 	 */
 	public function create($post_id,$user_ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($post_id) || $post_id <= 0)
 			PLIB_Helper::def_error('intgt0','post_id',$post_id);
 		if(!PLIB_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
@@ -75,7 +79,7 @@ class BS_DAO_UnsentPosts extends PLIB_Singleton
 		foreach($user_ids as $uid)
 			$sql .= '('.$post_id.','.$uid.'),';
 		$sql = PLIB_String::substr($sql,0,-1);
-		$this->db->sql_qry($sql);
+		$db->sql_qry($sql);
 	}
 	
 	/**
@@ -86,13 +90,15 @@ class BS_DAO_UnsentPosts extends PLIB_Singleton
 	 */
 	public function delete_by_users($ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_UNSENT_POSTS.' WHERE user_id IN ('.implode(',',$ids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

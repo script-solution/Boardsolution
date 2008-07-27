@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Miscellaneous_Tasks_Messages extends PLIB_FullObject implements PLIB_Progress_Task
+final class BS_ACP_Miscellaneous_Tasks_Messages extends PLIB_Object implements PLIB_Progress_Task
 {
 	/**
 	 * The number of posts
@@ -41,6 +41,20 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends PLIB_FullObject implemen
 	private $_sigs;
 	
 	/**
+	 * The number of links
+	 *
+	 * @var int
+	 */
+	private $_links;
+	
+	/**
+	 * The number of events
+	 *
+	 * @var int
+	 */
+	private $_events;
+	
+	/**
 	 * Constructor
 	 */
 	public function __construct()
@@ -50,6 +64,8 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends PLIB_FullObject implemen
 		$this->_pms = BS_DAO::get_pms()->get_count();
 		$this->_posts = BS_DAO::get_posts()->get_count();
 		$this->_sigs = BS_DAO::get_user()->get_user_count();
+		$this->_links = BS_DAO::get_links()->get_count();
+		$this->_events = BS_DAO::get_events()->get_count();
 	}
 	
 	/**
@@ -59,7 +75,7 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends PLIB_FullObject implemen
 	 */
 	public function get_total_operations()
 	{
-		return max($this->_pms,$this->_posts,$this->_sigs);
+		return max($this->_pms,$this->_posts,$this->_sigs,$this->_links,$this->_events);
 	}
 
 	/**
@@ -70,17 +86,33 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends PLIB_FullObject implemen
 	 */
 	public function run($pos,$ops)
 	{
-		// we can refresh the linklist-descriptions in one step
-		if($pos == 0)
+		// refresh linklist-descriptions
+		if($pos < $this->_links)
 		{
-			foreach(BS_DAO::get_links()->get_list() as $data)
+			foreach(BS_DAO::get_links()->get_list(-1,'id','ASC',$pos,$ops) as $data)
 			{
 				$text = '';
 				BS_PostingUtils::get_instance()->prepare_message_for_db(
-					$text,addslashes($data['link_desc_posted']),'lnkdesc'
+					$text,addslashes($data['link_desc_posted']),'desc'
 				);
 				
 				BS_DAO::get_links()->update_text($data['id'],$text,$data['link_desc_posted']);
+			}
+		}
+		
+		// refresh event-descriptions
+		if($pos < $this->_events)
+		{
+			foreach(BS_DAO::get_events()->get_list($pos,$ops) as $data)
+			{
+				$text = '';
+				BS_PostingUtils::get_instance()->prepare_message_for_db(
+					$text,addslashes($data['description_posted']),'desc'
+				);
+				
+				BS_DAO::get_events()->update($data['id'],array(
+					'description' => $text
+				));
 			}
 		}
 		
@@ -126,7 +158,7 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends PLIB_FullObject implemen
 		}
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

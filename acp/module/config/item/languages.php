@@ -22,18 +22,22 @@ final class BS_ACP_Config_Item_Languages extends PLIB_Config_Item_Default
 {
 	public function get_control($form)
 	{
+		$cache = PLIB_Props::get()->cache();
+
 		$langs = array();
-		foreach($this->cache->get_cache('languages') as $data)
+		foreach($cache->get_cache('languages') as $data)
 			$langs[$data['id']] = $data['lang_name'];
 		
 		$str = $form->get_combobox($this->_data->get_name(),$langs,$this->_data->get_value());
-		$str .= $this->_get_suffix();
+		$str .= $this->get_suffix();
 		return $str;
 	}
 
 	public function get_value()
 	{
-		return $this->input->get_var($this->_data->get_name(),'post',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+
+		return $input->get_var($this->_data->get_name(),'post',PLIB_Input::ID);
 	}
 }
 ?>

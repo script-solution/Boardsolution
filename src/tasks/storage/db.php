@@ -17,7 +17,7 @@
  * @subpackage	src.tasks
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Tasks_Storage_DB extends PLIB_FullObject implements PLIB_Tasks_Storage
+final class BS_Tasks_Storage_DB extends PLIB_Object implements PLIB_Tasks_Storage
 {
 	/**
 	 * Indicates wether multiple tasks will be executed. Additionally we count
@@ -29,8 +29,10 @@ final class BS_Tasks_Storage_DB extends PLIB_FullObject implements PLIB_Tasks_St
 	
 	public function get_tasks()
 	{
+		$cache = PLIB_Props::get()->cache();
+
 		$res = array();
-		foreach($this->cache->get_cache('tasks') as $task)
+		foreach($cache->get_cache('tasks') as $task)
 		{
 			$res[] = new PLIB_Tasks_Data(
 				$task['id'],$task['task_file'],$task['task_interval'],new PLIB_Date($task['last_execution']),
@@ -58,7 +60,9 @@ final class BS_Tasks_Storage_DB extends PLIB_FullObject implements PLIB_Tasks_St
 	 */
 	public function store_task($task)
 	{
-		$tasks = $this->cache->get_cache('tasks');
+		$cache = PLIB_Props::get()->cache();
+
+		$tasks = $cache->get_cache('tasks');
 		$id = $task->get_id();
 		$tasks->set_element_field($id,'task_interval',$task->get_interval());
 		$tasks->set_element_field($id,'last_execution',$task->get_last_execution()->to_timestamp());
@@ -71,7 +75,7 @@ final class BS_Tasks_Storage_DB extends PLIB_FullObject implements PLIB_Tasks_St
 		));
 		
 		if($this->_multiple == 0)
-			$this->cache->store('tasks');
+			$cache->store('tasks');
 		else
 			$this->_multiple++;
 	}
@@ -85,12 +89,14 @@ final class BS_Tasks_Storage_DB extends PLIB_FullObject implements PLIB_Tasks_St
 	 */
 	public function finish()
 	{
+		$cache = PLIB_Props::get()->cache();
+
 		if($this->_multiple > 1)
-			$this->cache->store('tasks');
+			$cache->store('tasks');
 		$this->_multiple = 0;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

@@ -21,15 +21,23 @@ final class BS_Front_Action_edit_topic_poll extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		$auth = PLIB_Props::get()->auth();
+		$forums = PLIB_Props::get()->forums();
+		$cfg = PLIB_Props::get()->cfg();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 
 		// are the parameters valid?
 		if($id == null || $fid == null)
 			return 'The GET-parameter "id" or "fid" is missing';
 
 		// the user has to be logged in
-		if(!$this->user->is_loggedin())
+		if(!$user->is_loggedin())
 			return 'Not loggedin';
 
 		// does the topic exist?
@@ -38,7 +46,7 @@ final class BS_Front_Action_edit_topic_poll extends BS_Front_Action_Base
 			return 'A topic with id "'.$id.'" has not been found';
 
 		// has the user the permission to edit this poll?
-		if(!$this->auth->has_current_forum_perm(BS_MODE_EDIT_TOPIC,$topic_data['post_user']))
+		if(!$auth->has_current_forum_perm(BS_MODE_EDIT_TOPIC,$topic_data['post_user']))
 			return 'No permission to edit this topic';
 
 		// is it a poll?
@@ -46,12 +54,12 @@ final class BS_Front_Action_edit_topic_poll extends BS_Front_Action_Base
 			return 'The topic is no poll';
 		
 		// does the forum exist?
-		$forum_data = $this->forums->get_node_data($fid);
+		$forum_data = $forums->get_node_data($fid);
 		if($forum_data === null)
 			return 'The forum with id "'.$fid.'" doesn\'t exist';
 
 		// forum closed?
-		if(!$this->user->is_admin() && $this->forums->forum_is_closed($fid))
+		if(!$user->is_admin() && $forums->forum_is_closed($fid))
 			return 'You are no admin and the forum is closed';
 
 		// shadow-threads cannot be edited
@@ -73,21 +81,21 @@ final class BS_Front_Action_edit_topic_poll extends BS_Front_Action_Base
 			$old_is_mc = $data['multichoice'] == 1;
 		}
 
-		$can_edit_options = $this->auth->has_global_permission('always_edit_poll_options') ||
+		$can_edit_options = $auth->has_global_permission('always_edit_poll_options') ||
 			$total_votes == 0;
 
-		$important = $this->input->get_var('important','post',PLIB_Input::INT_BOOL);
-		$allow_posts = $this->input->get_var('allow_posts','post',PLIB_Input::INT_BOOL);
+		$important = $input->get_var('important','post',PLIB_Input::INT_BOOL);
+		$allow_posts = $input->get_var('allow_posts','post',PLIB_Input::INT_BOOL);
 
 		$fields = array(
 			'comallow' => $allow_posts
 		);
 		
 		if($can_edit_options)
-			$fields['name'] = $this->input->get_var('topic_name','post',PLIB_Input::STRING);
+			$fields['name'] = $input->get_var('topic_name','post',PLIB_Input::STRING);
 
 		// check if the user is allowed to mark a topic important
-		if($this->auth->has_current_forum_perm(BS_MODE_MARK_TOPICS_IMPORTANT))
+		if($auth->has_current_forum_perm(BS_MODE_MARK_TOPICS_IMPORTANT))
 			$fields['important'] = $important;
 
 		// update topic
@@ -95,8 +103,8 @@ final class BS_Front_Action_edit_topic_poll extends BS_Front_Action_Base
 
 		if($can_edit_options)
 		{
-			$multichoice = $this->input->get_var('multichoice','post',PLIB_Input::INT_BOOL);
-			$options = $this->input->get_var('poll_options','post',PLIB_Input::STRING);
+			$multichoice = $input->get_var('multichoice','post',PLIB_Input::INT_BOOL);
+			$options = $input->get_var('poll_options','post',PLIB_Input::STRING);
 			$lines = explode("\n",trim($options));
 			
 			// determine the "real" options
@@ -132,7 +140,7 @@ final class BS_Front_Action_edit_topic_poll extends BS_Front_Action_Base
 					return 'pollmoeglichkeitenleer';
 	
 				// too many options?
-				if(count($new_options) > $this->cfg['max_poll_options'])
+				if(count($new_options) > $cfg['max_poll_options'])
 					return 'max_poll_options';
 	
 				// delete all options
@@ -148,7 +156,7 @@ final class BS_Front_Action_edit_topic_poll extends BS_Front_Action_Base
 		}
 
 		$this->set_action_performed(true);
-		$this->add_link($this->locale->lang('back_to_forum'),$this->url->get_topics_url($fid));
+		$this->add_link($locale->lang('back_to_forum'),$url->get_topics_url($fid));
 
 		return '';
 	}

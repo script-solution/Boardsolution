@@ -51,11 +51,13 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	public function get_users($sort = 'p.id',$order = 'ASC',$start = 0,$count = 0,
 		$active = 1,$banned = 0)
 	{
-		$where = $this->_get_activenbanned($active,$banned);
-		$sort = $this->_get_sort($sort,$order);
-		$limit = $this->_get_limit($start,$count);
-		return $this->db->sql_rows(
-			'SELECT '.$this->_get_fields().'
+		$db = PLIB_Props::get()->db();
+
+		$where = $this->get_activenbanned($active,$banned);
+		$sort = $this->get_sort($sort,$order);
+		$limit = $this->get_limit($start,$count);
+		return $db->sql_rows(
+			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_PROFILES.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON p.id = u.`'.BS_EXPORT_USER_ID.'`
 			 '.$where.'
@@ -97,6 +99,8 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	public function get_users_by_ids($ids,$sort = 'p.id',$order = 'ASC',$start = 0,$count = 0,
 		$active = 1,$banned = 0)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
@@ -104,14 +108,14 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 		if(count($ids) == 0)
 			return array();
 		
-		$sort = $this->_get_sort($sort,$order);
-		return $this->db->sql_rows(
-			'SELECT '.$this->_get_fields().'
+		$sort = $this->get_sort($sort,$order);
+		return $db->sql_rows(
+			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
-			 '.$this->_get_activenbanned($active,$banned).' AND p.id IN ('.implode(',',$ids).')
+			 '.$this->get_activenbanned($active,$banned).' AND p.id IN ('.implode(',',$ids).')
 			 '.$sort.'
-			 '.$this->_get_limit($start,$count)
+			 '.$this->get_limit($start,$count)
 		);
 	}
 	
@@ -138,7 +142,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_users_by_names($names)
 	{
-		return $this->_get_users_by_names($this->_get_fields(),$names);
+		return $this->get_users_by_names_impl($this->get_fields(),$names);
 	}
 	
 	/**
@@ -149,7 +153,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_user_by_email($email)
 	{
-		return $this->_get_user_by_email($this->_get_fields(),$email);
+		return $this->get_user_by_email_impl($this->get_fields(),$email);
 	}
 	
 	/**
@@ -165,7 +169,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_users_by_groups($group_ids,$user_ids = array(),$start = 0,$count = 0)
 	{
-		return $this->_get_users_by_groups($this->_get_fields(),$group_ids,$user_ids,$start,$count);
+		return $this->get_users_by_groups_impl($this->get_fields(),$group_ids,$user_ids,$start,$count);
 	}
 	
 	/**
@@ -186,7 +190,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	public function get_users_by_search($user_name = '',$user_email = '',$register_date = 0,
 		$user_groups = array(),$sort = 'p.id',$order = 'ASC',$start = 0,$count = 0)
 	{
-		$where = $this->_get_search_where_clause($user_name,$user_email,$register_date,$user_groups);
+		$where = $this->get_search_where_clause($user_name,$user_email,$register_date,$user_groups);
 		return $this->get_users_by_custom_search($where,$sort,$order,$start,$count);
 	}
 	
@@ -205,13 +209,15 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	public function get_users_by_custom_search($where,$sort = 'p.id',$order = 'ASC',
 		$start = 0,$count = 0)
 	{
-		return $this->db->sql_rows(
-			'SELECT '.$this->_get_fields().'
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
+			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
 			 '.$where.'
-			 '.$this->_get_sort($sort,$order).'
-			 '.$this->_get_limit($start,$count)
+			 '.$this->get_sort($sort,$order).'
+			 '.$this->get_limit($start,$count)
 		);
 	}
 	
@@ -224,8 +230,10 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_users_with_delayed_notify($user_id)
 	{
-		return $this->db->sql_rows(
-			'SELECT '.$this->_get_fields().'
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
+			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
 			 WHERE email_notification_type != "immediatly" AND p.id != '.$user_id
@@ -239,8 +247,10 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_newest_user()
 	{
-		return $this->db->sql_fetch(
-			'SELECT '.$this->_get_fields().'
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_fetch(
+			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_PROFILES.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON p.id = u.`'.BS_EXPORT_USER_ID.'`
 			 WHERE p.active = 1 AND p.banned = 0
@@ -255,12 +265,16 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_last_active_user()
 	{
-		$ghost_mode = ($this->user->is_admin() || $this->cfg['allow_ghost_mode'] == 0 ? '1' : '0');
-		return $this->db->sql_fetch(
-			'SELECT '.$this->_get_fields().'
+		$user = PLIB_Props::get()->user();
+		$cfg = PLIB_Props::get()->cfg();
+		$db = PLIB_Props::get()->db();
+
+		$ghost_mode = ($user->is_admin() || $cfg['allow_ghost_mode'] == 0 ? '1' : '0');
+		return $db->sql_fetch(
+			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_PROFILES.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON p.id = u.`'.BS_EXPORT_USER_ID.'`
-			 WHERE p.id != '.$this->user->get_user_id().' AND p.active = 1 AND
+			 WHERE p.id != '.$user->get_user_id().' AND p.active = 1 AND
 						 p.banned = 0 AND (p.ghost_mode = 0 OR '.$ghost_mode.')
 			 ORDER BY p.lastlogin DESC'
 		);
@@ -274,6 +288,8 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_birthday_users_in_months($months)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($months) || count($months) == 0)
 			PLIB_Helper::def_error('intarray>0','months',$months);
 		
@@ -282,8 +298,8 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 			$where .= 'SUBSTRING(p.add_birthday,6,2) = "'.PLIB_StringHelper::ensure_2_chars($month).'" OR ';
 		$where = PLIB_String::substr($where,0,-4).')';
 		
-		return $this->db->sql_rows(
-			'SELECT '.$this->_get_fields().'
+		return $db->sql_rows(
+			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_PROFILES.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON p.id = u.`'.BS_EXPORT_USER_ID.'`
 			 '.$where
@@ -301,6 +317,8 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_birthday_users($month,$day = 0,$number = 0)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($month) || $month < 1 || $month > 12)
 			PLIB_Helper::def_error('numbetween','month',1,12,$month);
 		if(!PLIB_Helper::is_integer($day) || $day < 0 || $day > 31)
@@ -315,8 +333,8 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 		if($day != 0)
 			$where .= ' AND SUBSTRING(p.add_birthday,9,2) = '.$day;
 		
-		return $this->db->sql_rows(
-			'SELECT '.$this->_get_fields().'
+		return $db->sql_rows(
+			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_PROFILES.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON p.id = u.`'.BS_EXPORT_USER_ID.'`
 			 '.$where.'
@@ -329,7 +347,9 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_total_login_count()
 	{
-		$res = $this->db->sql_fetch(
+		$db = PLIB_Props::get()->db();
+
+		$res = $db->sql_fetch(
 			'SELECT SUM(logins) as total FROM '.BS_TB_PROFILES.'
 			 WHERE active = 1 AND banned = 0'
 		);
@@ -341,7 +361,9 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_lastlogin()
 	{
-		$res = $this->db->sql_fetch(
+		$db = PLIB_Props::get()->db();
+
+		$res = $db->sql_fetch(
 			'SELECT lastlogin FROM '.BS_TB_PROFILES.'
 			 WHERE active = 1 AND banned = 0
 			 ORDER BY lastlogin DESC'
@@ -354,7 +376,9 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_invalid_signature_ids()
 	{
-		return $this->db->sql_rows(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
 			'SELECT id FROM '.BS_TB_PROFILES.' WHERE signature_posted != "" AND signatur = ""'
 		);
 	}
@@ -377,10 +401,12 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_users_stats_postsperday($number)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($number) || $number <= 0)
 			PLIB_Helper::def_error('intgt0','number',$number);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT p.id,p.posts,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.registerdate,
 			 				p.posts / (('.time().' - p.registerdate) / 86400) per_day,p.user_group
 			 FROM '.BS_TB_PROFILES.' p
@@ -405,7 +431,9 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_users_stats_grouped_by_regdate()
 	{
-		return $this->db->sql_rows(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
 			'SELECT registerdate,COUNT(id) num,
 							CONCAT(YEAR(FROM_UNIXTIME(registerdate)),MONTH(FROM_UNIXTIME(registerdate))) date
 			 FROM '.BS_TB_PROFILES.'
@@ -422,8 +450,10 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function update_all($fields)
 	{
-		$this->db->sql_update(BS_TB_PROFILES,'',$fields);
-		return $this->db->get_affected_rows();
+		$db = PLIB_Props::get()->db();
+
+		$db->sql_update(BS_TB_PROFILES,'',$fields);
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -447,11 +477,13 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function update_users_by_ids($fields,$ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_update(BS_TB_PROFILES,' WHERE id IN ('.implode(',',$ids).')',$fields);
-		return $this->db->get_affected_rows();
+		$db->sql_update(BS_TB_PROFILES,' WHERE id IN ('.implode(',',$ids).')',$fields);
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -463,14 +495,16 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function update_theme_to_default($theme_ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($theme_ids) || count($theme_ids) == 0)
 			PLIB_Helper::def_error('intarray>0','theme_ids',$theme_ids);
 		
 		$fields = array('forum_style' => 0);
-		$this->db->sql_update(
+		$db->sql_update(
 			BS_TB_PROFILES,'WHERE forum_style IN ('.implode(',',$theme_ids).')',$fields
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -483,13 +517,15 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function add_additional_fields($name,$type,$length = 0)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(empty($name))
 			PLIB_Helper::def_error('notempty','name',$name);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'ALTER TABLE '.BS_TB_PROFILES.'
 			 ADD `add_'.$name.'`
-			 '.$this->_get_field_sql_syntax($type,$length)
+			 '.$this->get_field_sql_syntax($type,$length)
 		);
 	}
 	
@@ -502,13 +538,15 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function change_additional_field($name,$type,$length)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(empty($name))
 			PLIB_Helper::def_error('notempty','name',$name);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'ALTER TABLE '.BS_TB_PROFILES.'
 			 CHANGE `add_'.$name.'` `add_'.$name.'`
-			 '.$this->_get_field_sql_syntax($type,$length)
+			 '.$this->get_field_sql_syntax($type,$length)
 		);
 	}
 	
@@ -519,10 +557,12 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function delete_additional_fields($name)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(empty($name))
 			PLIB_Helper::def_error('notempty','name',$name);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'ALTER TABLE '.BS_TB_PROFILES.'
 			 DROP `add_'.$name.'`'
 		);
@@ -537,6 +577,8 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function create($id,$groups)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		if(!PLIB_Array_Utils::is_integer($groups) || count($groups) == 0)
@@ -550,10 +592,10 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 			'registerdate' => time(),
 			// TODO keep this?
 			'lastlogin' => time(),
-			'timezone' => $this->cfg['default_timezone'],
+			'timezone' => $cfg['default_timezone'],
 			'last_unread_update' => time(),
-			'bbcode_mode' => $this->cfg['msgs_default_bbcode_mode'],
-			'posts_order' => $this->cfg['default_posts_order'],
+			'bbcode_mode' => $cfg['msgs_default_bbcode_mode'],
+			'posts_order' => $cfg['default_posts_order'],
 			'user_group' => implode(',',$groups).','
 		);
 		return $this->create_custom($fields);
@@ -567,8 +609,10 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function create_custom($fields)
 	{
-		$this->db->sql_insert(BS_TB_PROFILES,$fields);
-		return $this->db->get_last_insert_id();
+		$db = PLIB_Props::get()->db();
+
+		$db->sql_insert(BS_TB_PROFILES,$fields);
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -579,13 +623,15 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function delete($ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM  '.BS_TB_PROFILES.' WHERE id IN ('.implode(',',$ids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 
 	/**
@@ -595,7 +641,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 * @param int $length the field-length
 	 * @return string the SQL-syntax
 	 */
-	protected function _get_field_sql_syntax($type,$length = 0)
+	protected function get_field_sql_syntax($type,$length = 0)
 	{
 		if(!PLIB_Helper::is_integer($length))
 			PLIB_Helper::def_error('integer','length',$length);
@@ -622,7 +668,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	/**
 	 * @return string the fields for a "full" user
 	 */
-	protected function _get_fields()
+	protected function get_fields()
 	{
 		return 'u.*,u.`'.BS_EXPORT_USER_ID.'` id,u.`'.BS_EXPORT_USER_NAME.'` user_name,'
 			.'u.`'.BS_EXPORT_USER_EMAIL.'` user_email,p.*';

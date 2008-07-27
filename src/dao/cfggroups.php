@@ -36,7 +36,9 @@ class BS_DAO_CFGGroups extends PLIB_Singleton
 	 */
 	public function get_all()
 	{
-		return $this->db->sql_rows(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_CONFIG_GROUPS.' ORDER BY sort ASC'
 		);
 	}

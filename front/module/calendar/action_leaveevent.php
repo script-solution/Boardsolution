@@ -21,16 +21,23 @@ final class BS_Front_Action_calendar_leaveevent extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+		$functions = PLIB_Props::get()->functions();
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		// is the user loggedin?
-		if($this->cfg['enable_calendar_events'] == 0 || !$this->user->is_loggedin())
+		if($cfg['enable_calendar_events'] == 0 || !$user->is_loggedin())
 			return 'Calendar-events disabled or not loggedin';
 
 		// check if the session-id is valid
-		if(!$this->functions->has_valid_get_sid())
+		if(!$functions->has_valid_get_sid())
 			return 'Invalid session-id';
 
 		// check parameters
-		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
 		if($id == null)
 			return 'The id "'.$id.'" is invalid';
 
@@ -40,17 +47,17 @@ final class BS_Front_Action_calendar_leaveevent extends BS_Front_Action_Base
 			return 'No calendar-event with id "'.$id.'" and allowed announcements found';
 
 		// is the user announced to this event?
-		if(!BS_DAO::get_eventann()->is_announced($this->user->get_user_id(),$id))
+		if(!BS_DAO::get_eventann()->is_announced($user->get_user_id(),$id))
 			return 'You are not announced';
 
 		$timeout = ($data['timeout'] == 0) ? $data['event_begin'] : $data['timeout'];
 		if(time() > $timeout)
 			return 'topic_closed';
 
-		BS_DAO::get_eventann()->leave($this->user->get_user_id(),$id);
+		BS_DAO::get_eventann()->leave($user->get_user_id(),$id);
 
-		$url = $this->url->get_url('calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id);
-		$this->add_link($this->locale->lang('back'),$url);
+		$murl = $url->get_url('calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id);
+		$this->add_link($locale->lang('back'),$murl);
 		$this->set_action_performed(true);
 
 		return '';

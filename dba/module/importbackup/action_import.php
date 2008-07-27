@@ -21,7 +21,10 @@ final class BS_DBA_Action_importbackup_import extends BS_DBA_Action_Base
 {
 	public function perform_action()
 	{
-		$prefix = $this->input->get_var('prefix','post',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+
+		$prefix = $input->get_var('prefix','post',PLIB_Input::STRING);
 		if($prefix === null || PLIB_String::strlen($prefix) == 0)
 			return 'invalid_prefix';
 		
@@ -29,7 +32,7 @@ final class BS_DBA_Action_importbackup_import extends BS_DBA_Action_Base
 		$size = 0;
 		
 		// read all files to see if there are any with the given prefix
-		if($handle = @opendir(PLIB_Path::inner().'dba/backups/'))
+		if($handle = @opendir(PLIB_Path::server_app().'dba/backups/'))
 		{
 			while($file = readdir($handle))
 			{
@@ -39,7 +42,7 @@ final class BS_DBA_Action_importbackup_import extends BS_DBA_Action_Base
 				if(PLIB_String::starts_with($file,$prefix))
 				{
 					$count++;
-					$size += filesize(PLIB_Path::inner().'dba/backups/'.$file);
+					$size += filesize(PLIB_Path::server_app().'dba/backups/'.$file);
 				}
 			}
 			closedir($handle);
@@ -51,7 +54,7 @@ final class BS_DBA_Action_importbackup_import extends BS_DBA_Action_Base
 		if(!$this->backups->add_backup($prefix,$count,$size))
 			return 'invalid_prefix';
 		
-		$this->set_success_msg($this->locale->lang('import_backup_success'));
+		$this->set_success_msg($locale->lang('import_backup_success'));
 		$this->set_action_performed(true);
 
 		return '';

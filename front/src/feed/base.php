@@ -17,7 +17,7 @@
  * @subpackage	src.feed
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_Front_Feed_Base extends PLIB_FullObject
+abstract class BS_Front_Feed_Base extends PLIB_Object
 {
 	/**
 	 * Returns the RSS-feed for the latest news
@@ -26,7 +26,9 @@ abstract class BS_Front_Feed_Base extends PLIB_FullObject
 	 */
 	public final function get_news()
 	{
-		$fids = PLIB_Array_Utils::advanced_explode(',',$this->cfg['news_forums']);
+		$cfg = PLIB_Props::get()->cfg();
+
+		$fids = PLIB_Array_Utils::advanced_explode(',',$cfg['news_forums']);
 		if(!PLIB_Array_Utils::is_integer($fids) || count($fids) == 0)
 			return '';
 		
@@ -40,11 +42,11 @@ abstract class BS_Front_Feed_Base extends PLIB_FullObject
 		}
 		
 		$news = array();
-		$newslist = BS_DAO::get_posts()->get_news_from_forums($myfids,$this->cfg['news_count']);
+		$newslist = BS_DAO::get_posts()->get_news_from_forums($myfids,$cfg['news_count']);
 		foreach($newslist as $data)
 			$news[] = $data;
 		
-		return $this->_get_news_XML($news);
+		return $this->get_news_XML($news);
 	}
 	
 	/**
@@ -53,7 +55,7 @@ abstract class BS_Front_Feed_Base extends PLIB_FullObject
 	 * @param array $data the data of the news
 	 * @return string the formated text to use
 	 */
-	protected final function _get_formated_text($data)
+	protected final function get_formated_text($data)
 	{
 		// build text
 		$use_bbcode = BS_PostingUtils::get_instance()->get_message_option('enable_bbcode') &&
@@ -72,9 +74,11 @@ abstract class BS_Front_Feed_Base extends PLIB_FullObject
 	 * @param int $tid the topic-id
 	 * @return string the URL
 	 */
-	protected final function _get_topic_url($fid,$tid)
+	protected final function get_topic_url($fid,$tid)
 	{
-		return $this->url->get_frontend_url(
+		$url = PLIB_Props::get()->url();
+
+		return $url->get_frontend_url(
 			'&amp;'.BS_URL_ACTION.'=posts'.'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid,'&amp;',false
 		);
 	}
@@ -86,9 +90,9 @@ abstract class BS_Front_Feed_Base extends PLIB_FullObject
 	 * @param array $news all news with the data
 	 * @return string the XML-document
 	 */
-	protected abstract function _get_news_XML($news);
+	protected abstract function get_news_XML($news);
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

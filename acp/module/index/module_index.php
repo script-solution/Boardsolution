@@ -19,18 +19,33 @@
  */
 final class BS_ACP_Module_index extends BS_ACP_Module
 {
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$url = PLIB_Props::get()->url();
+		$sessions = PLIB_Props::get()->sessions();
+		$user = PLIB_Props::get()->user();
+		$auth = PLIB_Props::get()->auth();
+		$functions = PLIB_Props::get()->functions();
+		$tpl = PLIB_Props::get()->tpl();
+
 		// check cookie-domain
-		if($this->cfg['cookie_domain'] == '')
-			$this->msgs->add_warning($this->locale->lang('cookie_domain_empty'));
-		else if(preg_match('/^[a-z]+:\/\//i',$this->cfg['cookie_domain']))
-			$this->msgs->add_warning($this->locale->lang('cookie_domain_invalid'));
+		if($cfg['cookie_domain'] == '')
+			$msgs->add_warning($locale->lang('cookie_domain_empty'));
+		else if(preg_match('/^[a-z]+:\/\//i',$cfg['cookie_domain']))
+			$msgs->add_warning($locale->lang('cookie_domain_invalid'));
 		
 		// check board-url
-		$host = $this->input->get_var('HTTP_HOST','server');
-		if(!preg_match('/^https?:\/\/'.preg_quote($host,'/').'/',$this->cfg['board_url']))
-			$this->msgs->add_warning($this->locale->lang('board_url_invalid'));
+		$host = $input->get_var('HTTP_HOST','server');
+		if(!preg_match('/^https?:\/\/'.preg_quote($host,'/').'/',$cfg['board_url']))
+			$msgs->add_warning($locale->lang('board_url_invalid'));
 		
 		// check if all required files and folders are writable
 		$writable_items = array(
@@ -41,17 +56,17 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 			'dba/backups',
 			'dba/backups/backups.txt'
 		);
-		foreach($this->cache->get_cache('themes') as $theme)
+		foreach($cache->get_cache('themes') as $theme)
 		{
 			$writable_items[] = 'themes/'.$theme['theme_folder'].'/basic.css';
 			$tplfolder = 'themes/'.$theme['theme_folder'].'/templates';
 			if(is_dir($tplfolder))
 			{
 				$tpls = PLIB_FileUtils::get_dir_content($tplfolder);
-				foreach($tpls as $tpl)
+				foreach($tpls as $template)
 				{
-					if(is_file($tplfolder.'/'.$tpl))
-						$writable_items[] = $tplfolder.'/'.$tpl;
+					if(is_file($tplfolder.'/'.$template))
+						$writable_items[] = $tplfolder.'/'.$template;
 				}
 			}
 		}
@@ -59,7 +74,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 		$not_writable = array();
 		foreach($writable_items as $item)
 		{
-			if(!PLIB_FileUtils::is_writable(PLIB_Path::inner().$item))
+			if(!PLIB_FileUtils::is_writable(PLIB_Path::server_app().$item))
 				$not_writable[] = $item;
 		}
 		
@@ -69,62 +84,62 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 			foreach($not_writable as $nw)
 				$list .= '	<li>'.$nw.'</li>'."\n";
 			$list .= '</ul>'."\n";
-			$this->msgs->add_warning(sprintf($this->locale->lang('paths_not_writable'),$list));
+			$msgs->add_warning(sprintf($locale->lang('paths_not_writable'),$list));
 		}
 		
 		
 		// versions
 		$gd_version = PLIB_PHPConfig::get_gd_version();
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'php_version' => PHP_VERSION,
 			'mysql_version' => $this->_get_mysql_version(),
-			'gd_version' => $gd_version == '0' ? $this->locale->lang('notavailable') : $gd_version,
+			'gd_version' => $gd_version == '0' ? $locale->lang('notavailable') : $gd_version,
 			'bs_version' => BS_VERSION
 		));
 
 		$tasks = array();
 
 		// not activated user
-		if($this->cfg['account_activation'] == 'admin')
+		if($cfg['account_activation'] == 'admin')
 		{
 			$nau_num = BS_DAO::get_user()->get_user_count(0,-1);
 			if($nau_num > 0)
 				$nau_num = '<span style="font-weight: bold; color: #FF0000;">'.$nau_num.'</span>';
-			$uactivate_url = $this->url->get_acpmod_url('useractivation');
+			$uactivate_url = $url->get_acpmod_url('useractivation');
 			$tasks[] = array(
-				'name' => $this->locale->lang('not_activated_user'),
+				'name' => $locale->lang('not_activated_user'),
 				'detail' => sprintf(
-					$this->locale->lang('user_waiting_for_activation'),$nau_num,$uactivate_url
+					$locale->lang('user_waiting_for_activation'),$nau_num,$uactivate_url
 				)
 			);
 		}
 		
 		// not activated links
-		if($this->cfg['linklist_activate_links'] == 1)
+		if($cfg['linklist_activate_links'] == 1)
 		{
 			$nal_num = BS_DAO::get_links()->get_count(0);
 			if($nal_num > 0)
 				$nal_num = '<span style="font-weight: bold; color: #FF0000;">'.$nal_num.'</span>';
-			$lactivate_url = $this->url->get_acpmod_url('linklist');
+			$lactivate_url = $url->get_acpmod_url('linklist');
 			$tasks[] = array(
-				'name' => $this->locale->lang('not_activated_links'),
+				'name' => $locale->lang('not_activated_links'),
 				'detail' => sprintf(
-					$this->locale->lang('links_waiting_for_activation'),$nal_num,$lactivate_url
+					$locale->lang('links_waiting_for_activation'),$nal_num,$lactivate_url
 				)
 			);
 		}
 		
-		$this->tpl->add_array('tasks',$tasks);
+		$tpl->add_array('tasks',$tasks);
 		
 		// online user
 		$online_user = array();
-		$locations = $this->sessions->get_user_at_location('all');
+		$locations = $sessions->get_user_at_location('all');
 		foreach($locations as $data)
 		{
-			if(!$this->user->is_admin() && $data['ghost_mode'] == 1 && $this->cfg['allow_ghost_mode'] == 1)
+			if(!$user->is_admin() && $data['ghost_mode'] == 1 && $cfg['allow_ghost_mode'] == 1)
 			{
-				$user_name = '<i>'.$this->locale->lang('hidden_user').'</i>';
-				$location = '<i>'.$this->locale->lang('notavailable').'</i>';
+				$user_name = '<i>'.$locale->lang('hidden_user').'</i>';
+				$location = '<i>'.$locale->lang('notavailable').'</i>';
 			}
 			else
 			{
@@ -137,10 +152,10 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 						$user_name .= ' ('.($data['duplicates'] + 1).'x)';
 				}
 				else if($data['user_id'] == 0)
-					$user_name = $this->locale->lang('guest');
+					$user_name = $locale->lang('guest');
 				else
 				{
-					$ucolor = $this->auth->get_user_color($data['user_id'],$data['user_group']);
+					$ucolor = $auth->get_user_color($data['user_id'],$data['user_group']);
 					$name = '<span style="color: #'.$ucolor.'">'.$data['user_name'].'</span>';
 					$user_name = BS_ACP_Utils::get_instance()->get_userlink($data['user_id'],$name);
 					if($data['duplicates'] > 0)
@@ -166,25 +181,25 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 			);
 		}
 		
-		$this->tpl->add_array('online_user',$online_user);
+		$tpl->add_array('online_user',$online_user);
 
 		// statistics
-		$stats = $this->functions->get_stats();
+		$stats = $functions->get_stats();
 		$dbsize = $this->_get_db_size();
 		if($dbsize >= 0)
 		{
 			$stats['database_size'] = PLIB_StringHelper::get_formated_data_size(
-				$dbsize,$this->locale->get_thousands_separator(),$this->locale->get_dec_separator()
+				$dbsize,$locale->get_thousands_separator(),$locale->get_dec_separator()
 			);
 		}
 		else
-			$stats['database_size'] = $this->locale->lang('notavailable');
+			$stats['database_size'] = $locale->lang('notavailable');
 		
-		$stats['upload_dir_size'] = $this->_get_dir_size(PLIB_Path::inner().'uploads');
-		$stats['avatar_dir_size'] = $this->_get_dir_size(PLIB_Path::inner().'images/avatars');
-		$stats['smiley_dir_size'] = $this->_get_dir_size(PLIB_Path::inner().'images/smileys');
+		$stats['upload_dir_size'] = $this->_get_dir_size(PLIB_Path::server_app().'uploads');
+		$stats['avatar_dir_size'] = $this->_get_dir_size(PLIB_Path::server_app().'images/avatars');
+		$stats['smiley_dir_size'] = $this->_get_dir_size(PLIB_Path::server_app().'images/smileys');
 
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'safe_mode' => $this->_get_php_flag('safe_mode'),
 			'open_basedir' => @ini_get('open_basedir'),
 			'max_execution_time' => @ini_get('max_execution_time'),
@@ -196,7 +211,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 			'upload_max_filesize' => @ini_get('upload_max_filesize'),
 			'file_uploads' => $this->_get_php_flag('file_uploads'),
 			'stats' => $stats,
-			'phpinfo_url' => $this->url->get_acpmod_url('phpinfo')
+			'phpinfo_url' => $url->get_acpmod_url('phpinfo')
 		));
 	}
 
@@ -218,6 +233,8 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 	 */
 	private function _get_db_size()
 	{
+		$db = PLIB_Props::get()->db();
+
 		$dbsize = 0;
 		$version = $this->_get_mysql_version();
 
@@ -231,16 +248,16 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 
 		if(preg_match("/^(3\\.23|4\\.|5\\.)/",$version))
 		{
-			$qry = $this->db->sql_qry('SHOW TABLE STATUS FROM `'.BS_MYSQL_DATABASE.'`');
+			$qry = $db->sql_qry('SHOW TABLE STATUS FROM `'.BS_MYSQL_DATABASE.'`');
 			if($qry !== false)
 			{
-				while($data = $this->db->sql_fetch_assoc($qry))
+				while($data = $db->sql_fetch_assoc($qry))
 				{
 					$engine = isset($data['Engine']) ? $data['Engine'] : $data['Type'];
 					if($engine != 'MRG_MyISAM' && isset($tables[$data['Name']]))
 						$dbsize += $data['Data_length'] + $data['Index_length'];
 				}
-				$this->db->sql_free($qry);
+				$db->sql_free($qry);
 			}
 			else
 				$dbsize = -1;
@@ -256,9 +273,11 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 	 */
 	private function _get_mysql_version()
 	{
+		$db = PLIB_Props::get()->db();
+
 		static $version = null;
 		if($version == null)
-			$version = $this->db->get_server_version();
+			$version = $db->get_server_version();
 
 		return $version;
 	}
@@ -271,15 +290,12 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 	 */
 	private function _get_dir_size($dir)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		$size = PLIB_FileUtils::get_dir_size($dir,false);
 		return PLIB_StringHelper::get_formated_data_size(
-			$size,$this->locale->get_thousands_separator(),$this->locale->get_dec_separator()
+			$size,$locale->get_thousands_separator(),$locale->get_dec_separator()
 		);
-	}
-
-	public function get_location()
-	{
-		return array();
 	}
 }
 ?>

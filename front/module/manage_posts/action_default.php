@@ -21,14 +21,21 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 {
 	public function perform_action($type = 'split')
 	{
-		if(!$this->input->isset_var('submit','post'))
+		$input = PLIB_Props::get()->input();
+		$forums = PLIB_Props::get()->forums();
+		$user = PLIB_Props::get()->user();
+		$auth = PLIB_Props::get()->auth();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		if(!$input->isset_var('submit','post'))
 			return '';
 
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$split_type = $this->input->correct_var('split_type','post',PLIB_Input::STRING,
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$split_type = $input->correct_var('split_type','post',PLIB_Input::STRING,
 			array('selected','following'),'selected');
-		$merge_type = $this->input->correct_var('merge_type','post',PLIB_Input::STRING,
+		$merge_type = $input->correct_var('merge_type','post',PLIB_Input::STRING,
 			array('selected','following'),'selected');
 
 		// check other parameters
@@ -36,12 +43,12 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 			return 'One of the GET-parameters "fid" and "tid" is invalid';
 
 		// does the forum exist?
-		$forum_data = $this->forums->get_node_data($fid);
+		$forum_data = $forums->get_node_data($fid);
 		if($forum_data === null)
 			return 'The forum with id "'.$fid.'" doesn\'t exist';
 
 		// forum closed?
-		if(!$this->user->is_admin() && $this->forums->forum_is_closed($fid))
+		if(!$user->is_admin() && $forums->forum_is_closed($fid))
 			return 'You are no admin and the forum is closed';
 		
 		// does the topic exist?
@@ -50,17 +57,17 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 			return 'The topic doesn\'t exist';
 
 		// topic closed?
-		if($topic_data['thread_closed'] == 1 && !$this->user->is_admin())
+		if($topic_data['thread_closed'] == 1 && !$user->is_admin())
 			return 'You are no admin and the thread is closed';
 
 		// permission to split / merge posts?
-		if(!$this->auth->has_current_forum_perm(BS_MODE_SPLIT_POSTS))
+		if(!$auth->has_current_forum_perm(BS_MODE_SPLIT_POSTS))
 			return 'You have no permission to split posts';
 
 		// build where-clause depending on type
 		$post_data = array();
 		$post_ids = array();
-		$ids = $this->input->get_var('selected_posts','post');
+		$ids = $input->get_var('selected_posts','post');
 		if(($type == 'split' && $split_type == 'selected') ||
 				($type == 'merge' && $merge_type == 'selected'))
 		{
@@ -89,21 +96,21 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 		if($type == 'split')
 		{
 			// check the target-forum
-			$target_fid = $this->input->get_var('target_forum','post',PLIB_Input::ID);
-			if($target_fid == null || !$this->forums->node_exists($target_fid))
+			$target_fid = $input->get_var('target_forum','post',PLIB_Input::ID);
+			if($target_fid == null || !$forums->node_exists($target_fid))
 				return 'The target-forum "'.$target_fid.'" doesn\'t exist';
 
-			$topic_name = $this->input->get_var('new_topic_name','post',PLIB_Input::STRING);
+			$topic_name = $input->get_var('new_topic_name','post',PLIB_Input::STRING);
 			if(trim($topic_name) == '')
 				return 'missing_topic_name';
 
-			$symbol = $this->input->get_var('symbol','post',PLIB_Input::INTEGER);
+			$symbol = $input->get_var('symbol','post',PLIB_Input::INTEGER);
 			$symbol = ($symbol > BS_NUMBER_OF_TOPIC_ICONS || $symbol < 0) ? 0 : (int)$symbol;
 		}
 		else
 		{
 			// determine target-forum and check topic-id
-			$topic_id = $this->input->get_var('topic_id','post',PLIB_Input::ID);
+			$topic_id = $input->get_var('topic_id','post',PLIB_Input::ID);
 			if($topic_id == null)
 				return 'missing_topic_id';
 
@@ -146,7 +153,7 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 
 		$first_post = $post_data[0];
 		$last_post = $post_data[$total_posts - 1];
-		$target_forum_data = $this->forums->get_node_data($target_fid);
+		$target_forum_data = $forums->get_node_data($target_fid);
 
 		// if we move the posts to a topic in another forum we have to change the number of posts and
 		// potentially the last post
@@ -349,17 +356,17 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 
 		if($complete_move)
 		{
-			$url = $this->url->get_url(
+			$murl = $url->get_url(
 				'posts','&amp;'.BS_URL_FID.'='.$target_fid.'&amp;'.BS_URL_TID.'='.$topic_id
 			);
-			$this->add_link($this->locale->lang('go_to_new_topic'),$url);
+			$this->add_link($locale->lang('go_to_new_topic'),$murl);
 		}
 		else
 		{
-			$url = $this->url->get_url(
+			$murl = $url->get_url(
 				'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
 			);
-			$this->add_link($this->locale->lang('go_to_topic'),$url);
+			$this->add_link($locale->lang('go_to_topic'),$murl);
 		}
 		
 		$this->set_action_performed(true);

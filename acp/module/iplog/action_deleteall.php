@@ -21,9 +21,11 @@ final class BS_ACP_Action_iplog_deleteall extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		BS_DAO::get_logips()->clear();
 		
-		$this->set_success_msg($this->locale->lang('deleted_logs'));
+		$this->set_success_msg($locale->lang('deleted_logs'));
 		$this->set_action_performed(true);
 
 		return '';

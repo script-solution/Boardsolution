@@ -22,8 +22,10 @@ final class BS_ACP_Config_Item_CurrentTopicLoc extends PLIB_Config_Item_MultiEnu
 {
 	public function get_value()
 	{
+		$input = PLIB_Props::get()->input();
+
 		$props = $this->_data->get_properties();
-		$vals = $this->input->get_var($this->_data->get_name(),'post');
+		$vals = $input->get_var($this->_data->get_name(),'post');
 		if(!is_array($vals))
 			$vals = array();
 		

@@ -31,11 +31,13 @@ final class BS_ACP_Config_Item_Spam extends PLIB_Config_Item_Default
 	
 	public function get_control($form)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		$name = $this->_data->get_name();
 		$value = $this->_data->get_value();
 		
 		// add checkbox
-		$str = $form->get_checkbox($name.'_enabled',$value != 0,'1',$this->locale->lang('enabled'));
+		$str = $form->get_checkbox($name.'_enabled',$value != 0,'1',$locale->lang('enabled'));
 		
 		// add combo
 		$options = array();
@@ -44,17 +46,19 @@ final class BS_ACP_Config_Item_Spam extends PLIB_Config_Item_Default
 			$options[$e] = $e;
 		$str .= '&nbsp;, '.$form->get_combobox($name.'_time',$options,$value);
 		
-		$str .= $this->_get_suffix();
+		$str .= $this->get_suffix();
 		return $str;
 	}
 
 	public function get_value()
 	{
+		$input = PLIB_Props::get()->input();
+
 		$name = $this->_data->get_name();
-		if(!$this->input->isset_var($name.'_enabled','post'))
+		if(!$input->isset_var($name.'_enabled','post'))
 			return 0;
 		
-		return $this->input->correct_var($name.'_time','post',PLIB_Input::INTEGER,$this->_elements,3600);
+		return $input->correct_var($name.'_time','post',PLIB_Input::INTEGER,$this->_elements,3600);
 	}
 }
 ?>

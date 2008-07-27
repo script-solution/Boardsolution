@@ -19,108 +19,130 @@
  */
 final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACTION_UNSUBSCRIBE_TOPIC => array('unsubscribe','topics')
-		);
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACTION_UNSUBSCRIBE_TOPIC,array('unsubscribe','topics'));
+
+		$doc->add_breadcrumb($locale->lang('threads'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=topics'));
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$tpl = PLIB_Props::get()->tpl();
+		$unread = PLIB_Props::get()->unread();
+		$url = PLIB_Props::get()->url();
+
 		// has the user the permission to view the subscriptions?
-		if($this->cfg['enable_email_notification'] == 0)
+		if($cfg['enable_email_notification'] == 0)
 		{
-			$this->_report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
 			return;
 		}
 
-		$site = $this->input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+		$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
 		if($site == null)
 			$site = 1;
 
 		// display delete-notice
-		if(($delete = $this->input->get_var('delete','post')) != null &&
+		if(($delete = $input->get_var('delete','post')) != null &&
 			PLIB_Array_Utils::is_integer($delete))
 		{
-			$subscr = BS_DAO::get_subscr()->get_subscr_topics_of_user($this->user->get_user_id(),$delete);
+			$subscr = BS_DAO::get_subscr()->get_subscr_topics_of_user($user->get_user_id(),$delete);
 			$names = array();
 			foreach($subscr as $data)
 				$names[] = $data['name'];
-			$namelist = PLIB_StringHelper::get_enum($names,$this->locale->lang('and'));
+			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
 			
-			$loc = '&amp;'.BS_URL_LOC.'='.$this->input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING);
+			$loc = '&amp;'.BS_URL_LOC.'='.$input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING);
 			$string_ids = implode(',',$delete);
-			$yes_url = $this->url->get_url(
+			$yes_url = $url->get_url(
 				0,
 				$loc.'&amp;'.BS_URL_AT.'='.BS_ACTION_UNSUBSCRIBE_TOPIC
 					.'&amp;'.BS_URL_DEL.'='.$string_ids.'&amp;'.BS_URL_SITE.'='.$site,'&amp;',true
 			);
-			$no_url = $this->url->get_url(0,$loc.'&amp;'.BS_URL_SITE.'='.$site);
-			$target = $this->url->get_url(
+			$no_url = $url->get_url(0,$loc.'&amp;'.BS_URL_SITE.'='.$site);
+			$target = $url->get_url(
 				'redirect','&amp;'.BS_URL_LOC.'=del_subscr&amp;'.BS_URL_ID.'='.$string_ids
 					.'&amp;'.BS_URL_SITE.'='.$site
 			);
 
-			$this->functions->add_delete_message(
-				sprintf($this->locale->lang('delete_subscr_topics'),$namelist),
+			$functions->add_delete_message(
+				sprintf($locale->lang('delete_subscr_topics'),$namelist),
 				$yes_url,$no_url,$target
 			);
 		}
 
 		$end = BS_SUBSCR_TOPICS_PER_PAGE;
-		$num = BS_DAO::get_subscr()->get_subscr_topics_count($this->user->get_user_id());
+		$num = BS_DAO::get_subscr()->get_subscr_topics_count($user->get_user_id());
 		$pagination = new BS_Pagination($end,$num);
 		
-		$this->tpl->add_variables(array(
-			'target_url' => $this->url->get_url(0,'&amp;'.BS_URL_LOC.'=topics&amp;'.BS_URL_SITE.'='.$site),
+		$tpl->add_variables(array(
+			'target_url' => $url->get_url(0,'&amp;'.BS_URL_LOC.'=topics&amp;'.BS_URL_SITE.'='.$site),
 			'action_type' => BS_ACTION_UNSUBSCRIBE_TOPIC,
 			'num' => $num
 		));
 
 		// TODO create a method for this (we need it more than once, right?)
 		$cache = array(
-			'symbol_poll' =>				$this->user->get_theme_item_path('images/thread_type/poll.gif'),
-			'symbol_event' =>				$this->user->get_theme_item_path('images/thread_type/event.gif'),
+			'symbol_poll' =>				$user->get_theme_item_path('images/thread_type/poll.gif'),
+			'symbol_event' =>				$user->get_theme_item_path('images/thread_type/event.gif'),
 
-			'important_en' =>				$this->user->get_theme_item_path('images/thread_status/important_en.gif'),
-			'important_dis' =>			$this->user->get_theme_item_path('images/thread_status/important_dis.gif'),
-			'important_new_en' =>		$this->user->get_theme_item_path('images/thread_status/important_new_en.gif'),
-			'important_new_dis' =>	$this->user->get_theme_item_path('images/thread_status/important_new_dis.gif'),
+			'important_en' =>				$user->get_theme_item_path('images/thread_status/important_en.gif'),
+			'important_dis' =>			$user->get_theme_item_path('images/thread_status/important_dis.gif'),
+			'important_new_en' =>		$user->get_theme_item_path('images/thread_status/important_new_en.gif'),
+			'important_new_dis' =>	$user->get_theme_item_path('images/thread_status/important_new_dis.gif'),
 
-			'hot_en' =>							$this->user->get_theme_item_path('images/thread_status/hot_en.gif'),
-			'hot_dis' =>						$this->user->get_theme_item_path('images/thread_status/hot_dis.gif'),
-			'hot_new_en' =>					$this->user->get_theme_item_path('images/thread_status/hot_new_en.gif'),
-			'hot_new_dis' =>				$this->user->get_theme_item_path('images/thread_status/hot_new_dis.gif'),
+			'hot_en' =>							$user->get_theme_item_path('images/thread_status/hot_en.gif'),
+			'hot_dis' =>						$user->get_theme_item_path('images/thread_status/hot_dis.gif'),
+			'hot_new_en' =>					$user->get_theme_item_path('images/thread_status/hot_new_en.gif'),
+			'hot_new_dis' =>				$user->get_theme_item_path('images/thread_status/hot_new_dis.gif'),
 
-			'closed_en' =>					$this->user->get_theme_item_path('images/thread_status/closed_en.gif'),
-			'closed_dis' =>					$this->user->get_theme_item_path('images/thread_status/closed_dis.gif'),
-			'closed_new_en' =>			$this->user->get_theme_item_path('images/thread_status/closed_new_en.gif'),
-			'closed_new_dis' =>			$this->user->get_theme_item_path('images/thread_status/closed_new_dis.gif'),
+			'closed_en' =>					$user->get_theme_item_path('images/thread_status/closed_en.gif'),
+			'closed_dis' =>					$user->get_theme_item_path('images/thread_status/closed_dis.gif'),
+			'closed_new_en' =>			$user->get_theme_item_path('images/thread_status/closed_new_en.gif'),
+			'closed_new_dis' =>			$user->get_theme_item_path('images/thread_status/closed_new_dis.gif'),
 
-			'moved_en' =>						$this->user->get_theme_item_path('images/thread_status/moved_en.gif'),
-			'moved_dis' =>					$this->user->get_theme_item_path('images/thread_status/moved_dis.gif'),
-			'moved_new_en' =>				$this->user->get_theme_item_path('images/thread_status/moved_new_en.gif'),
-			'moved_new_dis' =>			$this->user->get_theme_item_path('images/thread_status/moved_new_dis.gif')
+			'moved_en' =>						$user->get_theme_item_path('images/thread_status/moved_en.gif'),
+			'moved_dis' =>					$user->get_theme_item_path('images/thread_status/moved_dis.gif'),
+			'moved_new_en' =>				$user->get_theme_item_path('images/thread_status/moved_new_en.gif'),
+			'moved_new_dis' =>			$user->get_theme_item_path('images/thread_status/moved_new_dis.gif')
 		);
 
 		$topics = array();
 		$sublist = BS_DAO::get_subscr()->get_subscr_topics_of_user(
-			$this->user->get_user_id(),array(),$pagination->get_start(),$end
+			$user->get_user_id(),array(),$pagination->get_start(),$end
 		);
 		foreach($sublist as $data)
 		{
 			$info = BS_TopicUtils::get_instance()->get_displayed_name($data['name']);
 			$topic_name = '<a title="'.$info['complete'].'"';
-			$topic_name .= ' href="'.$this->url->get_url('posts','&amp;'.BS_URL_FID.'='.$data['rubrikid']
+			$topic_name .= ' href="'.$url->get_url('posts','&amp;'.BS_URL_FID.'='.$data['rubrikid']
 																										.'&amp;'.BS_URL_TID.'='.$data['topic_id']).'">';
 			$topic_name .= $info['displayed'].'</a>';
 
-			$lastpost = $data['lastpost_time'] > 0 ? PLIB_Date::get_date($data['lastpost_time']) : $this->locale->lang('notavailable');
+			$lastpost = $data['lastpost_time'] > 0 ? PLIB_Date::get_date($data['lastpost_time']) : $locale->lang('notavailable');
 			
 			$topics[] = array(
 				'topic_status' => BS_TopicUtils::get_instance()->get_status_data(
-					$cache,$data,$this->unread->is_unread_thread($data['topic_id'])
+					$cache,$data,$unread->is_unread_thread($data['topic_id'])
 				),
 				'topic_symbol' => BS_TopicUtils::get_instance()->get_symbol(
 					$cache,$data['type'],$data['symbol']
@@ -133,17 +155,10 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 			);
 		}
 
-		$url = $this->url->get_url(0,'&amp;'.BS_URL_LOC.'=topics&amp;'.BS_URL_SITE.'={d}');
-		$this->functions->add_pagination($pagination,$url);
+		$murl = $url->get_url(0,'&amp;'.BS_URL_LOC.'=topics&amp;'.BS_URL_SITE.'={d}');
+		$functions->add_pagination($pagination,$murl);
 		
-		$this->tpl->add_array('topics',$topics);
-	}
-	
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('threads') => $this->url->get_url(0,'&amp;'.BS_URL_LOC.'=topics')
-		);
+		$tpl->add_array('topics',$topics);
 	}
 }
 ?>

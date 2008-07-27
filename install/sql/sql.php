@@ -40,9 +40,11 @@ class BS_InstallSQL
 	 */
 	public function start()
 	{
-		$prefix = $this->functions->get_session_var('table_prefix');
-		$install_type = $this->functions->get_session_var('install_type');
-		$board_url = $this->functions->get_session_var('board_url');
+		$functions = PLIB_Props::get()->functions();
+
+		$prefix = $functions->get_session_var('table_prefix');
+		$install_type = $functions->get_session_var('install_type');
+		$board_url = $functions->get_session_var('board_url');
 		
 		$this->add_to_log('Creating "config/mysql.php"...');
 		if($fp = @fopen('config/mysql.php','w'))
@@ -179,11 +181,13 @@ class BS_InstallSQL
 	 */
 	public function _get_mysql_config()
 	{
-		$host = $this->functions->get_session_var('host');
-		$login = $this->functions->get_session_var('login');
-		$password = $this->functions->get_session_var('password');
-		$database = $this->functions->get_session_var('database');
-		$prefix = $this->functions->get_session_var('table_prefix');
+		$functions = PLIB_Props::get()->functions();
+
+		$host = $functions->get_session_var('host');
+		$login = $functions->get_session_var('login');
+		$password = $functions->get_session_var('password');
+		$database = $functions->get_session_var('database');
+		$prefix = $functions->get_session_var('table_prefix');
 		
 		$content = '<?php'."\r\n";
 		$content .= '##########################################'."\r\n";

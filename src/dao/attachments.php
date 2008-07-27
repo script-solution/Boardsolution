@@ -36,7 +36,9 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function get_attachment_count()
 	{
-		return $this->db->sql_num(BS_TB_ATTACHMENTS,'id','');
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_num(BS_TB_ATTACHMENTS,'id','');
 	}
 	
 	/**
@@ -45,10 +47,12 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function get_attachment_count_of_user($id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		return $this->db->sql_num(BS_TB_ATTACHMENTS,'id',' WHERE poster_id = '.$id);
+		return $db->sql_num(BS_TB_ATTACHMENTS,'id',' WHERE poster_id = '.$id);
 	}
 	
 	/**
@@ -59,7 +63,9 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function get_attachment_count_of_path($path)
 	{
-		return $this->db->sql_num(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_num(
 			BS_TB_ATTACHMENTS,'id',' WHERE attachment_path = "'.$path.'"'
 		);
 	}
@@ -69,7 +75,9 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function get_all()
 	{
-		return $this->db->sql_rows(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_ATTACHMENTS
 		);
 	}
@@ -81,7 +89,9 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function get_all_with_names()
 	{
-		return $this->db->sql_rows(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
 			'SELECT a.*,t.name,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_ATTACHMENTS.' a
 			 LEFT JOIN '.BS_TB_USER.' u ON a.poster_id = u.`'.BS_EXPORT_USER_ID.'`
@@ -97,10 +107,12 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function get_by_id($id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		return $this->db->sql_fetch(
+		return $db->sql_fetch(
 			'SELECT *
 			 FROM '.BS_TB_ATTACHMENTS.'
 			 WHERE id = '.$id
@@ -112,15 +124,17 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 * That means you can be sure that the user is allowed to view this attachment.
 	 *
 	 * @param string $path the attachment-path
-	 * @param int $user_id user-id
+	 * @param int $user_id user-id (0 = guest)
 	 * @return array the attachment
 	 */
 	public function get_attachment_of_user_by_path($path,$user_id)
 	{
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		$db = PLIB_Props::get()->db();
+
+		if(!PLIB_Helper::is_integer($user_id) || $user_id < 0)
+			PLIB_Helper::def_error('intge0','user_id',$user_id);
 		
-		return $this->db->sql_fetch(
+		return $db->sql_fetch(
 			'SELECT *
 			 FROM '.BS_TB_ATTACHMENTS.'
 			 WHERE attachment_path = "'.$path.'" AND IF(pm_id > 0,poster_id = '.$user_id.',1)'
@@ -135,10 +149,12 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function get_by_paths($paths)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!is_array($paths) || count($paths) == 0)
 			PLIB_Helper::def_error('array>0','paths',$paths);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT *
 			 FROM '.BS_TB_ATTACHMENTS.'
 			 WHERE attachment_path IN ("'.implode('","',$paths).'")'
@@ -153,7 +169,7 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function get_by_topicids($tids)
 	{
-		return $this->_get_by('thread_id',$tids);
+		return $this->get_by('thread_id',$tids);
 	}
 	
 	/**
@@ -164,7 +180,7 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function get_by_postid($pid)
 	{
-		return $this->_get_by('post_id',array($pid));
+		return $this->get_by('post_id',array($pid));
 	}
 	
 	/**
@@ -175,7 +191,7 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function get_by_postids($pids)
 	{
-		return $this->_get_by('post_id',$pids);
+		return $this->get_by('post_id',$pids);
 	}
 	
 	/**
@@ -186,7 +202,7 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function get_by_pmid($pmid)
 	{
-		return $this->_get_by('pm_id',array($pmid));
+		return $this->get_by('pm_id',array($pmid));
 	}
 	
 	/**
@@ -197,7 +213,7 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function get_by_pmids($pmids)
 	{
-		return $this->_get_by('pm_id',$pmids);
+		return $this->get_by('pm_id',$pmids);
 	}
 	
 	/**
@@ -213,6 +229,8 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function create($post_id,$topic_id,$pm_id,$user_id,$size,$path)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($post_id) || $post_id < 0)
 			PLIB_Helper::def_error('intge0','post_id',$post_id);
 		if(!PLIB_Helper::is_integer($topic_id) || $topic_id < 0)
@@ -226,7 +244,7 @@ class BS_DAO_Attachments extends PLIB_Singleton
 		if(empty($path))
 			PLIB_Helper::def_error('notempty','path',$path);
 		
-		$this->db->sql_insert(BS_TB_ATTACHMENTS,array(
+		$db->sql_insert(BS_TB_ATTACHMENTS,array(
 			'post_id' => $post_id,
 			'thread_id' => $topic_id,
 			'pm_id' => $pm_id,
@@ -234,7 +252,7 @@ class BS_DAO_Attachments extends PLIB_Singleton
 			'attachment_size' => $size,
 			'attachment_path' => $path
 		));
-		return $this->db->get_last_insert_id();
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -245,13 +263,15 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function inc_downloads($id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$this->db->sql_update(BS_TB_ATTACHMENTS,'WHERE id = '.$id,array(
+		$db->sql_update(BS_TB_ATTACHMENTS,'WHERE id = '.$id,array(
 			'downloads' => array('downloads + 1')
 		));
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -263,15 +283,17 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function update_topic_id($post_ids,$topic_id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($post_ids) || count($post_ids) == 0)
 			PLIB_Helper::def_error('intarray>0','post_ids',$post_ids);
 		if(!PLIB_Helper::is_integer($topic_id) || $topic_id <= 0)
 			PLIB_Helper::def_error('intgt0','topic_id',$topic_id);
 		
-		$this->db->sql_update(BS_TB_ATTACHMENTS,'WHERE post_id IN ('.implode(',',$post_ids).')',array(
+		$db->sql_update(BS_TB_ATTACHMENTS,'WHERE post_id IN ('.implode(',',$post_ids).')',array(
 			'thread_id' => $topic_id
 		));
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -282,7 +304,7 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function delete_by_ids($ids)
 	{
-		return $this->_delete_by('id',$ids);
+		return $this->delete_by('id',$ids);
 	}
 	
 	/**
@@ -293,7 +315,7 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function delete_by_topicids($tids)
 	{
-		return $this->_delete_by('thread_id',$tids);
+		return $this->delete_by('thread_id',$tids);
 	}
 	
 	/**
@@ -304,7 +326,7 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function delete_by_postids($pids)
 	{
-		return $this->_delete_by('post_id',$pids);
+		return $this->delete_by('post_id',$pids);
 	}
 	
 	/**
@@ -315,7 +337,7 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function delete_by_pmids($pmids)
 	{
-		return $this->_delete_by('pm_id',$pmids);
+		return $this->delete_by('pm_id',$pmids);
 	}
 	
 	/**
@@ -326,14 +348,16 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 */
 	public function delete_pm_attachments_of_users($ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_ATTACHMENTS.'
 			 WHERE poster_id IN ('.implode(',',$ids).') AND pm_id > 0'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -343,12 +367,14 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 * @param array $ids an array with all ids
 	 * @return array the attachments
 	 */
-	protected function _get_by($field,$ids)
+	protected function get_by($field,$ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT *
 			 FROM '.BS_TB_ATTACHMENTS.'
 			 WHERE '.$field.' IN ('.implode(',',$ids).')'
@@ -362,15 +388,17 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 * @param array $ids an array with all ids
 	 * @return int the number of affected rows
 	 */
-	protected function _delete_by($field,$ids)
+	protected function delete_by($field,$ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_ATTACHMENTS.' WHERE '.$field.' IN ('.implode(',',$ids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

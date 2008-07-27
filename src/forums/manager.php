@@ -25,6 +25,14 @@ final class BS_Forums_Manager extends PLIB_Tree_Manager
 	 */
 	public function __construct()
 	{
+		// don't call parent constructor here, because we want to init the nodes lazy
+	}
+
+	/**
+	 * @see PLIB_Tree_Manager::first_node_access()
+	 */
+	protected function first_node_access()
+	{
 		parent::__construct(new BS_Forums_Storage_DB());
 	}
 	
@@ -129,10 +137,12 @@ final class BS_Forums_Manager extends PLIB_Tree_Manager
 	 */
 	public function is_unread_forum($id)
 	{
+		$unread = PLIB_Props::get()->unread();
+
 		$node = $this->get_node($id);
 		if($node !== null)
 		{
-			if($this->unread->is_unread_forum($id))
+			if($unread->is_unread_forum($id))
 				return true;
 
 			return $this->_is_unread_forum_rek($node);
@@ -149,9 +159,11 @@ final class BS_Forums_Manager extends PLIB_Tree_Manager
 	 */
 	private function _is_unread_forum_rek($node)
 	{
+		$unread = PLIB_Props::get()->unread();
+
 		foreach($node->get_childs() as $child)
 		{
-			if($this->unread->is_unread_forum($child->get_id()))
+			if($unread->is_unread_forum($child->get_id()))
 				return true;
 
 			if($this->has_childs($child->get_id()))

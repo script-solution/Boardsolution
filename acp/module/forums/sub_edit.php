@@ -27,27 +27,57 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 	private $_helper;
 	
 	/**
-	 * Constructor
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
 	 */
-	public function __construct()
+	public function init($doc)
 	{
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_ADD_FORUM,array('edit','add'));
+		$doc->add_action(BS_ACP_ACTION_EDIT_FORUM,array('edit','edit'));
+
+		$id = $input->get_var('id','get',PLIB_Input::ID);
+		if($id != null)
+		{
+			$doc->add_breadcrumb(
+				$locale->lang('edit_forum'),
+				$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
+			);
+		}
+		else
+		{
+			$doc->add_breadcrumb(
+				$locale->lang('create_new_forum'),
+				$url->get_acpmod_url(0,'&amp;action=edit')
+			);
+		}
+		
 		$this->_helper = BS_ACP_Module_Forums_Helper::get_instance();
 	}
 	
-	public function get_actions()
-	{
-		return array(
-			BS_ACP_ACTION_ADD_FORUM => array('edit','add'),
-			BS_ACP_ACTION_EDIT_FORUM => array('edit','edit')
-		);
-	}
-	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$url = PLIB_Props::get()->url();
+		$locale = PLIB_Props::get()->locale();
+		$auth = PLIB_Props::get()->auth();
+		$cache = PLIB_Props::get()->cache();
+		$tpl = PLIB_Props::get()->tpl();
+		$forums = PLIB_Props::get()->forums();
+
+		$id = $input->get_var('id','get',PLIB_Input::ID);
 		$type = $id != null ? 'edit' : 'add';
 		
-		$this->_request_formular();
+		$this->request_formular();
 		
 		// retrieve default data
 		if($type == 'add')
@@ -57,37 +87,37 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 			);
 			$forum = $data->get_attributes();
 			
-			$target_url = $this->url->get_acpmod_url(0,'&amp;action=edit');
-			$form_title = $this->locale->lang('add');
+			$target_url = $url->get_acpmod_url(0,'&amp;action=edit');
+			$form_title = $locale->lang('add');
 		}
 		else
 		{
-			$forum = $this->forums->get_forum_data($id);
+			$forum = $forums->get_forum_data($id);
 			
-			$target_url = $this->url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id);
-			$form_title = $this->locale->lang('edit');
+			$target_url = $url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id);
+			$form_title = $locale->lang('edit');
 		}
 		
 		// build some combos
-		$forums = $this->forums->get_all_nodes();
-		$parent_combo = $this->_get_parent_combobox($forums,$forum['id'],$forum['parent_id'],'parent');
+		$nodes = $forums->get_all_nodes();
+		$parent_combo = $this->_get_parent_combobox($nodes,$forum['id'],$forum['parent_id'],'parent');
 		
 		$this->_add_access_combo(
-			'permission_thread',$this->auth->get_permissions_in_forum(BS_MODE_START_TOPIC,$forum['id'])
+			'permission_thread',$auth->get_permissions_in_forum(BS_MODE_START_TOPIC,$forum['id'])
 		);
 		$this->_add_access_combo(
-			'permission_poll',$this->auth->get_permissions_in_forum(BS_MODE_START_POLL,$forum['id'])
+			'permission_poll',$auth->get_permissions_in_forum(BS_MODE_START_POLL,$forum['id'])
 		);
 		$this->_add_access_combo(
-			'permission_event',$this->auth->get_permissions_in_forum(BS_MODE_START_EVENT,$forum['id'])
+			'permission_event',$auth->get_permissions_in_forum(BS_MODE_START_EVENT,$forum['id'])
 		);
 		$this->_add_access_combo(
-			'permission_post',$this->auth->get_permissions_in_forum(BS_MODE_REPLY,$forum['id'])
+			'permission_post',$auth->get_permissions_in_forum(BS_MODE_REPLY,$forum['id'])
 		);
 
 		$forum_type_options = array(
-			'contains_cats' => $this->locale->lang('contains_cats'),
-			'contains_threads' => $this->locale->lang('contains_threads')
+			'contains_cats' => $locale->lang('contains_cats'),
+			'contains_threads' => $locale->lang('contains_threads')
 		);
 
 		// user
@@ -111,7 +141,7 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 		
 		// usergroups
 		$usergroups = array();
-		foreach($this->cache->get_cache('user_groups') as $gdata)
+		foreach($cache->get_cache('user_groups') as $gdata)
 		{
 			if($gdata['id'] == BS_STATUS_ADMIN || $gdata['id'] == BS_STATUS_GUEST)
 				continue;
@@ -128,14 +158,14 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 		$forumtype->set_custom_attribute('onchange','toggleForumType()');
 		
 		// populate template
-		$this->tpl->add_array('default',$forum);
-		$this->tpl->add_array('usergroups',$usergroups);
-		$this->tpl->add_variables(array(
+		$tpl->add_array('default',$forum);
+		$tpl->add_array('usergroups',$usergroups);
+		$tpl->add_variables(array(
 			'action_type' => $type == 'edit' ? BS_ACP_ACTION_EDIT_FORUM : BS_ACP_ACTION_ADD_FORUM,
 			'target_url' => $target_url,
 			'form_title' => $form_title,
 			'parent_combo' => $parent_combo,
-			'search_url' => $this->url->get_standalone_url('acp','user_search','&amp;comboid=user_intern'),
+			'search_url' => $url->get_acpmod_url('usersearch','&amp;comboid=user_intern'),
 			'user_combo' => $usercb->to_html(),
 			'forum_type_combo' => $forumtype->to_html()
 		));
@@ -152,9 +182,11 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 	 */
 	private function _get_parent_combobox($forums,$fid,$parent_id,$name)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		$return = '<select name="'.$name.'">'."\n";
 		$sel = ($parent_id == 0) ? ' selected="selected"' : '';
-		$return .= '<option value="0"'.$sel.'>- '.$this->locale->lang('main_forum').' -</option>'."\n";
+		$return .= '<option value="0"'.$sel.'>- '.$locale->lang('main_forum').' -</option>'."\n";
 		$num = count($forums);
 		for($i = 0;$i < $num;$i++)
 		{
@@ -193,8 +225,11 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 	 */
 	private function _add_access_combo($type,$permissions = array())
 	{
+		$cache = PLIB_Props::get()->cache();
+		$tpl = PLIB_Props::get()->tpl();
+
 		$radios = array();
-		foreach($this->cache->get_cache('user_groups') as $data)
+		foreach($cache->get_cache('user_groups') as $data)
 		{
 			if($data['id'] == BS_STATUS_ADMIN)
 				continue;
@@ -205,24 +240,7 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 				'value' => in_array($data['id'],$permissions)
 			);
 		}
-		$this->tpl->add_array($type,$radios);
-	}
-	
-	public function get_location()
-	{
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
-		if($id != null)
-		{
-			return array(
-				$this->locale->lang('edit_forum') => $this->url->get_acpmod_url(
-					0,'&amp;action=edit&amp;id='.$id
-				)
-			);
-		}
-		
-		return array(
-			$this->locale->lang('create_new_forum') => $this->url->get_acpmod_url(0,'&amp;action=edit')
-		);
+		$tpl->add_array($type,$radios);
 	}
 }
 ?>

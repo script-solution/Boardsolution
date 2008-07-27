@@ -21,53 +21,57 @@ final class BS_ACP_Action_themes_add extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$theme_name = $this->input->get_var('theme_name','post',PLIB_Input::STRING);
-		$theme_folder = $this->input->get_var('theme_folder','post',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+
+		$theme_name = $input->get_var('theme_name','post',PLIB_Input::STRING);
+		$theme_folder = $input->get_var('theme_folder','post',PLIB_Input::STRING);
 		if(!preg_match('/^[a-z0-9_]+$/i',$theme_folder))
 			return 'invalid_theme_folder_name';
 		
-		if($this->cache->get_cache('themes')->element_exists_with(array('theme_folder' => $theme_folder)))
+		if($cache->get_cache('themes')->element_exists_with(array('theme_folder' => $theme_folder)))
 			return 'theme_exists';
 
 		BS_DAO::get_themes()->create($theme_name,$theme_folder);
-		$this->cache->refresh('themes');
+		$cache->refresh('themes');
 
 		$msg = '';
 		
-		$result = $this->_create_directory(PLIB_Path::inner().'themes/'.$theme_folder);
+		$result = $this->_create_directory(PLIB_Path::server_app().'themes/'.$theme_folder);
 		if(!$result)
-			$msg = $this->locale->lang('error_creating_directory_structure_failed').'<br />';
+			$msg = $locale->lang('error_creating_directory_structure_failed').'<br />';
 
 		if($msg == '')
 		{
-			$result = $this->_create_directory(PLIB_Path::inner().'themes/'.$theme_folder.'/templates');
+			$result = $this->_create_directory(PLIB_Path::server_app().'themes/'.$theme_folder.'/templates');
 			if(!$result)
-				$msg = $this->locale->lang('error_creating_directory_structure_failed').'<br />';
+				$msg = $locale->lang('error_creating_directory_structure_failed').'<br />';
 		}
 		
 		if($msg == '')
 		{
-			$result = $this->_create_directory(PLIB_Path::inner().'themes/'.$theme_folder.'/images');
+			$result = $this->_create_directory(PLIB_Path::server_app().'themes/'.$theme_folder.'/images');
 			if(!$result)
-				$msg = $this->locale->lang('error_creating_directory_structure_failed').'<br />';
+				$msg = $locale->lang('error_creating_directory_structure_failed').'<br />';
 		}
 
 		if($msg == '')
 		{
 			$result = PLIB_FileUtils::copy(
-				PLIB_Path::inner().'themes/default/style.css',
-				PLIB_Path::inner().'themes/'.$theme_folder.'/style.css'
+				PLIB_Path::server_app().'themes/default/style.css',
+				PLIB_Path::server_app().'themes/'.$theme_folder.'/style.css'
 			);
 			if(!$result)
-				$msg = $this->locale->lang('error_creating_directory_structure_failed').'<br />';
+				$msg = $locale->lang('error_creating_directory_structure_failed').'<br />';
 		}
 
 		// don't report errors here. the index-files are not really important
-		$this->_create_index_file(PLIB_Path::inner().'themes/'.$theme_folder);
-		$this->_create_index_file(PLIB_Path::inner().'themes/'.$theme_folder.'/templates');
-		$this->_create_index_file(PLIB_Path::inner().'themes/'.$theme_folder.'/images');
+		$this->_create_index_file(PLIB_Path::server_app().'themes/'.$theme_folder);
+		$this->_create_index_file(PLIB_Path::server_app().'themes/'.$theme_folder.'/templates');
+		$this->_create_index_file(PLIB_Path::server_app().'themes/'.$theme_folder.'/images');
 		
-		$this->set_success_msg($msg.$this->locale->lang('theme_add_success'));
+		$this->set_success_msg($msg.$locale->lang('theme_add_success'));
 		$this->set_action_performed(true);
 
 		return '';
@@ -83,7 +87,7 @@ final class BS_ACP_Action_themes_add extends BS_ACP_Action_Base
 	{
 		if(@mkdir($path))
 		{
-			if(@chown($path,fileowner(PLIB_Path::inner().'themes/default')))
+			if(@chown($path,fileowner(PLIB_Path::server_app().'themes/default')))
 				return @chmod($path,0777);
 		}
 

@@ -39,24 +39,28 @@ final class BS_UserUtils extends PLIB_Singleton
 	 */
 	public function get_link($id,$name,$group_ids = '',$color = false,$style = '')
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+		$url = PLIB_Props::get()->url();
+
 		static $user_cache = array();
 		
-		if($this->cfg['always_color_usernames'])
+		if($cfg['always_color_usernames'])
 			$color = true;
 		
 		// do we have it already in the cache?
 		if(isset($user_cache[$id.$color.$style]))
 			return $user_cache[$id.$color.$style];
 		
-		$url = $this->url->get_url('userdetails','&amp;'.BS_URL_ID.'='.$id);
+		$murl = $url->get_url('userdetails','&amp;'.BS_URL_ID.'='.$id);
 		$link = '<a';
 		if($style != '')
 			$link .= ' style="'.$style.'"';
-		$link .= ' href="'.$url.'">';
+		$link .= ' href="'.$murl.'">';
 		
 		if($color && $group_ids != '')
 		{
-			$c = $this->auth->get_user_color($id,$group_ids);
+			$c = $auth->get_user_color($id,$group_ids);
 			$link .= '<span style="color: #'.$c.';">';
 		}
 		
@@ -78,11 +82,18 @@ final class BS_UserUtils extends PLIB_Singleton
 	 *
 	 * @param int $pollid the id of the poll
 	 * @param int $userid the id of the user (0 = current)
+	 * @return boolean true if the user has voted
 	 */
 	public function user_voted_for_poll($pollid,$userid = 0)
 	{
+		$user = PLIB_Props::get()->user();
+
 		if($userid == 0)
-			$userid = $this->user->get_user_id();
+		{
+			$userid = $user->get_user_id();
+			if($userid == 0)
+				return false;
+		}
 		
 		return BS_DAO::get_pollvotes()->user_voted($pollid,$userid);
 	}
@@ -95,11 +106,19 @@ final class BS_UserUtils extends PLIB_Singleton
 	 */
 	public function user_voted_for_link($linkid)
 	{
+		$user = PLIB_Props::get()->user();
+
 		static $votes = null;
 		if($votes === null)
 		{
-			$votes = BS_DAO::get_linkvotes()->get_votes_of_user($this->user->get_user_id());
-			$votes = PLIB_Array_Utils::get_fast_access($votes);
+			$userid = $user->get_user_id();
+			if($userid == 0)
+				$votes = array();
+			else
+			{
+				$votes = BS_DAO::get_linkvotes()->get_votes_of_user($userid);
+				$votes = PLIB_Array_Utils::get_fast_access($votes);
+			}
 		}
 		
 		return isset($votes[$linkid]);
@@ -115,14 +134,17 @@ final class BS_UserUtils extends PLIB_Singleton
 	 */
 	public function get_displayed_email($email,$mode,$use_link = false)
 	{
+		$user = PLIB_Props::get()->user();
+		$locale = PLIB_Props::get()->locale();
+
 		// admins can always view the email-address
-		if($this->user->is_admin())
+		if($user->is_admin())
 			$mode = 'default';
 		
 		switch($mode)
 		{
 			case 'hide':
-				return $this->locale->lang('notavailable');
+				return $locale->lang('notavailable');
 	
 			case 'default':
 				if($use_link)
@@ -152,7 +174,7 @@ final class BS_UserUtils extends PLIB_Singleton
 	public function get_avatar_path($data)
 	{
 		if($data['av_pfad'] != '' && ($data['aowner'] == $data['post_user'] || $data['aowner'] == 0))
-			return PLIB_Path::inner().'images/avatars/'.$data['av_pfad'];
+			return PLIB_Path::client_app().'images/avatars/'.$data['av_pfad'];
 	
 		return '';
 	}
@@ -167,19 +189,21 @@ final class BS_UserUtils extends PLIB_Singleton
 	 */
 	public function get_profile_avatar($avatar_id,$user_id)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		if($avatar_id > 0)
 		{
 			$avatar = BS_DAO::get_avatars()->get_by_id($avatar_id);
 			if($avatar !== false && ($avatar['user'] == $user_id || $avatar['user'] == 0))
 			{
-				$image = PLIB_Path::inner().'images/avatars/'.$avatar['av_pfad'];
+				$image = PLIB_Path::client_app().'images/avatars/'.$avatar['av_pfad'];
 				return '<img src="'.$image.'" alt="" />';
 			}
 	
-			return $this->locale->lang('nopictureavailable');
+			return $locale->lang('nopictureavailable');
 		}
 	
-		return $this->locale->lang('nopictureavailable');
+		return $locale->lang('nopictureavailable');
 	}
 	
 	/**
@@ -190,10 +214,12 @@ final class BS_UserUtils extends PLIB_Singleton
 	 */
 	public function check_username($user_name)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		if(preg_match("/([\"\\/|'])/i",$user_name))
 			return false;
 	
-		if($this->cfg['profile_user_special_chars'] == 0 &&
+		if($cfg['profile_user_special_chars'] == 0 &&
 			!preg_match('/^([a-z|0-9|_|\\-|\\[|\\]]+)$/i',$user_name))
 			return false;
 	

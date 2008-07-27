@@ -17,7 +17,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Locale extends PLIB_FullObject implements PLIB_Locale
+final class BS_Locale extends PLIB_Object implements PLIB_Locale
 {
 	/**
 	 * The language-entries
@@ -64,13 +64,15 @@ final class BS_Locale extends PLIB_FullObject implements PLIB_Locale
 	 */
 	public function get_language_entries($file,$language = null)
 	{
+		$user = PLIB_Props::get()->user();
+
 		if($language === null)
-			$folder = $this->user->get_language();
+			$folder = $user->get_language();
 		else
 			$folder = $language;
 		
 		$lang = array();
-		$path = PLIB_Path::inner().'language/'.$folder.'/'.$file.'.ini';
+		$path = PLIB_Path::server_app().'language/'.$folder.'/'.$file.'.ini';
 		if(is_file($path))
 		{
 			$matches = array();
@@ -134,11 +136,13 @@ final class BS_Locale extends PLIB_FullObject implements PLIB_Locale
 	
 	public function get_dec_separator()
 	{
-		if(!method_exists($this->user,'get_language'))
+		$user = PLIB_Props::get()->user();
+
+		if(!method_exists($user,'get_language'))
 			return ',';
 		
 		// TODO improve that?
-		switch($this->user->get_language())
+		switch($user->get_language())
 		{
 			case 'ger_du':
 			case 'ger_sie':
@@ -151,11 +155,13 @@ final class BS_Locale extends PLIB_FullObject implements PLIB_Locale
 	
 	public function get_thousands_separator()
 	{
-		if(!method_exists($this->user,'get_language'))
+		$user = PLIB_Props::get()->user();
+
+		if(!method_exists($user,'get_language'))
 			return '.';
 		
 		// TODO improve that?
-		switch($this->user->get_language())
+		switch($user->get_language())
 		{
 			case 'ger_du':
 			case 'ger_sie':
@@ -168,11 +174,13 @@ final class BS_Locale extends PLIB_FullObject implements PLIB_Locale
 	
 	public function get_date_order()
 	{
-		if(!method_exists($this->user,'get_language'))
+		$user = PLIB_Props::get()->user();
+
+		if(!method_exists($user,'get_language'))
 			return array('d','m','Y');
 		
 		// TODO improve that?
-		switch($this->user->get_language())
+		switch($user->get_language())
 		{
 			case 'ger_du':
 			case 'ger_sie':
@@ -185,11 +193,13 @@ final class BS_Locale extends PLIB_FullObject implements PLIB_Locale
 	
 	public function get_date_separator()
 	{
-		if(!method_exists($this->user,'get_language'))
+		$user = PLIB_Props::get()->user();
+
+		if(!method_exists($user,'get_language'))
 			return '.';
 		
 		// TODO improve that?
-		switch($this->user->get_language())
+		switch($user->get_language())
 		{
 			case 'ger_du':
 			case 'ger_sie':
@@ -202,10 +212,12 @@ final class BS_Locale extends PLIB_FullObject implements PLIB_Locale
 	
 	public function get_timezone()
 	{
-		if(!method_exists($this->user,'get_profile_val'))
+		$user = PLIB_Props::get()->user();
+
+		if(!method_exists($user,'get_profile_val'))
 			return 'Europe/Berlin';
 		
-		$tz = $this->user->get_profile_val('timezone');
+		$tz = $user->get_profile_val('timezone');
 		if($tz && @timezone_open($tz) !== false)
 			return $tz;
 		
@@ -217,7 +229,7 @@ final class BS_Locale extends PLIB_FullObject implements PLIB_Locale
 		throw new PLIB_Exceptions_UnsupportedMethod();
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

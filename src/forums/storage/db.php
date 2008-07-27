@@ -17,7 +17,7 @@
  * @subpackage	src.forums
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Forums_Storage_DB extends PLIB_FullObject implements PLIB_Tree_Storage
+final class BS_Forums_Storage_DB extends PLIB_Object implements PLIB_Tree_Storage
 {
 	public function get_nodes()
 	{
@@ -43,7 +43,7 @@ final class BS_Forums_Storage_DB extends PLIB_FullObject implements PLIB_Tree_St
 		BS_DAO::get_forums()->delete_by_ids($ids);
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

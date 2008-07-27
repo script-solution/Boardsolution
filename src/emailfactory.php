@@ -35,18 +35,23 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_new_link_mail()
 	{
-		$this->locale->add_language_file('email');
+		$locale = PLIB_Props::get()->locale();
+		$cfg = PLIB_Props::get()->cfg();
+		$tpl = PLIB_Props::get()->tpl();
+		$functions = PLIB_Props::get()->functions();
+
+		$locale->add_language_file('email');
 		
-		$title = sprintf($this->locale->lang('link_email_title'),$this->cfg['forum_title']);
-		$text = $this->tpl->parse_string(
-			$this->locale->lang('link_email_text'),
+		$title = sprintf($locale->lang('link_email_title'),$cfg['forum_title']);
+		$text = $tpl->parse_string(
+			$locale->lang('link_email_text'),
 			array(
-				'forum_name' => $this->cfg['forum_title'],
-				'board_url' => $this->cfg['board_url']
+				'forum_name' => $cfg['forum_title'],
+				'board_url' => $cfg['board_url']
 			)
 		);
 		
-		return $this->functions->get_mailer('',$title,$text);
+		return $functions->get_mailer('',$title,$text);
 	}
 	
 	/**
@@ -61,22 +66,27 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_new_registration_mail($user_name,$user_email,$user_pw)
 	{
-		$this->locale->add_language_file('email',$this->functions->get_def_lang_folder());
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$cfg = PLIB_Props::get()->cfg();
+		$tpl = PLIB_Props::get()->tpl();
+
+		$locale->add_language_file('email',$functions->get_def_lang_folder());
 		
 		$title = sprintf(
-			$this->locale->lang('new_registration_email_title'),
-			$this->cfg['forum_title']
+			$locale->lang('new_registration_email_title'),
+			$cfg['forum_title']
 		);
-		$text = $this->tpl->parse_string(
-			$this->locale->lang('new_registration_email_text'),
+		$text = $tpl->parse_string(
+			$locale->lang('new_registration_email_text'),
 			array(
-				'forum_name' => $this->cfg['forum_title'],
+				'forum_name' => $cfg['forum_title'],
 				'user_name' => $user_name,
 				'user_pw' => $user_pw
 			)
 		);
 		
-		return $this->functions->get_mailer($user_email,$title,$text);
+		return $functions->get_mailer($user_email,$title,$text);
 	}
 	
 	/**
@@ -93,23 +103,29 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_account_changed_mail($langid,$oldname,$newname,$oldemail,$newemail,$password)
 	{
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$cfg = PLIB_Props::get()->cfg();
+		$tpl = PLIB_Props::get()->tpl();
+
 		if(!PLIB_Helper::is_integer($langid) || $langid <= 0)
 			PLIB_Helper::def_error('intgt0','langid',$langid);
 		
-		$lang_data = $this->cache->get_cache('languages')->get_element($langid);
+		$lang_data = $cache->get_cache('languages')->get_element($langid);
 		if($lang_data != null)
-			$this->locale->add_language_file('email',$lang_data['lang_folder']);
+			$locale->add_language_file('email',$lang_data['lang_folder']);
 		else
-			$this->locale->add_language_file('email',$this->functions->get_def_lang_folder());
+			$locale->add_language_file('email',$functions->get_def_lang_folder());
 
 		$title = sprintf(
-			$this->locale->lang('userdata_changed_email_title'),
-			$this->cfg['forum_title']
+			$locale->lang('userdata_changed_email_title'),
+			$cfg['forum_title']
 		);
-		$text = $this->tpl->parse_string(
-			$this->locale->lang('userdata_changed_email_text'),
+		$text = $tpl->parse_string(
+			$locale->lang('userdata_changed_email_text'),
 			array(
-				'forum_name' => $this->cfg['forum_title'],
+				'forum_name' => $cfg['forum_title'],
 				'name_changed' => $oldname != $newname,
 				'user_name' => $newname,
 				'email_changed' => $oldemail != $newemail,
@@ -119,7 +135,7 @@ final class BS_EmailFactory extends PLIB_Singleton
 			)
 		);
 		
-		return $this->functions->get_mailer($oldemail,$title,$text);
+		return $functions->get_mailer($oldemail,$title,$text);
 	}
 	
 	/**
@@ -132,20 +148,26 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_change_email_mail($user_id,$user_email,$user_key)
 	{
-		$this->locale->add_language_file('email');
+		$locale = PLIB_Props::get()->locale();
+		$cfg = PLIB_Props::get()->cfg();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+		$functions = PLIB_Props::get()->functions();
+
+		$locale->add_language_file('email');
 		
-		$subject = sprintf($this->locale->lang('change_email_email_title'),$this->cfg['forum_title']);
-		$text = $this->tpl->parse_string(
-			$this->locale->lang('change_email_email_text'),
+		$subject = sprintf($locale->lang('change_email_email_title'),$cfg['forum_title']);
+		$text = $tpl->parse_string(
+			$locale->lang('change_email_email_text'),
 			array(
-				'url' => $this->url->get_standalone_url(
-					'front','conf_email','&'.BS_URL_ID.'='.$user_id.'&'.BS_URL_PID.'='.$user_key,'&',true
+				'url' => $url->get_url(
+					'conf_email','&'.BS_URL_ID.'='.$user_id.'&'.BS_URL_PID.'='.$user_key,'&',true
 				),
 				'email' => $user_email
 			)
 		);
 		
-		return $this->functions->get_mailer($user_email,$subject,$text);
+		return $functions->get_mailer($user_email,$subject,$text);
 	}
 	
 	/**
@@ -158,20 +180,26 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_change_pw_mail($user_id,$user_email,$user_key)
 	{
-		$this->locale->add_language_file('email');
+		$locale = PLIB_Props::get()->locale();
+		$cfg = PLIB_Props::get()->cfg();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+		$functions = PLIB_Props::get()->functions();
 
-		$subject = sprintf($this->locale->lang('pw_change_title'),$this->cfg['forum_title']);
-		$text = $this->tpl->parse_string(
-			$this->locale->lang('pw_change_text'),
+		$locale->add_language_file('email');
+
+		$subject = sprintf($locale->lang('pw_change_title'),$cfg['forum_title']);
+		$text = $tpl->parse_string(
+			$locale->lang('pw_change_text'),
 			array(
-				'url' => $this->url->get_frontend_url(
+				'url' => $url->get_frontend_url(
 					'&'.BS_URL_ACTION.'=change_password&'.BS_URL_ID.'='.$user_id.'&'.BS_URL_KW.'='.$user_key,
 					'&',false
 				)
 			)
 		);
 		
-		return $this->functions->get_mailer($user_email,$subject,$text);
+		return $functions->get_mailer($user_email,$subject,$text);
 	}
 	
 	/**
@@ -184,24 +212,30 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_account_activation_mail($user_id,$user_email,$user_key)
 	{
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+		$cfg = PLIB_Props::get()->cfg();
+		$url = PLIB_Props::get()->url();
+		$functions = PLIB_Props::get()->functions();
+
 		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
 			PLIB_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$this->locale->add_language_file('email');
+		$locale->add_language_file('email');
 
 		// send the email
-		$subject = $this->locale->lang('account_activation_email_title');
-		$text = $this->tpl->parse_string(
-			$this->locale->lang('account_activation_email_text'),
+		$subject = $locale->lang('account_activation_email_title');
+		$text = $tpl->parse_string(
+			$locale->lang('account_activation_email_text'),
 			array(
-				'forum_name' => $this->cfg['forum_title'],
-				'url' => $this->url->get_standalone_url(
-					'front','activate','&user_id='.$user_id.'&user_key='.$user_key,'&',true
+				'forum_name' => $cfg['forum_title'],
+				'url' => $url->get_url(
+					'activate','&'.BS_URL_ID.'='.$user_id.'&'.BS_URL_KW.'='.$user_key,'&',true
 				)
 			)
 		);
 		
-		return $this->functions->get_mailer($user_email,$subject,$text);
+		return $functions->get_mailer($user_email,$subject,$text);
 	}
 	
 	/**
@@ -212,18 +246,24 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_account_activated_mail()
 	{
-		$this->locale->add_language_file('email');
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+		$cfg = PLIB_Props::get()->cfg();
+		$url = PLIB_Props::get()->url();
+		$functions = PLIB_Props::get()->functions();
+
+		$locale->add_language_file('email');
 		
-		$subject = $this->locale->lang('account_activated_title');
-		$text = $this->tpl->parse_string(
-			$this->locale->lang('account_activated_text'),
+		$subject = $locale->lang('account_activated_title');
+		$text = $tpl->parse_string(
+			$locale->lang('account_activated_text'),
 			array(
-				'forum_name' => $this->cfg['forum_title'],
-				'board_url' => $this->url->get_frontend_url('','&',false)
+				'forum_name' => $cfg['forum_title'],
+				'board_url' => $url->get_frontend_url('','&',false)
 			)
 		);
 		
-		return $this->functions->get_mailer('',$subject,$text);
+		return $functions->get_mailer('',$subject,$text);
 	}
 	
 	/**
@@ -234,18 +274,24 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_account_not_activated_mail()
 	{
-		$this->locale->add_language_file('email');
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+		$cfg = PLIB_Props::get()->cfg();
+		$url = PLIB_Props::get()->url();
+		$functions = PLIB_Props::get()->functions();
+
+		$locale->add_language_file('email');
 		
-		$subject = $this->locale->lang('account_not_activated_title');
-		$text = $this->tpl->parse_string(
-			$this->locale->lang('account_not_activated_text'),
+		$subject = $locale->lang('account_not_activated_title');
+		$text = $tpl->parse_string(
+			$locale->lang('account_not_activated_text'),
 			array(
-				'forum_name' => $this->cfg['forum_title'],
-				'board_url' => $this->url->get_frontend_url('','&',false)
+				'forum_name' => $cfg['forum_title'],
+				'board_url' => $url->get_frontend_url('','&',false)
 			)
 		);
 		
-		return $this->functions->get_mailer('',$subject,$text);
+		return $functions->get_mailer('',$subject,$text);
 	}
 	
 	/**
@@ -256,18 +302,24 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_account_reactivated_mail()
 	{
-		$this->locale->add_language_file('email',$this->functions->get_def_lang_folder());
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$tpl = PLIB_Props::get()->tpl();
+		$cfg = PLIB_Props::get()->cfg();
+		$url = PLIB_Props::get()->url();
+
+		$locale->add_language_file('email',$functions->get_def_lang_folder());
 		
-		$subject = $this->locale->lang('account_reactivated_title');
-		$text = $this->tpl->parse_string(
-			$this->locale->lang('account_reactivated_text'),
+		$subject = $locale->lang('account_reactivated_title');
+		$text = $tpl->parse_string(
+			$locale->lang('account_reactivated_text'),
 			array(
-				'forum_name' => $this->cfg['forum_title'],
-				'board_url' => $this->url->get_frontend_url('','&',false)
+				'forum_name' => $cfg['forum_title'],
+				'board_url' => $url->get_frontend_url('','&',false)
 			)
 		);
 		
-		return $this->functions->get_mailer('',$subject,$text);
+		return $functions->get_mailer('',$subject,$text);
 	}
 	
 	/**
@@ -278,18 +330,24 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_account_deactivated_mail()
 	{
-		$this->locale->add_language_file('email');
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+		$cfg = PLIB_Props::get()->cfg();
+		$url = PLIB_Props::get()->url();
+		$functions = PLIB_Props::get()->functions();
+
+		$locale->add_language_file('email');
 		
-		$subject = $this->locale->lang('account_deactivated_title');
-		$text = $this->tpl->parse_string(
-			$this->locale->lang('account_deactivated_text'),
+		$subject = $locale->lang('account_deactivated_title');
+		$text = $tpl->parse_string(
+			$locale->lang('account_deactivated_text'),
 			array(
-				'forum_name' => $this->cfg['forum_title'],
-				'board_url' => $this->url->get_frontend_url('','&',false)
+				'forum_name' => $cfg['forum_title'],
+				'board_url' => $url->get_frontend_url('','&',false)
 			)
 		);
 		
-		return $this->functions->get_mailer('',$subject,$text);
+		return $functions->get_mailer('',$subject,$text);
 	}
 	
 	/**
@@ -300,18 +358,24 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_new_pm_mail($email)
 	{
-		$this->locale->add_language_file('email');
+		$locale = PLIB_Props::get()->locale();
+		$cfg = PLIB_Props::get()->cfg();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+		$functions = PLIB_Props::get()->functions();
+
+		$locale->add_language_file('email');
 		
-		$subject = sprintf($this->locale->lang('new_pm_email_title'),$this->cfg['forum_title']);
-		$text = $this->tpl->parse_string(
-			$this->locale->lang('new_pm_email_text'),
+		$subject = sprintf($locale->lang('new_pm_email_title'),$cfg['forum_title']);
+		$text = $tpl->parse_string(
+			$locale->lang('new_pm_email_text'),
 			array(
-				'forum_name' => $this->cfg['forum_title'],
-				'board_url' => $this->url->get_frontend_url('','&',false)
+				'forum_name' => $cfg['forum_title'],
+				'board_url' => $url->get_frontend_url('','&',false)
 			)
 		);
 		
-		return $this->functions->get_mailer($email,$subject,$text);
+		return $functions->get_mailer($email,$subject,$text);
 	}
 	
 	/**
@@ -326,31 +390,33 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_register_mail($user_id,$user_name,$user_email,$user_pw,$user_key = '')
 	{
-		$this->locale->add_language_file('email');
+		$locale = PLIB_Props::get()->locale();
+		$cfg = PLIB_Props::get()->cfg();
+		$tpl = PLIB_Props::get()->tpl();
+		$functions = PLIB_Props::get()->functions();
+		$url = PLIB_Props::get()->url();
 
-		$url = '';
-		if($this->cfg['account_activation'] == 'email')
-		{
-			$url = $this->url->get_standalone_url(
-				'front','activate','&user_id='.$user_id.'&user_key='.$user_key,'&',true
-			);
-		}
+		$locale->add_language_file('email');
+
+		$murl = '';
+		if($cfg['account_activation'] == 'email')
+			$murl = $url->get_url('activate','&user_id='.$user_id.'&user_key='.$user_key,'&',true);
 		
 		$subject = sprintf(
-			$this->locale->lang('account_registration_email_title'),$this->cfg['forum_title']
+			$locale->lang('account_registration_email_title'),$cfg['forum_title']
 		);
-		$text = $this->tpl->parse_string(
-			$this->locale->lang('account_registration_email_text'),
+		$text = $tpl->parse_string(
+			$locale->lang('account_registration_email_text'),
 			array(
-				'forum_name' => $this->cfg['forum_title'],
+				'forum_name' => $cfg['forum_title'],
 				'user_name' => $user_name,
 				'user_pw' => $user_pw,
-				'type' => $this->cfg['account_activation'],
-				'url' => $url
+				'type' => $cfg['account_activation'],
+				'url' => $murl
 			)
 		);
 		
-		return $this->functions->get_mailer($user_email,$subject,$text);
+		return $functions->get_mailer($user_email,$subject,$text);
 	}
 	
 	/**
@@ -361,22 +427,28 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_new_account_mail($user_name)
 	{
-		$this->locale->add_language_file('email');
+		$locale = PLIB_Props::get()->locale();
+		$cfg = PLIB_Props::get()->cfg();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+		$functions = PLIB_Props::get()->functions();
+
+		$locale->add_language_file('email');
 
 		$subject = sprintf(
-			$this->locale->lang('newaccount_email_title'),
-			$this->cfg['forum_title'],
+			$locale->lang('newaccount_email_title'),
+			$cfg['forum_title'],
 			$user_name
 		);
-		$text = $this->tpl->parse_string(
-			$this->locale->lang('newaccount_email_text'),
+		$text = $tpl->parse_string(
+			$locale->lang('newaccount_email_text'),
 			array(
-				'forum_name' => $this->cfg['forum_title'],
-				'board_url' => $this->url->get_frontend_url('','&',false)
+				'forum_name' => $cfg['forum_title'],
+				'board_url' => $url->get_frontend_url('','&',false)
 			)
 		);
 		
-		return $this->functions->get_mailer('',$subject,$text);
+		return $functions->get_mailer('',$subject,$text);
 	}
 	
 	/**
@@ -391,17 +463,52 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_delayed_email_notification_mail($subject,$text,$user_name,$user_email,$topics)
 	{
-		$subject = sprintf($subject,$this->cfg['forum_title']);
-		$text = $this->tpl->parse_string(
+		$cfg = PLIB_Props::get()->cfg();
+		$tpl = PLIB_Props::get()->tpl();
+		$functions = PLIB_Props::get()->functions();
+
+		$subject = sprintf($subject,$cfg['forum_title']);
+		$text = $tpl->parse_string(
 			$text,
 			array(
-				'forum_name' => $this->cfg['forum_title'],
+				'forum_name' => $cfg['forum_title'],
 				'user_name' => $user_name,
 				'topics' => $topics
 			)
 		);
 		
-		return $this->functions->get_mailer($user_email,$subject,$text);
+		return $functions->get_mailer($user_email,$subject,$text);
+	}
+	
+	/**
+	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 *
+	 * @param int $current the current number of PMs in the inbox
+	 * @param string $email the email-address to send the email to
+	 * @return PLIB_Email_Base the email-instance
+	 */
+	public function get_pm_inbox_full_mail($current,$email)
+	{
+		$locale = PLIB_Props::get()->locale();
+		$cfg = PLIB_Props::get()->cfg();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+		$functions = PLIB_Props::get()->functions();
+
+		$locale->add_language_file('email');
+		
+		$subject = sprintf($locale->lang('pm_inbox_full_email_title'),$cfg['forum_title']);
+		$text = $tpl->parse_string(
+			$locale->lang('pm_inbox_full_email_text'),
+			array(
+				'percent' => round(100 / ($cfg['pm_max_inbox'] / $current),1),
+				'current' => $current,
+				'max' => $cfg['pm_max_inbox'],
+				'board_url' => $url->get_frontend_url('','&',false)
+			)
+		);
+		
+		return $functions->get_mailer($email,$subject,$text);
 	}
 	
 	/**
@@ -422,38 +529,43 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_new_post_texts($fid,$tid,$pid,$text,$user_name)
 	{
-		$this->locale->add_language_file('email');
+		$locale = PLIB_Props::get()->locale();
+		$cfg = PLIB_Props::get()->cfg();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
+		$locale->add_language_file('email');
 		
-		$url = $this->url->get_frontend_url(
+		$murl = $url->get_frontend_url(
 			'&'.BS_URL_ACTION.'=posts&'.BS_URL_FID.'='.$fid
 				.'&'.BS_URL_TID.'='.$tid,'&',false
 		);
 		if(BS_PostingUtils::get_instance()->get_posts_order() == 'ASC')
 		{
 			$post_num = BS_DAO::get_posts()->get_count_in_topic($tid);
-			if($post_num > $this->cfg['posts_per_page'])
+			if($post_num > $cfg['posts_per_page'])
 			{
-				$params = $this->functions->get_page_params($this->cfg['posts_per_page'],$post_num);
-				$url .= '&'.BS_URL_SITE.'='.$params['final'];
+				$pagination = new BS_Pagination($cfg['posts_per_page'],$post_num);
+				$murl .= '&'.BS_URL_SITE.'='.$pagination->get_page_count();
 			}
 		}
-		$url .= '#b_'.$pid;
+		$murl .= '#b_'.$pid;
 		
-		$subject = sprintf($this->locale->lang('new_entry_title'),$this->cfg['forum_title']);
-		$text_def = $this->tpl->parse_string(
-			$this->locale->lang('new_entry_text'),
+		$subject = sprintf($locale->lang('new_entry_title'),$cfg['forum_title']);
+		$text_def = $tpl->parse_string(
+			$locale->lang('new_entry_text'),
 			array(
-				'forum_name' => $this->cfg['forum_title'],
-				'board_url' => $url,
+				'forum_name' => $cfg['forum_title'],
+				'board_url' => $murl,
 				'text' => '',
 				'user_name' => ''
 			)
 		);
-		$text_post = $this->tpl->parse_string(
-			$this->locale->lang('new_entry_text'),
+		$text_post = $tpl->parse_string(
+			$locale->lang('new_entry_text'),
 			array(
-				'forum_name' => $this->cfg['forum_title'],
-				'board_url' => $url,
+				'forum_name' => $cfg['forum_title'],
+				'board_url' => $murl,
 				'text' => PLIB_StringHelper::htmlspecialchars_back($text),
 				'user_name' => $user_name
 			)

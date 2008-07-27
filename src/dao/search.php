@@ -39,7 +39,9 @@ class BS_DAO_Search extends PLIB_Singleton
 	 */
 	public function get_by_id($id)
 	{
-		$row = $this->db->sql_fetch(
+		$db = PLIB_Props::get()->db();
+
+		$row = $db->sql_fetch(
 			'SELECT * FROM '.BS_TB_SEARCH.' WHERE id = "'.$id.'"'
 		);
 		if(!$row)
@@ -55,8 +57,10 @@ class BS_DAO_Search extends PLIB_Singleton
 	 */
 	public function create($fields)
 	{
-		$this->db->sql_insert(BS_TB_SEARCH,$fields);
-		return $this->db->get_last_insert_id();
+		$db = PLIB_Props::get()->db();
+
+		$db->sql_insert(BS_TB_SEARCH,$fields);
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -67,11 +71,13 @@ class BS_DAO_Search extends PLIB_Singleton
 	 */
 	public function delete_timedout($timeout)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($timeout) || $timeout <= 0)
 			PLIB_Helper::def_error('intgt0','timeout',$timeout);
 		
-		$this->db->sql_qry('DELETE FROM '.BS_TB_SEARCH.' WHERE search_date < '.(time() - $timeout));
-		return $this->db->get_affected_rows();
+		$db->sql_qry('DELETE FROM '.BS_TB_SEARCH.' WHERE search_date < '.(time() - $timeout));
+		return $db->get_affected_rows();
 	}
 }
 ?>

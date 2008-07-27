@@ -21,13 +21,17 @@ final class BS_DBA_Action_index_optimize extends BS_DBA_Action_Base
 {
 	public function perform_action()
 	{
-		$stables = $this->input->get_var('tables','get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$db = PLIB_Props::get()->db();
+		$locale = PLIB_Props::get()->locale();
+
+		$stables = $input->get_var('tables','get',PLIB_Input::STRING);
 		$tables = PLIB_Array_Utils::advanced_explode(';',$stables);
 		if(count($tables) > 0)
-			$this->db->sql_qry('OPTIMIZE TABLE `'.implode('`, `',$tables).'`');
+			$db->sql_qry('OPTIMIZE TABLE `'.implode('`, `',$tables).'`');
 		
 		$this->set_success_msg(
-			sprintf($this->locale->lang('optimize_tables_success'),'"'.implode('", "',$tables).'"')
+			sprintf($locale->lang('optimize_tables_success'),'"'.implode('", "',$tables).'"')
 		);
 		$this->set_action_performed(true);
 

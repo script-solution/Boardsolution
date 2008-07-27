@@ -19,33 +19,51 @@
  */
 final class BS_ACP_Module_attachments extends BS_ACP_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_DELETE_ATTACHMENTS => 'delete'
-		);
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_DELETE_ATTACHMENTS,'delete');
+		$doc->add_breadcrumb($locale->lang('acpmod_attachments'),$url->get_acpmod_url());
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$input = PLIB_Props::get()->input();
+		$functions = PLIB_Props::get()->functions();
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
 		$attachments = $this->_get_attachments();
 		$files = $this->_get_files();
 		
-		$delete = $this->input->get_var('delete','post');
+		$delete = $input->get_var('delete','post');
 		if($delete != null)
 		{
-			$ids = $this->input->get_var('delete','post');
+			$ids = $input->get_var('delete','post');
 			$paths = PLIB_Array_Utils::advanced_implode('|',$ids);
-			$this->functions->add_delete_message(
-				sprintf($this->locale->lang('delete_files_question'),$paths),
-				$this->url->get_acpmod_url(0,
+			$functions->add_delete_message(
+				sprintf($locale->lang('delete_files_question'),$paths),
+				$url->get_acpmod_url(0,
 					'&amp;at='.BS_ACP_ACTION_DELETE_ATTACHMENTS.'&amp;ids='.implode(',',$ids)
 				),
-				$this->url->get_acpmod_url()
+				$url->get_acpmod_url()
 			);
 		}
 
-		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
+		$search = $input->get_var('search','get',PLIB_Input::STRING);
 		if($search != '')
 		{
 			foreach($files as $pos => $file)
@@ -98,7 +116,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 						{
 							$orig_data = &$dba;
 							$is_db_attachment = true;
-							$this->_cache->go_to_first();
+							$attachments->rewind();
 							break;
 						}
 					}
@@ -112,7 +130,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 				$owner_name = '';
 				$topic = '';
 
-				$icon = $this->functions->get_attachment_icon($ext);
+				$icon = $functions->get_attachment_icon($ext);
 				$title = '<img src="'.$icon.'" alt="'.$ext.'" /> '.$filename;
 
 				// does the attachment exist in the database?
@@ -127,7 +145,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 
 					if($d['post_id'] != '')
 					{
-						$attachment_url = $this->url->get_frontend_url(
+						$attachment_url = $url->get_frontend_url(
 							'&amp;'.BS_URL_ACTION.'=redirect&amp;'.BS_URL_LOC.'=show_post&amp;'
 							.BS_URL_ID.'='.$d['post_id']
 						);
@@ -136,16 +154,16 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 						$topic .= ' href="'.$attachment_url.'">'.$t['displayed'].'</a>';
 					}
 					else
-						$topic = '<i>'.$this->locale->lang('pm').'</i>';
+						$topic = '<i>'.$locale->lang('pm').'</i>';
 				}
 				else
 				{
 					$last_mod = filemtime('uploads/'.$filename);
-					$title .= '<br /><div class="a_desc">'.$this->locale->lang('uploaded').': ';
+					$title .= '<br /><div class="a_desc">'.$locale->lang('uploaded').': ';
 					if($last_mod > 0)
 						$title .= PLIB_Date::get_date($last_mod);
 					else
-						$title .= $this->locale->lang('notavailable');
+						$title .= $locale->lang('notavailable');
 					$title .= '</div>';
 
 					// give the user a short periode of time to add an attachment :)
@@ -177,22 +195,22 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 			$index++;
 		}
 		
-		$this->tpl->add_array('attachments',$tplatt);
+		$tpl->add_array('attachments',$tplatt);
 		
-		$hidden = $this->input->get_vars_from_method('get');
+		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);
 		unset($hidden['search']);
 		unset($hidden['at']);
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'failed' => $failed,
 			'site' => $site,
-			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));
 
-		$url = $this->url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
-		$this->functions->add_pagination($pagination,$url);
+		$murl = $url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
+		$functions->add_pagination($pagination,$murl);
 	}
 	
 	/**
@@ -203,7 +221,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 	private function _get_files()
 	{
 		$files = array();
-		$dir = opendir(PLIB_Path::inner().'uploads');
+		$dir = opendir(PLIB_Path::server_app().'uploads');
 		while($file = readdir($dir))
 		{
 			if($file != '.' && $file != '..' && $file != '.htaccess')
@@ -217,7 +235,8 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 
 	/**
 	 * initializes the attachment-cache
-	 *
+	 * 
+	 * @return PLIB_Array_2Dim the attachments
 	 */
 	private function _get_attachments()
 	{
@@ -226,13 +245,6 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 			$content[$data['attachment_path']] = $data;
 
 		return new PLIB_Array_2Dim($content);
-	}
-
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('acpmod_attachments') => $this->url->get_acpmod_url()
-		);
 	}
 }
 ?>

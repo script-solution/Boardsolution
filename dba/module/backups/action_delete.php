@@ -21,19 +21,23 @@ final class BS_DBA_Action_backups_delete extends BS_DBA_Action_Base
 {
 	public function perform_action()
 	{
-		$backups = $this->input->get_var('backups','get',PLIB_Input::STRING);
-		$abackups = PLIB_Array_Utils::advanced_explode(',',$backups);
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$backups = PLIB_Props::get()->backups();
+
+		$ibackups = $input->get_var('backups','get',PLIB_Input::STRING);
+		$abackups = PLIB_Array_Utils::advanced_explode(',',$ibackups);
 		if(count($abackups) == 0)
 			return 'No backups specified via GET "backups"';
 		
 		$i = 0;
 		foreach($abackups as $prefix)
 		{
-			if($this->backups->delete_backup($prefix))
+			if($backups->delete_backup($prefix))
 				$i++;
 		}
 
-		$this->set_success_msg(sprintf($this->locale->lang('deleted_backups'),$i));
+		$this->set_success_msg(sprintf($locale->lang('deleted_backups'),$i));
 		$this->set_action_performed(true);
 
 		return '';

@@ -29,8 +29,9 @@ final class BS_Front_Action_Plain_Topic extends BS_Front_Action_Plain
 	 */
 	public static function get_default($post,$type = 0)
 	{
-		$input = PLIB_Object::get_prop('input');
-		$auth = PLIB_Object::get_prop('auth');
+		$input = PLIB_Props::get()->input();
+		$auth = PLIB_Props::get()->auth();
+		
 		$topic_name = $input->get_var('topic_name','post',PLIB_Input::STRING);
 		$allow_posts = $input->get_var('allow_posts','post',PLIB_Input::INT_BOOL);
 		if($auth->has_current_forum_perm(BS_MODE_MARK_TOPICS_IMPORTANT) &&
@@ -161,9 +162,11 @@ final class BS_Front_Action_Plain_Topic extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
+		$db = PLIB_Props::get()->db();
+
 		parent::perform_action();
 		
-		$this->db->start_transaction();
+		$db->start_transaction();
 		
 		// create post
 		$this->_post->perform_action();
@@ -188,10 +191,10 @@ final class BS_Front_Action_Plain_Topic extends BS_Front_Action_Plain
 		);
 		BS_DAO::get_topics()->create($fields);
 		
-		$this->db->commit_transaction();
+		$db->commit_transaction();
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

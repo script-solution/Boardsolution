@@ -263,3 +263,16 @@ a.bs_button_big {
 a.bs_button_big:hover {
 	text-decoration: underline;
 }
+
+a.bs_button_selected {
+	border: 1px solid #e5e5e5;
+	background-color: #f0f0f0;
+	text-align: center;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 0.9em;
+}
+
+a.bs_button_selected:hover {
+	text-decoration: underline;
+}

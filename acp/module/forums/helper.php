@@ -36,14 +36,16 @@ final class BS_ACP_Module_Forums_Helper extends PLIB_Singleton
 	 */
 	public function is_no_sub_category($parent_id,$target_id)
 	{
+		$forums = PLIB_Props::get()->forums();
+		
 		if($parent_id == $target_id)
 			return false;
 
-		$forums = $this->forums->get_sub_nodes($parent_id);
-		$len = count($forums);
+		$nodes = $forums->get_sub_nodes($parent_id);
+		$len = count($nodes);
 		for($i = 0;$i < $len;$i++)
 		{
-			if($forums[$i]->get_id() == $target_id)
+			if($nodes[$i]->get_id() == $target_id)
 				return false;
 		}
 
@@ -62,8 +64,10 @@ final class BS_ACP_Module_Forums_Helper extends PLIB_Singleton
 	 */
 	public function refresh_intern_access($id,$selected_user,$selected_groups,$is_intern)
 	{
+		$cache = PLIB_Props::get()->cache();
+
 		$regen = false;
-		$intern = $this->cache->get_cache('intern');
+		$intern = $cache->get_cache('intern');
 		$user_ids = PLIB_Array_Utils::advanced_explode(',',$selected_user);
 
 		if($is_intern)
@@ -121,10 +125,10 @@ final class BS_ACP_Module_Forums_Helper extends PLIB_Singleton
 		}
 
 		if($regen)
-			$this->cache->refresh('intern');
+			$cache->refresh('intern');
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

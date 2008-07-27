@@ -21,19 +21,25 @@ final class BS_Front_Action_delete_topics_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
+		$input = PLIB_Props::get()->input();
+		$forums = PLIB_Props::get()->forums();
+		$auth = PLIB_Props::get()->auth();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		// nothing to do?
-		if(!$this->input->isset_var('submit','post'))
+		if(!$input->isset_var('submit','post'))
 			return '';
 
 		// check parameter
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		if($fid == null)
 			return 'The forum id "'.$fid.'" is invalid';
 
-		if(!$this->forums->node_exists($fid))
+		if(!$forums->node_exists($fid))
 			return 'The forum with id "'.$fid.'" does not exist';
 
-		$id_str = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
+		$id_str = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
 		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
 			return 'No valid id-string got via GET';
 
@@ -42,7 +48,7 @@ final class BS_Front_Action_delete_topics_default extends BS_Front_Action_Base
 		foreach(BS_DAO::get_topics()->get_by_ids($ids,$fid) as $data)
 		{
 			// skip this topic if the user is not allowed to delete it
-			if(!$this->auth->has_current_forum_perm(BS_MODE_DELETE_TOPICS,$data['post_user']))
+			if(!$auth->has_current_forum_perm(BS_MODE_DELETE_TOPICS,$data['post_user']))
 				continue;
 			
 			$tids[] = $data['id'];
@@ -61,7 +67,7 @@ final class BS_Front_Action_delete_topics_default extends BS_Front_Action_Base
 		$deltopics->perform_action();
 
 		$this->set_action_performed(true);
-		$this->add_link($this->locale->lang('back_to_forum'),$this->url->get_topics_url($fid));
+		$this->add_link($locale->lang('back_to_forum'),$url->get_topics_url($fid));
 
 		return '';
 	}

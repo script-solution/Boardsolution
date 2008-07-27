@@ -21,39 +21,46 @@ final class BS_Front_Action_userprofile_deleteavatars extends BS_Front_Action_Ba
 {
 	public function perform_action()
 	{
+		$user = PLIB_Props::get()->user();
+		$cfg = PLIB_Props::get()->cfg();
+		$functions = PLIB_Props::get()->functions();
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		// has the user the permission?
-		if(!$this->user->is_loggedin() || $this->cfg['enable_avatars'] == 0)
+		if(!$user->is_loggedin() || $cfg['enable_avatars'] == 0)
 			return 'You are a guest or avatars are disabled';
 
 		// check if the session-id is valid
-		if(!$this->functions->has_valid_get_sid())
+		if(!$functions->has_valid_get_sid())
 			return 'Invalid session-id';
 
 		// check the ids
-		$id_str = $this->input->get_var(BS_URL_DEL,'get',PLIB_Input::STRING);
+		$id_str = $input->get_var(BS_URL_DEL,'get',PLIB_Input::STRING);
 		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
 			return 'Invalid id-string got via GET';
 
 		// delete the avatars from the directory images/avatars
-		foreach(BS_DAO::get_avatars()->get_by_ids_from_user($ids,$this->user->get_user_id()) as $data)
-			@unlink(PLIB_Path::inner().'images/avatars/'.$data['av_pfad']);
+		foreach(BS_DAO::get_avatars()->get_by_ids_from_user($ids,$user->get_user_id()) as $data)
+			@unlink(PLIB_Path::server_app().'images/avatars/'.$data['av_pfad']);
 
 		// delete them in the database
-		BS_DAO::get_avatars()->delete_by_ids_from_user($ids,$this->user->get_user_id());
+		BS_DAO::get_avatars()->delete_by_ids_from_user($ids,$user->get_user_id());
 
 		// remove the avatar of the user if it has just been deleted
-		if(in_array($this->user->get_profile_val('avatar'),$ids))
+		if(in_array($user->get_profile_val('avatar'),$ids))
 		{
-			BS_DAO::get_profile()->update_user_by_id(array('avatar' => 0),$this->user->get_user_id());
-			$this->user->set_profile_val('avatar',0);
+			BS_DAO::get_profile()->update_user_by_id(array('avatar' => 0),$user->get_user_id());
+			$user->set_profile_val('avatar',0);
 		}
 
 		$this->set_action_performed(true);
-		$site = $this->input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
-		$url = $this->url->get_url(
+		$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+		$murl = $url->get_url(
 			'userprofile','&amp;'.BS_URL_LOC.'=avatars&amp;'.BS_URL_SITE.'='.$site
 		);
-		$this->add_link($this->locale->lang('back'),$url);
+		$this->add_link($locale->lang('back'),$murl);
 
 		return '';
 	}

@@ -19,44 +19,73 @@
  */
 final class BS_Front_Module_posts extends BS_Front_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACTION_VOTE => 'votepoll',
-			BS_ACTION_JOIN_EVENT => 'joinevent',
-			BS_ACTION_LEAVE_EVENT => 'leaveevent',
-			BS_ACTION_SUBSCRIBE_TOPIC => 'subscribetopic'
-		);
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		
+		$doc->set_robots_value('index,follow');
+		
+		$doc->add_action(BS_ACTION_VOTE,'votepoll');
+		$doc->add_action(BS_ACTION_JOIN_EVENT,'joinevent');
+		$doc->add_action(BS_ACTION_LEAVE_EVENT,'leaveevent');
+		$doc->add_action(BS_ACTION_SUBSCRIBE_TOPIC,'subscribetopic');
+
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$this->add_loc_forum_path($fid);
+		$this->add_loc_topic();
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$site = $this->input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$ips = PLIB_Props::get()->ips();
+		$cookies = PLIB_Props::get()->cookies();
+		$auth = PLIB_Props::get()->auth();
+		$user = PLIB_Props::get()->user();
+		$cfg = PLIB_Props::get()->cfg();
+		$tpl = PLIB_Props::get()->tpl();
+		$forums = PLIB_Props::get()->forums();
+		$functions = PLIB_Props::get()->functions();
+		$unread = PLIB_Props::get()->unread();
+		$url = PLIB_Props::get()->url();
+
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
 
 		// check if the parameters are valid
 		if($tid == null || $fid == null)
 		{
 			// send 404 for search-engines and such
 			header('HTTP/1.0 404 Not Found');
-			$this->_report_error(PLIB_Messages::MSG_TYPE_ERROR,$this->locale->lang('thread_not_found'));
+			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('thread_not_found'));
 			return;
 		}
 
 		// increase the views of the topic
-		$viewed_topics = $this->input->get_var(
+		$viewed_topics = $input->get_var(
 			BS_COOKIE_PREFIX.'viewed_topics','cookie',PLIB_Input::STRING
 		);
 		$viewed_topic_ids = $viewed_topics != null ? explode(',',$viewed_topics) : array();
-		$spam_threadview_timeout = $this->ips->get_timeout('spam_threadview');
+		$spam_threadview_timeout = $ips->get_timeout('spam_threadview');
 		if($spam_threadview_timeout == 0 || !in_array($tid,$viewed_topic_ids))
 		{
 			BS_DAO::get_topics()->update($tid,array('views' => array('views + 1')));
 			if($spam_threadview_timeout > 0)
 			{
 				$viewed_topic_ids[] = $tid;
-				$this->cookies->set_cookie('viewed_topics',implode(',',$viewed_topic_ids),
+				$cookies->set_cookie('viewed_topics',implode(',',$viewed_topic_ids),
 					$spam_threadview_timeout);
 			}
 		}
@@ -67,65 +96,65 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		{
 			// send 404 for search-engines and such
 			header('HTTP/1.0 404 Not Found');
-			$this->_report_error(PLIB_Messages::MSG_TYPE_ERROR,$this->locale->lang('thread_not_found'));
+			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('thread_not_found'));
 			return;
 		}
 
 		// check if the user is allowed to view this topic
-		if(!$this->auth->has_access_to_intern_forum($fid))
+		if(!$auth->has_access_to_intern_forum($fid))
 		{
-			$this->_report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
 			return;
 		}
 
 		$this->_add_posting_options_top(
-			$topic_data['comallow'] && ($this->user->is_admin() || !$topic_data['thread_closed']),
+			$topic_data['comallow'] && ($user->is_admin() || !$topic_data['thread_closed']),
 			$fid,$tid,$site
 		);
 
-		$pagination = new BS_Pagination($this->cfg['posts_per_page'],$topic_data['posts'] + 1);
-		$url = $this->url->get_url(
+		$pagination = new BS_Pagination($cfg['posts_per_page'],$topic_data['posts'] + 1);
+		$purl = $url->get_url(
 			'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_SITE.'={d}'
 		);
 
 		switch($topic_data['type'])
 		{
 			case 0:
-				$thread_type = $this->locale->lang('thread');
+				$thread_type = $locale->lang('thread');
 				break;
 			case -1:
-				$thread_type = $this->locale->lang('event');
+				$thread_type = $locale->lang('event');
 				break;
 			default:
-				$thread_type = $this->locale->lang('poll');
+				$thread_type = $locale->lang('poll');
 				break;
 		}
 
 		// display the head
-		$enable_quick_search = $this->cfg['enable_search'] &&
-			($this->cfg['display_denied_options'] || $this->auth->has_global_permission('view_search'));
+		$enable_quick_search = $cfg['enable_search'] &&
+			($cfg['display_denied_options'] || $auth->has_global_permission('view_search'));
 		
-		$spagiurl = $url;
-		if(($hl = $this->input->get_var(BS_URL_HL,'get',PLIB_Input::STRING)) !== null)
+		$spagiurl = $purl;
+		if(($hl = $input->get_var(BS_URL_HL,'get',PLIB_Input::STRING)) !== null)
 		{
 			$hl = stripslashes(PLIB_StringHelper::htmlspecialchars_back($hl));
 			$spagiurl .= '&amp;'.BS_URL_HL.'='.urlencode($hl);
 		}
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'tid' => $tid,
 			'fid' => $fid,
 			'enable_quick_search' => $enable_quick_search,
-			'enable_email_notification' => $this->cfg['enable_email_notification'] &&
-					!$this->forums->forum_is_closed($topic_data['rubrikid']),
+			'enable_email_notification' => $cfg['enable_email_notification'] &&
+					!$forums->forum_is_closed($topic_data['rubrikid']),
 			'thread_type_ins' => $thread_type,
-			'sasinsert' => $this->functions->get_pagination_small($pagination,$spagiurl),
+			'sasinsert' => $functions->get_pagination_small($pagination,$spagiurl),
 			'threadname_ins' => $topic_data['name'],
 			'show_poll' => $topic_data['type'] > 0,
 			'show_event' => $topic_data['type'] == -1,
-			'quoteLink' => $this->url->get_url(
-	    	'new_post','&'.BS_URL_FID.'='.$fid.'&'.BS_URL_TID.'='.$tid
-					.'&'.BS_URL_SITE.'='.$site.'&'.BS_URL_PID.'=','&'
+			'quoteLink' => $url->get_url(
+	    	'new_post','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
+					.'&amp;'.BS_URL_SITE.'='.$site.'&amp;'.BS_URL_PID.'='
 	    )
 		));
 
@@ -138,29 +167,29 @@ final class BS_Front_Module_posts extends BS_Front_Module
 
 		// determine permissions
 		$puser = $topic_data['post_user'];
-		$edit_perm				= $this->auth->has_current_forum_perm(BS_MODE_EDIT_TOPIC,$puser);
-		$openclose_perm		= $this->auth->has_current_forum_perm(BS_MODE_OPENCLOSE_TOPICS,$puser);
-		$delete_perm			= $this->auth->has_current_forum_perm(BS_MODE_DELETE_TOPICS,$puser);
-		$move_perm				= $this->auth->has_current_forum_perm(BS_MODE_MOVE_TOPICS,$puser);
+		$edit_perm				= $auth->has_current_forum_perm(BS_MODE_EDIT_TOPIC,$puser);
+		$openclose_perm		= $auth->has_current_forum_perm(BS_MODE_OPENCLOSE_TOPICS,$puser);
+		$delete_perm			= $auth->has_current_forum_perm(BS_MODE_DELETE_TOPICS,$puser);
+		$move_perm				= $auth->has_current_forum_perm(BS_MODE_MOVE_TOPICS,$puser);
 
-		$del_posts_perm		= $this->auth->has_current_forum_perm(BS_MODE_DELETE_POSTS);
-		$split_posts_perm	= $this->auth->has_current_forum_perm(BS_MODE_SPLIT_POSTS);
+		$del_posts_perm		= $auth->has_current_forum_perm(BS_MODE_DELETE_POSTS);
+		$split_posts_perm	= $auth->has_current_forum_perm(BS_MODE_SPLIT_POSTS);
 
 		$tactions_perm		= $edit_perm || $openclose_perm || $delete_perm || $move_perm;
-		$pactions_perm		= ($this->user->is_admin() || !$topic_data['thread_closed']) &&
+		$pactions_perm		= ($user->is_admin() || !$topic_data['thread_closed']) &&
 			($del_posts_perm || $split_posts_perm);
 
-		$add_form = ($this->cfg['display_denied_options'] || $tactions_perm || $pactions_perm) &&
-			!$this->forums->forum_is_closed($topic_data['rubrikid']);
+		$add_form = ($cfg['display_denied_options'] || $tactions_perm || $pactions_perm) &&
+			!$forums->forum_is_closed($topic_data['rubrikid']);
 
 		// display the bottom of the head
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'add_posts_action_form' => $add_form,
-			'view_ip' => $this->cfg['display_denied_options'] || $this->auth->has_global_permission('view_user_ip')
+			'view_ip' => $cfg['display_denied_options'] || $auth->has_global_permission('view_user_ip')
 		));
 		
 		$posts = array();
-		$keywords = $this->functions->get_search_keywords();
+		$keywords = $functions->get_search_keywords();
 		$postcon = new BS_Front_Post_Container(
 			$fid,$tid,null,$pagination,'p.id '.BS_PostingUtils::get_instance()->get_posts_order(),'',$keywords
 		);
@@ -198,55 +227,58 @@ final class BS_Front_Module_posts extends BS_Front_Module
 			);
 		}
 		
-		$this->tpl->add_array('posts',$posts);
+		$tpl->add_array('posts',$posts);
 
 		// display bottom
 		$this->_add_posting_options_bottom($fid,$tid);
 
 		// show page split
 		$highlight = ($hl !== null) ? '&amp;'.BS_URL_HL.'='.urlencode($hl) : '';
-		$purl = $this->url->get_url(
+		$purl = $url->get_url(
 			0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.$highlight.'&amp;'.BS_URL_SITE.'={d}'
 		);
-		$this->functions->add_pagination($pagination,$purl);
+		$functions->add_pagination($pagination,$purl);
 		
-		$show_bottom_bar = ($this->user->is_admin() ||
-			!$this->forums->forum_is_closed($topic_data['rubrikid'])) &&
-			($this->cfg['display_denied_options'] || $tactions_perm || $pactions_perm);
+		$show_bottom_bar = ($user->is_admin() ||
+			!$forums->forum_is_closed($topic_data['rubrikid'])) &&
+			($cfg['display_denied_options'] || $tactions_perm || $pactions_perm);
 		
-		BS_Front_OnlineUtils::get_instance()->add_currently_online('posts');
+		$view_useronline = $auth->has_global_permission('view_useronline_list');
+		if($view_useronline)
+			BS_Front_OnlineUtils::get_instance()->add_currently_online('posts');
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'show_bottom_bar' => $show_bottom_bar,
-			'quick_reply_action_type' => BS_ACTION_REPLY
+			'quick_reply_action_type' => BS_ACTION_REPLY,
+			'view_useronline_list' => $view_useronline
 		));
 		
 		// mark topic read
-		$this->unread->mark_topics_read(array($topic_data['id']));
+		$unread->mark_topics_read(array($topic_data['id']));
 
 		// show bottom bar?
 		if($show_bottom_bar)
 		{
 			// add the javascript to redirect the user to the chosen topic-action
-			$this->tpl->set_template('inc_topic_action_js.htm');
-			$this->tpl->add_variables(array(
+			$tpl->set_template('inc_topic_action_js.htm');
+			$tpl->add_variables(array(
 				'fid' => $fid,
 				'site' => 1 // not needed here
 			));
-			$this->tpl->restore_template();
+			$tpl->restore_template();
 			
 			if($del_posts_perm && $split_posts_perm)
-				$manage_posts_title = $this->locale->lang('move_or_delete_posts');
+				$manage_posts_title = $locale->lang('move_or_delete_posts');
 			else if($del_posts_perm)
-				$manage_posts_title = $this->locale->lang('delete_posts');
+				$manage_posts_title = $locale->lang('delete_posts');
 			else
-				$manage_posts_title = $this->locale->lang('move_posts');
+				$manage_posts_title = $locale->lang('move_posts');
 			
 			// the bottom bar...
 			
-			$this->tpl->add_variables(array(
-				'display_topic_actions' => $this->cfg['display_denied_options'] || $tactions_perm,
-				'display_post_actions' => $this->cfg['display_denied_options'] || $pactions_perm,
+			$tpl->add_variables(array(
+				'display_topic_actions' => $cfg['display_denied_options'] || $tactions_perm,
+				'display_post_actions' => $cfg['display_denied_options'] || $pactions_perm,
 				'manage_posts_title' => $manage_posts_title,
 				'topic_action_combo' => BS_TopicUtils::get_instance()->get_action_combobox(
 					'posts',$topic_data['thread_closed']
@@ -254,17 +286,17 @@ final class BS_Front_Module_posts extends BS_Front_Module
 			));
 		}
 
-		if($this->cfg['display_similar_topics'] == 1)
+		if($cfg['display_similar_topics'] == 1)
 		{
-			$current_url = $this->url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid
+			$current_url = $url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid
 				.'&amp;'.BS_URL_TID.'='.$tid.$highlight);
 			BS_Front_TopicFactory::get_instance()->add_similar_topics(
 				$topic_data['name'],$topic_data['id'],$current_url
 			);
 		}
 		
-		$this->tpl->add_variables(array(
-			'similar_topics' => $this->cfg['display_similar_topics'] == 1
+		$tpl->add_variables(array(
+			'similar_topics' => $cfg['display_similar_topics'] == 1
 		));
 	}
 	
@@ -278,15 +310,22 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	 */
 	private function _add_posting_options_top($allow_posts,$fid,$tid,$site)
 	{
+		$user = PLIB_Props::get()->user();
+		$forums = PLIB_Props::get()->forums();
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
 		$site_add = $site != null ? '&amp;'.BS_URL_SITE.'='.$site : '';
 		
 		$display_reply = $allow_posts &&
-			($this->user->is_admin() || !$this->forums->forum_is_closed($fid)) &&
-			($this->cfg['display_denied_options'] || $this->auth->has_current_forum_perm(BS_MODE_REPLY));
+			($user->is_admin() || !$forums->forum_is_closed($fid)) &&
+			($cfg['display_denied_options'] || $auth->has_current_forum_perm(BS_MODE_REPLY));
 	
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'display_reply' => $display_reply,
-			'reply_url' => $this->url->get_url(
+			'reply_url' => $url->get_url(
 				'new_post','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.$site_add
 			)
 		));
@@ -300,16 +339,20 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	 */
 	private function _add_posting_options_bottom($fid,$tid)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+		$forums = PLIB_Props::get()->forums();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
 		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
-		$display_subscribe = ($this->cfg['display_denied_options'] || $this->user->is_loggedin()) &&
-			$this->cfg['enable_email_notification'] && !$topic_data['thread_closed'] &&
-			!$this->forums->forum_is_closed($fid);
+		$display_subscribe = ($cfg['display_denied_options'] || $user->is_loggedin()) &&
+			$cfg['enable_email_notification'] && !$topic_data['thread_closed'] &&
+			!$forums->forum_is_closed($fid);
 	
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'enable_email_notification' => $display_subscribe,
-			'print_url' => $this->url->get_standalone_url(
-				'front','print','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
-			)
+			'print_url' => $url->get_url('print','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid)
 		));
 	}
 	
@@ -318,23 +361,28 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	 */
 	private function _add_poll()
 	{
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$url = PLIB_Props::get()->url();
+		$user = PLIB_Props::get()->user();
+		$tpl = PLIB_Props::get()->tpl();
+
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 	
 		$user_voted = BS_UserUtils::get_instance()->user_voted_for_poll($topic_data['type']);
-		$result_url = $this->url->get_url(
+		$result_url = $url->get_url(
 			0,'&amp;'.BS_URL_FID."=".$fid."&amp;".BS_URL_TID."=".$tid."&amp;".BS_URL_MODE."=results"
 		);
-		$vote_url = $this->url->get_posts_url($fid,$tid);
+		$vote_url = $url->get_posts_url($fid,$tid);
 	
-		$show_results = !$this->user->is_loggedin() ||
-			$this->input->get_var(BS_URL_MODE,'get',PLIB_Input::STRING) == 'results' || $user_voted ||
+		$show_results = !$user->is_loggedin() ||
+			$input->get_var(BS_URL_MODE,'get',PLIB_Input::STRING) == 'results' || $user_voted ||
 			$topic_data['thread_closed'] == 1;
 		
-		$this->tpl->set_template('inc_poll.htm');
-		$this->tpl->add_variables(array(
-			'vote_action' => $this->url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid),
+		$tpl->set_template('inc_poll.htm');
+		$tpl->add_variables(array(
+			'vote_action' => $url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid),
 			'action_type' => BS_ACTION_VOTE
 		));
 		
@@ -343,7 +391,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		// result
 		if($show_results)
 		{
-			$img_rating_back = $this->user->get_theme_item_path('images/diagrams/rate_back.gif');
+			$img_rating_back = $user->get_theme_item_path('images/diagrams/rate_back.gif');
 	
 			$total_votes = 0;
 			$poll_options = array();
@@ -382,15 +430,15 @@ final class BS_Front_Module_posts extends BS_Front_Module
 				);
 			}
 			
-			$this->tpl->add_variables(array(
-				'show_poll_options' => $this->user->is_loggedin() &&
+			$tpl->add_variables(array(
+				'show_poll_options' => $user->is_loggedin() &&
 					!$user_voted && $topic_data['thread_closed'] == 0
 			));
 		}
 		// vote
 		else
 		{
-			$this->_request_formular(false,false);
+			$this->request_formular(false,false);
 			
 			foreach(BS_DAO::get_polls()->get_options_by_id($topic_data['type']) as $i => $pdata)
 			{
@@ -415,19 +463,19 @@ final class BS_Front_Module_posts extends BS_Front_Module
 				);
 			}
 	
-			$this->tpl->add_variables(array(
+			$tpl->add_variables(array(
 				'show_poll_options' => true
 			));
 		}
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'show_results' => $show_results,
 			'result_url' => $result_url,
 			'vote_url' => $vote_url
 		));
 		
-		$this->tpl->add_array('poll_options',$tploptions);
-		$this->tpl->restore_template();
+		$tpl->add_array('poll_options',$tploptions);
+		$tpl->restore_template();
 	}
 	
 	/**
@@ -435,8 +483,11 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	 */
 	private function _add_event()
 	{
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$tpl = PLIB_Props::get()->tpl();
+
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 	
 		$event_data = BS_DAO::get_events()->get_by_topic_id($tid);
 		if($event_data['event_end'] == 0)
@@ -444,8 +495,8 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		else
 			$event_end = PLIB_Date::get_date($event_data['event_end']);
 		
-		$this->tpl->set_template('inc_event.htm');
-		$this->tpl->add_variables(array(
+		$tpl->set_template('inc_event.htm');
+		$tpl->add_variables(array(
 			'location' => $event_data['event_location'],
 			'event_begin' => PLIB_Date::get_date($event_data['event_begin']),
 			'event_end' => $event_end,
@@ -461,7 +512,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 				$timeout = PLIB_Date::get_date($event_data['timeout']);
 			
 			$event = new BS_Event($event_data);
-			$this->tpl->add_variables(array(
+			$tpl->add_variables(array(
 				'timeout' => $timeout,
 				'fid' => $fid,
 				'tid' => $tid,
@@ -473,23 +524,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 			));
 		}
 		
-		$this->tpl->restore_template();
-	}
-
-	public function get_location()
-	{
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-
-		$result = array();
-		$this->_add_loc_forum_path($result,$fid);
-		$this->_add_loc_topic($result);
-
-		return $result;
-	}
-	
-	public function get_robots_value()
-	{
-		return "index,follow";
+		$tpl->restore_template();
 	}
 }
 ?>

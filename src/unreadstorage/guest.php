@@ -17,7 +17,7 @@
  * @subpackage	src.unreadstorage
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_UnreadStorage_Guest extends PLIB_FullObject implements BS_UnreadStorage
+final class BS_UnreadStorage_Guest extends PLIB_Object implements BS_UnreadStorage
 {
 	/**
 	 * The unread-data
@@ -52,7 +52,9 @@ final class BS_UnreadStorage_Guest extends PLIB_FullObject implements BS_UnreadS
 	 */
 	public function __construct()
 	{
-		$sdata = $this->cookies->get_cookie('unread',PLIB_Input::STRING);
+		$cookies = PLIB_Props::get()->cookies();
+
+		$sdata = $cookies->get_cookie('unread',PLIB_Input::STRING);
 		if(!$sdata)
 			return;
 		
@@ -137,7 +139,9 @@ final class BS_UnreadStorage_Guest extends PLIB_FullObject implements BS_UnreadS
 	 */
 	public function get_last_update()
 	{
-		$time = $this->cookies->get_cookie('unread_update',PLIB_Input::STRING);
+		$cookies = PLIB_Props::get()->cookies();
+
+		$time = $cookies->get_cookie('unread_update',PLIB_Input::STRING);
 		if($time === null || $time <= 0)
 		{
 			$time = time();
@@ -153,7 +157,9 @@ final class BS_UnreadStorage_Guest extends PLIB_FullObject implements BS_UnreadS
 	 */
 	public function set_last_update($time)
 	{
-		$this->cookies->set_cookie('unread_update',$time);
+		$cookies = PLIB_Props::get()->cookies();
+
+		$cookies->set_cookie('unread_update',$time);
 	}
 
 	/**
@@ -227,6 +233,8 @@ final class BS_UnreadStorage_Guest extends PLIB_FullObject implements BS_UnreadS
 	 */
 	private function _store()
 	{
+		$cookies = PLIB_Props::get()->cookies();
+
 		$d = array();
 		foreach($this->_data as $pid => $is_news)
 		{
@@ -235,10 +243,10 @@ final class BS_UnreadStorage_Guest extends PLIB_FullObject implements BS_UnreadS
 			else
 				$d[] = $pid;
 		}
-		$this->cookies->set_cookie('unread',implode(',',$d));
+		$cookies->set_cookie('unread',implode(',',$d));
 	}
 
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

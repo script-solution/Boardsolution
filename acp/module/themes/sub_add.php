@@ -19,26 +19,37 @@
  */
 final class BS_ACP_SubModule_themes_add extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_ADD_THEME => 'add'
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_ADD_THEME,'add');
+
+		$doc->add_breadcrumb(
+			$locale->lang('add_theme'),
+			$url->get_acpmod_url(0,'&amp;action=add')
 		);
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$this->_request_formular();
-		$this->tpl->add_variables(array(
+		$tpl = PLIB_Props::get()->tpl();
+
+		$this->request_formular();
+		$tpl->add_variables(array(
 			'at_add' => BS_ACP_ACTION_ADD_THEME
 		));
-	}
-	
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('add_theme') => $this->url->get_acpmod_url(0,'&amp;action=add')
-		);
 	}
 }
 ?>

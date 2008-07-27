@@ -48,10 +48,12 @@ final class BS_ACP_Module_Tasks_Helper extends PLIB_Singleton
 	 */
 	public function get_interval_types()
 	{
+		$locale = PLIB_Props::get()->locale();
+		
 		return array(
-			'days' => PLIB_Object::get_prop('locale')->lang('days'),
-			'hours' => PLIB_Object::get_prop('locale')->lang('hours'),
-			'minutes' => PLIB_Object::get_prop('locale')->lang('minutes')
+			'days' => $locale->lang('days'),
+			'hours' => $locale->lang('hours'),
+			'minutes' => $locale->lang('minutes')
 		);
 	}
 	
@@ -95,7 +97,7 @@ final class BS_ACP_Module_Tasks_Helper extends PLIB_Singleton
 		return array($interval / 60,'minutes');
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

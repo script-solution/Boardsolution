@@ -19,20 +19,58 @@
  */
 final class BS_Front_Module_new_mail extends BS_Front_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACTION_SEND_EMAIL => 'default'
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$auth = PLIB_Props::get()->auth();
+		$cfg = PLIB_Props::get()->cfg();
+		
+		$doc->has_access($auth->has_global_permission('send_mails') && $cfg['enable_emails'] == 1);
+		
+		$doc->add_action(BS_ACTION_SEND_EMAIL,'default');
+
+		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$doc->add_breadcrumb(
+			$locale->lang('email'),
+			$url->get_url('new_mail','&amp;'.BS_URL_ID.'='.$id)
 		);
 	}
 	
+	/**
+	 * @see BS_Front_Module::is_guest_only()
+	 *
+	 * @return boolean
+	 */
+	public function is_guest_only()
+	{
+		return true;
+	}
+	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$user = PLIB_Props::get()->user();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
 		// check if the id is valid
-		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
 		if($id == null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 
@@ -41,20 +79,20 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 		// check if the user has been found
 		if($data === false)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 
 		// check if the user has allowed board emails
 		if($data['allow_board_emails'] == 0)
 		{
-			$this->_report_error(PLIB_Messages::MSG_TYPE_ERROR,$this->locale->lang('user_disabled_emails'));
+			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('user_disabled_emails'));
 			return;
 		}
 
-		$form = $this->_request_formular(false,true);
+		$form = $this->request_formular(false,true);
 		
-		if($this->input->isset_var('preview','post'))
+		if($input->isset_var('preview','post'))
 		{
 			$content_type_val = $form->get_input_value('content_type','plain');
 			BS_PostingUtils::get_instance()->add_post_preview(
@@ -62,35 +100,23 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 			);
 		}
 		
-		$pform = new BS_PostingForm($this->locale->lang('text').':');
+		$pform = new BS_PostingForm($locale->lang('text').':');
 		$pform->add_form();
 		
 		$sec_code_field = PLIB_StringHelper::generate_random_key(15);
-		$this->user->set_session_data('sec_code_field',$sec_code_field);
+		$user->set_session_data('sec_code_field',$sec_code_field);
 		
 		$content_type_options = array(
-			'plain' => $this->locale->lang('content_type_plain'),
-			'html' => $this->locale->lang('content_type_html')
+			'plain' => $locale->lang('content_type_plain'),
+			'html' => $locale->lang('content_type_html')
 		);
 		
-		$this->tpl->add_variables(array(
-			'target_url' => $this->url->get_url('new_mail','&amp;'.BS_URL_ID.'='.$id),
+		$tpl->add_variables(array(
+			'target_url' => $url->get_url('new_mail','&amp;'.BS_URL_ID.'='.$id),
 			'receiver' => BS_UserUtils::get_instance()->get_link($id,$data['user_name'],$data['user_group']),
 			'action_type' => BS_ACTION_SEND_EMAIL,
 			'content_type_options' => $content_type_options
 		));
-	}
-
-	public function get_location()
-	{
-		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$url = $this->url->get_url('new_mail','&amp;'.BS_URL_ID.'='.$id);
-		return array($this->locale->lang('email') => $url);
-	}
-
-	public function has_access()
-	{
-		return $this->auth->has_global_permission('send_mails') && $this->cfg['enable_emails'] == 1;
 	}
 }
 ?>

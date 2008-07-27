@@ -76,17 +76,23 @@ final class BS_User_Current extends PLIB_User_Current
 	 * @var boolean
 	 */
 	private $_max_login_tries = false;
-	
+
+	/**
+	 * @see PLIB_User_Current::init()
+	 */
 	public function init()
 	{
+		$input = PLIB_Props::get()->input();
+		$cookies = PLIB_Props::get()->cookies();
+
 		// we disable cookies if the user wants to get logged out. because if the session
 		// doesn't exist anymore we assign a new sid, login the user again and the logout fails
 		// because of a wrong session-id
-		if($this->input->get_var(BS_URL_AT,'get',PLIB_Input::INTEGER) === BS_ACTION_LOGOUT)
+		if($input->get_var(BS_URL_AT,'get',PLIB_Input::INTEGER) === BS_ACTION_LOGOUT)
 		{
 			// delete the cookies, too
-			$this->cookies->delete_cookie('user');
-	    $this->cookies->delete_cookie('pw');
+			$cookies->delete_cookie('user');
+	    $cookies->delete_cookie('pw');
 			$this->set_use_cookies(false);
 		}
 		
@@ -94,18 +100,27 @@ final class BS_User_Current extends PLIB_User_Current
 		
 		$this->_determine_language();
 		$this->_determine_theme();
-		
-		// store the location
-		if(!$this->doc->is_standalone())
-			$this->_user->set_location(BS_Location::get_instance()->get_location());
 	}
 
+	/**
+	 * @see PLIB_User_Current::finalize()
+	 */
 	public function finalize()
 	{
+		$ips = PLIB_Props::get()->ips();
+
 		parent::finalize();
 		
 		if($this->_store_login)
-			$this->ips->add_entry('login');
+			$ips->add_entry('login');
+	}
+	
+	/**
+	 * Sets the current location of the user
+	 */
+	public function set_location()
+	{
+		$this->_user->set_location(BS_Location::get_instance()->get_location());
 	}
 	
 	/**
@@ -119,27 +134,33 @@ final class BS_User_Current extends PLIB_User_Current
 	/**
 	 * Override this method to add support for a limited number of login-tries
 	 *
-	 * @param string $user the entered user-name
+	 * @param string $username the entered user-name
 	 * @param string $pw the entered password
 	 * @param boolean $hash does the password need to be hashed?
 	 * @return int the error-code; see BS_LOGIN_ERROR_*
 	 */
-	public function login($user,$pw,$hashpw = true)
+	public function login($username,$pw,$hashpw = true)
 	{
-		$loggedin = $this->_set_userdata(0,$user);
+		$input = PLIB_Props::get()->input();
+		$cfg = PLIB_Props::get()->cfg();
+		$functions = PLIB_Props::get()->functions();
+		$cookies = PLIB_Props::get()->cookies();
+
+		$oldpw = $pw;
+		$loggedin = $this->set_userdata(0,$username);
 		
 		// login confirmation?
-		if($this->input->isset_var('login','post') && $this->cfg['enable_security_code'] == 1)
+		if($input->isset_var('login','post') && $cfg['enable_security_code'] == 1)
 		{
-	    if($this->input->isset_var('conf','post'))
+	    if($input->isset_var('conf','post'))
 			{
 				$hashpw = false; // the password is already hashed
-				if(!$this->functions->check_security_code(false))
+				if(!$functions->check_security_code(false))
 					$loggedin = self::LOGIN_ERROR_INVALID_SEC_CODE;
 			}
 			// max login tries?
-			else if($this->cfg['profile_max_login_tries'] > 0 && $this->_userdata !== null &&
-							$this->_userdata->get_profile_val('login_tries') >= $this->cfg['profile_max_login_tries'])
+			else if($cfg['profile_max_login_tries'] > 0 && $this->_userdata !== null &&
+							$this->_userdata->get_profile_val('login_tries') >= $cfg['profile_max_login_tries'])
 	    {
 	    	$this->_max_login_tries = true;
 				$loggedin = self::LOGIN_ERROR_MAX_LOGIN_TRIES; // she/he has to confirm the login
@@ -153,23 +174,23 @@ final class BS_User_Current extends PLIB_User_Current
 		{
 	    // perform stripslashes here because addslashes() has been called on the value
 		  // and we want to compare it with as it is
-			$user = stripslashes($user);
+			$username = stripslashes($username);
 	
 			if(empty($pw))
 		    $loggedin = self::LOGIN_ERROR_PW_INCORRECT;
 		  else
-		  	$loggedin = $this->_check_user($user,$pw);
+		  	$loggedin = $this->check_user($username,$pw);
 		}
 		
 		// increase the login-tries, if the pw was incorrect
 		if($loggedin == self::LOGIN_ERROR_PW_INCORRECT)
 		{
 			// increase login tries
-			if($this->cfg['profile_max_login_tries'] > 0 &&
-				 $this->_userdata->get_profile_val('login_tries') < $this->cfg['profile_max_login_tries'])
+			if($cfg['profile_max_login_tries'] > 0 &&
+				 $this->_userdata->get_profile_val('login_tries') < $cfg['profile_max_login_tries'])
 			{
 				BS_DAO::get_profile()->update_user_by_id(
-					array('login_tries' => array('login_tries + 1')),$this->user->get_user_id()
+					array('login_tries' => array('login_tries + 1')),$this->get_user_id()
 				);
 			}
 		}
@@ -178,27 +199,73 @@ final class BS_User_Current extends PLIB_User_Current
 		if($loggedin == self::LOGIN_ERROR_NO_ERROR)
 		{
 			// reset login-tries
-			if($this->cfg['profile_max_login_tries'] > 0 &&
+			if($cfg['profile_max_login_tries'] > 0 &&
 				$this->_userdata->get_profile_val('login_tries') > 0)
 			{
 				BS_DAO::get_profile()->update_user_by_id(
-					array('login_tries' => 0),$this->user->get_user_id()
+					array('login_tries' => 0),$this->get_user_id()
 				);
 			}
 			
 			// we want to log this login
 			$this->_store_login = true;
 			// store lastlogin
-			$this->cookies->set_cookie('lastlogin',$this->_userdata->get_profile_val('lastlogin'));
+			$cookies->set_cookie('lastlogin',$this->_userdata->get_profile_val('lastlogin'));
 			
-			$this->_setup_user($user,$pw);
+			$this->setup_user($username,$pw);
+			
+			// fire community-event
+			$status = BS_Community_User::get_status_from_groups($this->get_all_user_groups());
+			$u = new BS_Community_User(
+				$this->get_user_id(),$this->get_user_name(),
+				$this->get_profile_val('user_email'),$status,$pw,$hashpw ? $oldpw : null
+			);
+			BS_Community_Manager::get_instance()->fire_user_login($u);
 		}
 		else
-			$this->_setup_guest();
+			$this->setup_guest();
 		
 		$this->_refresh_stats($loggedin == self::LOGIN_ERROR_NO_ERROR);
 
 		return $loggedin;
+	}
+
+	/**
+	 * @see PLIB_User_Current::logout()
+	 */
+	public function logout()
+	{
+		$user = PLIB_Props::get()->user();
+		
+		// collect user-data
+		$status = BS_Community_User::get_status_from_groups($user->get_all_user_groups());
+		$u = new BS_Community_User(
+			$user->get_user_id(),$user->get_user_name(),
+			$user->get_profile_val('user_email'),$status,$user->get_profile_val('user_pw')
+		);
+		
+		// now logout
+		parent::logout();
+		
+		// fire community-event
+		BS_Community_Manager::get_instance()->fire_user_logout($u);
+	}
+
+	/**
+	 * @see PLIB_User_Current::set_userdata()
+	 *
+	 * @param int $id
+	 * @param string $user
+	 * @return int
+	 */
+	protected function set_userdata($id,$user = false)
+	{
+		$res = parent::set_userdata($id,$user);
+		
+		$this->_user->set_user_group($userdata->get_profile_val('user_group'));
+		$this->_user->set_ghost_mode($userdata->get_profile_val('ghost_mode'));
+		
+		return $res;
 	}
 
 	/**
@@ -219,15 +286,13 @@ final class BS_User_Current extends PLIB_User_Current
 	
 	public function get_theme_item_path($item)
 	{
-		$base = PLIB_Path::inner().'themes/';
-		
 		// at first we look in the selected theme
-		$path = $base.$this->_theme.'/'.$item;
-		if(is_file($path))
-			return $path;
+		$path = 'themes/'.$this->_theme.'/'.$item;
+		if(is_file(PLIB_Path::server_app().$path))
+			return PLIB_Path::client_app().$path;
 		
 		// if the file does not exist, we use the default theme
-		return $base.'default/'.$item;
+		return PLIB_Path::client_app().'themes/default/'.$item;
 	}
 	
 	/**
@@ -307,14 +372,16 @@ final class BS_User_Current extends PLIB_User_Current
 	 */
 	public function use_bbcode_applet()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		// not enabled?
-		if(!$this->cfg['msgs_allow_java_applet'])
+		if(!$cfg['msgs_allow_java_applet'])
 			return false;
 		
 		if($this->is_loggedin())
 			return $this->get_profile_val('bbcode_mode') == 'applet';
 		
-		return $this->cfg['msgs_default_bbcode_mode'] == 'applet';
+		return $cfg['msgs_default_bbcode_mode'] == 'applet';
 	}
 	
 	/**
@@ -324,7 +391,11 @@ final class BS_User_Current extends PLIB_User_Current
 	 */
 	private function _refresh_stats($refresh_logins)
 	{
-		$stats_data = $this->cache->get_cache('stats')->current();
+		$cache = PLIB_Props::get()->cache();
+		$user = PLIB_Props::get()->user();
+		$sessions = PLIB_Props::get()->sessions();
+
+		$stats_data = $cache->get_cache('stats')->current();
 		$time = time();
 		$regen_stats = false;
 
@@ -336,48 +407,48 @@ final class BS_User_Current extends PLIB_User_Current
 			$yesterday = $yd->to_format('dmY');
 			
 			BS_DAO::get_profile()->update_user_by_id(
-				array('logins' => array('logins + 1'),'lastlogin' => time()),$this->user->get_user_id()
+				array('logins' => array('logins + 1'),'lastlogin' => time()),$user->get_user_id()
 			);
 
 			$lastlogin = PLIB_Date::get_formated_date('dmY',$stats_data['logins_last']);
 
 			if($lastlogin == PLIB_Date::get_formated_date('dmY'))
 			{
-				$this->cache->get_cache('stats')->set_element_field(
+				$cache->get_cache('stats')->set_element_field(
 					0,'logins_today',$stats_data['logins_today'] + 1
 				);
 			}
 			else if($lastlogin == $yesterday)
 			{
-				$this->cache->get_cache('stats')->set_element_field(
+				$cache->get_cache('stats')->set_element_field(
 					0,'logins_yesterday',$stats_data['logins_today']
 				);
-				$this->cache->get_cache('stats')->set_element_field(0,'logins_today',1);
+				$cache->get_cache('stats')->set_element_field(0,'logins_today',1);
 			}
 			else if($lastlogin < $yesterday)
 			{
-				$this->cache->get_cache('stats')->set_element_field(0,'logins_yesterday',0);
-				$this->cache->get_cache('stats')->set_element_field(0,'logins_today',1);
+				$cache->get_cache('stats')->set_element_field(0,'logins_yesterday',0);
+				$cache->get_cache('stats')->set_element_field(0,'logins_today',1);
 			}
 
-			$this->cache->get_cache('stats')->set_element_field(
+			$cache->get_cache('stats')->set_element_field(
 				0,'logins_total',$stats_data['logins_total'] + 1
 			);
-			$this->cache->get_cache('stats')->set_element_field(0,'logins_last',$time);
+			$cache->get_cache('stats')->set_element_field(0,'logins_last',$time);
 
 			$regen_stats = true;
 		}
 
 		// refresh max-online?
-		$online_num = $this->sessions->get_online_count();
+		$online_num = $sessions->get_online_count();
 		if($online_num > $stats_data['max_online'])
 		{
-			$this->cache->get_cache('stats')->set_element_field(0,'max_online',$online_num);
+			$cache->get_cache('stats')->set_element_field(0,'max_online',$online_num);
 			$regen_stats = true;
 		}
 
 		if($regen_stats)
-			$this->cache->store('stats');
+			$cache->store('stats');
 	}
 
 	/**
@@ -385,19 +456,23 @@ final class BS_User_Current extends PLIB_User_Current
 	 */
 	private function _determine_language()
 	{
-		if($this->is_loggedin() && $this->cfg['allow_custom_lang'] == 1)
+		$cfg = PLIB_Props::get()->cfg();
+		$cache = PLIB_Props::get()->cache();
+		$functions = PLIB_Props::get()->functions();
+
+		if($this->is_loggedin() && $cfg['allow_custom_lang'] == 1)
 		{
 			if($this->get_profile_val('forum_lang') > 0)
 			{
 				$lang = $this->get_profile_val('forum_lang');
-				$lang_data = $this->cache->get_cache('languages')->get_element($lang);
+				$lang_data = $cache->get_cache('languages')->get_element($lang);
 				$this->_language = $lang_data['lang_folder'];
 				return;
 			}
 		}
 
-		if($this->cfg['default_forum_lang'] > 0)
-			$this->_language = $this->functions->get_def_lang_folder();
+		if($cfg['default_forum_lang'] > 0)
+			$this->_language = $functions->get_def_lang_folder();
 	}
 
 	/**
@@ -405,6 +480,9 @@ final class BS_User_Current extends PLIB_User_Current
 	 */
 	private function _determine_theme()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$cache = PLIB_Props::get()->cache();
+
 		// is it a mobile device?
 		if($this->_user->uses_mobile_device())
 		{
@@ -413,12 +491,12 @@ final class BS_User_Current extends PLIB_User_Current
 		}
 		
 		// use theme of user?
-		if($this->is_loggedin() && $this->cfg['allow_custom_style'] == 1)
+		if($this->is_loggedin() && $cfg['allow_custom_style'] == 1)
 		{
 			if($this->get_profile_val('forum_style') > 0)
 			{
 				$theme = $this->get_profile_val('forum_style');
-				$theme_data = $this->cache->get_cache('themes')->get_element($theme);
+				$theme_data = $cache->get_cache('themes')->get_element($theme);
 				// just do this if it is a valid theme (if the cache does not exist for example)
 				if(is_string($theme_data['theme_folder']))
 					$this->set_theme($theme_data['theme_folder']);
@@ -426,18 +504,18 @@ final class BS_User_Current extends PLIB_User_Current
 			}
 		}
 
-		if($this->cfg['default_forum_style'] > 0)
+		if($cfg['default_forum_style'] > 0)
 		{
-			$data = $this->cache->get_cache('themes')->get_element($this->cfg['default_forum_style']);
+			$data = $cache->get_cache('themes')->get_element($cfg['default_forum_style']);
 			// just do this if it is a valid theme (if the cache does not exist for example)
 			if(is_string($data['theme_folder']))
 				$this->set_theme($data['theme_folder']);
 		}
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
-		return array_merge(parent::_get_print_vars(),get_object_vars($this));
+		return array_merge(parent::get_print_vars(),get_object_vars($this));
 	}
 }
 ?>

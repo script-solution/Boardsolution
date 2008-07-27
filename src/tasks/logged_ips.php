@@ -21,7 +21,9 @@ final class BS_Tasks_logged_ips extends PLIB_Tasks_Base
 {
 	public function run()
 	{
-		BS_DAO::get_logips()->delete_timedout($this->cfg['ip_log_days'] * 86400);
+		$cfg = PLIB_Props::get()->cfg();
+
+		BS_DAO::get_logips()->delete_timedout($cfg['ip_log_days'] * 86400);
 	}
 }
 ?>

@@ -36,7 +36,9 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function get_count()
 	{
-		return $this->db->sql_num(BS_TB_LOG_ERRORS,'id','');
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_num(BS_TB_LOG_ERRORS,'id','');
 	}
 	
 	/**
@@ -47,8 +49,10 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function get_count_by_keyword($keyword)
 	{
-		$where = $this->_get_keyword_where($keyword);
-		return $this->db->sql_num(BS_TB_LOG_ERRORS.' l','l.id',$where);
+		$db = PLIB_Props::get()->db();
+
+		$where = $this->get_keyword_where($keyword);
+		return $db->sql_num(BS_TB_LOG_ERRORS.' l','l.id',$where);
 	}
 	
 	/**
@@ -59,10 +63,12 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function get_by_ids($ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_LOG_ERRORS.'
 			 WHERE id IN ('.implode(',',$ids).')'
 		);
@@ -95,13 +101,15 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function get_list_by_keyword($keyword,$sort = 'id',$order = 'ASC',$start = 0,$count = 0)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);
 		if(!PLIB_Helper::is_integer($count) || $count < 0)
 			PLIB_Helper::def_error('intge0','count',$count);
 		
-		$where = $keyword ? $this->_get_keyword_where($keyword) : '';
-		return $this->db->sql_rows(
+		$where = $keyword ? $this->get_keyword_where($keyword) : '';
+		return $db->sql_rows(
 			'SELECT l.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_LOG_ERRORS.' l
 			 LEFT JOIN '.BS_TB_USER.' u ON u.`'.BS_EXPORT_USER_ID.'` = l.user_id
@@ -119,8 +127,10 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function create($fields)
 	{
-		$this->db->sql_insert(BS_TB_LOG_ERRORS,$fields,false);
-		return $this->db->get_last_insert_id();
+		$db = PLIB_Props::get()->db();
+
+		$db->sql_insert(BS_TB_LOG_ERRORS,$fields,false);
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -128,7 +138,9 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function clear()
 	{
-		$this->db->sql_qry('TRUNCATE TABLE '.BS_TB_LOG_ERRORS);
+		$db = PLIB_Props::get()->db();
+
+		$db->sql_qry('TRUNCATE TABLE '.BS_TB_LOG_ERRORS);
 	}
 	
 	/**
@@ -139,13 +151,15 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function delete_timedout($timeout)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($timeout) || $timeout <= 0)
 			PLIB_Helper::def_error('intgt0','timeout',$timeout);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_LOG_ERRORS.' WHERE date < '.(time() - $timeout)
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -156,13 +170,15 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function delete($ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_LOG_ERRORS.' WHERE id IN ('.implode(',',$ids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -171,7 +187,7 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 * @param string $keyword the keyword to search for
 	 * @return string the WHERE-clause
 	 */
-	protected function _get_keyword_where($keyword)
+	protected function get_keyword_where($keyword)
 	{
 		$where = ' WHERE l.message LIKE "%'.$keyword.'%" OR l.backtrace LIKE "%'.$keyword.'%" OR';
 		$where .= ' l.query LIKE "%'.$keyword.'%"';

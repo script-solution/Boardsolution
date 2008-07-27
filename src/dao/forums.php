@@ -36,7 +36,9 @@ class BS_DAO_Forums extends PLIB_Singleton
 	 */
 	public function get_count()
 	{
-		return $this->db->sql_num(BS_TB_FORUMS,'id','');
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_num(BS_TB_FORUMS,'id','');
 	}
 	
 	/**
@@ -50,12 +52,14 @@ class BS_DAO_Forums extends PLIB_Singleton
 	 */
 	public function get_list($sort = 'id',$order = 'ASC',$start = 0,$count = 0)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
 			PLIB_Helper::def_error('intge0','start',$start);
 		if(!PLIB_Helper::is_integer($count) || $count < 0)
 			PLIB_Helper::def_error('intge0','count',$count);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_FORUMS.'
 			 ORDER BY '.$sort.' '.$order.'
 			 '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
@@ -70,7 +74,9 @@ class BS_DAO_Forums extends PLIB_Singleton
 	 */
 	public function get_all_for_cache()
 	{
-		return $this->db->sql_rows(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
 			'SELECT f.*,b.post_user lastpost_userid,b.post_time lastpost_time,
 							b.post_an_user lastpost_an_user,b.threadid lastpost_topicid,
 							u.`'.BS_EXPORT_USER_NAME.'` lastpost_username,t.posts lastpost_topicposts,
@@ -92,8 +98,10 @@ class BS_DAO_Forums extends PLIB_Singleton
 	 */
 	public function create($fields)
 	{
-		$this->db->sql_insert(BS_TB_FORUMS,$fields);
-		return $this->db->get_last_insert_id();
+		$db = PLIB_Props::get()->db();
+
+		$db->sql_insert(BS_TB_FORUMS,$fields);
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -129,11 +137,13 @@ class BS_DAO_Forums extends PLIB_Singleton
 	 */
 	public function update_by_ids($ids,$fields)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_update(BS_TB_FORUMS,'WHERE id IN ('.implode(',',$ids).')',$fields);
-		return $this->db->get_affected_rows();
+		$db->sql_update(BS_TB_FORUMS,'WHERE id IN ('.implode(',',$ids).')',$fields);
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -144,15 +154,17 @@ class BS_DAO_Forums extends PLIB_Singleton
 	 */
 	public function reset_attributes($ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_update(BS_TB_FORUMS,'WHERE id IN ('.implode(',',$ids).')',array(
+		$db->sql_update(BS_TB_FORUMS,'WHERE id IN ('.implode(',',$ids).')',array(
 			'threads' => 0,
 			'posts' => 0,
 			'lastpost_id' => 0
 		));
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -163,11 +175,13 @@ class BS_DAO_Forums extends PLIB_Singleton
 	 */
 	public function delete_by_ids($ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_qry('DELETE FROM '.BS_TB_FORUMS.' WHERE id IN ('.implode(',',$ids).')');
-		return $this->db->get_affected_rows();
+		$db->sql_qry('DELETE FROM '.BS_TB_FORUMS.' WHERE id IN ('.implode(',',$ids).')');
+		return $db->get_affected_rows();
 	}
 }
 ?>

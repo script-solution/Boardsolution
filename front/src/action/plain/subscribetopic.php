@@ -29,7 +29,8 @@ final class BS_Front_Action_Plain_SubscribeTopic extends BS_Front_Action_Plain
 	 */
 	public static function get_default($topic_id,$exists = true)
 	{
-		$user = PLIB_Object::get_prop('user');
+		$user = PLIB_Props::get()->user();
+		
 		return new BS_Front_Action_Plain_SubscribeTopic($topic_id,$user->get_user_id(),$exists);
 	}
 	
@@ -85,8 +86,11 @@ final class BS_Front_Action_Plain_SubscribeTopic extends BS_Front_Action_Plain
 	
 	public function check_data()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$locale = PLIB_Props::get()->locale();
+
 		// check if the user is allowed to subscribe this topic
-		if($this->cfg['enable_email_notification'] == 1 && $this->_user_id > 0)
+		if($cfg['enable_email_notification'] == 1 && $this->_user_id > 0)
 		{
 			// has the user already subscribed this topic?
 			if($this->_exists)
@@ -106,14 +110,14 @@ final class BS_Front_Action_Plain_SubscribeTopic extends BS_Front_Action_Plain
 				$this->_name = $data['name'];
 			}
 			
-			if($this->cfg['max_topic_subscriptions'] > 0)
+			if($cfg['max_topic_subscriptions'] > 0)
 			{
 				$subscriptions = BS_DAO::get_subscr()->get_subscr_topics_count($this->_user_id);
-				if($subscriptions >= $this->cfg['max_topic_subscriptions'])
+				if($subscriptions >= $cfg['max_topic_subscriptions'])
 				{
 					return sprintf(
-						$this->locale->lang('error_max_topic_subscriptions'),
-						$this->cfg['max_topic_subscriptions']
+						$locale->lang('error_max_topic_subscriptions'),
+						$cfg['max_topic_subscriptions']
 					);
 				}
 			}
@@ -124,18 +128,21 @@ final class BS_Front_Action_Plain_SubscribeTopic extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
+		$db = PLIB_Props::get()->db();
+		$cfg = PLIB_Props::get()->cfg();
+
 		parent::perform_action();
 		
-		$this->db->start_transaction();
+		$db->start_transaction();
 		
 		// does the user want to subscribe the topic?
-		if($this->cfg['enable_email_notification'] == 1 && $this->_user_id > 0)
+		if($cfg['enable_email_notification'] == 1 && $this->_user_id > 0)
 			BS_DAO::get_subscr()->subscribe_topic($this->_topic_id,$this->_user_id);
 		
-		$this->db->commit_transaction();
+		$db->commit_transaction();
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

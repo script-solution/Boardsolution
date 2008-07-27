@@ -19,17 +19,21 @@ class BS_Install_type extends BS_Install
 {
 	public function run()
 	{
-		$type = $this->functions->get_session_var('install_type');
+		$functions = PLIB_Props::get()->functions();
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+
+		$type = $functions->get_session_var('install_type');
 		$options = array(
-			'full' => $this->locale->lang('fullinstall'),
-			'update' => $this->locale->lang('update')
+			'full' => $locale->lang('fullinstall'),
+			'update' => $locale->lang('update')
 		);
 		
-		$this->tpl->set_template('step_type.htm');
-		$this->tpl->add_variables(array(
+		$tpl->set_template('step_type.htm');
+		$tpl->add_variables(array(
 			'install_type_combo' => $this->html->get_combobox($options,$type,'install_type')
 		));
-		echo $this->tpl->parse_template();
+		echo $tpl->parse_template();
 	}
 }
 ?>

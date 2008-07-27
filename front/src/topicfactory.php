@@ -43,12 +43,14 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 	 */
 	public function get_current_topic()
 	{
+		$input = PLIB_Props::get()->input();
+
 		if($this->_topic !== false)
 			return $this->_topic;
 		
 		$this->_topic = null;
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 	
 		if($tid != null && $fid != null)
 		{
@@ -73,14 +75,20 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 	 */
 	public function add_similar_topics($title,$tid,$current_url)
 	{
+		$input = PLIB_Props::get()->input();
+		$functions = PLIB_Props::get()->functions();
+		$locale = PLIB_Props::get()->locale();
+		$cfg = PLIB_Props::get()->cfg();
+		$url = PLIB_Props::get()->url();
+
 		// change similar-topics-display-state?
-		if($this->input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING) == 'clap_similar_topics')
-			$this->functions->clap_area('similar_topics');
+		if($input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING) == 'clap_similar_topics')
+			$functions->clap_area('similar_topics');
 	
 		$search_string = '';
 		$search_words = array();
 		$words = PLIB_StringHelper::get_words($title);
-		$ignore = $this->functions->get_search_ignore_words();
+		$ignore = $functions->get_search_ignore_words();
 		foreach(array_keys($words) as $k)
 		{
 			if(isset($ignore[$k]))
@@ -98,22 +106,22 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 		$sql = ' t.id != '.$tid.' AND moved_tid = 0'.$search_string;
 	
 		// build search link
-		$url = $this->url->get_url(
+		$murl = $url->get_url(
 			'search','&amp;'.BS_URL_MODE.'=similar_topics&amp;'.BS_URL_KW.'='.implode(' ',$search_words)
 		);
-		$topics_title = sprintf($this->locale->lang('similar_topics'),$title);
-		$topics_title = '<a href="'.$url.'">'.$topics_title.'</a>';
+		$topics_title = sprintf($locale->lang('similar_topics'),$title);
+		$topics_title = '<a href="'.$murl.'">'.$topics_title.'</a>';
 	
 		// display the topics
 		$topics = new BS_Front_Topics(
-			$topics_title,$sql,'lastpost','DESC',$this->cfg['similar_topic_num'],0,true
+			$topics_title,$sql,'lastpost','DESC',$cfg['similar_topic_num'],0,true
 		);
 		$topics->set_show_topic_action(false);
 		$topics->set_show_important_first(false);
 		$topics->set_show_forum(true);
 		$topics->set_middle_width(60);
 	
-		$clap_data = $this->functions->get_clap_data(
+		$clap_data = $functions->get_clap_data(
 			'similar_topics',$current_url.'&amp;'.BS_URL_LOC.'=clap_similar_topics'
 		);
 		$topics->set_tbody_content($clap_data['divparams']);
@@ -128,9 +136,13 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 	 */
 	public function add_latest_topics_full($fid = 0)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$functions = PLIB_Props::get()->functions();
+		$url = PLIB_Props::get()->url();
+
 		$infos = $this->_get_latest_topics_infos($fid);
 		
-		$num = $this->cfg['threads_per_page'];
+		$num = $cfg['threads_per_page'];
 		$topics = new BS_Front_Topics($infos['title'],$infos['sql'],'lastpost','DESC',$num);
 		$topics->set_show_topic_action(false);
 		$topics->set_show_important_first(false);
@@ -138,10 +150,10 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 		$topics->set_middle_width(60);
 		$topics->add_topics();
 	
-		$url = $this->url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_SITE.'={d}');
+		$murl = $url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_SITE.'={d}');
 		$num = BS_DAO::get_topics()->get_count_by_search($topics->get_user_where_clause());
-		$pagination = new BS_Pagination($this->cfg['threads_per_page'],$num);
-		$this->functions->add_pagination($pagination,$url);
+		$pagination = new BS_Pagination($cfg['threads_per_page'],$num);
+		$functions->add_pagination($pagination,$murl);
 	}
 	
 	/**
@@ -151,25 +163,30 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 	 */
 	public function add_latest_topics_small($fid = 0)
 	{
-		if($this->input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING) == 'clap_current_topics')
-			$this->functions->clap_area('current_topics');
+		$input = PLIB_Props::get()->input();
+		$functions = PLIB_Props::get()->functions();
+		$cfg = PLIB_Props::get()->cfg();
+		$url = PLIB_Props::get()->url();
+
+		if($input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING) == 'clap_current_topics')
+			$functions->clap_area('current_topics');
 		
 		$infos = $this->_get_latest_topics_infos($fid);
 		
 		$fid_param = $fid > 0 ? '&amp;'.BS_URL_FID.'='.$fid : '';
-		$url = $this->url->get_url('latest_topics',$fid_param);
-		$title = '<a href="'.$url.'">'.$infos['title'].'</a>';
+		$murl = $url->get_url('latest_topics',$fid_param);
+		$title = '<a href="'.$murl.'">'.$infos['title'].'</a>';
 		
 		// display the topics
-		$num = $this->cfg['current_topic_num'];
+		$num = $cfg['current_topic_num'];
 		$topics = new BS_Front_Topics($title,$infos['sql'],'lastpost','DESC',$num,0,true);
 		$topics->set_show_topic_action(false);
 		$topics->set_show_important_first(false);
 		$topics->set_show_forum(true);
 		$topics->set_middle_width(60);
 		
-		$current_url = $this->url->get_url('forums',$fid > 0 ? '&amp;'.BS_URL_FID.'='.$fid : '');
-		$clap_data = $this->functions->get_clap_data(
+		$current_url = $url->get_url('forums',$fid > 0 ? '&amp;'.BS_URL_FID.'='.$fid : '');
+		$clap_data = $functions->get_clap_data(
 			'current_topics',$current_url.'&amp;'.BS_URL_LOC.'=clap_current_topics'
 		);
 		$topics->set_tbody_content($clap_data['divparams']);
@@ -185,21 +202,24 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 	 */
 	private function _get_latest_topics_infos($fid)
 	{
+		$forums = PLIB_Props::get()->forums();
+		$locale = PLIB_Props::get()->locale();
+
 		if($fid > 0)
 		{
 			$ids = array($fid);
-			$subforums = $this->forums->get_sub_nodes($fid);
+			$subforums = $forums->get_sub_nodes($fid);
 			$len = count($subforums);
 			for($i = 0;$i < $len;$i++)
 				$ids[] = $subforums[$i]->get_id();
 	
 			$sql = ' t.rubrikid IN ('.implode(',',$ids).') AND moved_tid = 0';
-			$title = sprintf($this->locale->lang('current_topics_in'),$this->forums->get_forum_name($fid));
+			$title = sprintf($locale->lang('current_topics_in'),$forums->get_forum_name($fid));
 		}
 		else
 		{
 			$sql = ' moved_tid = 0';
-			$title = $this->locale->lang('current_topics');
+			$title = $locale->lang('current_topics');
 		}
 		
 		return array(
@@ -208,7 +228,7 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 		);
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

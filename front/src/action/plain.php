@@ -27,7 +27,7 @@
  * @subpackage	front.src.action
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_Front_Action_Plain extends PLIB_FullObject
+abstract class BS_Front_Action_Plain extends PLIB_Object
 {
 	/**
 	 * Stores wether the data has been checked

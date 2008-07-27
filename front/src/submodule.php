@@ -19,12 +19,47 @@
  */
 abstract class BS_Front_SubModule extends BS_Front_Module
 {
-	public function get_template()
+	/**
+	 * The template for the submodule
+	 *
+	 * @var string
+	 */
+	private $_template;
+	
+	/**
+	 * Constructor
+	 */
+	public function __construct()
 	{
+		parent::__construct();
+		
 		$classname = get_class($this);
 		$lastus = strrpos($classname,'_');
 		$prevlastus = strrpos(PLIB_String::substr($classname,0,$lastus),'_');
-		return PLIB_String::strtolower(PLIB_String::substr($classname,$prevlastus + 1)).'.htm';
+		$this->_template = PLIB_String::strtolower(PLIB_String::substr($classname,$prevlastus + 1)).'.htm';
+	}
+	
+	/**
+	 * @return string the template to use for this sub-module
+	 */
+	public final function get_template()
+	{
+		return $this->_template;
+	}
+	
+	/**
+	 * Sets the template for this submodule
+	 *
+	 * @param string $template the template
+	 */
+	public final function set_template($template)
+	{
+		$this->_template = $template;
+	}
+	
+	protected function get_print_vars()
+	{
+		return array_merge(parent::get_print_vars(),get_object_vars($this));
 	}
 }
 ?>

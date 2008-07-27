@@ -21,19 +21,26 @@ final class BS_Front_Action_userprofile_sendpm extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		$auth = PLIB_Props::get()->auth();
+		$ips = PLIB_Props::get()->ips();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		// nothing to do?
-		if(!$this->input->isset_var('submit','post'))
+		if(!$input->isset_var('submit','post'))
 			return '';
 
 		// has the user the permission to write a PM?
-		if(!$this->user->is_loggedin() || $this->user->get_profile_val('allow_pms') == 0)
+		if(!$user->is_loggedin() || $user->get_profile_val('allow_pms') == 0)
 			return 'You are a guest or you\'ve disabled PMs';
 
 		// spam?
-		$spam_pm_on = $this->auth->is_ipblock_enabled('spam_pm');
+		$spam_pm_on = $auth->is_ipblock_enabled('spam_pm');
 		if($spam_pm_on)
 		{
-			if($this->ips->entry_exists('pm'))
+			if($ips->entry_exists('pm'))
 				return 'ippmmsg';
 		}
 		
@@ -47,20 +54,20 @@ final class BS_Front_Action_userprofile_sendpm extends BS_Front_Action_Base
 		$pm->perform_action();
 
 		// finish up
-		$this->ips->add_entry('pm');
+		$ips->add_entry('pm');
 
 		$this->set_action_performed(true);
 		$this->set_success_msg(sprintf(
-			$this->locale->lang('success_'.BS_ACTION_SEND_PM),
-			PLIB_Array_Utils::advanced_implode(',',$pm->get_receiver_names())
+			$locale->lang('success_'.BS_ACTION_SEND_PM),
+			PLIB_StringHelper::get_enum($pm->get_receiver_names())
 		));
 		$this->add_link(
-			$this->locale->lang('go_to_inbox'),
-			$this->url->get_url(0,'&amp;'.BS_URL_LOC.'=pminbox')
+			$locale->lang('go_to_inbox'),
+			$url->get_url(0,'&amp;'.BS_URL_LOC.'=pminbox')
 		);
 		$this->add_link(
-			$this->locale->lang('compose_another_pm'),
-			$this->url->get_url(0,'&amp;'.BS_URL_LOC.'=pmcompose')
+			$locale->lang('compose_another_pm'),
+			$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmcompose')
 		);
 
 		return '';

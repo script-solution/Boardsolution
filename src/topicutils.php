@@ -37,12 +37,14 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 */
 	public function is_locked($locked,$type,$post_locked = 0)
 	{
+		$auth = PLIB_Props::get()->auth();
+
 		// nothing locked?
 		if($locked == 0)
 			return false;
 		
 		// if the user has permission to lock topics, it is not locked for her/him
-		if($this->auth->has_current_forum_perm(BS_MODE_LOCK_TOPICS))
+		if($auth->has_current_forum_perm(BS_MODE_LOCK_TOPICS))
 			return false;
 		
 		switch($type)
@@ -66,7 +68,7 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 *
 	 * @param string $title the title of the topic
 	 * @param int $length the max. length of the topic.
-	 * 	<code>(0 = $this->cfg['thread_max_title_len'])</code>
+	 * 	<code>(0 = PLIB_Props::get()->cfg()['thread_max_title_len'])</code>
 	 * @return array an array of the form:
 	 * 	<code>
 	 * 		array(
@@ -77,7 +79,9 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 */
 	public function get_displayed_name($title,$length = 0)
 	{
-		$max_length = ($length === 0) ? $this->cfg['thread_max_title_len'] : $length;
+		$cfg = PLIB_Props::get()->cfg();
+
+		$max_length = ($length === 0) ? $cfg['thread_max_title_len'] : $length;
 		return PLIB_StringHelper::get_limited_string($title,$max_length);
 	}
 	
@@ -91,9 +95,12 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 */
 	public function get_status_data($cache,$topic_data,$is_unread)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$locale = PLIB_Props::get()->locale();
+
 		$result = array();
-		$is_hot = $topic_data['posts'] >= $this->cfg['thread_hot_posts_count'] ||
-							$topic_data['views'] >= $this->cfg['thread_hot_views_count'];
+		$is_hot = $topic_data['posts'] >= $cfg['thread_hot_posts_count'] ||
+							$topic_data['views'] >= $cfg['thread_hot_views_count'];
 		$unread = $is_unread ? '_new' : '';
 	
 		$important = ($topic_data['important'] == 1) ? '_en' : '_dis';
@@ -101,16 +108,16 @@ final class BS_TopicUtils extends PLIB_Singleton
 		$closed = ($topic_data['thread_closed'] == 1) ? '_en' : '_dis';
 		$hot = $is_hot ? '_en' : '_dis';
 	
-		$result['important_title'] = $this->locale->lang('important'.$unread.$important);
+		$result['important_title'] = $locale->lang('important'.$unread.$important);
 		$result['important_image'] = $cache['important'.$unread.$important];
 	
-		$result['moved_title'] = $this->locale->lang('moved'.$unread.$moved);
+		$result['moved_title'] = $locale->lang('moved'.$unread.$moved);
 		$result['moved_image'] = $cache['moved'.$unread.$moved];
 	
-		$result['closed_title'] = $this->locale->lang('closed'.$unread.$closed);
+		$result['closed_title'] = $locale->lang('closed'.$unread.$closed);
 		$result['closed_image'] = $cache['closed'.$unread.$closed];
 	
-		$result['hot_title'] = $this->locale->lang('hot'.$unread.$hot);
+		$result['hot_title'] = $locale->lang('hot'.$unread.$hot);
 		$result['hot_image'] = $cache['hot'.$unread.$hot];
 	
 		return $result;
@@ -124,9 +131,13 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 */
 	public function get_selected_topics($topics)
 	{
+		$user = PLIB_Props::get()->user();
+		$url = PLIB_Props::get()->url();
+		$locale = PLIB_Props::get()->locale();
+
 		$cache = array(
-			'symbol_poll' =>				$this->user->get_theme_item_path('images/thread_type/poll.gif'),
-			'symbol_event' =>				$this->user->get_theme_item_path('images/thread_type/event.gif')
+			'symbol_poll' =>				$user->get_theme_item_path('images/thread_type/poll.gif'),
+			'symbol_event' =>				$user->get_theme_item_path('images/thread_type/event.gif')
 		);
 		
 		$res = array();
@@ -134,16 +145,16 @@ final class BS_TopicUtils extends PLIB_Singleton
 		{
 			$symbol = $this->get_symbol($cache,$data['type'],$data['symbol']);
 			if($data['important'] == 1)
-				$symbol .= ' <b>'.$this->locale->lang('important').': </b>';
+				$symbol .= ' <b>'.$locale->lang('important').': </b>';
 
 			$topic = $this->get_displayed_name($data['name']);
 
 			$topic_id = ($data['moved_tid'] > 0) ? $data['moved_tid'] : $data['id'];
 			$forum_id = ($data['moved_rid'] > 0) ? $data['moved_rid'] : $data['rubrikid'];
-			$url = $this->url->get_posts_url($forum_id,$topic_id);
+			$murl = $url->get_posts_url($forum_id,$topic_id);
 			
 			$topic_path = BS_ForumUtils::get_instance()->get_forum_path($data['rubrikid'],false);
-			$topic_path .= ' &raquo; <a href="'.$url.'">';
+			$topic_path .= ' &raquo; <a href="'.$murl.'">';
 			$topic_path .= '<span title="'.$topic['complete'].'">';
 			if($data['moved_tid'] > 0)
 				$topic_path .= '<i>'.$topic['displayed'].'</i>';
@@ -167,23 +178,26 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 */
 	public function get_symbol($cache,$topic_type,$symbol)
 	{
+		$user = PLIB_Props::get()->user();
+		$locale = PLIB_Props::get()->locale();
+
 		$result = '&nbsp;';
 	
 		if($symbol != 0)
 		{
-			$img = $this->user->get_theme_item_path('images/thread_type/symbol_'.$symbol.'.gif');
-			$result = '<img src="'.$img.'" title="'.$this->locale->lang('thread').'"';
-			$result .= ' alt="'.$this->locale->lang('thread').'" />'."\n";
+			$img = $user->get_theme_item_path('images/thread_type/symbol_'.$symbol.'.gif');
+			$result = '<img src="'.$img.'" title="'.$locale->lang('thread').'"';
+			$result .= ' alt="'.$locale->lang('thread').'" />'."\n";
 		}
 		else if($topic_type > 0)
 		{
-			$result = '<img src="'.$cache['symbol_poll'].'" title="'.$this->locale->lang('poll').'"';
-			$result .= ' alt="'.$this->locale->lang('poll').'" />'."\n";
+			$result = '<img src="'.$cache['symbol_poll'].'" title="'.$locale->lang('poll').'"';
+			$result .= ' alt="'.$locale->lang('poll').'" />'."\n";
 		}
 		else if($topic_type == -1)
 		{
-			$result = '<img src="'.$cache['symbol_event'].'" title="'.$this->locale->lang('event').'"';
-			$result .= ' alt="'.$this->locale->lang('event').'" />'."\n";
+			$result = '<img src="'.$cache['symbol_event'].'" title="'.$locale->lang('event').'"';
+			$result .= ' alt="'.$locale->lang('event').'" />'."\n";
 		}
 	
 		return $result;
@@ -198,6 +212,9 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 */
 	public function get_symbols($form,$select = 0)
 	{
+		$locale = PLIB_Props::get()->locale();
+		$user = PLIB_Props::get()->user();
+
 		$symbols = '';
 		for($i = 0;$i <= BS_NUMBER_OF_TOPIC_ICONS;$i++)
 		{
@@ -206,10 +223,10 @@ final class BS_TopicUtils extends PLIB_Singleton
 			$symbols .= ' value="'.$i.'" />'."\n".'<label for="t'.$i.'">';
 	
 			if($i == 0)
-				$symbols .= $this->locale->lang('noicon');
+				$symbols .= $locale->lang('noicon');
 			else
 			{
-				$img = $this->user->get_theme_item_path('images/thread_type/symbol_'.$i.'.gif');
+				$img = $user->get_theme_item_path('images/thread_type/symbol_'.$i.'.gif');
 				$symbols .= '<img src="'.$img.'" alt="" />';
 			}
 	
@@ -230,69 +247,74 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 */
 	public function get_action_combobox($location = 'topics',$is_closed = false)
 	{
-		$edit_perm				= $this->cfg['display_denied_options'] ||
-												$this->auth->has_global_permission('edit_own_threads') ||
-												$this->auth->has_current_forum_perm(BS_MODE_EDIT_TOPIC);
-		$openclose_perm		= $this->cfg['display_denied_options'] ||
-												$this->auth->has_global_permission('openclose_own_threads') ||
-												$this->auth->has_current_forum_perm(BS_MODE_OPENCLOSE_TOPICS);
-		$delete_perm			= $this->cfg['display_denied_options'] ||
-												$this->auth->has_global_permission('delete_own_threads') ||
-												$this->auth->has_current_forum_perm(BS_MODE_DELETE_TOPICS);
-		$move_perm				= $this->cfg['display_denied_options'] ||
-												$this->auth->has_current_forum_perm(BS_MODE_MOVE_TOPICS);
-		$mark							= $this->cfg['display_denied_options'] ||
-												$this->user->is_loggedin();
-		$lock_perm				= $this->cfg['display_denied_options'] ||
-												$this->auth->has_current_forum_perm(BS_MODE_LOCK_TOPICS);
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+		$user = PLIB_Props::get()->user();
+		$locale = PLIB_Props::get()->locale();
+
+		$edit_perm				= $cfg['display_denied_options'] ||
+												$auth->has_global_permission('edit_own_threads') ||
+												$auth->has_current_forum_perm(BS_MODE_EDIT_TOPIC);
+		$openclose_perm		= $cfg['display_denied_options'] ||
+												$auth->has_global_permission('openclose_own_threads') ||
+												$auth->has_current_forum_perm(BS_MODE_OPENCLOSE_TOPICS);
+		$delete_perm			= $cfg['display_denied_options'] ||
+												$auth->has_global_permission('delete_own_threads') ||
+												$auth->has_current_forum_perm(BS_MODE_DELETE_TOPICS);
+		$move_perm				= $cfg['display_denied_options'] ||
+												$auth->has_current_forum_perm(BS_MODE_MOVE_TOPICS);
+		$mark							= $cfg['display_denied_options'] ||
+												$user->is_loggedin();
+		$lock_perm				= $cfg['display_denied_options'] ||
+												$auth->has_current_forum_perm(BS_MODE_LOCK_TOPICS);
 	
 		$disabled = ' disabled="disabled" style="color: #AAAAAA;"';
 	
 		$var = '<select id="topic_action" name="topic_action"';
 		$var .= ' onchange="performModAction(getModActionURL())">'."\n";
-		$var .= '	<option value=""> - '.$this->locale->lang('please_choose').' - </option>'."\n";
+		$var .= '	<option value=""> - '.$locale->lang('please_choose').' - </option>'."\n";
 		$var .= '	<option value="edit"'.($edit_perm ? '' : $disabled).'>';
-		$var .= $this->locale->lang('edit_topic').'</option>'."\n";
+		$var .= $locale->lang('edit_topic').'</option>'."\n";
 	
 		if($location == 'topics' || $is_closed)
 		{
 			$var .= '	<option value="open"'.($openclose_perm ? '' : $disabled).'>';
-			$var .= $this->locale->lang($location == 'posts' ? 'open_topic' : 'open_topics');
+			$var .= $locale->lang($location == 'posts' ? 'open_topic' : 'open_topics');
 			$var .= '</option>'."\n";
 		}
 	
 		if($location == 'topics' || !$is_closed)
 		{
 			$var .= '	<option value="close"'.($openclose_perm ? '' : $disabled).'>';
-			$var .= $this->locale->lang($location == 'posts' ? 'close_topic' : 'close_topics');
+			$var .= $locale->lang($location == 'posts' ? 'close_topic' : 'close_topics');
 			$var .= '</option>'."\n";
 		}
 		
 		$var .= ' <option value="lock"'.($lock_perm ? '' : $disabled).'>';
-		$var .= $this->locale->lang($location == 'posts' ? 'lock_topic' : 'lock_topics');
+		$var .= $locale->lang($location == 'posts' ? 'lock_topic' : 'lock_topics');
 		$var .= '</option>'."\n";
 	
 		$var .= '	<option value="delete"'.($delete_perm ? '' : $disabled).'>';
-		$var .= $this->locale->lang($location == 'posts' ? 'delete_topic' : 'delete_topics');
+		$var .= $locale->lang($location == 'posts' ? 'delete_topic' : 'delete_topics');
 		$var .= '</option>'."\n";
 	
 		$var .= '	<option value="move"'.($move_perm ? '' : $disabled).'>';
-		$var .= $this->locale->lang($location == 'posts' ? 'move_topic' : 'move_topics');
+		$var .= $locale->lang($location == 'posts' ? 'move_topic' : 'move_topics');
 		$var .= '</option>'."\n";
 	
 		if($location == 'topics')
 		{
 			$var .= '	<option value="mark_read"'.($mark ? '' : $disabled).'>';
-			$var .= $this->locale->lang('mark_topics_read').'</option>'."\n";
+			$var .= $locale->lang('mark_topics_read').'</option>'."\n";
 			$var .= '	<option value="mark_unread"'.($mark ? '' : $disabled).'>';
-			$var .= $this->locale->lang('mark_topics_unread').'</option>'."\n";
+			$var .= $locale->lang('mark_topics_unread').'</option>'."\n";
 		}
 		$var .= '</select>'."\n";
 	
 		return $var;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

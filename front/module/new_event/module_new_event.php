@@ -19,79 +19,95 @@
  */
 final class BS_Front_Module_new_event extends BS_Front_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACTION_START_EVENT => 'default'
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$auth = PLIB_Props::get()->auth();
+		$cfg = PLIB_Props::get()->cfg();
+		
+		$doc->set_has_access($auth->has_current_forum_perm(BS_MODE_START_EVENT) &&
+			$cfg['enable_events'] == 1);
+		
+		$doc->add_action(BS_ACTION_START_EVENT,'default');
+
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		
+		$this->add_loc_forum_path($fid);
+		$doc->add_breadcrumb(
+			$locale->lang('newevent'),
+			$url->get_url('new_event','&amp;'.BS_URL_FID.'='.$fid)
 		);
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$forums = PLIB_Props::get()->forums();
+		$user = PLIB_Props::get()->user();
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		if($fid == null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
 		// does the forum exist?
-		$forum_data = $this->forums->get_node_data($fid);
+		$forum_data = $forums->get_node_data($fid);
 		if($forum_data === null || $forum_data->get_forum_type() != 'contains_threads')
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
 		// forum closed?
-		if(!$this->user->is_admin() && $this->forums->forum_is_closed($fid))
+		if(!$user->is_admin() && $forums->forum_is_closed($fid))
 		{
-			$this->_report_error(PLIB_Messages::MSG_TYPE_ERROR,$this->locale->lang('forum_is_closed'));
+			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('forum_is_closed'));
 			return;
 		}
 	
-		$form = $this->_request_formular(true,true);
+		$form = $this->request_formular(true,true);
 	
-		if($this->input->isset_var('preview','post'))
+		if($input->isset_var('preview','post'))
 			BS_PostingUtils::get_instance()->add_post_preview();
 		
-		$loggedin = $this->user->is_loggedin();
-		$subt_def = $loggedin ? $this->user->get_profile_val('default_email_notification') : 0;
+		$loggedin = $user->is_loggedin();
+		$subt_def = $loggedin ? $user->get_profile_val('default_email_notification') : 0;
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_START_EVENT,
 			'open_end' => $form->get_checkbox_value('open_end',false),
 			'timeout_type_begin' => $form->get_radio_value('timeout_type','begin',true),
 			'timeout_type_self' => $form->get_radio_value('timeout_type','self',false),
-			'target_url' => $this->url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid),
+			'target_url' => $url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid),
 			'subscribe_topic_def' => $subt_def,
-			'enable_email_notification' => $this->cfg['enable_email_notification'] && $loggedin,
-			'important_allowed' => $this->auth->has_current_forum_perm(BS_MODE_MARK_TOPICS_IMPORTANT),
-			'back_url' => $this->url->get_topics_url($fid)
+			'enable_email_notification' => $cfg['enable_email_notification'] && $loggedin,
+			'important_allowed' => $auth->has_current_forum_perm(BS_MODE_MARK_TOPICS_IMPORTANT),
+			'back_url' => $url->get_topics_url($fid)
 		));
 		
-		$pform = new BS_PostingForm($this->locale->lang('post').':');
-		$pform->set_show_attachments(true,0,false,$this->input->isset_var('action_type','post'));
+		$pform = new BS_PostingForm($locale->lang('post').':');
+		$pform->set_show_attachments(true,0,false,$input->isset_var('action_type','post'));
 		$pform->set_show_options(true);
 		$pform->add_form();
-	}
-	
-	public function get_location()
-	{
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		
-		$result = array();
-		$this->_add_loc_forum_path($result,$fid);
-		$url = $this->url->get_url('new_event','&amp;'.BS_URL_FID.'='.$fid);
-		$result[$this->locale->lang('newevent')] = $url;
-		
-		return $result;
-	}
-	
-	public function has_access()
-	{
-		return $this->auth->has_current_forum_perm(BS_MODE_START_EVENT) &&
-			$this->cfg['enable_events'] == 1;
 	}
 }
 ?>

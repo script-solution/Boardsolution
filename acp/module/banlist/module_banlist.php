@@ -19,68 +19,81 @@
  */
 final class BS_ACP_Module_banlist extends BS_ACP_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_DELETE_BANS => 'delete',
-			BS_ACP_ACTION_ADD_BAN => 'add',
-			BS_ACP_ACTION_UPDATE_BANS => 'update'
-		);
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_DELETE_BANS,'delete');
+		$doc->add_action(BS_ACP_ACTION_ADD_BAN,'add');
+		$doc->add_action(BS_ACP_ACTION_UPDATE_BANS,'update');
+
+		$doc->add_breadcrumb($locale->lang('acpmod_bans'),$url->get_acpmod_url());
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		if(($delete = $this->input->get_var('delete','post')) != null)
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$url = PLIB_Props::get()->url();
+		$tpl = PLIB_Props::get()->tpl();
+
+		if(($delete = $input->get_var('delete','post')) != null)
 		{
-			$names = $this->cache->get_cache('banlist')->get_field_vals_of_keys($delete,'bann_name');
-			$namelist = PLIB_StringHelper::get_enum($names,$this->locale->lang('and'));
+			$names = $cache->get_cache('banlist')->get_field_vals_of_keys($delete,'bann_name');
+			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
 			
-			$this->functions->add_delete_message(
-				sprintf($this->locale->lang('delete_message'),$namelist),
-				$this->url->get_acpmod_url(
+			$functions->add_delete_message(
+				sprintf($locale->lang('delete_message'),$namelist),
+				$url->get_acpmod_url(
 					0,'&amp;ids='.implode(',',$delete).'&amp;at='.BS_ACP_ACTION_DELETE_BANS
 				),
-				$this->url->get_acpmod_url()
+				$url->get_acpmod_url()
 			);
 		}
 		
-		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
-		$this->_request_formular();
+		$search = $input->get_var('search','get',PLIB_Input::STRING);
+		$this->request_formular();
 		
 		$type_array = array(
-			'ip' => $this->locale->lang('ip_address'),
-			'user' => $this->locale->lang('username'),
-			'mail' => $this->locale->lang('email_adress')
+			'ip' => $locale->lang('ip_address'),
+			'user' => $locale->lang('username'),
+			'mail' => $locale->lang('email_adress')
 		);
 	
 		$entries = array();
-		foreach($this->cache->get_cache('banlist')->get_elements() as $lang)
+		foreach($cache->get_cache('banlist')->get_elements() as $lang)
 		{
 			if(!$search || stripos($lang['bann_name'],$search) !== false ||
 					stripos($lang['bann_type'],$search) !== false)
 				$entries[] = $lang;
 		}
 		
-		$hidden = $this->input->get_vars_from_method('get');
+		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);
 		unset($hidden['at']);
 		unset($hidden['search']);
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'types' => $type_array,
 			'entries' => $entries,
 			'action_type_update' => BS_ACP_ACTION_UPDATE_BANS,
 			'action_type_add' => BS_ACP_ACTION_ADD_BAN,
-			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));
-	}
-	
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('acpmod_bans') => $this->url->get_acpmod_url()
-		);
 	}
 }
 ?>

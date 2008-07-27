@@ -21,6 +21,8 @@ final class BS_ACP_Action_smileys_import extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		$i = BS_DAO::get_smileys()->get_next_sort_key();
 		
 		$count = 0;
@@ -43,7 +45,7 @@ final class BS_ACP_Action_smileys_import extends BS_ACP_Action_Base
 		}
 		closedir($dir);
 
-		$this->set_success_msg(sprintf($this->locale->lang('import_smileys_success'),$count));
+		$this->set_success_msg(sprintf($locale->lang('import_smileys_success'),$count));
 		$this->set_action_performed(true);
 
 		return 'import_smileys_failed';

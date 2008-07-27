@@ -17,7 +17,7 @@
  * @subpackage	src.cache
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Cache_Source_CustomDB extends PLIB_FullObject implements PLIB_Cache_Source
+final class BS_Cache_Source_CustomDB extends PLIB_Object implements PLIB_Cache_Source
 {
 	/**
 	 * The SQL-query
@@ -54,12 +54,14 @@ final class BS_Cache_Source_CustomDB extends PLIB_FullObject implements PLIB_Cac
 	
 	public function get_content()
 	{
+		$db = PLIB_Props::get()->db();
+
 		// perform query
-		$res = $this->db->sql_qry($this->_sql);
+		$res = $db->sql_qry($this->_sql);
 		
 		// collect rows
 		$rows = array();
-		while($row = $this->db->sql_fetch_assoc($res))
+		while($row = $db->sql_fetch_assoc($res))
 		{
 			if($this->_key !== null)
 				$rows[$row[$this->_key]] = $row;
@@ -70,7 +72,7 @@ final class BS_Cache_Source_CustomDB extends PLIB_FullObject implements PLIB_Cac
 		return $rows;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

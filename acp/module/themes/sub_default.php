@@ -19,40 +19,55 @@
  */
 final class BS_ACP_SubModule_themes_default extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_UPDATE_THEMES => 'update',
-			BS_ACP_ACTION_DELETE_THEMES => 'delete'
-		);
+		parent::init($doc);
+		
+		$doc->add_action(BS_ACP_ACTION_UPDATE_THEMES,'update');
+		$doc->add_action(BS_ACP_ACTION_DELETE_THEMES,'delete');
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$delete = $this->input->get_var('delete','post');
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$url = PLIB_Props::get()->url();
+		$tpl = PLIB_Props::get()->tpl();
+
+		$delete = $input->get_var('delete','post');
 		if($delete != null)
 		{
-			$names = $this->cache->get_cache('themes')->get_field_vals_of_keys($delete,'theme_name');
-			$namelist = PLIB_StringHelper::get_enum($names,$this->locale->lang('and'));
+			$names = $cache->get_cache('themes')->get_field_vals_of_keys($delete,'theme_name');
+			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
 			
-			$this->functions->add_delete_message(
-				sprintf($this->locale->lang('delete_message'),$namelist),
-				$this->url->get_acpmod_url(
+			$functions->add_delete_message(
+				sprintf($locale->lang('delete_message'),$namelist),
+				$url->get_acpmod_url(
 					0,'&amp;at='.BS_ACP_ACTION_DELETE_THEMES.'&amp;ids='.implode(',',$delete)
 				),
-				$this->url->get_acpmod_url()
+				$url->get_acpmod_url()
 			);
 		}
 		
-		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
-		$this->_request_formular();
+		$search = $input->get_var('search','get',PLIB_Input::STRING);
+		$this->request_formular();
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'at_update' => BS_ACP_ACTION_UPDATE_THEMES
 		));
 		
 		$themes = array();
-		foreach($this->cache->get_cache('themes') as $data)
+		foreach($cache->get_cache('themes') as $data)
 		{
 			if(!$search || stripos($data['theme_name'],$search) !== false ||
 				stripos($data['theme_folder'],$search) !== false)
@@ -61,26 +76,21 @@ final class BS_ACP_SubModule_themes_default extends BS_ACP_SubModule
 					'id' => $data['id'],
 					'theme_name' => $data['theme_name'],
 					'theme_folder' => $data['theme_folder'],
-					'edit_url' => $this->url->get_acpmod_url(0,'&amp;action=editor&amp;theme='.$data['theme_folder'])
+					'edit_url' => $url->get_acpmod_url(0,'&amp;action=editor&amp;theme='.$data['theme_folder'])
 				);
 			}
 		}
 		
-		$hidden = $this->input->get_vars_from_method('get');
+		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);
 		unset($hidden['search']);
 		unset($hidden['at']);
-		$this->tpl->add_array('themes',$themes);
-		$this->tpl->add_variables(array(
-			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+		$tpl->add_array('themes',$themes);
+		$tpl->add_variables(array(
+			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));
-	}
-	
-	public function get_location()
-	{
-		return array();
 	}
 }
 ?>

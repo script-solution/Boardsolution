@@ -51,6 +51,8 @@ class BS_DAO_Links extends PLIB_Singleton
 	 */
 	public function get_count_by_keyword($keyword,$active = -1)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!in_array($active,array(-1,0,1)))
 			PLIB_Helper::def_error('inarray','active',array(-1,0,1),$active);
 		
@@ -66,7 +68,7 @@ class BS_DAO_Links extends PLIB_Singleton
 			$where .= ' OR category LIKE "%'.$keyword.'%" OR link_url LIKE "%'.$keyword.'%"';
 			$where .= ' OR link_desc_posted LIKE "%'.$keyword.'%")';
 		}
-		return $this->db->sql_num(BS_TB_LINKS.' l','l.id',$where);
+		return $db->sql_num(BS_TB_LINKS.' l','l.id',$where);
 	}
 	
 	/**
@@ -77,7 +79,9 @@ class BS_DAO_Links extends PLIB_Singleton
 	 */
 	public function url_exists($url)
 	{
-		return $this->db->sql_num(BS_TB_LINKS,'id',' WHERE link_url = "'.$url.'"') > 0;
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_num(BS_TB_LINKS,'id',' WHERE link_url = "'.$url.'"') > 0;
 	}
 	
 	/**
@@ -85,7 +89,9 @@ class BS_DAO_Links extends PLIB_Singleton
 	 */
 	public function get_categories()
 	{
-		$rows = $this->db->sql_rows(
+		$db = PLIB_Props::get()->db();
+
+		$rows = $db->sql_rows(
 			'SELECT category FROM '.BS_TB_LINKS.'
 			 WHERE active = 1
 			 GROUP BY category
@@ -120,10 +126,12 @@ class BS_DAO_Links extends PLIB_Singleton
 	 */
 	public function get_by_ids($ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_LINKS.' WHERE id IN ('.implode(',',$ids).')'
 		);
 	}
@@ -159,6 +167,8 @@ class BS_DAO_Links extends PLIB_Singleton
 	public function get_list_by_keyword($keyword,$active = -1,$sort = 'l.id',$order = 'ASC',
 		$start = 0,$count = 0)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!in_array($active,array(-1,0,1)))
 			PLIB_Helper::def_error('inarray','active',array(-1,0,1),$active);
 		if(!PLIB_Helper::is_integer($start) || $start < 0)
@@ -174,7 +184,7 @@ class BS_DAO_Links extends PLIB_Singleton
 			$where .= ' AND (user_name LIKE "%'.$keyword.'%" OR category LIKE "%'.$keyword.'%"';
 			$where .= ' OR link_url LIKE "%'.$keyword.'%" OR link_desc_posted LIKE "%'.$keyword.'%")';
 		}
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT l.*,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.user_group
 			 FROM '.BS_TB_LINKS.' l
 			 LEFT JOIN '.BS_TB_USER.' u ON l.user_id = u.`'.BS_EXPORT_USER_ID.'`
@@ -190,7 +200,9 @@ class BS_DAO_Links extends PLIB_Singleton
 	 */
 	public function get_invalid_link_ids()
 	{
-		return $this->db->sql_rows(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
 			'SELECT id FROM '.BS_TB_LINKS.' WHERE link_desc = "" AND link_desc_posted != ""'
 		);
 	}
@@ -203,8 +215,10 @@ class BS_DAO_Links extends PLIB_Singleton
 	 */
 	public function create($fields)
 	{
-		$this->db->sql_insert(BS_TB_LINKS,$fields);
-		return $this->db->get_last_insert_id();
+		$db = PLIB_Props::get()->db();
+
+		$db->sql_insert(BS_TB_LINKS,$fields);
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -216,15 +230,17 @@ class BS_DAO_Links extends PLIB_Singleton
 	 */
 	public function set_active($ids,$active)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		if($active !== 1 && $active !== 2)
 			PLIB_Helper::error('Active should be 0 or 1');
 		
-		$this->db->sql_update(BS_TB_LINKS,'WHERE id = IN ('.implode(',',$ids).')',array(
+		$db->sql_update(BS_TB_LINKS,'WHERE id = IN ('.implode(',',$ids).')',array(
 			'active' => $active
 		));
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -235,13 +251,15 @@ class BS_DAO_Links extends PLIB_Singleton
 	 */
 	public function increase_clicks($id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$this->db->sql_update(BS_TB_LINKS,'WHERE id = '.$id,array(
+		$db->sql_update(BS_TB_LINKS,'WHERE id = '.$id,array(
 			'clicks' => array('clicks + 1')
 		));
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -253,16 +271,18 @@ class BS_DAO_Links extends PLIB_Singleton
 	 */
 	public function vote($id,$vote)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		if(!PLIB_Helper::is_integer($vote) || $vote < 1 || $vote > 6)
 			PLIB_Helper::def_error('numbetween','vote',1,6,$vote);
 		
-		$this->db->sql_update(BS_TB_LINKS,'WHERE id = '.$id,array(
+		$db->sql_update(BS_TB_LINKS,'WHERE id = '.$id,array(
 			'votes' => array('votes + 1'),
 			'vote_points' => array('vote_points + '.$vote)
 		));
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -275,14 +295,16 @@ class BS_DAO_Links extends PLIB_Singleton
 	 */
 	public function update_text($id,$text,$text_posted)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$this->db->sql_update(BS_TB_LINKS,'WHERE id = '.$id,array(
+		$db->sql_update(BS_TB_LINKS,'WHERE id = '.$id,array(
 			'link_desc' => $text,
 			'link_desc_posted' => $text_posted
 		));
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -294,11 +316,13 @@ class BS_DAO_Links extends PLIB_Singleton
 	 */
 	public function update($id,$fields)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$this->db->sql_update(BS_TB_LINKS,'WHERE id = '.$id,$fields);
-		return $this->db->get_affected_rows();
+		$db->sql_update(BS_TB_LINKS,'WHERE id = '.$id,$fields);
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -309,7 +333,7 @@ class BS_DAO_Links extends PLIB_Singleton
 	 */
 	public function delete_by_ids($ids)
 	{
-		return $this->_delete_by('id',$ids);
+		return $this->delete_by('id',$ids);
 	}
 	
 	/**
@@ -320,7 +344,7 @@ class BS_DAO_Links extends PLIB_Singleton
 	 */
 	public function delete_by_users($ids)
 	{
-		return $this->_delete_by('user_id',$ids);
+		return $this->delete_by('user_id',$ids);
 	}
 	
 	/**
@@ -330,15 +354,17 @@ class BS_DAO_Links extends PLIB_Singleton
 	 * @param array $ids the ids
 	 * @return int the number of affected rows
 	 */
-	protected function _delete_by($field,$ids)
+	protected function delete_by($field,$ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_LINKS.' WHERE '.$field.' IN ('.implode(',',$ids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

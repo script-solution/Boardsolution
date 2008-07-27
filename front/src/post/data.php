@@ -18,7 +18,7 @@
  * @subpackage	front.src.post
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Post_Data extends PLIB_FullObject
+final class BS_Front_Post_Data extends PLIB_Object
 {
 	/**
 	 * A cache for profile-data. As soon as we need a value for the profile it will be created
@@ -138,8 +138,10 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function get_post_number()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		$page = $this->_container->get_pagination()->get_page();
-		return (($page - 1) * $this->cfg['posts_per_page']) + $this->_no + 1;
+		return (($page - 1) * $cfg['posts_per_page']) + $this->_no + 1;
 	}
 	
 	/**
@@ -171,7 +173,9 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function get_post_url()
 	{
-		return $this->url->get_url(
+		$url = PLIB_Props::get()->url();
+
+		return $url->get_url(
 			'redirect','&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'='.$this->get_field('bid')
 		);
 	}
@@ -202,10 +206,12 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function get_guest_email()
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		if($this->_data['post_an_mail'] != '')
     	return $this->_data['post_an_mail'];
     else
-    	return $this->locale->lang('notavailable');
+    	return $locale->lang('notavailable');
 	}
 	
 	/**
@@ -213,7 +219,9 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function get_user_group()
 	{
-		return $this->auth->get_groupname((int)$this->_data['user_group']);
+		$auth = PLIB_Props::get()->auth();
+
+		return $auth->get_groupname((int)$this->_data['user_group']);
 	}
 	
 	/**
@@ -221,11 +229,14 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function get_user_stats()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$locale = PLIB_Props::get()->locale();
+
 		if(isset(self::$_profiles[$this->_data['id']]['stats']))
 			return self::$_profiles[$this->_data['id']]['stats'];
 		
 		$stats = '';
-		if($this->_data['post_user'] != 0 && $this->cfg['enable_post_count'] == 1)
+		if($this->_data['post_user'] != 0 && $cfg['enable_post_count'] == 1)
 		{
 			$rank = $this->get_rank();
 			$stats .= BS_PostingUtils::get_instance()->get_experience_diagram(
@@ -233,10 +244,10 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 			);
 			$stats .= '<br />';
 
-    	if($this->cfg['enable_user_ranks'] == 1)
-    		$stats .= '<i>'.$rank['rank'].'</i> '.$this->locale->lang('with').' ';
-    	$stats .= $this->_data['exppoints'].' '.$this->locale->lang('points').', ';
-    	$stats .= $this->_data['posts'].' '.$this->locale->lang('posts');
+    	if($cfg['enable_user_ranks'] == 1)
+    		$stats .= '<i>'.$rank['rank'].'</i> '.$locale->lang('with').' ';
+    	$stats .= $this->_data['exppoints'].' '.$locale->lang('points').', ';
+    	$stats .= $this->_data['posts'].' '.$locale->lang('posts');
     }
     
     self::$_profiles[$this->_data['id']]['stats'] = $stats;
@@ -248,13 +259,16 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function get_user_ip()
 	{
+		$auth = PLIB_Props::get()->auth();
+		$locale = PLIB_Props::get()->locale();
+
 		if(isset(self::$_profiles[$this->_data['id']]['userstatus']))
 			return self::$_profiles[$this->_data['id']]['userstatus'];
 		
-		if($this->auth->has_global_permission('view_user_ip') && $this->_data['ip_adresse'] != '')
+		if($auth->has_global_permission('view_user_ip') && $this->_data['ip_adresse'] != '')
 			$status = $this->_data['ip_adresse'];
 		else
-			$status = $this->locale->lang('notavailable');
+			$status = $locale->lang('notavailable');
 		
 		self::$_profiles[$this->_data['id']]['userstatus'] = $status;
 		return $status;
@@ -265,11 +279,14 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function get_user_status()
 	{
-		if($this->cfg['enable_user_ranks'] == 1 && $this->_data['post_user'] > 0)
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+
+		if($cfg['enable_user_ranks'] == 1 && $this->_data['post_user'] > 0)
 			return '';
 		
 		$group_id = $this->_data['post_user'] > 0 ? (int)$this->_data['user_group'] : BS_STATUS_GUEST;
-		return $this->auth->get_colored_groupname($group_id);
+		return $auth->get_colored_groupname($group_id);
 	}
 	
 	/**
@@ -290,10 +307,12 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function get_rank()
 	{
+		$functions = PLIB_Props::get()->functions();
+
 		if(isset(self::$_profiles[$this->_data['id']]['rank']))
 			return self::$_profiles[$this->_data['id']]['rank'];
 		
-		$rank = $this->functions->get_rank_data($this->_data['exppoints']);
+		$rank = $functions->get_rank_data($this->_data['exppoints']);
 		self::$_profiles[$this->_data['id']]['rank'] = $rank;
 		return $rank;
 	}
@@ -303,10 +322,13 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function get_rank_title()
 	{
-		if($this->cfg['enable_user_ranks'] == 1 && $this->_data['post_user'] > 0)
-			return $this->locale->lang('rank');
+		$cfg = PLIB_Props::get()->cfg();
+		$locale = PLIB_Props::get()->locale();
+
+		if($cfg['enable_user_ranks'] == 1 && $this->_data['post_user'] > 0)
+			return $locale->lang('rank');
 		
-		return $this->locale->lang('user_group');
+		return $locale->lang('user_group');
 	}
 	
 	/**
@@ -314,14 +336,17 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function get_rank_images()
 	{
+		$cache = PLIB_Props::get()->cache();
+		$functions = PLIB_Props::get()->functions();
+
 		if(isset(self::$_profiles[$this->_data['id']]['rankimg']))
 			return self::$_profiles[$this->_data['id']]['rankimg'];
 		
 		if($this->_data['post_user'] > 0)
 		{
 			$rank = $this->get_rank();
-			$rank_num = $this->cache->get_cache('user_ranks')->get_element_count();
-			$images = $this->functions->get_rank_images(
+			$rank_num = $cache->get_cache('user_ranks')->get_element_count();
+			$images = $functions->get_rank_images(
 			 	$rank_num,$rank['pos'],$this->_data['id'],$this->_data['user_group']
 			);
 		}
@@ -345,11 +370,13 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function get_avatar()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		if(isset(self::$_profiles[$this->_data['id']]['avatar']))
 			return self::$_profiles[$this->_data['id']]['avatar'];
 		
 		$avatar = '';
-		if($this->cfg['enable_avatars'] == 1)
+		if($cfg['enable_avatars'] == 1)
 			$avatar = BS_UserUtils::get_instance()->get_avatar_path($this->_data);
 		self::$_profiles[$this->_data['id']]['avatar'] = $avatar;
 		return $avatar;
@@ -360,6 +387,8 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function get_additional_fields()
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		$fields = array();
 	  if($this->_data['post_user'] != 0)
 	  {
@@ -373,7 +402,7 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 					if(!$fdata->display_empty())
 						continue;
 
-					$field_value = $this->locale->lang('notavailable');
+					$field_value = $locale->lang('notavailable');
 				}
 				else
 					$field_value = $field->get_display($val,$left_class,$left_class,30);
@@ -413,21 +442,29 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function get_post_buttons()
 	{
+		$auth = PLIB_Props::get()->auth();
+		$forums = PLIB_Props::get()->forums();
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		$cfg = PLIB_Props::get()->cfg();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		static $cache = null;
 		if($cache === null)
 		{
 			$cache = array(
-				'can_reply'					=> $this->auth->has_current_forum_perm(BS_MODE_REPLY),
-				'fclosed'						=> $this->forums->forum_is_closed($this->_data['rubrikid']),
-				'fid'								=> $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID),
-				'tid'								=> $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID),
-				'action'						=> $this->input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING),
+				'can_reply'					=> $auth->has_current_forum_perm(BS_MODE_REPLY),
+				'fclosed'						=> $forums->forum_is_closed($this->_data['rubrikid']),
+				'fid'								=> $input->get_var(BS_URL_FID,'get',PLIB_Input::ID),
+				'tid'								=> $input->get_var(BS_URL_TID,'get',PLIB_Input::ID),
+				'action'						=> $input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING),
 				'site'							=> $this->_container->get_pagination()->get_page(),
 				'total_pages'				=> $this->_container->get_pagination()->get_page_count(),
 				'total_posts'				=> $this->_container->get_post_count(),
 				'topic'							=> BS_Front_TopicFactory::get_instance()->get_current_topic(),
 				'posts_order'				=> BS_PostingUtils::get_instance()->get_posts_order(),
-				'is_admin'					=> $this->user->is_admin()
+				'is_admin'					=> $user->is_admin()
 			);
 		}
 		
@@ -440,56 +477,56 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	    	 	$cache['posts_order'] == 'DESC'))
 	    {
 	    	// delete topic
-	    	if($this->cfg['display_denied_options'] ||
-	    		 $this->auth->has_current_forum_perm(BS_MODE_DELETE_TOPICS,$this->_data['post_user']))
+	    	if($cfg['display_denied_options'] ||
+	    		 $auth->has_current_forum_perm(BS_MODE_DELETE_TOPICS,$this->_data['post_user']))
 	    	{
-		    	$url = $this->url->get_url('delete_topics','&amp;'.BS_URL_FID.'='.$cache['fid']
+		    	$murl = $url->get_url('delete_topics','&amp;'.BS_URL_FID.'='.$cache['fid']
 		    		.'&amp;'.BS_URL_ID.'='.$cache['tid']);
-		    	$btns .= '<a class="bs_button_big" title="'.$this->locale->lang('delete_topic');
-					$btns .= '" href="'.$url.'">'.$this->locale->lang('delete_topic').'</a>';
+		    	$btns .= '<a class="bs_button_big" title="'.$locale->lang('delete_topic');
+					$btns .= '" href="'.$murl.'">'.$locale->lang('delete_topic').'</a>';
 	    	}
 	    }
 	    else
 	    {
 	    	// delete post
-	    	if($this->cfg['display_denied_options'] ||
-	    		 ($this->auth->has_current_forum_perm(BS_MODE_DELETE_POSTS,$this->_data['post_user']) &&
+	    	if($cfg['display_denied_options'] ||
+	    		 ($auth->has_current_forum_perm(BS_MODE_DELETE_POSTS,$this->_data['post_user']) &&
 	    		  ($cache['is_admin'] || $cache['topic']['thread_closed'] == 0)))
 	    	{
-		    	$url = $this->url->get_url('delete_post','&amp;'.BS_URL_FID.'='.$cache['fid']
+		    	$murl = $url->get_url('delete_post','&amp;'.BS_URL_FID.'='.$cache['fid']
 		    		.'&amp;'.BS_URL_TID.'='.$cache['tid'].'&amp;'.BS_URL_ID.'='.$this->_data['bid']);
-		    	$btns .= '<a title="'.$this->locale->lang('deletepost').'" class="bs_button" href="';
-		    	$btns .= $url.'">'.$this->locale->lang('delete').'</a>';
+		    	$btns .= '<a title="'.$locale->lang('deletepost').'" class="bs_button" href="';
+		    	$btns .= $murl.'">'.$locale->lang('delete').'</a>';
 	    	}
 	    }
 	
 	    // edit post
-	    if($this->cfg['display_denied_options'] ||
-	    	 ($this->auth->has_current_forum_perm(BS_MODE_EDIT_POST,$this->_data['post_user']) &&
+	    if($cfg['display_denied_options'] ||
+	    	 ($auth->has_current_forum_perm(BS_MODE_EDIT_POST,$this->_data['post_user']) &&
 	    	  ($cache['is_admin'] || $cache['topic']['thread_closed'] == 0)))
 	    {
-		    $url = $this->url->get_url('edit_post','&amp;'.BS_URL_FID.'='.$cache['fid']
+		    $murl = $url->get_url('edit_post','&amp;'.BS_URL_FID.'='.$cache['fid']
 		    	.'&amp;'.BS_URL_TID.'='.$cache['tid'].'&amp;'.BS_URL_ID.'='.$this->_data['bid']
 		    	.'&amp;'.BS_URL_SITE.'='.$cache['site']);
-		    $btns .= '<a class="bs_button" title="'.$this->locale->lang('editpost');
-				$btns .= '" href="'.$url.'">'.$this->locale->lang('edit').'</a>';
+		    $btns .= '<a class="bs_button" title="'.$locale->lang('editpost');
+				$btns .= '" href="'.$murl.'">'.$locale->lang('edit').'</a>';
 	    }
 	
 	  	// quote button
-	    if(($this->cfg['display_denied_options'] || $cache['can_reply']) &&
+	    if(($cfg['display_denied_options'] || $cache['can_reply']) &&
 	    	$cache['topic']['comallow'] == 1 &&
 	    	($cache['is_admin'] || $cache['topic']['thread_closed'] == 0))
 	    {
 				$add_url = '&amp;'.BS_URL_PID.'='.$this->_data['bid'];
 				if($cache['site'] > 1)
 					$add_url .= '&amp;'.BS_URL_SITE.'='.$cache['site'];
-	    	$url = $this->url->get_url('new_post','&amp;'.BS_URL_FID.'='.$cache['fid']
+	    	$murl = $url->get_url('new_post','&amp;'.BS_URL_FID.'='.$cache['fid']
 	    		.'&amp;'.BS_URL_TID.'='.$cache['tid'].$add_url);
 	    	
 	      $btns .= '<a id="quote_link_'.$this->_data['bid'].'" class="bs_button"';
-	      $btns .= ' title="'.$this->locale->lang('quotethispost').'"';
-				$btns .= ' href="'.$url.'" onclick="toggleQuote('.$this->_data['bid'].'); return false;">';
-				$btns .= $this->locale->lang('quote').'+</a>';
+	      $btns .= ' title="'.$locale->lang('quotethispost').'"';
+				$btns .= ' href="'.$murl.'" onclick="toggleQuote('.$this->_data['bid'].'); return false;">';
+				$btns .= $locale->lang('quote').'+</a>';
 	    }
 	  }
 	  
@@ -501,24 +538,31 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function get_profile_buttons()
 	{
+		$auth = PLIB_Props::get()->auth();
+		$user = PLIB_Props::get()->user();
+		$url = PLIB_Props::get()->url();
+		$sessions = PLIB_Props::get()->sessions();
+		$cfg = PLIB_Props::get()->cfg();
+		$locale = PLIB_Props::get()->locale();
+
 		static $cache = null;
 		if($cache === null)
 		{
 			$cache = array(
-				'view_online'				=> $this->auth->has_global_permission('view_online_locations'),
-				'send_mails'				=> $this->auth->has_global_permission('send_mails'),
-				'is_admin'					=> $this->user->is_admin(),
-				'is_loggedin'				=> $this->user->is_loggedin()
+				'view_online'				=> $auth->has_global_permission('view_online_locations'),
+				'send_mails'				=> $auth->has_global_permission('send_mails'),
+				'is_admin'					=> $user->is_admin(),
+				'is_loggedin'				=> $user->is_loggedin()
 			);
 		}
 		
 		$btns = '';
 	
 	  $btns .= '<a class="bs_button" style="float: left;" href="';
-	  $btns .= $this->url->get_url('user_locations').'">';
-	  $location = $this->sessions->get_user_location($this->_data['post_user']);
+	  $btns .= $url->get_url('user_locations').'">';
+	  $location = $sessions->get_user_location($this->_data['post_user']);
 		if($this->_data['post_user'] > 0 && $location != '' && ($this->_data['ghost_mode'] == 0 ||
-				$this->cfg['allow_ghost_mode'] == 0 || $cache['is_admin']))
+				$cfg['allow_ghost_mode'] == 0 || $cache['is_admin']))
 		{
 			$loc = '';
 			if($cache['view_online'])
@@ -528,34 +572,34 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 			}
 	
 	  	$btns .= '<span title="'.$loc.'" style="color: #008000;">';
-	  	$btns .= $this->locale->lang('status_online').'</span>';
+	  	$btns .= $locale->lang('status_online').'</span>';
 	  }
 	  else
-	  	$btns .= '<span style="color: #CC0000;">'.$this->locale->lang('status_offline').'</span>';
+	  	$btns .= '<span style="color: #CC0000;">'.$locale->lang('status_offline').'</span>';
 	  $btns .= '</a>';
 	
 		// email button
-	  if($this->cfg['enable_emails'] == 1 && PLIB_StringHelper::is_valid_email($this->_data['email']) &&
+	  if($cfg['enable_emails'] == 1 && PLIB_StringHelper::is_valid_email($this->_data['email']) &&
 			 $this->_data['allow_board_emails'] == 1 &&
-			 ($this->cfg['display_denied_options'] || $cache['send_mails']))
+			 ($cfg['display_denied_options'] || $cache['send_mails']))
 	  {
 	  	$btns .= '<a class="bs_button" style="float: left;" title="';
-	  	$btns .= sprintf($this->locale->lang('send_mail_to_user'),$this->_data['user']);
+	  	$btns .= sprintf($locale->lang('send_mail_to_user'),$this->_data['user']);
 	  	$btns .= '" href="';
-	  	$btns .= $this->url->get_url('new_mail','&amp;'.BS_URL_ID.'='.$this->_data['post_user']);
-	  	$btns .= '">'.$this->locale->lang('email').'</a>';
+	  	$btns .= $url->get_url('new_mail','&amp;'.BS_URL_ID.'='.$this->_data['post_user']);
+	  	$btns .= '">'.$locale->lang('email').'</a>';
 	  }
 	
 	  // pm button
-	  if($this->cfg['enable_pms'] == 1 && $this->_data['post_user'] != 0 &&
-	  	 $this->_data['allow_pms'] == 1 && ($this->cfg['display_denied_options'] || $cache['is_loggedin']))
+	  if($cfg['enable_pms'] == 1 && $this->_data['post_user'] != 0 &&
+	  	 $this->_data['allow_pms'] == 1 && ($cfg['display_denied_options'] || $cache['is_loggedin']))
 	  {
-	    $pm_url = $this->url->get_url('userprofile','&amp;'.BS_URL_LOC.'=pmcompose'
+	    $pm_url = $url->get_url('userprofile','&amp;'.BS_URL_LOC.'=pmcompose'
 	    	.'&amp;'.BS_URL_ID.'='.$this->_data['post_user']);
 	    
-	    $btns .= '<a class="bs_button" style="float: left;" title="'.$this->_data['user'];
-			$btns .= ' '.$this->locale->lang('sendapm').'"';
-	    $btns .= ' href="'.$pm_url.'">'.$this->locale->lang('pm_short').'</a>';
+	    $btns .= '<a class="bs_button" style="float: left;" title="';
+			$btns .= sprintf($locale->lang('send_pm_to_user'),$this->_data['user']).'"';
+	    $btns .= ' href="'.$pm_url.'">'.$locale->lang('pm_short').'</a>';
 	  }
 	  
 	  return $btns;
@@ -566,9 +610,11 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function is_unread()
 	{
-		if($this->unread->is_unread_thread($this->_data['threadid']))
+		$unread = PLIB_Props::get()->unread();
+
+		if($unread->is_unread_thread($this->_data['threadid']))
 		{
-			$first_unread = $this->unread->get_first_unread_post($this->_data['threadid']);
+			$first_unread = $unread->get_first_unread_post($this->_data['threadid']);
 	    return $this->_data['bid'] >= $first_unread;
 		}
 		return false;
@@ -579,37 +625,41 @@ final class BS_Front_Post_Data extends PLIB_FullObject
 	 */
 	public function get_post_image()
 	{
+		$unread = PLIB_Props::get()->unread();
+		$user = PLIB_Props::get()->user();
+		$locale = PLIB_Props::get()->locale();
+
 		// determine post unread image
-	  if($this->unread->is_unread_thread($this->_data['threadid']))
+	  if($unread->is_unread_thread($this->_data['threadid']))
 	  {
-			$first_unread = $this->unread->get_first_unread_post($this->_data['threadid']);
+			$first_unread = $unread->get_first_unread_post($this->_data['threadid']);
 	    if($this->_data['bid'] >= $first_unread)
 	    {
-	    	$image = $this->user->get_theme_item_path('images/unread/post_unread.gif');
-	      $img = '<img alt="'.$this->locale->lang('newentry').'" title="';
-	      $img .= $this->locale->lang('newentry').'"';
+	    	$image = $user->get_theme_item_path('images/unread/post_unread.gif');
+	      $img = '<img alt="'.$locale->lang('newentry').'" title="';
+	      $img .= $locale->lang('newentry').'"';
 	      $img .= ' src="'.$image.'" />';
 	    }
 	    else
 	    {
-	    	$image = $this->user->get_theme_item_path('images/unread/post_read.gif');
-	      $img = '<img alt="'.$this->locale->lang('nonewentry').'" title="';
-	      $img .= $this->locale->lang('nonewentry').'"';
+	    	$image = $user->get_theme_item_path('images/unread/post_read.gif');
+	      $img = '<img alt="'.$locale->lang('nonewentry').'" title="';
+	      $img .= $locale->lang('nonewentry').'"';
 	      $img .= ' src="'.$image.'" />';
 	    }
 	  }
 	  else
 	  {
-	    $image = $this->user->get_theme_item_path('images/unread/post_read.gif');
-	    $img = '<img alt="'.$this->locale->lang('nonewentry').'" title="';
-	    $img .= $this->locale->lang('nonewentry').'"';
+	    $image = $user->get_theme_item_path('images/unread/post_read.gif');
+	    $img = '<img alt="'.$locale->lang('nonewentry').'" title="';
+	    $img .= $locale->lang('nonewentry').'"';
 	    $img .= ' src="'.$image.'" />';
 	  }
 	  
 	  return $img;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

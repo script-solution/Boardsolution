@@ -39,10 +39,12 @@ class BS_DAO_LinkVotes extends PLIB_Singleton
 	 */
 	public function get_votes_of_user($user_id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
 			PLIB_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$rows = $this->db->sql_rows(
+		$rows = $db->sql_rows(
 			'SELECT link_id FROM '.BS_TB_LINK_VOTES.' WHERE user_id = '.$user_id
 		);
 		$lids = array();
@@ -59,12 +61,14 @@ class BS_DAO_LinkVotes extends PLIB_Singleton
 	 */
 	public function vote($link_id,$user_id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($link_id) || $link_id <= 0)
 			PLIB_Helper::def_error('intgt0','link_id',$link_id);
 		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
 			PLIB_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$this->db->sql_insert(BS_TB_LINK_VOTES,array(
+		$db->sql_insert(BS_TB_LINK_VOTES,array(
 			'link_id' => $link_id,
 			'user_id' => $user_id
 		));
@@ -78,13 +82,15 @@ class BS_DAO_LinkVotes extends PLIB_Singleton
 	 */
 	public function delete_by_links($ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_LINK_VOTES.' WHERE link_id IN ('.implode(',',$ids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

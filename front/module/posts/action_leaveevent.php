@@ -21,17 +21,24 @@ final class BS_Front_Action_posts_leaveevent extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+		$functions = PLIB_Props::get()->functions();
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		// is the user loggedin?
-		if($this->cfg['enable_events'] == 0 || !$this->user->is_loggedin())
+		if($cfg['enable_events'] == 0 || !$user->is_loggedin())
 			return 'Events are disabled or you are not loggedin';
 
 		// check if the session-id is valid
-		if(!$this->functions->has_valid_get_sid())
+		if(!$functions->has_valid_get_sid())
 			return 'The session-id is invalid';
 
 		// check parameters
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
 
 		if($fid == null || $tid == null)
 			return 'The forum-id or topic-id is invalid';
@@ -46,17 +53,17 @@ final class BS_Front_Action_posts_leaveevent extends BS_Front_Action_Base
 			return 'An event with topic-id "'.$tid.'" and enabled announcements has not been found';
 		
 		// is the user announced to this event?
-		if(!BS_DAO::get_eventann()->is_announced($this->user->get_user_id(),$event['id']))
+		if(!BS_DAO::get_eventann()->is_announced($user->get_user_id(),$event['id']))
 			return 'You are not announced to this event';
 
 		$timeout = ($event['timeout'] == 0) ? $event['event_begin'] : $event['timeout'];
 		if($data['thread_closed'] == 1 || time() > $timeout)
 			return 'topic_closed';
 
-		BS_DAO::get_eventann()->leave($this->user->get_user_id(),$event['id']);
+		BS_DAO::get_eventann()->leave($user->get_user_id(),$event['id']);
 
 		$this->set_action_performed(true);
-		$this->add_link($this->locale->lang('go_to_topic'),$this->url->get_posts_url($fid,$tid));
+		$this->add_link($locale->lang('go_to_topic'),$url->get_posts_url($fid,$tid));
 
 		return '';
 	}

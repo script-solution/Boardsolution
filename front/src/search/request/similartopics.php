@@ -68,7 +68,11 @@ final class BS_Front_Search_Request_SimilarTopics extends BS_Front_Search_Reques
 	
 	public function get_result_ids()
 	{
-		$keyword = $this->input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+
+		$keyword = $input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
 		if(!BS_Front_Search_Utils::is_valid_keyword($keyword))
 			return null;
 		
@@ -77,8 +81,8 @@ final class BS_Front_Search_Request_SimilarTopics extends BS_Front_Search_Reques
 
 		if(count($this->_keywords) == 0)
 		{
-			$this->msgs->add_error(
-				sprintf($this->locale->lang('search_missing_keyword'),BS_SEARCH_MIN_KEYWORD_LEN)
+			$msgs->add_error(
+				sprintf($locale->lang('search_missing_keyword'),BS_SEARCH_MIN_KEYWORD_LEN)
 			);
 			return null;
 		}
@@ -88,13 +92,15 @@ final class BS_Front_Search_Request_SimilarTopics extends BS_Front_Search_Reques
 			$this->_keywords,array('p.text_posted','t.name'),'OR'
 		);
 		
-		return $this->_get_result_ids('topics',$sql,250);
+		return $this->get_result_ids_impl('topics',$sql,250);
 	}
 	
 	public function get_title($search)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		return sprintf(
-			$this->locale->lang('search_result_topics'),
+			$locale->lang('search_result_topics'),
 			stripslashes(implode('", "',$this->_keywords)),
 			count($search->get_result_ids())
 		);
@@ -105,7 +111,7 @@ final class BS_Front_Search_Request_SimilarTopics extends BS_Front_Search_Reques
 		return array('date','DESC');
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

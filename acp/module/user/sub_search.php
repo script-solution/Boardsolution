@@ -19,32 +19,56 @@
  */
 final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array();
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_ACPACCESS_MODULE,'module');
+		$doc->add_breadcrumb(
+			$locale->lang('search'),
+			$url->get_acpmod_url(0,'&amp;action=search&amp;use_sess=1')
+		);
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		$cache = PLIB_Props::get()->cache();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+		$cfg = PLIB_Props::get()->cfg();
+
 		// search?
-		if($this->input->isset_var('submit','post'))
+		if($input->isset_var('submit','post'))
 			$this->_perform_search();
 		
 		// init the search
-		$use_sess = $this->input->get_var('use_sess','get',PLIB_Input::INT_BOOL);
+		$use_sess = $input->get_var('use_sess','get',PLIB_Input::INT_BOOL);
 		if($use_sess)
-			$sp = $this->user->get_session_data('user_search_params');
+			$sp = $user->get_session_data('user_search_params');
 		else
 		{
 			// delete potential old session-data
-			$this->user->delete_session_data('user_search_ids');
-			$this->user->delete_session_data('user_search_params');
+			$user->delete_session_data('user_search_ids');
+			$user->delete_session_data('user_search_params');
 			
 			$sp = $this->_get_search_params();
 		}
 		
 		// collect usergroups
-		$groups = $this->cache->get_cache('user_groups');
+		$groups = $cache->get_cache('user_groups');
 		$user_group_options = array();
 		$selected_groups = array();
 		foreach($groups as $data)
@@ -59,11 +83,11 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 		}
 		
 		$form = new BS_HTML_Formular(false,false);
-		$form->set_condition($this->input->isset_var('submit','post'));
+		$form->set_condition($input->isset_var('submit','post'));
 		
-		$this->tpl->add_variables(array(
-			'wait_image' => $this->user->get_theme_item_path('images/wait.gif'),
-			'search_target' => $this->url->get_acpmod_url(0,'&amp;action=search'),
+		$tpl->add_variables(array(
+			'wait_image' => $user->get_theme_item_path('images/wait.gif'),
+			'search_target' => $url->get_acpmod_url(0,'&amp;action=search'),
 			'name_value' => stripslashes($sp['name']),
 			'action_param' => BS_URL_ACTION,
 			'email_value' => stripslashes($sp['email']),
@@ -73,7 +97,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 			),
 		));
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'posts_control' => $this->_get_int_control(
 				'from_posts','to_posts',$sp['from_posts'],$sp['to_posts']
 			),
@@ -86,8 +110,8 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 			'lastlogin_control' => $this->_get_date_control(
 				$form,'from_lastlogin','to_lastlogin',$sp['from_lastlogin'],$sp['to_lastlogin']
 			),
-			'enable_post_count' => $this->cfg['enable_post_count'] == 1,
-			'reset_url' => $this->url->get_acpmod_url(0,'&amp;action=search')
+			'enable_post_count' => $cfg['enable_post_count'] == 1,
+			'reset_url' => $url->get_acpmod_url(0,'&amp;action=search')
 		));
 		
 		// add additional fields
@@ -106,8 +130,8 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 				case 'int':
 					if(!$use_sess)
 					{
-						$from = $this->input->get_var('add_from_'.$field_name,'post',PLIB_Input::INTEGER);
-						$to = $this->input->get_var('add_to_'.$field_name,'post',PLIB_Input::INTEGER);
+						$from = $input->get_var('add_from_'.$field_name,'post',PLIB_Input::INTEGER);
+						$to = $input->get_var('add_to_'.$field_name,'post',PLIB_Input::INTEGER);
 					}
 					else
 					{
@@ -132,8 +156,8 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 				case 'date':
 					if(!$use_sess)
 					{
-						$from = $this->input->get_var('add_from_'.$field_name,'post',PLIB_Input::INTEGER);
-						$to = $this->input->get_var('add_to_'.$field_name,'post',PLIB_Input::INTEGER);
+						$from = $input->get_var('add_from_'.$field_name,'post',PLIB_Input::INTEGER);
+						$to = $input->get_var('add_to_'.$field_name,'post',PLIB_Input::INTEGER);
 					}
 					else
 					{
@@ -148,7 +172,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 				
 				case 'enum':
 					if(!$use_sess)
-						$value = $this->input->get_var('add_'.$field_name,'post');
+						$value = $input->get_var('add_'.$field_name,'post');
 					else
 						$value = $sp['add_'.$field_name];
 					
@@ -165,7 +189,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 			);
 		}
 		
-		$this->tpl->add_array('addfields',$tplfields);
+		$tpl->add_array('addfields',$tplfields);
 	}
 	
 	/**
@@ -173,6 +197,14 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 	 */
 	private function _perform_search()
 	{
+		$cache = PLIB_Props::get()->cache();
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		$doc = PLIB_Props::get()->doc();
+		$url = PLIB_Props::get()->url();
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+
 		$search_params = $this->_get_search_params();
 		
 		// builds where-clause
@@ -199,7 +231,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 		if($search_params['group'] != null && PLIB_Array_Utils::is_integer($search_params['group']))
 		{
 			$where .= ' AND (';
-			$groups = $this->cache->get_cache('user_groups');
+			$groups = $cache->get_cache('user_groups');
 			foreach($search_params['group'] as $gid)
 			{
 				// check if the group is allowed
@@ -236,8 +268,8 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 			switch($data->get_type())
 			{
 				case 'int':
-					$from = $this->input->get_var('add_from_'.$field_name,'post',PLIB_Input::INTEGER);
-					$to = $this->input->get_var('add_to_'.$field_name,'post',PLIB_Input::INTEGER);
+					$from = $input->get_var('add_from_'.$field_name,'post',PLIB_Input::INTEGER);
+					$to = $input->get_var('add_to_'.$field_name,'post',PLIB_Input::INTEGER);
 					$where .= PLIB_StringHelper::build_int_range_sql('p.add_'.$field_name,$from,$to);
 					
 					$search_params['add_from_'.$field_name] = $from;
@@ -253,8 +285,8 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 					break;
 				
 				case 'date':
-					$from = $this->input->get_var('add_from_'.$field_name,'post',PLIB_Input::STRING);
-					$to = $this->input->get_var('add_to_'.$field_name,'post',PLIB_Input::STRING);
+					$from = $input->get_var('add_from_'.$field_name,'post',PLIB_Input::STRING);
+					$to = $input->get_var('add_to_'.$field_name,'post',PLIB_Input::STRING);
 					$where .= PLIB_StringHelper::build_date_range_sql('p.add_'.$field_name,$from,$to);
 					
 					$search_params['add_from_'.$field_name] = $from;
@@ -262,7 +294,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 					break;
 				
 				case 'enum':
-					$selected = $this->input->get_var('add_'.$field_name,'post');
+					$selected = $input->get_var('add_'.$field_name,'post');
 					if(is_array($selected) && PLIB_Array_Utils::is_integer($selected) && count($selected) > 0)
 						$where .= ' AND p.`add_'.$field_name.'` IN ('.implode(',',$selected).')';
 					$search_params['add_'.$field_name] = $selected;
@@ -278,13 +310,13 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 		if(count($user_ids) > 0)
 		{
 			// ok, store them to the session and redirect to the results-page
-			$this->user->set_session_data('user_search_params',$search_params);
-			$this->user->set_session_data('user_search_ids',$user_ids);
-			$this->doc->redirect(PLIB_Path::outer().$this->url->get_acpmod_url(0,'&action=default','&'));
+			$user->set_session_data('user_search_params',$search_params);
+			$user->set_session_data('user_search_ids',$user_ids);
+			$doc->redirect(PLIB_Path::outer().$url->get_acpmod_url(0,'&action=default','&'));
 		}
 		// show the search-form again, if we have found 0 user
 		else
-			$this->msgs->add_error($this->locale->lang('no_user_found'));
+			$msgs->add_error($locale->lang('no_user_found'));
 	}
 	
 	/**
@@ -294,24 +326,26 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 	 */
 	private function _get_search_params()
 	{
-		$from_reg = $this->input->get_var('from_reg','post',PLIB_Input::STRING);
-		$to_reg = $this->input->get_var('to_reg','post',PLIB_Input::STRING);
-		$from_lastlogin = $this->input->get_var('from_lastlogin','post',PLIB_Input::STRING);
-		$to_lastlogin = $this->input->get_var('to_lastlogin','post',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+
+		$from_reg = $input->get_var('from_reg','post',PLIB_Input::STRING);
+		$to_reg = $input->get_var('to_reg','post',PLIB_Input::STRING);
+		$from_lastlogin = $input->get_var('from_lastlogin','post',PLIB_Input::STRING);
+		$to_lastlogin = $input->get_var('to_lastlogin','post',PLIB_Input::STRING);
 		
 		return array(
-			'name' => $this->input->get_var('user_name','post',PLIB_Input::STRING),
-			'email' => $this->input->get_var('user_email','post',PLIB_Input::STRING),
-			'group' => $this->input->get_var('user_group','post'),
-			'from_posts' => $this->input->get_var('from_posts','post',PLIB_Input::INTEGER),
-			'to_posts' => $this->input->get_var('to_posts','post',PLIB_Input::INTEGER),
-			'from_points' => $this->input->get_var('from_pts','post',PLIB_Input::INTEGER),
-			'to_points' => $this->input->get_var('to_pts','post',PLIB_Input::INTEGER),
+			'name' => $input->get_var('user_name','post',PLIB_Input::STRING),
+			'email' => $input->get_var('user_email','post',PLIB_Input::STRING),
+			'group' => $input->get_var('user_group','post'),
+			'from_posts' => $input->get_var('from_posts','post',PLIB_Input::INTEGER),
+			'to_posts' => $input->get_var('to_posts','post',PLIB_Input::INTEGER),
+			'from_points' => $input->get_var('from_pts','post',PLIB_Input::INTEGER),
+			'to_points' => $input->get_var('to_pts','post',PLIB_Input::INTEGER),
 			'from_reg' => PLIB_StringHelper::get_clean_date($from_reg),
 			'to_reg' => PLIB_StringHelper::get_clean_date($to_reg),
 			'from_lastlogin' => PLIB_StringHelper::get_clean_date($from_lastlogin),
 			'to_lastlogin' => PLIB_StringHelper::get_clean_date($to_lastlogin),
-			'signature' => $this->input->get_var('signature','post',PLIB_Input::STRING)
+			'signature' => $input->get_var('signature','post',PLIB_Input::STRING)
 		);
 	}
 	
@@ -327,9 +361,11 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 	 */
 	private function _get_date_control($form,$from_param,$to_param,$from_val,$to_val)
 	{
-		$html = $this->locale->lang('between').' ';
+		$locale = PLIB_Props::get()->locale();
+
+		$html = $locale->lang('between').' ';
 		$html .= $form->get_date_chooser_textbox($from_param,$from_val);
-		$html .= ' '.$this->locale->lang('and').' ';
+		$html .= ' '.$locale->lang('and').' ';
 		$html .= $form->get_date_chooser_textbox($to_param,$to_val);
 		return $html;
 	}
@@ -345,9 +381,11 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 	 */
 	private function _get_int_control($from_param,$to_param,$from_val,$to_val)
 	{
-		$html = $this->locale->lang('From').' <input type="text" name="'.$from_param.'" size="10"';
+		$locale = PLIB_Props::get()->locale();
+
+		$html = $locale->lang('From').' <input type="text" name="'.$from_param.'" size="10"';
 		$html .= ' value="'.$from_val.'" />'."\n";
-		$html .= $this->locale->lang('to').' <input type="text" name="'.$to_param.'" size="10"';
+		$html .= $locale->lang('to').' <input type="text" name="'.$to_param.'" size="10"';
 		$html .= ' value="'.$to_val.'" />'."\n";
 		return $html;
 	}
@@ -363,13 +401,6 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 	{
 		return '<input type="text" name="'.$param.'" size="30" maxlength="30"'
 					.' value="'.$val.'" />'."\n";
-	}
-	
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('search') => $this->url->get_acpmod_url(0,'&amp;action=search&amp;use_sess=1')
-		);
 	}
 }
 ?>

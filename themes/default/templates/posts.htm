@@ -2,44 +2,11 @@
 
 {if action_result < 1}
 {if module_error == false}
-
-<script type="text/javascript">
-<!--
-var quotedPosts = new Array();
-function toggleQuote(postId)
-{
-	var link = PLIB_getElement('quote_link_' + postId);
-	if(quotedPosts.contains(postId))
-	{
-		PLIB_removeClassName(link,'bs_button_selected');
-		quotedPosts.removeEntry(postId);
-		link.innerHTML = link.innerHTML.substr(0,link.innerHTML.length - 1) + '+';
-	}
-	else
-	{
-		PLIB_addClassName(link,'bs_button_selected');
-		quotedPosts.push(postId);
-		link.innerHTML = link.innerHTML.substr(0,link.innerHTML.length - 1) + '-';
-	}
-}
-
-function quote()
-{
-	var quoteLink = '{quoteLink}';
-	if(quotedPosts.length > 0)
-	{
-		quoteLink += quotedPosts.join(',');
-		document.location.href = quoteLink;
-		return false;
-	}
-	return true;
-}
-//-->
-</script>
+<script type="text/javascript" src="{gjs.get_file('src/quote.js')}"></script>
 
 {if display_reply}
 <div>
-	<a class="bs_button_big" title="{glocale.lang('answer_desc')}" href="{reply_url}" onclick="return quote();">{glocale.lang('answer')}</a>
+	<a class="bs_button_big" title="{glocale.lang('answer_desc')}" href="{reply_url}" onclick="return quote('{quoteLink}');">{glocale.lang('answer')}</a>
 	<br style="clear: both;" />
 </div>
 {endif}
@@ -181,7 +148,7 @@ function quote()
 	</div>
 	<div style="float: right; width: 50%;">
 		{if display_reply}
-		<a class="bs_button_big" title="{glocale.lang('answer_desc')}" href="{reply_url}" onclick="return quote();">{glocale.lang('answer')}</a>
+		<a class="bs_button_big" title="{glocale.lang('answer_desc')}" href="{reply_url}" onclick="return quote('{quoteLink}');">{glocale.lang('answer')}</a>
 		{if gisloggedin}
 		<a class="bs_button_big" href="javascript:toggleQuickReply();">{glocale.lang('quick_reply')}</a>
 		{endif}
@@ -233,9 +200,11 @@ function toggleQuickReply()
 {include "inc_page_split.htm"}
 </div>
 
+{if view_useronline_list}
 <div class="bs_padtop_big">
 {include "inc_online_user.htm"}
 </div>
+{endif}
 
 {if show_bottom_bar}
 {include "inc_topic_action_js.htm"}

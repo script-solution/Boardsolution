@@ -39,10 +39,12 @@ class BS_DAO_AddFields extends PLIB_Singleton
 	 */
 	public function get_by_id($id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$row = $this->db->sql_fetch(
+		$row = $db->sql_fetch(
 			'SELECT * FROM '.BS_TB_USER_FIELDS.' WHERE id = '.$id
 		);
 		if(!$row)
@@ -59,8 +61,10 @@ class BS_DAO_AddFields extends PLIB_Singleton
 	 */
 	public function create($fields)
 	{
-		$this->db->sql_insert(BS_TB_USER_FIELDS,$fields);
-		return $this->db->get_last_insert_id();
+		$db = PLIB_Props::get()->db();
+
+		$db->sql_insert(BS_TB_USER_FIELDS,$fields);
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -72,11 +76,13 @@ class BS_DAO_AddFields extends PLIB_Singleton
 	 */
 	public function update($id,$fields)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$this->db->sql_update(BS_TB_USER_FIELDS,'WHERE id = '.$id,$fields);
-		return $this->db->get_affected_rows();
+		$db->sql_update(BS_TB_USER_FIELDS,'WHERE id = '.$id,$fields);
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -87,10 +93,12 @@ class BS_DAO_AddFields extends PLIB_Singleton
 	 */
 	public function dec_sort($lower)
 	{
-		$this->db->sql_update(BS_TB_USER_FIELDS,'WHERE field_sort > '.$lower,array(
+		$db = PLIB_Props::get()->db();
+
+		$db->sql_update(BS_TB_USER_FIELDS,'WHERE field_sort > '.$lower,array(
 			'field_sort' => array('field_sort - 1')
 		));
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -102,10 +110,12 @@ class BS_DAO_AddFields extends PLIB_Singleton
 	 */
 	public function update_sort_by_id($sort,$id)
 	{
-		$this->db->sql_update(BS_TB_USER_FIELDS,'WHERE id = '.$id,array(
+		$db = PLIB_Props::get()->db();
+
+		$db->sql_update(BS_TB_USER_FIELDS,'WHERE id = '.$id,array(
 			'field_sort' => $sort
 		));
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -116,13 +126,15 @@ class BS_DAO_AddFields extends PLIB_Singleton
 	 */
 	public function delete($id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_USER_FIELDS.' WHERE id = '.$id
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

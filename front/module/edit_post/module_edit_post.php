@@ -19,24 +19,60 @@
  */
 final class BS_Front_Module_edit_post extends BS_Front_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACTION_EDIT_POST => 'default'
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$user = PLIB_Props::get()->user();
+		
+		$doc->set_has_access($user->is_loggedin());
+		
+		$doc->add_action(BS_ACTION_EDIT_POST,'default');
+
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$site = ($s = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER)) != null ? '&amp;'.BS_URL_SITE.'='.$s : '';
+
+		$this->add_loc_forum_path($fid);
+		$this->add_loc_topic();
+		$params = '&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_ID.'='.$id.$site;
+		$doc->add_breadcrumb(
+			$locale->lang('edit_post'),
+			$url->get_url('edit_post',$params)
 		);
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$site = $this->input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+		$input = PLIB_Props::get()->input();
+		$auth = PLIB_Props::get()->auth();
+		$user = PLIB_Props::get()->user();
+		$forums = PLIB_Props::get()->forums();
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
 
 		// invalid id?
 		if($id == null || $fid == null || $tid == null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 
@@ -45,36 +81,36 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		// data not found?
 		if($data === false)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 
 		// no permission to edit the post?
-		if(!$this->auth->has_current_forum_perm(BS_MODE_EDIT_POST,$data['post_user']))
+		if(!$auth->has_current_forum_perm(BS_MODE_EDIT_POST,$data['post_user']))
 		{
-			$this->_report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
 			return;
 		}
 		
 		// forum closed?
-		if(!$this->user->is_admin() && $this->forums->forum_is_closed($fid))
+		if(!$user->is_admin() && $forums->forum_is_closed($fid))
 		{
-			$this->_report_error(PLIB_Messages::MSG_TYPE_ERROR,$this->locale->lang('forum_is_closed'));
+			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('forum_is_closed'));
 			return;
 		}
 		
 		// is the topic closed?
-		if($data['thread_closed'] == 1 && !$this->user->is_admin())
+		if($data['thread_closed'] == 1 && !$user->is_admin())
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 
 		// no access because a user with higher status locked the post?
 		if(BS_TopicUtils::get_instance()->is_locked($data['locked'],BS_LOCK_TOPIC_POSTS,$data['edit_lock']))
 		{
-			$this->_report_error(
-				PLIB_Messages::MSG_TYPE_ERROR,$this->locale->lang('no_permission_to_edit_post')
+			$this->report_error(
+				PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('no_permission_to_edit_post')
 			);
 			return;
 		}
@@ -83,13 +119,13 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		if($topic_data === null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 
-		$form = $this->_request_formular(true,true);
+		$form = $this->request_formular(true,true);
 
-		if($this->input->isset_var('preview','post'))
+		if($input->isset_var('preview','post'))
 			BS_PostingUtils::get_instance()->add_post_preview();
 
 		if($data['post_user'] == 0)
@@ -102,55 +138,32 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		}
 		
 		$add = '&amp;'.BS_URL_ID.'='.$id.'&amp;'.BS_URL_SITE.'='.$site;
-		$show_lock = ($this->auth->is_moderator_in_current_forum() || $this->user->is_admin()) &&
+		$show_lock = ($auth->is_moderator_in_current_forum() || $user->is_admin()) &&
 								 ($data['locked'] & BS_LOCK_TOPIC_POSTS) == 0;
 
-		$pform = new BS_PostingForm($this->locale->lang('post').':',$data['text_posted'],'posts');
+		$pform = new BS_PostingForm($locale->lang('post').':',$data['text_posted'],'posts');
 		$pform->set_use_smileys($data['use_smileys']);
 		$pform->set_use_bbcode($data['use_bbcode']);
 		$pform->set_show_options(true);
-		$pform->set_show_attachments(true,$data['id'],true,!$this->input->isset_var('post_update','post'));
+		$pform->set_show_attachments(true,$data['id'],true,!$input->isset_var('post_update','post'));
 		$pform->add_form();
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_EDIT_POST,
 			'user_text' => $user_text,
 			'show_lock_post' => $show_lock,
 			'lock_post' => $form->get_radio_yesno('lock_post',$data['edit_lock']),
-			'target_url' => $this->url->get_url('edit_post','&amp;'.BS_URL_FID.'='.$fid
+			'target_url' => $url->get_url('edit_post','&amp;'.BS_URL_FID.'='.$fid
 				.'&amp;'.BS_URL_TID.'='.$tid.$add),
-			'back_url' => $this->url->get_url('posts','&amp;'.BS_URL_FID.'='.$fid
+			'back_url' => $url->get_url('posts','&amp;'.BS_URL_FID.'='.$fid
 				.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_SITE.'='.$site).'#b_'.$id
 		));
 
-		$url = $this->url->get_url(
+		$murl = $url->get_url(
 			0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_ID.'='.$id
 				.'&amp;'.BS_URL_SITE.'='.$site.'&amp;'.BS_URL_PID.'='
 		);
-		BS_PostingUtils::get_instance()->add_topic_review($topic_data,true,$url);
-	}
-
-	public function get_location()
-	{
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$site = ($s = $this->input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER)) != null ? '&amp;'.BS_URL_SITE.'='.$s : '';
-
-		$result = array();
-		$this->_add_loc_forum_path($result,$fid);
-		$this->_add_loc_topic($result);
-
-		$params = '&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_ID.'='.$id.$site;
-		$url = $this->url->get_url('edit_post',$params);
-		$result[$this->locale->lang('edit_post')] = $url;
-
-		return $result;
-	}
-
-	public function has_access()
-	{
-		return $this->user->is_loggedin();
+		BS_PostingUtils::get_instance()->add_topic_review($topic_data,true,$murl);
 	}
 }
 ?>

@@ -2,7 +2,8 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; {charset}" />
+<title>{title}</title>
+<meta http-equiv="Content-Type" content="{mimetype}; {charset}" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
 {if redirect}
 <meta http-equiv="refresh" content="{redirect:time}; url={redirect:url}" />
@@ -17,6 +18,9 @@
 <script type="text/javascript" src="{gjs.get_file('src/functions.js')}"></script>
 <script type="text/javascript" src="{gjs.get_file('js/basic.js','lib')}"></script>
 <script type="text/javascript" src="{gjs.get_file('js/ajax.js','lib')}"></script>
+{loop jsfiles as file}
+<script type="{file:type}" src="{file:src}"></script>
+{endloop}
 <script type="text/javascript">
 <!--
 function setCookie(name,value,lifetime)
@@ -36,9 +40,32 @@ myAjax.setEventHandler('onfinish',function() {
 });
 //-->
 </script>
+{loop jsblocks as block}
+<script type="{block:type}">
+<!--
+{block:code}
+//-->
+</script>
+{endloop}
 
 <link rel="stylesheet" type="text/css" href="{gpath}acp/templates/style.css" />
-<title>{page_title}</title>
+{loop cssfiles as file}
+<link rel="stylesheet" type="{file:type}" href="{file:src}" />
+{endloop}
+<style type="text/css">
+div.bs_signature {
+	{if sig_max_height > 0}
+	height: expression( this.scrollHeight > {sig_max_height - 1} ? "{sig_max_height}px" : "auto" );
+	max-height: {sig_max_height}px;
+	overflow: hidden;
+	{endif}
+}
+</style>
+{loop cssblocks as block}
+<style type="{block:type}">
+{block:code}
+</style>
+{endloop}
 </head>
 <body>
 

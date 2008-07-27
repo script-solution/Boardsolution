@@ -19,48 +19,58 @@
  */
 final class BS_ACP_Module_dbcache extends BS_ACP_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_REGENERATE_CACHE => 'regenerate'
-		);
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_REGENERATE_CACHE,'regenerate');
+
+		$doc->add_breadcrumb($locale->lang('acpmod_dbcache'),$url->get_acpmod_url());
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$this->tpl->add_variables(array(
+		$tpl = PLIB_Props::get()->tpl();
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+
+		$tpl->add_variables(array(
 			'action_type' => BS_ACP_ACTION_REGENERATE_CACHE
 		));
 		
 		$entries = array();
-		foreach($this->cache->get_caches() as $name => $cache)
+		foreach($cache->get_caches() as $name => $content)
 		{
-			if($cache instanceof PLIB_Cache_Content)
+			if($content instanceof PLIB_Cache_Content)
 				$entries[] = $name;
 		}
-		$this->tpl->add_array('entries',$entries);
+		$tpl->add_array('entries',$entries);
 		
 		// show details?
-		if($this->input->isset_var('name','get'))
+		if($input->isset_var('name','get'))
 		{
-			$name = $this->input->get_var('name','get',PLIB_Input::STRING);
-			$cache = $this->cache->get_cache($name);
-			if($cache != null)
+			$name = $input->get_var('name','get',PLIB_Input::STRING);
+			$content = $cache->get_cache($name);
+			if($content != null)
 			{
-				$this->tpl->add_variables(array(
+				$tpl->add_variables(array(
 					'show_cache' => true,
 					'details_name' => $name,
-					'cache_content' => PLIB_PrintUtils::to_string($cache->get_elements())
+					'cache_content' => PLIB_PrintUtils::to_string($content->get_elements())
 				));
 			}
 		}
-	}
-	
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('acpmod_dbcache') => $this->url->get_acpmod_url()
-		);
 	}
 }
 ?>

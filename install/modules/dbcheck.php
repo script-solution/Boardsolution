@@ -19,10 +19,14 @@ class BS_Install_dbcheck extends BS_Install
 {
 	public function run()
 	{
-		$prefix = $this->functions->get_session_var('table_prefix');
-		$type = $this->functions->get_session_var('install_type');
+		$functions = PLIB_Props::get()->functions();
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+
+		$prefix = $functions->get_session_var('table_prefix');
+		$type = $functions->get_session_var('install_type');
 		
-		$this->tpl->set_template('step_config.htm');
+		$tpl->set_template('step_config.htm');
 		
 		$configs = array();
 		$configs[] = array('type' => 'separator');
@@ -39,8 +43,8 @@ class BS_Install_dbcheck extends BS_Install
 			$len = count($tables);
 			for($i = 0;$i < $len;$i++)
 			{
-				$configs[] = $this->functions->get_config_status(
-					$prefix.$tables[$i].':',$this->_check[$tables[$i]],$this->locale->lang('ok'),$this->locale->lang('notok')
+				$configs[] = $functions->get_config_status(
+					$prefix.$tables[$i].':',$this->_check[$tables[$i]],$locale->lang('ok'),$locale->lang('notok')
 				);
 			}
 		}
@@ -58,31 +62,34 @@ class BS_Install_dbcheck extends BS_Install
 			$len = count($tables);
 			for($i = 0;$i < $len;$i++)
 			{
-				$configs[] = $this->functions->get_config_status(
-					$prefix.$tables[$i].':',!$this->_check[$tables[$i]],$this->locale->lang('notavailable'),
-					$this->locale->lang('available')
+				$configs[] = $functions->get_config_status(
+					$prefix.$tables[$i].':',!$this->_check[$tables[$i]],$locale->lang('notavailable'),
+					$locale->lang('available')
 				);
 			}
 		}
 		
-		$this->tpl->add_array('configs',$configs);
-		$this->tpl->add_variables(array(
+		$tpl->add_array('configs',$configs);
+		$tpl->add_variables(array(
 			'prefix' => $prefix,
 			'show_table_prefix' => true,
-			'title' => $this->locale->lang('step_dbcheck')
+			'title' => $locale->lang('step_dbcheck')
 		));
 		
-		echo $this->tpl->parse_template();
+		echo $tpl->parse_template();
 	}
 	
 	public function check_inputs(&$check)
 	{
-		$prefix = $this->functions->get_session_var('table_prefix');
-		$type = $this->functions->get_session_var('install_type');
-		$host = $this->functions->get_session_var('host');
-		$login = $this->functions->get_session_var('login');
-		$password = $this->functions->get_session_var('password');
-		$database = $this->functions->get_session_var('database');
+		$functions = PLIB_Props::get()->functions();
+		$locale = PLIB_Props::get()->locale();
+
+		$prefix = $functions->get_session_var('table_prefix');
+		$type = $functions->get_session_var('install_type');
+		$host = $functions->get_session_var('host');
+		$login = $functions->get_session_var('login');
+		$password = $functions->get_session_var('password');
+		$database = $functions->get_session_var('database');
 		
 		$con = @mysql_connect($host,$login,$password);
 		@mysql_select_db($database,$con);
@@ -276,7 +283,7 @@ class BS_Install_dbcheck extends BS_Install
 			}
 			
 			if($count > 0)
-				$errors[] = $this->locale->lang('table_exists_error');
+				$errors[] = $locale->lang('table_exists_error');
 		}
 		
 		return array(count($errors) == 0,$errors);

@@ -19,12 +19,6 @@
  */
 abstract class BS_ACP_SubModule extends BS_ACP_Module
 {
-	public function get_template()
-	{
-		$classname = get_class($this);
-		$lastus = strrpos($classname,'_');
-		$prevlastus = strrpos(PLIB_String::substr($classname,0,$lastus),'_');
-		return PLIB_String::strtolower(PLIB_String::substr($classname,$prevlastus + 1)).'.htm';
-	}
+	// no changes yet
 }
 ?>

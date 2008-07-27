@@ -35,26 +35,37 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 */
 	public function get_forum_list($parent_id)
 	{
-		if($this->input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING) == 'clapforum' &&
-			 ($id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID)) != null)
-			$this->functions->clap_forum($id);
+		$input = PLIB_Props::get()->input();
+		$functions = PLIB_Props::get()->functions();
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+		$user = PLIB_Props::get()->user();
+		$url = PLIB_Props::get()->url();
+		$forums = PLIB_Props::get()->forums();
+
+		if($input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING) == 'clapforum' &&
+			 ($id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID)) != null)
+			$functions->clap_forum($id);
 	
-		$start_layer = $parent_id == 0 ? 1 : $this->forums->get_node($parent_id)->get_layer() + 2;
+		$start_layer = $parent_id == 0 ? 1 : $forums->get_node($parent_id)->get_layer() + 2;
 		$num = 0;
-		$cookie = $this->input->get_var(BS_COOKIE_PREFIX.'hidden_forums','cookie',PLIB_Input::STRING);
+		$cookie = $input->get_var(BS_COOKIE_PREFIX.'hidden_forums','cookie',PLIB_Input::STRING);
 		if($cookie == null)
-			$cookie = $this->input->set_var(BS_COOKIE_PREFIX.'hidden_forums','cookie','');
+			$cookie = $input->set_var(BS_COOKIE_PREFIX.'hidden_forums','cookie','');
 	
 		$hidden_forums = ($cookie != '') ? explode(',',$cookie) : array();
-		$sub_nodes = $this->forums->get_sub_nodes($parent_id);
+		$sub_nodes = $forums->get_sub_nodes($parent_id);
 	
 		// determine the number of visible forums
 		$forum_num = count($sub_nodes);
 		$real_num = $forum_num;
 		for($i = 0;$i < $forum_num;$i++)
 		{
-			if($this->cfg['hide_denied_forums'] == 1 &&
-				!$this->auth->has_access_to_intern_forum($sub_nodes[$i]->get_id()))
+			if($cfg['hide_denied_forums'] == 1 &&
+				!$auth->has_access_to_intern_forum($sub_nodes[$i]->get_id()))
 				$real_num--;
 		}
 	
@@ -66,23 +77,23 @@ final class BS_ForumUtils extends PLIB_Singleton
 		{
 			// just show the message if we are displaying all forums (not just sub-forums)
 			if($parent_id == 0)
-				$this->msgs->add_notice($this->locale->lang('no_forums_available'));
+				$msgs->add_notice($locale->lang('no_forums_available'));
 		}
 		else
 		{
-			$this->tpl->set_template('inc_forums.htm');
+			$tpl->set_template('inc_forums.htm');
 			
-			$this->tpl->add_variables(array(
-				'title' => ($parent_id == 0) ? $this->locale->lang('forums') : $this->locale->lang('subdirs'),
-				'enable_moderators' => $this->cfg['enable_moderators'],
+			$tpl->add_variables(array(
+				'title' => ($parent_id == 0) ? $locale->lang('forums') : $locale->lang('subdirs'),
+				'enable_moderators' => $cfg['enable_moderators'],
 			));
 	
 			$images = array(
-				'dot' => $this->user->get_theme_item_path('images/forums/path_dot.gif'),
-				'middle' => $this->user->get_theme_item_path('images/forums/path_middle.gif')
+				'dot' => $user->get_theme_item_path('images/forums/path_dot.gif'),
+				'middle' => $user->get_theme_item_path('images/forums/path_middle.gif')
 			);
 	
-			$forums = array();
+			$nodes = array();
 			$fn = 0;
 	
 			$post_order = BS_PostingUtils::get_instance()->get_posts_order();
@@ -108,8 +119,8 @@ final class BS_ForumUtils extends PLIB_Singleton
 						$next_display_layer = $node->get_layer();
 	
 					// skip this forum if the user is not allowed to view it
-					if($this->cfg['hide_denied_forums'] == 1 &&
-						 !$this->auth->has_access_to_intern_forum($forum_id))
+					if($cfg['hide_denied_forums'] == 1 &&
+						 !$auth->has_access_to_intern_forum($forum_id))
 						continue;
 	
 					if(!isset($sub_cats[$daten->get_parent_id()]))
@@ -121,12 +132,12 @@ final class BS_ForumUtils extends PLIB_Singleton
 					if(in_array($forum_id,$hidden_forums))
 					{
 						$display_rubrik = 'none';
-						$img_ins = $this->user->get_theme_item_path('images/crossclosed.gif');
+						$img_ins = $user->get_theme_item_path('images/crossclosed.gif');
 					}
 					else
 					{
 						$display_rubrik = 'block';
-						$img_ins = $this->user->get_theme_item_path('images/crossopen.gif');
+						$img_ins = $user->get_theme_item_path('images/crossopen.gif');
 					}
 	
 					$close_clap_forum = false;
@@ -150,7 +161,7 @@ final class BS_ForumUtils extends PLIB_Singleton
 					}
 	
 					$fid_add = $parent_id != 0 ? '&amp;'.BS_URL_FID.'='.$parent_id : '';
-					$forum_url = $this->url->get_topics_url($forum_id,'&amp;',1);
+					$forum_url = $url->get_topics_url($forum_id,'&amp;',1);
 					
 					$is_unread = false;
 					if($forum_type_cats)
@@ -158,17 +169,16 @@ final class BS_ForumUtils extends PLIB_Singleton
 						if(!$daten->get_display_subforums())
 							$clap_forum = false;
 						
-						$forums[$fn] = array(
+						$nodes[$fn] = array(
 							'contains_forums' => true,
 							'forum_id' => $forum_id,
 							'img_ins' => $img_ins,
 							'display_rubrik' => $display_rubrik,
 							'clap_forum' => $clap_forum,
-							'clap_forum_url' => $this->url->get_url(
+							'clap_forum_url' => $url->get_url(
 								0,$fid_add.'&amp;'.BS_URL_LOC.'=clapforum&amp;'.BS_URL_ID.'='.$forum_id
 							),
-							'cookie_prefix' => BS_COOKIE_PREFIX,
-							'root_path' => PLIB_Path::inner()
+							'cookie_prefix' => BS_COOKIE_PREFIX
 						);
 					}
 					else
@@ -218,10 +228,10 @@ final class BS_ForumUtils extends PLIB_Singleton
 						else
 							$beschr_ins = '&nbsp;';
 	
-						$forums[$fn] = array(
+						$nodes[$fn] = array(
 							'contains_forums' => false,
 							'clap_forum' => $clap_forum,
-							'mods_ins' => $this->auth->get_forum_mods($forum_id),
+							'mods_ins' => $auth->get_forum_mods($forum_id),
 							'beschr_ins' => $beschr_ins,
 							'lastpost' => $this->_get_forum_lastpost($lp_data,$post_order),
 							'alreadyread' => $this->_get_forum_image($forum_id,$is_unread),
@@ -231,11 +241,11 @@ final class BS_ForumUtils extends PLIB_Singleton
 						);
 					}
 					
-					$forums[$fn]['is_unread'] = $is_unread;
-					$forums[$fn]['close_clap_forum'] = $close_clap_forum;
-					$forums[$fn]['forum_name_ins'] = $daten->get_name();
-					$forums[$fn]['forum_url'] = $forum_url;
-					$forums[$fn]['path_images'] = $pimages;
+					$nodes[$fn]['is_unread'] = $is_unread;
+					$nodes[$fn]['close_clap_forum'] = $close_clap_forum;
+					$nodes[$fn]['forum_name_ins'] = $daten->get_name();
+					$nodes[$fn]['forum_url'] = $forum_url;
+					$nodes[$fn]['path_images'] = $pimages;
 					
 					$fn++;
 				}
@@ -244,15 +254,15 @@ final class BS_ForumUtils extends PLIB_Singleton
 					$open_div = true;
 			}
 			
-			$this->tpl->add_array('forums',$forums);
-			$this->tpl->add_variables(array(
+			$tpl->add_array('forums',$nodes);
+			$tpl->add_variables(array(
 				'clap_forum_bottom' => $open_div,
-				'forum_cookie' => $this->input->get_var(
+				'forum_cookie' => $input->get_var(
 					BS_COOKIE_PREFIX.'hidden_forums','cookie',PLIB_Input::STRING
 				)
 			));
 			
-			$this->tpl->restore_template();
+			$tpl->restore_template();
 		}
 	}
 	
@@ -264,13 +274,16 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 */
 	public function get_denied_forums($include_categories = true)
 	{
-		$ugroup = $this->user->get_user_group();
+		$user = PLIB_Props::get()->user();
+		$forums = PLIB_Props::get()->forums();
+
+		$ugroup = $user->get_user_group();
 		if($ugroup == BS_STATUS_ADMIN && !$include_categories)
 			return array();
 		
 		$denied = array();
 		$intern_access = $this->get_intern_forum_permissions();
-		foreach($this->forums->get_all_nodes() as $forum)
+		foreach($forums->get_all_nodes() as $forum)
 		{
 			$data = $forum->get_data();
 			$fid = $data->get_id();
@@ -287,7 +300,7 @@ final class BS_ForumUtils extends PLIB_Singleton
 				continue;
 	
 			// is it an intern forum?
-			if(!$this->forums->is_intern_forum($fid))
+			if(!$forums->is_intern_forum($fid))
 				continue;
 	
 			if(isset($intern_access[$fid]) && $intern_access[$fid])
@@ -309,16 +322,19 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 */
 	public function get_intern_forum_permissions()
 	{
+		$user = PLIB_Props::get()->user();
+		$cache = PLIB_Props::get()->cache();
+
 		$result = array();
-		$all_groups = $this->user->get_all_user_groups();
-		foreach($this->cache->get_cache('intern') as $data)
+		$all_groups = $user->get_all_user_groups();
+		foreach($cache->get_cache('intern') as $data)
 		{
 			if(!isset($result[$data['fid']]) || !$result[$data['fid']])
 			{
 				if($data['access_type'] == 'group')
 					$result[$data['fid']] = in_array($data['access_value'],$all_groups);
 				else
-					$result[$data['fid']] = $this->user->get_user_id() == $data['access_value'];
+					$result[$data['fid']] = $user->get_user_id() == $data['access_value'];
 			}
 		}
 	
@@ -330,29 +346,32 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 *
 	 * @param int $fid the id of the forum
 	 * @param boolean $start_with_raquo if you enable this the path will start with &amp;raquo;
+	 * @param int $maxlen the max length of the path
 	 * @return string the result
 	 */
 	public function get_forum_path($rid = 0,$start_with_raquo = true)
 	{
-		$id = ($rid != 0) ? $rid : $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$forums = PLIB_Props::get()->forums();
+		$url = PLIB_Props::get()->url();
+
+		$id = ($rid != 0) ? $rid : $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		$res = '';
 		if($id != null)
 		{
-			$path = $this->forums->get_path($id);
+			$path = $forums->get_path($id);
 			$len = count($path);
 			for($i = $len - 1;$i >= 0;$i--)
 			{
 				if($i < $len - 1 || $start_with_raquo)
 					$res .= ' &raquo; ';
-				$res .= '<a href="'.$this->url->get_topics_url($path[$i][1]).'"';
+				$res .= '<a href="'.$url->get_topics_url($path[$i][1]).'"';
 	
-				if(PLIB_String::strlen($path[$i][0]) > BS_MAX_FORUM_TITLE_LENGTH)
-				{
-					$res .= ' title="'.$path[$i][0].'">';
-					$res .= PLIB_String::substr($path[$i][0],0,BS_MAX_FORUM_TITLE_LENGTH - 3) . ' ...';
-				}
+				$name = PLIB_StringHelper::get_limited_string($path[$i][0],BS_MAX_FORUM_TITLE_LENGTH);
+				if($name['complete'] != '')
+					$res .= ' title="'.$name['complete'].'">'.$name['displayed'];
 				else
-					$res .= '>'.$path[$i][0];
+					$res .= '>'.$name['displayed'];
 	
 				$res .= '</a>';
 			}
@@ -375,6 +394,10 @@ final class BS_ForumUtils extends PLIB_Singleton
 	public function get_recursive_forum_combo($name,$select,$disabled_forum,
 		$disable_categories = true,$add_all_forums_option = false)
 	{
+		$locale = PLIB_Props::get()->locale();
+		$cfg = PLIB_Props::get()->cfg();
+		$forums = PLIB_Props::get()->forums();
+
 		$denied = $this->get_denied_forums(false);
 		$multiple = PLIB_String::substr($name,-2,2) == '[]';
 		
@@ -387,21 +410,21 @@ final class BS_ForumUtils extends PLIB_Singleton
 		{
 			$selected = ($multiple && $select != null && in_array(0,$select)) || $select === 0;
 			$result .= '	<option value="0"'.($selected ? ' selected="selected"' : '').'>- ';
-			$result .= $this->locale->lang('all').' '.$this->locale->lang('forums').' -</option>'."\n";
+			$result .= $locale->lang('all').' '.$locale->lang('forums').' -</option>'."\n";
 		}
 		
-		$forums = $this->forums->get_all_nodes();
-		$len = count($forums);
+		$nodes = $forums->get_all_nodes();
+		$len = count($nodes);
 		for($i = 0;$i < $len;$i++)
 		{
-			$node = $forums[$i];
+			$node = $nodes[$i];
 			$fdata = $node->get_data();
 			$fid = $fdata->get_id();
 			
 			// is the forum denied?
 			if(in_array($fid,$denied))
 			{
-				if($this->cfg['hide_denied_forums'] == 1)
+				if($cfg['hide_denied_forums'] == 1)
 					continue;
 				
 				$disabled = ' disabled="disabled" style="color: #AAAAAA;"';
@@ -448,6 +471,8 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 */
 	public function get_path_images($node,$sub_cats,$images,$start_layer = 0)
 	{
+		$forums = PLIB_Props::get()->forums();
+
 		$path_img = array();
 		$layer = $node->get_layer();
 		if($layer > 0)
@@ -459,7 +484,7 @@ final class BS_ForumUtils extends PLIB_Singleton
 			for($a = $start_layer;$a <= $layer;$a++)
 			{
 				$image = '';
-				$bigger = !isset($sub_cats[$p_id]) || $this->forums->get_child_count($p_id) > $sub_cats[$p_id];
+				$bigger = !isset($sub_cats[$p_id]) || $forums->get_child_count($p_id) > $sub_cats[$p_id];
 				if($a == 1 || $bigger)
 				{
 					if($bigger && $a == 1)
@@ -480,7 +505,7 @@ final class BS_ForumUtils extends PLIB_Singleton
 	
 				array_unshift($path_img,$image);
 				if($p_id > 0)
-					$p_id = $this->forums->get_parent_id($p_id);
+					$p_id = $forums->get_parent_id($p_id);
 			}
 		}
 	
@@ -503,26 +528,30 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 */
 	private function _get_subforum_info($parent_id)
 	{
+		$url = PLIB_Props::get()->url();
+		$auth = PLIB_Props::get()->auth();
+		$forums = PLIB_Props::get()->forums();
+
 		$thread_num = 0;
 		$post_num = 0;
 		$sub_forums = "";
 		$sub_forums_count = 1;
 		$lastpost = array(0,0,"","",0,0,0,0,0);
-		if($this->forums->has_childs($parent_id))
+		if($forums->has_childs($parent_id))
 		{
-			$forums = $this->forums->get_sub_nodes($parent_id);
-			for($i = 0;$i < count($forums);$i++)
+			$nodes = $forums->get_sub_nodes($parent_id);
+			for($i = 0;$i < count($nodes);$i++)
 			{
-				$node = $forums[$i];
+				$node = $nodes[$i];
 				$daten = $node->get_data();
 				$fid = $daten->get_id();
 				
-				if($this->auth->has_access_to_intern_forum($fid))
+				if($auth->has_access_to_intern_forum($fid))
 				{
 					if($node->get_layer() == 2 && $sub_forums_count <= BS_FORUM_SMALL_SUBDIR_DISPLAY)
 					{
-						$url = $this->url->get_topics_url($fid);
-						$sub_forums .= "<a href=\"".$url."\">".$daten->get_name()."</a>, ";
+						$murl = $url->get_topics_url($fid);
+						$sub_forums .= "<a href=\"".$murl."\">".$daten->get_name()."</a>, ";
 						$sub_forums_count++;
 					}
 					else if($sub_forums_count == BS_FORUM_SMALL_SUBDIR_DISPLAY + 1)
@@ -573,6 +602,8 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 */
 	private function _get_forum_lastpost($data,$post_order)
 	{
+		$url = PLIB_Props::get()->url();
+
 		if(!isset($data['tposts']))
 			$data['tposts'] = 0;
 	
@@ -587,9 +618,9 @@ final class BS_ForumUtils extends PLIB_Singleton
 		$site = 1;
 		if($post_order == 'ASC' && $pages > 1)
 			$site = $pages;
-		$topic_url = $this->url->get_posts_url($data['id'],$data['threadid'],'&amp;',1);
+		$topic_url = $url->get_posts_url($data['id'],$data['threadid'],'&amp;',1);
 		if($site > 1)
-			$lastpost_url = $this->url->get_posts_url($data['id'],$data['threadid'],'&amp;',$site);
+			$lastpost_url = $url->get_posts_url($data['id'],$data['threadid'],'&amp;',$site);
 		else
 			$lastpost_url = $topic_url;
 	
@@ -624,46 +655,54 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 */
 	private function _get_forum_image($id,&$is_unread)
 	{
-		$data = $this->forums->get_node_data($id);
+		$forums = PLIB_Props::get()->forums();
+		$unread = PLIB_Props::get()->unread();
+		$url = PLIB_Props::get()->url();
+		$user = PLIB_Props::get()->user();
+		$locale = PLIB_Props::get()->locale();
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+
+		$data = $forums->get_node_data($id);
 
 		// unread forum?
 		$is_unread = false;
 		if($data->get_display_subforums())
-			$is_unread = $this->unread->is_unread_forum($id);
+			$is_unread = $unread->is_unread_forum($id);
 		else
-			$is_unread = $this->forums->is_unread_forum($id);
+			$is_unread = $forums->is_unread_forum($id);
 
 		if($is_unread)
 		{
 			$image = $data->get_forum_is_closed() ? 'forum_unread_closed' : 'forum_unread';
 			$action_type = '&amp;'.BS_URL_AT.'='.BS_ACTION_CHANGE_READ_STATUS;
-			$read_url = $this->url->get_url(
+			$read_url = $url->get_url(
 				'forums',$action_type.'&amp;'.BS_URL_LOC.'=read&amp;'.BS_URL_MODE.'=forum'
 					.'&amp;'.BS_URL_FID.'='.$id,'&amp;',true
 			);
-			$img = $this->user->get_theme_item_path('images/unread/'.$image.'.gif');
+			$img = $user->get_theme_item_path('images/unread/'.$image.'.gif');
 			return '<a href="'.$read_url.'"><img src="'.$img.'"'
-				.' alt="'.$this->locale->lang('markrubrikasread').'"'
-				.' title="'.$this->locale->lang('markrubrikasread').'" border="0" /></a>';
+				.' alt="'.$locale->lang('markrubrikasread').'"'
+				.' title="'.$locale->lang('markrubrikasread').'" border="0" /></a>';
 		}
 
 		// denied forum?
-		if($this->cfg['hide_denied_forums'] == 0 && !$this->auth->has_access_to_intern_forum($id))
+		if($cfg['hide_denied_forums'] == 0 && !$auth->has_access_to_intern_forum($id))
 		{
-			$img = $this->user->get_theme_item_path('images/unread/forum_denied.gif');
-			return '<img src="'.$img.'" alt="'.$this->locale->lang('login_access_denied').'"'
-				.' title="'.$this->locale->lang('login_access_denied').'" />';
+			$img = $user->get_theme_item_path('images/unread/forum_denied.gif');
+			return '<img src="'.$img.'" alt="'.$locale->lang('login_access_denied').'"'
+				.' title="'.$locale->lang('login_access_denied').'" />';
 		}
 
 		// default
 		$image = $data->get_forum_is_closed() ? 'forum_read_closed' : 'forum_read';
 		$message = $data->get_forum_is_closed() ? 'forum_is_closed_msg' : 'forum_is_read';
-		$img = $this->user->get_theme_item_path('images/unread/'.$image.'.gif');
-		return '<img src="'.$img.'" alt="'.$this->locale->lang($message).'"'
-		 .' title="'.$this->locale->lang($message).'" />';
+		$img = $user->get_theme_item_path('images/unread/'.$image.'.gif');
+		return '<img src="'.$img.'" alt="'.$locale->lang($message).'"'
+		 .' title="'.$locale->lang($message).'" />';
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

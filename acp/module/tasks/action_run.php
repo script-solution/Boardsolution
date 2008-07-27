@@ -21,17 +21,21 @@ final class BS_ACP_Action_tasks_run extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+
+		$id = $input->get_var('id','get',PLIB_Input::ID);
 		if($id == null)
 			return 'Invalid id "'.$id.'"';
 		
-		if($this->cache->get_cache('tasks')->get_element($id) === null)
+		if($cache->get_cache('tasks')->get_element($id) === null)
 			return 'No task found with id "'.$id.'"';
 		
 		$con = new BS_Tasks_Container();
 		$con->run_task($id);
 		
-		$this->set_success_msg($this->locale->lang('task_run_success'));
+		$this->set_success_msg($locale->lang('task_run_success'));
 		$this->set_action_performed(true);
 
 		return '';

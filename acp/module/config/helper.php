@@ -54,17 +54,19 @@ final class BS_ACP_Module_Config_Helper extends PLIB_Singleton
 	 */
 	public function get_groups($gid,$perline)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		$tplcells = array();
 		foreach($this->get_manager()->get_groups() as $group)
 		{
 			if($group->get_parent_id() == 0)
 			{
-				$desc = $this->locale->contains_lang($group->get_name().'_desc');
+				$desc = $locale->contains_lang($group->get_name().'_desc');
 				$tplcells[] = array(
 					'id' => $group->get_id(),
 					'class' => $group->get_id() == $gid ? 'a_coldesc' : 'a_main',
-					'title' => $this->locale->lang($group->get_title(),false),
-					'description' => $desc ? $this->locale->lang($group->get_name().'_desc') : ''
+					'title' => $locale->lang($group->get_title(),false),
+					'description' => $desc ? $locale->lang($group->get_name().'_desc') : ''
 				);
 			}
 		}
@@ -79,7 +81,7 @@ final class BS_ACP_Module_Config_Helper extends PLIB_Singleton
 		return $this->_manager;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

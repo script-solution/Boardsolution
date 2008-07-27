@@ -21,10 +21,13 @@ final class BS_ACP_Action_languages_add extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		BS_DAO::get_langs()->create();
-		$this->cache->refresh('languages');
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
 
-		$this->set_success_msg($this->locale->lang('lang_added_notice'));
+		BS_DAO::get_langs()->create();
+		$cache->refresh('languages');
+
+		$this->set_success_msg($locale->lang('lang_added_notice'));
 		$this->set_action_performed(true);
 
 		return '';

@@ -17,7 +17,7 @@
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_Front_Search_Request_PMBasic extends PLIB_FullObject implements BS_Front_Search_Request
+abstract class BS_Front_Search_Request_PMBasic extends PLIB_Object implements BS_Front_Search_Request
 {
 	/**
 	 * The result-object
@@ -37,11 +37,15 @@ abstract class BS_Front_Search_Request_PMBasic extends PLIB_FullObject implement
 	 * @param string $search_cond the search-condition
 	 * @return array an array with the found ids
 	 */
-	protected final function _get_result_ids($search_cond)
+	protected final function get_result_ids_impl($search_cond)
 	{
-		$ids = BS_DAO::get_pms()->get_pm_ids_by_search($this->user->get_user_id(),$search_cond);
+		$user = PLIB_Props::get()->user();
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+
+		$ids = BS_DAO::get_pms()->get_pm_ids_by_search($user->get_user_id(),$search_cond);
 		if(count($ids) == 0)
-			$this->msgs->add_notice($this->locale->lang('no_pms_found'));
+			$msgs->add_notice($locale->lang('no_pms_found'));
 		
 		return $ids;
 	}

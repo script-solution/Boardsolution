@@ -42,13 +42,17 @@ final class BS_Front_Search_Request_UserPosts extends BS_Front_Search_Request_TP
 	
 	public function get_url_params()
 	{
-		$uid = $this->input->get_var(BS_URL_PID,'get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+
+		$uid = $input->get_var(BS_URL_PID,'get',PLIB_Input::ID);
 		return array(BS_URL_PID => $uid);
 	}
 	
 	public function encode_keywords()
 	{
-		$uid = $this->input->get_var(BS_URL_PID,'get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+
+		$uid = $input->get_var(BS_URL_PID,'get',PLIB_Input::ID);
 		if($uid == null)
 			return null;
 		
@@ -67,25 +71,31 @@ final class BS_Front_Search_Request_UserPosts extends BS_Front_Search_Request_TP
 	
 	public function get_result_ids()
 	{
-		$uid = $this->input->get_var(BS_URL_PID,'get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+
+		$uid = $input->get_var(BS_URL_PID,'get',PLIB_Input::ID);
 		if($uid == null)
 		{
-			$this->msgs->add_error($this->locale->lang('search_user_id_empty'));
+			$msgs->add_error($locale->lang('search_user_id_empty'));
 			return null;
 		}
 		
 		// TODO allow unlimited results?
 		$limit_vals = array(10,25,50,100,250,500);
-		$limit = $this->input->correct_var('limit','post',PLIB_Input::INTEGER,$limit_vals,250);
+		$limit = $input->correct_var('limit','post',PLIB_Input::INTEGER,$limit_vals,250);
 
 		$search_cond = ' WHERE p.post_user = '.$uid;
-		return $this->_get_result_ids('posts',$search_cond,$limit);
+		return $this->get_result_ids_impl('posts',$search_cond,$limit);
 	}
 	
 	public function get_title($search)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		return sprintf(
-			$this->locale->lang('search_result_user_posts'),
+			$locale->lang('search_result_user_posts'),
 			count($search->get_result_ids()),
 			$this->_username
 		);
@@ -96,7 +106,7 @@ final class BS_Front_Search_Request_UserPosts extends BS_Front_Search_Request_TP
 		return array('date','DESC');
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

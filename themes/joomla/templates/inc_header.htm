@@ -1,0 +1,34 @@
+<script type="text/javascript" src="{gjs.get_file('js/basic.js','lib')}"></script>
+<script type="text/javascript" src="{gjs.get_file('js/ajax.js','lib')}"></script>
+<script type="text/javascript" src="{gjs.get_file('src/functions.js')}"></script>
+<script type="text/javascript" src="{gjs.get_file('js/imgviewer.js','lib')}"></script>
+<script type="text/javascript">
+<!--
+var myAjax = new PLIB_Ajax();
+myAjax.setMimeType('text/plain; {charset}');
+myAjax.setEventHandler('onstart',function() {
+	PLIB_displayWaitBar('ajax_wait_bar');
+});
+myAjax.setEventHandler('onfinish',function() {
+	PLIB_hideElement('ajax_wait_bar');
+});
+
+PLIB_configureImageViewer(
+	true,80,10,10,10,5,'30px','{guser.get_theme_item_path("images/wait.gif")}',5,
+	'{glocale.lang("imgviewer_load_error")}'
+);
+
+function setCookie(name,value,lifetime)
+{
+	document.cookie = escape(name) + "=" + escape(value) +
+		(lifetime ? ";expires=" + (new Date((new Date()).getTime() + (1000 * lifetime))).toGMTString() : "") +
+		";path={cookie_path};domain={cookie_domain}";
+}
+//-->
+</script>
+
+<a id="top"></a>
+<div class="bs_body">
+
+{include "inc_headline.htm"}
+{include "inc_messages.htm"}

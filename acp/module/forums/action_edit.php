@@ -21,31 +21,36 @@ final class BS_ACP_Action_forums_edit extends BS_ACP_Action_Base
 {
 	public function perform_action($type = 'edit')
 	{
+		$input = PLIB_Props::get()->input();
+		$forums = PLIB_Props::get()->forums();
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+
 		$helper = BS_ACP_Module_Forums_Helper::get_instance();
 		
 		if($type == 'edit')
 		{
-			$id = $this->input->get_var('id','get',PLIB_Input::ID);
+			$id = $input->get_var('id','get',PLIB_Input::ID);
 			if($id == null)
 				return 'Invalid id "'.$id.'"';
 		}
 		
-		$category = $this->input->get_var('forum_name','post',PLIB_Input::STRING);
-		$parent = $this->input->get_var('parent','post',PLIB_Input::INTEGER);
-		$description = $this->input->get_var('description','post',PLIB_Input::STRING);
-		$forum_type = $this->input->correct_var(
+		$category = $input->get_var('forum_name','post',PLIB_Input::STRING);
+		$parent = $input->get_var('parent','post',PLIB_Input::INTEGER);
+		$description = $input->get_var('description','post',PLIB_Input::STRING);
+		$forum_type = $input->correct_var(
 			'forum_type','post',PLIB_Input::STRING,array('contains_cats','contains_threads'),'contains_threads'
 		);
-		$forum_is_intern = $this->input->get_var('is_intern','post',PLIB_Input::INT_BOOL);
-		$group_access = $this->input->get_var('group_access','post');
-		$selected_user = $this->input->get_var('selectedUsers','post',PLIB_Input::STRING);
-		$permission_thread = $this->input->get_var('permission_thread','post');
-		$permission_poll = $this->input->get_var('permission_poll','post');
-		$permission_event = $this->input->get_var('permission_event','post');
-		$permission_post = $this->input->get_var('permission_post','post');
-		$increase_experience = $this->input->get_var('increase_experience','post',PLIB_Input::INT_BOOL);
-		$display_subforums = $this->input->get_var('display_subforums','post',PLIB_Input::INT_BOOL);
-		$forum_is_closed = $this->input->get_var('forum_is_closed','post',PLIB_Input::INT_BOOL);
+		$forum_is_intern = $input->get_var('is_intern','post',PLIB_Input::INT_BOOL);
+		$group_access = $input->get_var('group_access','post');
+		$selected_user = $input->get_var('selectedUsers','post',PLIB_Input::STRING);
+		$permission_thread = $input->get_var('permission_thread','post');
+		$permission_poll = $input->get_var('permission_poll','post');
+		$permission_event = $input->get_var('permission_event','post');
+		$permission_post = $input->get_var('permission_post','post');
+		$increase_experience = $input->get_var('increase_experience','post',PLIB_Input::INT_BOOL);
+		$display_subforums = $input->get_var('display_subforums','post',PLIB_Input::INT_BOOL);
+		$forum_is_closed = $input->get_var('forum_is_closed','post',PLIB_Input::INT_BOOL);
 		
 		// check data
 		if(trim($category) == '')
@@ -57,7 +62,7 @@ final class BS_ACP_Action_forums_edit extends BS_ACP_Action_Base
 		// update parent-id and sort
 		if($type == 'edit')
 		{
-			$data = $this->forums->get_node_data($id);
+			$data = $forums->get_node_data($id);
 			if($data === null)
 				return 'Forum with id "'.$id.'" could not been found';
 			
@@ -65,12 +70,12 @@ final class BS_ACP_Action_forums_edit extends BS_ACP_Action_Base
 			// otherwise we would get the wrong results for $this->_get_changable_values()
 			if($data->get_parent_id() != $parent)
 			{
-				$sort = $this->forums->get_child_count($parent) + 1;
+				$sort = $forums->get_child_count($parent) + 1;
 				BS_DAO::get_forums()->update_by_id($id,array(
 					'parent_id' => $parent,
 					'sortierung' => $sort
 				));
-				PLIB_Object::set_prop('forums',new BS_Forums_Manager());
+				PLIB_Props::get()->reload('forums');
 			}
 		}
 		
@@ -94,7 +99,7 @@ final class BS_ACP_Action_forums_edit extends BS_ACP_Action_Base
 		);
 		
 		if($type == 'add')
-			$values['sortierung'] = $this->forums->get_child_count($parent) + 1;
+			$values['sortierung'] = $forums->get_child_count($parent) + 1;
 		
 		if($type == 'edit')
 			BS_DAO::get_forums()->update_by_id($id,$values);
@@ -123,17 +128,17 @@ final class BS_ACP_Action_forums_edit extends BS_ACP_Action_Base
 		$total += BS_DAO::get_forums_perm()->set_permissions($id,'reply',$gids['post']);
 		
 		if($forum_type != 'contains_cats' && $total == 0)
-			$this->msgs->add_warning($this->locale->lang('forums_warning_no_rights'));
+			$msgs->add_warning($locale->lang('forums_warning_no_rights'));
 		
 		$helper->refresh_intern_access($id,$selected_user,$group_access,$forum_is_intern);
 		
 		// refresh forum-cache
-		PLIB_Object::set_prop('forums',new BS_Forums_Manager());
+		PLIB_Props::get()->reload('forums');
 		
 		if($type == 'edit')
-			$this->set_success_msg($this->locale->lang('categorie_edit_success'));
+			$this->set_success_msg($locale->lang('categorie_edit_success'));
 		else
-			$this->set_success_msg($this->locale->lang('forum_successfully_created'));
+			$this->set_success_msg($locale->lang('forum_successfully_created'));
 		
 		$this->set_action_performed(true);
 

@@ -19,33 +19,39 @@
  */
 final class BS_Front_SubModule_userprofile_pmoutbox extends BS_Front_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACTION_DELETE_PMS => 'deletepms',
-			BS_ACTION_MARK_PMS_READ => 'pmmarkread',
-			BS_ACTION_MARK_PMS_UNREAD => 'pmmarkunread'
-		);
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACTION_DELETE_PMS,'deletepms');
+		$doc->add_action(BS_ACTION_MARK_PMS_READ,'pmmarkread');
+		$doc->add_action(BS_ACTION_MARK_PMS_UNREAD,'pmmarkunread');
+
+		$doc->add_breadcrumb($locale->lang('pmoutbox'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmoutbox'));
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
 		$helper = BS_Front_Module_UserProfile_Helper::get_instance();
 		if($helper->get_pm_permission() < 1)
 		{
-			$this->_report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
 			return;
 		}
 		
 		$helper->add_pm_delete_message();
 		$helper->add_folder('outbox','detail');
-	}
-	
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('pmoutbox') => $this->url->get_url(0,'&amp;'.BS_URL_LOC.'=pmoutbox')
-		);
 	}
 }
 ?>

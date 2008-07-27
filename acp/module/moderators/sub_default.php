@@ -19,31 +19,46 @@
  */
 final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_ADD_MODERATORS => 'add',
-			BS_ACP_ACTION_REMOVE_MODERATORS => 'remove'
-		);
+		parent::init($doc);
+		
+		$doc->add_action(BS_ACP_ACTION_ADD_MODERATORS,'add');
+		$doc->add_action(BS_ACP_ACTION_REMOVE_MODERATORS,'remove');
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$forums = $this->forums->get_all_nodes();
-		$num = count($forums);
+		$url = PLIB_Props::get()->url();
+		$tpl = PLIB_Props::get()->tpl();
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+		$cache = PLIB_Props::get()->cache();
+		$forums = PLIB_Props::get()->forums();
+
+		$nodes = $forums->get_all_nodes();
+		$num = count($nodes);
 		$tplforums = array();
 		
-		$hiddenfields = $this->url->get_acpmod_comps();
+		$hiddenfields = $url->get_acpmod_comps();
 		$hiddenfields['action'] = 'edituser';
 		
-		$this->tpl->add_variables(array(
-			'search_url' => $this->url->get_standalone_url('acp','user_search','&comboid=user_','&'),
+		$tpl->add_variables(array(
+			'search_url' => $url->get_acpmod_url('usersearch','&comboid=user_','&'),
 			'action_param' => BS_URL_ACTION,
 			'hiddenfields' => $hiddenfields
 		));
 		
 		if($num == 0)
-			$this->msgs->add_notice($this->locale->lang('create_forum_first'));
+			$msgs->add_notice($locale->lang('create_forum_first'));
 		else
 		{
 			$sub_cats = array();
@@ -54,8 +69,8 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 			);
 			
 			$forum_funcs = BS_ForumUtils::get_instance();
-			$mods = $this->cache->get_cache('moderators');
-			foreach($forums as $node)
+			$mods = $cache->get_cache('moderators');
+			foreach($nodes as $node)
 			{
 				$data = $node->get_data();
 				if(!isset($sub_cats[$data->get_parent_id()]))
@@ -78,14 +93,14 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 						foreach($forum_mods as $mdata)
 						{
 							$moderators .= $mdata['user_name'];
-							$del_url = $this->url->get_acpmod_url(
+							$del_url = $url->get_acpmod_url(
 								0,'&amp;at='.BS_ACP_ACTION_REMOVE_MODERATORS.'&amp;f='.$data->get_id()
 								 .'&amp;uid='.$mdata['user_id']
 							);
 							$moderators .= ' <a href="'.$del_url.'">';
-							$moderators .= '<img src="'.PLIB_Path::inner().'acp/images/delete_small.png"';
-							$moderators .= ' alt="'.$this->locale->lang('remove').'"';
-							$moderators .= ' title="'.$this->locale->lang('remove').'" />';
+							$moderators .= '<img src="'.PLIB_Path::client_app().'acp/images/delete_small.png"';
+							$moderators .= ' alt="'.$locale->lang('remove').'"';
+							$moderators .= ' title="'.$locale->lang('remove').'" />';
 							$moderators .= '</a>'."\n";
 							if($x < $mod_num - 1)
 								$moderators .= ', ';
@@ -105,21 +120,16 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 				);
 			}
 			
-			$this->tpl->add_variables(array(
+			$tpl->add_variables(array(
 				'action_type' => BS_ACP_ACTION_ADD_MODERATORS,
 				'add_button' => sprintf(
-					$this->locale->lang('add_chosen_moderators'),
-					'<input type="submit" value="'.$this->locale->lang('add').'" />'
+					$locale->lang('add_chosen_moderators'),
+					'<input type="submit" value="'.$locale->lang('add').'" />'
 				)
 			));
 		}
 		
-		$this->tpl->add_array('forums',$tplforums);
-	}
-	
-	public function get_location()
-	{
-		return array();
+		$tpl->add_array('forums',$tplforums);
 	}
 }
 ?>

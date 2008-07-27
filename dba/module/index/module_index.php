@@ -19,37 +19,53 @@
  */
 final class BS_DBA_Module_index extends BS_DBA_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_DBA_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_DBA_ACTION_DELETE_TABLES => 'delete',
-			BS_DBA_ACTION_OPTIMIZE_TABLES => 'optimize'
-		);
+		parent::init($doc);
+		
+		$doc->add_action(BS_DBA_ACTION_DELETE_TABLES,'delete');
+		$doc->add_action(BS_DBA_ACTION_OPTIMIZE_TABLES,'optimize');
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		unset($_SESSION['BS_restore']);
-		unset($_SESSION['BS_backup']);
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$functions = PLIB_Props::get()->functions();
+		$db = PLIB_Props::get()->db();
+		$tpl = PLIB_Props::get()->tpl();
+		$user = PLIB_Props::get()->user();
 		
-		$mode = $this->input->get_var('mode','get',PLIB_Input::STRING);
+		$user->delete_session_data('BS_restore');
+		$user->delete_session_data('BS_backup');
+		
+		$mode = $input->get_var('mode','get',PLIB_Input::STRING);
 		
 		// show delete message?
 		if($mode == 'qdelete')
 		{
-			$stables = $this->input->get_var('tables','get',PLIB_Input::STRING);
+			$stables = $input->get_var('tables','get',PLIB_Input::STRING);
 			$tables = PLIB_Array_Utils::advanced_explode(';',$stables);
 			if(count($tables) > 0)
 			{
 				$message = sprintf(
-					$this->locale->lang('delete_tables_question'),'"'.implode('", "',$tables).'"'
+					$locale->lang('delete_tables_question'),'"'.implode('", "',$tables).'"'
 				);
-				$yes_url = $this->url->get_url(
+				$yes_url = $url->get_url(
 					0,'&amp;at='.BS_DBA_ACTION_DELETE_TABLES.'&amp;tables='.implode(';',$tables)
 				);
-				$no_url = $this->url->get_url(0);
+				$no_url = $url->get_url(0);
 				
-				$this->functions->add_delete_message($message,$yes_url,$no_url,'');
+				$functions->add_delete_message($message,$yes_url,$no_url,'');
 			}
 		}
 		else if($mode == 'optimize')
@@ -57,10 +73,10 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 		
 		// retrieve tables in the database
 		$selected_db = BS_DBA_Utils::get_instance()->get_selected_database();
-		$qry = $this->db->sql_qry('SHOW TABLE STATUS FROM `'.$selected_db.'`',false);
+		$qry = $db->sql_qry('SHOW TABLE STATUS FROM `'.$selected_db.'`',false);
 		
-		$this->tpl->add_variables(array(
-			'error_msg' => $qry ? '' : $this->db->last_error()
+		$tpl->add_variables(array(
+			'error_msg' => $qry ? '' : $db->last_error()
 		));
 		
 		$total_overhead = 0;
@@ -69,7 +85,7 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 		$tables = array();
 		if($qry)
 		{
-			while($data = $this->db->sql_fetch_assoc($qry))
+			while($data = $db->sql_fetch_assoc($qry))
 			{
 				$size = $data['Data_length'] + $data['Index_length'] + $data['Data_free'];
 				$total_size += $size;
@@ -81,7 +97,7 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 				if($create_date >= 0)
 					$create_date = PLIB_Date::get_date($create_date);
 				else
-					$create_date = $this->locale->lang('notavailable');
+					$create_date = $locale->lang('notavailable');
 				
 				$tables[] = array(
 					'name' => $data['Name'],
@@ -93,25 +109,25 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 			}
 		}
 		
-		$this->tpl->add_array('tables',$tables);
-		$this->_request_formular();
+		$tpl->add_array('tables',$tables);
+		$this->request_formular();
 		
 		$actions = array(
-			'' => $this->locale->lang('please_choose'),
-			'backup' => $this->locale->lang('backup'),
-			'optimize' => $this->locale->lang('optimize'),
-			'delete' => $this->locale->lang('delete')
+			'' => $locale->lang('please_choose'),
+			'backup' => $locale->lang('backup'),
+			'optimize' => $locale->lang('optimize'),
+			'delete' => $locale->lang('delete')
 		);
 		$action_combo = new PLIB_HTML_ComboBox('action','action');
 		$action_combo->set_options($actions);
 		$action_combo->set_custom_attribute('onchange','performAction(this);');
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'size' => PLIB_StringHelper::get_formated_data_size($total_size,BS_DBA_LANGUAGE),
 			'overhead' => PLIB_StringHelper::get_formated_data_size($total_overhead,BS_DBA_LANGUAGE),
 			'entries' => number_format($total_rows,0,',','.'),
 			'action_combo' => $action_combo->to_html(),
-			'optimize_url' => $this->url->get_url(0,'&at='.BS_DBA_ACTION_OPTIMIZE_TABLES.'&tables=','&')
+			'optimize_url' => $url->get_url(0,'&at='.BS_DBA_ACTION_OPTIMIZE_TABLES.'&tables=','&')
 		));
 	}
 }

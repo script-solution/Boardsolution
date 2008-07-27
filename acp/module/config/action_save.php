@@ -21,13 +21,16 @@ final class BS_ACP_Action_Config_save extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+
 		$helper = BS_ACP_Module_Config_Helper::get_instance();
 		if($helper->get_manager()->save_changes())
 		{
-			$this->cache->refresh('config');
+			$cache->refresh('config');
 			
 			$this->set_action_performed(true);
-			$this->set_success_msg($this->locale->lang('settings_saved'));
+			$this->set_success_msg($locale->lang('settings_saved'));
 		}
 
 		return '';

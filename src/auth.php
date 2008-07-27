@@ -18,7 +18,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
+final class BS_Auth extends PLIB_Object
 {
 	/**
 	 * User-group permissions
@@ -55,19 +55,26 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	private $_is_current_forum_mod = false;
 	
-	public function init()
+	/**
+	 * Constructor
+	 */
+	public function __construct()
 	{
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		$cache = PLIB_Props::get()->cache();
+
 		$this->_calculate_group_perm();
 
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		if($fid !== null && $fid > 0)
 		{
-			if($this->user->is_loggedin() && !$this->user->is_admin())
+			if($user->is_loggedin() && !$user->is_admin())
 			{
 				// we have to do this here manually because the is_moderator_in_current_forum() method
 				// uses this field to determine if the user is a mod
-				$ismod = $this->cache->get_cache('moderators')->element_exists_with(array(
-					'rid' => $fid,'user_id' => $this->user->get_user_id()
+				$ismod = $cache->get_cache('moderators')->element_exists_with(array(
+					'rid' => $fid,'user_id' => $user->get_user_id()
 				));
 				$this->_is_current_forum_mod = $this->_user_group_perm['is_super_mod'] == 1 || $ismod;
 				
@@ -76,8 +83,8 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 				else
 				{
 					// check if he/she is a moderator in any forum
-					$ismodany = $this->cache->get_cache('moderators')->element_exists_with(array(
-						'user_id' => $this->user->get_user_id())
+					$ismodany = $cache->get_cache('moderators')->element_exists_with(array(
+						'user_id' => $user->get_user_id())
 					);
 					$this->_is_mod_in_any_forum = $this->_user_group_perm['is_super_mod'] == 1 || $ismodany;
 				}
@@ -93,7 +100,9 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function is_ipblock_enabled($type)
 	{
-		return $this->cfg[$type] > 0 && $this->_user_group_perm['disable_ip_blocks'] == 0;
+		$cfg = PLIB_Props::get()->cfg();
+
+		return $cfg[$type] > 0 && $this->_user_group_perm['disable_ip_blocks'] == 0;
 	}
 	
 	/**
@@ -106,20 +115,23 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function is_moderator_in_current_forum($user_id = 0,$group_ids = '')
 	{
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+
 		// current user?
 		if($user_id == 0)
 			return $this->_is_current_forum_mod;
 		
 		// check for the given user-id and user-groups
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$is_mod = $this->cache->get_cache('moderators')->element_exists_with(array(
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$is_mod = $cache->get_cache('moderators')->element_exists_with(array(
 			'rid' => $fid,'user_id' => $user_id
 		));
 		if($is_mod)
 			return true;
 		
 		// is one of the groups super-mod?
-		$ugroups = $this->cache->get_cache('user_groups');
+		$ugroups = $cache->get_cache('user_groups');
 		foreach(PLIB_Array_Utils::advanced_explode(',',$group_ids) as $group_id)
 		{
 			$gdata = $ugroups->get_element($group_id);
@@ -139,12 +151,14 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function is_moderator_in_any_forum($user_id = 0,$group_ids = '')
 	{
+		$cache = PLIB_Props::get()->cache();
+
 		// the current user?
 		if($user_id == 0)
 			return $this->_is_mod_in_any_forum;
 		
 		// is one of the groups super-mod?
-		$ugroups = $this->cache->get_cache('user_groups');
+		$ugroups = $cache->get_cache('user_groups');
 		foreach(PLIB_Array_Utils::advanced_explode(',',$group_ids) as $group_id)
 		{
 			$gdata = $ugroups->get_element($group_id);
@@ -154,7 +168,7 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 		
 		// mod in a forum?
 		// TODO this is very slow. perhaps should we organize the moderators more clever?
-		if($this->cache->get_cache('moderators')->element_exists_with(array('user_id' => $user_id)))
+		if($cache->get_cache('moderators')->element_exists_with(array('user_id' => $user_id)))
 			return true;
 
 		return false;
@@ -172,19 +186,22 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	public function get_usergroup_list($group_ids,$add_links = true,$one_line = true,
 		$show_hidden = false)
 	{
+		$url = PLIB_Props::get()->url();
+		$cache = PLIB_Props::get()->cache();
+
 		$user_groups = '';
 		$ugroups = PLIB_Array_Utils::advanced_explode(",",$group_ids);
 		$i = 0;
 		foreach($ugroups as $gid)
 		{
-			$gdata = $this->cache->get_cache('user_groups')->get_element($gid);
+			$gdata = $cache->get_cache('user_groups')->get_element($gid);
 			if(!$show_hidden && $gdata['is_visible'] == 0)
 				continue;
 			
 			if($add_links)
 			{
-				$url = $this->url->get_url('memberlist','&amp;'.BS_URL_MS_GROUP.urlencode('[]').'='.$gid);
-				$group = '<a href="'.$url.'" style="color: #'.$gdata['group_color'].';">';
+				$murl = $url->get_url('memberlist','&amp;'.BS_URL_MS_GROUP.urlencode('[]').'='.$gid);
+				$group = '<a href="'.$murl.'" style="color: #'.$gdata['group_color'].';">';
 				$group .= $gdata['group_title'].'</a>';
 			}
 			else
@@ -215,7 +232,9 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function get_groupname($group_id)
 	{
-		$data = $this->cache->get_cache('user_groups')->get_element($group_id);
+		$cache = PLIB_Props::get()->cache();
+
+		$data = $cache->get_cache('user_groups')->get_element($group_id);
 		if($data != null)
 			return $data['group_title'];
 
@@ -230,7 +249,9 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function get_colored_groupname($group_id)
 	{
-		$gdata = $this->cache->get_cache('user_groups')->get_element($group_id);
+		$cache = PLIB_Props::get()->cache();
+
+		$gdata = $cache->get_cache('user_groups')->get_element($group_id);
 		return '<span style="color: #'.$gdata['group_color'].';">'.$gdata['group_title'].'</span>';
 	}
 	
@@ -257,9 +278,12 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function get_user_color($id,$group_ids)
 	{
-		$gdata = $this->cache->get_cache('user_groups')->get_element((int)$group_ids);
+		$cache = PLIB_Props::get()->cache();
+		$cfg = PLIB_Props::get()->cfg();
+
+		$gdata = $cache->get_cache('user_groups')->get_element((int)$group_ids);
 		if($gdata['overrides_mod'] == 0 && $this->is_moderator_in_any_forum($id,$group_ids))
-			return $this->cfg['mod_color'];
+			return $cfg['mod_color'];
 
 		return $gdata['group_color'];
 	}
@@ -280,15 +304,18 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function get_user_images($id,$group_ids)
 	{
-		$ugroups = $this->cache->get_cache('user_groups');
+		$cache = PLIB_Props::get()->cache();
+		$cfg = PLIB_Props::get()->cfg();
+
+		$ugroups = $cache->get_cache('user_groups');
 		$gdata = $ugroups->get_element((int)$group_ids);
 
 		if($gdata['overrides_mod'] == 0 && $this->is_moderator_in_any_forum($id,$group_ids))
 		{
 			return array(
 				'is_mod' => true,
-				'filled' => $this->cfg['mod_rank_filled_image'],
-				'empty' => $this->cfg['mod_rank_empty_image']
+				'filled' => $cfg['mod_rank_filled_image'],
+				'empty' => $cfg['mod_rank_empty_image']
 			);
 		}
 
@@ -322,8 +349,11 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function has_current_forum_perm($action,$post_user = 0)
 	{
+		$user = PLIB_Props::get()->user();
+		$cfg = PLIB_Props::get()->cfg();
+
 		// the admin has always permission
-		if($this->user->is_admin())
+		if($user->is_admin())
 			return true;
 
 		switch($action)
@@ -339,64 +369,64 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 				return $this->_user_group_perm['edit_own_threads'] == 1;
 
 			case BS_MODE_EDIT_TOPIC:
-				if($this->cfg['mod_edit_topics'] == 1 && $this->is_moderator_in_current_forum())
+				if($cfg['mod_edit_topics'] == 1 && $this->is_moderator_in_current_forum())
 					return true;
 
 				if($post_user != 0)
 				{
-					if($this->user->get_user_id() == $post_user &&
+					if($user->get_user_id() == $post_user &&
 						$this->_user_group_perm['edit_own_threads'] == 1)
 						return true;
 				}
 				return false;
 
 			case BS_MODE_DELETE_TOPICS:
-				if($this->cfg['mod_delete_topics'] == 1 && $this->is_moderator_in_current_forum())
+				if($cfg['mod_delete_topics'] == 1 && $this->is_moderator_in_current_forum())
 					return true;
 
 				if($post_user != 0)
 				{
-					if($this->user->get_user_id() == $post_user &&
+					if($user->get_user_id() == $post_user &&
 						$this->_user_group_perm['delete_own_threads'] == 1)
 						return true;
 				}
 				return false;
 
 			case BS_MODE_MOVE_TOPICS:
-				return $this->cfg['mod_move_topics'] == 1 && $this->is_moderator_in_current_forum();
+				return $cfg['mod_move_topics'] == 1 && $this->is_moderator_in_current_forum();
 
 			case BS_MODE_EDIT_POST:
-				if($this->cfg['mod_edit_posts'] == 1 && $this->is_moderator_in_current_forum())
+				if($cfg['mod_edit_posts'] == 1 && $this->is_moderator_in_current_forum())
 					return true;
 
-				return $this->user->get_user_id() == $post_user &&
+				return $user->get_user_id() == $post_user &&
 					$this->_user_group_perm['edit_own_posts'] == 1;
 
 			case BS_MODE_DELETE_POSTS:
-				if($this->cfg['mod_delete_posts'] == 1 && $this->is_moderator_in_current_forum())
+				if($cfg['mod_delete_posts'] == 1 && $this->is_moderator_in_current_forum())
 					return true;
 
 				if($post_user != 0)
-					return $this->user->get_user_id() == $post_user &&
+					return $user->get_user_id() == $post_user &&
 						$this->_user_group_perm['delete_own_posts'] == 1;
 
 				return false;
 
 			case BS_MODE_SPLIT_POSTS:
-				return $this->cfg['mod_split_posts'] == 1 && $this->is_moderator_in_current_forum();
+				return $cfg['mod_split_posts'] == 1 && $this->is_moderator_in_current_forum();
 
 			case BS_MODE_OPENCLOSE_TOPICS:
-				if($this->cfg['mod_openclose_topics'] == 1 && $this->is_moderator_in_current_forum())
+				if($cfg['mod_openclose_topics'] == 1 && $this->is_moderator_in_current_forum())
 					return true;
 
-				return $this->user->get_user_id() == $post_user &&
+				return $user->get_user_id() == $post_user &&
 					$this->_user_group_perm['openclose_own_threads'] == 1;
 			
 			case BS_MODE_LOCK_TOPICS:
-				return $this->cfg['mod_lock_topics'] == 1 && $this->is_moderator_in_current_forum();
+				return $cfg['mod_lock_topics'] == 1 && $this->is_moderator_in_current_forum();
 			
 			case BS_MODE_MARK_TOPICS_IMPORTANT:
-				return $this->cfg['mod_mark_topics_important'] == 1 && $this->is_moderator_in_current_forum();
+				return $cfg['mod_mark_topics_important'] == 1 && $this->is_moderator_in_current_forum();
 		}
 
 		return false;
@@ -428,8 +458,10 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function has_permission_in_forum($action,$fid)
 	{
+		$user = PLIB_Props::get()->user();
+
 		// admins have always permission!
-		if($this->user->is_admin())
+		if($user->is_admin())
 			return true;
 		
 		$this->_init_forum_perm();
@@ -460,7 +492,9 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function is_in_any_group($groups)
 	{
-		return count(array_intersect($this->user->get_all_user_groups(),$groups)) > 0;
+		$user = PLIB_Props::get()->user();
+
+		return count(array_intersect($user->get_all_user_groups(),$groups)) > 0;
 	}
 
 	/**
@@ -471,8 +505,10 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function has_global_permission($operation)
 	{
+		$user = PLIB_Props::get()->user();
+
 		// the admin has always permission
-		if($this->user->is_admin())
+		if($user->is_admin())
 			return true;
 
 		return $this->_user_group_perm[$operation] == 1;
@@ -485,11 +521,13 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function has_board_access()
 	{
+		$user = PLIB_Props::get()->user();
+
 		if(!$this->has_global_permission('enter_board'))
 			return false;
-		else if($this->user->is_bot())
+		else if($user->is_bot())
 		{
-			$bot = $this->user->get_bot_data();
+			$bot = $user->get_bot_data();
 			if($bot !== null && !$bot['bot_access'])
 				return false;
 		}
@@ -504,18 +542,21 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function has_acp_access()
 	{
-		if($this->user->is_admin())
+		$user = PLIB_Props::get()->user();
+		$cache = PLIB_Props::get()->cache();
+
+		if($user->is_admin())
 			return true;
 
-		$acpaccess = $this->cache->get_cache('acp_access');
+		$acpaccess = $cache->get_cache('acp_access');
 		
 		// has the user access to acp?
-		$cond = array('access_type' => 'user','access_value' => $this->user->get_user_id());
+		$cond = array('access_type' => 'user','access_value' => $user->get_user_id());
 		if($acpaccess->element_exists_with($cond))
 			return true;
 
 		// has any of the user-groups the user belongs to access to the acp?
-		foreach($this->user->get_all_user_groups() as $gid)
+		foreach($user->get_all_user_groups() as $gid)
 		{
 			$cond = array('access_type' => 'group','access_value' => $gid);
 			if($acpaccess->element_exists_with($cond))
@@ -533,22 +574,25 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function has_access_to_module($module)
 	{
-		if($this->user->is_admin() || $module == 'faq')
+		$user = PLIB_Props::get()->user();
+		$cache = PLIB_Props::get()->cache();
+
+		if($user->is_admin() || $module == 'faq')
 			return true;
 		
-		$acpaccess = $this->cache->get_cache('acp_access');
+		$acpaccess = $cache->get_cache('acp_access');
 
 		// has the user access to acp?
 		$cond = array(
 			'access_type' => 'user',
-			'access_value' => $this->user->get_user_id(),
+			'access_value' => $user->get_user_id(),
 			'module' => $module
 		);
 		if($acpaccess->element_exists_with($cond))
 			return true;
 
 		// has any of the user-groups the user belongs to access to the acp?
-		foreach($this->user->get_all_user_groups() as $gid)
+		foreach($user->get_all_user_groups() as $gid)
 		{
 			$cond = array(
 				'access_type' => 'group',
@@ -571,27 +615,32 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function has_access_to_intern_forum($id = 0)
 	{
-		$fid = ($id == 0) ? $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID) : $id;
+		$input = PLIB_Props::get()->input();
+		$forums = PLIB_Props::get()->forums();
+		$user = PLIB_Props::get()->user();
+		$cache = PLIB_Props::get()->cache();
 
-		$forum_data = $this->forums->get_node_data($fid);
+		$fid = ($id == 0) ? $input->get_var(BS_URL_FID,'get',PLIB_Input::ID) : $id;
+
+		$forum_data = $forums->get_node_data($fid);
 		if($forum_data === null)
 			return false;
 		
 		if($forum_data->get_forum_is_intern())
 		{
 			// admins have always access
-			if($this->user->is_admin())
+			if($user->is_admin())
 				return true;
 
 			// guests if never access to intern forums
-			if(!$this->user->is_loggedin())
+			if(!$user->is_loggedin())
 				return false;
 
-			$rows = $this->cache->get_cache('intern')->get_elements_with(array('fid' => $fid));
+			$rows = $cache->get_cache('intern')->get_elements_with(array('fid' => $fid));
 			if(is_array($rows) && count($rows) > 0)
 			{
-				$ugroups = $this->user->get_all_user_groups();
-				$uid = $this->user->get_user_id();
+				$ugroups = $user->get_all_user_groups();
+				$uid = $user->get_user_id();
 				foreach($rows as $data)
 				{
 					if($data['access_type'] == 'user' && $data['access_value'] == $uid)
@@ -617,6 +666,11 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function get_forum_mods($fid)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$cache = PLIB_Props::get()->cache();
+		$user = PLIB_Props::get()->user();
+		$url = PLIB_Props::get()->url();
+
 		$output = '';
 		
 		// cache the moderators here
@@ -624,11 +678,11 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 		if(is_null($all_mods))
 		{
 			// to save performance we do this query only if the user-names should be colored
-			if($this->cfg['always_color_usernames'])
+			if($cfg['always_color_usernames'])
 			{
 				// grab all mods and store the moderatored forums of them
 				$uids = array();
-				foreach($this->cache->get_cache('moderators') as $value)
+				foreach($cache->get_cache('moderators') as $value)
 				{
 					if(!isset($uids[$value['user_id']]))
 						$uids[$value['user_id']] = array();
@@ -657,7 +711,7 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 			else
 			{
 				// simply store all mods for each forum in the array
-				foreach($this->cache->get_cache('moderators') as $value)
+				foreach($cache->get_cache('moderators') as $value)
 				{
 					if(!isset($all_mods[$value['rid']]))
 						$all_mods[$value['rid']] = array();
@@ -705,7 +759,7 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 		if(is_null($groups))
 		{
 			$nadmingroups = array();
-			foreach($this->cache->get_cache('user_groups') as $gdata)
+			foreach($cache->get_cache('user_groups') as $gdata)
 			{
 				if($gdata['id'] != BS_STATUS_ADMIN && $gdata['is_super_mod'] == 1)
 					$nadmingroups[] = $gdata['id'];
@@ -748,8 +802,8 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 			$output = '-';
 		else if($too_many)
 		{
-			$url = $this->url->get_url('team');
-			$output .= ', <a href="'.$url.'">...</a>';
+			$murl = $url->get_url('team');
+			$output .= ', <a href="'.$murl.'">...</a>';
 		}
 
 		return $output;
@@ -760,6 +814,10 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	private function _init_forum_perm()
 	{
+		$input = PLIB_Props::get()->input();
+		$forums = PLIB_Props::get()->forums();
+		$user = PLIB_Props::get()->user();
+
 		if($this->_forum_perm !== null)
 			return;
 		
@@ -790,7 +848,7 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 		}
 		
 		// is there a current-forum-id?
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		if($fid == null)
 			return;
 		
@@ -800,17 +858,17 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 			$this->_current_forum_perm[$key] = false;
 
 		// check if it is a intern forum
-		if($this->forums->is_intern_forum($fid) && !$this->has_access_to_intern_forum($fid))
+		if($forums->is_intern_forum($fid) && !$this->has_access_to_intern_forum($fid))
 			return;
 
 		// grab forum-data
-		$data = $this->forums->get_node_data($fid);
+		$data = $forums->get_node_data($fid);
 		if($data === null)
 			return;
 		
 		// store the permissions corresponding to the user-status and groups
-		$is_admin = $this->user->is_admin();
-		$ugroups = $this->user->get_all_user_groups();
+		$is_admin = $user->is_admin();
+		$ugroups = $user->get_all_user_groups();
 		foreach($this->_forum_perm[$fid] as $key => $groups)
 		{
 			if($is_admin || $data->get_forum_type() == 'contains_cats')
@@ -825,6 +883,9 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 	 */
 	private function _calculate_group_perm()
 	{
+		$cache = PLIB_Props::get()->cache();
+		$user = PLIB_Props::get()->user();
+
 		$permissions = array(
 			'view_memberlist',
 			'view_linklist',
@@ -854,10 +915,10 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 			'is_super_mod'
 		);
 
-		$ugroups = $this->cache->get_cache('user_groups');
-		$this->_user_group_perm = $ugroups->get_element($this->user->get_user_group());
+		$ugroups = $cache->get_cache('user_groups');
+		$this->_user_group_perm = $ugroups->get_element($user->get_user_group());
 
-		foreach($this->user->get_all_user_groups() as $id)
+		foreach($user->get_all_user_groups() as $id)
 		{
 			$data = $ugroups->get_element($id);
 			foreach($permissions as $perm)
@@ -868,7 +929,7 @@ final class BS_Auth extends PLIB_FullObject implements PLIB_Initable
 		}
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

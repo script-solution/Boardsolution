@@ -27,12 +27,14 @@ final class BS_ACP_Action_Performer extends PLIB_Actions_Performer
 		$this->set_mod_folder('acp/module/');
 	}
 	
-	protected function _before_action_performed($id,$action)
+	protected function before_action_performed($id,$action)
 	{
-		parent::_before_action_performed($id,$action);
+		$locale = PLIB_Props::get()->locale();
+
+		parent::before_action_performed($id,$action);
 		
 		// we have to add the messages-file if an action should be performed
-		$this->locale->add_language_file('messages');
+		$locale->add_language_file('messages');
 	}
 }
 ?>

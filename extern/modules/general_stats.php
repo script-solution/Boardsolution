@@ -120,8 +120,11 @@ final class BS_API_Module_general_stats extends BS_API_Module
 	
 	public function run()
 	{
-		$stats = $this->functions->get_stats();
-		$stats_data = $this->cache->get_cache('stats')->current();
+		$functions = PLIB_Props::get()->functions();
+		$cache = PLIB_Props::get()->cache();
+
+		$stats = $functions->get_stats();
+		$stats_data = $cache->get_cache('stats')->current();
 		
 		$this->registered_user = $stats['total_users'];
 		$this->logins = $stats['logins_total'];

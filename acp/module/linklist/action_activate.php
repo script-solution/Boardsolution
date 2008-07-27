@@ -21,7 +21,9 @@ final class BS_ACP_Action_linklist_activate extends BS_ACP_Action_Base
 {
 	public function perform_action($active = 0)
 	{
-		$ids = $this->input->get_var('delete','post');
+		$input = PLIB_Props::get()->input();
+
+		$ids = $input->get_var('delete','post');
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			return 'Got an invalid id-string via GET';
 		

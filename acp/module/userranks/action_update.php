@@ -21,8 +21,12 @@ final class BS_ACP_Action_userranks_update extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$post_to = $this->input->get_var('post_to','post');
-		$rank_name = $this->input->get_var('rank_name','post');
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+
+		$post_to = $input->get_var('post_to','post');
+		$rank_name = $input->get_var('rank_name','post');
 
 		$count = 0;
 		if(PLIB_Array_Utils::is_integer($post_to))
@@ -32,7 +36,7 @@ final class BS_ACP_Action_userranks_update extends BS_ACP_Action_Base
 			$last_post_to = 0;
 			foreach($post_to as $id => $post_to_val)
 			{
-				$data = $this->cache->get_cache('user_ranks')->get_element($id);
+				$data = $cache->get_cache('user_ranks')->get_element($id);
 				if($data['rank'] != $rank_name[$id] || $data['post_from'] != $last_post_to ||
 					$data['post_to'] != $post_to_val)
 				{
@@ -48,10 +52,10 @@ final class BS_ACP_Action_userranks_update extends BS_ACP_Action_Base
 			}
 
 			if($count > 0)
-				$this->cache->refresh('user_ranks');
+				$cache->refresh('user_ranks');
 		}
 
-		$this->set_success_msg($this->locale->lang('user_ranks_updated_success'));
+		$this->set_success_msg($locale->lang('user_ranks_updated_success'));
 		$this->set_action_performed(true);
 
 		return '';

@@ -27,9 +27,8 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 	 */
 	public static function get_default()
 	{
-		// we are static here..
-		$input = PLIB_Object::get_prop('input');
-		$cfg = PLIB_Object::get_prop('cfg');
+		$input = PLIB_Props::get()->input();
+		$cfg = PLIB_Props::get()->cfg();
 		
 		// name and email
 		$user_name = $input->get_var('user_name','post',PLIB_Input::STRING);
@@ -190,6 +189,10 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 	
 	public function check_data()
 	{
+		$functions = PLIB_Props::get()->functions();
+		$cfg = PLIB_Props::get()->cfg();
+		$locale = PLIB_Props::get()->locale();
+
 		// this is only possible if the community has not been exported
 		if(BS_ENABLE_EXPORT)
 			return 'The community is exported';
@@ -204,17 +207,17 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		if(!BS_UserUtils::get_instance()->check_username($this->_user_name))
 			return 'usernamenotallowed';
 
-		if($this->functions->is_banned('user',$this->_user_name))
+		if($functions->is_banned('user',$this->_user_name))
 			return 'usernamenotallowed';
 
 		$len = PLIB_String::strlen($this->_user_name);
-		if($len < $this->cfg['profile_min_user_len'] && $len > $this->cfg['profile_max_user_len'])
-			return sprintf($this->locale->lang('error_wronguserlen'),
-										 $this->cfg['profile_min_user_len'],
-										 $this->cfg['profile_max_user_len']);
+		if($len < $cfg['profile_min_user_len'] && $len > $cfg['profile_max_user_len'])
+			return sprintf($locale->lang('error_wronguserlen'),
+										 $cfg['profile_min_user_len'],
+										 $cfg['profile_max_user_len']);
 
 		// check the email-address
-		if($this->functions->is_banned('mail',$this->_user_email))
+		if($functions->is_banned('mail',$this->_user_email))
 			return 'mailnotallowed';
 
 		if($this->_user_email == '')
@@ -244,7 +247,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 				return 'The field with name "'.$name.'" doesn\'t exist!';
 			
 			if(($error = $field->is_valid_value($value)) !== '')
-				return sprintf($this->locale->lang('error_add_field_'.$error),$field->get_data()->get_title());
+				return sprintf($locale->lang('error_add_field_'.$error),$field->get_data()->get_title());
 		}
 		
 		// check if all required fields are specified
@@ -260,9 +263,17 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
+		$db = PLIB_Props::get()->db();
+		$cfg = PLIB_Props::get()->cfg();
+		$locale = PLIB_Props::get()->locale();
+		$msgs = PLIB_Props::get()->msgs();
+		$ips = PLIB_Props::get()->ips();
+		$cookies = PLIB_Props::get()->cookies();
+		$input = PLIB_Props::get()->input();
+
 		parent::perform_action();
 		
-		$this->db->start_transaction();
+		$db->start_transaction();
 		
 		// insert the user into the database
 		$this->_user_id = BS_DAO::get_user()->create(
@@ -280,10 +291,10 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 			'active' => $this->_active ? 1 : 0,
 			'allow_pms' => $this->_allow_pms ? 1 : 0,
 			'allow_board_emails' => $this->_allow_board_emails ? 1 : 0,
-			'timezone' => $this->cfg['default_timezone'],
+			'timezone' => $cfg['default_timezone'],
 			'last_unread_update' => $time,
-			'bbcode_mode' => $this->cfg['msgs_default_bbcode_mode'],
-			'posts_order' => $this->cfg['default_posts_order']
+			'bbcode_mode' => $cfg['msgs_default_bbcode_mode'],
+			'posts_order' => $cfg['default_posts_order']
 		);
 		
 		// add additional fields
@@ -297,7 +308,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		BS_DAO::get_profile()->create_custom($fields);
 
 		// send the administrators a PM
-		if($this->cfg['get_email_new_account'] == 1)
+		if($cfg['get_email_new_account'] == 1)
 		{
 			$mail = BS_EmailFactory::get_instance()->get_new_account_mail($this->_user_name);
 			$mail_errors = array();
@@ -311,22 +322,32 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 			// mail errors?
 			if(count($mail_errors) > 0)
 			{
-				$msg = sprintf($this->locale->lang('error_mail_error'),implode('<br />',$mail_errors));
-				$this->msgs->add_error($msg);
+				$msg = sprintf($locale->lang('error_mail_error'),implode('<br />',$mail_errors));
+				$msgs->add_error($msg);
 			}
 		}
 
-		$this->ips->add_entry('reg');
+		$ips->add_entry('reg');
 
 		// no account-activation...so login the user
-		if($this->cfg['account_activation'] == 'none')
+		if($cfg['account_activation'] == 'none')
 		{
-			$this->cookies->set_cookie('user',$this->_user_name);
-			$this->cookies->set_cookie('pw',md5($this->_user_pw));
+			$cookies->set_cookie('user',$this->_user_name);
+			$cookies->set_cookie('pw',md5($this->_user_pw));
+			
+			// fire community-event
+			$status = BS_Community_User::get_status_from_groups($this->_user_groups);
+			$user = new BS_Community_User(
+				$this->_user_id,
+				$input->unescape_value($this->_user_name,'post'),
+				$input->unescape_value($this->_user_email,'post'),$status,md5($this->_user_pw),
+				$input->unescape_value($this->_user_pw,'post')
+			);
+			BS_Community_Manager::get_instance()->fire_user_registered($user);
 		}
 
 		$user_key = '';
-		if($this->cfg['account_activation'] == 'email')
+		if($cfg['account_activation'] == 'email')
 		{
 			$user_key = PLIB_StringHelper::generate_random_key();
 			BS_DAO::get_activation()->create($this->_user_id,$user_key);
@@ -338,14 +359,14 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		);
 		if(!$mail->send_mail())
 		{
-			$msg = sprintf($this->locale->lang('error_mail_error'),$mail->get_error_message());
-			$this->msgs->add_error($msg);
+			$msg = sprintf($locale->lang('error_mail_error'),$mail->get_error_message());
+			$msgs->add_error($msg);
 		}
 		
-		$this->db->commit_transaction();
+		$db->commit_transaction();
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

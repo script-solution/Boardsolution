@@ -17,7 +17,7 @@
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_Front_Search_Request_TPBasic extends PLIB_FullObject
+abstract class BS_Front_Search_Request_TPBasic extends PLIB_Object
 	implements BS_Front_Search_Request
 {
 	/**
@@ -41,8 +41,11 @@ abstract class BS_Front_Search_Request_TPBasic extends PLIB_FullObject
 	 * @param array $keywords you may specify an array with keywords for "MATCH(...) AGAINST ..."
 	 * @return array an array with the found ids
 	 */
-	protected final function _get_result_ids($type = 'posts',$search_cond,$limit,$keywords = null)
+	protected final function get_result_ids_impl($type = 'posts',$search_cond,$limit,$keywords = null)
 	{
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+
 		// limit the search to the allowed forums
 		$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
 		if(count($denied) > 0)
@@ -59,7 +62,7 @@ abstract class BS_Front_Search_Request_TPBasic extends PLIB_FullObject
 			$ids[] = $type == 'posts' ? $data['id'] : $data['threadid'];
 		
 		if(count($ids) == 0)
-			$this->msgs->add_notice($this->locale->lang('no_'.$type.'_found'));
+			$msgs->add_notice($locale->lang('no_'.$type.'_found'));
 		
 		return $ids;
 	}

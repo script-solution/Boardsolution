@@ -32,7 +32,7 @@ final class BS_Session_Manager extends PLIB_Session_Manager
    * @param PLIB_Session_Data $user
    * @param string $currentsid
    */
-  protected function _check_online_timeout($user,$currentsid)
+  protected function check_online_timeout($user,$currentsid)
   {
   	// We want to treat acp-users different from frontend-users
   	$loc = $user->get_location();
@@ -82,6 +82,8 @@ final class BS_Session_Manager extends PLIB_Session_Manager
 	 */
 	public function get_user_at_location($location = 'forums',$id = -1,$hide_duplicates = true)
 	{
+		$forums = PLIB_Props::get()->forums();
+
 		$bots = array();
 		$user = array();
 		$guests = array();
@@ -113,9 +115,9 @@ final class BS_Session_Manager extends PLIB_Session_Manager
 					}
 					
 					// look if the user is in a subforum
-					if($this->forums->has_childs($id))
+					if($forums->has_childs($id))
 					{
-						$sub = $this->forums->get_sub_nodes($id);
+						$sub = $forums->get_sub_nodes($id);
 						$len = count($sub);
 						for($i = 0;$i < $len;$i++)
 						{
@@ -202,25 +204,28 @@ final class BS_Session_Manager extends PLIB_Session_Manager
 	 */
 	public function get_last_login()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+
 		// at first we look in the session-table (sorted by date descending)
 		$last = null;
-		foreach($this->get_online_list() as $user)
+		foreach($this->get_online_list() as $suser)
 		{
 			// the user has to be loggedin and we don't want to get ourself :)
-			if($user->get_user_id() <= 0 || $user->get_user_id() == $this->user->get_user_id())
+			if($suser->get_user_id() <= 0 || $suser->get_user_id() == $user->get_user_id())
 				continue;
 			
 			// is the user a ghost?
-			if(!$this->user->is_admin() && $user->get_ghost_mode() == 1 &&
-					$this->cfg['allow_ghost_mode'] == 1)
+			if(!$user->is_admin() && $suser->get_ghost_mode() == 1 &&
+					$cfg['allow_ghost_mode'] == 1)
 				continue;
 
 			// we have found a valid entry
 			$last = array(
-				'user_name' => $user->get_user_name(),
-				'lastlogin' => $user->get_date(),
-				'id' => $user->get_user_id(),
-				'user_group' => $user->get_user_group()
+				'user_name' => $suser->get_user_name(),
+				'lastlogin' => $suser->get_date(),
+				'id' => $suser->get_user_id(),
+				'user_group' => $suser->get_user_group()
 			);
 			break;
 		}
@@ -233,9 +238,9 @@ final class BS_Session_Manager extends PLIB_Session_Manager
 		return $last;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
-		return array_merge(parent::_get_print_vars(),get_object_vars($this));
+		return array_merge(parent::get_print_vars(),get_object_vars($this));
 	}
 }
 ?>

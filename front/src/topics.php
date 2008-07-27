@@ -17,7 +17,7 @@
  * @subpackage	front.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Topics extends PLIB_FullObject
+final class BS_Front_Topics extends PLIB_Object
 {
 	/**
 	 * do you want to limit the query to a specific forum?
@@ -331,6 +331,14 @@ final class BS_Front_Topics extends PLIB_FullObject
 	 */
 	public function add_topics()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+		$tpl = PLIB_Props::get()->tpl();
+		$input = PLIB_Props::get()->input();
+		$unread = PLIB_Props::get()->unread();
+		$functions = PLIB_Props::get()->functions();
+		$url = PLIB_Props::get()->url();
+
 		if($this->_total_topic_num != 0)
 		{
 			// generate sorting
@@ -367,7 +375,7 @@ final class BS_Front_Topics extends PLIB_FullObject
 
 			// generate where
 			$sql_where = ' WHERE 1';
-			if($this->cfg['hide_denied_forums'] == 1)
+			if($cfg['hide_denied_forums'] == 1)
 			{
 				$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
 				if(count($denied) > 0)
@@ -411,72 +419,72 @@ final class BS_Front_Topics extends PLIB_FullObject
 			}
 
 			$cache = array(
-				'symbol_poll' =>				$this->user->get_theme_item_path(
+				'symbol_poll' =>				$user->get_theme_item_path(
 					'images/thread_type/poll.gif'
 				),
-				'symbol_event' =>				$this->user->get_theme_item_path(
+				'symbol_event' =>				$user->get_theme_item_path(
 					'images/thread_type/event.gif'
 				),
 
-				'important_en' =>				$this->user->get_theme_item_path(
+				'important_en' =>				$user->get_theme_item_path(
 					'images/thread_status/important_en.gif'
 				),
-				'important_dis' =>			$this->user->get_theme_item_path(
+				'important_dis' =>			$user->get_theme_item_path(
 					'images/thread_status/important_dis.gif'
 				),
-				'important_new_en' =>		$this->user->get_theme_item_path(
+				'important_new_en' =>		$user->get_theme_item_path(
 					'images/thread_status/important_new_en.gif'
 				),
-				'important_new_dis' =>	$this->user->get_theme_item_path(
+				'important_new_dis' =>	$user->get_theme_item_path(
 					'images/thread_status/important_new_dis.gif'
 				),
 
-				'hot_en' =>							$this->user->get_theme_item_path(
+				'hot_en' =>							$user->get_theme_item_path(
 					'images/thread_status/hot_en.gif'
 				),
-				'hot_dis' =>						$this->user->get_theme_item_path(
+				'hot_dis' =>						$user->get_theme_item_path(
 					'images/thread_status/hot_dis.gif'
 				),
-				'hot_new_en' =>					$this->user->get_theme_item_path(
+				'hot_new_en' =>					$user->get_theme_item_path(
 					'images/thread_status/hot_new_en.gif'
 				),
-				'hot_new_dis' =>				$this->user->get_theme_item_path(
+				'hot_new_dis' =>				$user->get_theme_item_path(
 					'images/thread_status/hot_new_dis.gif'
 				),
 
-				'closed_en' =>					$this->user->get_theme_item_path(
+				'closed_en' =>					$user->get_theme_item_path(
 					'images/thread_status/closed_en.gif'
 				),
-				'closed_dis' =>					$this->user->get_theme_item_path(
+				'closed_dis' =>					$user->get_theme_item_path(
 					'images/thread_status/closed_dis.gif'
 				),
-				'closed_new_en' =>			$this->user->get_theme_item_path(
+				'closed_new_en' =>			$user->get_theme_item_path(
 					'images/thread_status/closed_new_en.gif'
 				),
-				'closed_new_dis' =>			$this->user->get_theme_item_path(
+				'closed_new_dis' =>			$user->get_theme_item_path(
 					'images/thread_status/closed_new_dis.gif'
 				),
 
-				'moved_en' =>						$this->user->get_theme_item_path(
+				'moved_en' =>						$user->get_theme_item_path(
 					'images/thread_status/moved_en.gif'
 				),
-				'moved_dis' =>					$this->user->get_theme_item_path(
+				'moved_dis' =>					$user->get_theme_item_path(
 					'images/thread_status/moved_dis.gif'
 				),
-				'moved_new_en' =>				$this->user->get_theme_item_path(
+				'moved_new_en' =>				$user->get_theme_item_path(
 					'images/thread_status/moved_new_en.gif'
 				),
-				'moved_new_dis' =>			$this->user->get_theme_item_path(
+				'moved_new_dis' =>			$user->get_theme_item_path(
 					'images/thread_status/moved_new_dis.gif'
 				),
 
-				'lastpost_image' =>			$this->user->get_theme_item_path(
+				'lastpost_image' =>			$user->get_theme_item_path(
 					'images/lastpost.gif'
 				)
 			);
 		}
 		
-		$this->tpl->set_template('inc_topics.htm');
+		$tpl->set_template('inc_topics.htm');
 
 		// determine required colspans
 		$total_colspan = 8;
@@ -491,9 +499,18 @@ final class BS_Front_Topics extends PLIB_FullObject
 		if(!$this->_show_views)
 			$total_colspan--;
 
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$redirect_url = '';
+		if(isset($pagination) && $pagination !== null)
+		{
+			$redirect_url = $url->get_url(
+				'redirect','&amp;'.BS_URL_LOC.'=topic_action&amp;'.BS_URL_FID.'='.$fid
+					.'&amp;'.BS_URL_SITE.'='.$pagination->get_page()
+			);
+		}
+		
 		// display header		
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'tbody_content' => $this->_tbody_content,
 			'show_thread_opening' => $this->_show_topic_opening,
 			'show_views' => $this->_show_views, 
@@ -508,7 +525,8 @@ final class BS_Front_Topics extends PLIB_FullObject
 			'middle_col_width' => $this->_middle_width,
 			'right_col_width' => (100 - $this->_middle_width) / 2,
 			'fid' => $fid,
-			'quick_search_target' => $this->url->get_url('search')
+			'quick_search_target' => $url->get_url('search'),
+			'redirect_url' => $redirect_url,
 		));
 		
 		$topics = array();
@@ -531,20 +549,20 @@ final class BS_Front_Topics extends PLIB_FullObject
 				}
 
 				$pages = BS_PostingUtils::get_instance()->get_post_pages($data['posts'] + 1);
-				$is_unread = $this->unread->is_unread_thread($data['id']);
+				$is_unread = $unread->is_unread_thread($data['id']);
 				$first_unread_url = '';
 				if($is_unread)
 				{
-					$fup = $this->unread->get_first_unread_post($data['id']);
+					$fup = $unread->get_first_unread_post($data['id']);
 					if($pages > 1)
 					{
-						$first_unread_url = $this->url->get_url(
+						$first_unread_url = $url->get_url(
 							'redirect','&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'='.$fup
 						);
 					}
 					else
 					{
-						$first_unread_url = $this->url->get_url(
+						$first_unread_url = $url->get_url(
 							'posts','&amp;'.BS_URL_FID.'='.$data['rubrikid']
 								.'&amp;'.BS_URL_TID.'='.$data['id'].'#b_'.$fup
 						);
@@ -554,13 +572,13 @@ final class BS_Front_Topics extends PLIB_FullObject
 				// generate page-split for topics with multiple pages
 				if($highlight_param)
 				{
-					$url = $this->url->get_url(
+					$murl = $url->get_url(
 						'posts','&amp;'.BS_URL_FID.'='.$data['rubrikid'].'&amp;'.BS_URL_TID.'='.$data['id']
 							.$highlight_param.'&amp;'.BS_URL_SITE.'={d}'
 					);
 				}
 				else
-					$url = $this->url->get_posts_url($data['rubrikid'],$data['id'],'&amp;','{d}');
+					$murl = $url->get_posts_url($data['rubrikid'],$data['id'],'&amp;','{d}');
 
 				$forum_path = '';
 				if($this->_show_forum)
@@ -574,7 +592,7 @@ final class BS_Front_Topics extends PLIB_FullObject
 				if(!is_null($this->_keywords))
 				{
 					$data['name'] = $kwhl->highlight($data['name']);
-					$ls = new PLIB_HTML_LimitedString($data['name'],$this->cfg['thread_max_title_len']);
+					$ls = new PLIB_HTML_LimitedString($data['name'],$cfg['thread_max_title_len']);
 					$res = $ls->get();
 					if($ls->has_cut())
 						$topic_name = array('displayed' => $res,'complete' => strip_tags($data['name']));
@@ -602,10 +620,10 @@ final class BS_Front_Topics extends PLIB_FullObject
 
 				// build url
 				if($highlight_param != '')
-					$posts_url = $this->url->get_url('posts','&amp;'.BS_URL_FID.'='.$forum_id
+					$posts_url = $url->get_url('posts','&amp;'.BS_URL_FID.'='.$forum_id
 						.'&amp;'.BS_URL_TID.'='.$topic_id.$highlight_param);
 				else
-					$posts_url = $this->url->get_posts_url($forum_id,$topic_id,'&amp;',1);
+					$posts_url = $url->get_posts_url($forum_id,$topic_id,'&amp;',1);
 
 				// display template
 				$topics[] = array(
@@ -618,7 +636,7 @@ final class BS_Front_Topics extends PLIB_FullObject
 					'topic_url' => $posts_url,
 					'show_forum' => $this->_show_forum,
 					'forum_path' => $forum_path,
-					'page_split' => $this->functions->get_page_split_tiny($pages,$url),
+					'page_split' => $functions->get_page_split_tiny($pages,$murl),
 					'important_title' => $important_title,
 					'important_colspan' => $important_colspan,
 					'show_important' => $this->_show_important_first && $is_important != $data['important'],
@@ -628,7 +646,7 @@ final class BS_Front_Topics extends PLIB_FullObject
 					'posts' => $data['posts'],
 					'views' => $data['views'],
 					'topic_status' => BS_TopicUtils::get_instance()->get_status_data(
-						$cache,$data,$this->unread->is_unread_thread($data['id'])
+						$cache,$data,$unread->is_unread_thread($data['id'])
 					),
 					'thread_pic' => BS_TopicUtils::get_instance()->get_symbol(
 						$cache,$data['type'],$data['symbol']
@@ -642,9 +660,9 @@ final class BS_Front_Topics extends PLIB_FullObject
 			}
 		}
 
-		$this->tpl->add_array('topics',$topics);
+		$tpl->add_array('topics',$topics);
 		
-		$this->tpl->restore_template();
+		$tpl->restore_template();
 	}
 
 	/**
@@ -680,6 +698,8 @@ final class BS_Front_Topics extends PLIB_FullObject
 	 */
 	private function _get_topic_lastpost(&$data,$posts_order,$pages)
 	{
+		$url = PLIB_Props::get()->url();
+		
 		if($data['lastpost_id'] == 0)
 			return false;
 
@@ -687,7 +707,7 @@ final class BS_Front_Topics extends PLIB_FullObject
 		$site = 1;
 		if($posts_order == 'ASC' && $pages > 1)
 			$site = $pages;
-		$url = $this->url->get_posts_url($data['rubrikid'],$data['id'],'&amp;',$site);
+		$murl = $url->get_posts_url($data['rubrikid'],$data['id'],'&amp;',$site);
 
 		// determine username
 		if($data['lastpost_user'] != 0)
@@ -702,11 +722,11 @@ final class BS_Front_Topics extends PLIB_FullObject
 		return array(
 			'date' => PLIB_Date::get_date($data['lastpost_time']),
 			'username' => $user_name,
-			'url' => $url.'#b_'.$data['lastpost_id']
+			'url' => $murl.'#b_'.$data['lastpost_id']
 		);
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

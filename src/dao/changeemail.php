@@ -40,10 +40,12 @@ class BS_DAO_ChangeEmail extends PLIB_Singleton
 	 */
 	public function get_by_user($id,$key = '')
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$row = $this->db->sql_fetch(
+		$row = $db->sql_fetch(
 			'SELECT * FROM '.BS_TB_CHANGE_EMAIL.'
 			 WHERE user_id = '.$id.($key ? ' AND user_key = "'.$key.'"' : '')
 		);
@@ -62,16 +64,18 @@ class BS_DAO_ChangeEmail extends PLIB_Singleton
 	 */
 	public function create($id,$key,$email)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$this->db->sql_insert(BS_TB_CHANGE_EMAIL,array(
+		$db->sql_insert(BS_TB_CHANGE_EMAIL,array(
 			'user_id' => $id,
 			'user_key' => $key,
 			'email_address' => $email,
 			'email_date' => time()
 		));
-		return $this->db->get_last_insert_id();
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -82,14 +86,16 @@ class BS_DAO_ChangeEmail extends PLIB_Singleton
 	 */
 	public function delete_by_user($id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_CHANGE_EMAIL.'
 			 WHERE user_id = '.$id
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -100,14 +106,16 @@ class BS_DAO_ChangeEmail extends PLIB_Singleton
 	 */
 	public function delete_timedout($timeout)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($timeout) || $timeout <= 0)
 			PLIB_Helper::def_error('intgt0','timeout',$timeout);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_CHANGE_EMAIL.'
 			 WHERE email_date < '.(time() - $timeout)
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

@@ -19,16 +19,40 @@
  */
 final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_EDIT_TPL => 'edit'
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_EDIT_TPL,'edit');
+
+		$helper = BS_ACP_Module_TplEditor_Helper::get_instance();
+		$path = $helper->get_path();
+		$file = $input->get_var('file','get',PLIB_Input::STRING);
+		$doc->add_breadcrumb(
+			$locale->lang('edit'),
+			$url->get_acpmod_url(0,'&amp;action=edit&amp;path='.$path.'&amp;file='.$file)
 		);
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$file = $this->input->get_var('file','get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
+		$file = $input->get_var('file','get',PLIB_Input::STRING);
 		$helper = BS_ACP_Module_TplEditor_Helper::get_instance();
 		$path = $helper->get_path();
 		$def_path = $helper->get_path_in_default();
@@ -40,11 +64,11 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 
 		if(!is_file($real_file))
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
-		$target_url = $this->url->get_acpmod_url(
+		$target_url = $url->get_acpmod_url(
 			0,'&amp;action=edit&amp;path='.$path.'&amp;file='.$file.'&amp;at='.BS_ACP_ACTION_EDIT_TPL
 		);
 		
@@ -58,34 +82,22 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 		foreach(PLIB_Array_Utils::advanced_explode('/',$path) as $part)
 		{
 			$cpath .= $part.'/';
-			$url = $this->url->get_acpmod_url('tpleditor','&amp;path='.$cpath);
-			$path_links .= '<a href="'.$url.'">'.$part.'</a>/';
+			$murl = $url->get_acpmod_url('tpleditor','&amp;path='.$cpath);
+			$path_links .= '<a href="'.$murl.'">'.$part.'</a>/';
 		}
 		
-		$this->tpl->set_template('tpleditor_formular.htm');
-		$this->tpl->add_variables(array(
+		$tpl->set_template('tpleditor_formular.htm');
+		$tpl->add_variables(array(
 			'target_url' => $target_url,
 			'image' => BS_ACP_Utils::get_instance()->get_file_image($real_file),
 			'filename' => $path_links.$file,
 			'filesize' => number_format(filesize($real_file),0,',','.'),
 			'last_modification' => PLIB_Date::get_date(filemtime($real_file)),
 			'file_content' => $file_content,
-			'back_url' => $this->url->get_acpmod_url(0,'&amp;action=view&amp;path='.$path),
+			'back_url' => $url->get_acpmod_url(0,'&amp;action=view&amp;path='.$path),
 			'back_button' => true
 		));
-		$this->tpl->restore_template();
-	}
-	
-	public function get_location()
-	{
-		$helper = BS_ACP_Module_TplEditor_Helper::get_instance();
-		$path = $helper->get_path();
-		$file = $this->input->get_var('file','get',PLIB_Input::STRING);
-		return array(
-			$this->locale->lang('edit') => $this->url->get_acpmod_url(
-				0,'&amp;action=edit&amp;path='.$path.'&amp;file='.$file
-			)
-		);
+		$tpl->restore_template();
 	}
 }
 ?>

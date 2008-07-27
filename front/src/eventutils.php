@@ -48,6 +48,9 @@ final class BS_Front_EventUtils extends PLIB_Singleton
 	 */
 	public function get_current_events()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$url = PLIB_Props::get()->url();
+
 		$ev = $this->_get_events();
 		
 		$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
@@ -61,24 +64,24 @@ final class BS_Front_EventUtils extends PLIB_Singleton
 				if($edata['tid'] == 0)
 				{
 					// skip calendar-events, if disabled
-					if($this->cfg['enable_calendar'] == 0)
+					if($cfg['enable_calendar'] == 0)
 						continue;
 	
-					$url = $this->url->get_url('calendar','&amp;'.BS_URL_MODE.'=event_detail'
+					$murl = $url->get_url('calendar','&amp;'.BS_URL_MODE.'=event_detail'
 						.'&amp;'.BS_URL_ID.'='.$edata['id']);
 				}
 				else
 				{
 					// is this forum denied for the user?
-					if($this->cfg['hide_denied_forums'] == 1 && in_array($edata['rubrikid'],$denied))
+					if($cfg['hide_denied_forums'] == 1 && in_array($edata['rubrikid'],$denied))
 						continue;
 					
-					$url = $this->url->get_posts_url($edata['rubrikid'],$edata['tid']);
+					$murl = $url->get_posts_url($edata['rubrikid'],$edata['tid']);
 				}
 				
 				$title = PLIB_StringHelper::get_limited_string($edata['event_title'],15);
 				$events['list'][] = array(
-					'url' => $url,
+					'url' => $murl,
 					'title_complete' => $title['complete'],
 					'title' => $title['displayed'],
 					'date' => PLIB_Date::get_date($edata['event_begin'],false)
@@ -184,7 +187,7 @@ final class BS_Front_EventUtils extends PLIB_Singleton
 		);
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

@@ -19,6 +19,9 @@
  */
 final class BS_Front_Module_userprofile extends BS_Front_SubModuleContainer
 {
+	/**
+	 * Constructor
+	 */
 	public function __construct()
 	{
 		$subs = array(
@@ -32,9 +35,24 @@ final class BS_Front_Module_userprofile extends BS_Front_SubModuleContainer
 		parent::__construct('userprofile',$subs,'infos');
 	}
 	
-	public function get_location()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
 	{
-		switch($this->input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING))
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$user = PLIB_Props::get()->user();
+		
+		$doc->set_has_access($user->is_loggedin());
+		
+		$doc->set_template('userprofile.htm');
+
+		switch($input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING))
 		{
 			case 'forums':
 			case 'topics':
@@ -54,19 +72,23 @@ final class BS_Front_Module_userprofile extends BS_Front_SubModuleContainer
 				break;
 		}
 		
-		$loc = array(
-			$this->locale->lang($title) => ''
-		);
-		return array_merge($loc,$this->_sub->get_location());
+		$doc->add_breadcrumb($locale->lang($title),'');
+		
+		// init submodule
+		$this->_sub->init($doc);
 	}
 	
-	public function get_template()
-	{
-		return 'userprofile.htm';
-	}
-	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+		$tpl = PLIB_Props::get()->tpl();
+		$auth = PLIB_Props::get()->auth();
+		$locale = PLIB_Props::get()->locale();
+
 		// run submodule
 		parent::run();
 		
@@ -76,27 +98,27 @@ final class BS_Front_Module_userprofile extends BS_Front_SubModuleContainer
 		$inbox_status = '';
 		$outbox_status = '';
 	
-		if($this->cfg['enable_pms'] == 1 && $this->user->get_profile_val('allow_pms') == 1)
+		if($cfg['enable_pms'] == 1 && $user->get_profile_val('allow_pms') == 1)
 		{
 			$helper = BS_Front_Module_UserProfile_Helper::get_instance();
 			$inbox_num = $helper->get_inbox_num();
-			$inbox_status = $this->_show_profile_status_bar($inbox_num,$this->cfg['pm_max_inbox']);
+			$inbox_status = $this->_show_profile_status_bar($inbox_num,$cfg['pm_max_inbox']);
 			$outbox_num = $helper->get_outbox_num();
-			$outbox_status = $this->_show_profile_status_bar($outbox_num,$this->cfg['pm_max_outbox']);
+			$outbox_status = $this->_show_profile_status_bar($outbox_num,$cfg['pm_max_outbox']);
 		}
 	
-		$this->tpl->add_variables(array(
-			'max_inbox' => $this->cfg['pm_max_inbox'],
-			'max_outbox' => $this->cfg['pm_max_outbox'],
+		$tpl->add_variables(array(
+			'max_inbox' => $cfg['pm_max_inbox'],
+			'max_outbox' => $cfg['pm_max_outbox'],
 			'allow_pw_change' => !BS_ENABLE_EXPORT,
-			'enable_avatars' => $this->cfg['enable_avatars'],
-			'enable_signatures' => $this->cfg['enable_signatures'],
-			'enable_email_notification' => $this->cfg['enable_email_notification'] == 1,
-			'subscribe_forums_perm' => $this->cfg['enable_email_notification'] == 1 &&
-				$this->auth->has_global_permission('subscribe_forums'),
-			'enable_pms' => $this->cfg['enable_pms'] == 1 && $this->user->get_profile_val('allow_pms') == 1,
-			'user_pw_change_title' => $this->cfg['profile_max_user_changes'] != 0 ?
-				$this->locale->lang('user_n_pw_change') : $this->locale->lang('pw_change'),
+			'enable_avatars' => $cfg['enable_avatars'],
+			'enable_signatures' => $cfg['enable_signatures'],
+			'enable_email_notification' => $cfg['enable_email_notification'] == 1,
+			'subscribe_forums_perm' => $cfg['enable_email_notification'] == 1 &&
+				$auth->has_global_permission('subscribe_forums'),
+			'enable_pms' => $cfg['enable_pms'] == 1 && $user->get_profile_val('allow_pms') == 1,
+			'user_pw_change_title' => $cfg['profile_max_user_changes'] != 0 ?
+				$locale->lang('user_n_pw_change') : $locale->lang('pw_change'),
 			'inbox_num' => $inbox_num,
 			'outbox_num' => $outbox_num,
 			'inbox_status' => $inbox_status,
@@ -114,14 +136,11 @@ final class BS_Front_Module_userprofile extends BS_Front_SubModuleContainer
 	 */
 	private function _show_profile_status_bar($num,$max)
 	{
-		$percent = $max == 0 ? 0 : floor((130 / $max) * $num);
-		$img = $this->user->get_theme_item_path('images/diagrams/profile_diagram.gif');
-		return '<img src="'.$img.'" height="16" width="'.$percent.'" alt="'.$percent.'" />';
-	}
+		$user = PLIB_Props::get()->user();
 
-	public function has_access()
-	{
-		return $this->user->is_loggedin();
+		$percent = $max == 0 ? 0 : floor((100 / $max) * $num);
+		$img = $user->get_theme_item_path('images/diagrams/profile_diagram.gif');
+		return '<img src="'.$img.'" height="16" width="'.$percent.'%" alt="'.$percent.'" />';
 	}
 }
 ?>

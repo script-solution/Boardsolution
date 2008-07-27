@@ -1,0 +1,73 @@
+<form method="post" action="{target_url}">
+<table width="100%" align="center" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="bs_tbl_top_left"></td>
+		<td class="bs_tbl_top"></td>
+		<td class="bs_tbl_top_right"></td>
+	</tr>
+	<tr>
+		<td class="bs_tbl_left"></td>
+		<td>
+		<table width="100%" cellpadding="2" cellspacing="1">
+			<tr>
+				<td colspan="6" align="center" class="bs_topic" height="22">{LANG:subscribed_topics}</td>
+			</tr>
+			<tr>
+				<td width="42%" class="bs_coldesc" colspan="3">{LANG:thread}</td>
+				<td width="24%" class="bs_coldesc" align="center">{LANG:subscribe_date}</td>
+				<td width="24%" class="bs_coldesc" align="center">{LANG:lastpost}</td>
+				<td width="10%" class="bs_coldesc" align="center">{LANG:delete}</td>
+			</tr>
+			{IF num == 0}
+			<tr>
+				<td colspan="6" align="center" class="bs_main">{LANG:no_subscribed_topics}</td>
+			</tr>
+			{ENDIF}
+			{LOOP topics as index => topic}
+			<tr>
+				<td width="5%" height="35" align="center" class="bs_main">
+				<img src="{topic:topic_status:important_image}" title="{topic:topic_status:important_title}" alt="" />
+				<img src="{topic:topic_status:hot_image}" title="{topic:topic_status:hot_title}" alt="" /><br />
+				<img src="{topic:topic_status:closed_image}" title="{topic:topic_status:closed_title}" alt="" />
+				<img src="{topic:topic_status:moved_image}" title="{topic:topic_status:moved_title}" alt="" />
+				</td>
+				<td width="3%" height="35" align="center" class="bs_main">{topic:topic_symbol}</td>
+				<td width="34%" height="35" class="bs_main">
+				{topic:topic_name}<br />
+				<div style="margin: 0px;">{topic:position}</div>
+				</td>
+				<td width="24%" height="35" class="bs_main" align="center">{topic:subscribe_date}</td>
+				<td width="24%" height="35" class="bs_main" align="center">{topic:last_post}</td>
+				<td width="10%" height="35" class="bs_main" align="center"
+						onclick="var cb = document.getElementById('subscr_{index}'); cb.checked = cb.checked ? false : true;">
+				<input type="checkbox" id="subscr_{index}" class="bs_checkbox" name="delete[]" value="{topic:topic_id}"
+							 onclick="this.checked = this.checked ? false : true;" />
+				</td>
+			</tr>
+			{ENDLOOP}
+		</table>
+		</td>
+		<td class="bs_tbl_right"></td>
+	</tr>
+	<tr>
+		<td class="bs_tbl_bottom_left"></td>
+		<td class="bs_tbl_bottom"></td>
+		<td class="bs_tbl_bottom_right"></td>
+	</tr>
+	<tr>
+		<td colspan="3">
+		<table width="100%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td width="30%">&nbsp;</td>
+				<td width="40%" align="center" class="bs_body"><input type="submit" value="{LANG:delete}" /></td>
+				<td width="30%" align="right">
+				<a class="bs_body" href="Javascript:invertSelection('subscr_');">{LANG:invertmark}</a>
+				</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+</table>
+</form>
+<br />
+{page_split}

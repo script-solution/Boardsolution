@@ -17,7 +17,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
+final class BS_Unread extends PLIB_Object
 {
 	/**
 	 * The unread-storage-implementation
@@ -68,10 +68,21 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 	 */	
 	private $_unread_news = array();
 	
-	public function init()
+	/**
+	 * Constructor
+	 */
+	public function __construct()
 	{
-		if($this->user->is_loggedin())
+		$user = PLIB_Props::get()->user();
+		$cookies = PLIB_Props::get()->cookies();
+
+		if($user->is_loggedin())
+		{
+			// remove unread topics for the guest. Because it doesn't make sense to keep them if the
+			// user is logged in
+			$cookies->delete_cookie('unread');
 			$this->_storage = new BS_UnreadStorage_User();
+		}
 		else
 			$this->_storage = new BS_UnreadStorage_Guest();
 		
@@ -166,11 +177,14 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function update_unread()
 	{
+		$user = PLIB_Props::get()->user();
+		$input = PLIB_Props::get()->input();
+
 		$update = false;
-		if($this->user->force_unread_update())
+		if($user->force_unread_update())
 			$update = true;
-		else if(!$this->input->isset_var(BS_URL_AT,'get') &&
-				!$this->input->isset_var('action_type','post'))
+		else if(!$input->isset_var(BS_URL_AT,'get') &&
+				!$input->isset_var('action_type','post'))
 			$update = true;
 
 		if($update)
@@ -194,11 +208,13 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function mark_topics_unread($ids)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		// determine if we have to grab news
-		$grab_news = $this->cfg['enable_portal_news'] && $this->cfg['enable_portal'];
+		$grab_news = $cfg['enable_portal_news'] && $cfg['enable_portal'];
 		if($grab_news)
 		{
-			$news_fids = PLIB_Array_Utils::advanced_explode(',',$this->cfg['news_forums']);
+			$news_fids = PLIB_Array_Utils::advanced_explode(',',$cfg['news_forums']);
 			if(!PLIB_Array_Utils::is_integer($news_fids) || count($news_fids) == 0)
 				$grab_news = false;
 		}
@@ -278,11 +294,13 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 	 */
 	public function mark_forum_read($id)
 	{
+		$forums = PLIB_Props::get()->forums();
+
 		//  we'll mark all sub-forums read, too, if we don't show all subforums in the forums-view
-		$data = $this->forums->get_node_data($id);
+		$data = $forums->get_node_data($id);
 		if(!$data->get_display_subforums())
 		{
-			$sub_forums = $this->forums->get_sub_node_ids($id);
+			$sub_forums = $forums->get_sub_node_ids($id);
 			$sub_forums[] = $id;
 		}
 		else
@@ -329,8 +347,12 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 	 */
 	private function _create_list()
 	{
+		$cache = PLIB_Props::get()->cache();
+		$user = PLIB_Props::get()->user();
+		$cfg = PLIB_Props::get()->cfg();
+
 		$last_update = $this->_storage->get_last_update();
-		$stats = $this->cache->get_cache('stats')->get_element(0,false);
+		$stats = $cache->get_cache('stats')->get_element(0,false);
 		$last_post = max($stats['posts_last'],$stats['last_edit']);
 	
 		// nothing to do?
@@ -339,15 +361,15 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 		
 		// select the NOT-favorite-forums for the current user
 		$forum_ids = array();
-		if($this->user->is_loggedin())
+		if($user->is_loggedin())
 		{
-			foreach(BS_DAO::get_unreadhide()->get_all_of_user($this->user->get_user_id()) as $data)
+			foreach(BS_DAO::get_unreadhide()->get_all_of_user($user->get_user_id()) as $data)
 				$forum_ids[] = $data['forum_id'];
 		}
 
 		// don't add denied topics to the unread-topics
 		$excl_fids = array();
-		if($this->cfg['hide_denied_forums'] == 1)
+		if($cfg['hide_denied_forums'] == 1)
 			$excl_fids = array_merge($forum_ids,BS_ForumUtils::get_instance()->get_denied_forums(false));
 		
 		// don't add already unread threads again (we would loose the first unread post-id)
@@ -356,10 +378,10 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 			$excl_tids = array_keys($this->_unread_threads);
 
 		// grab unread news from db?
-		$grab_news = $this->cfg['enable_portal_news'] && $this->cfg['enable_portal'];
+		$grab_news = $cfg['enable_portal_news'] && $cfg['enable_portal'];
 		if($grab_news)
 		{
-			$news_fids = PLIB_Array_Utils::advanced_explode(',',$this->cfg['news_forums']);
+			$news_fids = PLIB_Array_Utils::advanced_explode(',',$cfg['news_forums']);
 			if(!PLIB_Array_Utils::is_integer($news_fids) || count($news_fids) == 0)
 				$grab_news = false;
 		}
@@ -368,7 +390,7 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 		$post_ids = array();
 		$topic_ids = array();
 		$postlist = BS_DAO::get_posts()->get_unread_posts(
-			$last_update,$this->user->get_user_id(),$excl_fids,$excl_tids,BS_MAX_UNREAD_TOPICS
+			$last_update,$user->get_user_id(),$excl_fids,$excl_tids,BS_MAX_UNREAD_TOPICS
 		);
 		foreach($postlist as $data)
 		{
@@ -437,7 +459,7 @@ final class BS_Unread extends PLIB_FullObject implements PLIB_Initable
 		$this->_storage->remove_post_ids($ids);
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

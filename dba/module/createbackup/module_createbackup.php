@@ -19,38 +19,49 @@
  */
 final class BS_DBA_Module_createbackup extends BS_DBA_Module
 {
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$mode = $this->input->get_var('mode','get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$msgs = PLIB_Props::get()->msgs();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+		$user = PLIB_Props::get()->user();
+		$backups = PLIB_Props::get()->backups();
+
+		$mode = $input->get_var('mode','get',PLIB_Input::STRING);
 		if($mode == 'backup')
 		{
 			$this->_backup();
 			return;
 		}
 		
-		unset($_SESSION['BS_backup']);
+		$user->delete_session_data('BS_backup');
 		
-		$gtables = $this->input->get_var('tables','get',PLIB_Input::STRING);
+		$gtables = $input->get_var('tables','get',PLIB_Input::STRING);
 		$tables = PLIB_Array_Utils::advanced_explode(';',$gtables);
-		$prefix = $this->input->get_var('prefix','post',PLIB_Input::STRING);
+		$prefix = $input->get_var('prefix','post',PLIB_Input::STRING);
 		
 		if(!is_array($tables) || count($tables) == 0)
 		{
-			$this->_report_error($this->locale->lang('no_tables_selected'));
+			$this->report_error($locale->lang('no_tables_selected'));
 			return;
 		}
 		
 		// start backup?
-		if($this->input->isset_var('submit','post'))
+		if($input->isset_var('submit','post'))
 		{
-			if(trim($prefix) != '' && $this->backups->get_backup($prefix) === null)
+			if(trim($prefix) != '' && $backups->get_backup($prefix) === null)
 			{
 				BS_DBA_Progress::clear_progress();
 				$this->_backup();
 				return;
 			}
 			
-			$this->msgs->add_error($this->locale->lang('invalid_prefix'));
+			$msgs->add_error($locale->lang('invalid_prefix'));
 		}
 		
 		$database = BS_DBA_Utils::get_instance()->get_selected_database();
@@ -63,15 +74,15 @@ final class BS_DBA_Module_createbackup extends BS_DBA_Module
 		}
 		$sel_tables .= '</ul>';
 		
-		$form = $this->_request_formular();
-		$form->set_condition($this->input->isset_var('prefix'));
+		$form = $this->request_formular();
+		$form->set_condition($input->isset_var('prefix'));
 		
-		$this->tpl->add_variables(array(
-			'target_url' => $this->url->get_url('createbackup','&amp;tables='.implode(';',$tables)),
+		$tpl->add_variables(array(
+			'target_url' => $url->get_url('createbackup','&amp;tables='.implode(';',$tables)),
 			'hidden_tables' => $hidden_tables,
 			'tables' => $sel_tables,
-			'lang_structure' => $this->locale->lang('structure'),
-			'lang_data' => $this->locale->lang('data')
+			'lang_structure' => $locale->lang('structure'),
+			'lang_data' => $locale->lang('data')
 		));
 	}
 	
@@ -80,11 +91,14 @@ final class BS_DBA_Module_createbackup extends BS_DBA_Module
 	 */
 	private function _backup()
 	{
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		new BS_DBA_Progress(
-			$this->locale->lang('create_backup'),
-			$this->locale->lang('backup_finished'),
-			$this->url->get_url(0,'&mode=backup','&'),
-			$this->url->get_url('backups'),
+			$locale->lang('create_backup'),
+			$locale->lang('backup_finished'),
+			$url->get_url(0,'&mode=backup','&'),
+			$url->get_url('backups'),
 			new BS_DBA_Module_CreateBackup_Tasks_Backup()
 		);
 	}

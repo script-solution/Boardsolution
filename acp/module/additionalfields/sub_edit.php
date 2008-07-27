@@ -19,26 +19,60 @@
  */
 final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_EDIT_ADDFIELD => 'edit',
-			BS_ACP_ACTION_ADD_ADDFIELD => 'add'
-		);
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_EDIT_ADDFIELD,'edit');
+		$doc->add_action(BS_ACP_ACTION_ADD_ADDFIELD,'add');
+
+		$id = $input->get_var('id','get',PLIB_Input::ID);
+		if($id == null)
+		{
+			$doc->add_breadcrumb(
+				$locale->lang('add_new_field'),
+				$url->get_acpmod_url(0,'&amp;action=add')
+			);
+		}
+		else
+		{
+			$doc->add_breadcrumb(
+				$locale->lang('edit_field'),
+				$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
+			);
+		}
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
 		$helper = BS_ACP_Module_AdditionalFields_Helper::get_instance();
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',PLIB_Input::ID);
 		$type = $id != null ? 'edit' : 'add';
 		
 		if($type == 'edit')
 		{
-			$field = $this->cache->get_cache('user_fields')->get_element($id);
+			$field = $cache->get_cache('user_fields')->get_element($id);
 			if($field === null)
 			{
-				$this->_report_error();
+				$this->report_error();
 				return;
 			}
 			
@@ -63,37 +97,37 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 			);
 		}
 		
-		$form = $this->_request_formular();
+		$form = $this->request_formular();
 
 		if($type == 'edit')
 		{
-			$form_title = $this->locale->lang('edit_field');
-			$url = $this->url->get_acpmod_url(
+			$form_title = $locale->lang('edit_field');
+			$murl = $url->get_acpmod_url(
 				0,'&amp;action=edit&amp;id='.$id.'&amp;at='.BS_ACP_ACTION_EDIT_ADDFIELD
 			);
-			$submit_title = $this->locale->lang('save');
+			$submit_title = $locale->lang('save');
 		}
 		else
 		{
-			$form_title = $this->locale->lang('add_new_field');
-			$url = $this->url->get_acpmod_url(0,'&amp;action=edit&amp;at='.BS_ACP_ACTION_ADD_ADDFIELD);
-			$submit_title = $this->locale->lang('insert');
+			$form_title = $locale->lang('add_new_field');
+			$murl = $url->get_acpmod_url(0,'&amp;action=edit&amp;at='.BS_ACP_ACTION_ADD_ADDFIELD);
+			$submit_title = $locale->lang('insert');
 		}
 		
 		$types = array(
-			'int' => $this->locale->lang('field_type_int'),
-			'date' => $this->locale->lang('field_type_date'),
-			'line' => $this->locale->lang('field_type_line'),
-			'text' => $this->locale->lang('field_type_text'),
-			'enum' => $this->locale->lang('field_type_enum')
+			'int' => $locale->lang('field_type_int'),
+			'date' => $locale->lang('field_type_date'),
+			'line' => $locale->lang('field_type_line'),
+			'text' => $locale->lang('field_type_text'),
+			'enum' => $locale->lang('field_type_enum')
 		);
 		$type_sel = array();
 		foreach(array_keys($types) as $type)
 			$type_sel[$type] = $form->get_radio_value('field_type',$type,$default['field_type'] == $type);
 		
-		$this->tpl->add_array('default',$default);
-		$this->tpl->add_variables(array(
-			'target_url' => $url,
+		$tpl->add_array('default',$default);
+		$tpl->add_variables(array(
+			'target_url' => $murl,
 			'form_title' => $form_title,
 			'submit_title' => $submit_title,
 			'type_sel' => $type_sel,
@@ -116,7 +150,7 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 			);
 		}
 		
-		$this->tpl->add_array('locations',$locations);
+		$tpl->add_array('locations',$locations);
 	}
 
 	/**
@@ -127,16 +161,18 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 	 */
 	private function _get_location_name($loc)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		switch($loc)
 		{
 			case BS_UF_LOC_POSTS:
-				return $this->locale->lang('field_display_location_posts');
+				return $locale->lang('field_display_location_posts');
 			case BS_UF_LOC_REGISTRATION:
-				return $this->locale->lang('field_display_location_registration');
+				return $locale->lang('field_display_location_registration');
 			case BS_UF_LOC_USER_DETAILS:
-				return $this->locale->lang('field_display_location_user_details');
+				return $locale->lang('field_display_location_user_details');
 			case BS_UF_LOC_USER_PROFILE:
-				return $this->locale->lang('field_display_location_user_profile');
+				return $locale->lang('field_display_location_user_profile');
 			default:
 				return '';
 		}
@@ -149,32 +185,18 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 	 */
 	private function _get_field_display_from_post()
 	{
+		$input = PLIB_Props::get()->input();
+
 		$helper = BS_ACP_Module_AdditionalFields_Helper::get_instance();
 		$result = 0;
 		foreach($helper->get_locations() as $loc)
 		{
-			$loc_val = $this->input->get_var('loc_'.$loc,'post',PLIB_Input::INT_BOOL);
+			$loc_val = $input->get_var('loc_'.$loc,'post',PLIB_Input::INT_BOOL);
 			if($loc_val == 1)
 				$result |= $loc;
 		}
 
 		return $result;
-	}
-	
-	public function get_location()
-	{
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
-		if($id == null)
-		{
-			return array(
-				$this->locale->lang('add_new_field') => $this->url->get_acpmod_url(0,'&amp;action=add')
-			);
-		}
-		
-		return array(
-			$this->locale->lang('edit_field') =>
-				$this->url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
-		);
 	}
 }
 ?>

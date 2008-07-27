@@ -19,37 +19,51 @@
  */
 final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_SWITCH_SMILEYS => 'switch',
-			BS_ACP_ACTION_DELETE_SMILEYS => 'delete',
-			BS_ACP_ACTION_IMPORT_SMILEYS => 'import',
-			BS_ACP_ACTION_RESORT_SMILEYS => 'resort'
-		);
+		parent::init($doc);
+		
+		$doc->add_action(BS_ACP_ACTION_SWITCH_SMILEYS,'switch');
+		$doc->add_action(BS_ACP_ACTION_DELETE_SMILEYS,'delete');
+		$doc->add_action(BS_ACP_ACTION_IMPORT_SMILEYS,'import');
+		$doc->add_action(BS_ACP_ACTION_RESORT_SMILEYS,'resort');
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		if($this->input->isset_var('delete','post'))
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
+		if($input->isset_var('delete','post'))
 		{
-			$site = $this->input->get_var('site','get',PLIB_Input::ID);
-			$ids = $this->input->get_var('delete','post');
+			$site = $input->get_var('site','get',PLIB_Input::ID);
+			$ids = $input->get_var('delete','post');
 			$names = array();
 			foreach(BS_DAO::get_smileys()->get_by_ids($ids) as $smiley)
 				$names[] = $smiley['smiley_path'];
-			$namelist = PLIB_StringHelper::get_enum($names,$this->locale->lang('and'));
+			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
 			
-			$this->functions->add_delete_message(
-				sprintf($this->locale->lang('delete_message'),$namelist),
-				$this->url->get_acpmod_url(0,
+			$functions->add_delete_message(
+				sprintf($locale->lang('delete_message'),$namelist),
+				$url->get_acpmod_url(0,
 					'&amp;at='.BS_ACP_ACTION_DELETE_SMILEYS.'&amp;ids='.implode(',',$ids).'&amp;site='.$site
 				),
-				$this->url->get_acpmod_url(0,'&amp;site='.$site)
+				$url->get_acpmod_url(0,'&amp;site='.$site)
 			);
 		}
 		
-		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
+		$search = $input->get_var('search','get',PLIB_Input::STRING);
 		$num = BS_DAO::get_smileys()->get_count();
 		$matches = array();
 		if($num)
@@ -70,15 +84,15 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 		$pagination = new BS_ACP_Pagination($end,$num);
 		$page = $pagination->get_page();
 		
-		$hidden = $this->input->get_vars_from_method('get');
+		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);
 		unset($hidden['search']);
 		unset($hidden['at']);
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'page' => $page,
-			'import_url' => $this->url->get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_IMPORT_SMILEYS),
-			'correct_sort_url' => $this->url->get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_RESORT_SMILEYS),
-			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'import_url' => $url->get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_IMPORT_SMILEYS),
+			'correct_sort_url' => $url->get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_RESORT_SMILEYS),
+			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));
@@ -104,7 +118,7 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 					if($i > 0)
 					{
 						$prev = &$rows[$i - 1];
-						$switch_up_url = $this->url->get_acpmod_url(
+						$switch_up_url = $url->get_acpmod_url(
 							0,'&amp;at='.BS_ACP_ACTION_SWITCH_SMILEYS.'&amp;ids='.$data['id'].','.$prev['id']
 								.'&amp;site='.$page
 						);
@@ -114,7 +128,7 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 					if($i < $num - 1)
 					{
 						$next = &$rows[$i + 1];
-						$switch_down_url = $this->url->get_acpmod_url(
+						$switch_down_url = $url->get_acpmod_url(
 							0,'&amp;at='.BS_ACP_ACTION_SWITCH_SMILEYS.'&amp;ids='.$next['id'].','.$data['id']
 								.'&amp;site='.$page
 						);
@@ -136,11 +150,11 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 			}
 		}
 
-		$this->tpl->add_array('smileys',$smileys);
-		$this->tpl->add_variables(array('total' => $c));
+		$tpl->add_array('smileys',$smileys);
+		$tpl->add_variables(array('total' => $c));
 		
-		$url = $this->url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
-		$this->functions->add_pagination($pagination,$url);
+		$murl = $url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
+		$functions->add_pagination($pagination,$murl);
 	}
 	
 	/**
@@ -159,11 +173,6 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 		if(stripos($data['smiley_path'],$search) !== false)
 			return true;
 		return false;
-	}
-	
-	public function get_location()
-	{
-		return array();
 	}
 }
 ?>

@@ -19,51 +19,86 @@
  */
 final class BS_Front_Module_delete_post extends BS_Front_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACTION_DELETE_POSTS => 'default'
-		);
+		parent::init($doc);
+		
+		$user = PLIB_Props::get()->user();
+		
+		$doc->set_has_access($user->is_loggedin());
+		
+		$doc->add_action(BS_ACTION_DELETE_POSTS,'default');
+
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+
+		$this->add_loc_forum_path($fid);
+		$this->add_loc_topic();
+
+		$params = '&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_ID.'='.$id;
+		$murl = $url->get_url('delete_post',$params);
+		$doc->add_breadcrumb($locale->lang('deletepost'),$murl);
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$forums = PLIB_Props::get()->forums();
+		$auth = PLIB_Props::get()->auth();
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+		$user = PLIB_Props::get()->user();
+
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
 
 		// check other parameters
 		if($fid == null || $tid == null || $id == null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 
 		// forum closed?
-		if(!$this->user->is_admin() && $this->forums->forum_is_closed($fid))
+		if(!$user->is_admin() && $forums->forum_is_closed($fid))
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 
 		$post_data = BS_DAO::get_posts()->get_post_from_topic($id,$fid,$tid);
 		if($post_data === false)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
 		// topic closed?
-		if($post_data['thread_closed'] == 1 && !$this->user->is_admin())
+		if($post_data['thread_closed'] == 1 && !$user->is_admin())
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
 		// delete not allowed?
-		if(!$this->auth->has_current_forum_perm(BS_MODE_DELETE_POSTS,$post_data['post_user']))
+		if(!$auth->has_current_forum_perm(BS_MODE_DELETE_POSTS,$post_data['post_user']))
 		{
-			$this->_report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS,$this->locale->lang('permission_denied'));
+			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS,$locale->lang('permission_denied'));
 			return;
 		}
 		
@@ -71,7 +106,7 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		if($topic_data === null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
@@ -79,49 +114,27 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 
 		if($post_data['post_user'] > 0)
 		{
-			$user = BS_UserUtils::get_instance()->get_link(
+			$username = BS_UserUtils::get_instance()->get_link(
 				$post_data['post_user'],$post_data['user_name'],$post_data['user_group']
 			);
 		}
 		else
-			$user = $post_data['post_an_user'];
+			$username = $post_data['post_an_user'];
 		
-		$this->tpl->add_variables(array(
-			'title' => sprintf($this->locale->lang('selected_post_from_topic'),$topic_data['name']),
-			'target_url' => $this->url->get_url(
+		$tpl->add_variables(array(
+			'title' => sprintf($locale->lang('selected_post_from_topic'),$topic_data['name']),
+			'target_url' => $url->get_url(
 				0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_ID.'='.$id
 			),
 			'action_type' => BS_ACTION_DELETE_POSTS,
 			'text' => $text,
-			'user_name' => $user,
+			'user_name' => $username,
 			'date' => PLIB_Date::get_date($post_data['post_time'],true,true),
 			'post_id' => $post_data['pid'],
-			'back_url' => $this->url->get_url(
+			'back_url' => $url->get_url(
 				'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
 			)
 		));
-	}
-
-	public function get_location()
-	{
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-
-		$result = array();
-		$this->_add_loc_forum_path($result,$fid);
-		$this->_add_loc_topic($result);
-
-		$params = '&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_ID.'='.$id;
-		$url = $this->url->get_url('delete_post',$params);
-		$result[$this->locale->lang('deletepost')] = $url;
-
-		return $result;
-	}
-
-	public function has_access()
-	{
-		return $this->user->is_loggedin();
 	}
 }
 ?>

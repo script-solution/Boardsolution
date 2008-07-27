@@ -21,6 +21,9 @@ final class BS_ACP_Action_additionalfields_add extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+
 		$helper = BS_ACP_Module_AdditionalFields_Helper::get_instance();
 		
 		$values = array();
@@ -32,11 +35,11 @@ final class BS_ACP_Action_additionalfields_add extends BS_ACP_Action_Base
 			$values['field_name'],$values['field_type'],$values['field_length']
 		);
 
-		$values['field_sort'] = $this->cache->get_cache('user_fields')->get_element_count() + 1;
+		$values['field_sort'] = $cache->get_cache('user_fields')->get_element_count() + 1;
 		BS_DAO::get_addfields()->create($values);
-		$this->cache->refresh('user_fields');
+		$cache->refresh('user_fields');
 		
-		$this->set_success_msg($this->locale->lang('field_created_success'));
+		$this->set_success_msg($locale->lang('field_created_success'));
 		$this->set_action_performed(true);
 
 		return '';

@@ -19,17 +19,30 @@
  */
 final class BS_ACP_Module_bbcode extends BS_ACP_SubModuleContainer
 {
+	/**
+	 * Constructor
+	 */
 	public function __construct()
 	{
 		parent::__construct('bbcode',array('default','edit'),'default');
 	}
 
-	public function get_location()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		$loc = array(
-			$this->locale->lang('acpmod_bbcode') => $this->url->get_acpmod_url()
-		);
-		return array_merge($loc,$this->_sub->get_location());
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		$doc->add_breadcrumb($locale->lang('acpmod_bbcode'),$url->get_acpmod_url());
+		
+		// init submodule
+		$this->_sub->init($doc);
 	}
 }
 ?>

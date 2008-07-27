@@ -30,8 +30,9 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 	 */
 	public static function get_default($post_id = 0,$topic_id = 0,$pm_id = 0)
 	{
-		$input = PLIB_Object::get_prop('input');
-		$user = PLIB_Object::get_prop('user');
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		
 		$file_paths = $input->get_var('attached_file_paths','post');
 		return new BS_Front_Action_Plain_Attachments(
 			$file_paths,$user->get_user_id(),$post_id,$topic_id,$pm_id
@@ -140,12 +141,15 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 	
 	public function check_data()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+
 		// attachments allowed?
-		if($this->cfg['attachments_enable'] == 0)
+		if($cfg['attachments_enable'] == 0)
 			return 'Attachments disabled';
 		
 		// check the user-id if it is not the current one
-		if($this->user->get_user_id() != $this->_user_id)
+		if($user->get_user_id() != $this->_user_id)
 		{
 			$data = BS_DAO::get_user()->get_user_by_id($this->_user_id);
 			if($data === false)
@@ -158,22 +162,22 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 			return 'No attachments specified';
 	
 		// have we already reached the maximum?
-		if($this->cfg['attachments_max_number'] > 0)
+		if($cfg['attachments_max_number'] > 0)
 		{
 			$global_num = BS_DAO::get_attachments()->get_attachment_count();
-			if($global_num + $attach_num > $this->cfg['attachments_max_number'])
+			if($global_num + $attach_num > $cfg['attachments_max_number'])
 				return 'Global max. attachments reached';
 		}
 	
 		// check the number of attachments of the user
 		$user_attach_num = BS_DAO::get_attachments()->get_attachment_count_of_user($this->_user_id);
-		$user_limit = $this->cfg['attachments_per_user'];
+		$user_limit = $cfg['attachments_per_user'];
 		if($user_limit > 0 && $user_attach_num + $attach_num >= $user_limit)
 			return 'Max. user-attachments reached';
 	
 		// ensure that we insert not more than the maximum attachments per post
-		if($this->cfg['attachments_max_per_post'] > 0)
-			$this->_limit = min($attach_num,$this->cfg['attachments_max_per_post']);
+		if($cfg['attachments_max_per_post'] > 0)
+			$this->_limit = min($attach_num,$cfg['attachments_max_per_post']);
 		else
 			$this->_limit = $attach_num;
 		
@@ -182,9 +186,12 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
+		$db = PLIB_Props::get()->db();
+		$cfg = PLIB_Props::get()->cfg();
+
 		parent::perform_action();
 		
-		$this->db->start_transaction();
+		$db->start_transaction();
 	
 		for($i = 0;$i < $this->_limit;$i++)
 		{
@@ -207,8 +214,8 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 	
 			// is the size valid?
 			$filesize = @filesize($this->_file_paths[$i]);
-			if($this->cfg['attachments_max_filesize'] > 0 &&
-				($filesize / 1024) > $this->cfg['attachments_max_filesize'])
+			if($cfg['attachments_max_filesize'] > 0 &&
+				($filesize / 1024) > $cfg['attachments_max_filesize'])
 				continue;
 	
 			// insert the attachment
@@ -218,10 +225,10 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 			$this->_count++;
 		}
 		
-		$this->db->commit_transaction();
+		$db->commit_transaction();
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

@@ -40,12 +40,14 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function get_all_by_type($type,$ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!in_array($type,array('rubrikid','threadid')))
 			PLIB_Helper::def_error('inarray','type',array('rubrikid','threadid'),$type);
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT u.* FROM '.BS_TB_UNREAD.' u
 			 LEFT JOIN '.BS_TB_POSTS.' p ON u.post_id = p.id
 			 WHERE p.'.$type.' IN ('.implode(',',$ids).')'
@@ -60,10 +62,12 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function get_all_of_user($id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT u.*,p.rubrikid,p.threadid FROM '.BS_TB_UNREAD.' u
 			 LEFT JOIN '.BS_TB_POSTS.' p ON u.post_id = p.id
 			 WHERE u.user_id = '.$id
@@ -79,6 +83,8 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function create($userid,$postids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($userid) || $userid <= 0)
 			PLIB_Helper::def_error('intgt0','userid',$userid);
 		if(!is_array($postids) || count($postids) == 0)
@@ -93,7 +99,7 @@ class BS_DAO_Unread extends PLIB_Singleton
 			if($i++ < $len - 1)
 				$sql .= ',';
 		}
-		$this->db->sql_qry($sql);
+		$db->sql_qry($sql);
 	}
 	
 	/**
@@ -105,15 +111,17 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function update_by_post($post_id,$new_post_id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($post_id) || $post_id <= 0)
 			PLIB_Helper::def_error('intgt0','post_id',$post_id);
 		if(!PLIB_Helper::is_integer($new_post_id) || $new_post_id <= 0)
 			PLIB_Helper::def_error('intgt0','new_post_id',$new_post_id);
 		
-		$this->db->sql_update(BS_TB_UNREAD,'WHERE post_id = '.$post_id,array(
+		$db->sql_update(BS_TB_UNREAD,'WHERE post_id = '.$post_id,array(
 			'post_id' => $new_post_id
 		));
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -124,13 +132,15 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function delete_by_user($id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_UNREAD.' WHERE user_id = '.$id
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -141,13 +151,15 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function delete_posts($post_ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($post_ids) || count($post_ids) == 0)
 			PLIB_Helper::def_error('intarray>0','post_ids',$post_ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_UNREAD.' WHERE post_id IN ('.implode(',',$post_ids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -159,16 +171,18 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function delete_posts_of_user($id,$post_ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		if(!PLIB_Array_Utils::is_integer($post_ids) || count($post_ids) == 0)
 			PLIB_Helper::def_error('intarray>0','post_ids',$post_ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_UNREAD.'
 			 WHERE user_id = '.$id.' AND post_id IN ('.implode(',',$post_ids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -179,14 +193,16 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function delete_news_of_user($id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_UNREAD.'
 			 WHERE user_id = '.$id.' AND is_news = 1'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

@@ -33,10 +33,12 @@ final class BS_User_Data extends PLIB_User_Data
 	 */
 	public function __construct($data)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		parent::__construct($data['id'],$data['user_name'],$data['user_pw']);
 		
 		$this->_data = $data;
-		if($this->cfg['enable_pms'] == 1)
+		if($cfg['enable_pms'] == 1)
 			$this->_data['unread_pms'] = BS_DAO::get_pms()->get_unread_pms_count($this->_data['id']);
 		else
 			$this->_data['unread_pms'] = 0;
@@ -88,9 +90,9 @@ final class BS_User_Data extends PLIB_User_Data
 		$this->_data[$name] = $value;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
-		return array_merge(parent::_get_print_vars(),get_object_vars($this));
+		return array_merge(parent::get_print_vars(),get_object_vars($this));
 	}
 }
 ?>

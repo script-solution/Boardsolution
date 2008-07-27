@@ -19,17 +19,35 @@
  */
 final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_DELETE_SUBSCRIPTIONS => 'delete'
-		);
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_DELETE_SUBSCRIPTIONS,'delete');
+		$doc->add_breadcrumb($locale->lang('acpmod_subscriptions'),$url->get_acpmod_url());
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$input = PLIB_Props::get()->input();
+		$functions = PLIB_Props::get()->functions();
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
 		$end = 15;
-		$search = $this->input->get_var('search','get',PLIB_Input::STRING);
+		$search = $input->get_var('search','get',PLIB_Input::STRING);
 		if($search != '')
 			$num = BS_DAO::get_subscr()->get_count_by_keyword($search);
 		else
@@ -38,38 +56,38 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		$site = $pagination->get_page();
 		
 		$order_vals = array('username','date','lastlogin','lastpost');
-		$order = $this->input->correct_var('order','get',PLIB_Input::STRING,$order_vals,'date');
-		$ad = $this->input->correct_var('ad','get',PLIB_Input::STRING,array('ASC','DESC'),'DESC');
+		$order = $input->correct_var('order','get',PLIB_Input::STRING,$order_vals,'date');
+		$ad = $input->correct_var('ad','get',PLIB_Input::STRING,array('ASC','DESC'),'DESC');
 
 		// display delete-message?
-		$delete = $this->input->get_var('delete','post');
+		$delete = $input->get_var('delete','post');
 		if($delete != null && PLIB_Array_Utils::is_integer($delete))
 		{
 			$ids = PLIB_Array_Utils::advanced_implode(',',$delete);
 			$def_params = '&amp;site='.$site.'&amp;order='.$order.'&amp;ad='.$ad;
-			$yes_url = $this->url->get_acpmod_url(
+			$yes_url = $url->get_acpmod_url(
 				0,'&amp;at='.BS_ACP_ACTION_DELETE_SUBSCRIPTIONS.'&amp;ids='.$ids.$def_params
 			);
-			$no_url = $this->url->get_acpmod_url(0,$def_params);
-			$this->functions->add_delete_message(
-				$this->locale->lang('delete_subscriptions_question'),$yes_url,$no_url,''
+			$no_url = $url->get_acpmod_url(0,$def_params);
+			$functions->add_delete_message(
+				$locale->lang('delete_subscriptions_question'),$yes_url,$no_url,''
 			);
 		}
 	
-		$base_url = $this->url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site='.$site.'&amp;');
-		$this->tpl->add_variables(array(
+		$base_url = $url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site='.$site.'&amp;');
+		$tpl->add_variables(array(
 			'target_url' => $base_url.'order='.$order.'&amp;ad='.$ad,
 			'username_col' => BS_ACP_Utils::get_instance()->get_order_column(
-				$this->locale->lang('username'),'username','ASC',$order,$base_url
+				$locale->lang('username'),'username','ASC',$order,$base_url
 			),
 			'date_col' => BS_ACP_Utils::get_instance()->get_order_column(
-				$this->locale->lang('date'),'date','DESC',$order,$base_url
+				$locale->lang('date'),'date','DESC',$order,$base_url
 			),
 			'lastlogin_col' => BS_ACP_Utils::get_instance()->get_order_column(
-				$this->locale->lang('lastlogin'),'lastlogin','DESC',$order,$base_url
+				$locale->lang('lastlogin'),'lastlogin','DESC',$order,$base_url
 			),
 			'lastpost_col' => BS_ACP_Utils::get_instance()->get_order_column(
-				$this->locale->lang('lastpost'),'lastpost','DESC',$order,$base_url
+				$locale->lang('lastpost'),'lastpost','DESC',$order,$base_url
 			)
 		));
 
@@ -95,27 +113,27 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		{
 			if($data['forum_id'] > 0)
 			{
-				$url = $this->url->get_frontend_url(
+				$furl = $url->get_frontend_url(
 					'&amp;'.BS_URL_ACTION.'=topics&amp;'.BS_URL_FID.'='.$data['forum_id']
 				);
 				$info = BS_TopicUtils::get_instance()->get_displayed_name($data['forum_name'],22);
-				$name = '[<b>F</b>] <a target="_blank" href="'.$url.'"';
+				$name = '[<b>F</b>] <a target="_blank" href="'.$furl.'"';
 				$name .= ' title="'.$info['complete'].'">'.$info['displayed'].'</a>';
 				if($data['flastpost_time'] == 0)
-					$lastpost = $this->locale->lang('notavailable');
+					$lastpost = $locale->lang('notavailable');
 				else
 					$lastpost = PLIB_Date::get_date($data['flastpost_time']);
 			}
 			else
 			{
-				$url = $this->url->get_frontend_url(
+				$furl = $url->get_frontend_url(
 					'&amp;'.BS_URL_ACTION.'=redirect&amp;'.BS_URL_LOC.'=show_topic&amp;'.BS_URL_TID.'='.$data['topic_id']
 				);
 				$info = BS_TopicUtils::get_instance()->get_displayed_name($data['name'],22);
-				$name = '[<b>T</b>] <a target="_blank" href="'.$url.'"';
+				$name = '[<b>T</b>] <a target="_blank" href="'.$furl.'"';
 				$name .= ' title="'.$info['complete'].'">'.$info['displayed'].'</a>';
 				if($data['lastpost_time'] == 0)
-					$lastpost = $this->locale->lang('notavailable');
+					$lastpost = $locale->lang('notavailable');
 				else
 					$lastpost = PLIB_Date::get_date($data['lastpost_time']);
 			}
@@ -130,29 +148,22 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 			);
 		}
 
-		$this->tpl->add_array('subscriptions',$subscriptions);
+		$tpl->add_array('subscriptions',$subscriptions);
 		
-		$hidden = $this->input->get_vars_from_method('get');
+		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);
 		unset($hidden['search']);
 		unset($hidden['at']);
-		$this->tpl->add_variables(array(
-			'search_url' => $this->input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+		$tpl->add_variables(array(
+			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));
 
-		$url = $this->url->get_acpmod_url(
+		$murl = $url->get_acpmod_url(
 			0,'&amp;search='.$search.'&amp;order='.$order.'&amp;ad='.$ad.'&amp;site={d}'
 		);
-		$this->functions->add_pagination($pagination,$url);
-	}
-	
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('acpmod_subscriptions') => $this->url->get_acpmod_url()
-		);
+		$functions->add_pagination($pagination,$murl);
 	}
 }
 ?>

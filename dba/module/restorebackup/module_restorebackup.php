@@ -19,13 +19,19 @@
  */
 final class BS_DBA_Module_restorebackup extends BS_DBA_Module
 {
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		new BS_DBA_Progress(
-			$this->locale->lang('restore_backup'),
-			$this->locale->lang('restore_finished'),
-			$this->url->get_url(0,'','&'),
-			$this->url->get_url('backups'),
+			$locale->lang('restore_backup'),
+			$locale->lang('restore_finished'),
+			$url->get_url(0,'','&'),
+			$url->get_url('backups'),
 			new BS_DBA_Module_RestoreBackup_Tasks_Restore(),
 			1
 		);

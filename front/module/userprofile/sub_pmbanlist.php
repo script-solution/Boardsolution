@@ -19,50 +19,70 @@
  */
 final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACTION_BAN_USER => 'pmbanuser',
-			BS_ACTION_UNBAN_USER => 'pmunbanuser'
-		);
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACTION_BAN_USER,'pmbanuser');
+		$doc->add_action(BS_ACTION_UNBAN_USER,'pmunbanuser');
+
+		$doc->add_breadcrumb($locale->lang('banlist'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmbanlist'));
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$functions = PLIB_Props::get()->functions();
+		$tpl = PLIB_Props::get()->tpl();
+
 		$helper = BS_Front_Module_UserProfile_Helper::get_instance();
 		if($helper->get_pm_permission() < 1)
 		{
-			$this->_report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
 			return;
 		}
 
-		$del = $this->input->get_var('del','post');
+		$del = $input->get_var('del','post');
 		if($del != null && PLIB_Array_Utils::is_integer($del))
 		{
 			$ids = implode(',',$del);
 			$names = array();
-			foreach(BS_DAO::get_userbans()->get_by_user($this->user->get_user_id(),$del) as $i => $data)
+			foreach(BS_DAO::get_userbans()->get_by_user($user->get_user_id(),$del) as $i => $data)
 				$names[] = $data['user_name'];
-			$namelist = PLIB_StringHelper::get_enum($names,$this->locale->lang('and'));
+			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
 
 			$loc = '&amp;'.BS_URL_LOC.'=pmbanlist';
-			$yes_url = $this->url->get_url(0,$loc.'&amp;'.BS_URL_AT.'='
+			$yes_url = $url->get_url(0,$loc.'&amp;'.BS_URL_AT.'='
 				.BS_ACTION_UNBAN_USER.'&amp;'.BS_URL_DEL.'='.$ids,'&amp;',true);
-			$no_url = $this->url->get_url(0,$loc);
-			$target_url = $this->url->get_url('redirect','&amp;'.BS_URL_LOC.'=del_pm_ban'
+			$no_url = $url->get_url(0,$loc);
+			$target_url = $url->get_url('redirect','&amp;'.BS_URL_LOC.'=del_pm_ban'
 				.'&amp;'.BS_URL_ID.'='.$ids);
 			
-			$this->functions->add_delete_message(
-				sprintf($this->locale->lang('banlist_delete'),$namelist),$yes_url,$no_url,$target_url
+			$functions->add_delete_message(
+				sprintf($locale->lang('banlist_delete'),$namelist),$yes_url,$no_url,$target_url
 			);
 		}
 
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'action_param' => BS_URL_ACTION
 		));
 		
 		$banned_user = array();
-		foreach(BS_DAO::get_userbans()->get_all_of_user($this->user->get_user_id()) as $i => $data)
+		foreach(BS_DAO::get_userbans()->get_all_of_user($user->get_user_id()) as $i => $data)
 		{
 			$banned_user[] = array(
 				'number' => $i + 1,
@@ -72,23 +92,16 @@ final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 			);
 		}
 		
-		$this->tpl->add_array('banned_user',$banned_user);
+		$tpl->add_array('banned_user',$banned_user);
 	
-		$this->tpl->add_variables(array(
-			'ban_user_url' => $this->url->get_url(
+		$tpl->add_variables(array(
+			'ban_user_url' => $url->get_url(
 				'userprofile',
 				'&amp;'.BS_URL_LOC.'=pmbanlist'.'&amp;'.BS_URL_AT.'='.BS_ACTION_BAN_USER,
 				'&amp;',
 				true
 			)
 		));
-	}
-	
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('banlist') => $this->url->get_url(0,'&amp;'.BS_URL_LOC.'=pmbanlist')
-		);
 	}
 }
 ?>

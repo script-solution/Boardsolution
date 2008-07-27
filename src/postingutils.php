@@ -35,7 +35,9 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 */
 	public function get_post_pages($num)
 	{
-		$per_page = $this->cfg['posts_per_page'];
+		$cfg = PLIB_Props::get()->cfg();
+
+		$per_page = $cfg['posts_per_page'];
 		$show = ($num % $per_page);
 		$final = ($show == 0) ? ($num / $per_page) : (int)($num / $per_page) + 1;
 		return $final;
@@ -48,10 +50,13 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 */
 	public function get_posts_order()
 	{
-		if($this->user->is_loggedin())
-			return $this->user->get_profile_val('posts_order');
+		$user = PLIB_Props::get()->user();
+		$cfg = PLIB_Props::get()->cfg();
+
+		if($user->is_loggedin())
+			return $user->get_profile_val('posts_order');
 	
-		return $this->cfg['default_posts_order'];
+		return $cfg['default_posts_order'];
 	}
 	
 	/**
@@ -96,18 +101,20 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 */
 	public function add_topic_review($topic_data,$show_quote = true,$quote_post_url = '',$number = 1)
 	{
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		$show_quote = $show_quote && BS_PostingUtils::get_instance()->get_message_option('enable_bbcode');
 	
-		$this->tpl->set_template('inc_message_review.htm');
+		$tpl->set_template('inc_message_review.htm');
 		
-		$review_title = sprintf($this->locale->lang('topic_review_title'),BS_TOPIC_REVIEW_POST_COUNT);
-		$this->tpl->add_variables(array(
+		$review_title = sprintf($locale->lang('topic_review_title'),BS_TOPIC_REVIEW_POST_COUNT);
+		$tpl->add_variables(array(
 			'show_quote' => $show_quote,
 			'field_id' => 'bbcode_area'.$number,
 			'number' => $number,
-			'request_url' => $this->url->get_standalone_url(
-				'front','ajax_quote_message','&id=%d%&type=post','&'
-			),
+			'request_url' => $url->get_url('ajax_quote','&id=%d%&type=post','&'),
 			'topic_title' => $review_title.': "'.$topic_data['name'].'"',
 			'limit_height' => false
 		));
@@ -130,29 +137,32 @@ final class BS_PostingUtils extends PLIB_Singleton
 			);
 		}
 
-		$this->tpl->add_array('messages',$posts);
-		$this->tpl->restore_template();
+		$tpl->add_array('messages',$posts);
+		$tpl->restore_template();
 	}
 	
 	/**
 	 * returns the post-preview-text
 	 *
-	 * @param string $location the location: posts, sig, lnkdesc
+	 * @param string $location the location: posts, sig, desc
 	 * @param int $use_smileys -1 = grab from POST, if $location = 'posts', otherwise the value
 	 * @param int $use_bbcode -1 = grab from POST, if $location = 'posts', otherwise the value
 	 * @return array <code>array('text' => ...,'error' => ...)</code>
 	 */
 	public function get_post_preview_text($location = 'posts',$use_smileys = -1,$use_bbcode = -1)
 	{
-		$post_text = $this->input->get_var('text','post',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+
+		$post_text = $input->get_var('text','post',PLIB_Input::STRING);
 		$text = '';
 		$error = $this->prepare_message_for_db($text,$post_text,$location,$use_smileys,$use_bbcode);
 		
 		// any error? so break here
 		if($error != '')
 		{
-			if($this->locale->contains_lang('error_'.$error))
-				$message = $this->locale->lang('error_'.$error);
+			if($locale->contains_lang('error_'.$error))
+				$message = $locale->lang('error_'.$error);
 			else
 				$message = $error;
 			
@@ -166,9 +176,9 @@ final class BS_PostingUtils extends PLIB_Singleton
 		if($location == 'posts')
 		{
 			if($use_bbcode === -1)
-				$use_bbcode = $this->input->isset_var('use_bbcode','post') ? 1 : 0;
+				$use_bbcode = $input->isset_var('use_bbcode','post') ? 1 : 0;
 			if($use_smileys === -1)
-				$use_smileys = $this->input->isset_var('use_smileys','post') ? 1 : 0;
+				$use_smileys = $input->isset_var('use_smileys','post') ? 1 : 0;
 		}
 		else
 		{
@@ -191,41 +201,46 @@ final class BS_PostingUtils extends PLIB_Singleton
 	/**
 	 * Adds the preview of a post
 	 *
-	 * @param string $location the location: posts, sig, lnkdesc
+	 * @param string $location the location: posts, sig, desc
 	 * @param int $use_smileys -1 = grab from POST, if $location = 'posts', otherwise the value
 	 * @param int $use_bbcode -1 = grab from POST, if $location = 'posts', otherwise the value
 	 */
 	public function add_post_preview($location = 'posts',$use_smileys = -1,$use_bbcode = -1)
 	{
+		$msgs = PLIB_Props::get()->msgs();
+		$tpl = PLIB_Props::get()->tpl();
+
 		$res = $this->get_post_preview_text($location,$use_smileys,$use_bbcode);
 		
 		if($res['error'])
 		{
-			$this->msgs->add_error($res['error']);
+			$msgs->add_error($res['error']);
 			return;
 		}
 	
 		// show template
-		$this->tpl->set_template('inc_post_preview.htm');
-		$this->tpl->add_variables(array(
+		$tpl->set_template('inc_post_preview.htm');
+		$tpl->add_variables(array(
 			'text' => $res['text']
 		));
-		$this->tpl->restore_template();
+		$tpl->restore_template();
 	}
 	
 	/**
 	 * Returns the option with given name for the given location without the prefix
 	 * 
 	 * @param string $name the option-name
-	 * @param string $location your location: posts, lnkdesc, sig
+	 * @param string $location your location: posts, desc, sig
 	 * @return mixed the value
 	 */
 	public function get_message_option($name,$location = 'posts')
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		switch($location)
 		{
 			case 'posts':
-			case 'lnkdesc':
+			case 'desc':
 			case 'sig':
 				$prefix = $location.'_';
 				break;
@@ -235,22 +250,24 @@ final class BS_PostingUtils extends PLIB_Singleton
 				break;
 		}
 		
-		return $this->cfg[$prefix.$name];
+		return $cfg[$prefix.$name];
 	}
 	
 	/**
 	 * Collects all message-options for the given location and returns them.
 	 * The prefix of the options will not be in the result-array!
 	 * 
-	 * @param string $location your location: posts, lnkdesc, sig
+	 * @param string $location your location: posts, desc, sig
 	 * @return array all options with the corresponding values
 	 */
 	public function get_message_options($location = 'posts')
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		switch($location)
 		{
 			case 'posts':
-			case 'lnkdesc':
+			case 'desc':
 			case 'sig':
 				$prefix = $location.'_';
 				break;
@@ -270,9 +287,9 @@ final class BS_PostingUtils extends PLIB_Singleton
 		$options = array();
 		
 		foreach($def_options as $option)
-			$options[$option] = $this->cfg['msgs_'.$option];
+			$options[$option] = $cfg['msgs_'.$option];
 		foreach($indiv_options as $option)
-			$options[$option] = $this->cfg[$prefix.$option];
+			$options[$option] = $cfg[$prefix.$option];
 		
 		return $options;
 	}
@@ -282,7 +299,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 * 
 	 * @param string $text will contain the text for the DB
 	 * @param string $text_posted the posted text
-	 * @param string $location the location: posts, sig, lnkdesc
+	 * @param string $location the location: posts, sig, desc
 	 * @param boolean $use_smileys -1 = grab from POST, if $location = 'posts', otherwise the value
 	 * @param boolean $use_bbcode -1 = grab from POST, if $location = 'posts', otherwise the value
 	 * @return string the error-message, if any, or an empty string
@@ -290,8 +307,11 @@ final class BS_PostingUtils extends PLIB_Singleton
 	public function prepare_message_for_db(&$text,$text_posted,$location = 'posts',$use_smileys = -1,
 		$use_bbcode = -1)
 	{
+		$locale = PLIB_Props::get()->locale();
+		$input = PLIB_Props::get()->input();
+
 		$options = $this->get_message_options($location);
-		$this->locale->add_language_file('messages');
+		$locale->add_language_file('messages');
 		
 		// check if the text is empty
 		if($location != 'sig')
@@ -307,9 +327,9 @@ final class BS_PostingUtils extends PLIB_Singleton
 		if($location == 'posts')
 		{
 			if($use_bbcode === -1)
-				$use_bbcode = $this->input->isset_var('use_bbcode','post') ? 1 : 0;
+				$use_bbcode = $input->isset_var('use_bbcode','post') ? 1 : 0;
 			if($use_smileys === -1)
-				$use_smileys = $this->input->isset_var('use_smileys','post') ? 1 : 0;
+				$use_smileys = $input->isset_var('use_smileys','post') ? 1 : 0;
 		}
 		else
 		{
@@ -329,7 +349,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 		{
 			list($pos,$err) = $bbcode->get_error_code();
 			return sprintf(
-				$this->locale->lang('error_bbcode_'.$err),
+				$locale->lang('error_bbcode_'.$err),
 				PLIB_StringHelper::get_text_part($text_posted,$pos,20),
 				$pos
 			);
@@ -341,7 +361,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 			if($options['max_smileys'] == 0)
 				return 'no_smileys_in_msg_allowed';
 			
-			return sprintf($this->locale->lang('error_maxsmileys'),$options['max_smileys']);
+			return sprintf($locale->lang('error_maxsmileys'),$options['max_smileys']);
 		}
 	
 		if($enable_bbcode && $bbcode->get_number_of_images() > $options['max_images'])
@@ -349,7 +369,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 			if($options['max_images'] == 0)
 				return 'no_imgs_in_msg_allowed';
 			
-			return sprintf($this->locale->lang('error_maxpics'),$options['max_images']);
+			return sprintf($locale->lang('error_maxpics'),$options['max_images']);
 		}
 		
 		$text = $temp;
@@ -372,7 +392,13 @@ final class BS_PostingUtils extends PLIB_Singleton
 		$show_attachments = false,$show_signature = false,$show_edited_notice = false,
 		$attachments = array(),$wordwrap_codes = false)
 	{
-		$this->tpl->set_template('inc_post_text.htm');
+		$tpl = PLIB_Props::get()->tpl();
+		$cfg = PLIB_Props::get()->cfg();
+		$url = PLIB_Props::get()->url();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+
+		$tpl->set_template('inc_post_text.htm');
 		
 		// get post-text
 		$enable_bbcode = $this->get_message_option('enable_bbcode') &&
@@ -394,10 +420,10 @@ final class BS_PostingUtils extends PLIB_Singleton
 	  	$text = $kwhl->highlight($text);
 	  }
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'text' => $text,
 			'show_attachments' => $show_attachments && isset($attachments[$post_data['bid']]),
-			'show_signature' => $show_signature && $this->cfg['enable_signatures'] == 1 &&
+			'show_signature' => $show_signature && $cfg['enable_signatures'] == 1 &&
 				$post_data['attach_signature'] == 1 && $post_data['bsignatur'] != '',
 			'show_edit_notice' => $show_edited_notice && $post_data['edited_times'] > 0
 		));
@@ -405,37 +431,35 @@ final class BS_PostingUtils extends PLIB_Singleton
 		// add attachments
 	  if($show_attachments && isset($attachments[$post_data['bid']]))
 	  {
-	  	$this->tpl->set_template('inc_attachments_display.htm');
+	  	$tpl->set_template('inc_attachments_display.htm');
 	  	
 	  	$tplatt = array();
 	  	for($i = 0;$i < count($attachments[$post_data['bid']]);$i++)
 	    {
 	      $attachment = $attachments[$post_data['bid']][$i];
 	      $ext = PLIB_FileUtils::get_extension($attachment['attachment_path']);
-	      $attachment_url = $this->url->get_standalone_url(
-	      	'front','download','&amp;'.BS_URL_ID.'='.$attachment['id']
-	      );
+	      $attachment_url = $url->get_url('download','&amp;'.BS_URL_ID.'='.$attachment['id']);
 				$image_url = '';
 				$image_title = '';
 	
-	      $is_image = $this->cfg['attachments_images_show'] == 1 &&
+	      $is_image = $cfg['attachments_images_show'] == 1 &&
 	      	($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif');
 	      
 	      if($is_image)
 	      {
-	      	list($att_width,$att_height) = explode('x',$this->cfg['attachments_images_size']);
+	      	list($att_width,$att_height) = explode('x',$cfg['attachments_images_size']);
 	      	$params = '&amp;path='.$attachment['attachment_path'].'&amp;width=';
 	      	$params .= $att_width.'&amp;height='.$att_height;
-	        $params .= '&amp;method='.$this->cfg['attachments_images_resize_method'];
+	        $params .= '&amp;method='.$cfg['attachments_images_resize_method'];
 	        
-	      	$image_url = $this->url->get_standalone_url('front','thumbnail',$params);
-	        $image_title = sprintf($this->locale->lang('download_image'),
+	      	$image_url = $url->get_url('thumbnail',$params);
+	        $image_title = sprintf($locale->lang('download_image'),
 	        	basename($attachment['attachment_path']));
 	      }
 	
 				$tplatt[] = array(
 					'is_image' => $is_image,
-					'fileicon' => $this->functions->get_attachment_icon($ext),
+					'fileicon' => $functions->get_attachment_icon($ext),
 					'image_url' => $image_url,
 					'image_title' => $image_title,
 					'attachment_url' => $attachment_url,
@@ -445,12 +469,12 @@ final class BS_PostingUtils extends PLIB_Singleton
 				);
 	    }
 	    
-	    $this->tpl->add_array('attachments',$tplatt);
-	    $this->tpl->restore_template();
+	    $tpl->add_array('attachments',$tplatt);
+	    $tpl->restore_template();
 	  }
 	
 		// add signature
-	  if($show_signature && $this->cfg['enable_signatures'] == 1 &&
+	  if($show_signature && $cfg['enable_signatures'] == 1 &&
 			 $post_data['attach_signature'] == 1 && $post_data['bsignatur'] != '')
 	  {
 	    $enable_smileys = $this->get_message_option('enable_smileys','sig');
@@ -462,7 +486,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 	
 	    $this->add_default_font($signature,$post_data['default_font']);
 	    
-	    $this->tpl->add_variables(array(
+	    $tpl->add_variables(array(
 	    	'signature' => $signature
 	   	));
 	  }
@@ -475,15 +499,15 @@ final class BS_PostingUtils extends PLIB_Singleton
 	  		false
 	  	);
 	    
-	    $this->tpl->add_variables(array(
+	    $tpl->add_variables(array(
 	    	'edited' => sprintf(
-		    	$this->locale->lang('last_edited_by_user'),$post_data['edited_times'],
+		    	$locale->lang('last_edited_by_user'),$post_data['edited_times'],
 					PLIB_Date::get_date($post_data['edited_date']),$user
 				)
 	   	));
 	  }
 	
-	  return $this->tpl->parse_template();
+	  return $tpl->parse_template();
 	}
 	
 	/**
@@ -494,9 +518,11 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 */
 	public function add_default_font(&$input,$default_font)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		if($default_font !== 0)
 		{
-			$fonts = explode(',',$this->cfg['post_font_pool']);
+			$fonts = explode(',',$cfg['post_font_pool']);
 			PLIB_Array_Utils::trim($fonts);
 			
 			if(in_array($default_font,$fonts))
@@ -514,18 +540,19 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 */
 	public function get_experience_diagram($exppoints,$rank_data,$user_id)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$url = PLIB_Props::get()->url();
+
 		$user_stats = '';
-		if($this->cfg['post_stats_type'] != 'disabled')
+		if($cfg['post_stats_type'] != 'disabled')
 		{
-			$img_url = $this->url->get_standalone_url(
-				'front','user_experience','&amp;'.BS_URL_ID.'='.$user_id
-			);
-			$faq_url = $this->url->get_url('faq').'#f_0';
+			$img_url = $url->get_url('user_experience','&amp;'.BS_URL_ID.'='.$user_id);
+			$faq_url = $url->get_url('faq').'#f_0';
 			
 			$user_stats = '<a href="'.$faq_url.'" style="cursor: help;">';
 			$user_stats .= '<img src="'.$img_url.'" alt="" /></a>';
 			
-			if($this->cfg['post_stats_type'] == 'current_rank')
+			if($cfg['post_stats_type'] == 'current_rank')
 			{
 				$r_start = $rank_data['post_from'];
 				$r_end = $rank_data['post_to'];
@@ -541,7 +568,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 		return $user_stats;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

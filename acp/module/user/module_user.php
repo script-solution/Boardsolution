@@ -19,22 +19,37 @@
  */
 final class BS_ACP_Module_user extends BS_ACP_SubModuleContainer
 {
+	/**
+	 * Constructor
+	 */
 	public function __construct()
 	{
+		$input = PLIB_Props::get()->input();
+
 		// show edit-usergroups-page?
-		$type = $this->input->get_var('action_type','post',PLIB_Input::STRING);
-		if($type == 'edit_groups' && $this->input->get_var('delete','post') != null)
-			$this->input->set_var('action','get','ugroups');
+		$type = $input->get_var('action_type','post',PLIB_Input::STRING);
+		if($type == 'edit_groups' && $input->get_var('delete','post') != null)
+			$input->set_var('action','get','ugroups');
 		
 		parent::__construct('user',array('default','search','edit','ugroups','add'),'default');
 	}
 
-	public function get_location()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		$loc = array(
-			$this->locale->lang('acpmod_user') => $this->url->get_acpmod_url()
-		);
-		return array_merge($loc,$this->_sub->get_location());
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		$doc->add_breadcrumb($locale->lang('acpmod_user'),$url->get_acpmod_url());
+		
+		// init submodule
+		$this->_sub->init($doc);
 	}
 }
 ?>

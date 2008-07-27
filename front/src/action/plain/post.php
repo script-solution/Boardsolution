@@ -30,8 +30,9 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 	 */
 	public static function get_default($fid,$tid = 1,$add_topic = true)
 	{
-		$input = PLIB_Object::get_prop('input');
-		$user = PLIB_Object::get_prop('user');
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		
 		$post_text = $input->get_var('text','post',PLIB_Input::STRING);
 		$use_bbcode = $input->isset_var('use_bbcode','post') ? 1 : 0;
 		$use_smileys = $input->isset_var('use_smileys','post') ? 1 : 0;
@@ -238,12 +239,15 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 	
 	public function check_data()
 	{
+		$user = PLIB_Props::get()->user();
+		$forums = PLIB_Props::get()->forums();
+
 		// are all parameters valid?
 		if($this->_fid == null || $this->_tid == null)
 			return 'The forum-id or topic-id is invalid';
 		
 		// check the user-id if it is not the current one and no guest
-		if($this->user->get_user_id() != $this->_user_id && $this->_user_id > 0)
+		if($user->get_user_id() != $this->_user_id && $this->_user_id > 0)
 		{
 			$data = BS_DAO::get_user()->get_user_by_id($this->_user_id);
 			if($data === false)
@@ -251,11 +255,11 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 			
 			$this->_user_name = $data['user_name'];
 		}
-		else if($this->user->get_user_id() == $this->_user_id)
-			$this->_user_name = $this->user->get_user_name();
+		else if($user->get_user_id() == $this->_user_id)
+			$this->_user_name = $user->get_user_name();
 		
 		// does the forum exist?
-		$forum_data = $this->forums->get_node_data($this->_fid);
+		$forum_data = $forums->get_node_data($this->_fid);
 		if($forum_data === null || $forum_data->get_forum_type() != 'contains_threads')
 			return 'The forum with id "'.$this->_fid.'" doesn\'t exist or contains no topics';
 		
@@ -290,9 +294,15 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
+		$db = PLIB_Props::get()->db();
+		$cfg = PLIB_Props::get()->cfg();
+		$functions = PLIB_Props::get()->functions();
+		$forums = PLIB_Props::get()->forums();
+		$cache = PLIB_Props::get()->cache();
+
 		parent::perform_action();
 		
-		$this->db->start_transaction();
+		$db->start_transaction();
 		
 		// create the post
 		$time = time();
@@ -312,7 +322,7 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 		$postid = BS_DAO::get_posts()->create($fields);
 	
 		// send emails to all you subscribed the topic
-		if($this->cfg['enable_email_notification'] == 1)
+		if($cfg['enable_email_notification'] == 1)
 		{
 			$userlist = BS_DAO::get_subscr()->get_subscribed_users($this->_fid,$this->_tid,$this->_user_id);
 			if(count($userlist) > 0)
@@ -322,7 +332,7 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 					$this->_fid,$this->_tid,$postid,$this->_post_text,$name
 				);
 	
-				$email = $this->functions->get_mailer('',$einfo['subject'],'');
+				$email = $functions->get_mailer('',$einfo['subject'],'');
 				foreach($userlist as $data)
 				{
 					if($data['emails_include_post'] == 1)
@@ -371,7 +381,7 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 		if($this->_user_id > 0)
 		{
 			$fields = array('posts' => array('posts + 1'));
-			$forum_data = $this->forums->get_node_data($this->_fid);
+			$forum_data = $forums->get_node_data($this->_fid);
 			if($forum_data->get_increase_experience())
 			{
 				$number = $this->_add_topic ? BS_EXPERIENCE_FOR_POST + BS_EXPERIENCE_FOR_TOPIC
@@ -383,15 +393,15 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 		}
 	
 		// store that a post has been done
-		$this->cache->get_cache('stats')->set_element_field(0,'posts_last',time());
-		$this->cache->store('stats');
+		$cache->get_cache('stats')->set_element_field(0,'posts_last',time());
+		$cache->store('stats');
 	
 		$this->_post_id = $postid;
 		
-		$this->db->commit_transaction();
+		$db->commit_transaction();
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

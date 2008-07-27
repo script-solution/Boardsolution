@@ -21,7 +21,13 @@ final class BS_ACP_Action_forums_delete extends BS_ACP_Action_Base
 {
 	public function perform_action($type = 'delete')
 	{
-		$id_str = $this->input->get_var('ids','get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$forums = PLIB_Props::get()->forums();
+		$functions = PLIB_Props::get()->functions();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+
+		$id_str = $input->get_var('ids','get',PLIB_Input::STRING);
 		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
 			return 'Got an invalid id-string via GET';
 		
@@ -31,9 +37,9 @@ final class BS_ACP_Action_forums_delete extends BS_ACP_Action_Base
 			$delete = array();
 			foreach($ids as $fid)
 			{
-				if($this->forums->has_childs($fid))
+				if($forums->has_childs($fid))
 				{
-					$sub = $this->forums->get_sub_nodes($fid);
+					$sub = $forums->get_sub_nodes($fid);
 					$sub_len = count($sub);
 					for($x = 0;$x < $sub_len;$x++)
 						$delete[] = $sub[$x]->get_id();
@@ -103,7 +109,7 @@ final class BS_ACP_Action_forums_delete extends BS_ACP_Action_Base
 			BS_DAO::get_events()->delete_by_topicids($thread_ids);
 			
 			foreach(BS_DAO::get_attachments()->get_by_topicids($thread_ids) as $adata)
-				$this->functions->delete_attachment($adata['attachment_path']);
+				$functions->delete_attachment($adata['attachment_path']);
 
 			BS_DAO::get_attachments()->delete_by_topicids($thread_ids);
 		}
@@ -126,16 +132,16 @@ final class BS_ACP_Action_forums_delete extends BS_ACP_Action_Base
 			BS_DAO::get_forums()->reset_attributes($ids);
 		
 		// update the intern-permissions and moderators
-		$this->cache->refresh('intern');
-		$this->cache->refresh('moderators');
+		$cache->refresh('intern');
+		$cache->refresh('moderators');
 		
 		// refresh forums
-		PLIB_Object::set_prop('forums',new BS_Forums_Manager());
+		PLIB_Props::get()->reload('forums');
 		
 		if($type == 'delete')
-			$this->set_success_msg($this->locale->lang('delete_forums_successfully'));
+			$this->set_success_msg($locale->lang('delete_forums_successfully'));
 		else
-			$this->set_success_msg($this->locale->lang('empty_forums_successfully'));
+			$this->set_success_msg($locale->lang('empty_forums_successfully'));
 		
 		$this->set_action_performed(true);
 

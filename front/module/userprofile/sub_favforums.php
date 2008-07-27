@@ -19,37 +19,58 @@
  */
 final class BS_Front_SubModule_userprofile_favforums extends BS_Front_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACTION_SAVE_FAVFORUMS => 'favforums'
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACTION_SAVE_FAVFORUMS,'favforums');
+
+		$doc->add_breadcrumb(
+			$locale->lang('favorite_forums'),
+			$url->get_url(0,'&amp;'.BS_URL_LOC.'=favforums')
 		);
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$user = PLIB_Props::get()->user();
+		$forums = PLIB_Props::get()->forums();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
 		// collect the forum-ids
 		$forum_ids = array();
-		foreach(BS_DAO::get_unreadhide()->get_all_of_user($this->user->get_user_id()) as $data)
+		foreach(BS_DAO::get_unreadhide()->get_all_of_user($user->get_user_id()) as $data)
 			$forum_ids[] = $data['forum_id'];
 		
-		$forum_ids = $this->forums->get_nodes_with_other_ids($forum_ids,false);
+		$forum_ids = $forums->get_nodes_with_other_ids($forum_ids,false);
 
-		$this->tpl->add_variables(array(
-			'target_url' => $this->url->get_url(0,'&amp;'.BS_URL_LOC.'=favforums'),
+		$tpl->add_variables(array(
+			'target_url' => $url->get_url(0,'&amp;'.BS_URL_LOC.'=favforums'),
 			'action_type' => BS_ACTION_SAVE_FAVFORUMS,
 		));
 
 		$sub_cats = array();
 		$images = array(
-			'dot' => $this->user->get_theme_item_path('images/forums/path_dot.gif'),
-			'middle' => $this->user->get_theme_item_path('images/forums/path_middle.gif')
+			'dot' => $user->get_theme_item_path('images/forums/path_dot.gif'),
+			'middle' => $user->get_theme_item_path('images/forums/path_middle.gif')
 		);
 		$utils = BS_ForumUtils::get_instance();
 		
 		$tplforums = array();
 		$index = 0;
-		foreach($this->forums->get_all_nodes() as $forum)
+		foreach($forums->get_all_nodes() as $forum)
 		{
 			$data = $forum->get_data();
 			$id = $forum->get_id();
@@ -66,7 +87,7 @@ final class BS_Front_SubModule_userprofile_favforums extends BS_Front_SubModule
 				'index' => $index,
 				'contains_forums' => $data->get_forum_type() == 'contains_cats',
 				'path_images' => $utils->get_path_images($forum,$sub_cats,$images,1),
-				'forum_url' => $this->url->get_topics_url($id),
+				'forum_url' => $url->get_topics_url($id),
 				'selected' => in_array($id,$forum_ids)
 			);
 			
@@ -74,14 +95,7 @@ final class BS_Front_SubModule_userprofile_favforums extends BS_Front_SubModule
 				$index++;
 		}
 		
-		$this->tpl->add_array('forums',$tplforums,false);
-	}
-	
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('favorite_forums') => $this->url->get_url(0,'&amp;'.BS_URL_LOC.'=favforums')
-		);
+		$tpl->add_array('forums',$tplforums,false);
 	}
 }
 ?>

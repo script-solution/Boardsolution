@@ -47,51 +47,55 @@ final class BS_ACP_Module_AdditionalFields_Helper extends PLIB_Singleton
 	 */
 	public function retrieve_valid_field_attributes($id,$type,&$values)
 	{
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$cache = PLIB_Props::get()->cache();
+
 		$manager  = BS_AddField_Manager::get_instance();
 		$field = $id == 0 ? null : $manager->get_field($id);
 		$locked = $id == 0 ? false : $field->get_data()->get_name() == 'birthday';
 		
-		$values['field_name'] = $this->input->get_var('field_name','post',PLIB_Input::STRING);
-		$values['display_name'] = $this->input->get_var('display_name','post',PLIB_Input::STRING);
-		$values['field_length'] = $this->input->get_var('field_length','post',PLIB_Input::INTEGER);
-		$values['field_type'] = $this->input->correct_var(
+		$values['field_name'] = $input->get_var('field_name','post',PLIB_Input::STRING);
+		$values['display_name'] = $input->get_var('display_name','post',PLIB_Input::STRING);
+		$values['field_length'] = $input->get_var('field_length','post',PLIB_Input::INTEGER);
+		$values['field_type'] = $input->correct_var(
 			'field_type','post',PLIB_Input::STRING,array('int','line','text','date','enum'),'line'
 		);
-		$values['allowed_values'] = $this->input->get_var('field_values','post',PLIB_Input::STRING);
-		$values['field_suffix'] = $this->input->get_var('field_suffix','post',PLIB_Input::STRING);
+		$values['allowed_values'] = $input->get_var('field_values','post',PLIB_Input::STRING);
+		$values['field_suffix'] = $input->get_var('field_suffix','post',PLIB_Input::STRING);
 		$values['field_custom_display'] = PLIB_StringHelper::htmlspecialchars_back(
-			$this->input->get_var('field_custom_display','post',PLIB_Input::STRING)
+			$input->get_var('field_custom_display','post',PLIB_Input::STRING)
 		);
-		$values['field_validation'] = $this->input->get_var(
+		$values['field_validation'] = $input->get_var(
 			'field_validation','post',PLIB_Input::STRING
 		);
-		$values['field_is_required'] = $this->input->get_var(
+		$values['field_is_required'] = $input->get_var(
 			'field_is_required','post',PLIB_Input::INT_BOOL
 		);
-		$values['field_edit_notice'] = $this->input->get_var(
+		$values['field_edit_notice'] = $input->get_var(
 			'field_edit_notice','post',PLIB_Input::STRING
 		);
-		$values['display_always'] = $this->input->get_var(
+		$values['display_always'] = $input->get_var(
 			'display_always','post',PLIB_Input::INT_BOOL
 		);
 
 		if(!$locked && !preg_match('/^[a-z0-9_]+$/i',$values['field_name']))
-			return $this->locale->lang('field_name_invalid');
+			return $locale->lang('field_name_invalid');
 
 		if($type == 'add')
 		{
-			if($this->cache->get_cache('user_fields')->element_exists_with(
+			if($cache->get_cache('user_fields')->element_exists_with(
 					array('field_name' => $values['field_name'])))
-				return $this->locale->lang('field_name_exists');
+				return $locale->lang('field_name_exists');
 		}
 
 		if(trim($values['display_name']) == '')
-			return $this->locale->lang('display_name_empty');
+			return $locale->lang('display_name_empty');
 
 		if(!$locked && ($values['field_type'] == 'int' ||
 			$values['field_type'] == 'line') && ($values['field_length'] == null ||
 				$values['field_length'] <= 0 || $values['field_length'] > 255))
-			return $this->locale->lang('field_length_invalid');
+			return $locale->lang('field_length_invalid');
 
 		if($values['field_type'] == 'enum')
 		{
@@ -105,7 +109,7 @@ final class BS_ACP_Module_AdditionalFields_Helper extends PLIB_Singleton
 			}
 
 			if(count($lines) < 2)
-				return $this->locale->lang('field_values_invalid');
+				return $locale->lang('field_values_invalid');
 			
 			$values['allowed_values'] = implode("\n",$lines);
 		}
@@ -115,7 +119,7 @@ final class BS_ACP_Module_AdditionalFields_Helper extends PLIB_Singleton
 		$values['field_show_type'] = 0;
 		foreach($this->get_locations() as $loc)
 		{
-			if($this->input->get_var('loc_'.$loc,'post',PLIB_Input::INT_BOOL) == 1)
+			if($input->get_var('loc_'.$loc,'post',PLIB_Input::INT_BOOL) == 1)
 				$values['field_show_type'] |= $loc;
 		}
 		
@@ -131,7 +135,7 @@ final class BS_ACP_Module_AdditionalFields_Helper extends PLIB_Singleton
 		return '';
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

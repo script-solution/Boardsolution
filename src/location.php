@@ -19,7 +19,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Location extends PLIB_FullObject
+final class BS_Location extends PLIB_Object
 {
 	/**
 	 * Creates an instance of this class from the current location
@@ -30,8 +30,8 @@ final class BS_Location extends PLIB_FullObject
 	public static function get_instance()
 	{
 		// cache some properties
-		$input = PLIB_Object::get_prop('input');
-		$doc = PLIB_Object::get_prop('doc');
+		$input = PLIB_Props::get()->input();
+		$doc = PLIB_Props::get()->doc();
 		
 		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
@@ -120,70 +120,77 @@ final class BS_Location extends PLIB_FullObject
 	 */
 	public function decode($enable_links = true)
 	{
+		$locale = PLIB_Props::get()->locale();
+		$doc = PLIB_Props::get()->doc();
+		$forums = PLIB_Props::get()->forums();
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+		$url = PLIB_Props::get()->url();
+
 		$parts = explode(':',$this->_location);
 		if(count($parts) < 1)
-			return $this->locale->lang('loc_index');
+			return $locale->lang('loc_index');
 	
 		if($parts[0] == 'acp')
 		{
 			// we don't want to display the acp-location in the frontend
-			if(!$this->doc->is_acp())
-				return $this->locale->lang('loc_index');
+			if(!$doc->is_acp())
+				return $locale->lang('loc_index');
 			
-			if($this->locale->contains_lang('loc_acp_'.$parts[1]))
-				return $this->locale->lang('loc_acp_'.$parts[1]);
+			if($locale->contains_lang('loc_acp_'.$parts[1]))
+				return $locale->lang('loc_acp_'.$parts[1]);
 	
-			return $this->locale->lang('loc_acp_index');
+			return $locale->lang('loc_acp_index');
 		}
 		
 		switch($parts[0])
 		{
 			case 'userdetails':
 				if(!isset($parts[1]) || !isset($parts[2]))
-					return $this->locale->lang('loc_index');
+					return $locale->lang('loc_index');
 				
 				if($enable_links)
 				{
-					$url = $this->url->get_url('userdetails','&amp;'.BS_URL_ID.'='.$parts[1]);
-					$link = '<a href="'.$url.'">'.$parts[2].'</a>';
+					$murl = $url->get_url('userdetails','&amp;'.BS_URL_ID.'='.$parts[1]);
+					$link = '<a href="'.$murl.'">'.$parts[2].'</a>';
 				}
 				else
 					$link = $parts[2];
 				
-				return sprintf($this->locale->lang('loc_'.$parts[0]),$link);
+				return sprintf($locale->lang('loc_'.$parts[0]),$link);
 			
 			case 'topics':
 			case 'new_topic':
 			case 'new_poll':
 			case 'new_event':
 				if(!isset($parts[1]))
-					return $this->locale->lang('loc_index');
+					return $locale->lang('loc_index');
 	
-				$forum_data = $this->forums->get_node_data($parts[1]);
+				$forum_data = $forums->get_node_data($parts[1]);
 				if($forum_data === null)
-					return $this->locale->lang('loc_index');
+					return $locale->lang('loc_index');
 	
 				// intern and disallowed forum?
-				if($this->cfg['hide_denied_forums'] == 1 && !$this->auth->has_access_to_intern_forum($parts[1]))
-					return $this->locale->lang('loc_hidden');
+				if($cfg['hide_denied_forums'] == 1 && !$auth->has_access_to_intern_forum($parts[1]))
+					return $locale->lang('loc_hidden');
 	
 				if($enable_links)
 					$forum = BS_ForumUtils::get_instance()->get_forum_path($parts[1],false);
 				else
 					$forum = strip_tags(BS_ForumUtils::get_instance()->get_forum_path($parts[1],false));
 	
-				return sprintf($this->locale->lang('loc_'.$parts[0]),$forum);
+				return sprintf($locale->lang('loc_'.$parts[0]),$forum);
 	
 			case 'posts':
 			case 'new_post':
 			case 'edit_post':
 			case 'print':
 				if(!isset($parts[1]) || !isset($parts[2]) || !isset($parts[3]))
-					return $this->locale->lang('loc_index');
+					return $locale->lang('loc_index');
 	
 				// intern and disallowed forum?
-				if($this->cfg['hide_denied_forums'] == 1 && !$this->auth->has_access_to_intern_forum($parts[1]))
-					return $this->locale->lang('loc_hidden');
+				if($cfg['hide_denied_forums'] == 1 && !$auth->has_access_to_intern_forum($parts[1]))
+					return $locale->lang('loc_hidden');
 	
 				// append the rest of the parts to the topic-title
 				// because the title may contain ":"
@@ -193,23 +200,23 @@ final class BS_Location extends PLIB_FullObject
 	
 				if($enable_links)
 				{
-					$topic_url = $this->url->get_posts_url($parts[1],$parts[2]);
+					$topic_url = $url->get_posts_url($parts[1],$parts[2]);
 					$topic = '<a href="'.$topic_url.'">'.$topic_title.'</a>';
 				}
 				else
 					$topic = $topic_title;
 	
-				return sprintf($this->locale->lang('loc_'.$parts[0]),$topic);
+				return sprintf($locale->lang('loc_'.$parts[0]),$topic);
 	
 			default:
-				if(!$this->locale->contains_lang('loc_'.$parts[0]))
-					return $this->locale->lang('loc_index');
+				if(!$locale->contains_lang('loc_'.$parts[0]))
+					return $locale->lang('loc_index');
 	
-				return $this->locale->lang('loc_'.$parts[0]);
+				return $locale->lang('loc_'.$parts[0]);
 		}
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

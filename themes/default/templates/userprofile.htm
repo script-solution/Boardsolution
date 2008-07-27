@@ -70,11 +70,7 @@
 					<tr>
 						<td class="bs_main">
 						{glocale.lang('pminbox')}:
-						(
-							{inbox_num}
-							/
-							{if max_inbox == 0}<span title="{glocale.lang('unlimited')}">&infin;</span>{else}{max_inbox}{endif}
-						)
+						({inbox_num} / {if max_inbox == 0}<span title="{glocale.lang('unlimited')}">&infin;</span>{else}{max_inbox}{endif})
 						</td>
 					</tr>
 					<tr>
@@ -83,11 +79,7 @@
 					<tr>
 						<td class="bs_main">
 						{glocale.lang('pmoutbox')}:
-						(
-							{outbox_num}
-							/
-							{if max_outbox == 0}<span title="{glocale.lang('unlimited')}">&infin;</span>{else}{max_outbox}{endif}
-						)
+						({outbox_num} / {if max_outbox == 0}<span title="{glocale.lang('unlimited')}">&infin;</span>{else}{max_outbox}{endif})
 						</td>
 					</tr>
 					<tr>

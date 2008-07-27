@@ -19,45 +19,58 @@
  */
 final class BS_ACP_Module_userranks extends BS_ACP_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_UPDATE_USERRANKS => 'update',
-			BS_ACP_ACTION_ADD_USERRANK => 'add',
-			BS_ACP_ACTION_DELETE_USERRANKS => 'delete'
-		);
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_UPDATE_USERRANKS,'update');
+		$doc->add_action(BS_ACP_ACTION_ADD_USERRANK,'add');
+		$doc->add_action(BS_ACP_ACTION_DELETE_USERRANKS,'delete');
+
+		$doc->add_breadcrumb($locale->lang('acpmod_userranks'),$url->get_acpmod_url());
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		if(($ids = $this->input->get_var('delete','post')) != null)
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$url = PLIB_Props::get()->url();
+		$tpl = PLIB_Props::get()->tpl();
+
+		if(($ids = $input->get_var('delete','post')) != null)
 		{
-			$names = $this->cache->get_cache('user_ranks')->get_field_vals_of_keys($ids,'rank');
-			$namelist = PLIB_StringHelper::get_enum($names,$this->locale->lang('and'));
+			$names = $cache->get_cache('user_ranks')->get_field_vals_of_keys($ids,'rank');
+			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
 			
-			$this->functions->add_delete_message(
-				sprintf($this->locale->lang('delete_message'),$namelist),
-				$this->url->get_acpmod_url(
+			$functions->add_delete_message(
+				sprintf($locale->lang('delete_message'),$namelist),
+				$url->get_acpmod_url(
 					0,'&amp;at='.BS_ACP_ACTION_DELETE_USERRANKS.'&amp;ids='.implode(',',$ids)
 				),
-				$this->url->get_acpmod_url()
+				$url->get_acpmod_url()
 			);
 		}
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'at_update' => BS_ACP_ACTION_UPDATE_USERRANKS,
 			'at_add' => BS_ACP_ACTION_ADD_USERRANK
 		));
 	
-		$ranks = $this->cache->get_cache('user_ranks')->get_elements();
-		$this->tpl->add_array('ranks',$ranks);
-	}
-	
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('acpmod_userranks') => $this->url->get_acpmod_url()
-		);
+		$ranks = $cache->get_cache('user_ranks')->get_elements();
+		$tpl->add_array('ranks',$ranks);
 	}
 }
 ?>

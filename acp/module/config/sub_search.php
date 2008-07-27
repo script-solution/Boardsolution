@@ -27,38 +27,57 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 	private $_keyword;
 	
 	/**
-	 * Constructor
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
 	 */
-	public function __construct()
+	public function init($doc)
 	{
-		$this->_keyword = $this->input->get_var('kw','get',PLIB_Input::STRING);
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_SAVE_SETTINGS,'save');
+		$doc->add_action(BS_ACP_ACTION_REVERT_SETTING,'revert');
+		
+		$doc->set_template('config_items.htm');
+
+		// init manager
+		$this->_keyword = $input->get_var('kw','get',PLIB_Input::STRING);
 		if($this->_keyword !== null)
 		{
 			$this->_keyword = $this->_prepare_keyword($this->_keyword);
 			$helper = BS_ACP_Module_Config_Helper::get_instance();
 			$helper->get_manager()->load_items_with($this->_keyword);
 		}
+
+		// add bread crumb
+		$keyword = $input->get_var('kw','get',PLIB_Input::STRING);
+		if($keyword != null)
+		{
+			$doc->add_breadcrumb(
+				$locale->lang('config_search_result_title'),
+				$url->get_acpmod_url(0,'&amp;action=search&amp;kw='.$keyword)
+			);
+		}
 	}
 	
-	public function get_actions()
-	{
-		return array(
-			BS_ACP_ACTION_SAVE_SETTINGS => 'save',
-			BS_ACP_ACTION_REVERT_SETTING => 'revert'
-		);
-	}
-	
-	public function get_template()
-	{
-		return 'config_items.htm';
-	}
-	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$keyword = $this->input->get_var('kw','get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$url = PLIB_Props::get()->url();
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+
+		$keyword = $input->get_var('kw','get',PLIB_Input::STRING);
 		if($this->_keyword === null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
@@ -78,14 +97,14 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 		}
 		
 		$perline = 6;
-		$hidden_fields = $this->url->get_acpmod_comps();
+		$hidden_fields = $url->get_acpmod_comps();
 		$hidden_fields['action'] = 'search';
-		$this->tpl->add_variables(array(
-			'form_target' => $this->url->get_acpmod_url(0,'&amp;action=search&amp;kw='.$keyword),
+		$tpl->add_variables(array(
+			'form_target' => $url->get_acpmod_url(0,'&amp;action=search&amp;kw='.$keyword),
 			'action_type' => BS_ACP_ACTION_SAVE_SETTINGS,
-			'title' => sprintf($this->locale->lang('config_search_result'),$this->_keyword),
+			'title' => sprintf($locale->lang('config_search_result'),$this->_keyword),
 			'items' => $items,
-			'form_target' => $this->input->get_var('SERVER_PHPSELF','server',PLIB_Input::STRING),
+			'form_target' => $input->get_var('SERVER_PHPSELF','server',PLIB_Input::STRING),
 			'hidden_fields' => $hidden_fields,
 			'groups_per_line' => $perline,
 			'group_rows' => $helper->get_groups(0,$perline),
@@ -117,18 +136,6 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 		$repl = array('&auml;','&ouml;','&uuml;','&szlig');
 		$keyword = str_replace($uml,$repl,$keyword);
 		return $keyword;
-	}
-	
-	public function get_location()
-	{
-		$keyword = $this->input->get_var('kw','get',PLIB_Input::STRING);
-		if($keyword == null)
-			return array();
-		
-		return array(
-			$this->locale->lang('config_search_result_title') =>
-				$this->url->get_acpmod_url(0,'&amp;action=search&amp;kw='.$keyword)
-		);
 	}
 }
 ?>

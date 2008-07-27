@@ -19,25 +19,32 @@
  */
 final class BS_ACP_SubModule_errorlog_sendform extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_SEND_ERRORS => 'send'
-		);
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_SEND_ERRORS,'send');
+		$doc->add_breadcrumb($locale->lang('send_errors'),$url->get_acpmod_url(0,'&amp;action=sendform'));
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$this->tpl->add_variables(array(
+		$tpl = PLIB_Props::get()->tpl();
+
+		$tpl->add_variables(array(
 			'action_type' => BS_ACP_ACTION_SEND_ERRORS
 		));
-	}
-	
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('send_errors') => $this->url->get_acpmod_url(0,'&amp;action=sendform')
-		);
 	}
 }
 ?>

@@ -19,24 +19,27 @@ class BS_InstallSQL_update extends BS_InstallSQL
 {
 	public function run()
 	{
-		include(PLIB_Path::inner().'config/community.php');
-		include(PLIB_Path::inner().'config/mysql.php');
-		include(PLIB_Path::inner().'src/mysql.php');
-		$prefix = $this->functions->get_session_var('table_prefix');
+		$functions = PLIB_Props::get()->functions();
+		$db = PLIB_Props::get()->db();
+
+		include(PLIB_Path::server_app().'config/community.php');
+		include(PLIB_Path::server_app().'config/mysql.php');
+		include(PLIB_Path::server_app().'src/mysql.php');
+		$prefix = $functions->get_session_var('table_prefix');
 		
-		// we have to init $this->db here because we need it later on
-		$this->db = new BS_MySQL(BS_MYSQL_HOST,BS_MYSQL_LOGIN,BS_MYSQL_PASSWORD,BS_MYSQL_DATABASE);
+		// we have to init $db here because we need it later on
+		$db = new BS_MySQL(BS_MYSQL_HOST,BS_MYSQL_LOGIN,BS_MYSQL_PASSWORD,BS_MYSQL_DATABASE);
 		
 		// change default charset and collation of the db
-		if($this->db->get_server_version() >= '4.1')
+		if($db->get_server_version() >= '4.1')
 		{
-			$this->db->sql_qry(
+			$db->sql_qry(
 				'ALTER DATABASE `'.BS_MYSQL_DATABASE.'` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
 			);
 		}
 		
 		$this->add_to_log('Creating Table "'.$prefix.'change_email"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"CREATE TABLE `".$prefix."change_email` (
 				`user_id` int(10) unsigned NOT NULL default '0',
 				`user_key` varchar(32) NOT NULL default '',
@@ -48,7 +51,7 @@ class BS_InstallSQL_update extends BS_InstallSQL
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.BS_TB_BOTS.'"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"CREATE TABLE `".BS_TB_BOTS."` (
 			  `id` int(10) unsigned NOT NULL auto_increment,
 			  `bot_name` varchar(255) NOT NULL default '',
@@ -60,82 +63,82 @@ class BS_InstallSQL_update extends BS_InstallSQL
 			) TYPE=MyISAM;"
 		);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('Googlebot', 'Googlebot/', '', '', 1);"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('YahooBot', 'Yahoo! Slurp;', '', '', 1);"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('MSNBot', 'msnbot/', '', '', 1);"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('ZyBorg', 'ZyBorg/', '', '', 1);"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('SeekBot', 'Seekbot/', '', '', 1);"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('Exabot', 'Exabot/', '', '', 1);"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('Gigabot', 'Gigabot/', '', '', 1);"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('iCCrawler', 'iCCrawler', '', '', 1);"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('Mediapartners-Google', 'Mediapartners-Google/', '', '', 1);"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('MJ12bot', 'MJ12bot/', '', '', 1);"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('W3C-Validator', 'W3C_Validator/', '', '', 1);"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('Accoona', 'Accoona-AI-Agent/', '', '', 1);"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('MSN-Media-Bot', 'msnbot-media/1.0', '', '', 1);"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('Twiceler-Bot', 'Twiceler-0.9', '', '', 1);"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('RedBot', 'RedBot/redbot-1.0', '', '', 1);"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_BOTS."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('Ask.com', 'Ask Jeeves/Teoma;', '', '', 1);"
@@ -143,7 +146,7 @@ class BS_InstallSQL_update extends BS_InstallSQL
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Modifying Table "'.$prefix.'config"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"ALTER TABLE `".$prefix."config`
 			 DROP `links_per_page`,
 			 DROP `post_max_smileys`,
@@ -208,7 +211,7 @@ class BS_InstallSQL_update extends BS_InstallSQL
 			 CHANGE `enable_calendar_events` `enable_calendar_events` tinyint(1) unsigned NOT NULL default 0 ;"
 		);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"UPDATE `".BS_TB_DESIGN."` SET
 			 `current_topic_loc` = 'portal',
 			 `enable_portal` = 1,
@@ -259,7 +262,7 @@ class BS_InstallSQL_update extends BS_InstallSQL
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Modifying Table "'.$prefix.'cache"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"ALTER TABLE `".$prefix."cache`
 			 CHANGE `table_name` `table_name`
 							enum('banlist','intern','languages','moderators','smileys','themes','user_groups',
@@ -267,13 +270,13 @@ class BS_InstallSQL_update extends BS_InstallSQL
 							NOT NULL DEFAULT 'banlist';"
 		);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO ".$prefix."cache (table_name,table_content) VALUES ('bots','a:0:{}')"
 		);
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Modifying Table "'.$prefix.'change_pw"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"ALTER TABLE `".$prefix."change_pw`
 			 CHANGE `user_id` `user_id` int(10) unsigned NOT NULL DEFAULT '0' ,
 			 CHANGE `email_date` `email_date` int(10) unsigned NOT NULL DEFAULT '0';"
@@ -281,14 +284,14 @@ class BS_InstallSQL_update extends BS_InstallSQL
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Modifying Table "'.$prefix.'events"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"ALTER TABLE `".$prefix."events`
 			 CHANGE `max_announcements` `max_announcements` mediumint(5) NOT NULL DEFAULT '0';"
 		);
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Modifying Table "'.$prefix.'forums"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"ALTER TABLE `".$prefix."forums`
 			 CHANGE `increase_experience` `increase_experience` tinyint(1) unsigned NOT NULL DEFAULT '0' ,
 			 CHANGE `display_subforums` `display_subforums` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -300,13 +303,13 @@ class BS_InstallSQL_update extends BS_InstallSQL
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Removing Table "'.$prefix.'ip"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"DROP TABLE `".$prefix."ip`;"
 		);
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$prefix.'log_errors"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"CREATE TABLE `".$prefix."log_errors` (
 				`id` int(10) unsigned NOT NULL auto_increment,
 				`query` text NOT NULL,
@@ -320,7 +323,7 @@ class BS_InstallSQL_update extends BS_InstallSQL
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$prefix.'log_ips"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"CREATE TABLE `".$prefix."log_ips` (
 				`id` int(10) unsigned NOT NULL auto_increment,
 				`user_ip` varchar(15) NOT NULL default '',
@@ -334,7 +337,7 @@ class BS_InstallSQL_update extends BS_InstallSQL
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Modifying Table "'.$prefix.'profiles"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"ALTER TABLE `".$prefix."profiles`
 			 ADD `unread_topics` text NOT NULL ,
 			 CHANGE `bbcode_mode` `bbcode_mode` enum('simple','advanced','applet') NOT NULL DEFAULT 'simple' ,
@@ -343,50 +346,50 @@ class BS_InstallSQL_update extends BS_InstallSQL
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Modifying Table "'.$prefix.'sessions"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"ALTER TABLE `".$prefix."sessions`
 			 DROP `unread_topics`;"
 		);
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Modifying Table "'.$prefix.'smileys"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"ALTER TABLE `".$prefix."smileys`
 			 ADD `sort_key` int(10) unsigned NOT NULL default 0;"
 		);
 		
-		$qry = $this->db->sql_qry('SELECT id FROM '.$prefix.'smileys ORDER BY id ASC');
-		for($i = 1;$data = $this->db->sql_fetch_assoc($qry);$i++)
+		$qry = $db->sql_qry('SELECT id FROM '.$prefix.'smileys ORDER BY id ASC');
+		for($i = 1;$data = $db->sql_fetch_assoc($qry);$i++)
 		{
-			$this->db->sql_qry(
+			$db->sql_qry(
 				'UPDATE '.$prefix.'smileys SET sort_key = '.$i.' WHERE id = '.$data['id']
 			);
 		}
-		$this->db->sql_free($qry);
+		$db->sql_free($qry);
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Modifying Table "'.$prefix.'tasks"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"ALTER TABLE `".$prefix."tasks`
 			 CHANGE `task_interval` `task_interval` int(10) unsigned NOT NULL DEFAULT '0' ,
 			 CHANGE `last_execution` `last_execution` int(10) unsigned NOT NULL DEFAULT '0' ,
 			 CHANGE `enabled` `enabled` tinyint(1) unsigned NOT NULL DEFAULT '0';"
 		);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"INSERT INTO `".BS_TB_TASKS."`
 				(`task_title`, `task_file`, `task_interval`, `last_execution`, `enabled`, `task_time`)
 				VALUES
 				('error_log', 'error_log.php', 259200, 0, 1, NULL);"
 		);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"UPDATE ".$prefix."tasks SET
 			 task_title = 'change_email_pw',
 			 task_file = 'change_email_pw.php'
 			 WHERE task_title = 'change_pw'"
 		);
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"UPDATE ".$prefix."tasks SET
 			 task_title = 'logged_ips',
 			 task_file = 'logged_ips.php'
@@ -395,16 +398,16 @@ class BS_InstallSQL_update extends BS_InstallSQL
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Modifying Table "'.$prefix.'topics"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"ALTER TABLE `".$prefix."topics`
 			 ADD `locked` tinyint(3) unsigned NOT NULL default 0;"
 		);
 		
-		$qry = $this->db->sql_qry(
+		$qry = $db->sql_qry(
 			'SELECT id,status_lock,edit_lock FROM '.$prefix.'topics
 			 WHERE status_lock = 1 OR edit_lock = 1'
 		);
-		while($data = $this->db->sql_fetch_assoc($qry))
+		while($data = $db->sql_fetch_assoc($qry))
 		{
 			$locked = 0;
 			if($data['edit_lock'])
@@ -412,11 +415,11 @@ class BS_InstallSQL_update extends BS_InstallSQL
 			if($data['status_lock'])
 				$locked |= BS_LOCK_TOPIC_OPENCLOSE;
 			
-			$this->db->sql_qry('UPDATE '.$prefix.'topics SET locked = '.$locked.' WHERE id = '.$data['id']);
+			$db->sql_qry('UPDATE '.$prefix.'topics SET locked = '.$locked.' WHERE id = '.$data['id']);
 		}
-		$this->db->sql_free($qry);
+		$db->sql_free($qry);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"ALTER TABLE `".$prefix."topics`
 			 DROP `last_status_ch_from`,
 			 DROP `last_edited_from`,
@@ -426,14 +429,14 @@ class BS_InstallSQL_update extends BS_InstallSQL
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Modifying Table "'.$prefix.'user"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"ALTER TABLE `".$prefix."user`
 			 CHANGE `user_name` `user_name` varchar(50) NOT NULL default '';"
 		);
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Modifying Table "'.$prefix.'user_groups"...');
-		$this->db->sql_qry(
+		$db->sql_qry(
 			"ALTER TABLE `".$prefix."user_groups`
 			 CHANGE `is_visible` `is_visible` tinyint(1) unsigned NOT NULL DEFAULT '0' ,
 			 CHANGE `view_online_locations` `view_online_locations` tinyint(1) unsigned NOT NULL DEFAULT '0' ,
@@ -443,7 +446,7 @@ class BS_InstallSQL_update extends BS_InstallSQL
 		$this->add_to_log_success();
 		
 		// change charset and collation
-		if($this->db->get_server_version() >= '4.1')
+		if($db->get_server_version() >= '4.1')
 		{
 			$this->add_to_log('Changing charset to "utf8" and collation to "utf8_general_ci"...');
 			$this->_change_charset();
@@ -453,9 +456,9 @@ class BS_InstallSQL_update extends BS_InstallSQL
 		$this->add_to_log('Generating DB-Cache...');
 		
 		// now we have to create the cache-data
-		include_once(PLIB_Path::inner().'src/cache/cache.php');
-		include_once(PLIB_Path::inner().'src/cache/db_cache.php');
-		include_once(PLIB_Path::inner().'src/cache/cache_container.php');
+		include_once(PLIB_Path::server_app().'src/cache/cache.php');
+		include_once(PLIB_Path::server_app().'src/cache/db_cache.php');
+		include_once(PLIB_Path::server_app().'src/cache/cache_container.php');
 		
 		// we have to instantiate the cache-container here because the write_to_db() method needs it
 		$this->cachecon = &new BS_CacheContainer($this);
@@ -479,6 +482,8 @@ class BS_InstallSQL_update extends BS_InstallSQL
 	 */
 	public function _change_charset()
 	{
+		$db = PLIB_Props::get()->db();
+
 		$charset = 'utf8';
 		$collate = 'utf8_general_ci';
 		
@@ -495,15 +500,15 @@ class BS_InstallSQL_update extends BS_InstallSQL
 		foreach($tables as $table)
 		{
 			// change default charset and collation of the table
-			$this->db->sql_qry(
+			$db->sql_qry(
 				'ALTER TABLE '.$table.' DEFAULT CHARACTER SET '.$charset.' COLLATE '.$collate.';'
 			);
 			
 			$fields = '';
 			
 			// collect the fields we want to change in this table
-			$qry = $this->db->sql_qry('SHOW COLUMNS FROM '.$table);
-			while($data = $this->db->sql_fetch_assoc($qry))
+			$qry = $db->sql_qry('SHOW COLUMNS FROM '.$table);
+			while($data = $db->sql_fetch_assoc($qry))
 			{
 				// check if it is a text-field
 				$is_text = false;
@@ -525,12 +530,12 @@ class BS_InstallSQL_update extends BS_InstallSQL
 					$fields .= ',';			
 				}
 			}
-			$this->db->sql_free($qry);
+			$db->sql_free($qry);
 			
 			// if there are fields to change do it
 			if($fields != '')
 			{
-				$this->db->sql_qry(
+				$db->sql_qry(
 					'ALTER TABLE '.$table.' '.PLIB_String::substr($fields,0,-1).';'
 				);
 			}

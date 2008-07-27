@@ -21,26 +21,32 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
+		$input = PLIB_Props::get()->input();
+		$functions = PLIB_Props::get()->functions();
+		$cache = PLIB_Props::get()->cache();
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+
 		if(BS_ENABLE_EXPORT)
 			return 'The community is exported';
 		
 		// check username
-		$user_name = $this->input->get_var('user_name','post',PLIB_Input::STRING);
+		$user_name = $input->get_var('user_name','post',PLIB_Input::STRING);
 		if(trim($user_name) == '' || !BS_UserUtils::get_instance()->check_username($user_name))
 			return 'usernamenotallowed';
 
-		if($this->functions->is_banned('user',$user_name))
+		if($functions->is_banned('user',$user_name))
 			return 'user_name_banned';
 
 		if(BS_DAO::get_user()->name_exists($user_name))
 			return 'registeruservorhanden';
 
-		$user_pw = $this->input->get_var('user_pw','post',PLIB_Input::STRING);
-		$user_pw_conf = $this->input->get_var('user_pw_conf','post',PLIB_Input::STRING);
-		$user_email = $this->input->get_var('user_email','post',PLIB_Input::STRING);
-		$main_group = $this->input->get_var('main_group','post',PLIB_Input::ID);
-		$other_groups = $this->input->get_var('other_groups','post');
-		$notify = $this->input->get_var('notify','post',PLIB_Input::INT_BOOL);
+		$user_pw = $input->get_var('user_pw','post',PLIB_Input::STRING);
+		$user_pw_conf = $input->get_var('user_pw_conf','post',PLIB_Input::STRING);
+		$user_email = $input->get_var('user_email','post',PLIB_Input::STRING);
+		$main_group = $input->get_var('main_group','post',PLIB_Input::ID);
+		$other_groups = $input->get_var('other_groups','post');
+		$notify = $input->get_var('notify','post',PLIB_Input::INT_BOOL);
 
 		// check pw
 		if($user_pw == '' || $user_pw != $user_pw_conf)
@@ -51,7 +57,7 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 		if(!PLIB_StringHelper::is_valid_email($user_email))
 			return 'mailnotallowed';
 
-		if($this->functions->is_banned('mail',$user_email))
+		if($functions->is_banned('mail',$user_email))
 			return 'email_is_banned';
 
 		// does the email already exist?
@@ -63,14 +69,14 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 
 		// build user-groups
 		$groups = array();
-		if($this->cache->get_cache('user_groups')->key_exists($main_group))
+		if($cache->get_cache('user_groups')->key_exists($main_group))
 			$groups[] = $main_group;
 
 		if(is_array($other_groups))
 		{
 			foreach($other_groups as $gid)
 			{
-				if($this->cache->get_cache('user_groups')->key_exists($gid))
+				if($cache->get_cache('user_groups')->key_exists($gid))
 					$groups[] = $gid;
 			}
 		}
@@ -78,6 +84,15 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 		
 		// create profile-entry
 		BS_DAO::get_profile()->create($id,$groups);
+		
+		// fire community-event
+		$status = BS_Community_User::get_status_from_groups($groups);
+		$user = new BS_Community_User(
+			$id,$input->unescape_value($user_name,'post'),
+			$input->unescape_value($user_email,'post'),$status,md5($user_pw),
+			$input->unescape_value($user_pw,'post')
+		);
+		BS_Community_Manager::get_instance()->fire_user_registered($user);
 
 		// send email if required
 		if($notify == 1)
@@ -88,11 +103,11 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 			if(!$email->send_mail())
 			{
 				$msg = $email->get_error_message();
-				$this->msgs->add_error(sprintf($this->locale->lang('email_send_error'),$msg));
+				$msgs->add_error(sprintf($locale->lang('email_send_error'),$msg));
 			}
 		}
 		
-		$this->set_success_msg($this->locale->lang('add_user_success'));
+		$this->set_success_msg($locale->lang('add_user_success'));
 		$this->set_action_performed(true);
 
 		return '';

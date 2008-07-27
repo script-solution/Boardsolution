@@ -19,35 +19,55 @@
  */
 final class BS_ACP_Module_useractivation extends BS_ACP_Module
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_USER_ACT_DELETE => 'delete',
-			BS_ACP_ACTION_USER_ACT_ACTIVATE => 'activate'
-		);
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_USER_ACT_DELETE,'delete');
+		$doc->add_action(BS_ACP_ACTION_USER_ACT_ACTIVATE,'activate');
+
+		$doc->add_breadcrumb($locale->lang('acpmod_user_activation'),$url->get_acpmod_url());
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$msgs = PLIB_Props::get()->msgs();
+		$locale = PLIB_Props::get()->locale();
+		$input = PLIB_Props::get()->input();
+		$functions = PLIB_Props::get()->functions();
+		$url = PLIB_Props::get()->url();
+		$tpl = PLIB_Props::get()->tpl();
+
 		// community exported?
 		if(BS_ENABLE_EXPORT)
 		{
-			$this->msgs->add_error($this->locale->lang('activation_community_exported'));
+			$msgs->add_error($locale->lang('activation_community_exported'));
 			return;
 		}
 		
 		// show delete-message?
-		$action_type = $this->input->get_var('action_type','post',PLIB_Input::STRING);
-		if(($ids = $this->input->get_var('delete','post')) != null && $action_type != 'none')
+		$action_type = $input->get_var('action_type','post',PLIB_Input::STRING);
+		if(($ids = $input->get_var('delete','post')) != null && $action_type != 'none')
 		{
 			if($action_type == 'delete')
 			{
-				$msg = $this->locale->lang('delete_message');
+				$msg = $locale->lang('delete_message');
 				$at = BS_ACP_ACTION_USER_ACT_DELETE;
 			}
 			else
 			{
-				$msg = $this->locale->lang('activate_user');
+				$msg = $locale->lang('activate_user');
 				$at = BS_ACP_ACTION_USER_ACT_ACTIVATE;
 			}
 			
@@ -56,12 +76,12 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 			$names = array();
 			foreach(BS_DAO::get_user()->get_users_by_ids($ids,0) as $user)
 				$names[] = $user['user_name'];
-			$namelist = PLIB_StringHelper::get_enum($names,$this->locale->lang('and'));
+			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
 			
-			$this->functions->add_delete_message(
+			$functions->add_delete_message(
 				sprintf($msg,$namelist),
-				$this->url->get_acpmod_url(0,'&amp;at='.$at.'&amp;ids='.$id_str),
-				$this->url->get_acpmod_url()
+				$url->get_acpmod_url(0,'&amp;at='.$at.'&amp;ids='.$id_str),
+				$url->get_acpmod_url()
 			);
 		}
 		
@@ -83,19 +103,12 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 			);
 		}
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'not_exported' => !BS_ENABLE_EXPORT
 		));
-		$this->tpl->add_array('user',$user);
+		$tpl->add_array('user',$user);
 
-		$this->functions->add_pagination($pagination,$this->url->get_acpmod_url(0,'&amp;site={d}'));
-	}
-	
-	public function get_location()
-	{
-		return array(
-			$this->locale->lang('acpmod_user_activation') => $this->url->get_acpmod_url()
-		);
+		$functions->add_pagination($pagination,$url->get_acpmod_url(0,'&amp;site={d}'));
 	}
 }
 ?>

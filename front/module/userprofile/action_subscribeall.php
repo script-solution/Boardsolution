@@ -21,24 +21,31 @@ final class BS_Front_Action_userprofile_subscribeall extends BS_Front_Action_Bas
 {
 	public function perform_action()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+		$functions = PLIB_Props::get()->functions();
+		$forums = PLIB_Props::get()->forums();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		// is the user loggedin?
-		if($this->cfg['enable_email_notification'] == 0 || !$this->user->is_loggedin())
+		if($cfg['enable_email_notification'] == 0 || !$user->is_loggedin())
 			return 'Subscriptions are disabled or you are a guest';
 
 		// check if the session-id is valid
-		if(!$this->functions->has_valid_get_sid())
+		if(!$functions->has_valid_get_sid())
 			return 'Invalid session-id';
 
 		// collect all existing forum-subscriptions
 		$ex_fids = array();
-		foreach(BS_DAO::get_subscr()->get_subscr_forums_of_user($this->user->get_user_id()) as $data)
+		foreach(BS_DAO::get_subscr()->get_subscr_forums_of_user($user->get_user_id()) as $data)
 			$ex_fids[$data['forum_id']] = true;
 
 		$denied_forums = BS_ForumUtils::get_instance()->get_denied_forums(true);
 
 		// get all missing forum-ids
 		$fids = array();
-		foreach($this->forums->get_all_nodes() as $fnode)
+		foreach($forums->get_all_nodes() as $fnode)
 		{
 			$fdata = $fnode->get_data();
 			// denied forum or category?
@@ -50,24 +57,24 @@ final class BS_Front_Action_userprofile_subscribeall extends BS_Front_Action_Bas
 		}
 
 		// do we have a subscription-limit?
-		if($this->cfg['max_forum_subscriptions'] > 0)
+		if($cfg['max_forum_subscriptions'] > 0)
 		{
-			if(count($fids) + count($ex_fids) > $this->cfg['max_forum_subscriptions'])
+			if(count($fids) + count($ex_fids) > $cfg['max_forum_subscriptions'])
 			{
 				return sprintf(
-					$this->locale->lang('error_subscribe_all_not_possible'),
-					$this->cfg['max_forum_subscriptions']
+					$locale->lang('error_subscribe_all_not_possible'),
+					$cfg['max_forum_subscriptions']
 				);
 			}
 		}
 
 		// add all missing forum-ids
 		foreach($fids as $fid)
-			BS_DAO::get_subscr()->subscribe_forum($fid,$this->user->get_user_id());
+			BS_DAO::get_subscr()->subscribe_forum($fid,$user->get_user_id());
 		
 		$this->set_action_performed(true);
 		$this->add_link(
-			$this->locale->lang('back'),$this->url->get_url('userprofile','&amp;'.BS_URL_LOC.'=forums')
+			$locale->lang('back'),$url->get_url('userprofile','&amp;'.BS_URL_LOC.'=forums')
 		);
 
 		return '';

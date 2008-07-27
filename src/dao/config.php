@@ -36,7 +36,9 @@ class BS_DAO_Config extends PLIB_Singleton
 	 */
 	public function get_all()
 	{
-		return $this->db->sql_rows(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_CONFIG.' ORDER BY group_id ASC,sort ASC'
 		);
 	}
@@ -49,16 +51,38 @@ class BS_DAO_Config extends PLIB_Singleton
 	 */
 	public function get_by_group($group_id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($group_id) || $group_id <= 0)
 			PLIB_Helper::def_error('intgt0','group_id',$group_id);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT c.*
 			 FROM '.BS_TB_CONFIG.' c
 			 LEFT JOIN '.BS_TB_CONFIG_GROUPS.' g ON c.group_id = g.id
 			 WHERE g.parent_id = '.$group_id.'
 			 ORDER BY g.sort ASC,c.sort ASC'
 		);
+	}
+	
+	/**
+	 * Updates the setting-value with given name
+	 *
+	 * @param string $name the setting-name
+	 * @param mixed $value the new value
+	 * @return int the number of affected rows
+	 */
+	public function update_setting_by_name($name,$value)
+	{
+		$db = PLIB_Props::get()->db();
+		
+		if(empty($name))
+			PLIB_Helper::def_error('notempty','name',$name);
+		
+		$db->sql_update(BS_TB_CONFIG,'WHERE name = "'.$name.'"',array(
+			'value' => $value
+		));
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -70,13 +94,15 @@ class BS_DAO_Config extends PLIB_Singleton
 	 */
 	public function update_setting($id,$value)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$this->db->sql_update(BS_TB_CONFIG,'WHERE id = '.$id,array(
+		$db->sql_update(BS_TB_CONFIG,'WHERE id = '.$id,array(
 			'value' => $value
 		));
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -87,11 +113,13 @@ class BS_DAO_Config extends PLIB_Singleton
 	 */
 	public function revert_setting($id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		$this->db->sql_update(BS_TB_CONFIG,'WHERE id = '.$id,array('value' => array('`default`')));
-		return $this->db->get_affected_rows();
+		$db->sql_update(BS_TB_CONFIG,'WHERE id = '.$id,array('value' => array('`default`')));
+		return $db->get_affected_rows();
 	}
 }
 ?>

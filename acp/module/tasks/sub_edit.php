@@ -19,27 +19,51 @@
  */
 final class BS_ACP_SubModule_tasks_edit extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_EDIT_TASK => array('edit','edit')
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_EDIT_TASK,array('edit','edit'));
+		
+		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$doc->add_breadcrumb(
+			$locale->lang('edit_task'),
+			$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
 		);
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		$id = $input->get_var('id','get',PLIB_Input::ID);
 		if($id == null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
-		$tasks = $this->cache->get_cache('tasks');
+		$tasks = $cache->get_cache('tasks');
 		$data = $tasks->get_element($id);
 		if($data === null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
@@ -52,24 +76,16 @@ final class BS_ACP_SubModule_tasks_edit extends BS_ACP_SubModule
 		else
 			list($data['time_hour'],$data['time_min'],$data['time_sec']) = explode(':',$data['task_time']);
 		
-		$this->tpl->add_variables(array(
-			'title' => $this->locale->lang('edit_task'),
+		$tpl->add_variables(array(
+			'title' => $locale->lang('edit_task'),
 			'is_def' => $helper->is_default_task($data['task_file']),
 			'action_type' => BS_ACP_ACTION_EDIT_TASK,
-			'form_target' => $this->url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id),
+			'form_target' => $url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id),
 			'default' => $data,
 			'interval_types' => $helper->get_interval_types()
 		));
 		
-		$this->_request_formular();
-	}
-	
-	public function get_location()
-	{
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
-		return array(
-			$this->locale->lang('edit_task') => $this->url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
-		);
+		$this->request_formular();
 	}
 }
 ?>

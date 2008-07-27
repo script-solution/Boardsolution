@@ -19,13 +19,16 @@ class BS_Install_finished extends BS_Install
 {
 	public function run()
 	{
-		$this->tpl->set_template('step_finished.htm');
-		$this->tpl->add_variables(array(
-			'type' => $this->functions->get_session_var('install_type')
+		$tpl = PLIB_Props::get()->tpl();
+		$functions = PLIB_Props::get()->functions();
+
+		$tpl->set_template('step_finished.htm');
+		$tpl->add_variables(array(
+			'type' => $functions->get_session_var('install_type')
 		));
-		echo $this->tpl->parse_template();
+		echo $tpl->parse_template();
 		
-		$this->functions->clear_session();
+		$functions->clear_session();
 	}
 }
 ?>

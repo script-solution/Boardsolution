@@ -19,38 +19,69 @@
  */
 final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 {
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Page $doc
+	 */
+	public function init($doc)
+	{
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$input = PLIB_Props::get()->input();
+
+		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$doc->add_breadcrumb(
+			$locale->lang('details'),
+			$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmdetails&amp;'.BS_URL_ID.'='.$id)
+		);
+	}
+	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$cfg = PLIB_Props::get()->cfg();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
 		$helper = BS_Front_Module_UserProfile_Helper::get_instance();
 		if($helper->get_pm_permission() < 1)
 		{
-			$this->_report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
 			return;
 		}
 
 		// pm-id valid?
-		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
 		if($id == null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 
 		// grab the data from the db
-		$data = BS_DAO::get_pms()->get_pm_details($id,$this->user->get_user_id());
+		$data = BS_DAO::get_pms()->get_pm_details($id,$user->get_user_id());
 		if($data === false)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 
 		// mark it read?
 		if($data['pm_read'] == 0)
-			BS_DAO::get_pms()->set_read_flag(array($id),$this->user->get_user_id(),1);
+			BS_DAO::get_pms()->set_read_flag(array($id),$user->get_user_id(),1);
 
 		if($data['pm_type'] == 'inbox' && $data['sender_name'] != '')
 		{
-			$user_name = $this->locale->lang('From').' ';
+			$user_name = $locale->lang('From').' ';
 			$user_name .= BS_UserUtils::get_instance()->get_link(
 				$data['sender_id'],$data['sender_name'],$data['sender_user_group']
 			);
@@ -59,7 +90,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 			$user_name = 'Boardsolution';
 		else
 		{
-			$user_name = $this->locale->lang('pm_to').' ';
+			$user_name = $locale->lang('pm_to').' ';
 			$user_name .= BS_UserUtils::get_instance()->get_link(
 				$data['receiver_id'],$data['receiver_name'],$data['receiver_user_group']
 			);
@@ -70,7 +101,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		$bbcode = new BS_BBCode_Parser($data['pm_text'],'posts',$enable_bbcode,$enable_smileys);
 		$text = $bbcode->get_message_for_output();
 
-		$keywords = $this->functions->get_search_keywords();
+		$keywords = $functions->get_search_keywords();
 		if($keywords != null)
 		{
 			$kwhl = new PLIB_KeywordHighlighter($keywords,'<span class="bs_highlight">');
@@ -79,7 +110,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 
 		// determine avatar
 		$avatar = '';
-		if($this->cfg['enable_avatars'] == 1)
+		if($cfg['enable_avatars'] == 1)
 		{
 			if($data['pm_type'] == 'inbox')
 			{
@@ -106,15 +137,15 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 
 		// show top
 		$add = '&amp;'.BS_URL_ID.'='.$id.'&amp;'.BS_URL_KW.'='.$data['pm_type'];
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'date' => PLIB_Date::get_date($data['pm_date']),
 			'text' => $text,
 			'type' => $data['pm_type'],
 			'subject' => $data['pm_title'],
-			'back' => $this->url->get_url(
+			'back' => $url->get_url(
 				'redirect','&amp;'.BS_URL_LOC.'=pm_navigate&amp;'.BS_URL_MODE.'=back'.$add
 			),
-			'forward' => $this->url->get_url(
+			'forward' => $url->get_url(
 				'redirect','&amp;'.BS_URL_LOC.'=pm_navigate&amp;'.BS_URL_MODE.'=forward'.$add
 			),
 			'user_name' => $user_name,
@@ -129,37 +160,33 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 			foreach(BS_DAO::get_attachments()->get_by_pmid($data['id']) as $adata)
 			{
 				$ext = PLIB_FileUtils::get_extension($adata['attachment_path']);
-				$attachment_url = $this->url->get_standalone_url(
-					'front','download','&amp;'.BS_URL_ID.'='.$adata['id']
-				);
+				$attachment_url = $url->get_url('download','&amp;'.BS_URL_ID.'='.$adata['id']);
 	
-				$is_image = $this->cfg['attachments_images_show'] == 1 &&
+				$is_image = $cfg['attachments_images_show'] == 1 &&
 					($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png');
 	
 				if($is_image)
 		    {
-		    	list($att_width,$att_height) = explode('x',$this->cfg['attachments_images_size']);
+		    	list($att_width,$att_height) = explode('x',$cfg['attachments_images_size']);
 		    	$params = '&amp;path='.$adata['attachment_path'].'&amp;width=';
 		    	$params .= $att_width.'&amp;height='.$att_height.'&amp;method=';
-		    	$params .= $this->cfg['attachments_images_resize_method'];
-		    	$image_url = $this->url->get_standalone_url('front','thumbnail',$params);
+		    	$params .= $cfg['attachments_images_resize_method'];
+		    	$image_url = $url->get_url('thumbnail',$params);
 		      $image_title = sprintf(
-		      	$this->locale->lang('download_image'),basename($adata['attachment_path'])
+		      	$locale->lang('download_image'),basename($adata['attachment_path'])
 		      );
-		      $file_icon = '';
-		      $attachment_name = '';
 		    }
 		    else
 		    {
 		    	$image_url = '';
 		    	$image_title = '';
-		    	$file_icon = $this->functions->get_attachment_icon($ext);
-		    	$attachment_name = basename($adata['attachment_path']);
 		    }
+		    $file_icon = $functions->get_attachment_icon($ext);
+		    $attachment_name = basename($adata['attachment_path']);
 	
 				$attachments[] = array(
 					'is_image' => $is_image,
-					'file_icon' => $file_icon,
+					'fileicon' => $file_icon,
 					'image_url' => $image_url,
 					'image_title' => $image_title,
 					'attachment_url' => $attachment_url,
@@ -169,26 +196,17 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 			}
 		}
 
-		$this->tpl->add_array('attachments',$attachments);
+		$tpl->add_array('attachments',$attachments);
 
 		// show bottom
 		$uid = ($data['pm_type'] == 'inbox') ? $data['sender_id'] : $data['receiver_id'];
 		$params = '&amp;'.BS_URL_LOC.'=pmbanlist&amp;'.BS_URL_AT.'='.BS_ACTION_BAN_USER;
 		$params .= '&amp;'.BS_URL_ID.'='.$uid;
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'id' => $data['id'],
-			'ban_user_url' => $this->url->get_url('userprofile',$params,'&amp;',true),
+			'ban_user_url' => $url->get_url('userprofile',$params,'&amp;',true),
 			'show_reply_btn' => $data['pm_type'] == 'inbox'
 		));
-	}
-	
-	public function get_location()
-	{
-		$id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$url = $this->url->get_url(0,'&amp;'.BS_URL_LOC.'=pmdetails&amp;'.BS_URL_ID.'='.$id);
-		return array(
-			$this->locale->lang('details') => $url
-		);
 	}
 }
 ?>

@@ -77,8 +77,10 @@ final class BS_ACP_Utils extends PLIB_Singleton
 	 */
 	public function get_userlink($id,$name)
 	{
-		$url = $this->url->get_standalone_url('acp','user_details','&amp;id='.$id);
-		$user = '<a href="javascript:PLIB_openDefaultPopup(\''.$url.'\',';
+		$url = PLIB_Props::get()->url();
+		
+		$furl = $url->get_acpmod_url('userdetails','&amp;id='.$id);
+		$user = '<a href="javascript:PLIB_openDefaultPopup(\''.$furl.'\',';
 		$user .= '\'UserDetails\',800,500);">'.$name.'</a>';
 		return $user;
 	}
@@ -98,10 +100,10 @@ final class BS_ACP_Utils extends PLIB_Singleton
 		if($order == $order_value)
 		{
 			$result = $title.' <a href="'.$url.'order='.$order_value.'&amp;ad=ASC">';
-			$result .= '<img src="'.PLIB_Path::inner().'acp/images/asc.gif" alt="ASC" />';
+			$result .= '<img src="'.PLIB_Path::client_app().'acp/images/asc.gif" alt="ASC" />';
 			$result .= '</a> ';
 			$result .= '<a href="'.$url.'order='.$order_value.'&amp;ad=DESC">';
-			$result .= '<img src="'.PLIB_Path::inner().'acp/images/desc.gif" alt="DESC" />';
+			$result .= '<img src="'.PLIB_Path::client_app().'acp/images/desc.gif" alt="DESC" />';
 			$result .= '</a>';
 		}
 		else
@@ -123,16 +125,18 @@ final class BS_ACP_Utils extends PLIB_Singleton
 	 */
 	public function get_yesno($bool,$colored = false,$yesisgreen = true)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		if($colored)
 		{
 			$green = $yesisgreen ? '#008000' : '#ff0000';
 			$red = $yesisgreen ? '#ff0000' : '#008000';
 			if($bool)
-				return '<span style="color: '.$green.';">'.$this->locale->lang('yes').'</span>';
-			return '<span style="color: '.$red.';">'.$this->locale->lang('no').'</span>';
+				return '<span style="color: '.$green.';">'.$locale->lang('yes').'</span>';
+			return '<span style="color: '.$red.';">'.$locale->lang('no').'</span>';
 		}
 		
-		return $bool ? $this->locale->lang('yes') : $this->locale->lang('no');
+		return $bool ? $locale->lang('yes') : $locale->lang('no');
 	}
 	
 	/**
@@ -143,6 +147,8 @@ final class BS_ACP_Utils extends PLIB_Singleton
 	 */
 	public function send_email_to_user($mail,$user_ids)
 	{
+		$msgs = PLIB_Props::get()->msgs();
+
 		$error_msgs = array();
 		foreach(BS_DAO::get_user()->get_users_by_ids($user_ids) as $data)
 		{
@@ -156,10 +162,10 @@ final class BS_ACP_Utils extends PLIB_Singleton
 		}
 		
 		foreach(array_keys($error_msgs) as $error)
-			$this->msgs->add_error($error);
+			$msgs->add_error($error);
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

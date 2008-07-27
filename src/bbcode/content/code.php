@@ -35,10 +35,12 @@ final class BS_BBCode_Content_Code extends BS_BBCode_Content_Default
 	 */
 	public function get_param($param)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		$this->_old_param = PLIB_String::strtolower($param);
-		if($param && $this->cfg['msgs_code_highlight'])
+		if($param && $cfg['msgs_code_highlight'])
 		{
-			$hldir = PLIB_Path::inner().'bbceditor/highlighter/';
+			$hldir = PLIB_Path::server_app().'bbceditor/highlighter/';
 			PLIB_Highlighting_Languages::ensure_inited($hldir.'languages.xml');
 			$name = PLIB_Highlighting_Languages::get_language_name($this->_old_param);
 			if($name === null)
@@ -51,16 +53,18 @@ final class BS_BBCode_Content_Code extends BS_BBCode_Content_Default
 
 	public function get_text($inner,$param)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		$code = $this->_get_trimmed_code($inner);
 		
-		if($this->cfg['msgs_code_line_numbers'])
+		if($cfg['msgs_code_line_numbers'])
 			$line_count = count(PLIB_Array_Utils::advanced_explode("\n",$code));
 							
 		// highlight code?
-		$use_highlighting = $this->cfg['msgs_code_highlight'] && $param;
+		$use_highlighting = $cfg['msgs_code_highlight'] && $param;
 		if($use_highlighting)
 		{
-			$hldir = PLIB_Path::inner().'bbceditor/highlighter/';
+			$hldir = PLIB_Path::server_app().'bbceditor/highlighter/';
 			PLIB_Highlighting_Languages::ensure_inited($hldir.'languages.xml');
 			
 			// does the language exist?
@@ -102,7 +106,7 @@ final class BS_BBCode_Content_Code extends BS_BBCode_Content_Default
 		}
 		
 		// add line numbers?
-		if($this->cfg['msgs_code_line_numbers'])
+		if($cfg['msgs_code_line_numbers'])
 		{
 			$fcode = '<table width="100%" cellpadding="0" cellspacing="0">';
 			$fcode .= '	<tr>';

@@ -21,10 +21,13 @@ final class BS_ACP_Action_bbcode_edit extends BS_ACP_Action_Base
 {
 	public function perform_action($mode = 'edit')
 	{
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+
 		// check id if we want to edit
 		if($mode == 'edit')
 		{
-			$id = $this->input->get_var('id','get',PLIB_Input::ID);
+			$id = $input->get_var('id','get',PLIB_Input::ID);
 			if($id == null)
 				return 'The parameter id is invalid';
 			
@@ -34,24 +37,24 @@ final class BS_ACP_Action_bbcode_edit extends BS_ACP_Action_Base
 		}
 		
 		// grab parameters from POST
-		$name = $this->input->get_var('name','post',PLIB_Input::STRING);
-		$type = $this->input->get_var('type','post',PLIB_Input::STRING);
-		$type_custom = $this->input->get_var('type_custom','post',PLIB_Input::STRING);
-		$content = $this->input->get_var('content','post',PLIB_Input::STRING);
-		$content_custom = $this->input->get_var('content_custom','post',PLIB_Input::STRING);
-		$param = $this->input->correct_var(
+		$name = $input->get_var('name','post',PLIB_Input::STRING);
+		$type = $input->get_var('type','post',PLIB_Input::STRING);
+		$type_custom = $input->get_var('type_custom','post',PLIB_Input::STRING);
+		$content = $input->get_var('content','post',PLIB_Input::STRING);
+		$content_custom = $input->get_var('content_custom','post',PLIB_Input::STRING);
+		$param = $input->correct_var(
 			'param','post',PLIB_Input::STRING,array('no','optional','required'),'no'
 		);
-		$param_type = $this->input->correct_var(
+		$param_type = $input->correct_var(
 			'param_type','post',PLIB_Input::STRING,
 			array('text','integer','identifier','color','url','mail'),'text'
 		);
-		$replacement = $this->input->get_var('replacement','post',PLIB_Input::STRING);
-		$replacement_param = $this->input->get_var('replacement_param','post',PLIB_Input::STRING);
-		$allowed_content = $this->input->get_var('allowed_content','post',PLIB_Input::STRING);
-		$allow_nesting = $this->input->get_var('allow_nesting','post',PLIB_Input::INT_BOOL);
-		$ignore_whitespace = $this->input->get_var('ignore_whitespace','post',PLIB_Input::INT_BOOL);
-		$ignore_unknown_tags = $this->input->get_var('ignore_unknown_tags','post',PLIB_Input::INT_BOOL);
+		$replacement = $input->get_var('replacement','post',PLIB_Input::STRING);
+		$replacement_param = $input->get_var('replacement_param','post',PLIB_Input::STRING);
+		$allowed_content = $input->get_var('allowed_content','post',PLIB_Input::STRING);
+		$allow_nesting = $input->get_var('allow_nesting','post',PLIB_Input::INT_BOOL);
+		$ignore_whitespace = $input->get_var('ignore_whitespace','post',PLIB_Input::INT_BOOL);
+		$ignore_unknown_tags = $input->get_var('ignore_unknown_tags','post',PLIB_Input::INT_BOOL);
 		
 		// check parameters
 		if(empty($name))
@@ -114,7 +117,7 @@ final class BS_ACP_Action_bbcode_edit extends BS_ACP_Action_Base
 			BS_DAO::get_bbcodes()->create($fields);
 		
 		// we are finished :)
-		$this->set_success_msg($this->locale->lang('tag_'.$mode.'_success'));
+		$this->set_success_msg($locale->lang('tag_'.$mode.'_success'));
 		$this->set_action_performed(true);
 
 		return '';

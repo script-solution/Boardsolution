@@ -4,7 +4,15 @@
 
 <p class="a_block">{glocale.lang('template_editor_hint')}</p>
 <p class="a_block_pad">{glocale.lang('template_editor_other_theme')}</p>
-<p class="a_block_pad"><b>{glocale.lang('folder')}:</b> {position}</p>
+<p class="a_block_pad">
+	<b>{glocale.lang('folder')}:</b>
+	{set current=''}
+	{loop position as pos}
+	{set current=current~pos~'/'}
+	<a href="{gurl.get_acpmod_url(0,'&amp;path='~current)}">{pos}</a>
+	{if position.current != position.last}/{endif}
+	{endloop}
+</p>
 
 <div class="a_border a_pad">
 	<h1 class="a_topic">{glocale.lang('acpmod_tpleditor')}</h1>
@@ -36,14 +44,19 @@
 			<td align="center" class="hlCol">&lt;DIR&gt;</td>
 			{else}
 			<td class="hlCol">
-			<img src="{gpath}images/filetypes/{item:image}" alt="File" /> {item:name}
+			{if item:is_img}
+			<img src="{item:path}" height="15" alt="Image" />
+			{else}
+			<img src="{gpath}images/filetypes/{item:image}" alt="File" />
+			{endif}
+			{item:name}
 			{if item:exists_in_theme == false}*{endif}
 			</td>
 			<td align="center" class="hlCol">{item:filesize} Bytes</td>
 			{endif}
 			<td align="center" class="hlCol">{item:last_modified}</td>
 			<td align="center" class="hlCol">
-			{if item:is_dir}
+			{if item:is_dir || item:is_img}
 			-
 			{else}
 			<a href="{item:edit_url}">

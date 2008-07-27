@@ -43,9 +43,11 @@ final class BS_API_Module_latest_topics extends BS_API_Module
 	
 	public function run($params = array('limit' => 10))
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		// denied forums?
 		$denied = array();
-		if($this->cfg['hide_denied_forums'] == 1)
+		if($cfg['hide_denied_forums'] == 1)
 			$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
 		
 		// ensure that the params are valid

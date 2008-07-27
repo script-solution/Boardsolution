@@ -27,10 +27,19 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 	 */
 	public static function get_default()
 	{
-		$input = PLIB_Object::get_prop('input');
-		$user = PLIB_Object::get_prop('user');
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
 		
 		$receiver = $input->get_var('receiver','post');
+		if(!is_array($receiver))
+			$receiver = array();
+		// read additional receivers from the textfield if the user hasn't transferred them
+		$new_receiver = $input->get_var('new_receiver','post',PLIB_Input::STRING);
+		if($new_receiver)
+		{
+			$other = PLIB_Array_Utils::advanced_explode(',',$new_receiver);
+			$receiver = array_merge($receiver,PLIB_Array_Utils::trim($other));
+		}
 		$title = $input->get_var('pm_title','post',PLIB_Input::STRING);
 		$post_text = $input->get_var('text','post',PLIB_Input::STRING);
 		$att = BS_Front_Action_Plain_Attachments::get_default();
@@ -95,6 +104,13 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 	private $_receiver_mails = array();
 	
 	/**
+	 * The number of PMs in the inboxes of the receivers
+	 *
+	 * @var array
+	 */
+	private $_inbox_counts = array();
+	
+	/**
 	 * Constructor
 	 *
 	 * @param int $user_id the id of the sender
@@ -130,12 +146,15 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 	
 	public function check_data()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+
 		// pms disabled?
-		if($this->cfg['enable_pms'] == 0)
+		if($cfg['enable_pms'] == 0)
 			return 'PMs are disabled!';
 		
 		// check the user-id if it is not the current one
-		if($this->user->get_user_id() != $this->_user_id)
+		if($user->get_user_id() != $this->_user_id)
 		{
 			$data = BS_DAO::get_user()->get_user_by_id($this->_user_id);
 			if($data === false)
@@ -144,7 +163,7 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 
 		// check the total number of pms
 		$outbox_num = BS_DAO::get_pms()->get_count_in_folder('outbox',$this->_user_id);
-		if($this->cfg['pm_max_outbox'] > 0 && $outbox_num > $this->cfg['pm_max_outbox'])
+		if($cfg['pm_max_outbox'] > 0 && $outbox_num > $cfg['pm_max_outbox'])
 			return 'maxoutbox';
 		
 		// check attachments if available
@@ -171,7 +190,7 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 		{
 			// inbox full?
 			$r_inbox = BS_DAO::get_pms()->get_count_in_folder('inbox',$data['id']);
-			if($this->cfg['pm_max_inbox'] > 0 && $r_inbox > $this->cfg['pm_max_inbox'])
+			if($cfg['pm_max_inbox'] > 0 && $r_inbox > $cfg['pm_max_inbox'])
 				continue;
 			
 			// pms disabled?
@@ -186,6 +205,7 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 			if(in_array($data['id'],$this->_receiver_ids))
 				continue;
 
+			$this->_inbox_counts[] = $r_inbox;
 			$this->_receiver[] = $receiver[$i];
 			$this->_receiver_ids[] = $data['id'];
 			if($data['enable_pm_email'] == 1)
@@ -210,9 +230,13 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
+		$db = PLIB_Props::get()->db();
+		$cfg = PLIB_Props::get()->cfg();
+		$msgs = PLIB_Props::get()->msgs();
+
 		parent::perform_action();
 		
-		$this->db->start_transaction();
+		$db->start_transaction();
 		
 		for($i = 0;$i < count($this->_receiver_ids);$i++)
 		{
@@ -221,6 +245,17 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 			
 			$pmid = $this->_insert_pm($this->_receiver_ids[$i],'outbox');
 			$this->_insert_attachments($pmid);
+			
+			// do we have to send the "pm-inbox-full-email"?
+			$percent = 100 / ($cfg['pm_max_inbox'] / $this->_inbox_counts[$i]);
+			if($percent >= BS_PM_INBOX_FULL_EMAIL_SINCE)
+			{
+				$mail = BS_EmailFactory::get_instance()->get_pm_inbox_full_mail(
+					$this->_inbox_counts[$i],$this->_receiver_email[$this->_receiver_ids[$i]]
+				);
+				if(!$mail->send_mail())
+					$msgs->add_error($mail->get_error_message());
+			}
 
 			// do we have to send an email?
 			if(isset($this->_receiver_email[$this->_receiver_ids[$i]]))
@@ -229,11 +264,11 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 					$this->_receiver_email[$this->_receiver_ids[$i]]
 				);
 				if(!$email->send_mail())
-					$this->msgs->add_error($email->get_error_message());
+					$msgs->add_error($email->get_error_message());
 			}
 		}
 		
-		$this->db->commit_transaction();
+		$db->commit_transaction();
 	}
 	
 	/**
@@ -275,7 +310,7 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 		}
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

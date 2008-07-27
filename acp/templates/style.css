@@ -120,7 +120,7 @@ input.bs_bbcode_notice {
 	background-color: #ebebeb;
 }
 
-#bbcode_area_resizer {
+.bbcode_area_resizer {
 	width: 91%;
 	margin: 0;
 	margin-bottom: 1em;
@@ -199,13 +199,13 @@ span.a_msg_notice {
 	text-align: right;
 	border: 1px solid #777;
 	background-color: #ebebeb;
-	padding: 0.4em;
+	padding: 0.6em;
 	padding-right: 0px;
-	padding-bottom: 4px;
+	padding-bottom: 6px;
 }
 
 .a_menubar a {
-	padding: 0.4em;
+	padding: 0.6em;
 	margin-right: 1px;
 	border-left: 1px solid #777;
 	text-decoration: none;

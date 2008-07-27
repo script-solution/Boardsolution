@@ -19,14 +19,14 @@
  */
 final class BS_ACP_Module_Config_Manager extends PLIB_Config_Manager
 {
-	protected function _get_item($data)
+	protected function get_item($data)
 	{
-		$item = parent::_get_item($data);
+		$item = parent::get_item($data);
 		if($item !== null)
 			return $item;
 		
 		$type = $data->get_type();
-		$file = PLIB_Path::inner().'acp/module/config/item/'.$type.'.php';
+		$file = PLIB_Path::server_app().'acp/module/config/item/'.$type.'.php';
 		if(is_file($file))
 		{
 			include_once($file);

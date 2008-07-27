@@ -19,19 +19,20 @@
  */
 final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 {
-	public function get_actions()
-	{
-		return array();
-	}
-	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
 		$helper = BS_ACP_Module_TplEditor_Helper::get_instance();
 		$path = $helper->get_path();
 		$def_path = $helper->get_path_in_default();
-
-		$this->tpl->add_variables(array(
-			'position' => $path,
+		
+		$tpl->add_variables(array(
+			'position' => explode('/',$path),
 			'parent_path' => $helper->get_parent_path(),
 			'not_in_root' => $path != null && $path != ''
 		));
@@ -45,7 +46,8 @@ final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 			{
 				if(is_dir($def_path.'/'.$file))
 					$dirs[] = $file;
-				else if(($ext = PLIB_FileUtils::get_extension($file)) == 'htm' || $ext == 'css' || $ext == 'js')
+				else if(($ext = PLIB_FileUtils::get_extension($file)) == 'htm' || $ext == 'css' || $ext == 'js'
+					|| $ext == 'jpg' || $ext == 'gif' || $ext == 'png')
 					$files[] = $file;
 			}
 		}
@@ -62,19 +64,20 @@ final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 			$is_dir = $dir_content[$i]['type'] == 'dir';
 			$item_name = $dir_content[$i]['name'];
 			$exists_in_theme = true;
+			$ext = PLIB_FileUtils::get_extension($item_name);
 			
 			if(is_file($path.'/'.$item_name))
 				$file_path = $path.'/'.$item_name;
 			else
 			{
-				$exists_in_theme = is_dir($path.'/'.$item_name);// || strpos($path,'themes') === false;
+				$exists_in_theme = is_dir($path.'/'.$item_name);
 				$file_path = $def_path.'/'.$item_name;
 			}
 
 			if($is_dir)
 			{
 				$goto_path = ($path != '') ? $path.'/'.$item_name : $item_name;
-				$url = $this->url->get_acpmod_url(0,'&amp;action=view&amp;path='.$goto_path);
+				$vurl = $url->get_acpmod_url(0,'&amp;action=view&amp;path='.$goto_path);
 				$edit_url = '';
 				$image = '';
 				$filesize = '';
@@ -83,7 +86,8 @@ final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 			{
 				$image = BS_ACP_Utils::get_instance()->get_file_image($file_path);
 				$filesize = number_format(filesize($file_path),0,',','.');
-				$edit_url = $this->url->get_acpmod_url(
+				$vurl = '';
+				$edit_url = $url->get_acpmod_url(
 					0,'&amp;action=edit&amp;path='.$path.'&amp;file='.$item_name
 				);
 			}
@@ -94,8 +98,10 @@ final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 				$last_modified = '<i>Unknown</i>';
 
 			$items[] = array(
-				'url' => $url,
+				'url' => $vurl,
 				'is_dir' => $is_dir,
+				'is_img' => $ext == 'jpg' || $ext == 'png' || $ext == 'gif',
+				'path' => $file_path,
 				'name' => $item_name,
 				'image' => $image,
 				'filesize' => $filesize,
@@ -105,7 +111,7 @@ final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$this->tpl->add_array('items',$items);
+		$tpl->add_array('items',$items);
 	}
 
 	/**
@@ -127,11 +133,6 @@ final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 			$dir_content[] = array('type' => 'file','name' => $files[$i]);
 
 		return $dir_content;
-	}
-	
-	public function get_location()
-	{
-		return array();
 	}
 }
 ?>

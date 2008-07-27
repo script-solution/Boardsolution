@@ -21,58 +21,64 @@ final class BS_Front_Action_chg_read_status extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
+		$functions = PLIB_Props::get()->functions();
+		$input = PLIB_Props::get()->input();
+		$unread = PLIB_Props::get()->unread();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		// check if the session-id is valid
-		if(!$this->functions->has_valid_get_sid())
+		if(!$functions->has_valid_get_sid())
 			return 'Invalid session-id';
 
-		$read = $this->input->correct_var(
+		$read = $input->correct_var(
 			BS_URL_LOC,'get',PLIB_Input::STRING,array('read','unread'),'read'
 		);
-		$mode = $this->input->correct_var(
+		$mode = $input->correct_var(
 			BS_URL_MODE,'get',PLIB_Input::STRING,array('topics','forum','all'),'topics'
 		);
-		$site = $this->input->get_var(BS_URL_SITE,'get',PLIB_Input::ID);
+		$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::ID);
 
 		switch($mode)
 		{
 			case 'topics':
-				$id_str = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
+				$id_str = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
 				if(!($ids = PLIB_StringHelper::get_ids($id_str)))
 					return 'Invalid id-string got via GET';
 
 				if($read == 'read')
-					$this->unread->mark_topics_read($ids);
+					$unread->mark_topics_read($ids);
 				else
-					$this->unread->mark_topics_unread($ids);
+					$unread->mark_topics_unread($ids);
 
-				$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+				$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 				if($fid != null)
-					$this->add_link($this->locale->lang('back'),$this->url->get_topics_url($fid,'&amp;',$site));
+					$this->add_link($locale->lang('back'),$url->get_topics_url($fid,'&amp;',$site));
 				else
-					$this->add_link($this->locale->lang('back'),$this->url->get_url('unread'));
+					$this->add_link($locale->lang('back'),$url->get_url('unread'));
 				break;
 
 			case 'forum':
-				$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+				$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 				if($fid == null)
 					return 'Invalid forum-id "'.$fid.'"';
 
-				$this->unread->mark_forum_read($fid);
+				$unread->mark_forum_read($fid);
 
-				if($this->input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING) == 'topics')
-					$this->add_link($this->locale->lang('back'),$this->url->get_topics_url($fid,'&amp;',$site));
+				if($input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING) == 'topics')
+					$this->add_link($locale->lang('back'),$url->get_topics_url($fid,'&amp;',$site));
 				else
-					$this->add_link($this->locale->lang('back'),$this->url->get_forums_url());
+					$this->add_link($locale->lang('back'),$url->get_forums_url());
 				break;
 
 			case 'all':
-				$this->unread->mark_all_read();
+				$unread->mark_all_read();
 
-				$this->add_link($this->locale->lang('forumindex'),$this->url->get_forums_url());
+				$this->add_link($locale->lang('forumindex'),$url->get_forums_url());
 				break;
 		}
 
-		$this->set_success_msg($this->locale->lang('success_'.BS_ACTION_CHANGE_READ_STATUS.'_'.$read));
+		$this->set_success_msg($locale->lang('success_'.BS_ACTION_CHANGE_READ_STATUS.'_'.$read));
 		$this->set_action_performed(true);
 
 		return '';

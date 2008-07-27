@@ -19,26 +19,48 @@
  */
 final class BS_ACP_SubModule_linklist_edit extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_EDIT_LINK => 'edit'
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_EDIT_LINK,'edit');
+		
+		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$doc->add_breadcrumb(
+			$locale->lang('edit'),
+			$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
 		);
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+
+		$id = $input->get_var('id','get',PLIB_Input::ID);
 		if($id == null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
 		$data = BS_DAO::get_links()->get_by_id($id);
 		if($data === false)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
@@ -46,35 +68,27 @@ final class BS_ACP_SubModule_linklist_edit extends BS_ACP_SubModule
 		foreach(BS_DAO::get_links()->get_categories() as $name)
 			$options[$name] = $name;
 
-		$this->_request_formular();
+		$this->request_formular();
 		
 		// load posting-form
 		$form = new BS_PostingForm(
-			$this->locale->lang('email_text').':',$data['link_desc_posted'],'lnkdesc'
+			$locale->lang('email_text').':',$data['link_desc_posted'],'desc'
 		);
 		
 		// set colspan for the post-form-template
-		$this->tpl->set_template('inc_post_form.htm');
-		$this->tpl->add_variables(array(
+		$tpl->set_template('inc_post_form.htm');
+		$tpl->add_variables(array(
 			'colspan_main' => 1
 		));
-		$this->tpl->restore_template();
+		$tpl->restore_template();
 		
 		$form->add_form();
 
-		$this->tpl->add_array('data',$data);
-		$this->tpl->add_variables(array(
+		$tpl->add_array('data',$data);
+		$tpl->add_variables(array(
 			'id' => $id,
 			'categories' => $options
 		));
-	}
-	
-	public function get_location()
-	{
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
-		return array(
-			$this->locale->lang('edit') => $this->url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
-		);
 	}
 }
 ?>

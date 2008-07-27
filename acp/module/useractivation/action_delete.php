@@ -21,10 +21,13 @@ final class BS_ACP_Action_useractivation_delete extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+
 		if(BS_ENABLE_EXPORT)
 			return 'The community is exported';
 		
-		$idstr = $this->input->get_var('ids','get',PLIB_Input::STRING);
+		$idstr = $input->get_var('ids','get',PLIB_Input::STRING);
 		if(!($ids = PLIB_StringHelper::get_ids($idstr)))
 			return 'Got an invalid id-string via GET';
 		
@@ -41,7 +44,7 @@ final class BS_ACP_Action_useractivation_delete extends BS_ACP_Action_Base
 			$ids
 		);
 		
-		$this->set_success_msg($this->locale->lang('accounts_deleted_success'));
+		$this->set_success_msg($locale->lang('accounts_deleted_success'));
 		$this->set_action_performed(true);
 
 		return '';

@@ -19,17 +19,45 @@
  */
 final class BS_ACP_SubModule_bbcode_edit extends BS_ACP_SubModule
 {
-	public function get_actions()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		return array(
-			BS_ACP_ACTION_ADD_BBCODE => array('edit','add'),
-			BS_ACP_ACTION_EDIT_BBCODE => array('edit','edit')
-		);
+		parent::init($doc);
+		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_ADD_BBCODE,array('edit','add'));
+		$doc->add_action(BS_ACP_ACTION_EDIT_BBCODE,array('edit','edit'));
+
+		$id = $input->get_var('id','get',PLIB_Input::ID);
+		if($id == null)
+			$doc->add_breadcrumb($locale->lang('add_tag'),$url->get_acpmod_url(0,'&amp;action=edit'));
+		else
+		{
+			$doc->add_breadcrumb(
+				$locale->lang('edit_tag'),
+				$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
+			);
+		}
 	}
 	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
+		$id = $input->get_var('id','get',PLIB_Input::ID);
 		if($id == null)
 		{
 			$data = array(
@@ -45,24 +73,24 @@ final class BS_ACP_SubModule_bbcode_edit extends BS_ACP_SubModule
 				'ignore_unknown_tags' => 0,
 				'allowed_content' => 'inline,link'
 			);
-			$title = $this->locale->lang('add_tag');
+			$title = $locale->lang('add_tag');
 			$action_type = BS_ACP_ACTION_ADD_BBCODE;
 		}
 		else
 		{
 			$data = BS_DAO::get_bbcodes()->get_by_id($id);
-			$title = $this->locale->lang('edit_tag');
+			$title = $locale->lang('edit_tag');
 			$action_type = BS_ACP_ACTION_EDIT_BBCODE;
 		}
 		
-		$form = $this->_request_formular();
+		$form = $this->request_formular();
 		
 		$types = array();
 		$alltypes = array_merge(array('inline','block','link'),BS_DAO::get_bbcodes()->get_types());
 		foreach($alltypes as $type)
 		{
-			if($this->locale->contains_lang('tag_type_'.$type))
-				$types[$type] = $this->locale->lang('tag_type_'.$type);
+			if($locale->contains_lang('tag_type_'.$type))
+				$types[$type] = $locale->lang('tag_type_'.$type);
 			else
 				$types[$type] = $type;
 		}
@@ -70,25 +98,25 @@ final class BS_ACP_SubModule_bbcode_edit extends BS_ACP_SubModule
 		$contents = array();
 		foreach(BS_DAO::get_bbcodes()->get_contents() as $con)
 		{
-			if($this->locale->contains_lang('tag_content_'.$con))
-				$contents[$con] = $this->locale->lang('tag_content_'.$con);
+			if($locale->contains_lang('tag_content_'.$con))
+				$contents[$con] = $locale->lang('tag_content_'.$con);
 			else
 				$contents[$con] = $con;
 		}
 		
 		$param_types = array(
-			'text' => $this->locale->lang('tag_param_type_text'),
-			'identifier' => $this->locale->lang('tag_param_type_identifier'),
-			'integer' => $this->locale->lang('tag_param_type_integer'),
-			'color' => $this->locale->lang('tag_param_type_color'),
-			'url' => $this->locale->lang('tag_param_type_url'),
-			'mail' => $this->locale->lang('tag_param_type_mail'),
+			'text' => $locale->lang('tag_param_type_text'),
+			'identifier' => $locale->lang('tag_param_type_identifier'),
+			'integer' => $locale->lang('tag_param_type_integer'),
+			'color' => $locale->lang('tag_param_type_color'),
+			'url' => $locale->lang('tag_param_type_url'),
+			'mail' => $locale->lang('tag_param_type_mail'),
 		);
 		
 		$params = array(
-			'no' => $this->locale->lang('tag_param_no'),
-			'optional' => $this->locale->lang('tag_param_optional'),
-			'required' => $this->locale->lang('tag_param_required')
+			'no' => $locale->lang('tag_param_no'),
+			'optional' => $locale->lang('tag_param_optional'),
+			'required' => $locale->lang('tag_param_required')
 		);
 		$param_combo = new PLIB_HTML_ComboBox('param','param',null,$data['param']);
 		$param_combo->set_options($params);
@@ -96,8 +124,8 @@ final class BS_ACP_SubModule_bbcode_edit extends BS_ACP_SubModule
 			$param_combo->set_value($form->get_input_value('param'));
 		$param_combo->set_custom_attribute('onchange','toggleParameter();');
 		
-		$site = $this->input->get_var('site','get',PLIB_Input::INTEGER);
-		$this->tpl->add_variables(array(
+		$site = $input->get_var('site','get',PLIB_Input::INTEGER);
+		$tpl->add_variables(array(
 			'default' => $data,
 			'site' => $site,
 			'types' => $types,
@@ -106,23 +134,8 @@ final class BS_ACP_SubModule_bbcode_edit extends BS_ACP_SubModule
 			'param_types' => $param_types,
 			'action_type' => $action_type,
 			'title' => $title,
-			'form_target' => $this->url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id.'&amp;site='.$site)
+			'form_target' => $url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id.'&amp;site='.$site)
 		));
-	}
-	
-	public function get_location()
-	{
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
-		if($id == null)
-		{
-			return array(
-				$this->locale->lang('add_tag') => $this->url->get_acpmod_url(0,'&amp;action=edit')
-			);
-		}
-		
-		return array(
-			$this->locale->lang('edit_tag') => $this->url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
-		);
 	}
 }
 ?>

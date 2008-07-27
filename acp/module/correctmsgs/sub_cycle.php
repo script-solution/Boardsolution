@@ -19,26 +19,35 @@
  */
 final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 {
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		$locale = PLIB_Props::get()->locale();
+		$tpl = PLIB_Props::get()->tpl();
+		$url = PLIB_Props::get()->url();
+
 		$helper = BS_ACP_Module_CorrectMsgs_Helper::get_instance();
 		
-		$pos = $this->input->get_var('pos','get',PLIB_Input::INTEGER);
+		$pos = $input->get_var('pos','get',PLIB_Input::INTEGER);
 		if($pos === null)
 			$pos = 0;
 		
 		// load messages from session
-		$msgs = $this->user->get_session_data('im_data');
+		$msgs = $user->get_session_data('im_data');
 		if($msgs === false)
 		{
 			$msgs = $helper->get_incorrect_messages();
-			$this->user->set_session_data('im_data',$msgs);
+			$user->set_session_data('im_data',$msgs);
 		}
 		
 		// move forward / backwards
-		if($this->input->isset_var('prev','post') && $pos > 0)
+		if($input->isset_var('prev','post') && $pos > 0)
 			$pos--;
-		else if($this->input->isset_var('next','post') && $pos < count($msgs) - 1)
+		else if($input->isset_var('next','post') && $pos < count($msgs) - 1)
 			$pos++;
 		
 		// determine data of the message
@@ -54,63 +63,92 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 				$data = BS_DAO::get_profile()->get_user_by_id($id);
 				$data['use_bbcode'] = true;
 				$data['use_smileys'] = true;
+				$data['text_posted'] = $data['signature_posted'];
 				break;
 			
 			case 'pm':
 				$data = BS_DAO::get_pms()->get_by_id($id);
 				$data['use_bbcode'] = true;
 				$data['use_smileys'] = true;
+				$data['text_posted'] = $data['pm_text_posted'];
 				break;
 			
 			case 'link':
 				$data = BS_DAO::get_links()->get_by_id($id);
 				$data['use_bbcode'] = true;
 				$data['use_smileys'] = true;
+				$data['text_posted'] = $data['link_desc_posted'];
+				break;
+			
+			case 'event':
+				$data = BS_DAO::get_events()->get_by_id($id);
+				$data['use_bbcode'] = true;
+				$data['use_smileys'] = true;
+				$data['text_posted'] = $data['description_posted'];
 				break;
 		}
 		
-		$this->locale->add_language_file('messages');
+		$locale->add_language_file('messages');
 		
 		$error = '';
-		if($this->input->isset_var('test','post'))
-			$data['text_posted'] = $this->input->get_var('text','post',PLIB_Input::STRING);
+		if($input->isset_var('test','post'))
+			$data['text_posted'] = $input->get_var('text','post',PLIB_Input::STRING);
 
 		$err = $this->_update_message($data['id'],$data['text_posted'],$data['use_bbcode'],
-			$data['use_smileys'],$type,$this->input->isset_var('test','post'));
+			$data['use_smileys'],$type,$input->isset_var('test','post'));
 		if($err != '')
 		{
-			$msg = $this->locale->contains_lang('error_'.$err) ? $this->locale->lang('error_'.$err) : $err;
-			$error = '<span style="color: #FF0000;"><b>'.$this->locale->lang('error').':</b></span> '.$msg;
+			$msg = $locale->contains_lang('error_'.$err) ? $locale->lang('error_'.$err) : $err;
+			$error = '<span style="color: #FF0000;"><b>'.$locale->lang('error').':</b></span> '.$msg;
 		}
 		else
-			$error = '<span style="color: #008000;"><b>'.$this->locale->lang('edit_messages_success').'</b></span>';
+			$error = '<span style="color: #008000;"><b>'.$locale->lang('edit_messages_success').'</b></span>';
 
 		$data['text_posted'] = stripslashes($data['text_posted']);
 		
 		switch($type)
 		{
 			case 'post':
-				$url = $this->url->get_frontend_url(
+				$furl = $url->get_frontend_url(
 					'&amp;'.BS_URL_ACTION.'=redirect&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'='.$data['id']
 				);
-				$type_str = '<a target="_blank" href="'.$url.'">';
-				$type_str .= $this->locale->lang('msgs_'.$type).'</a>';
+				$type_str = '<a target="_blank" href="'.$furl.'">';
+				$type_str .= $locale->lang('msgs_'.$type).'</a>';
 				break;
 			
 			case 'link':
-				$url = $this->url->get_frontend_url(
+				$furl = $url->get_frontend_url(
 					'&amp;'.BS_URL_ACTION.'=linklist&amp;'.BS_URL_ID.'='.$data['id']
 				);
-				$type_str = '<a target="_blank" href="'.$url.'">';
-				$type_str .= $this->locale->lang('msgs_'.$type).'</a>';
+				$type_str = '<a target="_blank" href="'.$furl.'">';
+				$type_str .= $locale->lang('msgs_'.$type).'</a>';
+				break;
+			
+			case 'event':
+				if($data['tid'] > 0)
+				{
+					$furl = $url->get_frontend_url(
+						'&amp;'.BS_URL_ACTION.'=redirect&amp;'.BS_URL_LOC.'=show_topic&amp;'
+							.BS_URL_TID.'='.$data['tid']
+					);
+				}
+				else
+				{
+					$furl = $url->get_frontend_url(
+						'&amp;'.BS_URL_ACTION.'=calendar&amp;'.BS_URL_LOC.'=eventdetails&amp;'
+							.BS_URL_ID.'='.$data['id']
+					);
+				}
+				$type_str = '<a target="_blank" href="'.$furl.'">';
+				$type_str .= $locale->lang('msgs_'.$type).'</a>';
 				break;
 			
 			default:
-				$type_str = $this->locale->lang('msgs_'.$type);
+				$type_str = $locale->lang('msgs_'.$type);
 				break;
 		}
 		
-		$this->tpl->add_variables(array(
+		$tpl->add_variables(array(
 			'position' => $pos + 1,
 			'total' => count($msgs),
 			'error' => $error,
@@ -118,13 +156,8 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 			'type' => $type_str,
 			'next_disabled' => $pos >= count($msgs) - 1,
 			'prev_disabled' => $pos <= 0,
-			'target' => $this->url->get_acpmod_url(0,'&amp;action=cycle&amp;pos='.$pos)
+			'target' => $url->get_acpmod_url(0,'&amp;action=cycle&amp;pos='.$pos)
 		));
-	}
-	
-	public function get_location()
-	{
-		return array();
 	}
 	
 	/**
@@ -149,8 +182,9 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 			case 'signature':
 				$loc = 'sig';
 				break;
+			case 'event':
 			case 'link':
-				$loc = 'lnkdesc';
+				$loc = 'desc';
 				break;
 		}
 		
@@ -182,6 +216,13 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 				
 				case 'link':
 					BS_DAO::get_links()->update_text($id,$text,$post_text);
+					break;
+				
+				case 'event':
+					BS_DAO::get_events()->update($id,array(
+						'description_posted' => $post_text,
+						'description' => $text
+					));
 					break;
 			}
 		}

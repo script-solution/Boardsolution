@@ -39,7 +39,9 @@ class BS_DAO_Themes extends PLIB_Singleton
 	 */
 	public function theme_exists($folder)
 	{
-		return $this->db->sql_num(BS_TB_THEMES,'id',' WHERE theme_folder = "'.$folder.'"') > 0;
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_num(BS_TB_THEMES,'id',' WHERE theme_folder = "'.$folder.'"') > 0;
 	}
 	
 	/**
@@ -51,16 +53,18 @@ class BS_DAO_Themes extends PLIB_Singleton
 	 */
 	public function create($name,$folder)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(empty($name))
 			PLIB_Helper::def_error('notempty','name',$name);
 		if(empty($folder))
 			PLIB_Helper::def_error('notempty','folder',$folder);
 		
-		$this->db->sql_insert(BS_TB_THEMES,array(
+		$db->sql_insert(BS_TB_THEMES,array(
 			'theme_name' => $name,
 			'theme_folder' => $folder
 		));
-		return $this->db->get_last_insert_id();
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -73,6 +77,8 @@ class BS_DAO_Themes extends PLIB_Singleton
 	 */
 	public function update_by_id($id,$name,$folder = '')
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		if(empty($name))
@@ -83,8 +89,8 @@ class BS_DAO_Themes extends PLIB_Singleton
 		);
 		if($folder)
 			$fields['theme_folder'] = $folder;
-		$this->db->sql_update(BS_TB_THEMES,'WHERE id = '.$id,$fields);
-		return $this->db->get_affected_rows();
+		$db->sql_update(BS_TB_THEMES,'WHERE id = '.$id,$fields);
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -95,13 +101,15 @@ class BS_DAO_Themes extends PLIB_Singleton
 	 */
 	public function delete_by_ids($ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_THEMES.' WHERE id IN ('.implode(',',$ids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

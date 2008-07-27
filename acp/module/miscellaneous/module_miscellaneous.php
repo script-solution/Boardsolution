@@ -31,17 +31,30 @@ final class BS_ACP_Module_miscellaneous extends BS_ACP_SubModuleContainer
 		'userexp' => 'refresh_user_posts'
 	);
 	
+	/**
+	 * Constructor
+	 */
 	public function __construct()
 	{
 		parent::__construct('miscellaneous',array('default','operation'),'default');
 	}
 
-	public function get_location()
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
+	 */
+	public function init($doc)
 	{
-		$loc = array(
-			$this->locale->lang('acpmod_miscellaneous') => $this->url->get_acpmod_url()
-		);
-		return array_merge($loc,$this->_sub->get_location());
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		$doc->add_breadcrumb($locale->lang('acpmod_miscellaneous'),$url->get_acpmod_url());
+		
+		// init submodule
+		$this->_sub->init($doc);
 	}
 	
 	/**

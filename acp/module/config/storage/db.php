@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_Config_Storage_DB extends PLIB_FullObject implements PLIB_Config_Storage
+final class BS_ACP_Module_Config_Storage_DB extends PLIB_Object implements PLIB_Config_Storage
 {
 	/**
 	 * The groups
@@ -58,14 +58,16 @@ final class BS_ACP_Module_Config_Storage_DB extends PLIB_FullObject implements P
 	 */
 	public function get_items_with($keyword)
 	{
+		$locale = PLIB_Props::get()->locale();
+
 		$result = array();
 		foreach(BS_DAO::get_config()->get_all() as $data)
 		{
 			$add = false;
-			if($this->_contains($this->locale->lang($data['name'],false),$keyword))
+			if($this->_contains($locale->lang($data['name'],false),$keyword))
 				$add = true;
-			else if($this->locale->contains_lang($data['name'].'_desc') &&
-				$this->_contains($this->locale->lang($data['name'].'_desc'),$keyword))
+			else if($locale->contains_lang($data['name'].'_desc') &&
+				$this->_contains($locale->lang($data['name'].'_desc'),$keyword))
 				$add = true;
 			else if($this->_contains($data['value'],$keyword))
 				$add = true;
@@ -102,7 +104,7 @@ final class BS_ACP_Module_Config_Storage_DB extends PLIB_FullObject implements P
 		BS_DAO::get_config()->update_setting($id,$value);
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

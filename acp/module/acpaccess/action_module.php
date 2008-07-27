@@ -21,9 +21,14 @@ final class BS_ACP_Action_acpaccess_module extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$module = $this->input->get_var('module','get',PLIB_Input::STRING);
-		$groups = $this->input->get_var('groups','post');
-		$user = $this->input->get_var('selectedUsers','post',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$auth = PLIB_Props::get()->auth();
+		$locale = PLIB_Props::get()->locale();
+
+		$module = $input->get_var('module','get',PLIB_Input::STRING);
+		$groups = $input->get_var('groups','post');
+		$user = $input->get_var('selectedUsers','post',PLIB_Input::STRING);
 
 		// check if module exists
 		if(BS_ACP_Module_ACPAccess_Helper::get_instance()->get_module_name($module) === '')
@@ -40,7 +45,7 @@ final class BS_ACP_Action_acpaccess_module extends BS_ACP_Action_Base
 			foreach($groups as $gid)
 			{
 				// check if the usergroup exists
-				if($this->cache->get_cache('user_groups')->key_exists($gid))
+				if($cache->get_cache('user_groups')->key_exists($gid))
 					BS_DAO::get_acpaccess()->create($module,'group',$gid);
 			}
 		}
@@ -56,7 +61,7 @@ final class BS_ACP_Action_acpaccess_module extends BS_ACP_Action_Base
 				if($data === false)
 					continue;
 				
-				if($this->auth->is_in_group($data['user_group'],BS_STATUS_ADMIN))
+				if($auth->is_in_group($data['user_group'],BS_STATUS_ADMIN))
 					continue;
 				
 				BS_DAO::get_acpaccess()->create($module,'user',$uid);
@@ -64,9 +69,9 @@ final class BS_ACP_Action_acpaccess_module extends BS_ACP_Action_Base
 		}
 
 		// regenerate the cache from the database
-		$this->cache->refresh('acp_access');
+		$cache->refresh('acp_access');
 		
-		$this->set_success_msg($this->locale->lang('saved_config_module_success'));
+		$this->set_success_msg($locale->lang('saved_config_module_success'));
 		$this->set_action_performed(true);
 
 		return '';

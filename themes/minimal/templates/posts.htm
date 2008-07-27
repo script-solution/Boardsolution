@@ -2,10 +2,11 @@
 
 {if action_result < 1}
 {if module_error == false}
+<script type="text/javascript" src="{gjs.get_file('src/quote.js')}"></script>
 
 {if display_reply}
 <div>
-	<a class="bs_button_big" title="{glocale.lang('answer_desc')}" href="{reply_url}">{glocale.lang('answer')}</a>
+	<a class="bs_button_big" title="{glocale.lang('answer_desc')}" href="{reply_url}" onclick="return quote('{quoteLink}');">{glocale.lang('answer')}</a>
 	<br style="clear: both;" />
 </div>
 {endif}

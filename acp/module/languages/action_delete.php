@@ -21,16 +21,20 @@ final class BS_ACP_Action_languages_delete extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$id_str = $this->input->get_var('ids','get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+		$locale = PLIB_Props::get()->locale();
+
+		$id_str = $input->get_var('ids','get',PLIB_Input::STRING);
 		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
 			return 'Got an invalid id-string via GET';
 		
 		$count = BS_DAO::get_langs()->delete_by_ids($ids);
 
 		if($count > 0)
-			$this->cache->refresh('languages');
+			$cache->refresh('languages');
 
-		$this->set_success_msg($this->locale->lang('lang_delete_success'));
+		$this->set_success_msg($locale->lang('lang_delete_success'));
 		$this->set_action_performed(true);
 
 		return '';

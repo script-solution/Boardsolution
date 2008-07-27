@@ -21,15 +21,18 @@ final class BS_BBCode_Content_AttachmentImage extends BS_BBCode_Content_Default
 {
 	public function get_text($inner,$param)
 	{
+		$url = PLIB_Props::get()->url();
+		$cfg = PLIB_Props::get()->cfg();
+
 		$inner = trim($inner);
-		list($att_width,$att_height) = explode('x',$this->cfg['attachments_images_size']);
-		$url = $this->url->get_standalone_url('front','download','&amp;path='.$inner);
-		$img_url = $this->url->get_standalone_url(
-			'front','thumbnail','&amp;path='.$inner.'&amp;width='
+		list($att_width,$att_height) = explode('x',$cfg['attachments_images_size']);
+		$murl = $url->get_url('download','&amp;path='.$inner);
+		$img_url = $url->get_url(
+			'thumbnail','&amp;path='.$inner.'&amp;width='
 				.$att_width.'&amp;height='.$att_height.'&amp;method='
-				.$this->cfg['attachments_images_resize_method']
+				.$cfg['attachments_images_resize_method']
 		);
-		$content = '<a href="'.$url.'">';
+		$content = '<a href="'.$murl.'">';
 		$content .= '<img src="'.$img_url.'" alt="'.$inner.'" />';
 		$content .= '</a>';
 		

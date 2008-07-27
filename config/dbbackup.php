@@ -23,7 +23,7 @@ define('BS_DBA_LINE_WRAP',"\n");
 /**
  * Do you want to enable GZip?
  */
-define('BS_DBA_ENABLE_GZIP',true);
+define('BS_DBA_ENABLE_GZIP',false);
 
 /**
  * The number of SQL-statements per file

@@ -17,7 +17,7 @@
  * @subpackage	src.user
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_User_Storage_DB extends PLIB_FullObject implements PLIB_User_Storage
+final class BS_User_Storage_DB extends PLIB_Object implements PLIB_User_Storage
 {
 	/**
 	 * Stores wether we want to force an unread-update
@@ -25,6 +25,24 @@ final class BS_User_Storage_DB extends PLIB_FullObject implements PLIB_User_Stor
 	 * @var boolean
 	 */
 	private $_force_unread_update = false;
+	
+	/**
+	 * Wether we are currently in the ACP
+	 *
+	 * @var boolean
+	 */
+	private $_is_acp;
+	
+	/**
+	 * Constructor
+	 *
+	 * @param boolean $is_acp are we in the ACP?
+	 */
+	public function __construct($is_acp = false)
+	{
+		parent::__construct();
+		$this->_is_acp = $is_acp;
+	}
 	
 	/**
 	 * @return boolean wether we want to force an unread-update
@@ -59,18 +77,22 @@ final class BS_User_Storage_DB extends PLIB_FullObject implements PLIB_User_Stor
 	 * This method gives you the opportunity to perform additional checks. For example if
 	 * the user is activated.
 	 * 
-	 * @param PLIB_User_Data the data of the user
+	 * @param PLIB_User_Data $userdata the data of the user
 	 * @return int the error-code or PLIB_User_Current::LOGIN_ERROR_NO_ERROR
 	 */
 	public function check_user($userdata)
 	{
-		if($userdata->get_profile_val('active') == 0 && $this->cfg['account_activation'] == 1)
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+		$user = PLIB_Props::get()->user();
+
+		if($userdata->get_profile_val('active') == 0 && $cfg['account_activation'] == 1)
 			return BS_User_Current::LOGIN_ERROR_NOT_ACTIVATED;
 		if($userdata->get_profile_val('banned') == 1)
 			return BS_User_Current::LOGIN_ERROR_BANNED;
-		if($this->doc->is_acp() && !$this->auth->has_acp_access())
+		if($this->_is_acp && !$auth->has_acp_access())
 			return BS_User_Current::LOGIN_ERROR_ADMIN_REQUIRED;
-		if($this->user->is_bot())
+		if($user->is_bot())
 			return BS_User_Current::LOGIN_ERROR_BOT;
 		
 		return PLIB_User_Current::LOGIN_ERROR_NO_ERROR;
@@ -83,10 +105,13 @@ final class BS_User_Storage_DB extends PLIB_FullObject implements PLIB_User_Stor
 	 */
 	public function login($id)
 	{
+		$cookies = PLIB_Props::get()->cookies();
+		$user = PLIB_Props::get()->user();
+
 		$this->_force_unread_update = true;
 
-		$this->cookies->set_cookie('user',$this->user->get_user_name());
-		$this->cookies->set_cookie('pw',$this->user->get_userdata()->get_user_pw());
+		$cookies->set_cookie('user',$user->get_user_name());
+		$cookies->set_cookie('pw',$user->get_userdata()->get_user_pw());
 	}
 	
 	/**
@@ -96,11 +121,13 @@ final class BS_User_Storage_DB extends PLIB_FullObject implements PLIB_User_Stor
 	 */
 	public function logout($id)
 	{
-		$this->cookies->delete_cookie('user');
-		$this->cookies->delete_cookie('pw');
+		$cookies = PLIB_Props::get()->cookies();
+
+		$cookies->delete_cookie('user');
+		$cookies->delete_cookie('pw');
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

@@ -18,7 +18,7 @@
  * @subpackage	src.bbcode
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_BBCode_Parser extends PLIB_FullObject
+final class BS_BBCode_Parser extends PLIB_Object
 {
 	/**
 	 * Open tags at a opening-tag which does not allow open tags
@@ -63,7 +63,7 @@ final class BS_BBCode_Parser extends PLIB_FullObject
 	private $_text;
 
 	/**
-	 * The location: posts, sig, lnkdesc
+	 * The location: posts, sig, desc
 	 *
 	 * @var string
 	 */
@@ -108,7 +108,7 @@ final class BS_BBCode_Parser extends PLIB_FullObject
 	 * constructor
 	 * 
 	 * @param string $text the text to format
-	 * @param string $loc the location: posts, sig, lnkdesc
+	 * @param string $loc the location: posts, sig, desc
 	 * @param boolean $enable_bbcode do you want to enable bbcode in this message?
 	 * @param boolean $enable_smileys do you want to enable smileys in this message?
 	 */
@@ -120,7 +120,7 @@ final class BS_BBCode_Parser extends PLIB_FullObject
 		$this->_location = $loc;
 		$this->_enable_bbcode = $enable_bbcode;
 		$this->_enable_smileys = $enable_smileys;
-		$this->_board_path = PLIB_Path::inner();
+		$this->_board_path = PLIB_Path::client_app();
 		BS_BBCode_Helper::get_instance()->reset();
 	}
 
@@ -232,19 +232,24 @@ final class BS_BBCode_Parser extends PLIB_FullObject
 	 */
 	public function get_message_for_output($wordwrap_codes = false)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+		$functions = PLIB_Props::get()->functions();
+
 		if($wordwrap_codes)
 		{
 			$this->_text = str_replace('<br />',"\n",$this->_text);
 			$this->_text = BS_BBCode_WordWrap::word_wrap_special(
-				$this->_text,$this->cfg['msgs_max_line_length']
+				$this->_text,$cfg['msgs_max_line_length']
 			);
 			$this->_text = str_replace("\n",'<br />',$this->_text);
 		}
 
 		// replace boardsolution-file and language-entries
 		$this->_text = str_replace('{BSF}',
-			$this->_board_path.$this->functions->get_board_file(true),$this->_text);
-		$this->_text = preg_replace('/{LANG=([^}]+?)}/e','$this->locale->lang("\\1")',$this->_text);
+			$this->_board_path.$functions->get_board_file(true),$this->_text);
+		$this->_text = preg_replace(
+			'/{LANG=([^}]+?)}/e','PLIB_Props::get()->locale()->lang("\\1")',$this->_text
+		);
 
 		// replace paths
 		if($this->_enable_smileys)
@@ -258,11 +263,13 @@ final class BS_BBCode_Parser extends PLIB_FullObject
 	 */
 	private function _replace_remaining_stuff()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		$search = array();
 		$replace = array();
 
 		// convert plain-text urls and emails to links?
-		if($this->cfg['msgs_parse_urls'] == 1)
+		if($cfg['msgs_parse_urls'] == 1)
 		{
 			$search[] = '/(\A|\s)((http(s?)|ftp):\/\/|www\.)([^\s,<"]+)/ise';
 			$search[] = '/(\A|\s)([-_a-z0-9\.]+)@([-_a-z0-9]+).([a-z]+)/i';
@@ -293,11 +300,11 @@ final class BS_BBCode_Parser extends PLIB_FullObject
 
 		// wordwrap...
 		$this->_text = BS_BBCode_WordWrap::word_wrap_special(
-			$this->_text,$this->cfg['msgs_max_line_length']
+			$this->_text,$cfg['msgs_max_line_length']
 		);
 
 		// replace badwords
-		if($this->cfg['enable_badwords'] == 1)
+		if($cfg['enable_badwords'] == 1)
 			$this->_text = $this->_replace_badwords($this->_text);
 
 		$this->_text = str_replace("\n",'<br />',$this->_text);
@@ -378,17 +385,19 @@ final class BS_BBCode_Parser extends PLIB_FullObject
 	 */
 	private function _replace_badwords($input)
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		$search = array();
 		$replace = array();
 
-		$badwords_highlight = PLIB_StringHelper::htmlspecialchars_back($this->cfg['badwords_highlight']);
+		$badwords_highlight = PLIB_StringHelper::htmlspecialchars_back($cfg['badwords_highlight']);
 		foreach($this->_get_badwords() as $data)
 		{
 			if($data['word'] != '')
 			{
 				$replacement = str_replace('{value}',$data['replacement'],$badwords_highlight);
 
-				if($this->cfg['badwords_spaces_around'] == 1)
+				if($cfg['badwords_spaces_around'] == 1)
 				{
 					$search[] = '/(^|\b)'.preg_quote($data['word'],'/').'(\b|$)/i';
 					$replace[] = '\\1'.$replacement.'\\2';
@@ -412,12 +421,14 @@ final class BS_BBCode_Parser extends PLIB_FullObject
 	 */
 	private function _get_badwords()
 	{
+		$cfg = PLIB_Props::get()->cfg();
+
 		static $badwords = null;
 		if($badwords === null)
 		{
 			$badwords = array();
-			$repl = $this->cfg['badwords_default_replacement'];
-			$lines = explode("\n",$this->cfg['badwords_definitions']);
+			$repl = $cfg['badwords_default_replacement'];
+			$lines = explode("\n",$cfg['badwords_definitions']);
 			foreach($lines as $line)
 			{
 				$split = explode('=',$line);
@@ -887,7 +898,7 @@ final class BS_BBCode_Parser extends PLIB_FullObject
 			$sections[$sec_len - 1]->add_sub_section(new BS_BBCode_Section($next_id++,'','',$text));
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

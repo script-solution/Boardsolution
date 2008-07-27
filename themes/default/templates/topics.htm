@@ -35,10 +35,6 @@
 {if contains_topics}
 {include "inc_topic_action_js.htm"}
 
-{if show_topic_action}
-<form name="thread_action" method="post" action="{redirect_url}">
-{endif}
-
 {include "inc_topics.htm"}
 
 <div style="padding-top: 0.3em;">
@@ -66,10 +62,6 @@
 	<br style="clear: both;" />
 </div>
 
-{if show_topic_action}
-</form>
-{endif}
-
 <div class="bs_padtop">
 {include "inc_page_split.htm"}
 </div>
@@ -81,9 +73,11 @@
 </div>
 {endif}
 
+{if view_useronline_list}
 <div class="bs_padtop">
 {include "inc_online_user.htm"}
 </div>
+{endif}
 
 {if contains_topics}
 <form method="get" action="{php_self}">

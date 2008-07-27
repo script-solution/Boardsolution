@@ -1,3 +1,5 @@
+{include "inc_post_preview.htm"}
+
 <form method="post" enctype="multipart/form-data" action="{target_url}">
 <input type="hidden" name="action_type" value="{action_type}" />
 <div class="bs_border">
@@ -54,14 +56,12 @@
 				</table>
 			</dd>
 		</dl>
-		<dl>
-			<dt>{glocale.lang('description')}:</dt>
-			<dd>{form.get_textarea('description',default:description,'90%','100px')}</dd>
-		</dl>
+		{include "inc_post_form.htm"}
 	</fieldset>
 </div>
 <center>
 	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href='{back_url}'" />
+	<input type="submit" name="preview" value="{glocale.lang('preview')}" />
 	<input type="submit" name="submit" value="{glocale.lang('submit')}" />
 </center>
 </form>

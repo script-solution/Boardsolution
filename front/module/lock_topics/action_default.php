@@ -21,13 +21,19 @@ final class BS_Front_Action_lock_topics_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$id_str = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$functions = PLIB_Props::get()->functions();
+		$auth = PLIB_Props::get()->auth();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$id_str = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
 		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
 			return 'Invalid id-string got via GET';
 
 		// check if the session-id is valid
-		if(!$this->functions->has_valid_get_sid())
+		if(!$functions->has_valid_get_sid())
 			return 'Invalid session-id';
 
 		if($fid == null)
@@ -38,7 +44,7 @@ final class BS_Front_Action_lock_topics_default extends BS_Front_Action_Base
 		foreach(BS_DAO::get_topics()->get_by_ids($ids,$fid) as $data)
 		{
 			// skip this topic if the user is not allowed to delete it
-			if(!$this->auth->has_current_forum_perm(BS_MODE_LOCK_TOPICS))
+			if(!$auth->has_current_forum_perm(BS_MODE_LOCK_TOPICS))
 				continue;
 
 			// check if this is a shadow topic
@@ -53,9 +59,9 @@ final class BS_Front_Action_lock_topics_default extends BS_Front_Action_Base
 			return 'no_topics_chosen';
 
 		// grab vars
-		$edit_topic = $this->input->get_var('edit_topic','post',PLIB_Input::INT_BOOL);
-		$openclose_topic = $this->input->get_var('openclose_topic','post',PLIB_Input::INT_BOOL);
-		$posts_topic = $this->input->get_var('posts_topic','post',PLIB_Input::INT_BOOL);
+		$edit_topic = $input->get_var('edit_topic','post',PLIB_Input::INT_BOOL);
+		$openclose_topic = $input->get_var('openclose_topic','post',PLIB_Input::INT_BOOL);
+		$posts_topic = $input->get_var('posts_topic','post',PLIB_Input::INT_BOOL);
 
 		// build locked-value
 		$locked = 0;
@@ -70,7 +76,7 @@ final class BS_Front_Action_lock_topics_default extends BS_Front_Action_Base
 		BS_DAO::get_topics()->update_by_ids($topic_ids,array('locked' => $locked));
 
 		$this->set_action_performed(true);
-		$this->add_link($this->locale->lang('back'),$this->url->get_topics_url($fid));
+		$this->add_link($locale->lang('back'),$url->get_topics_url($fid));
 
 		return '';
 	}

@@ -21,14 +21,17 @@ final class BS_ACP_Action_themes_simpledelete extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$theme = $this->input->get_var('theme','get',PLIB_Input::STRING);
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+
+		$theme = $input->get_var('theme','get',PLIB_Input::STRING);
 		if($theme == null)
 			return 'Invalid theme "'.$theme.'"';
 		
-		$file = PLIB_Path::inner().'themes/'.$theme.'/style.css';
+		$file = PLIB_Path::server_app().'themes/'.$theme.'/style.css';
 		$css = new PLIB_CSS_SimpleParser($file,$file);
 		
-		$split = explode(',',$this->input->get_var('ids','get',PLIB_Input::STRING));
+		$split = explode(',',$input->get_var('ids','get',PLIB_Input::STRING));
 		for($i = 0;$i < count($split);$i++)
 		{
 			if($split[$i] != '')
@@ -39,9 +42,9 @@ final class BS_ACP_Action_themes_simpledelete extends BS_ACP_Action_Base
 		}
 
 		if(!$css->write())
-			return sprintf($this->locale->lang('file_not_saved'),$file);
+			return sprintf($locale->lang('file_not_saved'),$file);
 		
-		$this->set_success_msg($this->locale->lang('file_saved'));
+		$this->set_success_msg($locale->lang('file_saved'));
 		$this->set_action_performed(true);
 
 		return '';

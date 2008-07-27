@@ -1,4 +1,6 @@
-{include "inc_popup_header.htm"}
+{include "inc_header.htm"}
+
+{if module_error == false}
 
 <script type="text/javascript">
 <!--
@@ -30,7 +32,9 @@ self.focus();
 		{endloop}
 		<tr>
 			<td class="a_coldesc">{glocale.lang('signature')}:</td>
-			<td colspan="2" class="a_main">{signature}</td>
+			<td colspan="2" class="a_main">
+			<div class="bs_signature">{signature}</div>
+			</td>
 		</tr>
 		<tr>
 			<td class="a_coldesc">{glocale.lang('logins')}:</td>
@@ -52,4 +56,6 @@ self.focus();
 	</table>
 </div>
 
-{include "inc_popup_footer.htm"}
+{endif}
+
+{include "inc_footer.htm"}

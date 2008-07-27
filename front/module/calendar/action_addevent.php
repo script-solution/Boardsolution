@@ -21,9 +21,19 @@ final class BS_Front_Action_calendar_addevent extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
+		$input = PLIB_Props::get()->input();
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		// nothing to do?
+		if(!$input->isset_var('submit','post',PLIB_Input::STRING))
+			return '';
+		
 		// has the user permission to start an event?
-		if($this->cfg['enable_calendar_events'] == 0 ||
-			!$this->auth->has_global_permission('add_cal_event'))
+		if($cfg['enable_calendar_events'] == 0 ||
+			!$auth->has_global_permission('add_cal_event'))
 			return 'Calendar-events disabled or no permission to add events';
 
 		$event = BS_Front_Action_Plain_Event::get_default();
@@ -33,7 +43,7 @@ final class BS_Front_Action_calendar_addevent extends BS_Front_Action_Base
 		
 		$event->perform_action();
 
-		$this->add_link($this->locale->lang('back'),$this->url->get_url('calendar'));
+		$this->add_link($locale->lang('back'),$url->get_url('calendar'));
 		$this->set_action_performed(true);
 
 		return '';

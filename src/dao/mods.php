@@ -40,12 +40,14 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 */
 	public function is_user_mod_in_forum($user_id,$fid)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
 			PLIB_Helper::def_error('intgt0','user_id',$user_id);
 		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
 			PLIB_Helper::def_error('intgt0','fid',$fid);
 		
-		return $this->db->sql_num(BS_TB_MODS,'id',' WHERE rid = '.$fid.' AND user_id = '.$user_id) > 0;
+		return $db->sql_num(BS_TB_MODS,'id',' WHERE rid = '.$fid.' AND user_id = '.$user_id) > 0;
 	}
 	
 	/**
@@ -56,10 +58,12 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 */
 	public function get_by_user_ids($user_ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
 			PLIB_Helper::def_error('intarray>0','user_ids',$user_ids);
 		
-		return $this->db->sql_rows(
+		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_MODS.'
 			 WHERE user_id IN ('.implode(',',$user_ids).')'
 		);
@@ -73,7 +77,9 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 */
 	public function get_all_grouped_by_user()
 	{
-		return $this->db->sql_rows(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
 			'SELECT m.*,p.user_group,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_MODS.' m
 			 LEFT JOIN '.BS_TB_USER.' u ON m.user_id = u.`'.BS_EXPORT_USER_ID.'`
@@ -91,16 +97,18 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 */
 	public function create($fid,$user_id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
 			PLIB_Helper::def_error('intgt0','fid',$fid);
 		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
 			PLIB_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$this->db->sql_insert(BS_TB_MODS,array(
+		$db->sql_insert(BS_TB_MODS,array(
 			'rid' => $fid,
 			'user_id' => $user_id
 		));
-		return $this->db->get_last_insert_id();
+		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -111,6 +119,8 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 */
 	public function create_multiple($fids,$user_id)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($fids) || count($fids) == 0)
 			PLIB_Helper::def_error('intarray>0','fids',$fids);
 		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
@@ -120,7 +130,7 @@ class BS_DAO_Mods extends PLIB_Singleton
 		foreach($fids as $fid)
 			$sql .= '('.$user_id.','.$fid.'),';
 		$sql = PLIB_String::substr($sql,0,-1);
-		$this->db->sql_qry($sql);
+		$db->sql_qry($sql);
 	}
 	
 	/**
@@ -132,15 +142,17 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 */
 	public function delete_user_from_forum($user_id,$fid)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
 			PLIB_Helper::def_error('intgt0','user_id',$user_id);
 		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
 			PLIB_Helper::def_error('intgt0','fid',$fid);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_MODS.' WHERE rid = '.$fid.' AND user_id = '.$user_id
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -151,7 +163,7 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 */
 	public function delete_by_users($user_ids)
 	{
-		return $this->_delete_by('user_id',$user_ids);
+		return $this->delete_by('user_id',$user_ids);
 	}
 	
 	/**
@@ -162,7 +174,7 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 */
 	public function delete_by_forums($fids)
 	{
-		return $this->_delete_by('rid',$fids);
+		return $this->delete_by('rid',$fids);
 	}
 	
 	/**
@@ -172,15 +184,17 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 * @param array $ids the ids
 	 * @return int the number of affected rows
 	 */
-	protected function _delete_by($field,$ids)
+	protected function delete_by($field,$ids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
 			PLIB_Helper::def_error('intarray>0','ids',$ids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_MODS.' WHERE '.$field.' IN ('.implode(',',$ids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

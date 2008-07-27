@@ -21,21 +21,24 @@ final class BS_ACP_Action_smileys_edit extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+
 		// nothing to do?
-		if(!$this->input->isset_var('submit','post'))
+		if(!$input->isset_var('submit','post'))
 			return '';
 		
-		$id = $this->input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',PLIB_Input::ID);
 		if($id == null)
 			return 'Invalid id "'.$id.'"';
 
 		if(BS_DAO::get_smileys()->get_by_id($id) === false)
 			return 'No smiley found with id "'.$id.'"';
 		
-		$smiley_path = $this->input->get_var('smiley_path','post',PLIB_Input::STRING);
-		$primary_code = $this->input->get_var('primary_code','post',PLIB_Input::STRING);
-		$secondary_code = $this->input->get_var('secondary_code','post',PLIB_Input::STRING);
-		$is_base = $this->input->get_var('is_base','post',PLIB_Input::INT_BOOL);
+		$smiley_path = $input->get_var('smiley_path','post',PLIB_Input::STRING);
+		$primary_code = $input->get_var('primary_code','post',PLIB_Input::STRING);
+		$secondary_code = $input->get_var('secondary_code','post',PLIB_Input::STRING);
+		$is_base = $input->get_var('is_base','post',PLIB_Input::INT_BOOL);
 
 		if($smiley_path == '')
 			return 'smiley_path_empty';
@@ -49,9 +52,9 @@ final class BS_ACP_Action_smileys_edit extends BS_ACP_Action_Base
 
 		// check wether the codes exist
 		if(BS_DAO::get_smileys()->code_exists($primary_code,$id))
-			return sprintf($this->locale->lang('smiley_code_exists'),$primary_code);
+			return sprintf($locale->lang('smiley_code_exists'),$primary_code);
 		if($secondary_code != '' && BS_DAO::get_smileys()->code_exists($secondary_code,$id))
-			return sprintf($this->locale->lang('smiley_code_exists'),$secondary_code);
+			return sprintf($locale->lang('smiley_code_exists'),$secondary_code);
 		
 		$fields = array(
 			'smiley_path' => $smiley_path,
@@ -61,7 +64,7 @@ final class BS_ACP_Action_smileys_edit extends BS_ACP_Action_Base
 		);
 		BS_DAO::get_smileys()->update_by_id($id,$fields);
 		
-		$this->set_success_msg($this->locale->lang('smiley_edit_success'));
+		$this->set_success_msg($locale->lang('smiley_edit_success'));
 		$this->set_action_performed(true);
 
 		return '';

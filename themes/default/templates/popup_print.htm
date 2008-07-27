@@ -1,14 +1,14 @@
-{include "inc_popup_header.htm"}
+{include "inc_header.htm"}
 
 {if module_error == false}
 
 <script type="text/javascript">
 <!--
-//window.print();
+window.print();
 //-->
 </script>
 
-<div class="bs_board_title">{board_title}</div>
+<h1>{board_title}</h1>
 
 <div class="bs_padtop_big"><b>{glocale.lang('position')}:</b> {location}</div>
 
@@ -63,4 +63,4 @@
 
 {endif}
 
-{include "inc_popup_footer.htm"}
+{include "inc_footer.htm"}

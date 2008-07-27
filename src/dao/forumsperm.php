@@ -36,7 +36,9 @@ class BS_DAO_ForumsPerm extends PLIB_Singleton
 	 */
 	public function get_all()
 	{
-		return $this->db->sql_rows(
+		$db = PLIB_Props::get()->db();
+
+		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_FORUMS_PERM
 		);
 	}
@@ -51,6 +53,8 @@ class BS_DAO_ForumsPerm extends PLIB_Singleton
 	 */
 	public function set_permissions($fid,$type,$groups)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(count($groups) == 0)
 			return 0;
 		
@@ -65,8 +69,8 @@ class BS_DAO_ForumsPerm extends PLIB_Singleton
 		foreach($groups as $gid)
 			$sql .= '('.$fid.',"'.$type.'",'.$gid.'),';
 		$sql = PLIB_String::substr($sql,0,-1);
-		$this->db->sql_qry($sql);
-		return $this->db->get_affected_rows();
+		$db->sql_qry($sql);
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -77,13 +81,15 @@ class BS_DAO_ForumsPerm extends PLIB_Singleton
 	 */
 	public function delete_by_forums($fids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($fids) || count($fids) == 0)
 			PLIB_Helper::def_error('intarray>0','fids',$fids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_FORUMS_PERM.' WHERE forum_id IN ('.implode(',',$fids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -94,13 +100,15 @@ class BS_DAO_ForumsPerm extends PLIB_Singleton
 	 */
 	public function delete_by_groups($gids)
 	{
+		$db = PLIB_Props::get()->db();
+
 		if(!PLIB_Array_Utils::is_integer($gids) || count($gids) == 0)
 			PLIB_Helper::def_error('intarray>0','gids',$gids);
 		
-		$this->db->sql_qry(
+		$db->sql_qry(
 			'DELETE FROM '.BS_TB_FORUMS_PERM.' WHERE group_id IN ('.implode(',',$gids).')'
 		);
-		return $this->db->get_affected_rows();
+		return $db->get_affected_rows();
 	}
 }
 ?>

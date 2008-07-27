@@ -21,22 +21,29 @@ final class BS_Front_Action_move_topics_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
+		$input = PLIB_Props::get()->input();
+		$forums = PLIB_Props::get()->forums();
+		$user = PLIB_Props::get()->user();
+		$auth = PLIB_Props::get()->auth();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		// nothing to do?
-		if(!$this->input->isset_var('submit','post'))
+		if(!$input->isset_var('submit','post'))
 			return '';
 
 		// parameters valid?
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$id_str = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$id_str = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
 		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
 			return 'Got an invalid id-string via GET';
 
-		$target_fid = $this->input->get_var('target_forum','post',PLIB_Input::ID);
+		$target_fid = $input->get_var('target_forum','post',PLIB_Input::ID);
 
 		if($fid == null || $target_fid == null)
 			return 'The forum-id "'.$fid.'" or "'.$target_fid.'" is invalid';
 
-		if(!$this->forums->node_exists($fid) || !$this->forums->node_exists($target_fid))
+		if(!$forums->node_exists($fid) || !$forums->node_exists($target_fid))
 			return 'The forum-id "'.$fid.'" or "'.$target_fid.'" doesn\'t exist';
 		
 		// check if the target-forum is equal to the source-forum
@@ -44,14 +51,14 @@ final class BS_Front_Action_move_topics_default extends BS_Front_Action_Base
 			return 'movetootherrubrik';
 
 		// has the user the permission to move the topics?
-		if(!$this->user->is_loggedin() || !$this->auth->has_current_forum_perm(BS_MODE_MOVE_TOPICS))
+		if(!$user->is_loggedin() || !$auth->has_current_forum_perm(BS_MODE_MOVE_TOPICS))
 			return 'You are a guest or have no permission to move topics';
 
-		$post_reason = $this->input->get_var('post_reason','post',PLIB_Input::INT_BOOL);
-		$leave_link = $this->input->get_var('leave_link','post',PLIB_Input::INT_BOOL);
+		$post_reason = $input->get_var('post_reason','post',PLIB_Input::INT_BOOL);
+		$leave_link = $input->get_var('leave_link','post',PLIB_Input::INT_BOOL);
 
-		$forum_data = $this->forums->get_node_data($fid);
-		$target_forum_data = $this->forums->get_node_data($target_fid);
+		$forum_data = $forums->get_node_data($fid);
+		$target_forum_data = $forums->get_node_data($target_fid);
 		if($target_forum_data->get_forum_type() == 'contains_cats')
 			return 'You can\'t move the topic to a forum that contains forums';
 
@@ -215,21 +222,21 @@ final class BS_Front_Action_move_topics_default extends BS_Front_Action_Base
 			}
 
 			$this->set_success_msg(sprintf(
-				$this->locale->lang('success_'.BS_ACTION_MOVE_TOPICS),
+				$locale->lang('success_'.BS_ACTION_MOVE_TOPICS),
 				implode('", "',$moved_topics)
 			));
 		}
 		else
-			$this->set_success_msg($this->locale->lang('error_no_topics_moved'));
+			$this->set_success_msg($locale->lang('error_no_topics_moved'));
 
 		$this->set_action_performed(true);
-		$this->add_link($this->locale->lang('back_to_forum'),$this->url->get_topics_url($fid));
+		$this->add_link($locale->lang('back_to_forum'),$url->get_topics_url($fid));
 		if($num == 1)
 		{
-			$url = $this->url->get_url(
+			$murl = $url->get_url(
 				'posts','&amp;'.BS_URL_FID.'='.$target_fid.'&amp;'.BS_URL_TID.'='.$moved_topic_ids[0]
 			);
-			$this->add_link($this->locale->lang('to_moved_thread'),$url);
+			$this->add_link($locale->lang('to_moved_thread'),$murl);
 		}
 
 		return '';

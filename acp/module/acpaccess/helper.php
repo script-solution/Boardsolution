@@ -34,8 +34,10 @@ final class BS_ACP_Module_ACPAccess_Helper extends PLIB_Singleton
 	 */
 	public function get_group_options()
 	{
+		$cache = PLIB_Props::get()->cache();
+
 		$options = array();
-		foreach($this->cache->get_cache('user_groups') as $row)
+		foreach($cache->get_cache('user_groups') as $row)
 		{
 			if($row['id'] != BS_STATUS_GUEST && $row['id'] != BS_STATUS_ADMIN)
 				$options[$row['id']] = $row['group_title'];
@@ -63,7 +65,7 @@ final class BS_ACP_Module_ACPAccess_Helper extends PLIB_Singleton
 		return '';
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

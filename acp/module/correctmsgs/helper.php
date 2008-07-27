@@ -58,11 +58,15 @@ final class BS_ACP_Module_CorrectMsgs_Helper extends PLIB_Singleton
 		// links
 		foreach(BS_DAO::get_links()->get_invalid_link_ids() as $data)
 			$incorrect[] = array('link',$data['id']);
+	
+		// events
+		foreach(BS_DAO::get_events()->get_invalid_event_ids() as $data)
+			$incorrect[] = array('event',$data['id']);
 		
 		return $incorrect;
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

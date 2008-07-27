@@ -21,10 +21,16 @@ final class BS_Front_Action_userprofile_favforums extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		if(!$this->user->is_loggedin())
+		$user = PLIB_Props::get()->user();
+		$input = PLIB_Props::get()->input();
+		$forums = PLIB_Props::get()->forums();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		if(!$user->is_loggedin())
 			return 'You are a guest';
 
-		$ids = $this->input->get_var('favorite','post');
+		$ids = $input->get_var('favorite','post');
 		if(!is_array($ids))
 			$ids = array();
 		
@@ -35,8 +41,8 @@ final class BS_Front_Action_userprofile_favforums extends BS_Front_Action_Base
 			if(PLIB_Helper::is_integer($fid))
 				$fids[] = $fid;
 		}
-		$fids = $this->forums->get_nodes_with_other_ids($fids,false);
-		$uid = $this->user->get_user_id();
+		$fids = $forums->get_nodes_with_other_ids($fids,false);
+		$uid = $user->get_user_id();
 		
 		// delete the old ids
 		BS_DAO::get_unreadhide()->delete_by_users(array($uid));
@@ -46,7 +52,7 @@ final class BS_Front_Action_userprofile_favforums extends BS_Front_Action_Base
 		
 		$this->set_action_performed(true);
 		$this->add_link(
-			$this->locale->lang('back'),$this->url->get_url(0,'&amp;'.BS_URL_LOC.'=favforums')
+			$locale->lang('back'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=favforums')
 		);
 
 		return '';

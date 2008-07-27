@@ -50,27 +50,6 @@ final class BS_URL extends PLIB_URL
 	}
 	
 	/**
-	 * Builds a standalone-URL for the given type
-	 *
-	 * @param string $type the type: acp or front
-	 * @param string $module the module-name
-	 * @param string $additional additional parameters starting with <var>$separator</var>
-	 * @param string $separator the separator of the links
-	 * @param boolean $absolute use PLIB_Path::outer() (=absolute) or PLIB_Path::inner()?
-	 * @return string the generated URL
-	 */
-	public function get_standalone_url($type,$module,$additional = '',$separator = '&amp;',
-		$absolute = false)
-	{
-		return $this->get_file_url(
-			'standalone.php',
-			$separator.BS_URL_PAGE.'='.$type.$separator.BS_URL_ACTION.'='.$module.$additional,
-			$separator,
-			$absolute
-		);
-	}
-	
-	/**
 	 * Builds the components for the URL of the current module in the ACP. This may be
 	 * usefull for example if you want to use a formular via GET and therefore have to
 	 * know all GET-parameters
@@ -79,10 +58,13 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_acpmod_comps()
 	{
+		$user = PLIB_Props::get()->user();
+		$input = PLIB_Props::get()->input();
+
 		return array(
 			'page' => 'content',
-			BS_URL_SID => $this->user->get_session_id(),
-			'loc' => $this->input->get_var('loc','get',PLIB_Input::IDENTIFIER)
+			BS_URL_SID => $user->get_session_id(),
+			'loc' => $input->get_var('loc','get',PLIB_Input::IDENTIFIER)
 		);
 	}
 	
@@ -96,12 +78,15 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_acpmod_url($module = 0,$additional = '',$separator = '&amp;')
 	{
-		$this->_init();
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+
+		$this->init();
 
 		// collect infos
 		if($module === 0)
 		{
-			$action_param = $this->input->get_var('loc','get',PLIB_Input::IDENTIFIER);
+			$action_param = $input->get_var('loc','get',PLIB_Input::IDENTIFIER);
 			if($action_param == null)
 				$action = '';
 			else
@@ -110,7 +95,7 @@ final class BS_URL extends PLIB_URL
 		else
 			$action = 'loc='.$module;
 
-		$session_id = '&amp;'.BS_URL_SID.'='.$this->user->get_session_id();
+		$session_id = '&amp;'.BS_URL_SID.'='.$user->get_session_id();
 		
 		// build parameters
 		$parameters = $action;
@@ -141,18 +126,20 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_admin_url($additional = '',$separator = '&amp;')
 	{
-		$this->_init();
+		$user = PLIB_Props::get()->user();
+
+		$this->init();
 		
 		// append sid in all cases
 		if($this->_session_id != '')
 			$sid = str_replace('&amp;',$separator,$this->_session_id);
 		else
-			$sid = $separator.BS_URL_SID.'='.$this->user->get_session_id();
+			$sid = $separator.BS_URL_SID.'='.$user->get_session_id();
 		
 		if($additional == '')
-			return PLIB_Path::inner().'admin.php?'.PLIB_String::substr($sid,5);
+			return PLIB_Path::client_app().'admin.php?'.PLIB_String::substr($sid,5);
 
-		return PLIB_Path::inner().'admin.php?'.$additional.$sid;
+		return PLIB_Path::client_app().'admin.php?'.$additional.$sid;
 	}
 	
 	/**
@@ -165,9 +152,11 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_frontend_url($additional = '',$separator = '&amp;',$use_sid = true)
 	{
-		$this->_init();
+		$functions = PLIB_Props::get()->functions();
+
+		$this->init();
 		
-		$file = $this->functions->get_board_file(false);
+		$file = $functions->get_board_file(false);
 		if($separator == '&')
 			$file = str_replace('&amp;','&',$file);
 		
@@ -190,15 +179,15 @@ final class BS_URL extends PLIB_URL
 	 * Note that this method does NOT append the external vars. Therefore you should
 	 * always create a link to a standalone-file!
 	 * 
-	 * @param string $file the file (starting at PLIB_Path::inner())
+	 * @param string $file the file (starting at PLIB_Path::client_app())
 	 * @param string $additional additional parameters
 	 * @param string $separator the separator for the parameters (default = &amp;)
-	 * @param boolean $absolute use PLIB_Path::outer() (=absolute) or PLIB_Path::inner()?
+	 * @param boolean $absolute use PLIB_Path::outer() (=absolute) or PLIB_Path::client_app()?
 	 * @return string the url
 	 */
 	public function get_file_url($file,$additional = '',$separator = '&amp;',$absolute = false)
 	{
-		$this->_init();
+		$this->init();
 		
 		// Note that we don't append the external vars here because this leads always to
 		// a standalone file!
@@ -209,7 +198,7 @@ final class BS_URL extends PLIB_URL
 		$parameters .= $additional;
 		
 		$first_sep = PLIB_String::strpos($file,'?') !== false ? $separator : '?';
-		$base = $absolute ? PLIB_Path::outer() : PLIB_Path::inner();
+		$base = $absolute ? PLIB_Path::outer() : PLIB_Path::client_app();
 		if($parameters == '')
 			$url = $base.$file;
 		else if($separator == '&' && PLIB_String::substr($parameters,0,1) == $separator)
@@ -231,13 +220,16 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_portal_url($separator = '&amp;')
 	{
-		if($this->cfg['enable_modrewrite'])
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+
+		if($cfg['enable_modrewrite'])
 		{
 			static $sessionid_add = null;
 			if($sessionid_add === null)
 			{
 				if($this->use_session_id())
-					$sessionid_add = '_s'.$this->user->get_session_id();
+					$sessionid_add = '_s'.$user->get_session_id();
 				else
 					$sessionid_add = '';
 			}
@@ -257,13 +249,16 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_forums_url($separator = '&amp;')
 	{
-		if($this->cfg['enable_modrewrite'])
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+
+		if($cfg['enable_modrewrite'])
 		{
 			static $sessionid_add = null;
 			if($sessionid_add === null)
 			{
 				if($this->use_session_id())
-					$sessionid_add = '_s'.$this->user->get_session_id();
+					$sessionid_add = '_s'.$user->get_session_id();
 				else
 					$sessionid_add = '';
 			}
@@ -285,20 +280,24 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_topics_url($fid,$separator = '&amp;',$site = 0)
 	{
+		$input = PLIB_Props::get()->input();
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+
 		if($site === 0)
 		{
-			$site = $this->input->get_var(BS_URL_SITE,'get',PLIB_Input::ID);
+			$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::ID);
 			if($site === null)
 				$site = 1;
 		}
 		
-		if($this->cfg['enable_modrewrite'])
+		if($cfg['enable_modrewrite'])
 		{
 			static $sessionid_add = null;
 			if($sessionid_add === null)
 			{
 				if($this->use_session_id())
-					$sessionid_add = '_s'.$this->user->get_session_id();
+					$sessionid_add = '_s'.$user->get_session_id();
 				else
 					$sessionid_add = '';
 			}
@@ -323,20 +322,24 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_posts_url($fid,$tid,$separator = '&amp;',$site = 0)
 	{
+		$input = PLIB_Props::get()->input();
+		$cfg = PLIB_Props::get()->cfg();
+		$user = PLIB_Props::get()->user();
+
 		if($site === 0)
 		{
-			$site = $this->input->get_var(BS_URL_SITE,'get',PLIB_Input::ID);
+			$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::ID);
 			if($site === null)
 				$site = 1;
 		}
 		
-		if($this->cfg['enable_modrewrite'])
+		if($cfg['enable_modrewrite'])
 		{
 			static $sessionid_add = null;
 			if($sessionid_add === null)
 			{
 				if($this->use_session_id())
-					$sessionid_add = '_s'.$this->user->get_session_id();
+					$sessionid_add = '_s'.$user->get_session_id();
 				else
 					$sessionid_add = '';
 			}
@@ -356,10 +359,12 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_splitted_session_id()
 	{
-		$this->_init();
+		$user = PLIB_Props::get()->user();
+
+		$this->init();
 		
 		if($this->_session_id != '')
-			return array(BS_URL_SID,$this->user->get_session_id());
+			return array(BS_URL_SID,$user->get_session_id());
 
 		return 0;
 	}

@@ -17,7 +17,7 @@
  * @subpackage	src.session
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Session_Storage_DB extends PLIB_FullObject implements PLIB_Session_Storage
+final class BS_Session_Storage_DB extends PLIB_Object implements PLIB_Session_Storage
 {
 	public function load_list()
 	{
@@ -71,7 +71,7 @@ final class BS_Session_Storage_DB extends PLIB_FullObject implements PLIB_Sessio
 		);
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}

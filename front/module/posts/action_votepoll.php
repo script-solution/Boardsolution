@@ -21,9 +21,14 @@ final class BS_Front_Action_posts_votepoll extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
+		$input = PLIB_Props::get()->input();
+		$user = PLIB_Props::get()->user();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
 		// parameter valid?
-		$fid = $this->input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $this->input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
 		if($fid == null || $tid == null)
 			return 'The forum- or topic-id is invalid';
 
@@ -38,7 +43,7 @@ final class BS_Front_Action_posts_votepoll extends BS_Front_Action_Base
 			return 'The topic is closed or no poll';
 
 		// guests are not allowed to vote
-		if(!$this->user->is_loggedin())
+		if(!$user->is_loggedin())
 			return 'You are a guest';
 
 		if(BS_UserUtils::get_instance()->user_voted_for_poll($topic_data['type']))
@@ -46,7 +51,7 @@ final class BS_Front_Action_posts_votepoll extends BS_Front_Action_Base
 
 		if($topic_data['multichoice'] == 0)
 		{
-			$choice = $this->input->get_var('vote_option','post',PLIB_Input::ID);
+			$choice = $input->get_var('vote_option','post',PLIB_Input::ID);
 			if($choice == null)
 				return 'no_radiobutton_clicked';
 
@@ -54,7 +59,7 @@ final class BS_Front_Action_posts_votepoll extends BS_Front_Action_Base
 		}
 		else
 		{
-			$choice = $this->input->get_var('vote_option','post');
+			$choice = $input->get_var('vote_option','post');
 			if($choice == null || count($choice) == 0 || !PLIB_Array_Utils::is_integer($choice))
 				return 'no_checkbox_clicked';
 
@@ -62,10 +67,10 @@ final class BS_Front_Action_posts_votepoll extends BS_Front_Action_Base
 				BS_DAO::get_polls()->vote($value);
 		}
 
-		BS_DAO::get_pollvotes()->create($topic_data['type'],$this->user->get_user_id());
+		BS_DAO::get_pollvotes()->create($topic_data['type'],$user->get_user_id());
 
 		$this->set_action_performed(true);
-		$this->add_link($this->locale->lang('go_to_topic'),$this->url->get_posts_url($fid,$tid));
+		$this->add_link($locale->lang('go_to_topic'),$url->get_posts_url($fid,$tid));
 	
 		return '';
 	}

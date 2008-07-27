@@ -21,12 +21,17 @@ final class BS_Front_Action_change_password_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		$user = PLIB_Props::get()->user();
+
 		// check if the user is allowed to do this
-		if((BS_ENABLE_EXPORT && BS_EXPORT_SEND_PW_TYPE != 'enabled') || $this->user->is_loggedin())
+		if((BS_ENABLE_EXPORT && BS_EXPORT_SEND_PW_TYPE != 'enabled') || $user->is_loggedin())
 			return 'Community exported and send-pw-type not enabled or not loggedin';
 
-		$user_id = $this->input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$user_key = $this->input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
+		$user_id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$user_key = $input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
 
 		// check parameter
 		if($user_id == null || $user_key == null)
@@ -37,8 +42,8 @@ final class BS_Front_Action_change_password_default extends BS_Front_Action_Base
 			return 'Invalid user-id or user-key';
 
 		// check new password
-		$password = $this->input->get_var('password','post',PLIB_Input::STRING);
-		$password_conf = $this->input->get_var('password_conf','post',PLIB_Input::STRING);
+		$password = $input->get_var('password','post',PLIB_Input::STRING);
+		$password_conf = $input->get_var('password_conf','post',PLIB_Input::STRING);
 
 		if($password == null || $password_conf == null)
 			return 'missing_password';
@@ -59,9 +64,18 @@ final class BS_Front_Action_change_password_default extends BS_Front_Action_Base
 
 		// finally delete the entry in the change-password-table
 		BS_DAO::get_changepw()->delete_by_user($user_id);
-
+		
+		// fire community-event
+		$groups = PLIB_Array_Utils::advanced_explode(',',$userdata['user_group']);
+		$status = BS_Community_User::get_status_from_groups($groups);
+		$u = new BS_Community_User(
+			$user_id,$userdata['user_name'],$userdata['user_email'],$status,$dbpw,
+			$input->unescape_value($password,'post')
+		);
+		BS_Community_Manager::get_instance()->fire_user_changed($u);
+		
 		$this->set_action_performed(true);
-		$this->add_link($this->locale->lang('forumindex'),$this->functions->get_start_url());
+		$this->add_link($locale->lang('forumindex'),$functions->get_start_url());
 
 		return '';
 	}

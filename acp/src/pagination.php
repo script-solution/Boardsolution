@@ -27,7 +27,9 @@ final class BS_ACP_Pagination extends PLIB_Pagination
 	 */
 	public function __construct($per_page,$num)
 	{
-		$page = $this->input->get_var('site','get',PLIB_Input::INTEGER);
+		$input = PLIB_Props::get()->input();
+
+		$page = $input->get_var('site','get',PLIB_Input::INTEGER);
 		parent::__construct($per_page,$num,$page);
 	}
 }

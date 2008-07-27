@@ -20,32 +20,54 @@
 final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 {
 	/**
-	 * Constructor
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_ACP_Page $doc
 	 */
-	public function __construct()
+	public function init($doc)
 	{
-		$gid = $this->input->get_var('gid','get',PLIB_Input::ID);
-		if($gid == null)
-			$gid = $this->input->set_var('gid','get',1);
+		parent::init($doc);
 		
+		$input = PLIB_Props::get()->input();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		
+		$doc->add_action(BS_ACP_ACTION_SAVE_SETTINGS,'save');
+		$doc->add_action(BS_ACP_ACTION_REVERT_SETTING,'revert');
+
+		// set group-id
+		$gid = $input->get_var('gid','get',PLIB_Input::ID);
+		if($gid == null)
+			$gid = $input->set_var('gid','get',1);
+		
+		// load group
 		$helper = BS_ACP_Module_Config_Helper::get_instance();
 		$helper->get_manager()->load_group($gid);
+
+		// add bread crumb
+		$gid = $input->get_var('gid','get',PLIB_Input::ID);
+		if($gid != null)
+		{
+			$manager = BS_ACP_Module_Config_Helper::get_instance()->get_manager();
+			$title = $locale->lang($manager->get_group($gid)->get_title(),false);
+			$doc->add_breadcrumb($title,$url->get_acpmod_url(0,'&amp;action=items&amp;gid='.$gid));
+		}
 	}
 	
-	public function get_actions()
-	{
-		return array(
-			BS_ACP_ACTION_SAVE_SETTINGS => 'save',
-			BS_ACP_ACTION_REVERT_SETTING => 'revert'
-		);
-	}
-	
+	/**
+	 * @see PLIB_Module::run()
+	 */
 	public function run()
 	{
-		$gid = $this->input->get_var('gid','get',PLIB_Input::ID);
+		$input = PLIB_Props::get()->input();
+		$url = PLIB_Props::get()->url();
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+
+		$gid = $input->get_var('gid','get',PLIB_Input::ID);
 		if($gid == null)
 		{
-			$this->_report_error();
+			$this->report_error();
 			return;
 		}
 		
@@ -55,14 +77,14 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 		$manager->display($view);
 		
 		$perline = 6;
-		$hidden_fields = $this->url->get_acpmod_comps();
+		$hidden_fields = $url->get_acpmod_comps();
 		$hidden_fields['action'] = 'search';
-		$this->tpl->add_variables(array(
-			'form_target' => $this->url->get_acpmod_url(0,'&amp;action=items&amp;gid='.$gid),
+		$tpl->add_variables(array(
+			'form_target' => $url->get_acpmod_url(0,'&amp;action=items&amp;gid='.$gid),
 			'action_type' => BS_ACP_ACTION_SAVE_SETTINGS,
-			'title' => $this->locale->lang($manager->get_group($gid)->get_title(),false),
+			'title' => $locale->lang($manager->get_group($gid)->get_title(),false),
 			'items' => $view->get_items(),
-			'form_target' => $this->input->get_var('SERVER_PHPSELF','server',PLIB_Input::STRING),
+			'form_target' => $input->get_var('SERVER_PHPSELF','server',PLIB_Input::STRING),
 			'hidden_fields' => $hidden_fields,
 			'groups_per_line' => $perline,
 			'group_rows' => $helper->get_groups($gid,$perline),
@@ -73,19 +95,6 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 			'gid' => $gid,
 			'display_affects_msgs_hints' => $view->has_affects_msgs_settings()
 		));
-	}
-	
-	public function get_location()
-	{
-		$gid = $this->input->get_var('gid','get',PLIB_Input::ID);
-		if($gid == null)
-			return array();
-		
-		$manager = BS_ACP_Module_Config_Helper::get_instance()->get_manager();
-		$title = $this->locale->lang($manager->get_group($gid)->get_title(),false);
-		return array(
-			$title => $this->url->get_acpmod_url(0,'&amp;action=items&amp;gid='.$gid)
-		);
 	}
 }
 ?>

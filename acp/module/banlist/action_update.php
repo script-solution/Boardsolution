@@ -21,8 +21,11 @@ final class BS_ACP_Action_banlist_update extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$types = $this->input->get_var('types','post');
-		$values = $this->input->get_var('values','post');
+		$input = PLIB_Props::get()->input();
+		$cache = PLIB_Props::get()->cache();
+
+		$types = $input->get_var('types','post');
+		$values = $input->get_var('values','post');
 		if(!is_array($types) || !is_array($values) || count($types) != count($values))
 			return 'Invalid POST-variables "types", "values". No arrays? Size not equal?';
 		
@@ -36,7 +39,7 @@ final class BS_ACP_Action_banlist_update extends BS_ACP_Action_Base
 			}
 		}
 
-		$this->cache->refresh('banlist');
+		$cache->refresh('banlist');
 		
 		$this->set_show_status_page(false);
 		$this->set_action_performed(true);

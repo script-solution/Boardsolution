@@ -34,20 +34,22 @@ final class BS_Front_Action_Helper extends PLIB_Singleton
 	 */
 	public function adjust_last_post_time($max_post_time)
 	{
-		$stats_data = $this->cache->get_cache('stats')->current();
+		$cache = PLIB_Props::get()->cache();
+
+		$stats_data = $cache->get_cache('stats')->current();
 	
 		// refresh lastpost?
 		if($max_post_time == $stats_data['posts_last'])
 		{
 			$lastpost_time = BS_DAO::get_topics()->get_last_post_time();
-			$this->cache->get_cache('stats')->set_element_field(
+			$cache->get_cache('stats')->set_element_field(
 				0,'posts_last',$lastpost_time
 			);
-			$this->cache->store('stats');
+			$cache->store('stats');
 		}
 	}
 	
-	protected function _get_print_vars()
+	protected function get_print_vars()
 	{
 		return get_object_vars($this);
 	}
