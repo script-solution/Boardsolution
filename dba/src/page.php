@@ -22,7 +22,7 @@ final class BS_DBA_Page extends PLIB_Page
 	/**
 	 * The current module
 	 *
-	 * @var BS_ACP_Module
+	 * @var BS_DBA_Module
 	 */
 	private $_module;
 
