@@ -2,7 +2,7 @@
 /**
  * Contains the news-feed-module
  * 
- * @version			$Id: news_feed.php 9 2008-05-30 18:46:42Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.module
  * @author			Nils Asmussen <nils@script-solution.de>
