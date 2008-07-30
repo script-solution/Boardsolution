@@ -61,7 +61,7 @@ final class BS_ACP_Document_Frameset extends BS_ACP_Document
 	 */
 	public function render()
 	{
-		$this->init();
+		$this->prepare_rendering();
 		
 		$input = PLIB_Props::get()->input();
 		$locale = PLIB_Props::get()->locale();
