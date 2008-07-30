@@ -2,7 +2,7 @@
 /**
  * Contains the index module for the ACP
  * 
- * @version			$Id: module_index.php 39 2008-07-27 18:24:44Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>

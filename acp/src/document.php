@@ -36,7 +36,7 @@ abstract class BS_ACP_Document extends BS_Document
 		$locale = PLIB_Props::get()->locale();
 		$locale->add_language_file('admin');
 		
-		parent::init();
+		parent::prepare_rendering();
 	}
 }
 ?>

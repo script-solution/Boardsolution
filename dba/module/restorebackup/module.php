@@ -2,7 +2,7 @@
 /**
  * Contains the restore-backup-module
  * 
- * @version			$Id: module_restorebackup.php 39 2008-07-27 18:24:44Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	dba.module
  * @author			Nils Asmussen <nils@script-solution.de>

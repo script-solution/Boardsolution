@@ -2,7 +2,7 @@
 /**
  * Contains the latest-topics-module
  * 
- * @version			$Id: module_latest_topics.php 43 2008-07-30 10:47:55Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>

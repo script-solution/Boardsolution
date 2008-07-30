@@ -2,7 +2,7 @@
 /**
  * Contains the module for the user-search in the frontend
  * 
- * @version			$Id: module_user_search.php 43 2008-07-30 10:47:55Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	front.module
  * @author			Nils Asmussen <nils@script-solution.de>

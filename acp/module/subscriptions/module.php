@@ -2,7 +2,7 @@
 /**
  * Contains the subscriptions module for the ACP
  * 
- * @version			$Id: module_subscriptions.php 43 2008-07-30 10:47:55Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
