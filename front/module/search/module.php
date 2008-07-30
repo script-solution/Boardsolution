@@ -1,0 +1,176 @@
+<?php
+/**
+ * Contains the search-module
+ * 
+ * @version			$Id: module_search.php 43 2008-07-30 10:47:55Z nasmussen $
+ * @package			Boardsolution
+ * @subpackage	front.modules
+ * @author			Nils Asmussen <nils@script-solution.de>
+ * @copyright		2003-2008 Nils Asmussen
+ * @link				http://www.script-solution.de
+ */
+
+/**
+ * The search-module
+ * 
+ * @package			Boardsolution
+ * @subpackage	front.modules
+ * @author			Nils Asmussen <nils@script-solution.de>
+ */
+final class BS_Front_Module_search extends BS_Front_Module
+{
+	/**
+	 * @see PLIB_Module::init($doc)
+	 *
+	 * @param BS_Front_Document $doc
+	 */
+	public function init($doc)
+	{
+		parent::init($doc);
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$cfg = PLIB_Props::get()->cfg();
+		$auth = PLIB_Props::get()->auth();
+		$renderer = $doc->use_default_renderer();
+		
+		$renderer->set_has_access($cfg['enable_search'] == 1 && $auth->has_global_permission('view_search'));
+		
+		$renderer->add_breadcrumb($locale->lang('search'),$url->get_url('search'));
+	}
+	
+	/**
+	 * @see PLIB_Module::run()
+	 */
+	public function run()
+	{
+		$input = PLIB_Props::get()->input();
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+
+		// display the search-form
+		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$modes = array('default','user_posts','user_topics','topic','similar_topics');
+		$mode = $input->correct_var(BS_URL_MODE,'get',PLIB_Input::STRING,$modes,'default');
+		$keywords = $input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
+		$usernames = $input->get_var(BS_URL_UN,'get',PLIB_Input::STRING);
+		
+		$submitted = $input->isset_var('submit','post');
+		if($mode != 'default' || $submitted || $id != null || $keywords != null || $usernames != null)
+		{
+			switch($mode)
+			{
+				case 'user_posts':
+					$request = new BS_Front_Search_Request_UserPosts();
+					break;
+				case 'user_topics':
+					$request = new BS_Front_Search_Request_UserTopics();
+					break;
+				case 'similar_topics':
+					$request = new BS_Front_Search_Request_SimilarTopics();
+					break;
+				case 'topic':
+					$request = new BS_Front_Search_Request_Topic();
+					break;
+				default:
+					$request = new BS_Front_Search_Request_Default();
+					break;
+			}
+			
+			$manager = new BS_Front_Search_Manager($id,$request);
+			$result_num = count($manager->get_result_ids());
+			$result = $request->get_result();
+		
+			$tpl->add_variables(array(
+				'result_tpl' => $result !== null ? $result->get_template() : '',
+				'result_num' => $result_num
+			));
+		}
+		else
+			$result_num = 0;
+		
+		if($result_num > 0)
+			$manager->add_result();
+		else
+		{
+			$order_vals = array('lastpost','topic_name','topic_type','replies','views','relevance');
+			$order = $input->correct_var('order','post',PLIB_Input::STRING,$order_vals,'relevance');
+			$ad = $input->correct_var('ad','post',PLIB_Input::STRING,array('ASC','DESC'),'DESC');
+			$limit_vals = array(10,25,50,100,250,500);
+			$limit = $input->correct_var('limit','post',PLIB_Input::INTEGER,$limit_vals,250);
+
+			// the condition is true if we should have been displayed the result but
+			// there has occurred an error
+			$form = $this->request_formular(false,false);
+			$form->set_condition($mode != 'default' || $submitted || $id != null);
+			
+			$keyword_mode_options = array(
+				'and' => $locale->lang('keyword_mode_and'),
+				'or' => $locale->lang('keyword_mode_or')
+			);
+
+			$order_options = array(
+				'relevance' => $locale->lang('relevance'),
+				'lastpost' => $locale->lang('date'),
+				'topic_name' => $locale->lang('name'),
+				'topic_type' => $locale->lang('threadtype'),
+				'replies' => $locale->lang('posts'),
+				'views' => $locale->lang('hits')
+			);
+
+			$ad_options = array(
+				'DESC' => $locale->lang('descending'),
+				'ASC' => $locale->lang('ascending')
+			);
+
+			$limit_options = array(
+				10 => 10,
+				25 => 25,
+				50 => 50,
+				100 => 100,
+				250 => 250,
+				500 => 500
+			);
+
+			$result_type_options = array(
+				'posts' => $locale->lang('posts'),
+				'topics' => $locale->lang('threads')
+			);
+
+			$keyword = stripslashes($input->get_var('keyword','post',PLIB_Input::STRING));
+			$username = stripslashes($input->get_var('un','post',PLIB_Input::STRING));
+			
+			$selection = $input->get_var('fid','post');
+			$forum_combo = BS_ForumUtils::get_instance()->get_recursive_forum_combo(
+				'fid[]',$selection === null ? 0 : $selection,-1,true,true
+			);
+			
+			$tpl->add_variables(array(
+				'action_param' => BS_URL_ACTION,
+				'search_explain_keyword' => sprintf(
+					$locale->lang('search_explain_keyword'),
+					$url->get_url('faq').'#f_9',
+					BS_SEARCH_MIN_KEYWORD_LEN
+				),
+				'search_explain_user' => sprintf(
+					$locale->lang('search_explain_user'),$url->get_url('faq').'#f_9'
+				),
+				'target_url' => $url->get_url(0),
+				'keyword' => $keyword,
+				'keyword_mode_options' => $keyword_mode_options,
+				'keyword_mode' => 'and',
+				'order_options' => $order_options,
+				'order' => $order,
+				'ad_options' => $ad_options,
+				'ad' => $ad,
+				'limit_options' => $limit_options,
+				'limit' => $limit,
+				'result_type_options' => $result_type_options,
+				'user_name' => $username,
+				'forum_combo' => $forum_combo
+			));
+		}
+	}
+}
+?>
