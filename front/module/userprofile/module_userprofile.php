@@ -38,7 +38,7 @@ final class BS_Front_Module_userprofile extends BS_Front_SubModuleContainer
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -47,10 +47,11 @@ final class BS_Front_Module_userprofile extends BS_Front_SubModuleContainer
 		$input = PLIB_Props::get()->input();
 		$locale = PLIB_Props::get()->locale();
 		$user = PLIB_Props::get()->user();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access($user->is_loggedin());
+		$renderer->set_has_access($user->is_loggedin());
 		
-		$doc->set_template('userprofile.htm');
+		$renderer->set_template('userprofile.htm');
 
 		switch($input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING))
 		{
@@ -72,7 +73,7 @@ final class BS_Front_Module_userprofile extends BS_Front_SubModuleContainer
 				break;
 		}
 		
-		$doc->add_breadcrumb($locale->lang($title),'');
+		$renderer->add_breadcrumb($locale->lang($title),'');
 		
 		// init submodule
 		$this->_sub->init($doc);

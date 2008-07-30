@@ -103,7 +103,7 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 * Returns the attachment with the given id
 	 *
 	 * @param int $id the attachment-id
-	 * @return array the data of it
+	 * @return array the data of it or false if not found
 	 */
 	public function get_by_id($id)
 	{
@@ -112,11 +112,14 @@ class BS_DAO_Attachments extends PLIB_Singleton
 		if(!PLIB_Helper::is_integer($id) || $id <= 0)
 			PLIB_Helper::def_error('intgt0','id',$id);
 		
-		return $db->sql_fetch(
+		$res = $db->sql_fetch(
 			'SELECT *
 			 FROM '.BS_TB_ATTACHMENTS.'
 			 WHERE id = '.$id
 		);
+		if(!$res)
+			return false;
+		return $res;
 	}
 	
 	/**
@@ -125,7 +128,7 @@ class BS_DAO_Attachments extends PLIB_Singleton
 	 *
 	 * @param string $path the attachment-path
 	 * @param int $user_id user-id (0 = guest)
-	 * @return array the attachment
+	 * @return array the attachment or false if not found
 	 */
 	public function get_attachment_of_user_by_path($path,$user_id)
 	{
@@ -134,11 +137,14 @@ class BS_DAO_Attachments extends PLIB_Singleton
 		if(!PLIB_Helper::is_integer($user_id) || $user_id < 0)
 			PLIB_Helper::def_error('intge0','user_id',$user_id);
 		
-		return $db->sql_fetch(
+		$res = $db->sql_fetch(
 			'SELECT *
 			 FROM '.BS_TB_ATTACHMENTS.'
 			 WHERE attachment_path = "'.$path.'" AND IF(pm_id > 0,poster_id = '.$user_id.',1)'
 		);
+		if(!$res)
+			return false;
+		return $res;
 	}
 	
 	/**

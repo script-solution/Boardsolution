@@ -22,7 +22,7 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -32,16 +32,17 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 		$user = PLIB_Props::get()->user();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access($user->is_loggedin());
+		$renderer->set_has_access($user->is_loggedin());
 		
-		$doc->add_action(BS_ACTION_LOCK_TOPICS,'default');
+		$renderer->add_action(BS_ACTION_LOCK_TOPICS,'default');
 		
 		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		$ids = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
 
 		$this->add_loc_forum_path($fid);
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('lock_topics'),
 			$url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids)
 		);
@@ -102,7 +103,7 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 		$selected_topics = BS_TopicUtils::get_instance()->get_selected_topics($selected_topic_data);
 		if(count($selected_topics) == 0)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('no_topics_chosen'));
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('no_topics_chosen'));
 			return;
 		}
 

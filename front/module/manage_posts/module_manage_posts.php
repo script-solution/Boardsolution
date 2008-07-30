@@ -22,7 +22,7 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -33,13 +33,14 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 		$url = PLIB_Props::get()->url();
 		$user = PLIB_Props::get()->user();
 		$auth = PLIB_Props::get()->auth();
+		$renderer = $doc->use_default_renderer();
 
-		$doc->set_has_access($user->is_loggedin() && $auth->has_current_forum_perm(BS_MODE_SPLIT_POSTS));
+		$renderer->set_has_access($user->is_loggedin() && $auth->has_current_forum_perm(BS_MODE_SPLIT_POSTS));
 		
 		// add actions
-		$doc->add_action(BS_ACTION_MERGE_POSTS,array('default','merge'));
-		$doc->add_action(BS_ACTION_SPLIT_POSTS,array('default','split'));
-		$doc->add_module_action(
+		$renderer->add_action(BS_ACTION_MERGE_POSTS,array('default','merge'));
+		$renderer->add_action(BS_ACTION_SPLIT_POSTS,array('default','split'));
+		$renderer->add_module_action(
 			BS_ACTION_DELETE_POSTS,'delete_post','default','front/module/'
 		);
 		
@@ -49,7 +50,7 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 		
 		$this->add_loc_forum_path($fid);
 		$this->add_loc_topic();
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('manage_posts'),
 			$url->get_url('manage_posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid)
 		);
@@ -82,7 +83,7 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 		// forum closed?
 		if(!$user->is_admin() && $forums->forum_is_closed($fid))
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('forum_is_closed'));
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('forum_is_closed'));
 			return;
 		}
 		

@@ -36,7 +36,7 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -45,10 +45,11 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 		$auth = PLIB_Props::get()->auth();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access($auth->has_global_permission('view_online_locations'));
+		$renderer->set_has_access($auth->has_global_permission('view_online_locations'));
 
-		$doc->add_breadcrumb($locale->lang('user_locations'),$url->get_url('user_locations'));
+		$renderer->add_breadcrumb($locale->lang('user_locations'),$url->get_url('user_locations'));
 	}
 	
 	/**

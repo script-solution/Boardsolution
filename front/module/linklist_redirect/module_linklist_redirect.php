@@ -22,13 +22,13 @@ final class BS_Front_Module_linklist_redirect extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
-		$doc->set_output_enabled(false);
+		$doc->use_raw_renderer();
 	}
 	
 	/**

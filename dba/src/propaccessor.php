@@ -20,6 +20,16 @@
 final class BS_DBA_PropAccessor extends BS_PropAccessor
 {
 	/**
+	 * @see BS_PropAccessor::doc()
+	 *
+	 * @return BS_DBA_Document
+	 */
+	public function doc()
+	{
+		return $this->get('doc');
+	}
+
+	/**
 	 * @return BS_DBA_Backup_Manager the backup-manager
 	 */
 	public function backups()

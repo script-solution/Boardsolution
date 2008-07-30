@@ -22,7 +22,7 @@ final class BS_Front_SubModule_userprofile_pmoutbox extends BS_Front_SubModule
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -30,12 +30,13 @@ final class BS_Front_SubModule_userprofile_pmoutbox extends BS_Front_SubModule
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACTION_DELETE_PMS,'deletepms');
-		$doc->add_action(BS_ACTION_MARK_PMS_READ,'pmmarkread');
-		$doc->add_action(BS_ACTION_MARK_PMS_UNREAD,'pmmarkunread');
+		$renderer->add_action(BS_ACTION_DELETE_PMS,'deletepms');
+		$renderer->add_action(BS_ACTION_MARK_PMS_READ,'pmmarkread');
+		$renderer->add_action(BS_ACTION_MARK_PMS_UNREAD,'pmmarkunread');
 
-		$doc->add_breadcrumb($locale->lang('pmoutbox'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmoutbox'));
+		$renderer->add_breadcrumb($locale->lang('pmoutbox'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmoutbox'));
 	}
 	
 	/**
@@ -46,7 +47,7 @@ final class BS_Front_SubModule_userprofile_pmoutbox extends BS_Front_SubModule
 		$helper = BS_Front_Module_UserProfile_Helper::get_instance();
 		if($helper->get_pm_permission() < 1)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
 			return;
 		}
 		

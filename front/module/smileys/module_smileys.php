@@ -22,7 +22,7 @@ final class BS_Front_Module_smileys extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -31,13 +31,14 @@ final class BS_Front_Module_smileys extends BS_Front_Module
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 		$input = PLIB_Props::get()->input();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_template('popup_smileys.htm');
-		$doc->set_show_headline(false);
-		$doc->set_show_bottom(false);
+		$renderer->set_template('popup_smileys.htm');
+		$renderer->set_show_headline(false);
+		$renderer->set_show_bottom(false);
 		
 		$number = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('smileys'),
 			$url->get_url('smileys','&amp;'.BS_URL_ID.'='.$number)
 		);

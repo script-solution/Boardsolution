@@ -28,7 +28,8 @@ final class BS_DBA_Module_backups extends BS_DBA_Module
 	{
 		parent::init($doc);
 		
-		$doc->add_action(BS_DBA_ACTION_DELETE_BACKUPS,'delete');
+		$renderer = $doc->use_default_renderer();
+		$renderer->add_action(BS_DBA_ACTION_DELETE_BACKUPS,'delete');
 	}
 	
 	/**

@@ -22,13 +22,13 @@ final class BS_Front_Module_download extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
-		$doc->set_output_enabled(false);
+		$doc->use_download_renderer();
 	}
 	
 	/**
@@ -40,6 +40,7 @@ final class BS_Front_Module_download extends BS_Front_Module
 		$user = PLIB_Props::get()->user();
 		$auth = PLIB_Props::get()->auth();
 		$ips = PLIB_Props::get()->ips();
+		$doc = PLIB_Props::get()->doc();
 
 		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
 		
@@ -47,57 +48,64 @@ final class BS_Front_Module_download extends BS_Front_Module
 		{
 			// ok, then try the path
 			$path = $input->get_var('path','get',PLIB_Input::STRING);
-			if($path !== null && preg_match('/^uploads\//',$path))
+			if($path === null || !preg_match('/^uploads\//',$path))
 			{
-				$path = str_replace('../','',$path);
-				$data = BS_DAO::get_attachments()->get_attachment_of_user_by_path(
-					$path,$user->get_user_id()
-				);
+				$this->report_error();
+				return;
 			}
+			
+			$path = str_replace('../','',$path);
+			$data = BS_DAO::get_attachments()->get_attachment_of_user_by_path(
+				$path,$user->get_user_id()
+			);
 		}
 		else
 			$data = BS_DAO::get_attachments()->get_by_id($id);
 		
-		// do we have got the data?
-		if(isset($data) && $data['id'] != '')
+		// not found?
+		if($data === false)
 		{
-		  if($auth->has_global_permission('attachments_download'))
-		  {
-		    // check if the user has the permission to download _this_ file
-		    $dl_allowed = false;
-		    // pm-attachment?
-		    if($data['pm_id'] > 0)
-		    	$dl_allowed = $user->is_loggedin() && $data['poster_id'] == $user->get_user_id();
-		    // post-attachment?
-		    else if($data['post_id'] > 0)
-		    {
-		    	$postdata = BS_DAO::get_posts()->get_post_by_id($data['post_id']);
-		    	$dl_allowed = $auth->has_access_to_intern_forum($postdata['rubrikid']);
-		    }
-		    
-		    if($dl_allowed)
-		    {
-			    if(is_file(PLIB_Path::server_app().$data['attachment_path']))
-			    {
-			    	if(!$ips->entry_exists('adl_'.$data['id']))
-			      	BS_DAO::get_attachments()->inc_downloads($data['id']);
-			      $ips->add_entry('adl_'.$data['id']);
-						
-			      $fileinfo = @getimagesize(PLIB_Path::server_app().$data['attachment_path']);
-			      $filetype = ($fileinfo) ? 'application/'.$fileinfo['mime'] : 'application/octet-stream';
-			      header('Content-Description: File Transfer');
-			      header('Content-Type: '.$filetype);
-			      if($filesize = @filesize(PLIB_Path::server_app().$data['attachment_path']))
-			        header('Content-Length: '.$filesize);
-			      header('Content-Disposition: attachment; filename="'.basename($data['attachment_path']).'"');
-			      readfile(PLIB_Path::server_app().$data['attachment_path']);
-			      return;
-			    }
-		    }
-		  }
+			$this->report_error();
+			return;
 		}
 		
-		$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+		// do we have got the data?
+		if(!$auth->has_global_permission('attachments_download'))
+		{
+			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+			return;
+		}
+
+		// check if the user has the permission to download _this_ file
+		$dl_allowed = false;
+		// pm-attachment?
+		if($data['pm_id'] > 0)
+			$dl_allowed = $user->is_loggedin() && $data['poster_id'] == $user->get_user_id();
+		// post-attachment?
+		else if($data['post_id'] > 0)
+		{
+			$postdata = BS_DAO::get_posts()->get_post_by_id($data['post_id']);
+			$dl_allowed = $auth->has_access_to_intern_forum($postdata['rubrikid']);
+		}
+
+		if(!$dl_allowed)
+		{
+			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+			return;
+		}
+		
+		if(!is_file(PLIB_Path::server_app().$data['attachment_path']))
+		{
+			$this->report_error();
+			return;
+		}
+		
+		if(!$ips->entry_exists('adl_'.$data['id']))
+			BS_DAO::get_attachments()->inc_downloads($data['id']);
+		$ips->add_entry('adl_'.$data['id']);
+		
+		$renderer = $doc->use_download_renderer();
+		$renderer->set_file(PLIB_Path::server_app().$data['attachment_path']);
 	}
 }
 ?>

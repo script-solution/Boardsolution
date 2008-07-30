@@ -31,14 +31,13 @@ final class BS_Location extends PLIB_Object
 	{
 		// cache some properties
 		$input = PLIB_Props::get()->input();
-		$doc = PLIB_Props::get()->doc();
 		
 		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
 		$action = $input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING);
 	
 		$location = '';
-		if($doc->is_acp())
+		if(defined('BS_ACP'))
 		{
 			$loc = $input->get_var('loc','get',PLIB_Input::STRING);
 			$location = 'acp:'.PLIB_FileUtils::get_name($loc,false);
@@ -121,7 +120,6 @@ final class BS_Location extends PLIB_Object
 	public function decode($enable_links = true)
 	{
 		$locale = PLIB_Props::get()->locale();
-		$doc = PLIB_Props::get()->doc();
 		$forums = PLIB_Props::get()->forums();
 		$cfg = PLIB_Props::get()->cfg();
 		$auth = PLIB_Props::get()->auth();
@@ -134,7 +132,7 @@ final class BS_Location extends PLIB_Object
 		if($parts[0] == 'acp')
 		{
 			// we don't want to display the acp-location in the frontend
-			if(!$doc->is_acp())
+			if(!defined('BS_ACP'))
 				return $locale->lang('loc_index');
 			
 			if($locale->contains_lang('loc_acp_'.$parts[1]))

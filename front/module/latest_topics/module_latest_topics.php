@@ -22,7 +22,7 @@ final class BS_Front_Module_latest_topics extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -30,10 +30,11 @@ final class BS_Front_Module_latest_topics extends BS_Front_Module
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_robots_value('index,follow');
+		$doc->use_default_renderer()->set_robots_value('index,follow');
 		
-		$doc->add_breadcrumb($locale->lang('current_topics'),$url->get_url(0));
+		$renderer->add_breadcrumb($locale->lang('current_topics'),$url->get_url(0));
 	}
 	
 	/**

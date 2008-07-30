@@ -22,7 +22,7 @@ final class BS_Front_Module_faq extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -31,10 +31,10 @@ final class BS_Front_Module_faq extends BS_Front_Module
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 		$cfg = PLIB_Props::get()->cfg();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access($cfg['enable_faq'] == 1);
-		
-		$doc->add_breadcrumb($locale->lang('faq'),$url->get_url('faq'));
+		$renderer->set_has_access($cfg['enable_faq'] == 1);
+		$renderer->add_breadcrumb($locale->lang('faq'),$url->get_url('faq'));
 	}
 	
 	/**

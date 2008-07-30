@@ -33,7 +33,7 @@ final class BS_ACP_SubModule_vcompare_default extends BS_ACP_SubModule
 		if($versions === false)
 		{
 			$this->report_error(
-				PLIB_Messages::MSG_TYPE_ERROR,$http->get_error_code().': '.$http->get_error_message()
+				PLIB_Document_Messages::ERROR,$http->get_error_code().': '.$http->get_error_message()
 			);
 			return;
 		}

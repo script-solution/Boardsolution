@@ -48,8 +48,9 @@ final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
 		parent::init($doc);
 		
 		$locale = PLIB_Props::get()->locale();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_breadcrumb($locale->lang('miscellaneous_in_progress'));
+		$renderer->add_breadcrumb($locale->lang('miscellaneous_in_progress'));
 	}
 	
 	/**

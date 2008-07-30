@@ -22,7 +22,7 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -32,10 +32,11 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 		$user = PLIB_Props::get()->user();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access($user->is_loggedin());
+		$renderer->set_has_access($user->is_loggedin());
 		
-		$doc->add_action(BS_ACTION_EDIT_POST,'default');
+		$renderer->add_action(BS_ACTION_EDIT_POST,'default');
 
 		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
@@ -45,7 +46,7 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		$this->add_loc_forum_path($fid);
 		$this->add_loc_topic();
 		$params = '&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_ID.'='.$id.$site;
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('edit_post'),
 			$url->get_url('edit_post',$params)
 		);
@@ -88,14 +89,14 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		// no permission to edit the post?
 		if(!$auth->has_current_forum_perm(BS_MODE_EDIT_POST,$data['post_user']))
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
 			return;
 		}
 		
 		// forum closed?
 		if(!$user->is_admin() && $forums->forum_is_closed($fid))
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('forum_is_closed'));
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('forum_is_closed'));
 			return;
 		}
 		
@@ -110,7 +111,7 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		if(BS_TopicUtils::get_instance()->is_locked($data['locked'],BS_LOCK_TOPIC_POSTS,$data['edit_lock']))
 		{
 			$this->report_error(
-				PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('no_permission_to_edit_post')
+				PLIB_Document_Messages::ERROR,$locale->lang('no_permission_to_edit_post')
 			);
 			return;
 		}

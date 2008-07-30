@@ -30,8 +30,9 @@ final class BS_Front_SubModule_stats_timeline extends BS_Front_SubModule
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('stats_timeline'),
 			$url->get_url('stats','&amp;'.BS_URL_LOC.'=timeline')
 		);

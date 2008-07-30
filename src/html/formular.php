@@ -29,8 +29,13 @@ final class BS_HTML_Formular extends PLIB_HTML_Formular
 	{
 		$doc = PLIB_Props::get()->doc();
 		$input = PLIB_Props::get()->input();
-
-		$condition = $doc->get_action_result() === -1;
+		$renderer = $doc->get_renderer();
+		
+		if($renderer instanceof PLIB_Document_Renderer_HTML_Default)
+			$condition = $renderer->get_action_result() === -1;
+		else
+			$condition = false;
+		
 		if(!$condition && $check_attachments)
 			$condition |= $input->isset_var('add_attachment','post') ||
 						$input->isset_var('remove_attachment','post');

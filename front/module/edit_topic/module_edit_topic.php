@@ -29,7 +29,7 @@ final class BS_Front_Module_edit_topic extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -39,20 +39,21 @@ final class BS_Front_Module_edit_topic extends BS_Front_Module
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 		$user = PLIB_Props::get()->user();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access($user->is_loggedin());
+		$renderer->set_has_access($user->is_loggedin());
 		
 		// add actions
-		$doc->add_action(BS_ACTION_EDIT_EVENT,'event');
-		$doc->add_action(BS_ACTION_EDIT_TOPIC,'topic');
-		$doc->add_action(BS_ACTION_EDIT_POLL,'poll');
+		$renderer->add_action(BS_ACTION_EDIT_EVENT,'event');
+		$renderer->add_action(BS_ACTION_EDIT_TOPIC,'topic');
+		$renderer->add_action(BS_ACTION_EDIT_POLL,'poll');
 
 		// add bread crumbs
 		$id = (int)$input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
 		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		
 		$this->add_loc_forum_path($fid);
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('editthread'),
 			$url->get_url('edit_topic','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id)
 		);
@@ -71,7 +72,7 @@ final class BS_Front_Module_edit_topic extends BS_Front_Module
 			else if($this->_tdata['type'] == -1)
 				$tplname = 'edit_event.htm';
 			
-			$doc->set_template($tplname);
+			$renderer->set_template($tplname);
 		}
 	}
 	
@@ -109,28 +110,28 @@ final class BS_Front_Module_edit_topic extends BS_Front_Module
 		// is the user allowed to edit this topic?
 		if(!$auth->has_current_forum_perm(BS_MODE_EDIT_TOPIC,$this->_tdata['post_user']))
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
 			return;
 		}
 		
 		// forum closed?
 		if(!$user->is_admin() && $forums->forum_is_closed($fid))
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('forum_is_closed'));
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('forum_is_closed'));
 			return;
 		}
 	
 		// has this topic been moved?
 		if($this->_tdata['moved_tid'] != 0)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('shadow_thread_deny'));
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('shadow_thread_deny'));
 			return;
 		}
 	
 		// no access because a user with higher status locked the post?
 		if(BS_TopicUtils::get_instance()->is_locked($this->_tdata['locked'],BS_LOCK_TOPIC_EDIT))
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('no_permission_locked'));
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('no_permission_locked'));
 			return;
 		}
 	

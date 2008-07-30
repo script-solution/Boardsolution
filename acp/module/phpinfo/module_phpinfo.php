@@ -30,13 +30,13 @@ final class BS_ACP_Module_phpinfo extends BS_ACP_Module
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
-		
-		$doc->add_action(BS_ACP_ACTION_ACPACCESS_MODULE,'module');
+		$renderer = $doc->use_default_renderer();
 		
 		// disable gzip here
 		$doc->set_gzip(false);
-
-		$doc->add_breadcrumb($locale->lang('acpmod_phpinfo'),$url->get_acpmod_url());
+		
+		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_MODULE,'module');
+		$renderer->add_breadcrumb($locale->lang('acpmod_phpinfo'),$url->get_acpmod_url());
 	}
 	
 	/**

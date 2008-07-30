@@ -28,10 +28,11 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$doc->add_action(BS_ACP_ACTION_SWITCH_SMILEYS,'switch');
-		$doc->add_action(BS_ACP_ACTION_DELETE_SMILEYS,'delete');
-		$doc->add_action(BS_ACP_ACTION_IMPORT_SMILEYS,'import');
-		$doc->add_action(BS_ACP_ACTION_RESORT_SMILEYS,'resort');
+		$renderer = $doc->use_default_renderer();
+		$renderer->add_action(BS_ACP_ACTION_SWITCH_SMILEYS,'switch');
+		$renderer->add_action(BS_ACP_ACTION_DELETE_SMILEYS,'delete');
+		$renderer->add_action(BS_ACP_ACTION_IMPORT_SMILEYS,'import');
+		$renderer->add_action(BS_ACP_ACTION_RESORT_SMILEYS,'resort');
 	}
 	
 	/**

@@ -22,7 +22,7 @@ final class BS_Front_Module_search extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -32,10 +32,11 @@ final class BS_Front_Module_search extends BS_Front_Module
 		$url = PLIB_Props::get()->url();
 		$cfg = PLIB_Props::get()->cfg();
 		$auth = PLIB_Props::get()->auth();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access($cfg['enable_search'] == 1 && $auth->has_global_permission('view_search'));
+		$renderer->set_has_access($cfg['enable_search'] == 1 && $auth->has_global_permission('view_search'));
 		
-		$doc->add_breadcrumb($locale->lang('search'),$url->get_url('search'));
+		$renderer->add_breadcrumb($locale->lang('search'),$url->get_url('search'));
 	}
 	
 	/**

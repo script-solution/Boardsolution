@@ -22,7 +22,7 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -32,11 +32,12 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 		$user = PLIB_Props::get()->user();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access($user->is_loggedin());
+		$renderer->set_has_access($user->is_loggedin());
 		
-		$doc->add_action(BS_ACTION_OPEN_TOPICS,array('default','open'));
-		$doc->add_action(BS_ACTION_CLOSE_TOPICS,array('default','close'));
+		$renderer->add_action(BS_ACTION_OPEN_TOPICS,array('default','open'));
+		$renderer->add_action(BS_ACTION_CLOSE_TOPICS,array('default','close'));
 
 		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		$ids = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
@@ -45,7 +46,7 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 		);
 		
 		$this->add_loc_forum_path($fid);
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang($mode.'_topics'),
 			$url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids.'&amp;mode='.$mode)
 		);
@@ -136,7 +137,7 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 		if(count($selected_topics) == 0)
 		{
 			$this->report_error(
-				PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('no_topics_chosen_openclose')
+				PLIB_Document_Messages::ERROR,$locale->lang('no_topics_chosen_openclose')
 			);
 			return;
 		}

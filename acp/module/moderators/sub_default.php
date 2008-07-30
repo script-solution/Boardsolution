@@ -28,8 +28,9 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$doc->add_action(BS_ACP_ACTION_ADD_MODERATORS,'add');
-		$doc->add_action(BS_ACP_ACTION_REMOVE_MODERATORS,'remove');
+		$renderer = $doc->use_default_renderer();
+		$renderer->add_action(BS_ACP_ACTION_ADD_MODERATORS,'add');
+		$renderer->add_action(BS_ACP_ACTION_REMOVE_MODERATORS,'remove');
 	}
 	
 	/**

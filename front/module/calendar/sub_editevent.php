@@ -28,8 +28,9 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 	{
 		parent::init($doc);
 		
-		$doc->add_action(BS_ACTION_CAL_ADD_EVENT,'addevent');
-		$doc->add_action(BS_ACTION_CAL_EDIT_EVENT,'editevent');
+		$renderer = $doc->use_default_renderer();
+		$renderer->add_action(BS_ACTION_CAL_ADD_EVENT,'addevent');
+		$renderer->add_action(BS_ACTION_CAL_EDIT_EVENT,'editevent');
 		
 		$input = PLIB_Props::get()->input();
 		$locale = PLIB_Props::get()->locale();
@@ -38,14 +39,14 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
 		if($id !== null)
 		{
-			$doc->add_breadcrumb(
+			$renderer->add_breadcrumb(
 				$locale->lang('edit_event'),
 				$url->get_url(0,'&amp;'.BS_URL_LOC.'=editevent&amp;'.BS_URL_ID.'='.$id)
 			);
 		}
 		else
 		{
-			$doc->add_breadcrumb(
+			$renderer->add_breadcrumb(
 				$locale->lang('add_event'),
 				$url->get_url(0,'&amp;'.BS_URL_LOC.'=editevent')
 			);
@@ -65,7 +66,7 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 		// calendar-events disabled?
 		if($cfg['enable_calendar_events'] == 0)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
 			return;
 		}
 		
@@ -105,7 +106,7 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 				if($default['user_id'] != $user->get_user_id() ||
 						!$auth->has_global_permission('edit_cal_event'))
 				{
-					$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+					$this->report_error(PLIB_Document_Messages::NO_ACCESS);
 					return;
 				}
 			}
@@ -113,7 +114,7 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 			{
 				if(!$auth->has_global_permission('add_cal_event'))
 				{
-					$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+					$this->report_error(PLIB_Document_Messages::NO_ACCESS);
 					return;
 				}
 			}

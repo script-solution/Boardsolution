@@ -91,15 +91,16 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		parent::init($doc);
 		
 		$input = PLIB_Props::get()->input();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_breadcrumb(BS_VERSION.' vs. '.$this->_compare_version);
+		$renderer->add_breadcrumb(BS_VERSION.' vs. '.$this->_compare_version);
 		
 		$http = new PLIB_HTTP('www.script-solution.de');
 		$this->_versions = $http->get('/bsversions/versions.xml');
 		if($this->_versions === false)
 		{
 			$this->report_error(
-				PLIB_Messages::MSG_TYPE_ERROR,$http->get_error_code().': '.$http->get_error_message()
+				PLIB_Document_Messages::ERROR,$http->get_error_code().': '.$http->get_error_message()
 			);
 			return;
 		}
@@ -113,7 +114,7 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		if(!isset($cbversions[$compare]))
 		{
 			$this->report_error(
-				PLIB_Messages::MSG_TYPE_ERROR,'Version with id "'.$compare.'" doesn\'t exist!'
+				PLIB_Document_Messages::ERROR,'Version with id "'.$compare.'" doesn\'t exist!'
 			);
 			return;
 		}
@@ -151,7 +152,7 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		if($versioninfo === false)
 		{
 			$this->report_error(
-				PLIB_Messages::MSG_TYPE_ERROR,$http->get_error_code().': '.$http->get_error_message()
+				PLIB_Document_Messages::ERROR,$http->get_error_code().': '.$http->get_error_message()
 			);
 			return;
 		}

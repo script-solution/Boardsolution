@@ -200,14 +200,6 @@ class BS_PropLoader extends PLIB_PropLoader
 	}
 	
 	/**
-	 * @return BS_Messages the property
-	 */
-	protected function msgs()
-	{
-		return new BS_Messages();
-	}
-	
-	/**
 	 * @return PLIB_Input the property
 	 */
 	protected function input()

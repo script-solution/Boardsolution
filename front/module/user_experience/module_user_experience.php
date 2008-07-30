@@ -68,13 +68,13 @@ final class BS_Front_Module_user_experience extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
-		$doc->set_output_enabled(false);
+		$doc->use_gdimage_renderer();
 	}
 	
 	/**
@@ -252,8 +252,10 @@ final class BS_Front_Module_user_experience extends BS_Front_Module
 		$g->draw_line($start->derive(0,BS_IMG_HEIGHT - 1),$end->derive(0,BS_IMG_HEIGHT - 1),$linecolor);
 		$g->draw_line($end->derive(-1,0),$end->derive(-1,BS_IMG_HEIGHT - 1),$linecolor);
 		
-		// finish
-		$img->send();
+		// set image to the renderer
+		$doc = PLIB_Props::get()->doc();
+		$renderer = $doc->use_gdimage_renderer();
+		$renderer->set_image($img);
 	}
 }
 ?>

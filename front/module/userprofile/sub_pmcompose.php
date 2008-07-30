@@ -22,7 +22,7 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -31,14 +31,15 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 		$input = PLIB_Props::get()->input();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACTION_SEND_PM,'sendpm');
+		$renderer->add_action(BS_ACTION_SEND_PM,'sendpm');
 		
 		$uid = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
 		$pid = $input->get_var(BS_URL_PID,'get',PLIB_Input::ID);
 		$id = ($uid != null) ? '&amp;'.BS_URL_ID.'='.$uid : '';
 		$pid = ($pid != null) ? '&amp;'.BS_URL_PID.'='.$pid : '';
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('newpm'),
 			$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmcompose'.$id.$pid)
 		);
@@ -59,7 +60,7 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		$helper = BS_Front_Module_UserProfile_Helper::get_instance();
 		if($helper->get_pm_permission() < 1)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
 			return;
 		}
 		

@@ -31,21 +31,22 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 		$input = PLIB_Props::get()->input();
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_EDIT_ADDFIELD,'edit');
-		$doc->add_action(BS_ACP_ACTION_ADD_ADDFIELD,'add');
+		$renderer->add_action(BS_ACP_ACTION_EDIT_ADDFIELD,'edit');
+		$renderer->add_action(BS_ACP_ACTION_ADD_ADDFIELD,'add');
 
 		$id = $input->get_var('id','get',PLIB_Input::ID);
 		if($id == null)
 		{
-			$doc->add_breadcrumb(
+			$renderer->add_breadcrumb(
 				$locale->lang('add_new_field'),
 				$url->get_acpmod_url(0,'&amp;action=add')
 			);
 		}
 		else
 		{
-			$doc->add_breadcrumb(
+			$renderer->add_breadcrumb(
 				$locale->lang('edit_field'),
 				$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
 			);

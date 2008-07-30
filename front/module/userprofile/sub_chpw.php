@@ -22,7 +22,7 @@ final class BS_Front_SubModule_userprofile_chpw extends BS_Front_SubModule
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -31,11 +31,12 @@ final class BS_Front_SubModule_userprofile_chpw extends BS_Front_SubModule
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 		$cfg = PLIB_Props::get()->cfg();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACTION_CHANGE_USER_PW,'chguserpw');
+		$renderer->add_action(BS_ACTION_CHANGE_USER_PW,'chguserpw');
 		
 		$title = $cfg['profile_max_user_changes'] != 0 ? 'user_n_pw_change' : 'pw_change';
-		$doc->add_breadcrumb($locale->lang($title),$url->get_url(0,'&amp;'.BS_URL_LOC.'=chpw'));
+		$renderer->add_breadcrumb($locale->lang($title),$url->get_url(0,'&amp;'.BS_URL_LOC.'=chpw'));
 	}
 	
 	/**
@@ -52,7 +53,7 @@ final class BS_Front_SubModule_userprofile_chpw extends BS_Front_SubModule
 		// has the user the permission to change user/pw
 		if(BS_ENABLE_EXPORT)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR);
+			$this->report_error(PLIB_Document_Messages::ERROR);
 			return;
 		}
 

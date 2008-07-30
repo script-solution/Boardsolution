@@ -103,13 +103,13 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
-		$doc->set_output_enabled(false);
+		$doc->use_gdimage_renderer();
 	}
 	
 	/**
@@ -388,7 +388,9 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 		$tview->draw_in_rect($legend,$textpad,$textpos);
 		
 		// finish
-		$img->send('png',false);
+		$doc = PLIB_Props::get()->doc();
+		$renderer = $doc->use_gdimage_renderer();
+		$renderer->set_image($img);
 	}
 }
 

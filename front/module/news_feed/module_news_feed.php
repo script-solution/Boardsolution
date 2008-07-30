@@ -22,13 +22,13 @@ final class BS_Front_Module_news_feed extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
-		$doc->set_output_enabled(false);
+		$doc->use_raw_renderer();
 	}
 	
 	/**
@@ -59,9 +59,9 @@ final class BS_Front_Module_news_feed extends BS_Front_Module
 		
 		$doc->set_mimetype('application/xml');
 		$doc->set_header('Content-Type','application/xml');
-		$res = $doc->gzip($xml);
-		$doc->send_header();
-		echo $res;
+		
+		$renderer = $doc->use_raw_renderer();
+		$renderer->set_content($xml);
 	}
 }
 ?>

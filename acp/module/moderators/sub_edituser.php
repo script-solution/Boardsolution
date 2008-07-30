@@ -31,11 +31,12 @@ final class BS_ACP_SubModule_moderators_edituser extends BS_ACP_SubModule
 		$input = PLIB_Props::get()->input();
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_CONFIG_MOD_FORUMS,'edituser');
+		$renderer->add_action(BS_ACP_ACTION_CONFIG_MOD_FORUMS,'edituser');
 		
 		$usernames = $input->get_var('usernames','get',PLIB_Input::STRING);
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('config_mod_forums'),
 			$url->get_acpmod_url(0,'&amp;action=edituser&amp;usernames='.$usernames)
 		);
@@ -54,7 +55,7 @@ final class BS_ACP_SubModule_moderators_edituser extends BS_ACP_SubModule
 		$auser = preg_split('/\s*,\s*/',$usernames);
 		if(count($auser) == 0)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('username_not_found'));
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('username_not_found'));
 			return;
 		}
 		
@@ -66,7 +67,7 @@ final class BS_ACP_SubModule_moderators_edituser extends BS_ACP_SubModule
 		// any user found?
 		if(count($user_ids) == 0)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('username_not_found'));
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('username_not_found'));
 			return;
 		}
 		

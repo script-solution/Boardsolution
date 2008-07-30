@@ -22,16 +22,17 @@ final class BS_Front_Module_topics extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
 		$input = PLIB_Props::get()->input();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_robots_value('index,follow');		
-		$doc->add_action(BS_ACTION_SUBSCRIBE_FORUM,'subscribeforum');
+		$renderer->set_robots_value('index,follow');		
+		$renderer->add_action(BS_ACTION_SUBSCRIBE_FORUM,'subscribeforum');
 
 		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		$this->add_loc_forum_path($fid);
@@ -74,8 +75,8 @@ final class BS_Front_Module_topics extends BS_Front_Module
 		if($forum_data === null)
 		{
 			// send a 404 for search-engines and such
-			header('HTTP/1.0 404 Not Found');
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('forum_not_found'));
+			$doc->set_header('HTTP/1.0 404 Not Found','');
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('forum_not_found'));
 			return;
 		}
 
@@ -94,7 +95,7 @@ final class BS_Front_Module_topics extends BS_Front_Module
 		// check if the user is allowed to view the forum
 		if(!$auth->has_access_to_intern_forum($fid))
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
 			return;
 		}
 

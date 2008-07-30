@@ -22,7 +22,7 @@ final class BS_Front_Module_new_event extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -33,16 +33,17 @@ final class BS_Front_Module_new_event extends BS_Front_Module
 		$url = PLIB_Props::get()->url();
 		$auth = PLIB_Props::get()->auth();
 		$cfg = PLIB_Props::get()->cfg();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access($auth->has_current_forum_perm(BS_MODE_START_EVENT) &&
+		$renderer->set_has_access($auth->has_current_forum_perm(BS_MODE_START_EVENT) &&
 			$cfg['enable_events'] == 1);
 		
-		$doc->add_action(BS_ACTION_START_EVENT,'default');
+		$renderer->add_action(BS_ACTION_START_EVENT,'default');
 
 		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		
 		$this->add_loc_forum_path($fid);
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('newevent'),
 			$url->get_url('new_event','&amp;'.BS_URL_FID.'='.$fid)
 		);
@@ -80,7 +81,7 @@ final class BS_Front_Module_new_event extends BS_Front_Module
 		// forum closed?
 		if(!$user->is_admin() && $forums->forum_is_closed($fid))
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('forum_is_closed'));
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('forum_is_closed'));
 			return;
 		}
 	

@@ -20,6 +20,16 @@
 final class BS_DBA_PropLoader extends BS_PropLoader
 {
 	/**
+	 * Loads the document
+	 *
+	 * @return BS_DBA_Document the document
+	 */
+	protected function doc()
+	{
+		return new BS_DBA_Document();
+	}
+	
+	/**
 	 * @see BS_PropLoader::sessions()
 	 *
 	 * @return PLIB_Session_Manager

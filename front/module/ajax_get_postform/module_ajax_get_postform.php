@@ -22,13 +22,13 @@ final class BS_Front_Module_ajax_get_postform extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
-		$doc->set_output_enabled(false);
+		$doc->use_raw_renderer();
 	}
 	
 	/**
@@ -37,6 +37,7 @@ final class BS_Front_Module_ajax_get_postform extends BS_Front_Module
 	public function run()
 	{
 		$input = PLIB_Props::get()->input();
+		$doc = PLIB_Props::get()->doc();
 
 		$type = $input->correct_var(
 			'type','get',PLIB_Input::STRING,array('post','sig','linkdesc','pm'),'post'
@@ -48,7 +49,9 @@ final class BS_Front_Module_ajax_get_postform extends BS_Front_Module
 		
 		$form = new BS_PostingForm('','',$type);
 		$form->set_textarea_height($height);
-		echo $form->get_textarea('',$mode == 'applet');
+		
+		$renderer = $doc->use_raw_renderer();
+		$renderer->set_content($form->get_textarea('',$mode == 'applet'));
 	}
 }
 ?>

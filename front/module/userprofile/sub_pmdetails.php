@@ -22,7 +22,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -31,9 +31,10 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 		$input = PLIB_Props::get()->input();
+		$renderer = $doc->use_default_renderer();
 
 		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('details'),
 			$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmdetails&amp;'.BS_URL_ID.'='.$id)
 		);
@@ -55,7 +56,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		$helper = BS_Front_Module_UserProfile_Helper::get_instance();
 		if($helper->get_pm_permission() < 1)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
 			return;
 		}
 

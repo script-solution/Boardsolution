@@ -38,11 +38,12 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 		$input = PLIB_Props::get()->input();
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_SAVE_SETTINGS,'save');
-		$doc->add_action(BS_ACP_ACTION_REVERT_SETTING,'revert');
+		$renderer->add_action(BS_ACP_ACTION_SAVE_SETTINGS,'save');
+		$renderer->add_action(BS_ACP_ACTION_REVERT_SETTING,'revert');
 		
-		$doc->set_template('config_items.htm');
+		$renderer->set_template('config_items.htm');
 
 		// init manager
 		$this->_keyword = $input->get_var('kw','get',PLIB_Input::STRING);
@@ -57,7 +58,7 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 		$keyword = $input->get_var('kw','get',PLIB_Input::STRING);
 		if($keyword != null)
 		{
-			$doc->add_breadcrumb(
+			$renderer->add_breadcrumb(
 				$locale->lang('config_search_result_title'),
 				$url->get_acpmod_url(0,'&amp;action=search&amp;kw='.$keyword)
 			);

@@ -22,7 +22,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -33,12 +33,13 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 		$url = PLIB_Props::get()->url();
 		$user = PLIB_Props::get()->user();
 		$auth = PLIB_Props::get()->auth();
+		$renderer = $doc->use_default_renderer();
 
 		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
 		
-		$doc->set_has_access($user->get_user_id() == $id || $auth->has_global_permission('view_userdetails'));
+		$renderer->set_has_access($user->get_user_id() == $id || $auth->has_global_permission('view_userdetails'));
 		
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('userdetails'),
 			$url->get_url('userdetails','&amp;'.BS_URL_ID.'='.$id)
 		);

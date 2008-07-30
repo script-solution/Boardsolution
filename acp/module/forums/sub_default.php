@@ -28,10 +28,11 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$doc->add_action(BS_ACP_ACTION_DELETE_FORUMS,array('delete','delete'));
-		$doc->add_action(BS_ACP_ACTION_TRUNCATE_FORUMS,array('delete','truncate'));
-		$doc->add_action(BS_ACP_ACTION_SWITCH_FORUMS,'switch');
-		$doc->add_action(BS_ACP_ACTION_RESORT_FORUMS,'resort');
+		$renderer = $doc->use_default_renderer();
+		$renderer->add_action(BS_ACP_ACTION_DELETE_FORUMS,array('delete','delete'));
+		$renderer->add_action(BS_ACP_ACTION_TRUNCATE_FORUMS,array('delete','truncate'));
+		$renderer->add_action(BS_ACP_ACTION_SWITCH_FORUMS,'switch');
+		$renderer->add_action(BS_ACP_ACTION_RESORT_FORUMS,'resort');
 	}
 	
 	/**

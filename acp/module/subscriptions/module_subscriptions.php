@@ -30,9 +30,10 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_DELETE_SUBSCRIPTIONS,'delete');
-		$doc->add_breadcrumb($locale->lang('acpmod_subscriptions'),$url->get_acpmod_url());
+		$renderer->add_action(BS_ACP_ACTION_DELETE_SUBSCRIPTIONS,'delete');
+		$renderer->add_breadcrumb($locale->lang('acpmod_subscriptions'),$url->get_acpmod_url());
 	}
 	
 	/**

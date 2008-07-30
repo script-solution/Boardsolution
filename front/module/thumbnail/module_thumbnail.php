@@ -22,13 +22,13 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
-		$doc->set_output_enabled(false);
+		$doc->use_download_renderer();
 	}
 	
 	/**
@@ -92,7 +92,7 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 	  // check if the gd-library is installed
 	  if(!PLIB_PHPConfig::is_gd_installed())
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,'GD-Library could not be found!');
+			$this->report_error(PLIB_Document_Messages::ERROR,'GD-Library could not be found!');
 			return;
 		}
 	  
@@ -100,7 +100,7 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 	  $src_size = @getimagesize(PLIB_Path::server_app().$path);
 	  if(!$src_size)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,'The image is not readable!');
+			$this->report_error(PLIB_Document_Messages::ERROR,'The image is not readable!');
 			return;
 		}
 	
@@ -150,7 +150,7 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 					$src = PLIB_GD_Image::load_from($real_path,'png');
 					break;
 		    default:
-					$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,'Invalid image-type!');
+					$this->report_error(PLIB_Document_Messages::ERROR,'Invalid image-type!');
 					return;
 		  }
 		  
@@ -192,7 +192,7 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 		      break;
 		    
 		    default:
-		    	$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,'Unable to create image!');
+		    	$this->report_error(PLIB_Document_Messages::ERROR,'Unable to create image!');
 		    	return;
 		  }
 		  
@@ -202,24 +202,27 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 		  $src->destroy();
 		}
 		
-		// send the image to the browser
+		$doc = PLIB_Props::get()->doc();
+		$renderer = $doc->use_download_renderer();
+		$renderer->set_headers(false);
+		$renderer->set_file(PLIB_Path::server_app().$filename.'_thumb.'.$ext);
+		
+		// set the appropriate header
 		switch($ext)
 		{
 			case 'jpg':
 			case 'jpeg':
-				header('Content-type: image/jpeg');
+				$doc->set_header('Content-type','image/jpeg');
 				break;
 			
 			case 'gif':
-				header('Content-type: image/gif');
+				$doc->set_header('Content-type','image/gif');
 				break;
 			
 			case 'png':
-				header('Content-type: image/png');
+				$doc->set_header('Content-type','image/png');
 				break;
 		}
-		
-		readfile(PLIB_Path::server_app().$filename.'_thumb.'.$ext);
 	}
 }
 ?>

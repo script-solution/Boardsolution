@@ -141,7 +141,8 @@ if(defined('_JEXEC'))
 }
 
 // show the page
-$page = new BS_Front_Page();
-echo $page->render();
-return $page;
+$doc = new BS_Front_Document();
+PLIB_Props::get()->set_doc($doc);
+echo $doc->render();
+return $doc;
 ?>

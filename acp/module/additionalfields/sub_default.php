@@ -28,8 +28,9 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$doc->add_action(BS_ACP_ACTION_DELETE_ADDFIELDS,'delete');
-		$doc->add_action(BS_ACP_ACTION_SWITCH_ADDFIELDS,'switch');
+		$renderer = $doc->use_default_renderer();
+		$renderer->add_action(BS_ACP_ACTION_DELETE_ADDFIELDS,'delete');
+		$renderer->add_action(BS_ACP_ACTION_SWITCH_ADDFIELDS,'switch');
 	}
 	
 	/**

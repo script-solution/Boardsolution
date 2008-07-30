@@ -356,7 +356,7 @@ final class BS_PostingForm extends PLIB_Object
 			));
 		}
 		
-		if($doc->is_acp())
+		if(defined('BS_ACP'))
 			$murl = $functions->get_board_file(true).BS_URL_ACTION.'=faq#f_11';
 		else
 			$murl = $url->get_url('faq').'#f_11';

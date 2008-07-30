@@ -44,7 +44,8 @@ final class BS_ACP_Module_faq extends BS_ACP_Module
 		
 		$locale = PLIB_Props::get()->locale();
 		
-		$doc->add_breadcrumb($locale->lang('acpmod_adminfaq'));
+		$renderer = $doc->use_default_renderer();
+		$renderer->add_breadcrumb($locale->lang('acpmod_adminfaq'));
 	}
 	
 	/**

@@ -28,9 +28,10 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$doc->add_action(BS_ACP_ACTION_DELETE_LINKS,'delete');
-		$doc->add_action(BS_ACP_ACTION_ACTIVATE_LINKS,array('activate',1));
-		$doc->add_action(BS_ACP_ACTION_DEACTIVATE_LINKS,array('activate',0));
+		$renderer = $doc->use_default_renderer();
+		$renderer->add_action(BS_ACP_ACTION_DELETE_LINKS,'delete');
+		$renderer->add_action(BS_ACP_ACTION_ACTIVATE_LINKS,array('activate',1));
+		$renderer->add_action(BS_ACP_ACTION_DEACTIVATE_LINKS,array('activate',0));
 	}
 	
 	/**

@@ -30,10 +30,11 @@ final class BS_ACP_SubModule_tasks_add extends BS_ACP_SubModule
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_ADD_TASK,array('edit','add'));
-		$doc->set_template('tasks_edit.htm');
-		$doc->add_breadcrumb($locale->lang('add_task'),$url->get_acpmod_url(0,'&amp;action=add'));
+		$renderer->add_action(BS_ACP_ACTION_ADD_TASK,array('edit','add'));
+		$renderer->set_template('tasks_edit.htm');
+		$renderer->add_breadcrumb($locale->lang('add_task'),$url->get_acpmod_url(0,'&amp;action=add'));
 	}
 	
 	/**

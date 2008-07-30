@@ -21,7 +21,14 @@
 class BS_PropAccessor extends PLIB_PropAccessor
 {
 	/**
-	 * @return BS_Page the document
+	 * The document-instance
+	 *
+	 * @var BS_Document
+	 */
+	private $_doc;
+	
+	/**
+	 * @return BS_Document the document
 	 */
 	public function doc()
 	{
@@ -29,11 +36,24 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	}
 	
 	/**
+	 * Sets the document-instance
+	 *
+	 * @param BS_Document $doc the new value
+	 */
+	public function set_doc($doc)
+	{
+		if(!($doc instanceof BS_Document))
+			PLIB_Helper::def_error('instance','doc','BS_Document',$doc);
+		
+		$this->_doc = $doc;
+	}
+	
+	/**
 	 * @return BS_Auth the auth-property
 	 */
 	public function auth()
 	{
-		return parent::get('auth');
+		return $this->get('auth');
 	}
 	
 	/**
@@ -41,7 +61,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	 */
 	public function ips()
 	{
-		return parent::get('ips');
+		return $this->get('ips');
 	}
 	
 	/**
@@ -49,7 +69,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	 */
 	public function unread()
 	{
-		return parent::get('unread');
+		return $this->get('unread');
 	}
 	
 	/**
@@ -57,7 +77,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	 */
 	public function forums()
 	{
-		return parent::get('forums');
+		return $this->get('forums');
 	}
 	
 	/**
@@ -65,7 +85,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	 */
 	public function cache()
 	{
-		return parent::get('cache');
+		return $this->get('cache');
 	}
 	
 	/**
@@ -73,7 +93,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	 */
 	public function cfg()
 	{
-		return parent::get('cfg');
+		return $this->get('cfg');
 	}
 
 	/**
@@ -81,7 +101,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	 */
 	public function tpl()
 	{
-		return parent::get('tpl');
+		return $this->get('tpl');
 	}
 	
 	/**
@@ -89,7 +109,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	 */
 	public function sessions()
 	{
-		return parent::get('sessions');
+		return $this->get('sessions');
 	}
 
 	/**
@@ -97,7 +117,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	 */
 	public function user()
 	{
-		return parent::get('user');
+		return $this->get('user');
 	}
 	
 	/**
@@ -105,15 +125,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	 */
 	public function db()
 	{
-		return parent::get('db');
-	}
-	
-	/**
-	 * @return BS_Messages the msgs-property
-	 */
-	public function msgs()
-	{
-		return parent::get('msgs');
+		return $this->get('db');
 	}
 	
 	/**
@@ -121,7 +133,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	 */
 	public function input()
 	{
-		return parent::get('input');
+		return $this->get('input');
 	}
 
 	/**
@@ -129,7 +141,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	 */
 	public function cookies()
 	{
-		return parent::get('cookies');
+		return $this->get('cookies');
 	}
 
 	/**
@@ -137,7 +149,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	 */
 	public function functions()
 	{
-		return parent::get('functions');
+		return $this->get('functions');
 	}
 
 	/**
@@ -145,7 +157,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	 */
 	public function url()
 	{
-		return parent::get('url');
+		return $this->get('url');
 	}
 	
 	/**
@@ -153,7 +165,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	 */
 	public function locale()
 	{
-		return parent::get('locale');
+		return $this->get('locale');
 	}
 }
 ?>

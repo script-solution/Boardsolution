@@ -28,8 +28,9 @@ final class BS_ACP_SubModule_tasks_default extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$doc->add_action(BS_ACP_ACTION_RUN_TASK,'run');
-		$doc->add_action(BS_ACP_ACTION_DELETE_TASKS,'delete');
+		$renderer = $doc->use_default_renderer();
+		$renderer->add_action(BS_ACP_ACTION_RUN_TASK,'run');
+		$renderer->add_action(BS_ACP_ACTION_DELETE_TASKS,'delete');
 	}
 	
 	/**

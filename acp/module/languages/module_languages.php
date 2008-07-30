@@ -30,12 +30,13 @@ final class BS_ACP_Module_languages extends BS_ACP_Module
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_ADD_LANGUAGE,'add');
-		$doc->add_action(BS_ACP_ACTION_DELETE_LANGUAGES,'delete');
-		$doc->add_action(BS_ACP_ACTION_UPDATE_LANGUAGES,'update');
+		$renderer->add_action(BS_ACP_ACTION_ADD_LANGUAGE,'add');
+		$renderer->add_action(BS_ACP_ACTION_DELETE_LANGUAGES,'delete');
+		$renderer->add_action(BS_ACP_ACTION_UPDATE_LANGUAGES,'update');
 
-		$doc->add_breadcrumb($locale->lang('acpmod_languages'),$url->get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_languages'),$url->get_acpmod_url());
 	}
 	
 	/**

@@ -22,7 +22,7 @@ final class BS_Front_Module_activate extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -30,11 +30,11 @@ final class BS_Front_Module_activate extends BS_Front_Module
 		
 		$user = PLIB_Props::get()->user();
 		$locale = PLIB_Props::get()->locale();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_template('extern_conf.htm');
-		$doc->set_has_access(!$user->is_loggedin());
-		
-		$doc->add_breadcrumb($locale->lang('activation'),'');
+		$renderer->set_template('extern_conf.htm');
+		$renderer->set_has_access(!$user->is_loggedin());
+		$renderer->add_breadcrumb($locale->lang('activation'),'');
 	}
 	
 	/**

@@ -35,11 +35,12 @@ $input = PLIB_Props::get()->input();
 $pages = array('navi','content','frameset');
 $page = $input->correct_var('page','get',PLIB_Input::IDENTIFIER,$pages,'frameset');
 
-$class = 'BS_ACP_Page_'.$page;
+$class = 'BS_ACP_Document_'.$page;
 if(class_exists($class))
 {
-	$page = new $class();
-	echo $page->render();
+	$doc = new $class();
+	PLIB_Props::get()->set_doc($doc);
+	echo $doc->render();
 }
 else
 	PLIB_Helper::error('The class "'.$class.'" does not exist!');

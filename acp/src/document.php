@@ -1,7 +1,7 @@
 <?php
 /**
- * Contains acp-page-class
- * 
+ * Contains the acp-base-document-class
+ *
  * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.src
@@ -11,21 +11,19 @@
  */
 
 /**
- * The base page-class for all acp-pages
- * 
+ * The base-document for all ACP-documents
+ *
  * @package			Boardsolution
  * @subpackage	acp.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_ACP_Page extends BS_Page
+abstract class BS_ACP_Document extends BS_Document
 {
 	/**
-	 * @see PLIB_Page::_before_start()
+	 * @see PLIB_Document::prepare_rendering()
 	 */
-	protected function before_start()
+	protected function prepare_rendering()
 	{
-		parent::before_start();
-		
 		// set a fix path to the acp-templates
 		$tpl = PLIB_Props::get()->tpl();
 		$tpl->set_path('acp/templates/');
@@ -37,11 +35,8 @@ abstract class BS_ACP_Page extends BS_Page
 		
 		$locale = PLIB_Props::get()->locale();
 		$locale->add_language_file('admin');
-	}
-
-	protected function load_action_perf()
-	{
-		return new BS_ACP_Action_Performer();
+		
+		parent::init();
 	}
 }
 ?>

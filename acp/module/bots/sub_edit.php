@@ -31,12 +31,13 @@ final class BS_ACP_SubModule_bots_edit extends BS_ACP_SubModule
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 		$input = PLIB_Props::get()->input();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_EDIT_BOT,'edit');
-		$doc->set_template('bots_edit.htm');
+		$renderer->add_action(BS_ACP_ACTION_EDIT_BOT,'edit');
+		$renderer->set_template('bots_edit.htm');
 		
 		$id = $input->get_var('id','get',PLIB_Input::ID);
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('edit_bot'),
 			$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
 		);

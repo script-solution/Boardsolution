@@ -28,8 +28,9 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 	{
 		parent::init($doc);
 		
-		$doc->add_action(BS_DBA_ACTION_DELETE_TABLES,'delete');
-		$doc->add_action(BS_DBA_ACTION_OPTIMIZE_TABLES,'optimize');
+		$renderer = $doc->use_default_renderer();
+		$renderer->add_action(BS_DBA_ACTION_DELETE_TABLES,'delete');
+		$renderer->add_action(BS_DBA_ACTION_OPTIMIZE_TABLES,'optimize');
 	}
 	
 	/**

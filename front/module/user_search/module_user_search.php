@@ -22,15 +22,16 @@ final class BS_Front_Module_user_search extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
-		$doc->set_template('popup_user_search.htm');
-		$doc->set_show_headline(false);
-		$doc->set_show_bottom(false);
+		$renderer = $doc->use_default_renderer();
+		$renderer->set_template('popup_user_search.htm');
+		$renderer->set_show_headline(false);
+		$renderer->set_show_bottom(false);
 	}
 	
 	/**

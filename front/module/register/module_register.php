@@ -22,7 +22,7 @@ final class BS_Front_Module_register extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -32,12 +32,13 @@ final class BS_Front_Module_register extends BS_Front_Module
 		$url = PLIB_Props::get()->url();
 		$user = PLIB_Props::get()->user();
 		$cfg = PLIB_Props::get()->cfg();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access($cfg['enable_registrations'] && !$user->is_loggedin() && !BS_ENABLE_EXPORT);
+		$renderer->set_has_access($cfg['enable_registrations'] && !$user->is_loggedin() && !BS_ENABLE_EXPORT);
 		
-		$doc->add_action(BS_ACTION_REGISTER,'default');
+		$renderer->add_action(BS_ACTION_REGISTER,'default');
 
-		$doc->add_breadcrumb($locale->lang('register'),$url->get_url('register'));
+		$renderer->add_breadcrumb($locale->lang('register'),$url->get_url('register'));
 	}
 	
 	/**

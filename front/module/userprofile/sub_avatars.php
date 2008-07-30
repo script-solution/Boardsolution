@@ -22,7 +22,7 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -30,13 +30,14 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACTION_UPLOAD_AVATAR,'uploadavatar');
-		$doc->add_action(BS_ACTION_USE_AVATAR,'useavatar');
-		$doc->add_action(BS_ACTION_DELETE_AVATAR,'deleteavatars');
-		$doc->add_action(BS_ACTION_REMOVE_AVATAR,'removeavatar');
+		$renderer->add_action(BS_ACTION_UPLOAD_AVATAR,'uploadavatar');
+		$renderer->add_action(BS_ACTION_USE_AVATAR,'useavatar');
+		$renderer->add_action(BS_ACTION_DELETE_AVATAR,'deleteavatars');
+		$renderer->add_action(BS_ACTION_REMOVE_AVATAR,'removeavatar');
 
-		$doc->add_breadcrumb($locale->lang('avatars'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=avatars'));
+		$renderer->add_breadcrumb($locale->lang('avatars'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=avatars'));
 	}
 	
 	/**
@@ -55,7 +56,7 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 		// has the user the permission to configure the avatars?
 		if(!$user->is_loggedin() || $cfg['enable_avatars'] == 0)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
 			return;
 		}
 

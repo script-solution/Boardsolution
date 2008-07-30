@@ -42,9 +42,12 @@ abstract class BS_Front_Feed_Base extends PLIB_Object
 		}
 		
 		$news = array();
-		$newslist = BS_DAO::get_posts()->get_news_from_forums($myfids,$cfg['news_count']);
-		foreach($newslist as $data)
-			$news[] = $data;
+		if(count($myfids) > 0)
+		{
+			$newslist = BS_DAO::get_posts()->get_news_from_forums($myfids,$cfg['news_count']);
+			foreach($newslist as $data)
+				$news[] = $data;
+		}
 		
 		return $this->get_news_XML($news);
 	}

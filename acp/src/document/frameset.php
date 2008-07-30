@@ -1,36 +1,38 @@
 <?php
 /**
- * Contains acp-frameset-page
- * 
+ * Contains the acp-frameset-document-class
+ *
  * @version			$Id$
  * @package			Boardsolution
- * @subpackage	acp.src.page
+ * @subpackage	acp.src.document
  * @author			Nils Asmussen <nils@script-solution.de>
  * @copyright		2003-2008 Nils Asmussen
  * @link				http://www.script-solution.de
  */
 
 /**
- * The frame-set / login-page of the ACP
- * 
+ * The acp-frameset-document. We have no modules here and no renderer.
+ *
  * @package			Boardsolution
- * @subpackage	acp.src.page
+ * @subpackage	acp.src.document
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Page_FrameSet extends BS_ACP_Page
+final class BS_ACP_Document_Frameset extends BS_ACP_Document
 {
 	/**
 	 * The login-error-message
 	 *
 	 * @var string
 	 */
-	private $_error_msg = '';
-
+	private $_error_msg;
+	
 	/**
-	 * @see PLIB_Page::init()
+	 * @see BS_ACP_Document::prepare_rendering()
 	 */
-	protected function init()
+	protected function prepare_rendering()
 	{
+		parent::prepare_rendering();
+		
 		$input = PLIB_Props::get()->input();
 		$user = PLIB_Props::get()->user();
 		$locale = PLIB_Props::get()->locale();
@@ -51,12 +53,16 @@ final class BS_ACP_Page_FrameSet extends BS_ACP_Page
 		if($user->is_loggedin() && $input->get_var('logout','get') == 1)
 			$user->logout();
 	}
-
+	
 	/**
-	 * @see PLIB_Page::content()
+	 * @see PLIB_Document::render()
+	 *
+	 * @return string
 	 */
-	protected function content()
+	public function render()
 	{
+		$this->init();
+		
 		$input = PLIB_Props::get()->input();
 		$locale = PLIB_Props::get()->locale();
 		$tpl = PLIB_Props::get()->tpl();
@@ -77,9 +83,7 @@ final class BS_ACP_Page_FrameSet extends BS_ACP_Page
 				'charset' => 'charset='.BS_HTML_CHARSET,
 		  	'page_title' => sprintf($locale->lang('page_title'),BS_VERSION)
 		  ));
-		  $tpl->restore_template();
-		  
-		  $this->set_template('frameset.htm');
+		  $res = $tpl->parse_template();
 		}
 		else
 		{
@@ -90,31 +94,22 @@ final class BS_ACP_Page_FrameSet extends BS_ACP_Page
 				'charset' => 'charset='.BS_HTML_CHARSET,
 		  	'page_title' => sprintf($locale->lang('page_title'),BS_VERSION)
 		  ));
-		  $tpl->restore_template();
-		  
-		  $this->set_template('login.htm');
+		  $res = $tpl->parse_template();
 		}
+		
+		$this->finish();
+		return $res;
 	}
 
 	/**
-	 * @see PLIB_Page::footer()
+	 * @see PLIB_Document::load_module()
+	 *
+	 * @return BS_Front_Module
 	 */
-	protected function footer()
+	protected function load_module()
 	{
-		// do nothing
-	}
-
-	/**
-	 * @see PLIB_Page::header()
-	 */
-	protected function header()
-	{
-		// do nothing
-	}
-	
-	protected function get_print_vars()
-	{
-		return get_object_vars($this);
+		// no module here
+		return null;
 	}
 }
 ?>

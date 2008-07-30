@@ -28,8 +28,9 @@ final class BS_ACP_SubModule_themes_default extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$doc->add_action(BS_ACP_ACTION_UPDATE_THEMES,'update');
-		$doc->add_action(BS_ACP_ACTION_DELETE_THEMES,'delete');
+		$renderer = $doc->use_default_renderer();
+		$renderer->add_action(BS_ACP_ACTION_UPDATE_THEMES,'update');
+		$renderer->add_action(BS_ACP_ACTION_DELETE_THEMES,'delete');
 	}
 	
 	/**

@@ -30,11 +30,11 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_DELETE_IPLOGS,'delete');
-		$doc->add_action(BS_ACP_ACTION_DELETE_ALL_IPLOGS,'deleteall');
-
-		$doc->add_breadcrumb($locale->lang('acpmod_iplog'),$url->get_acpmod_url());
+		$renderer->add_action(BS_ACP_ACTION_DELETE_IPLOGS,'delete');
+		$renderer->add_action(BS_ACP_ACTION_DELETE_ALL_IPLOGS,'deleteall');
+		$renderer->add_breadcrumb($locale->lang('acpmod_iplog'),$url->get_acpmod_url());
 	}
 	
 	/**

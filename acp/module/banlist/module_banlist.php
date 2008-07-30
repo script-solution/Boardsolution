@@ -30,12 +30,13 @@ final class BS_ACP_Module_banlist extends BS_ACP_Module
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_DELETE_BANS,'delete');
-		$doc->add_action(BS_ACP_ACTION_ADD_BAN,'add');
-		$doc->add_action(BS_ACP_ACTION_UPDATE_BANS,'update');
+		$renderer->add_action(BS_ACP_ACTION_DELETE_BANS,'delete');
+		$renderer->add_action(BS_ACP_ACTION_ADD_BAN,'add');
+		$renderer->add_action(BS_ACP_ACTION_UPDATE_BANS,'update');
 
-		$doc->add_breadcrumb($locale->lang('acpmod_bans'),$url->get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_bans'),$url->get_acpmod_url());
 	}
 	
 	/**

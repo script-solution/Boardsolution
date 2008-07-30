@@ -1,47 +1,24 @@
 <?php
 /**
- * Contains the page-class which is used to display the whole frontend of the board except the
- * popups and so on.
+ * Contains the frontend-html-renderer-class
  *
  * @version			$Id$
  * @package			Boardsolution
- * @subpackage	front.src
+ * @subpackage	front.src.renderer
  * @author			Nils Asmussen <nils@script-solution.de>
  * @copyright		2003-2008 Nils Asmussen
  * @link				http://www.script-solution.de
  */
 
 /**
- * Represents the frontend of Boardsolution. Includes all necessary files and loads the appropriate
- * module. And it shows header, the module and footer.
+ * The html-renderer for the boardsolution-frontend
  *
  * @package			Boardsolution
- * @subpackage	front.src
+ * @subpackage	front.src.renderer
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Page extends BS_Page
+final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 {
-	/**
-	 * The module
-	 *
-	 * @var BS_Front_Module
-	 */
-	private $_module;
-	
-	/**
-	 * The name of the current module
-	 *
-	 * @var string
-	 */
-	private $_module_name;
-	
-	/**
-	 * Wether the current user has access to this page
-	 *
-	 * @var boolean
-	 */
-	private $_has_access = true;
-	
 	/**
 	 * Wether this page is viewable by guests only
 	 *
@@ -69,48 +46,31 @@ final class BS_Front_Page extends BS_Page
 	 * @var string
 	 */
 	private $_robots_value = 'noindex,nofollow';
-
+	
 	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
-		try
-		{
-			parent::__construct();
-			
-			$this->_check_addfields();
-			
-			$this->_module = $this->_get_module();
-		}
-		catch(PLIB_Exceptions_Critical $e)
-		{
-			echo $e;
-		}
-	}
-
-	/**
-	 * @return boolean true if the current user has access to this page
-	 */
-	public final function has_access()
-	{
-		return $this->_has_access;
-	}
-	
-	/**
-	 * Sets wether the current user has access to this page
-	 *
-	 * @param boolean $has_access the new value
-	 */
-	public final function set_has_access($has_access)
-	{
-		$this->_has_access = (bool)$has_access;
+		parent::__construct();
+		
+		$locale = PLIB_Props::get()->locale();
+		$url = PLIB_Props::get()->url();
+		$user = PLIB_Props::get()->user();
+		
+		// always set the location in html-pages
+		$user->set_location();
+		
+		// add the home-breadcrumb
+		$this->add_breadcrumb($locale->lang('home'),$url->get_forums_url());
+		
+		$this->_action_perf->set_prefix('BS_Front_Action_');
 	}
 
 	/**
 	 * @return boolean true if the headline will be shown
 	 */
-	public final function is_headline_shown()
+	public function is_headline_shown()
 	{
 		return $this->_show_headline;
 	}
@@ -120,7 +80,7 @@ final class BS_Front_Page extends BS_Page
 	 *
 	 * @param boolean $show the new value
 	 */
-	public final function set_show_headline($show)
+	public function set_show_headline($show)
 	{
 		$this->_show_headline = (bool)$show;
 	}
@@ -128,7 +88,7 @@ final class BS_Front_Page extends BS_Page
 	/**
 	 * @return boolean true if the bottom will be shown
 	 */
-	public final function is_bottom_shown()
+	public function is_bottom_shown()
 	{
 		return $this->_show_bottom;
 	}
@@ -138,7 +98,7 @@ final class BS_Front_Page extends BS_Page
 	 *
 	 * @param boolean $show the new value
 	 */
-	public final function set_show_bottom($show)
+	public function set_show_bottom($show)
 	{
 		$this->_show_bottom = (bool)$show;
 	}
@@ -153,7 +113,7 @@ final class BS_Front_Page extends BS_Page
 	 * 
 	 * @return string the value for the meta-tag "follow"
 	 */
-	public final function get_robots_value()
+	public function get_robots_value()
 	{
 		return $this->_robots_value;
 	}
@@ -168,17 +128,19 @@ final class BS_Front_Page extends BS_Page
 	 *
 	 * @param string $robots the new value
 	 */
-	public final function set_robots_value($robots)
+	public function set_robots_value($robots)
 	{
 		$this->_robots_value = (string)$robots;
 	}
-	
+
 	/**
-	 * @return string the name of the module that is used
+	 * @see PLIB_Document_Renderer_HTML_Default::load_action_perf()
+	 *
+	 * @return PLIB_Actions_Performer
 	 */
-	public final function get_module_name()
+	protected function load_action_perf()
 	{
-		return $this->_module_name;
+		return new BS_Front_Action_Performer();
 	}
 	
 	/**
@@ -188,49 +150,39 @@ final class BS_Front_Page extends BS_Page
 	{
 		parent::before_start();
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
-		
-		// add the home-breadcrumb
-		$this->add_breadcrumb($locale->lang('home'),$url->get_forums_url());
-		
-		$this->_action_perf->set_prefix('BS_Front_Action_');
-		
-		// init the module
-		$this->_module->init($this);
+		$doc = PLIB_Props::get()->doc();
 		
 		// set the default template if not already done
 		$template = '';
 		if($this->get_template() === null)
 		{
-			$classname = get_class($this->_module);
+			$classname = get_class($doc->get_module());
 			$prefixlen = PLIB_String::strlen('BS_Front_Module_');
 			$template = PLIB_String::strtolower(PLIB_String::substr($classname,$prefixlen)).'.htm';
 			$this->set_template($template);
 		}
-		
-		if($this->is_output_enabled())
-			$user->set_location();
 	}
 
 	/**
 	 * @see PLIB_Page::before_render()
 	 */
-	protected final function before_render()
+	protected function before_render()
 	{
 		$tpl = PLIB_Props::get()->tpl();
 		$cfg = PLIB_Props::get()->cfg();
-		$msgs = PLIB_Props::get()->msgs();
 		$user = PLIB_Props::get()->user();
+		$doc = PLIB_Props::get()->doc();
 		
 		// add redirect information
-		$redirect = $this->get_redirect();
+		$redirect = $doc->get_redirect();
 		if($redirect)
 			$tpl->add_array('redirect',$redirect,'inc_header.htm');
 		
 		// notify the template if an error has occurred
-		$tpl->add_global('module_error',$this->error_occurred());
+		$tpl->add_global('module_error',$doc->get_module()->error_occurred());
+		
+		$action_result = $this->get_action_result();
+		$tpl->add_global('action_result',$action_result);
 		
 		$tpl->add_global('gisloggedin',$user->is_loggedin());
 		$tpl->add_global('gusername',$user->get_user_name());
@@ -240,27 +192,61 @@ final class BS_Front_Page extends BS_Page
 		// TODO add theme
 		// TODO add current module
 		
-		// add messages
-		$msgs->add_messages();
+		// handle messages
+		$msgs = PLIB_Props::get()->msgs();
+		if($msgs->contains_msg())
+			$this->_handle_msgs($msgs);
 		
-		$this->set_gzip($cfg['enable_gzip']);
+		$doc->set_gzip($cfg['enable_gzip']);
+	}
+
+	/**
+	 * Handles the collected messages
+	 *
+	 * @param PLIB_Document_Messages $msgs
+	 */
+	private function _handle_msgs($msgs)
+	{
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+		$functions = PLIB_Props::get()->functions();
+		
+		if($msgs->contains_no_access())
+			$functions->show_login_form();
+		else
+		{
+			$amsgs = $msgs->get_all_messages();
+			$links = $msgs->get_links();
+			$tpl->set_template('inc_messages.htm');
+			$tpl->add_array('errors',$amsgs[PLIB_Document_Messages::ERROR]);
+			$tpl->add_array('warnings',$amsgs[PLIB_Document_Messages::WARNING]);
+			$tpl->add_array('notices',$amsgs[PLIB_Document_Messages::NOTICE]);
+			$tpl->add_array('links',$links);
+			$tpl->add_variables(array(
+				'title' => $locale->lang('information'),
+				'messages' => $msgs->contains_error() || $msgs->contains_notice() || $msgs->contains_warning()
+			));
+			$tpl->restore_template();
+		}
 	}
 
 	/**
 	 * @see PLIB_Page::content()
 	 */
-	protected final function content()
+	protected function content()
 	{
-		$tpl = PLIB_Props::get()->tpl();
 		$cfg = PLIB_Props::get()->cfg();
 		$user = PLIB_Props::get()->user();
 		$locale = PLIB_Props::get()->locale();
 		$msgs = PLIB_Props::get()->msgs();
 		$functions = PLIB_Props::get()->functions();
 		$auth = PLIB_Props::get()->auth();
+		$doc = PLIB_Props::get()->doc();
 
+		$module = $doc->get_module();
+		
 		// check this here (before the action will be performed)
-		$board_access = $auth->has_board_access() || $this->_module->is_guest_only();
+		$board_access = $auth->has_board_access() || $module->is_guest_only();
 		$module_access = $this->has_access();
 		
 		if($this->get_action_result() < 1)
@@ -270,7 +256,7 @@ final class BS_Front_Page extends BS_Page
 			if($board_access)
 			{
 				// board deactivated?
-				if($this->_module_name != 'login' && $cfg['enable_board'] == 0 &&
+				if($doc->get_module_name() != 'login' && $cfg['enable_board'] == 0 &&
 					!$user->is_admin())
 				{
 					$msg = nl2br(PLIB_StringHelper::htmlspecialchars_back($cfg['board_disabled_text']));
@@ -290,28 +276,7 @@ final class BS_Front_Page extends BS_Page
 					$this->set_error();
 				}
 				else
-				{
-					$template = $this->get_template();
-					
-					// run the module
-					$tpl = PLIB_Props::get()->tpl();
-					$tpl->set_template($template);
-					
-					$this->_module->run();
-					
-					$tpl->restore_template();
-					
-					// if errors have occurred and the output is disabled we want to display them
-					if(!$this->is_output_enabled() && $this->error_occurred())
-					{
-						// remove everything from the output-buffer
-						ob_clean();
-						$this->set_output_enabled(true);
-						$this->_header();
-						if($this->get_template() == $template)
-							$this->set_template('error.htm');
-					}
-				}
+					parent::content();
 			}
 		}
 	}
@@ -319,8 +284,10 @@ final class BS_Front_Page extends BS_Page
 	/**
 	 * @see PLIB_Page::header()
 	 */
-	protected final function header()
+	protected function header()
 	{
+		$doc = PLIB_Props::get()->doc();
+		
 		// add module-independend actions
 		$actions = array(
 			BS_ACTION_LOGOUT => 'logout',
@@ -334,21 +301,12 @@ final class BS_Front_Page extends BS_Page
 			$a = new $classname($id);
 			$this->_action_perf->add_action($a);
 		}
-
-		// add actions of the current module
-		$this->_action_perf->add_actions($this->_module_name,$this->get_actions());
 		
 		// perform actions
 		$this->perform_actions();
 		
-		$this->_header();
-	}
-	
-	/**
-	 * Initializes the header-templates
-	 */
-	private function _header()
-	{
+		
+		// prepare header-templates
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 		$tpl = PLIB_Props::get()->tpl();
@@ -357,12 +315,8 @@ final class BS_Front_Page extends BS_Page
 		$input = PLIB_Props::get()->input();
 		$auth = PLIB_Props::get()->auth();
 		$unread = PLIB_Props::get()->unread();
-		
-		$action_result = $this->get_action_result();
-		$tpl->add_global('action_result',$action_result);
-		$tpl->add_global('module_error',false);
 
-		$breadcrumbs = PLIB_Helper::generate_location($this);
+		$breadcrumbs = $this->get_breadcrumbs();
 		$page_title = str_replace($locale->lang('home'),$cfg['forum_title'],$breadcrumbs);
 		$page_title = strip_tags($page_title);
 		$this->set_title($page_title);
@@ -374,8 +328,8 @@ final class BS_Front_Page extends BS_Page
 			'cookie_domain' => $cfg['cookie_domain'],
 			'theme' => $user->get_theme(),
 			'title' => $this->get_title(),
-			'charset' => 'charset='.$this->get_charset(),
-			'mimetype' => $this->get_mimetype(),
+			'charset' => 'charset='.$doc->get_charset(),
+			'mimetype' => $doc->get_mimetype(),
 			'cssfiles' => $this->get_css_files(),
 			'cssblocks' => $this->get_css_blocks(),
 			'jsfiles' => $this->get_js_files(),
@@ -550,7 +504,7 @@ final class BS_Front_Page extends BS_Page
 	/**
 	 * @see PLIB_Page::footer()
 	 */
-	protected final function footer()
+	protected function footer()
 	{
 		$cfg = PLIB_Props::get()->cfg();
 		$locale = PLIB_Props::get()->locale();
@@ -645,56 +599,6 @@ final class BS_Front_Page extends BS_Page
 			'show_bottom' => $this->_show_bottom
 		));
 		$tpl->restore_template();
-	}
-	
-	/**
-	 * Determines the module to load and returns it
-	 *
-	 * @return BS_Front_Module the module
-	 */
-	private function _get_module()
-	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
-
-		// determine start-module
-		if($cfg['enable_portal'] == 1 &&
-			($user->is_loggedin() || $user->get_profile_val('startmodule' == 'portal')))
-			$default = 'portal';
-		else
-			$default = 'forums';
-		
-		$this->_module_name = PLIB_Helper::get_module_name(
-			'BS_Front_Module_',BS_URL_ACTION,$default,'front/module/'
-		);
-		$class = 'BS_Front_Module_'.$this->_module_name;
-		return new $class();
-	}
-	
-	/**
-	 * Checks wether any required additional field is empty. If so the user will be redirected
-	 * to the profile-info-page (if he/she is not already there).
-	 */
-	private function _check_addfields()
-	{
-		$cfg = PLIB_Props::get()->cfg();
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$url = PLIB_Props::get()->url();
-
-		if($cfg['force_fill_of_empty_req_fields'] == 1)
-		{
-			$action = $input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING);
-			$loc = $input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING);
-			if($user->is_loggedin() && ($action != 'userprofile' || $loc != 'infos'))
-			{
-				if(BS_AddField_Manager::get_instance()->is_any_required_field_empty())
-				{
-					$murl = $url->get_url('userprofile','&'.BS_URL_LOC.'=infos&'.BS_URL_MODE.'=1','&');
-					$this->redirect($murl);
-				}
-			}
-		}
 	}
 	
 	/**

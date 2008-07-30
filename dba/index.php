@@ -54,6 +54,6 @@ $user = PLIB_Props::get()->user();
 $user->init();
 $sessions->garbage_collection();
 
-$page = new BS_DBA_Page();
-echo $page->render();
+$doc = PLIB_Props::get()->doc();
+echo $doc->render();
 ?>

@@ -45,8 +45,9 @@ final class BS_ACP_Module_user extends BS_ACP_SubModuleContainer
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 
-		$doc->add_breadcrumb($locale->lang('acpmod_user'),$url->get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_user'),$url->get_acpmod_url());
 		
 		// init submodule
 		$this->_sub->init($doc);

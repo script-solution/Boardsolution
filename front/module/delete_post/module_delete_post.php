@@ -22,17 +22,18 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
 		$user = PLIB_Props::get()->user();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access($user->is_loggedin());
+		$renderer->set_has_access($user->is_loggedin());
 		
-		$doc->add_action(BS_ACTION_DELETE_POSTS,'default');
+		$renderer->add_action(BS_ACTION_DELETE_POSTS,'default');
 
 		$input = PLIB_Props::get()->input();
 		$locale = PLIB_Props::get()->locale();
@@ -47,7 +48,7 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 
 		$params = '&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_ID.'='.$id;
 		$murl = $url->get_url('delete_post',$params);
-		$doc->add_breadcrumb($locale->lang('deletepost'),$murl);
+		$renderer->add_breadcrumb($locale->lang('deletepost'),$murl);
 	}
 	
 	/**
@@ -98,7 +99,7 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 		// delete not allowed?
 		if(!$auth->has_current_forum_perm(BS_MODE_DELETE_POSTS,$post_data['post_user']))
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS,$locale->lang('permission_denied'));
+			$this->report_error(PLIB_Document_Messages::NO_ACCESS,$locale->lang('permission_denied'));
 			return;
 		}
 		

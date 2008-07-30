@@ -22,7 +22,7 @@ final class BS_Front_Module_change_password extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -32,14 +32,15 @@ final class BS_Front_Module_change_password extends BS_Front_Module
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 		$user = PLIB_Props::get()->user();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access(!$user->is_loggedin());
+		$renderer->set_has_access(!$user->is_loggedin());
 		
-		$doc->add_action(BS_ACTION_CHANGE_PASSWORD,'default');
+		$renderer->add_action(BS_ACTION_CHANGE_PASSWORD,'default');
 
 		$user_id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
 		$user_key = $input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('change_password'),
 			$url->get_url('change_password','&amp;'.BS_URL_ID.'='.$user_id.'&amp;'.BS_URL_KW.'='.$user_key)
 		);

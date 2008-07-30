@@ -58,10 +58,12 @@ abstract class BS_ACP_SubModuleContainer extends BS_ACP_Module
 	{
 		parent::init($doc);
 		
+		$renderer = $doc->use_default_renderer();
+		
 		$classname = get_class($this->_sub);
 		$lastus = strrpos($classname,'_');
 		$prevlastus = strrpos(PLIB_String::substr($classname,0,$lastus),'_');
-		$doc->set_template(PLIB_String::strtolower(PLIB_String::substr($classname,$prevlastus + 1)).'.htm');
+		$renderer->set_template(PLIB_String::strtolower(PLIB_String::substr($classname,$prevlastus + 1)).'.htm');
 	}
 	
 	/**

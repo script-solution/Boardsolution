@@ -38,6 +38,7 @@ final class BS_ACP_SubModule_user_ugroups extends BS_ACP_SubModule
 		$input = PLIB_Props::get()->input();
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 
 		$this->_ids = $input->get_var('delete','post');
 		if($this->_ids === null)
@@ -46,9 +47,9 @@ final class BS_ACP_SubModule_user_ugroups extends BS_ACP_SubModule
 		if(!is_array($this->_ids))
 			$this->_ids = PLIB_Array_Utils::advanced_explode(',',$this->_ids);
 		
-		$doc->add_action(BS_ACP_ACTION_USER_EDIT_UGROUPS,'ugroups');
+		$renderer->add_action(BS_ACP_ACTION_USER_EDIT_UGROUPS,'ugroups');
 
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('edit_groups'),
 			$url->get_acpmod_url(0,'&amp;action=ugroups&amp;ids='.implode(',',$this->_ids))
 		);

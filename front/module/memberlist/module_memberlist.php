@@ -22,7 +22,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -30,10 +30,11 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 		$url = PLIB_Props::get()->url();
 		$cfg = PLIB_Props::get()->cfg();
 		$auth = PLIB_Props::get()->auth();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access($cfg['enable_memberlist'] == 1 &&
+		$renderer->set_has_access($cfg['enable_memberlist'] == 1 &&
 			$auth->has_global_permission('view_memberlist'));
-		$doc->add_breadcrumb($locale->lang('memberlist'),$url->get_url('memberlist'));
+		$renderer->add_breadcrumb($locale->lang('memberlist'),$url->get_url('memberlist'));
 	}
 	
 	/**

@@ -31,9 +31,10 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 		$input = PLIB_Props::get()->input();
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_SAVE_SETTINGS,'save');
-		$doc->add_action(BS_ACP_ACTION_REVERT_SETTING,'revert');
+		$renderer->add_action(BS_ACP_ACTION_SAVE_SETTINGS,'save');
+		$renderer->add_action(BS_ACP_ACTION_REVERT_SETTING,'revert');
 
 		// set group-id
 		$gid = $input->get_var('gid','get',PLIB_Input::ID);
@@ -50,7 +51,7 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 		{
 			$manager = BS_ACP_Module_Config_Helper::get_instance()->get_manager();
 			$title = $locale->lang($manager->get_group($gid)->get_title(),false);
-			$doc->add_breadcrumb($title,$url->get_acpmod_url(0,'&amp;action=items&amp;gid='.$gid));
+			$renderer->add_breadcrumb($title,$url->get_acpmod_url(0,'&amp;action=items&amp;gid='.$gid));
 		}
 	}
 	

@@ -22,13 +22,14 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
-		$doc->add_action(BS_ACTION_VOTE_LINK,'votelink');
+		$renderer = $doc->use_default_renderer();
+		$renderer->add_action(BS_ACTION_VOTE_LINK,'votelink');
 	}
 	
 	/**

@@ -22,7 +22,7 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -33,13 +33,14 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 		$url = PLIB_Props::get()->url();
 		$auth = PLIB_Props::get()->auth();
 		$cfg = PLIB_Props::get()->cfg();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->has_access($auth->has_global_permission('send_mails') && $cfg['enable_emails'] == 1);
+		$renderer->set_has_access($auth->has_global_permission('send_mails') && $cfg['enable_emails'] == 1);
 		
-		$doc->add_action(BS_ACTION_SEND_EMAIL,'default');
+		$renderer->add_action(BS_ACTION_SEND_EMAIL,'default');
 
 		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('email'),
 			$url->get_url('new_mail','&amp;'.BS_URL_ID.'='.$id)
 		);
@@ -86,7 +87,7 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 		// check if the user has allowed board emails
 		if($data['allow_board_emails'] == 0)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('user_disabled_emails'));
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('user_disabled_emails'));
 			return;
 		}
 

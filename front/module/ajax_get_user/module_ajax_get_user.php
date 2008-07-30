@@ -22,13 +22,13 @@ final class BS_Front_Module_ajax_get_user extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
-		$doc->set_output_enabled(false);
+		$doc->use_raw_renderer();
 	}
 	
 	/**
@@ -39,6 +39,7 @@ final class BS_Front_Module_ajax_get_user extends BS_Front_Module
 		$cfg = PLIB_Props::get()->cfg();
 		$auth = PLIB_Props::get()->auth();
 		$input = PLIB_Props::get()->input();
+		$doc = PLIB_Props::get()->doc();
 
 		// the user has to have access to the memberlist to get existing usernames
 		if($cfg['enable_memberlist'] == 1 && $auth->has_global_permission('view_memberlist'))
@@ -58,7 +59,9 @@ final class BS_Front_Module_ajax_get_user extends BS_Front_Module
 			if(count($users) > 5)
 				$found_user[] = '...';
 			
-			echo PLIB_StringHelper::htmlspecialchars_back(implode(',',$found_user));
+			$result = PLIB_StringHelper::htmlspecialchars_back(implode(',',$found_user));
+			$renderer = $doc->use_raw_renderer();
+			$renderer->set_content($result);
 		}
 	}
 }

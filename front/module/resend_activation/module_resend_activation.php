@@ -22,7 +22,7 @@ final class BS_Front_Module_resend_activation extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -31,12 +31,13 @@ final class BS_Front_Module_resend_activation extends BS_Front_Module
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 		$user = PLIB_Props::get()->user();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access(!$user->is_loggedin());
+		$renderer->set_has_access(!$user->is_loggedin());
 		
-		$doc->add_action(BS_ACTION_RESEND_ACT_LINK,'default');
+		$renderer->add_action(BS_ACTION_RESEND_ACT_LINK,'default');
 
-		$doc->add_breadcrumb($locale->lang('resend_activation_link'),$url->get_url(0));
+		$renderer->add_breadcrumb($locale->lang('resend_activation_link'),$url->get_url(0));
 	}
 	
 	/**

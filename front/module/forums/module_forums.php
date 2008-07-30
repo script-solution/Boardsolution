@@ -22,13 +22,13 @@ final class BS_Front_Module_forums extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
-		$doc->set_robots_value('index,follow');
+		$doc->use_default_renderer()->set_robots_value('index,follow');
 	}
 	
 	/**
@@ -42,7 +42,7 @@ final class BS_Front_Module_forums extends BS_Front_Module
 		$auth = PLIB_Props::get()->auth();
 
 		$forums = BS_ForumUtils::get_instance();
-
+		
 		// display latest topics at the top?
 		$display_lt_top = strpos($cfg['current_topic_loc'],'top') !== false;
 		$display_lt_bottom = strpos($cfg['current_topic_loc'],'bottom') !== false;

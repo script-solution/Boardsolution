@@ -31,22 +31,23 @@ final class BS_ACP_SubModule_themes_editor extends BS_ACP_SubModule
 		$input = PLIB_Props::get()->input();
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 
 		// hack which changes the action-type if we want to add an attribute instead of saving the form
 		if($input->isset_var('add','post'))
 			$input->set_var('action_type','post',BS_ACP_ACTION_THEME_EDITOR_SIMPLE_ADD);
 		
-		$doc->add_action(BS_ACP_ACTION_THEME_EDITOR_SIMPLE_SAVE,'simplesave');
-		$doc->add_action(BS_ACP_ACTION_THEME_EDITOR_ADVANCED_SAVE,'advancedsave');
-		$doc->add_action(BS_ACP_ACTION_THEME_EDITOR_SIMPLE_DELETE,'simpledelete');
-		$doc->add_action(BS_ACP_ACTION_THEME_EDITOR_SIMPLE_ADD,'simpleadd');
+		$renderer->add_action(BS_ACP_ACTION_THEME_EDITOR_SIMPLE_SAVE,'simplesave');
+		$renderer->add_action(BS_ACP_ACTION_THEME_EDITOR_ADVANCED_SAVE,'advancedsave');
+		$renderer->add_action(BS_ACP_ACTION_THEME_EDITOR_SIMPLE_DELETE,'simpledelete');
+		$renderer->add_action(BS_ACP_ACTION_THEME_EDITOR_SIMPLE_ADD,'simpleadd');
 
 		$mode = $input->correct_var(
 			'mode','get',PLIB_Input::STRING,array('simple','advanced'),'simple'
 		);
 		$theme = $input->get_var('theme','get',PLIB_Input::STRING);
-		$doc->add_breadcrumb($theme,'');
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb($theme,'');
+		$renderer->add_breadcrumb(
 			$locale->lang($mode.'_mode'),
 			$url->get_acpmod_url(0,'&amp;action=editor&amp;theme='.$theme.'&amp;mode='.$mode)
 		);
@@ -70,7 +71,7 @@ final class BS_ACP_SubModule_themes_editor extends BS_ACP_SubModule
 		if(!is_file($stylefile))
 		{
 			$this->report_error(
-				PLIB_Messages::MSG_TYPE_ERROR,
+				PLIB_Document_Messages::ERROR,
 				sprintf($locale->lang('file_not_exists'),$stylefile)
 			);
 			return;

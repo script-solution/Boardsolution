@@ -38,21 +38,22 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 		$input = PLIB_Props::get()->input();
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_ADD_FORUM,array('edit','add'));
-		$doc->add_action(BS_ACP_ACTION_EDIT_FORUM,array('edit','edit'));
+		$renderer->add_action(BS_ACP_ACTION_ADD_FORUM,array('edit','add'));
+		$renderer->add_action(BS_ACP_ACTION_EDIT_FORUM,array('edit','edit'));
 
 		$id = $input->get_var('id','get',PLIB_Input::ID);
 		if($id != null)
 		{
-			$doc->add_breadcrumb(
+			$renderer->add_breadcrumb(
 				$locale->lang('edit_forum'),
 				$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
 			);
 		}
 		else
 		{
-			$doc->add_breadcrumb(
+			$renderer->add_breadcrumb(
 				$locale->lang('create_new_forum'),
 				$url->get_acpmod_url(0,'&amp;action=edit')
 			);

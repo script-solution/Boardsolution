@@ -22,7 +22,7 @@ final class BS_Front_SubModule_linklist_add extends BS_Front_SubModule
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -30,10 +30,11 @@ final class BS_Front_SubModule_linklist_add extends BS_Front_SubModule
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACTION_ADD_LINK,'addlink');
+		$renderer->add_action(BS_ACTION_ADD_LINK,'addlink');
 
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('addnewlink'),
 			$url->get_url('linklist','&amp;'.BS_URL_LOC.'=add')
 		);
@@ -52,7 +53,7 @@ final class BS_Front_SubModule_linklist_add extends BS_Front_SubModule
 
 		if(!$auth->has_global_permission('add_new_link'))
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
 			return;
 		}
 		

@@ -22,7 +22,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -31,17 +31,18 @@ final class BS_Front_Module_print extends BS_Front_Module
 		$locale = PLIB_Props::get()->locale();
 		$input = PLIB_Props::get()->input();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_template('popup_print.htm');
-		$doc->set_show_headline(false);
-		$doc->set_show_bottom(false);
+		$renderer->set_template('popup_print.htm');
+		$renderer->set_show_headline(false);
+		$renderer->set_show_bottom(false);
 		
 		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
 		
 		$this->add_loc_forum_path($fid);
 		$this->add_loc_topic();
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('print_topic'),
 			$url->get_url('print','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid)
 		);
@@ -73,7 +74,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		if($topic_data === null)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('thread_not_found'));
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('thread_not_found'));
 			return;
 		}
 		

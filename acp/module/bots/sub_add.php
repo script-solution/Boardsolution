@@ -30,10 +30,11 @@ final class BS_ACP_SubModule_bots_add extends BS_ACP_SubModule
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_ADD_BOT,'add');
-		$doc->set_template('bots_edit.htm');
-		$doc->add_breadcrumb($locale->lang('add_bot'),$url->get_acpmod_url(0,'&amp;action=add'));
+		$renderer->add_action(BS_ACP_ACTION_ADD_BOT,'add');
+		$renderer->set_template('bots_edit.htm');
+		$renderer->add_breadcrumb($locale->lang('add_bot'),$url->get_acpmod_url(0,'&amp;action=add'));
 	}
 	
 	/**

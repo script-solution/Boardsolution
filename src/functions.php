@@ -557,7 +557,9 @@ final class BS_Functions extends PLIB_Object
 		else
 			$msgs->add_error($locale->lang('permission_denied'));
 		
-		$doc->set_template('login.htm');
+		// TODO how to do that?
+		if($doc->get_renderer() instanceof BS_Front_Renderer_HTML)
+			$doc->get_renderer()->set_template('login.htm');
 	}
 	
 	/**

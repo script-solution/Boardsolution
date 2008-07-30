@@ -31,11 +31,12 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		$input = PLIB_Props::get()->input();
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_USER_EDIT,'edit');
+		$renderer->add_action(BS_ACP_ACTION_USER_EDIT,'edit');
 		
 		$id = $input->get_var('id','get',PLIB_Input::ID);
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('edit_user'),
 			$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
 		);

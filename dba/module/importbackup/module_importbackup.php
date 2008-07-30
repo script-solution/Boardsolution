@@ -28,7 +28,8 @@ final class BS_DBA_Module_importbackup extends BS_DBA_Module
 	{
 		parent::init($doc);
 		
-		$doc->add_action(BS_DBA_ACTION_IMPORT_BACKUP,'import');
+		$renderer = $doc->use_default_renderer();
+		$renderer->add_action(BS_DBA_ACTION_IMPORT_BACKUP,'import');
 	}
 	
 	/**

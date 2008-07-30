@@ -28,7 +28,7 @@ final class BS_Front_Module_security_code extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$doc->set_output_enabled(false);
+		$doc->use_gdimage_renderer();
 	}
 	
 	/**
@@ -37,6 +37,7 @@ final class BS_Front_Module_security_code extends BS_Front_Module
 	public function run()
 	{
 		$user = PLIB_Props::get()->user();
+		$doc = PLIB_Props::get()->doc();
 		
 		$imagedir = PLIB_Path::server_app().'images/gd/';
 		$captcha = new PLIB_GD_Captcha();
@@ -45,9 +46,13 @@ final class BS_Front_Module_security_code extends BS_Front_Module
 		$captcha->add_ttf_font(new PLIB_GD_Font_TTF($imagedir.'thros.ttf'),40);
 		$captcha->create_image();
 		
+		$renderer = $doc->use_gdimage_renderer();
+		$renderer->set_image($captcha->get_image());
+		
 		$user->set_session_data('security_code',$captcha->get_chars());
 	}
 	
+	// TODO we have to consider this!
 	public function require_board_access()
 	{
 		return false;

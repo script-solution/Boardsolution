@@ -30,9 +30,10 @@ final class BS_ACP_SubModule_user_add extends BS_ACP_SubModule
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_USER_ADD,'add');
-		$doc->add_breadcrumb($locale->lang('register_user'),$url->get_acpmod_url(0,'&amp;action=add'));
+		$renderer->add_action(BS_ACP_ACTION_USER_ADD,'add');
+		$renderer->add_breadcrumb($locale->lang('register_user'),$url->get_acpmod_url(0,'&amp;action=add'));
 	}
 	
 	/**

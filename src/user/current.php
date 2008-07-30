@@ -262,8 +262,11 @@ final class BS_User_Current extends PLIB_User_Current
 	{
 		$res = parent::set_userdata($id,$user);
 		
-		$this->_user->set_user_group($this->_userdata->get_profile_val('user_group'));
-		$this->_user->set_ghost_mode($this->_userdata->get_profile_val('ghost_mode'));
+		if($res == self::LOGIN_ERROR_NO_ERROR)
+		{
+			$this->_user->set_user_group($this->_userdata->get_profile_val('user_group'));
+			$this->_user->set_ghost_mode($this->_userdata->get_profile_val('ghost_mode'));
+		}
 		
 		return $res;
 	}

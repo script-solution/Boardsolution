@@ -30,12 +30,13 @@ final class BS_ACP_Module_userranks extends BS_ACP_Module
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_UPDATE_USERRANKS,'update');
-		$doc->add_action(BS_ACP_ACTION_ADD_USERRANK,'add');
-		$doc->add_action(BS_ACP_ACTION_DELETE_USERRANKS,'delete');
+		$renderer->add_action(BS_ACP_ACTION_UPDATE_USERRANKS,'update');
+		$renderer->add_action(BS_ACP_ACTION_ADD_USERRANK,'add');
+		$renderer->add_action(BS_ACP_ACTION_DELETE_USERRANKS,'delete');
 
-		$doc->add_breadcrumb($locale->lang('acpmod_userranks'),$url->get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_userranks'),$url->get_acpmod_url());
 	}
 	
 	/**

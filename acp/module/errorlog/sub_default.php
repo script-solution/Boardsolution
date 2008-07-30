@@ -28,8 +28,9 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$doc->add_action(BS_ACP_ACTION_DELETE_ERRORLOGS,'delete');
-		$doc->add_action(BS_ACP_ACTION_DELETE_ALL_ERRORLOGS,'deleteall');
+		$renderer = $doc->use_default_renderer();
+		$renderer->add_action(BS_ACP_ACTION_DELETE_ERRORLOGS,'delete');
+		$renderer->add_action(BS_ACP_ACTION_DELETE_ALL_ERRORLOGS,'deleteall');
 	}
 	
 	/**

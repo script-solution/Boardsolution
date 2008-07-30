@@ -60,7 +60,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				if($pmid === false)
 				{
 					$this->report_error(
-						PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('pm_navigation_failed_'.$mode)
+						PLIB_Document_Messages::ERROR,$locale->lang('pm_navigation_failed_'.$mode)
 					);
 					return;
 				}

@@ -1,29 +1,33 @@
 <?php
 /**
- * Contains the acp-navi-page
- * 
+ * Contains the acp-navi-document-class
+ *
  * @version			$Id$
  * @package			Boardsolution
- * @subpackage	acp.src.page
+ * @subpackage	acp.src.document
  * @author			Nils Asmussen <nils@script-solution.de>
  * @copyright		2003-2008 Nils Asmussen
  * @link				http://www.script-solution.de
  */
 
 /**
- * The navi-page of the ACP. Contains the navigation
- * 
+ * The acp-navi-document. We have no modules here and no renderer.
+ *
  * @package			Boardsolution
- * @subpackage	acp.src.page
+ * @subpackage	acp.src.document
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Page_Navi extends BS_ACP_Page
+final class BS_ACP_Document_Navi extends BS_ACP_Document
 {
 	/**
-	 * @see PLIB_Document::content()
+	 * @see PLIB_Document::render()
+	 *
+	 * @return string
 	 */
-	protected function content()
+	public function render()
 	{
+		$this->prepare_rendering();
+		
 		$input = PLIB_Props::get()->input();
 		$tpl = PLIB_Props::get()->tpl();
 		$cfg = PLIB_Props::get()->cfg();
@@ -40,11 +44,11 @@ final class BS_ACP_Page_Navi extends BS_ACP_Page
 			'cookie_domain' => $cfg['cookie_domain'],
 		  'page_title' => sprintf($locale->lang('page_title'),BS_VERSION)
 		));
-		$tpl->restore_template();
 		
 		$this->_load_modules();
 		
-		$this->set_template('navi.htm');
+		$this->finish();
+		return $tpl->parse_template();
 	}
 	
 	/**
@@ -121,24 +125,14 @@ final class BS_ACP_Page_Navi extends BS_ACP_Page
 	}
 
 	/**
-	 * @see PLIB_Page::footer()
+	 * @see PLIB_Document::load_module()
+	 *
+	 * @return BS_Front_Module
 	 */
-	protected function footer()
+	protected function load_module()
 	{
-		// do nothing
-	}
-
-	/**
-	 * @see PLIB_Page::header()
-	 */
-	protected function header()
-	{
-		// do nothing
-	}
-	
-	protected function get_print_vars()
-	{
-		return get_object_vars($this);
+		// no module here
+		return null;
 	}
 }
 ?>

@@ -30,11 +30,12 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_USER_ACT_DELETE,'delete');
-		$doc->add_action(BS_ACP_ACTION_USER_ACT_ACTIVATE,'activate');
+		$renderer->add_action(BS_ACP_ACTION_USER_ACT_DELETE,'delete');
+		$renderer->add_action(BS_ACP_ACTION_USER_ACT_ACTIVATE,'activate');
 
-		$doc->add_breadcrumb($locale->lang('acpmod_user_activation'),$url->get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_user_activation'),$url->get_acpmod_url());
 	}
 	
 	/**

@@ -22,7 +22,7 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -32,10 +32,11 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 		$auth = PLIB_Props::get()->auth();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access($auth->has_current_forum_perm(BS_MODE_REPLY));
+		$renderer->set_has_access($auth->has_current_forum_perm(BS_MODE_REPLY));
 		
-		$doc->add_action(BS_ACTION_REPLY,'default');
+		$renderer->add_action(BS_ACTION_REPLY,'default');
 
 		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
@@ -45,7 +46,7 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 
 		$this->add_loc_forum_path($fid);
 		$this->add_loc_topic();
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('newentry'),
 			$url->get_url('new_post','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
 				.'&amp;'.BS_URL_SITE.'='.$site)
@@ -85,7 +86,7 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 		// forum closed?
 		if(!$user->is_admin() && $forums->forum_is_closed($fid))
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('forum_is_closed'));
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('forum_is_closed'));
 			return;
 		}
 		

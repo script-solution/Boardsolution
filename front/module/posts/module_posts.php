@@ -22,20 +22,21 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
 		$input = PLIB_Props::get()->input();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_robots_value('index,follow');
+		$renderer->set_robots_value('index,follow');
 		
-		$doc->add_action(BS_ACTION_VOTE,'votepoll');
-		$doc->add_action(BS_ACTION_JOIN_EVENT,'joinevent');
-		$doc->add_action(BS_ACTION_LEAVE_EVENT,'leaveevent');
-		$doc->add_action(BS_ACTION_SUBSCRIBE_TOPIC,'subscribetopic');
+		$renderer->add_action(BS_ACTION_VOTE,'votepoll');
+		$renderer->add_action(BS_ACTION_JOIN_EVENT,'joinevent');
+		$renderer->add_action(BS_ACTION_LEAVE_EVENT,'leaveevent');
+		$renderer->add_action(BS_ACTION_SUBSCRIBE_TOPIC,'subscribetopic');
 
 		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
 		$this->add_loc_forum_path($fid);
@@ -59,6 +60,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$functions = PLIB_Props::get()->functions();
 		$unread = PLIB_Props::get()->unread();
 		$url = PLIB_Props::get()->url();
+		$doc = PLIB_Props::get()->doc();
 
 		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
 		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
@@ -68,8 +70,8 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		if($tid == null || $fid == null)
 		{
 			// send 404 for search-engines and such
-			header('HTTP/1.0 404 Not Found');
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('thread_not_found'));
+			$doc->set_header('HTTP/1.0 404 Not Found','');
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('thread_not_found'));
 			return;
 		}
 
@@ -95,15 +97,15 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		if($topic_data === null)
 		{
 			// send 404 for search-engines and such
-			header('HTTP/1.0 404 Not Found');
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('thread_not_found'));
+			$doc->set_header('HTTP/1.0 404 Not Found','');
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('thread_not_found'));
 			return;
 		}
 
 		// check if the user is allowed to view this topic
 		if(!$auth->has_access_to_intern_forum($fid))
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
 			return;
 		}
 

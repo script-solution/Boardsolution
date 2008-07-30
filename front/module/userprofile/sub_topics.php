@@ -22,7 +22,7 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -30,10 +30,11 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACTION_UNSUBSCRIBE_TOPIC,array('unsubscribe','topics'));
+		$renderer->add_action(BS_ACTION_UNSUBSCRIBE_TOPIC,array('unsubscribe','topics'));
 
-		$doc->add_breadcrumb($locale->lang('threads'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=topics'));
+		$renderer->add_breadcrumb($locale->lang('threads'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=topics'));
 	}
 	
 	/**
@@ -53,7 +54,7 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 		// has the user the permission to view the subscriptions?
 		if($cfg['enable_email_notification'] == 0)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
 			return;
 		}
 

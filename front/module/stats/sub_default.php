@@ -30,8 +30,9 @@ final class BS_Front_SubModule_stats_default extends BS_Front_SubModule
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_breadcrumb($locale->lang('general'),$url->get_url('stats'));
+		$renderer->add_breadcrumb($locale->lang('general'),$url->get_url('stats'));
 	}
 	
 	/**

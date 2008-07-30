@@ -22,16 +22,17 @@ final class BS_Front_Module_conf_email extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
 		$user = PLIB_Props::get()->user();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_template('extern_conf.htm');
-		$doc->set_has_access(!$user->is_loggedin());
+		$renderer->set_template('extern_conf.htm');
+		$renderer->set_has_access(!$user->is_loggedin());
 	}
 	
 	/**
@@ -69,7 +70,7 @@ final class BS_Front_Module_conf_email extends BS_Front_Module
 		$data = BS_DAO::get_changeemail()->get_by_user($id,$key);
 		if($data === false)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('email_change_failed'));
+			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('email_change_failed'));
 			return;
 		}
 		

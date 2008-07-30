@@ -29,9 +29,10 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 		parent::init($doc);
 		
 		$locale = PLIB_Props::get()->locale();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_ACPACCESS_MODULE,'module');
-		$doc->add_breadcrumb($locale->lang('send_emails_process'));
+		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_MODULE,'module');
+		$renderer->add_breadcrumb($locale->lang('send_emails_process'));
 	}
 	
 	/**

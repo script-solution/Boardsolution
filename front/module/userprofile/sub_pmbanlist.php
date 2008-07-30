@@ -22,7 +22,7 @@ final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -30,11 +30,12 @@ final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACTION_BAN_USER,'pmbanuser');
-		$doc->add_action(BS_ACTION_UNBAN_USER,'pmunbanuser');
+		$renderer->add_action(BS_ACTION_BAN_USER,'pmbanuser');
+		$renderer->add_action(BS_ACTION_UNBAN_USER,'pmunbanuser');
 
-		$doc->add_breadcrumb($locale->lang('banlist'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmbanlist'));
+		$renderer->add_breadcrumb($locale->lang('banlist'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmbanlist'));
 	}
 	
 	/**
@@ -52,7 +53,7 @@ final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 		$helper = BS_Front_Module_UserProfile_Helper::get_instance();
 		if($helper->get_pm_permission() < 1)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS);
+			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
 			return;
 		}
 

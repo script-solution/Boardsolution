@@ -68,24 +68,6 @@ abstract class BS_Front_Module extends PLIB_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::report_error()
-	 */
-	protected final function report_error($type = PLIB_Messages::MSG_TYPE_ERROR,$message = '')
-	{
-		$functions = PLIB_Props::get()->functions();
-		$doc = PLIB_Props::get()->doc();
-
-		// if a no-access-message has been added we want to show the login form
-		if($message == '' && $type == PLIB_Messages::MSG_TYPE_NO_ACCESS)
-		{
-			$functions->show_login_form();
-			$doc->set_error();
-		}
-		else
-			$doc->report_error($type,$message);
-	}
-	
-	/**
 	 * Adds the forum-location-path to the breadcrumbs. Can be used in modules which belong
 	 * to a forum or topic.
 	 * 
@@ -96,12 +78,16 @@ abstract class BS_Front_Module extends PLIB_Module
 		$forums = PLIB_Props::get()->forums();
 		$url = PLIB_Props::get()->url();
 		$doc = PLIB_Props::get()->doc();
+		$renderer = $doc->get_renderer();
+		
+		if(!($renderer instanceof BS_Front_Renderer_HTML))
+			PLIB_Helper::def_error('instance','render','BS_Front_Renderer_HTML',$renderer);
 
 		if(PLIB_Helper::is_integer($id) && $id > 0)
 		{
 			$path = $forums->get_path($id);
 			for($i = count($path) - 1;$i >= 0;$i--)
-				$doc->add_breadcrumb($path[$i][0],$url->get_topics_url($path[$i][1],'&amp;',1));
+				$renderer->add_breadcrumb($path[$i][0],$url->get_topics_url($path[$i][1],'&amp;',1));
 		}
 	}
 	
@@ -113,12 +99,16 @@ abstract class BS_Front_Module extends PLIB_Module
 	{
 		$url = PLIB_Props::get()->url();
 		$doc = PLIB_Props::get()->doc();
+		$renderer = $doc->get_renderer();
+		
+		if(!($renderer instanceof BS_Front_Renderer_HTML))
+			PLIB_Helper::def_error('instance','render','BS_Front_Renderer_HTML',$renderer);
 		
 		$tdata = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		if($tdata !== null)
 		{
 			$murl = $url->get_posts_url($tdata['rubrikid'],$tdata['id'],'&amp;',1);
-			$doc->add_breadcrumb($tdata['name'],$murl);
+			$renderer->add_breadcrumb($tdata['name'],$murl);
 		}
 	}
 }

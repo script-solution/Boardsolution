@@ -32,9 +32,10 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 		$locale = PLIB_Props::get()->locale();
 		$cache = PLIB_Props::get()->cache();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACP_ACTION_ACPACCESS_GROUP,array('client','group'));
-		$doc->add_action(BS_ACP_ACTION_ACPACCESS_USER,array('client','user'));
+		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_GROUP,array('client','group'));
+		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_USER,array('client','user'));
 
 		$type = $input->get_var('type','get',PLIB_Input::STRING);
 		$murl = $url->get_acpmod_url(0,'&amp;action=client&amp;type='.$type);
@@ -42,7 +43,7 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 		if($type == 'user')
 		{
 			$username = $this->_get_username();
-			$doc->add_breadcrumb(
+			$renderer->add_breadcrumb(
 				sprintf($locale->lang('permissions_for_user'),$username),
 				$murl.'&amp;name='.$username
 			);
@@ -53,7 +54,7 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 			$gdata = $cache->get_cache('user_groups')->get_element($group);
 			if($gdata !== null)
 			{
-				$doc->add_breadcrumb(
+				$renderer->add_breadcrumb(
 					sprintf($locale->lang('permissions_for_group'),$gdata['group_title']),
 					$murl.'&amp;group='.$group
 				);
@@ -81,7 +82,7 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 			$data = BS_DAO::get_profile()->get_user_by_name($username);
 			if($data === false || $auth->is_in_group($data['user_group'],BS_STATUS_ADMIN))
 			{
-				$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,$locale->lang('user_not_found'));
+				$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('user_not_found'));
 				return;
 			}
 

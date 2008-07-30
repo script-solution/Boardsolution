@@ -28,15 +28,16 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 	{
 		parent::init($doc);
 		
-		$doc->add_action(BS_ACTION_CAL_JOIN_EVENT,'joinevent');
-		$doc->add_action(BS_ACTION_CAL_LEAVE_EVENT,'leaveevent');
+		$renderer = $doc->use_default_renderer();
+		$renderer->add_action(BS_ACTION_CAL_JOIN_EVENT,'joinevent');
+		$renderer->add_action(BS_ACTION_CAL_LEAVE_EVENT,'leaveevent');
 		
 		$input = PLIB_Props::get()->input();
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
 
 		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('event_details'),
 			$url->get_url(0,'&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id)
 		);
@@ -60,7 +61,7 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 		// does the event exist?
 		if($event_data === false)
 		{
-			$this->report_error(PLIB_Messages::MSG_TYPE_ERROR,'');
+			$this->report_error(PLIB_Document_Messages::ERROR,'');
 			return;
 		}
 	
@@ -73,7 +74,7 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 				if($event_data['user_id'] != $user->get_user_id() ||
 					!$auth->has_global_permission('delete_cal_event'))
 				{
-					$this->report_error(PLIB_Messages::MSG_TYPE_NO_ACCESS,'');
+					$this->report_error(PLIB_Document_Messages::NO_ACCESS,'');
 					return;
 				}
 			}

@@ -1,62 +1,30 @@
 <?php
 /**
- * Contains acp-content-page
+ * Contains the dba-html-renderer-class
  *
  * @version			$Id$
  * @package			Boardsolution
- * @subpackage	dba.src
+ * @subpackage	dba.src.renderer
  * @author			Nils Asmussen <nils@script-solution.de>
  * @copyright		2003-2008 Nils Asmussen
  * @link				http://www.script-solution.de
  */
 
 /**
- * The content-page of the dbbackup-script
+ * The HTML-renderer for the DBA-script
  *
  * @package			Boardsolution
- * @subpackage	dba.src
+ * @subpackage	dba.src.renderer
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DBA_Page extends PLIB_Page
+final class BS_DBA_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 {
-	/**
-	 * The current module
-	 *
-	 * @var BS_DBA_Module
-	 */
-	private $_module;
-
-	/**
-	 * The name of the current module
-	 *
-	 * @var string
-	 */
-	private $_module_name;
-
 	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
-		try
-		{
-			parent::__construct();
-	
-			$this->_handle_session();
-			$this->_module = $this->_load_module();
-		}
-		catch(PLIB_Exceptions_Critical $e)
-		{
-			echo $e;
-		}
-	}
-	
-	/**
-	 * @see BS_Page::before_start()
-	 */
-	protected function before_start()
-	{
-		parent::before_start();
+		parent::__construct();
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
@@ -75,45 +43,45 @@ final class BS_DBA_Page extends PLIB_Page
 		
 		$this->_action_perf->set_prefix('BS_DBA_Action_');
 		$this->_action_perf->set_mod_folder('dba/module/');
-		
-		// init the module
-		$this->_module->init($this);
+	}
 
-		// add actions of the current module
-		// TODO we can improve that, right?
-		$this->_action_perf->add_actions($this->_module_name,$this->get_actions());
-		
-		$this->perform_actions();
+	/**
+	 * @see PLIB_Document_Renderer_HTML_Default::before_start()
+	 */
+	protected function before_start()
+	{
+		$doc = PLIB_Props::get()->doc();
 		
 		// set the default template if not already done
 		$template = '';
 		if($this->get_template() === null)
 		{
-			$classname = get_class($this->_module);
+			$classname = get_class($doc->get_module());
 			$prefixlen = PLIB_String::strlen('BS_DBA_Module_');
 			$template = PLIB_String::strtolower(PLIB_String::substr($classname,$prefixlen)).'.htm';
 			$this->set_template($template);
 		}
 	}
-
+	
 	/**
-	 * @see PLIB_Page::before_render()
+	 * @see PLIB_Document_Renderer_HTML_Default::before_render()
 	 */
-	protected final function before_render()
+	protected function before_render()
 	{
 		$tpl = PLIB_Props::get()->tpl();
 		$msgs = PLIB_Props::get()->msgs();
 		$user = PLIB_Props::get()->user();
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$doc = PLIB_Props::get()->doc();
 		
 		// add redirect information
-		$redirect = $this->get_redirect();
+		$redirect = $doc->get_redirect();
 		if($redirect)
 			$tpl->add_array('redirect',$redirect,'inc_header.htm');
 		
 		// notify the template if an error has occurred
-		$tpl->add_global('module_error',$this->error_occurred());
+		$tpl->add_global('module_error',$doc->get_module()->error_occurred());
 		
 		// add some global variables
 		$tpl->add_global('gisloggedin',$user->is_loggedin());
@@ -132,14 +100,36 @@ final class BS_DBA_Page extends PLIB_Page
 		$tpl->add_allowed_method('gurl','get_url');
 		
 		// add messages
-		$msgs->add_messages();
-		
-		$this->set_charset(BS_HTML_CHARSET);
-		$this->set_gzip(BS_DBA_ENABLE_GZIP);
+		if($msgs->contains_msg())
+			$this->handle_msgs($msgs);
 	}
 
 	/**
-	 * @see PLIB_Page::header()
+	 * Handles the collected messages
+	 *
+	 * @param PLIB_Document_Messages $msgs
+	 */
+	protected function handle_msgs($msgs)
+	{
+		$tpl = PLIB_Props::get()->tpl();
+		$locale = PLIB_Props::get()->locale();
+		
+		$amsgs = $msgs->get_all_messages();
+		$links = $msgs->get_links();
+		$tpl->set_template('inc_messages.htm');
+		$tpl->add_array('errors',$amsgs[PLIB_Document_Messages::ERROR]);
+		$tpl->add_array('warnings',$amsgs[PLIB_Document_Messages::WARNING]);
+		$tpl->add_array('notices',$amsgs[PLIB_Document_Messages::NOTICE]);
+		$tpl->add_array('links',$links);
+		$tpl->add_variables(array(
+			'title' => $locale->lang('information'),
+			'messages' => $msgs->contains_error() || $msgs->contains_notice() || $msgs->contains_warning()
+		));
+		$tpl->restore_template();
+	}
+
+	/**
+	 * @see PLIB_Document_Renderer_HTML_Default::header()
 	 */
 	protected function header()
 	{
@@ -148,6 +138,9 @@ final class BS_DBA_Page extends PLIB_Page
 		$functions = PLIB_Props::get()->functions();
 		$db = PLIB_Props::get()->db();
 		$user = PLIB_Props::get()->user();
+		$doc = PLIB_Props::get()->doc();
+		
+		$this->perform_actions();
 		
 		// change db?
 		if($input->isset_var('selectdb','post'))
@@ -160,8 +153,8 @@ final class BS_DBA_Page extends PLIB_Page
 			}
 		}
 		
-		$breadcrumbs = PLIB_Helper::generate_location($this);
-		$class = PLIB_String::strtolower(get_class($this->_module));
+		$breadcrumbs = $this->get_breadcrumbs();
+		$class = PLIB_String::strtolower(get_class($doc->get_module()));
 		$selected_db = BS_DBA_Utils::get_instance()->get_selected_database();
 		$show_db_combo = $user->is_loggedin() &&
 			($class == 'bs_dba_module_index' || $class == 'bs_dba_module_backups');
@@ -183,7 +176,7 @@ final class BS_DBA_Page extends PLIB_Page
 		
 		$tpl->set_template('inc_header.htm');
 		$tpl->add_variables(array(
-			'charset' => 'charset='.$this->get_charset(),
+			'charset' => 'charset='.$doc->get_charset(),
 			'position' => $breadcrumbs,
 			'board_url' => '../'.$functions->get_board_file(false),
 			'is_loggedin' => $user->is_loggedin(),
@@ -194,26 +187,20 @@ final class BS_DBA_Page extends PLIB_Page
 	}
 
 	/**
-	 * @see PLIB_Page::content()
+	 * @see PLIB_Document_Renderer_HTML_Default::content()
 	 */
-	protected final function content()
+	protected function content()
 	{
-		$tpl = PLIB_Props::get()->tpl();
 		$user = PLIB_Props::get()->user();
 
-		// run the module
-		if($user->is_loggedin())
-		{
-			$tpl->set_template($this->get_template());
-			$this->_module->run();
-			$tpl->restore_template();
-		}
-		else
+		if(!$user->is_loggedin())
 			$this->set_template('login.htm');
+		
+		parent::content();
 	}
 
 	/**
-	 * @see PLIB_Page::footer()
+	 * @see PLIB_Document_Renderer_HTML_Default::footer()
 	 */
 	protected function footer()
 	{
@@ -236,50 +223,6 @@ final class BS_DBA_Page extends PLIB_Page
 			'queries' => PLIB_PrintUtils::to_string($db->get_performed_queries())
 		));
 		$tpl->restore_template();
-	}
-
-	/**
-	 * Loads the corresponding module
-	 *
-	 * @return BS_DBA_Module the loaded module
-	 */
-	private function _load_module()
-	{
-		$this->_module_name = PLIB_Helper::get_module_name(
-			'BS_DBA_Module_','action','index','dba/module/'
-		);
-		$class = 'BS_DBA_Module_'.$this->_module_name;
-		return new $class();
-	}
-	
-	/**
-	 * Handles all session-operations
-	 */
-	private function _handle_session()
-	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		
-		// we want to require a session-id via GET
-		if($input->get_var('sid','get',PLIB_Input::STRING) != $user->get_session_id())
-			$user->logout();
-		
-		if(!$user->is_loggedin())
-		{
-			if($input->isset_var('login','post'))
-			{
-				$p_user = $input->get_var('user_login','post',PLIB_Input::STRING);
-				$p_pw = $input->get_var('pw_login','post',PLIB_Input::STRING);
-				$user->login($p_user,$p_pw);
-			}
-		}
-		else if($input->isset_var('logout','get'))
-			$user->logout();
-	}
-	
-	protected function get_print_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

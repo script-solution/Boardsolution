@@ -22,7 +22,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -30,9 +30,10 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_robots_value('index,follow');
-		$doc->add_breadcrumb($locale->lang('portal'),$url->get_portal_url());
+		$renderer->set_robots_value('index,follow');
+		$renderer->add_breadcrumb($locale->lang('portal'),$url->get_portal_url());
 	}
 	
 	/**

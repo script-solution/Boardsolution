@@ -28,8 +28,9 @@ final class BS_ACP_Module_userdetails extends BS_ACP_Module
 	{
 		parent::init($doc);
 		
-		$doc->set_template('popup_userdetails.htm');
-		$doc->set_show_headline(false);
+		$renderer = $doc->use_default_renderer();
+		$renderer->set_template('popup_userdetails.htm');
+		$renderer->set_show_headline(false);
 	}
 	
 	/**

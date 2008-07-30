@@ -22,7 +22,7 @@ final class BS_Front_SubModule_userprofile_config extends BS_Front_SubModule
 	/**
 	 * @see PLIB_Module::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -30,10 +30,11 @@ final class BS_Front_SubModule_userprofile_config extends BS_Front_SubModule
 		
 		$locale = PLIB_Props::get()->locale();
 		$url = PLIB_Props::get()->url();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->add_action(BS_ACTION_EDIT_PERS_CONFIG,'updateconfig');
+		$renderer->add_action(BS_ACTION_EDIT_PERS_CONFIG,'updateconfig');
 
-		$doc->add_breadcrumb(
+		$renderer->add_breadcrumb(
 			$locale->lang('profileconfig'),
 			$url->get_url(0,'&amp;'.BS_URL_LOC.'=config')
 		);

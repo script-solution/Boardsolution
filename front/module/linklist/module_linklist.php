@@ -30,7 +30,7 @@ final class BS_Front_Module_linklist extends BS_Front_SubModuleContainer
 	/**
 	 * @see BS_Front_SubModuleContainer::init($doc)
 	 *
-	 * @param BS_Front_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -40,14 +40,15 @@ final class BS_Front_Module_linklist extends BS_Front_SubModuleContainer
 		$url = PLIB_Props::get()->url();
 		$cfg = PLIB_Props::get()->cfg();
 		$auth = PLIB_Props::get()->auth();
+		$renderer = $doc->use_default_renderer();
 		
-		$doc->set_has_access($cfg['enable_linklist'] == 1 && $auth->has_global_permission('view_linklist'));
-		$doc->add_breadcrumb($locale->lang('linklist'),$url->get_url());
+		$renderer->set_has_access($cfg['enable_linklist'] == 1 && $auth->has_global_permission('view_linklist'));
+		$renderer->add_breadcrumb($locale->lang('linklist'),$url->get_url());
 		
 		// init submodule
 		$this->_sub->init($doc);
 		
-		$doc->set_template($this->_sub->get_template());
+		$renderer->set_template($this->_sub->get_template());
 	}
 }
 ?>
