@@ -99,8 +99,6 @@ final class BS_Front_Document extends BS_Document
 		$cfg = FWS_Props::get()->cfg();
 		$input = FWS_Props::get()->input();
 		$user = FWS_Props::get()->user();
-		$url = FWS_Props::get()->url();
-
 		if($cfg['force_fill_of_empty_req_fields'] == 1)
 		{
 			$action = $input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING);
@@ -109,7 +107,7 @@ final class BS_Front_Document extends BS_Document
 			{
 				if(BS_AddField_Manager::get_instance()->is_any_required_field_empty())
 				{
-					$murl = $url->get_url('userprofile','&'.BS_URL_LOC.'=infos&'.BS_URL_MODE.'=1','&');
+					$murl = BS_URL::get_url('userprofile','&'.BS_URL_LOC.'=infos&'.BS_URL_MODE.'=1','&');
 					$this->redirect($murl);
 				}
 			}

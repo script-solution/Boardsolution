@@ -29,14 +29,13 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$input = FWS_Props::get()->input();
 		$renderer = $doc->use_default_renderer();
 
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$renderer->add_breadcrumb(
 			$locale->lang('details'),
-			$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmdetails&amp;'.BS_URL_ID.'='.$id)
+			BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pmdetails&amp;'.BS_URL_ID.'='.$id)
 		);
 	}
 	
@@ -51,8 +50,6 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		$functions = FWS_Props::get()->functions();
 		$cfg = FWS_Props::get()->cfg();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$helper = BS_Front_Module_UserProfile_Helper::get_instance();
 		if($helper->get_pm_permission() < 1)
 		{
@@ -143,10 +140,10 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 			'text' => $text,
 			'type' => $data['pm_type'],
 			'subject' => $data['pm_title'],
-			'back' => $url->get_url(
+			'back' => BS_URL::get_url(
 				'redirect','&amp;'.BS_URL_LOC.'=pm_navigate&amp;'.BS_URL_MODE.'=back'.$add
 			),
-			'forward' => $url->get_url(
+			'forward' => BS_URL::get_url(
 				'redirect','&amp;'.BS_URL_LOC.'=pm_navigate&amp;'.BS_URL_MODE.'=forward'.$add
 			),
 			'user_name' => $user_name,
@@ -161,7 +158,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 			foreach(BS_DAO::get_attachments()->get_by_pmid($data['id']) as $adata)
 			{
 				$ext = FWS_FileUtils::get_extension($adata['attachment_path']);
-				$attachment_url = $url->get_url('download','&amp;'.BS_URL_ID.'='.$adata['id']);
+				$attachment_url = BS_URL::get_url('download','&amp;'.BS_URL_ID.'='.$adata['id']);
 	
 				$is_image = $cfg['attachments_images_show'] == 1 &&
 					($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png');
@@ -172,7 +169,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		    	$params = '&amp;path='.$adata['attachment_path'].'&amp;width=';
 		    	$params .= $att_width.'&amp;height='.$att_height.'&amp;method=';
 		    	$params .= $cfg['attachments_images_resize_method'];
-		    	$image_url = $url->get_url('thumbnail',$params);
+		    	$image_url = BS_URL::get_url('thumbnail',$params);
 		      $image_title = sprintf(
 		      	$locale->lang('download_image'),basename($adata['attachment_path'])
 		      );
@@ -205,7 +202,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		$params .= '&amp;'.BS_URL_ID.'='.$uid;
 		$tpl->add_variables(array(
 			'id' => $data['id'],
-			'ban_user_url' => $url->get_url('userprofile',$params,'&amp;',true),
+			'ban_user_url' => BS_URL::get_url('userprofile',$params,'&amp;',true),
 			'show_reply_btn' => $data['pm_type'] == 'inbox'
 		));
 	}

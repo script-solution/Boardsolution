@@ -27,14 +27,13 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 	public function init($doc)
 	{
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($cfg['enable_memberlist'] == 1 &&
 			$auth->has_global_permission('view_memberlist'));
-		$renderer->add_breadcrumb($locale->lang('memberlist'),$url->get_url('memberlist'));
+		$renderer->add_breadcrumb($locale->lang('memberlist'),BS_URL::get_url('memberlist'));
 	}
 	
 	/**
@@ -49,8 +48,6 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 		$locale = FWS_Props::get()->locale();
 		$auth = FWS_Props::get()->auth();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		// change search-display-state?
 		if($input->get_var(BS_URL_LOC,'get',FWS_Input::STRING) == 'clapsearch')
 			$functions->clap_area('memberlist_search');
@@ -89,7 +86,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 		$s_mods = $input->get_var(BS_URL_MS_MODS,'get',FWS_Input::INT_BOOL);
 		
 		// build the URL
-		$baseurl = $url->get_url('memberlist','&amp;');
+		$baseurl = BS_URL::get_url('memberlist','&amp;');
 		$baseurl .= BS_URL_MS_NAME.'='.$s_name.'&amp;'.BS_URL_MS_EMAIL.'='.$s_email.'&amp;';
 
 		$groups = $cache->get_cache('user_groups');
@@ -230,7 +227,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 				{
 					$email = '<a class="bs_button" style="float: none;" title="';
 					$email .= sprintf($locale->lang('send_mail_to_user'),$data['user_name']);
-					$email .= '" href="'.$url->get_url('new_mail','&amp;'.BS_URL_ID.'='.$data['id']).'">';
+					$email .= '" href="'.BS_URL::get_url('new_mail','&amp;'.BS_URL_ID.'='.$data['id']).'">';
 					$email .= $locale->lang('email').'</a>';
 				}
 				else
@@ -307,8 +304,9 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 		// display search-form
 		$hidden_fields = array();
 		$hidden_fields[BS_URL_ACTION] = 'memberlist';
-		if(($sid = $url->get_splitted_session_id()) != 0)
+		if(($sid = BS_URL::get_session_id()) !== false)
 			$hidden_fields[$sid[0]] = $sid[1];
+		$url = new BS_URL();
 		$hidden_fields = array_merge($hidden_fields,$url->get_extern_vars());
 		
 		$user_group_options = array();
@@ -324,7 +322,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 			}
 		}
 
-		$clap_url = $url->get_url(0,'&amp;'.BS_URL_LOC.'=clapsearch');
+		$clap_url = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=clapsearch');
 		$clap_data = $functions->get_clap_data('membersearch',$clap_url,'block');
 		
 		$form = $this->request_formular(false,false);
@@ -363,7 +361,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 			'user_group_combo' => $form->get_combobox(
 				BS_URL_MS_GROUP.'[]',$user_group_options,$selected_groups,true,count($user_group_options)
 			),
-			'reset_url' => $url->get_url(0,'&amp;'.BS_URL_ORDER.'='.$order.'&amp;'.BS_URL_AD.'='.$ad),
+			'reset_url' => BS_URL::get_url(0,'&amp;'.BS_URL_ORDER.'='.$order.'&amp;'.BS_URL_AD.'='.$ad),
 			'enable_post_count' => $cfg['enable_post_count'] == 1
 		));
 	}

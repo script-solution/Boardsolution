@@ -29,7 +29,6 @@ final class BS_Front_Module_smileys extends BS_Front_Module
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$input = FWS_Props::get()->input();
 		$renderer = $doc->use_default_renderer();
 		
@@ -40,7 +39,7 @@ final class BS_Front_Module_smileys extends BS_Front_Module
 		$number = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$renderer->add_breadcrumb(
 			$locale->lang('smileys'),
-			$url->get_url('smileys','&amp;'.BS_URL_ID.'='.$number)
+			BS_URL::get_url('smileys','&amp;'.BS_URL_ID.'='.$number)
 		);
 	}
 	

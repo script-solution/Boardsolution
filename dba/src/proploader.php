@@ -30,6 +30,22 @@ final class BS_DBA_PropLoader extends BS_PropLoader
 	}
 	
 	/**
+	 * @return FWS_Template_Handler the template-handler
+	 */
+	protected function tpl()
+	{
+		$tpl = parent::tpl();
+		
+		// replace the URL-class
+		$url = new BS_DBA_URL();
+		$tpl->add_global_ref('gurl',$url);
+		$tpl->remove_allowed_methods('gurl');
+		$tpl->add_allowed_method('gurl','get_url');
+		
+		return $tpl;
+	}
+	
+	/**
 	 * @see BS_PropLoader::sessions()
 	 *
 	 * @return FWS_Session_Manager
@@ -49,16 +65,6 @@ final class BS_DBA_PropLoader extends BS_PropLoader
 		$user = new FWS_User_Current(new BS_DBA_User_Storage_DBA());
 		$user->set_use_cookies(false);
 		return $user;
-	}
-
-	/**
-	 * @see BS_PropLoader::url()
-	 *
-	 * @return BS_DBA_URL
-	 */
-	protected function url()
-	{
-		return BS_DBA_URL::get_instance();
 	}
 
 	/**

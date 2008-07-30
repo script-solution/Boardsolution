@@ -30,8 +30,6 @@ final class BS_Front_Search_Result_Posts extends FWS_Object implements BS_Front_
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		/* @var $search BS_Front_Search_Manager */
 		/* @var $request BS_Front_Search_Request */
 		
@@ -44,7 +42,7 @@ final class BS_Front_Search_Result_Posts extends FWS_Object implements BS_Front_
 		
 		$end = $cfg['posts_per_page'];
 		$pagination = new BS_Pagination($end,count($ids));
-		$murl = $url->get_url(
+		$murl = BS_URL::get_url(
 			0,'&amp;'.BS_URL_ID.'='.$search->get_search_id().'&amp;'.BS_URL_MODE.'='.$request->get_name()
 				.'&amp;'.BS_URL_ORDER.'='.$order.'&amp;'.BS_URL_AD.'='.$ad.'&amp;'.BS_URL_SITE.'={d}'
 		);

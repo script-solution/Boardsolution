@@ -25,8 +25,6 @@ final class BS_Front_Action_calendar_editevent extends BS_Front_Action_Base
 		$user = FWS_Props::get()->user();
 		$auth = FWS_Props::get()->auth();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// nothing to do?
 		if(!$input->isset_var('submit','post',FWS_Input::STRING))
 			return '';
@@ -104,7 +102,7 @@ final class BS_Front_Action_calendar_editevent extends BS_Front_Action_Base
 		);
 		BS_DAO::get_events()->update($id,$fields);
 
-		$murl = $url->get_url('calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id);
+		$murl = BS_URL::get_url('calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id);
 		$this->add_link($locale->lang('back'),$murl);
 		$this->set_action_performed(true);
 

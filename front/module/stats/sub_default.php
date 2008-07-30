@@ -22,17 +22,16 @@ final class BS_Front_SubModule_stats_default extends BS_Front_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param FWS_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
-		$renderer->add_breadcrumb($locale->lang('general'),$url->get_url('stats'));
+		$renderer->add_breadcrumb($locale->lang('general'),BS_URL::get_url('stats'));
 	}
 	
 	/**
@@ -45,8 +44,6 @@ final class BS_Front_SubModule_stats_default extends BS_Front_SubModule
 		$locale = FWS_Props::get()->locale();
 		$cfg = FWS_Props::get()->cfg();
 		$user = FWS_Props::get()->user();
-		$url = FWS_Props::get()->url();
-
 		$limit = 10;
 		$time = time();
 
@@ -215,7 +212,7 @@ final class BS_Front_SubModule_stats_default extends BS_Front_SubModule
 		if($user->is_loggedin() && $cfg['enable_post_count'] == 1)
 		{
 			$key = md5($user->get_session_id().$user->get_user_ip());
-			$surl = $url->get_url('stats_diagram','&amp;id='.$user->get_user_id().'&amp;key='.$key);
+			$surl = BS_URL::get_url('stats_diagram','&amp;id='.$user->get_user_id().'&amp;key='.$key);
 		}
 		
 		$tpl->add_variables(array(

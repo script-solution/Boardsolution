@@ -22,7 +22,7 @@ final class BS_Front_Module_security_code extends BS_Front_Module
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param FWS_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{

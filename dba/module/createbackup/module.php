@@ -28,7 +28,6 @@ final class BS_DBA_Module_createbackup extends BS_DBA_Module
 		$locale = FWS_Props::get()->locale();
 		$msgs = FWS_Props::get()->msgs();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$backups = FWS_Props::get()->backups();
 
@@ -78,7 +77,7 @@ final class BS_DBA_Module_createbackup extends BS_DBA_Module
 		$form->set_condition($input->isset_var('prefix'));
 		
 		$tpl->add_variables(array(
-			'target_url' => $url->get_url('createbackup','&amp;tables='.implode(';',$tables)),
+			'target_url' => BS_DBA_URL::get_url('createbackup','&amp;tables='.implode(';',$tables)),
 			'hidden_tables' => $hidden_tables,
 			'tables' => $sel_tables,
 			'lang_structure' => $locale->lang('structure'),
@@ -92,13 +91,11 @@ final class BS_DBA_Module_createbackup extends BS_DBA_Module
 	private function _backup()
 	{
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		new BS_DBA_Progress(
 			$locale->lang('create_backup'),
 			$locale->lang('backup_finished'),
-			$url->get_url(0,'&mode=backup','&'),
-			$url->get_url('backups'),
+			BS_DBA_URL::get_url(0,'&mode=backup','&'),
+			BS_DBA_URL::get_url('backups'),
 			new BS_DBA_Module_CreateBackup_Tasks_Backup()
 		);
 	}

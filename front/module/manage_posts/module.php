@@ -30,7 +30,6 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
@@ -52,7 +51,7 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 		$this->add_loc_topic();
 		$renderer->add_breadcrumb(
 			$locale->lang('manage_posts'),
-			$url->get_url('manage_posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid)
+			BS_URL::get_url('manage_posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid)
 		);
 	}
 	
@@ -67,8 +66,6 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 		$locale = FWS_Props::get()->locale();
 		$auth = FWS_Props::get()->auth();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 		$mode = $input->correct_var(BS_URL_MODE,-1,FWS_Input::STRING,array('delete','split','merge'),'delete');
@@ -147,9 +144,9 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 		$tpl->add_variables(array(
 			'show_delete' => $auth->has_current_forum_perm(BS_MODE_DELETE_POSTS),
 			'show_move' => $auth->has_current_forum_perm(BS_MODE_SPLIT_POSTS),
-			'delete_posts_url' => $url->get_url(0,$params.'&amp;'.BS_URL_MODE.'=delete'),
-			'split_posts_url' => $url->get_url(0,$params.'&amp;'.BS_URL_MODE.'=split'),
-			'merge_posts_url' => $url->get_url(0,$params.'&amp;'.BS_URL_MODE.'=merge'),
+			'delete_posts_url' => BS_URL::get_url(0,$params.'&amp;'.BS_URL_MODE.'=delete'),
+			'split_posts_url' => BS_URL::get_url(0,$params.'&amp;'.BS_URL_MODE.'=split'),
+			'merge_posts_url' => BS_URL::get_url(0,$params.'&amp;'.BS_URL_MODE.'=merge'),
 			'delete_bold' => $mode == 'delete' ? ' style="font-weight: bold;"' : '',
 			'split_bold' => $mode == 'split' ? ' style="font-weight: bold;"' : '',
 			'merge_bold' => $mode == 'merge' ? ' style="font-weight: bold;"' : '',
@@ -159,8 +156,8 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 			'forum_combo' => BS_ForumUtils::get_instance()->get_recursive_forum_combo(
 				'target_forum',$target_forum,0
 			),
-			'back_url' => $url->get_url('posts',$params),
-			'target_url' => $url->get_url(0,$params),
+			'back_url' => BS_URL::get_url('posts',$params),
+			'target_url' => BS_URL::get_url(0,$params),
 			'at_merge' => BS_ACTION_MERGE_POSTS,
 			'at_delete' => BS_ACTION_DELETE_POSTS,
 			'at_split' => BS_ACTION_SPLIT_POSTS,
@@ -168,7 +165,7 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 			'action_type' => $action_type,
 			'start_date' => $form->get_date_chooser('start_',$start,false),
 			'end_date' => $form->get_date_chooser('end_',$end,false),
-			'display_target' => $url->get_url(0,$params),
+			'display_target' => BS_URL::get_url(0,$params),
 			'keyword' => $keyword,
 			'merge_split_options' => $split_options
 		));

@@ -29,14 +29,13 @@ final class BS_Front_SubModule_userprofile_config extends BS_Front_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_EDIT_PERS_CONFIG,'updateconfig');
 
 		$renderer->add_breadcrumb(
 			$locale->lang('profileconfig'),
-			$url->get_url(0,'&amp;'.BS_URL_LOC.'=config')
+			BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=config')
 		);
 	}
 	
@@ -49,7 +48,6 @@ final class BS_Front_SubModule_userprofile_config extends BS_Front_SubModule
 		$locale = FWS_Props::get()->locale();
 		$cache = FWS_Props::get()->cache();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 
 		$this->request_formular(false);
@@ -117,7 +115,7 @@ final class BS_Front_SubModule_userprofile_config extends BS_Front_SubModule
 			'enable_pms' => $cfg['enable_pms'] == 1,
 			'action_type' => BS_ACTION_EDIT_PERS_CONFIG,
 			'ghost_mode_allowed' => $cfg['allow_ghost_mode'] == 1,
-			'target_url' => $url->get_url('userprofile','&amp;'.BS_URL_LOC.'=config'),
+			'target_url' => BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=config'),
 			'allow_custom_lang' => $cfg['allow_custom_lang'],
 			'allow_custom_style' => $cfg['allow_custom_style'],
 			'lang_options' => $langs,

@@ -27,8 +27,6 @@ final class BS_Front_Action_edit_post_default extends BS_Front_Action_Base
 		$cfg = FWS_Props::get()->cfg();
 		$cache = FWS_Props::get()->cache();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// nothing to do?
 		if(!$input->isset_var('submit','post',FWS_Input::STRING))
 			return '';
@@ -130,7 +128,7 @@ final class BS_Front_Action_edit_post_default extends BS_Front_Action_Base
 		$cache->store('stats');
 
 		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::ID);
-		$murl = $url->get_url(
+		$murl = BS_URL::get_url(
 			'posts',
 			'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_SITE.'='.$site
 		).'#b_'.$id;

@@ -105,8 +105,6 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$total = $user->get_session_data('mail_total');
 		$success = $user->get_session_data('mail_send_success');
 		$failed = $user->get_session_data('mail_send_failed');
@@ -117,7 +115,7 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 			'title' => $locale->lang('send_emails_process'),
 			'percent' => round($this->_pm->get_percentage(),1),
 			'message' => $message,
-			'target_url' => $url->get_acpmod_url(0,'&action=send','&')
+			'target_url' => BS_URL::get_acpmod_url(0,'&action=send','&')
 		));
 	}
 

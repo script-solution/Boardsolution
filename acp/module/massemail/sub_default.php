@@ -29,8 +29,6 @@ final class BS_ACP_SubModule_massemail_default extends BS_ACP_SubModule
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
 		$cache = FWS_Props::get()->cache();
-		$url = FWS_Props::get()->url();
-
 		// we have to clear the position here to ensure that we will start again
 		// if the last progress hasn't be cleaned up, however.
 		$storage = new FWS_Progress_Storage_Session('massemail_');
@@ -133,7 +131,7 @@ final class BS_ACP_SubModule_massemail_default extends BS_ACP_SubModule
 			'user_combo' => $user_combo->to_html(),
 			'content_type_options' => $content_type_options,
 			'method_options' => $method_options,
-			'search_url' => $url->get_acpmod_url('usersearch','&amp;comboid=user_intern'),
+			'search_url' => BS_URL::get_acpmod_url('usersearch','&amp;comboid=user_intern'),
 		));
 	}
 	

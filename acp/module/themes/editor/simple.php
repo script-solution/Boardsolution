@@ -183,7 +183,6 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 	{
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
 
@@ -209,11 +208,11 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 					$text .= ' '.$locale->lang('and').' ';
 			}
 
-			$yes_url = $url->get_acpmod_url(
+			$yes_url = BS_URL::get_acpmod_url(
 				0,'&amp;action=editor&amp;theme='.$theme
 					.'&amp;class='.$class.'&amp;at='.BS_ACP_ACTION_THEME_EDITOR_SIMPLE_DELETE.'&ids='.$ids
 			);
-			$no_url = $url->get_acpmod_url(
+			$no_url = BS_URL::get_acpmod_url(
 				0,'&amp;action=editor&amp;theme='.$theme.'&amp;class='.$class
 			);
 			
@@ -226,7 +225,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 		if($class == null)
 			$class = $input->set_var('class','get',current($classes));
 
-		$base_url = $url->get_acpmod_url(
+		$base_url = BS_URL::get_acpmod_url(
 			0,'&amp;action=editor&amp;theme='.$theme.'&amp;mode=simple'
 		);
 

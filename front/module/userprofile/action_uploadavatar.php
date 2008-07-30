@@ -25,8 +25,6 @@ final class BS_Front_Action_userprofile_uploadavatar extends BS_Front_Action_Bas
 		$user = FWS_Props::get()->user();
 		$cfg = FWS_Props::get()->cfg();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
@@ -120,7 +118,7 @@ final class BS_Front_Action_userprofile_uploadavatar extends BS_Front_Action_Bas
 		$this->set_action_performed(true);
 		$this->add_link(
 			$locale->lang('back'),
-			$url->get_url('userprofile','&amp;'.BS_URL_LOC.'=avatars')
+			BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=avatars')
 		);
 
 		return '';

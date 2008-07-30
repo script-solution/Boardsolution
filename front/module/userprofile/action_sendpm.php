@@ -26,8 +26,6 @@ final class BS_Front_Action_userprofile_sendpm extends BS_Front_Action_Base
 		$auth = FWS_Props::get()->auth();
 		$ips = FWS_Props::get()->ips();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
@@ -63,11 +61,11 @@ final class BS_Front_Action_userprofile_sendpm extends BS_Front_Action_Base
 		));
 		$this->add_link(
 			$locale->lang('go_to_inbox'),
-			$url->get_url(0,'&amp;'.BS_URL_LOC.'=pminbox')
+			BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pminbox')
 		);
 		$this->add_link(
 			$locale->lang('compose_another_pm'),
-			$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmcompose')
+			BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pmcompose')
 		);
 
 		return '';

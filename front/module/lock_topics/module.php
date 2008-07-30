@@ -30,7 +30,6 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
 		
@@ -44,7 +43,7 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 		$this->add_loc_forum_path($fid);
 		$renderer->add_breadcrumb(
 			$locale->lang('lock_topics'),
-			$url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids)
+			BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids)
 		);
 	}
 	
@@ -59,8 +58,6 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 		$forums = FWS_Props::get()->forums();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		// check parameters
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$id_str = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
@@ -118,7 +115,7 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 
 		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_LOCK_TOPICS,
-			'target_url' => $url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id_str,'&amp;',true),
+			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id_str,'&amp;',true),
 			'selected_topics' => $selected_topics,
 			'edit_topic_def' => $edit_topic_vals['val'],
 			'openclose_topic_def' => $openclose_topic_vals['val'],
@@ -127,7 +124,7 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 			'openclose_topic_diffs' => $openclose_topic_vals['diffs'],
 			'posts_topic_diffs' => $posts_topic_vals['diffs'],
 			'show_diff_hint' => count($selected_topic_ids) > 1,
-			'back_url' => $url->get_topics_url($fid)
+			'back_url' => BS_URL::get_topics_url($fid)
 		));
 	}
 	

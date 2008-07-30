@@ -29,12 +29,11 @@ final class BS_Front_SubModule_userprofile_signature extends BS_Front_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_EDIT_SIGNATURE,'updatesig');
 
-		$renderer->add_breadcrumb($locale->lang('signature'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=signature'));
+		$renderer->add_breadcrumb($locale->lang('signature'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=signature'));
 	}
 	
 	/**
@@ -46,8 +45,6 @@ final class BS_Front_SubModule_userprofile_signature extends BS_Front_SubModule
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		if($cfg['enable_signatures'] == 0)
 		{
 			$this->report_error(FWS_Document_Messages::NO_ACCESS);
@@ -67,7 +64,7 @@ final class BS_Front_SubModule_userprofile_signature extends BS_Front_SubModule
 		
 		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_EDIT_SIGNATURE,
-			'target_url' => $url->get_url(0,'&amp;'.BS_URL_LOC.'=signature'),
+			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=signature'),
 			'signature_preview' => $bbcode->get_message_for_output()
 		));
 	}

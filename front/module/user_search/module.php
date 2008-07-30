@@ -45,8 +45,6 @@ final class BS_Front_Module_user_search extends BS_Front_Module
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
-		$url = FWS_Props::get()->url();
-
 		// has the user the permission to view the user-search?
 		if($cfg['enable_memberlist'] == 0 || !$auth->has_global_permission('view_memberlist'))
 		{
@@ -55,8 +53,9 @@ final class BS_Front_Module_user_search extends BS_Front_Module
 		}
 		
 		$hidden_fields = array();
-		if(($sid = $url->get_splitted_session_id()) != 0)
+		if(($sid = BS_URL::get_session_id()) !== false)
 			$hidden_fields[$sid[0]] = $sid[1];
+		$url = new BS_URL();
 		$hidden_fields = array_merge($hidden_fields,$url->get_extern_vars());
 		
 		$name = $input->get_var(BS_URL_MS_NAME,'get',FWS_Input::STRING);
@@ -97,7 +96,7 @@ final class BS_Front_Module_user_search extends BS_Front_Module
 		
 		$tpl->add_array('user_list',$user_list);
 		
-		$murl = $url->get_url(0,'&amp;'.BS_URL_MS_NAME.'='.$name.'&amp;'
+		$murl = BS_URL::get_url(0,'&amp;'.BS_URL_MS_NAME.'='.$name.'&amp;'
 			.BS_URL_MS_EMAIL.'='.$email.'&amp;'.BS_URL_SITE.'={d}');
 		$functions->add_pagination($pagination,$murl);
 	}

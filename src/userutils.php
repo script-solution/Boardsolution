@@ -41,8 +41,6 @@ final class BS_UserUtils extends FWS_Singleton
 	{
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
-		$url = FWS_Props::get()->url();
-
 		static $user_cache = array();
 		
 		if($cfg['always_color_usernames'])
@@ -52,7 +50,7 @@ final class BS_UserUtils extends FWS_Singleton
 		if(isset($user_cache[$id.$color.$style]))
 			return $user_cache[$id.$color.$style];
 		
-		$murl = $url->get_url('userdetails','&amp;'.BS_URL_ID.'='.$id);
+		$murl = BS_URL::get_url('userdetails','&amp;'.BS_URL_ID.'='.$id);
 		$link = '<a';
 		if($style != '')
 			$link .= ' style="'.$style.'"';

@@ -30,7 +30,6 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_EDIT_TPL,'edit');
@@ -40,7 +39,7 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 		$file = $input->get_var('file','get',FWS_Input::STRING);
 		$renderer->add_breadcrumb(
 			$locale->lang('edit'),
-			$url->get_acpmod_url(0,'&amp;action=edit&amp;path='.$path.'&amp;file='.$file)
+			BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;path='.$path.'&amp;file='.$file)
 		);
 	}
 	
@@ -51,8 +50,6 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 	{
 		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$file = $input->get_var('file','get',FWS_Input::STRING);
 		$helper = BS_ACP_Module_TplEditor_Helper::get_instance();
 		$path = $helper->get_path();
@@ -69,7 +66,7 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 			return;
 		}
 		
-		$target_url = $url->get_acpmod_url(
+		$target_url = BS_URL::get_acpmod_url(
 			0,'&amp;action=edit&amp;path='.$path.'&amp;file='.$file.'&amp;at='.BS_ACP_ACTION_EDIT_TPL
 		);
 		
@@ -83,7 +80,7 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 		foreach(FWS_Array_Utils::advanced_explode('/',$path) as $part)
 		{
 			$cpath .= $part.'/';
-			$murl = $url->get_acpmod_url('tpleditor','&amp;path='.$cpath);
+			$murl = BS_URL::get_acpmod_url('tpleditor','&amp;path='.$cpath);
 			$path_links .= '<a href="'.$murl.'">'.$part.'</a>/';
 		}
 		
@@ -95,7 +92,7 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 			'filesize' => number_format(filesize($real_file),0,',','.'),
 			'last_modification' => FWS_Date::get_date(filemtime($real_file)),
 			'file_content' => $file_content,
-			'back_url' => $url->get_acpmod_url(0,'&amp;action=view&amp;path='.$path),
+			'back_url' => BS_URL::get_acpmod_url(0,'&amp;action=view&amp;path='.$path),
 			'back_button' => true
 		));
 		$tpl->restore_template();

@@ -37,10 +37,9 @@ final class BS_ACP_Module_additionalfields extends BS_ACP_SubModuleContainer
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 
-		$renderer->add_breadcrumb($locale->lang('acpmod_addfields'),$url->get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_addfields'),BS_URL::get_acpmod_url());
 		
 		// init submodule
 		$this->_sub->init($doc);

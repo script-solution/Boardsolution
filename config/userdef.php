@@ -25,7 +25,7 @@
  * "page.php?site=forum" you have to use the value "page.php?site=forum".
  */
 // TODO changed for joomla
-define('BS_FRONTEND_FILE','index.php?option=com_joobs&amp;Itemid=26');
+define('BS_FRONTEND_FILE','index.php?option=com_joobs&Itemid=26');
 
 ############################ GENERAL ############################
 

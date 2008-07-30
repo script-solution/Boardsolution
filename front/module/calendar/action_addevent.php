@@ -25,8 +25,6 @@ final class BS_Front_Action_calendar_addevent extends BS_Front_Action_Base
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// nothing to do?
 		if(!$input->isset_var('submit','post',FWS_Input::STRING))
 			return '';
@@ -43,7 +41,7 @@ final class BS_Front_Action_calendar_addevent extends BS_Front_Action_Base
 		
 		$event->perform_action();
 
-		$this->add_link($locale->lang('back'),$url->get_url('calendar'));
+		$this->add_link($locale->lang('back'),BS_URL::get_url('calendar'));
 		$this->set_action_performed(true);
 
 		return '';

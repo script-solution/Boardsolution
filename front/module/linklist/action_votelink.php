@@ -25,8 +25,6 @@ final class BS_Front_Action_linklist_votelink extends BS_Front_Action_Base
 		$functions = FWS_Props::get()->functions();
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		$vote = $input->get_var('link_rating','post',FWS_Input::INTEGER);
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 
@@ -50,7 +48,7 @@ final class BS_Front_Action_linklist_votelink extends BS_Front_Action_Base
 		BS_DAO::get_linkvotes()->vote($id,$user->get_user_id());
 
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('back'),$url->get_url('linklist'));
+		$this->add_link($locale->lang('back'),BS_URL::get_url('linklist'));
 
 		return '';
 	}

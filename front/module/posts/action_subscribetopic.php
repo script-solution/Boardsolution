@@ -26,8 +26,6 @@ final class BS_Front_Action_posts_subscribetopic extends BS_Front_Action_Base
 		$functions = FWS_Props::get()->functions();
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		if(!$user->is_loggedin())
 			return 'nichteingeloggt';
 
@@ -57,8 +55,8 @@ final class BS_Front_Action_posts_subscribetopic extends BS_Front_Action_Base
 		$sub->perform_action();
 
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('back'),$url->get_posts_url($fid,$tid));
-		$murl = $url->get_url('userprofile','&amp;'.BS_URL_LOC.'=topics');
+		$this->add_link($locale->lang('back'),BS_URL::get_posts_url($fid,$tid));
+		$murl = BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=topics');
 		$this->add_link($locale->lang('to_profile_subscr'),$murl);
 		$this->set_success_msg(
 			sprintf($locale->lang('subscription_desc_topic'),$sub->get_topic_name())

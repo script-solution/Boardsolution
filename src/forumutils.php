@@ -43,7 +43,6 @@ final class BS_ForumUtils extends FWS_Singleton
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
 		$user = FWS_Props::get()->user();
-		$url = FWS_Props::get()->url();
 		$forums = FWS_Props::get()->forums();
 
 		if($input->get_var(BS_URL_LOC,'get',FWS_Input::STRING) == 'clapforum' &&
@@ -161,7 +160,7 @@ final class BS_ForumUtils extends FWS_Singleton
 					}
 	
 					$fid_add = $parent_id != 0 ? '&amp;'.BS_URL_FID.'='.$parent_id : '';
-					$forum_url = $url->get_topics_url($forum_id,'&amp;',1);
+					$forum_url = BS_URL::get_topics_url($forum_id,'&amp;',1);
 					
 					$is_unread = false;
 					if($forum_type_cats)
@@ -175,7 +174,7 @@ final class BS_ForumUtils extends FWS_Singleton
 							'img_ins' => $img_ins,
 							'display_rubrik' => $display_rubrik,
 							'clap_forum' => $clap_forum,
-							'clap_forum_url' => $url->get_url(
+							'clap_forum_url' => BS_URL::get_url(
 								0,$fid_add.'&amp;'.BS_URL_LOC.'=clapforum&amp;'.BS_URL_ID.'='.$forum_id
 							),
 							'cookie_prefix' => BS_COOKIE_PREFIX
@@ -353,8 +352,6 @@ final class BS_ForumUtils extends FWS_Singleton
 	{
 		$input = FWS_Props::get()->input();
 		$forums = FWS_Props::get()->forums();
-		$url = FWS_Props::get()->url();
-
 		$id = ($rid != 0) ? $rid : $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$res = '';
 		if($id != null)
@@ -365,7 +362,7 @@ final class BS_ForumUtils extends FWS_Singleton
 			{
 				if($i < $len - 1 || $start_with_raquo)
 					$res .= ' &raquo; ';
-				$res .= '<a href="'.$url->get_topics_url($path[$i][1]).'"';
+				$res .= '<a href="'.BS_URL::get_topics_url($path[$i][1]).'"';
 	
 				$name = FWS_StringHelper::get_limited_string($path[$i][0],BS_MAX_FORUM_TITLE_LENGTH);
 				if($name['complete'] != '')
@@ -528,7 +525,6 @@ final class BS_ForumUtils extends FWS_Singleton
 	 */
 	private function _get_subforum_info($parent_id)
 	{
-		$url = FWS_Props::get()->url();
 		$auth = FWS_Props::get()->auth();
 		$forums = FWS_Props::get()->forums();
 
@@ -550,7 +546,7 @@ final class BS_ForumUtils extends FWS_Singleton
 				{
 					if($node->get_layer() == 2 && $sub_forums_count <= BS_FORUM_SMALL_SUBDIR_DISPLAY)
 					{
-						$murl = $url->get_topics_url($fid);
+						$murl = BS_URL::get_topics_url($fid);
 						$sub_forums .= "<a href=\"".$murl."\">".$daten->get_name()."</a>, ";
 						$sub_forums_count++;
 					}
@@ -602,8 +598,6 @@ final class BS_ForumUtils extends FWS_Singleton
 	 */
 	private function _get_forum_lastpost($data,$post_order)
 	{
-		$url = FWS_Props::get()->url();
-
 		if(!isset($data['tposts']))
 			$data['tposts'] = 0;
 	
@@ -618,9 +612,9 @@ final class BS_ForumUtils extends FWS_Singleton
 		$site = 1;
 		if($post_order == 'ASC' && $pages > 1)
 			$site = $pages;
-		$topic_url = $url->get_posts_url($data['id'],$data['threadid'],'&amp;',1);
+		$topic_url = BS_URL::get_posts_url($data['id'],$data['threadid'],'&amp;',1);
 		if($site > 1)
-			$lastpost_url = $url->get_posts_url($data['id'],$data['threadid'],'&amp;',$site);
+			$lastpost_url = BS_URL::get_posts_url($data['id'],$data['threadid'],'&amp;',$site);
 		else
 			$lastpost_url = $topic_url;
 	
@@ -657,7 +651,6 @@ final class BS_ForumUtils extends FWS_Singleton
 	{
 		$forums = FWS_Props::get()->forums();
 		$unread = FWS_Props::get()->unread();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
 		$cfg = FWS_Props::get()->cfg();
@@ -676,7 +669,7 @@ final class BS_ForumUtils extends FWS_Singleton
 		{
 			$image = $data->get_forum_is_closed() ? 'forum_unread_closed' : 'forum_unread';
 			$action_type = '&amp;'.BS_URL_AT.'='.BS_ACTION_CHANGE_READ_STATUS;
-			$read_url = $url->get_url(
+			$read_url = BS_URL::get_url(
 				'forums',$action_type.'&amp;'.BS_URL_LOC.'=read&amp;'.BS_URL_MODE.'=forum'
 					.'&amp;'.BS_URL_FID.'='.$id,'&amp;',true
 			);

@@ -21,7 +21,6 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 {
 	public function run()
 	{
-		$url = FWS_Props::get()->url();
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
 
@@ -29,12 +28,12 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 		$week_start = $helper->get_week_timestamp();
 		
 		$back = $week_start - (86400 * 7);
-		$back_url = $url->get_url(
+		$back_url = BS_URL::get_url(
 			'calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_WEEK.'='.$back
 		);
 	
 		$forward = $week_start + (86400 * 7);
-		$forward_url = $url->get_url(
+		$forward_url = BS_URL::get_url(
 			'calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_WEEK.'='.$forward
 		);
 	

@@ -29,12 +29,11 @@ final class BS_Front_Module_latest_topics extends BS_Front_Module
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$doc->use_default_renderer()->set_robots_value('index,follow');
 		
-		$renderer->add_breadcrumb($locale->lang('current_topics'),$url->get_url(0));
+		$renderer->add_breadcrumb($locale->lang('current_topics'),BS_URL::get_url(0));
 	}
 	
 	/**
@@ -43,7 +42,6 @@ final class BS_Front_Module_latest_topics extends BS_Front_Module
 	public function run()
 	{
 		$input = FWS_Props::get()->input();
-		$url = FWS_Props::get()->url();
 		$tpl = FWS_Props::get()->tpl();
 
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
@@ -54,8 +52,9 @@ final class BS_Front_Module_latest_topics extends BS_Front_Module
 		
 		$hidden_fields = array();
 		$hidden_fields[BS_URL_ACTION] = 'latest_topics';
-		if(($sid = $url->get_splitted_session_id()) != 0)
+		if(($sid = BS_URL::get_session_id()) !== false)
 			$hidden_fields[$sid[0]] = $sid[1];
+		$url = new BS_URL();
 		$hidden_fields = array_merge($hidden_fields,$url->get_extern_vars());
 		
 		BS_Front_TopicFactory::get_instance()->add_latest_topics_full($fid);

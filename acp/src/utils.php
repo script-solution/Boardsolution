@@ -77,9 +77,7 @@ final class BS_ACP_Utils extends FWS_Singleton
 	 */
 	public function get_userlink($id,$name)
 	{
-		$url = FWS_Props::get()->url();
-		
-		$furl = $url->get_acpmod_url('userdetails','&amp;id='.$id);
+		$furl = BS_URL::get_acpmod_url('userdetails','&amp;id='.$id);
 		$user = '<a href="javascript:FWS_openDefaultPopup(\''.$furl.'\',';
 		$user .= '\'UserDetails\',800,500);">'.$name.'</a>';
 		return $user;

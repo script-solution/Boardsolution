@@ -60,13 +60,11 @@ final class BS_Functions extends FWS_Object
 	{
 		$cfg = FWS_Props::get()->cfg();
 		$user = FWS_Props::get()->user();
-		$url = FWS_Props::get()->url();
-
 		if($cfg['enable_portal'] == 1 &&
 			($user->is_loggedin() || $user->get_profile_val('startmodule') == 'portal'))
-			return $url->get_portal_url();
+			return BS_URL::get_portal_url();
 		
-		return $url->get_forums_url();
+		return BS_URL::get_forums_url();
 	}
 	
 	/**
@@ -453,7 +451,6 @@ final class BS_Functions extends FWS_Object
 	{
 		$user = FWS_Props::get()->user();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
 		$locale = FWS_Props::get()->locale();
 		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
@@ -463,21 +460,21 @@ final class BS_Functions extends FWS_Object
 		if(!$user->is_loggedin())
 		{
 			if($cfg['enable_registrations'] && !BS_ENABLE_EXPORT)
-				$register_url = $url->get_url('register');
+				$register_url = BS_URL::get_url('register');
 			else if($cfg['enable_registrations'] && BS_EXPORT_REGISTER_TYPE == 'link')
 				$register_url = BS_EXPORT_REGISTER_LINK;
 			else
 				$register_url = '';
 	
 			if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE == 'enabled')
-				$send_pw_url = $url->get_url('sendpw');
+				$send_pw_url = BS_URL::get_url('sendpw');
 			else if(BS_EXPORT_SEND_PW_TYPE == 'link')
 				$send_pw_url = BS_EXPORT_SEND_PW_LINK;
 			else
 				$send_pw_url = '';
 			
 			if(!BS_ENABLE_EXPORT)
-				$resend_act_link_url = $url->get_url('resend_activation');
+				$resend_act_link_url = BS_URL::get_url('resend_activation');
 			else if(BS_EXPORT_RESEND_ACT_TYPE == 'link')
 				$resend_act_link_url = BS_EXPORT_RESEND_ACT_LINK;
 			else
@@ -541,7 +538,7 @@ final class BS_Functions extends FWS_Object
 			$tpl->set_template('login.htm');
 			$tpl->add_variables(array(
 				'action_type' => BS_ACTION_LOGIN,
-				'target_url' => $url->get_url('login'),
+				'target_url' => BS_URL::get_url('login'),
 				'show_sendpw_link' => !BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE != 'disabled',
 				'show_register_link' => $cfg['enable_registrations'] &&
 					(!BS_ENABLE_EXPORT || BS_EXPORT_REGISTER_TYPE == 'link'),

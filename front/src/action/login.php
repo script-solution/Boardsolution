@@ -24,7 +24,6 @@ final class BS_Front_Action_login extends BS_Front_Action_Base
 		$input = FWS_Props::get()->input();
 		$functions = FWS_Props::get()->functions();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 
 		if($user->is_loggedin())
@@ -87,7 +86,7 @@ final class BS_Front_Action_login extends BS_Front_Action_Base
 		// otherwise we want to show nothing, therefore we simulate that we haven't done anything
 		$this->set_action_performed(false);
 		
-		$this->set_redirect(true,$url->get_url('login','&amp;'.BS_URL_ID.'='.$error_code));
+		$this->set_redirect(true,BS_URL::get_url('login','&amp;'.BS_URL_ID.'='.$error_code));
 		return $locale->lang('login_error_'.$error_code);
 	}
 }

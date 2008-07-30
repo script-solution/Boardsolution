@@ -25,8 +25,6 @@ final class BS_Front_Action_chg_read_status extends BS_Front_Action_Base
 		$input = FWS_Props::get()->input();
 		$unread = FWS_Props::get()->unread();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// check if the session-id is valid
 		if(!$functions->has_valid_get_sid())
 			return 'Invalid session-id';
@@ -53,9 +51,9 @@ final class BS_Front_Action_chg_read_status extends BS_Front_Action_Base
 
 				$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 				if($fid != null)
-					$this->add_link($locale->lang('back'),$url->get_topics_url($fid,'&amp;',$site));
+					$this->add_link($locale->lang('back'),BS_URL::get_topics_url($fid,'&amp;',$site));
 				else
-					$this->add_link($locale->lang('back'),$url->get_url('unread'));
+					$this->add_link($locale->lang('back'),BS_URL::get_url('unread'));
 				break;
 
 			case 'forum':
@@ -66,15 +64,15 @@ final class BS_Front_Action_chg_read_status extends BS_Front_Action_Base
 				$unread->mark_forum_read($fid);
 
 				if($input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING) == 'topics')
-					$this->add_link($locale->lang('back'),$url->get_topics_url($fid,'&amp;',$site));
+					$this->add_link($locale->lang('back'),BS_URL::get_topics_url($fid,'&amp;',$site));
 				else
-					$this->add_link($locale->lang('back'),$url->get_forums_url());
+					$this->add_link($locale->lang('back'),BS_URL::get_forums_url());
 				break;
 
 			case 'all':
 				$unread->mark_all_read();
 
-				$this->add_link($locale->lang('forumindex'),$url->get_forums_url());
+				$this->add_link($locale->lang('forumindex'),BS_URL::get_forums_url());
 				break;
 		}
 

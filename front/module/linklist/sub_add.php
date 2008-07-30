@@ -29,14 +29,13 @@ final class BS_Front_SubModule_linklist_add extends BS_Front_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_ADD_LINK,'addlink');
 
 		$renderer->add_breadcrumb(
 			$locale->lang('addnewlink'),
-			$url->get_url('linklist','&amp;'.BS_URL_LOC.'=add')
+			BS_URL::get_url('linklist','&amp;'.BS_URL_LOC.'=add')
 		);
 	}
 	
@@ -49,8 +48,6 @@ final class BS_Front_SubModule_linklist_add extends BS_Front_SubModule
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		if(!$auth->has_global_permission('add_new_link'))
 		{
 			$this->report_error(FWS_Document_Messages::NO_ACCESS);
@@ -73,10 +70,10 @@ final class BS_Front_SubModule_linklist_add extends BS_Front_SubModule
 		$pform->add_form();
 		
 		$tpl->add_variables(array(
-			'target_url' => $url->get_url(0,'&amp;'.BS_URL_LOC.'=add'),
+			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=add'),
 			'category_combo' => $form->get_combobox('link_category',$categories,''),
 			'action_type' => BS_ACTION_ADD_LINK,
-			'back_url' => $url->get_url(0)
+			'back_url' => BS_URL::get_url(0)
 		));
 	}
 	

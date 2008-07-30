@@ -80,8 +80,7 @@ echo '<br />'."\n";
 echo 'Das neueste Mitglied ist: ';
 if($stats->newest_member_id)
 {
-	$url = FWS_Props::get()->url();
-	$murl = $url->get_frontend_url(
+	$murl = BS_URL::get_frontend_url(
 		'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$stats->newest_member_id
 	);
 	echo '<a href="'.$murl.'">'.$stats->newest_member_name.'</a>';
@@ -97,15 +96,13 @@ echo '<br />'."\n";
 // request module "online_user" to get the currently online user in the board
 $online = BS_API_get_module('online_user');
 
-$url = FWS_Props::get()->url();
-
 // collect the registered user
 $i = 0;
 $registered = '';
 foreach($online->online_user as $reg)
 {
 	// build url to the user-details
-	$murl = $url->get_frontend_url(
+	$murl = BS_URL::get_frontend_url(
 		'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$reg['id']
 	);
 	$registered .= '<a title="'.$reg['location'].'" href="'.$murl.'">'.$reg['name'].'</a>';
@@ -137,8 +134,6 @@ echo '<br />'."\n";
 // request "latest_topics" module
 $topics = BS_API_get_module('latest_topics');
 
-$url = FWS_Props::get()->url();
-
 // print header
 echo '<hr />'."\n";
 echo '<b>Die aktuellen Themen:</b><br /><br />';
@@ -159,7 +154,7 @@ foreach($topics->latest_topics as $topic)
 	if($topic['creation_user_id'] > 0)
 	{
 		// build url to the user who created the topic
-		$murl = $url->get_frontend_url(
+		$murl = BS_URL::get_frontend_url(
 			'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$topic['creation_user_id']
 		);
 		$creation .= '<br />Von: <a href="'.$murl.'">'.$topic['creation_user_name'].'</a>';
@@ -173,7 +168,7 @@ foreach($topics->latest_topics as $topic)
 	// last post by a registered user?
 	if($topic['lastpost_user_id'] > 0)
 	{
-		$murl = $url->get_frontend_url(
+		$murl = BS_URL::get_frontend_url(
 			'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$topic['lastpost_user_id']
 		);
 		$lastpost .= '<br />Von: <a href="'.$murl.'">'.$topic['lastpost_user_name'].'</a>';
@@ -183,19 +178,19 @@ foreach($topics->latest_topics as $topic)
 		$lastpost .= '<br />Von: '.$topic['lastpost_user_name'];
 	
 	// add link to last post
-	$lastpost_url = $url->get_frontend_url(
+	$lastpost_url = BS_URL::get_frontend_url(
 		'&amp;'.BS_URL_ACTION.'=redirect&amp;'.BS_URL_LOC.'=show_post&amp;'
 			.BS_URL_ID.'='.$topic['lastpost_id']
 	);
 	$lastpost .= ' <a href="'.$lastpost_url.'">&raquo;&raquo;</a>';
 	
 	// build url to topic
-	$turl = $url->get_frontend_url(
+	$turl = BS_URL::get_frontend_url(
 		'&amp;'.BS_URL_ACTION.'=posts&amp;'.BS_URL_FID.'='.$topic['forum_id']
 			.'&amp;'.BS_URL_TID.'='.$topic['id']
 	);
 	// build url to forum
-	$furl = $url->get_frontend_url(
+	$furl = BS_URL::get_frontend_url(
 		'&amp;'.BS_URL_ACTION.'=topics&amp;'.BS_URL_FID.'='.$topic['forum_id']
 	);
 	$forum = '<a style="font-size: 11px;" href="'.$furl.'">'.$topic['forum_name'].'</a>';
@@ -223,8 +218,6 @@ echo '<b>Ungelesene Themen / PMs:</b><br />';
 // request "unread"-module
 $unread = BS_API_get_module('unread');
 
-$url = FWS_Props::get()->url();
-
 echo '<ul>'."\n";
 echo '	<li>Ungelesene Foren: ';
 
@@ -235,7 +228,7 @@ if(count($unread->unread_forums) > 0)
 	for($i = 0,$len = count($unread->unread_forums);$i < $len;$i++)
 	{
 		// build the url to the forum
-		$murl = $url->get_frontend_url(
+		$murl = BS_URL::get_frontend_url(
 			'&amp;'.BS_URL_ACTION.'=topics&amp;'.BS_URL_ID.'='.$unread->unread_forums[$i]
 		);
 		echo '<a href="'.$murl.'">'.$bs->forums->get_forum_name($unread->unread_forums[$i]).'</a>';
@@ -263,7 +256,7 @@ if(count($topic_ids) > 0)
 	foreach(BS_DAO::get_topics()->get_by_ids($topic_ids) as $utdata)
 	{
 		// build topic-url
-		$murl = $url->get_frontend_url(
+		$murl = BS_URL::get_frontend_url(
 			'&amp;'.BS_URL_ACTION.'=posts&amp;'.BS_URL_FID.'='.$utdata['fid']
 				.'&amp;'.BS_URL_TID.'='.$utdata['id']
 		);
@@ -291,8 +284,6 @@ echo '<b>Termine in den n&auml;chsten 5 Tagen:</b><br />';
 // to the module with 5 days in seconds
 $events = BS_API_get_module('events',array('event_timeout' => 3600 * 24 * 5));
 
-$url = FWS_Props::get()->url();
-
 // are there any events?
 if(count($events->events) > 0)
 {
@@ -301,7 +292,7 @@ if(count($events->events) > 0)
 		// is it an event in the calendar?
 		if($edata['topic_id'] == 0)
 		{
-			$murl = $url->get_frontend_url(
+			$murl = BS_URL::get_frontend_url(
 				'&amp;'.BS_URL_ACTION.'=calendar&amp;'.BS_URL_MODE.'=event_detail&amp;'
 					.BS_URL_ID.'='.$edata['id']
 			);
@@ -309,7 +300,7 @@ if(count($events->events) > 0)
 		// or an event in a forum?
 		else
 		{
-			$murl = $url->get_frontend_url(
+			$murl = BS_URL::get_frontend_url(
 				'&amp;'.BS_URL_ACTION.'=posts&amp;'.BS_URL_FID.'='.$edata['forum_id']
 				.'&amp;'.BS_URL_TID.'='.$edata['topic_id']
 			);
@@ -336,7 +327,7 @@ if(count($events->birthdays) > 0)
 	foreach($events->birthdays as $i => $bdata)
 	{
 		// build userdetails-url
-		$murl = $url->get_frontend_url(
+		$murl = BS_URL::get_frontend_url(
 			'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$bdata['id']
 		);
 		// print link to user

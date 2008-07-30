@@ -42,8 +42,6 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$order = $input->correct_var(BS_URL_ORDER,'get',FWS_Input::STRING,
 			array('error','date','user'),'date');
 		$ad = $input->correct_var(BS_URL_AD,'get',FWS_Input::STRING,array('ASC','DESC'),'DESC');
@@ -62,18 +60,18 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
-				$url->get_acpmod_url(
+				BS_URL::get_acpmod_url(
 					0,'&amp;at='.BS_ACP_ACTION_DELETE_ERRORLOGS.$params.'&amp;ids='.implode(',',$ids)
 				),
-				$url->get_acpmod_url(0,$params)
+				BS_URL::get_acpmod_url(0,$params)
 			);
 		}
 		else if($input->get_var('ask','get',FWS_Input::STRING) == 'deleteall')
 		{
 			$functions->add_delete_message(
 				$locale->lang('delete_all_question'),
-				$url->get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_DELETE_ALL_ERRORLOGS),
-				$url->get_acpmod_url(0,$params)
+				BS_URL::get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_DELETE_ALL_ERRORLOGS),
+				BS_URL::get_acpmod_url(0,$params)
 			);
 		}
 		
@@ -84,13 +82,13 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 		$end = 15;
 		$pagination = new BS_ACP_Pagination($end,$num);
 		
-		$baseurl = $url->get_acpmod_url(0,'&amp;search='.$search.'&amp;');
+		$baseurl = BS_URL::get_acpmod_url(0,'&amp;search='.$search.'&amp;');
 		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);
 		unset($hidden['search']);
 		unset($hidden['at']);
 		$tpl->add_variables(array(
-			'form_url' => $url->get_acpmod_url(0,$params),
+			'form_url' => BS_URL::get_acpmod_url(0,$params),
 			'col_error' => BS_ACP_Utils::get_instance()->get_order_column(
 				$locale->lang('error_msg'),'error','ASC',$order,$baseurl
 			),
@@ -103,7 +101,7 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search,
-			'delete_all_url' => $url->get_acpmod_url(0,$params.'&amp;ask=deleteall')
+			'delete_all_url' => BS_URL::get_acpmod_url(0,$params.'&amp;ask=deleteall')
 		));
 		
 		switch($order)
@@ -159,7 +157,7 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 			'count' => count($loglist)
 		));
 		
-		$murl = $url->get_acpmod_url(
+		$murl = BS_URL::get_acpmod_url(
 			0,'&amp;order='.$order.'&amp;ad='.$ad.'&amp;search='.$search.'&amp;site={d}'
 		);
 		$functions->add_pagination($pagination,$murl);

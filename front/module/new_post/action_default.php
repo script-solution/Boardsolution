@@ -28,8 +28,6 @@ final class BS_Front_Action_new_post_default extends BS_Front_Action_Base
 		$ips = FWS_Props::get()->ips();
 		$locale = FWS_Props::get()->locale();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
-
 		// anything to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
@@ -101,7 +99,7 @@ final class BS_Front_Action_new_post_default extends BS_Front_Action_Base
 			}
 		}
 
-		$murl = $url->get_url(
+		$murl = BS_URL::get_url(
 			'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.$header_add
 		).'#b_'.$post->get_post_id();
 		$this->add_link($locale->lang('go_to_post'),$murl);

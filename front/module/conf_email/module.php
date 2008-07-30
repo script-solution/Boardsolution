@@ -53,7 +53,6 @@ final class BS_Front_Module_conf_email extends BS_Front_Module
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
 		$db = FWS_Props::get()->db();
-		$url = FWS_Props::get()->url();
 		$msgs = FWS_Props::get()->msgs();
 		$doc = FWS_Props::get()->doc();
 
@@ -87,7 +86,7 @@ final class BS_Front_Module_conf_email extends BS_Front_Module
 		$user = BS_Community_User::get_instance_from_data($udata);
 		BS_Community_Manager::get_instance()->fire_user_changed($user);
 	
-		$murl = $url->get_frontend_url();
+		$murl = BS_URL::get_frontend_url();
 		$message = sprintf(
 			$locale->lang('email_change_success'),
 			'<a href="'.$murl.'">'.$locale->lang('here').'</a>'

@@ -30,7 +30,6 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
@@ -41,7 +40,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 		
 		$renderer->add_breadcrumb(
 			$locale->lang('userdetails'),
-			$url->get_url('userdetails','&amp;'.BS_URL_ID.'='.$id)
+			BS_URL::get_url('userdetails','&amp;'.BS_URL_ID.'='.$id)
 		);
 	}
 	
@@ -55,7 +54,6 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
 		$sessions = FWS_Props::get()->sessions();
 		$user = FWS_Props::get()->user();
 		$auth = FWS_Props::get()->auth();
@@ -183,7 +181,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 				$last_posts[] = array(
 					'date' => FWS_Date::get_date($data['post_time']),
 					'forum_path' => BS_ForumUtils::get_instance()->get_forum_path($data['rubrikid'],false),
-					'topic_url' => $url->get_url(
+					'topic_url' => BS_URL::get_url(
 						'redirect','&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'='.$data['id']
 					),
 					'topic_name' => $data['name']
@@ -195,7 +193,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 		$options = '';
 		
 		$options .= '<a class="bs_button" style="float: left;" href="';
-	  $options .= $url->get_url('user_locations').'">';
+	  $options .= BS_URL::get_url('user_locations').'">';
 	  $location = $sessions->get_user_location($user_data['id']);
 	  if($location != '' && ($user_data['ghost_mode'] == 0 || $cfg['allow_ghost_mode'] == 0 ||
 	  		$user->is_admin()))
@@ -220,7 +218,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 			$options .= '<a class="bs_button" style="float: left;" title="';
 			$options .= sprintf($locale->lang('send_pm_to_user'),$user_data['user_name']);
 			$options .= '" href="';
-			$options .= $url->get_url('userprofile',
+			$options .= BS_URL::get_url('userprofile',
 				'&amp;'.BS_URL_LOC.'=pmcompose&amp;'.BS_URL_ID.'='.$user_data['id']);
 			$options .= '">'.$locale->lang('pm_short').'</a>';
 		}
@@ -232,7 +230,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 			$options .= '<a class="bs_button" style="float: left;" title="';
 			$options .= sprintf($locale->lang('send_mail_to_user'),$user_data['user_name']);
 			$options .= '" href="';
-			$options .= $url->get_url('new_mail','&amp;'.BS_URL_ID.'='.$user_data['id']).'">';
+			$options .= BS_URL::get_url('new_mail','&amp;'.BS_URL_ID.'='.$user_data['id']).'">';
 			$options .= $locale->lang('email').'</a>';
 		}
 	
@@ -266,8 +264,8 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 			'user_groups' => $auth->get_usergroup_list($user_data['user_group']),
 			'signature' => $signature,
 			'last_posts' => $last_posts,
-			'search_for_user_posts_url' => $url->get_url('search','&amp;'.BS_URL_MODE.'=user_posts'.$pid),
-			'search_for_user_topics_url' => $url->get_url('search','&amp;'.BS_URL_MODE.'=user_topics'.$pid),
+			'search_for_user_posts_url' => BS_URL::get_url('search','&amp;'.BS_URL_MODE.'=user_posts'.$pid),
+			'search_for_user_topics_url' => BS_URL::get_url('search','&amp;'.BS_URL_MODE.'=user_topics'.$pid),
 			'options' => $options,
 			'enable_search' => ($cfg['display_denied_options'] || $auth->has_global_permission('view_search')) &&
 													$cfg['enable_search'],

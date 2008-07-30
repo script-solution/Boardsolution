@@ -30,7 +30,6 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
 		
@@ -48,7 +47,7 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		$params = '&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_ID.'='.$id.$site;
 		$renderer->add_breadcrumb(
 			$locale->lang('edit_post'),
-			$url->get_url('edit_post',$params)
+			BS_URL::get_url('edit_post',$params)
 		);
 	}
 	
@@ -63,8 +62,6 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		$forums = FWS_Props::get()->forums();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
@@ -154,13 +151,13 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 			'user_text' => $user_text,
 			'show_lock_post' => $show_lock,
 			'lock_post' => $form->get_radio_yesno('lock_post',$data['edit_lock']),
-			'target_url' => $url->get_url('edit_post','&amp;'.BS_URL_FID.'='.$fid
+			'target_url' => BS_URL::get_url('edit_post','&amp;'.BS_URL_FID.'='.$fid
 				.'&amp;'.BS_URL_TID.'='.$tid.$add),
-			'back_url' => $url->get_url('posts','&amp;'.BS_URL_FID.'='.$fid
+			'back_url' => BS_URL::get_url('posts','&amp;'.BS_URL_FID.'='.$fid
 				.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_SITE.'='.$site).'#b_'.$id
 		));
 
-		$murl = $url->get_url(
+		$murl = BS_URL::get_url(
 			0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_ID.'='.$id
 				.'&amp;'.BS_URL_SITE.'='.$site.'&amp;'.BS_URL_PID.'='
 		);

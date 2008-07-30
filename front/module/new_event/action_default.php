@@ -28,8 +28,6 @@ final class BS_Front_Action_new_event_default extends BS_Front_Action_Base
 		$cfg = FWS_Props::get()->cfg();
 		$ips = FWS_Props::get()->ips();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
@@ -103,7 +101,7 @@ final class BS_Front_Action_new_event_default extends BS_Front_Action_Base
 
 		$ips->add_entry('topic');
 
-		$murl = $url->get_url(
+		$murl = BS_URL::get_url(
 			'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$topic->get_topic_id()
 		);
 		$this->add_link($locale->lang('go_to_created_topic'),$murl);

@@ -76,7 +76,6 @@ abstract class BS_Front_Module extends FWS_Module
 	protected final function add_loc_forum_path($id)
 	{
 		$forums = FWS_Props::get()->forums();
-		$url = FWS_Props::get()->url();
 		$doc = FWS_Props::get()->doc();
 		$renderer = $doc->get_renderer();
 		
@@ -87,7 +86,7 @@ abstract class BS_Front_Module extends FWS_Module
 		{
 			$path = $forums->get_path($id);
 			for($i = count($path) - 1;$i >= 0;$i--)
-				$renderer->add_breadcrumb($path[$i][0],$url->get_topics_url($path[$i][1],'&amp;',1));
+				$renderer->add_breadcrumb($path[$i][0],BS_URL::get_topics_url($path[$i][1],'&amp;',1));
 		}
 	}
 	
@@ -97,7 +96,6 @@ abstract class BS_Front_Module extends FWS_Module
 	 */
 	protected final function add_loc_topic()
 	{
-		$url = FWS_Props::get()->url();
 		$doc = FWS_Props::get()->doc();
 		$renderer = $doc->get_renderer();
 		
@@ -107,7 +105,7 @@ abstract class BS_Front_Module extends FWS_Module
 		$tdata = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		if($tdata !== null)
 		{
-			$murl = $url->get_posts_url($tdata['rubrikid'],$tdata['id'],'&amp;',1);
+			$murl = BS_URL::get_posts_url($tdata['rubrikid'],$tdata['id'],'&amp;',1);
 			$renderer->add_breadcrumb($tdata['name'],$murl);
 		}
 	}

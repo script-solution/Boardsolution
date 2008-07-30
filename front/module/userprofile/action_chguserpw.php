@@ -27,7 +27,6 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 		$locale = FWS_Props::get()->locale();
 		$cache = FWS_Props::get()->cache();
 		$cookies = FWS_Props::get()->cookies();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 
 		// nothing to do?
@@ -149,7 +148,7 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 		
 		$this->set_action_performed(true);
 		$this->add_link(
-			$locale->lang('back'),$url->get_url(0,'&'.BS_URL_LOC.'=chpw','&')
+			$locale->lang('back'),BS_URL::get_url(0,'&'.BS_URL_LOC.'=chpw','&')
 		);
 
 		return '';

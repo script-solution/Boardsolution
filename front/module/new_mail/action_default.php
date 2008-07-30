@@ -28,8 +28,6 @@ final class BS_Front_Action_new_mail_default extends BS_Front_Action_Base
 		$user = FWS_Props::get()->user();
 		$functions = FWS_Props::get()->functions();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
@@ -136,7 +134,7 @@ final class BS_Front_Action_new_mail_default extends BS_Front_Action_Base
 		$ips->add_entry('mail');
 
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('forumindex'),$url->get_forums_url());
+		$this->add_link($locale->lang('forumindex'),BS_URL::get_forums_url());
 
 		return '';
 	}

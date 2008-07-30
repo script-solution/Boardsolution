@@ -31,14 +31,13 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
 		$cache = FWS_Props::get()->cache();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_GROUP,array('client','group'));
 		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_USER,array('client','user'));
 
 		$type = $input->get_var('type','get',FWS_Input::STRING);
-		$murl = $url->get_acpmod_url(0,'&amp;action=client&amp;type='.$type);
+		$murl = BS_URL::get_acpmod_url(0,'&amp;action=client&amp;type='.$type);
 		
 		if($type == 'user')
 		{

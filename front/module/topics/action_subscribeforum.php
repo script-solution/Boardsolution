@@ -28,8 +28,6 @@ final class BS_Front_Action_topics_subscribeforum extends BS_Front_Action_Base
 		$input = FWS_Props::get()->input();
 		$forums = FWS_Props::get()->forums();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// has the user the permission to subscribe the forum?
 		if(!$user->is_loggedin() || $cfg['enable_email_notification'] == 0 ||
 			 !$auth->has_global_permission('subscribe_forums'))
@@ -70,8 +68,8 @@ final class BS_Front_Action_topics_subscribeforum extends BS_Front_Action_Base
 		BS_DAO::get_subscr()->subscribe_forum($fid,$user->get_user_id());
 		
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('back'),$url->get_topics_url($fid));
-		$murl = $url->get_url('userprofile','&amp;'.BS_URL_LOC.'=forums');
+		$this->add_link($locale->lang('back'),BS_URL::get_topics_url($fid));
+		$murl = BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=forums');
 		$this->add_link($locale->lang('to_profile_subscr'),$murl);
 		$this->set_success_msg(sprintf($locale->lang('subscription_desc_forum'),$data->get_name()));
 

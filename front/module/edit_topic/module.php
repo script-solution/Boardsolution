@@ -37,7 +37,6 @@ final class BS_Front_Module_edit_topic extends BS_Front_Module
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
 		
@@ -55,7 +54,7 @@ final class BS_Front_Module_edit_topic extends BS_Front_Module
 		$this->add_loc_forum_path($fid);
 		$renderer->add_breadcrumb(
 			$locale->lang('editthread'),
-			$url->get_url('edit_topic','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id)
+			BS_URL::get_url('edit_topic','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id)
 		);
 		
 		// load topic-data
@@ -86,7 +85,6 @@ final class BS_Front_Module_edit_topic extends BS_Front_Module
 		$user = FWS_Props::get()->user();
 		$forums = FWS_Props::get()->forums();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$tpl = FWS_Props::get()->tpl();
 		$functions = FWS_Props::get()->functions();
 
@@ -137,10 +135,10 @@ final class BS_Front_Module_edit_topic extends BS_Front_Module
 	
 		$form = $this->request_formular(false);
 	
-		$target_url = $url->get_url(
+		$target_url = BS_URL::get_url(
 			'edit_topic','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id
 		);
-		$back_url = $url->get_topics_url($fid);
+		$back_url = BS_URL::get_topics_url($fid);
 		$forum_name = BS_ForumUtils::get_instance()->get_forum_path($this->_tdata['rubrikid'],false);
 		
 		// topic

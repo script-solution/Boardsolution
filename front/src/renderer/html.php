@@ -55,14 +55,13 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		parent::__construct();
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		
 		// always set the location in html-pages
 		$user->set_location();
 		
 		// add the home-breadcrumb
-		$this->add_breadcrumb($locale->lang('home'),$url->get_forums_url());
+		$this->add_breadcrumb($locale->lang('home'),BS_URL::get_forums_url());
 		
 		$this->_action_perf->set_prefix('BS_Front_Action_');
 	}
@@ -144,7 +143,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 	}
 	
 	/**
-	 * @see BS_Page::before_start()
+	 * @see FWS_Document_Renderer_HTML_Default::before_start()
 	 */
 	protected function before_start()
 	{
@@ -164,7 +163,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see FWS_Page::before_render()
+	 * @see FWS_Document_Renderer_HTML_Default::before_render()
 	 */
 	protected function before_render()
 	{
@@ -231,7 +230,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see FWS_Page::content()
+	 * @see FWS_Document_Renderer_HTML_Default::content()
 	 */
 	protected function content()
 	{
@@ -282,7 +281,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see FWS_Page::header()
+	 * @see FWS_Document_Renderer_HTML_Default::header()
 	 */
 	protected function header()
 	{
@@ -308,7 +307,6 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		
 		// prepare header-templates
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
 		$user = FWS_Props::get()->user();
@@ -336,8 +334,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			'jsblocks' => $this->get_js_blocks(),
 			'action' => $input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING),
 			'robots_value' => $this->get_robots_value(),
-			'rss20_feed' => $url->get_url('news_feed','&amp;'.BS_URL_MODE.'=rss20'),
-			'atom_feed' => $url->get_url('news_feed','&amp;'.BS_URL_MODE.'=atom'),
+			'rss20_feed' => BS_URL::get_url('news_feed','&amp;'.BS_URL_MODE.'=rss20'),
+			'atom_feed' => BS_URL::get_url('news_feed','&amp;'.BS_URL_MODE.'=atom'),
 			'sig_max_height' => $cfg['sig_max_height'],
 			'show_headline' => $this->_show_headline
 		));
@@ -350,9 +348,9 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			$tpl->add_variables(array(
 				'location' => $breadcrumbs,
 				'action_type' => BS_ACTION_LOGIN,
-				'login_url' => $url->get_url('login'),
+				'login_url' => BS_URL::get_url('login'),
 				'show_deactivated_notice' => $cfg['enable_board'] == 0 && $user->is_admin(),
-				'headline_url' => $url->get_forums_url()
+				'headline_url' => BS_URL::get_forums_url()
 			));
 			
 			$top_links = array();
@@ -363,7 +361,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('adminarea'),
 					'text' => $locale->lang('adminarea'),
-					'url' => $url->get_admin_url()
+					'url' => BS_URL::get_admin_url()
 				);
 			}
 			if($this->_show_top_link('enable_memberlist','view_memberlist'))
@@ -371,7 +369,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('memberlist_desc'),
 					'text' => $locale->lang('memberlist'),
-					'url' => $url->get_url('memberlist')
+					'url' => BS_URL::get_url('memberlist')
 				);
 			}
 			if($this->_show_top_link('enable_linklist','view_linklist'))
@@ -379,7 +377,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('linklist_desc'),
 					'text' => $locale->lang('linklist'),
-					'url' => $url->get_url('linklist')
+					'url' => BS_URL::get_url('linklist')
 				);
 			}
 			if($this->_show_top_link('enable_stats','view_stats'))
@@ -387,7 +385,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('statistics_desc'),
 					'text' => $locale->lang('statistics'),
-					'url' => $url->get_url('stats')
+					'url' => BS_URL::get_url('stats')
 				);
 			}
 			if($this->_show_top_link('enable_faq'))
@@ -395,7 +393,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('faq_desc'),
 					'text' => $locale->lang('faq'),
-					'url' => $url->get_url('faq')
+					'url' => BS_URL::get_url('faq')
 				);
 			}
 		
@@ -406,7 +404,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 					$top_links[] = array(
 						'title' => $locale->lang('register'),
 						'text' => $locale->lang('register'),
-						'url' => !BS_ENABLE_EXPORT ? $url->get_url('register') : BS_EXPORT_REGISTER_LINK
+						'url' => !BS_ENABLE_EXPORT ? BS_URL::get_url('register') : BS_EXPORT_REGISTER_LINK
 					);
 				}
 			}
@@ -415,7 +413,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('yourprofile'),
 					'text' => $locale->lang('profile'),
-					'url' => $url->get_url('userprofile','&amp;'.BS_URL_LOC.'=pr_infos')
+					'url' => BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=pr_infos')
 				);
 			}
 		
@@ -424,7 +422,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('calendar_desc'),
 					'text' => $locale->lang('calendar'),
-					'url' => $url->get_url('calendar')
+					'url' => BS_URL::get_url('calendar')
 				);
 			}
 		
@@ -433,7 +431,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('search_desc'),
 					'text' => $locale->lang('search'),
-					'url' => $url->get_url('search')
+					'url' => BS_URL::get_url('search')
 				);
 			}
 		
@@ -460,7 +458,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE != 'disabled')
 				{
 					if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE == 'enabled')
-						$sendpw_url = $url->get_url('sendpw');
+						$sendpw_url = BS_URL::get_url('sendpw');
 					else
 						$sendpw_url = BS_EXPORT_SEND_PW_LINK;
 				}
@@ -468,7 +466,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				if(!BS_ENABLE_EXPORT || BS_EXPORT_RESEND_ACT_TYPE == 'link')
 				{
 					if(!BS_ENABLE_EXPORT)
-						$resend_url = $url->get_url('resend_activation');
+						$resend_url = BS_URL::get_url('resend_activation');
 					else
 						$resend_url = BS_EXPORT_RESEND_ACT_LINK;
 				}
@@ -502,7 +500,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see FWS_Page::footer()
+	 * @see FWS_Document_Renderer_HTML_Default::footer()
 	 */
 	protected function footer()
 	{

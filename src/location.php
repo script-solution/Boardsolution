@@ -123,8 +123,6 @@ final class BS_Location extends FWS_Object
 		$forums = FWS_Props::get()->forums();
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
-		$url = FWS_Props::get()->url();
-
 		$parts = explode(':',$this->_location);
 		if(count($parts) < 1)
 			return $locale->lang('loc_index');
@@ -149,7 +147,7 @@ final class BS_Location extends FWS_Object
 				
 				if($enable_links)
 				{
-					$murl = $url->get_url('userdetails','&amp;'.BS_URL_ID.'='.$parts[1]);
+					$murl = BS_URL::get_url('userdetails','&amp;'.BS_URL_ID.'='.$parts[1]);
 					$link = '<a href="'.$murl.'">'.$parts[2].'</a>';
 				}
 				else
@@ -198,7 +196,7 @@ final class BS_Location extends FWS_Object
 	
 				if($enable_links)
 				{
-					$topic_url = $url->get_posts_url($parts[1],$parts[2]);
+					$topic_url = BS_URL::get_posts_url($parts[1],$parts[2]);
 					$topic = '<a href="'.$topic_url.'">'.$topic_title.'</a>';
 				}
 				else

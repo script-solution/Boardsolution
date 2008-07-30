@@ -30,7 +30,6 @@ final class BS_ACP_SubModule_acpaccess_module extends BS_ACP_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_MODULE,'module');
@@ -38,7 +37,7 @@ final class BS_ACP_SubModule_acpaccess_module extends BS_ACP_SubModule
 		$module = $input->get_var('module','get',FWS_Input::STRING);
 		$renderer->add_breadcrumb(
 			$locale->lang('edit_permissions_for_module'),
-			$url->get_acpmod_url(0,'&amp;action=module&amp;module='.$module)
+			BS_URL::get_acpmod_url(0,'&amp;action=module&amp;module='.$module)
 		);
 	}
 	
@@ -49,7 +48,6 @@ final class BS_ACP_SubModule_acpaccess_module extends BS_ACP_SubModule
 	{
 		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
 		$locale = FWS_Props::get()->locale();
 
 		$module = $input->get_var('module','get',FWS_Input::STRING);
@@ -86,7 +84,7 @@ final class BS_ACP_SubModule_acpaccess_module extends BS_ACP_SubModule
 			'module' => $module,
 			'action_type' => BS_ACP_ACTION_ACPACCESS_MODULE,
 			'group_combo' => $groupcombo->to_html(),
-			'search_url' => $url->get_acpmod_url('usersearch','&amp;comboid=user_intern'),
+			'search_url' => BS_URL::get_acpmod_url('usersearch','&amp;comboid=user_intern'),
 			'module_name' => $locale->lang($mod),
 			'user_combo' => $usercombo->to_html(),
 			'current_user_permissions' => count($user) > 0 ? implode(', ',$user) : '-',

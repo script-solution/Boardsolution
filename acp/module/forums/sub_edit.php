@@ -37,7 +37,6 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ADD_FORUM,array('edit','add'));
@@ -48,14 +47,14 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 		{
 			$renderer->add_breadcrumb(
 				$locale->lang('edit_forum'),
-				$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
+				BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
 			);
 		}
 		else
 		{
 			$renderer->add_breadcrumb(
 				$locale->lang('create_new_forum'),
-				$url->get_acpmod_url(0,'&amp;action=edit')
+				BS_URL::get_acpmod_url(0,'&amp;action=edit')
 			);
 		}
 		
@@ -68,7 +67,6 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 	public function run()
 	{
 		$input = FWS_Props::get()->input();
-		$url = FWS_Props::get()->url();
 		$locale = FWS_Props::get()->locale();
 		$auth = FWS_Props::get()->auth();
 		$cache = FWS_Props::get()->cache();
@@ -88,14 +86,14 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 			);
 			$forum = $data->get_attributes();
 			
-			$target_url = $url->get_acpmod_url(0,'&amp;action=edit');
+			$target_url = BS_URL::get_acpmod_url(0,'&amp;action=edit');
 			$form_title = $locale->lang('add');
 		}
 		else
 		{
 			$forum = $forums->get_forum_data($id);
 			
-			$target_url = $url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id);
+			$target_url = BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id);
 			$form_title = $locale->lang('edit');
 		}
 		
@@ -166,7 +164,7 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 			'target_url' => $target_url,
 			'form_title' => $form_title,
 			'parent_combo' => $parent_combo,
-			'search_url' => $url->get_acpmod_url('usersearch','&amp;comboid=user_intern'),
+			'search_url' => BS_URL::get_acpmod_url('usersearch','&amp;comboid=user_intern'),
 			'user_combo' => $usercb->to_html(),
 			'forum_type_combo' => $forumtype->to_html()
 		));

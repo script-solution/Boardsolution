@@ -29,13 +29,12 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_MODULE,'module');
 		$renderer->add_breadcrumb(
 			$locale->lang('search'),
-			$url->get_acpmod_url(0,'&amp;action=search&amp;use_sess=1')
+			BS_URL::get_acpmod_url(0,'&amp;action=search&amp;use_sess=1')
 		);
 	}
 	
@@ -48,7 +47,6 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 		$user = FWS_Props::get()->user();
 		$cache = FWS_Props::get()->cache();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
 		$cfg = FWS_Props::get()->cfg();
 
 		// search?
@@ -88,7 +86,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 		
 		$tpl->add_variables(array(
 			'wait_image' => $user->get_theme_item_path('images/wait.gif'),
-			'search_target' => $url->get_acpmod_url(0,'&amp;action=search'),
+			'search_target' => BS_URL::get_acpmod_url(0,'&amp;action=search'),
 			'name_value' => stripslashes($sp['name']),
 			'action_param' => BS_URL_ACTION,
 			'email_value' => stripslashes($sp['email']),
@@ -112,7 +110,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 				$form,'from_lastlogin','to_lastlogin',$sp['from_lastlogin'],$sp['to_lastlogin']
 			),
 			'enable_post_count' => $cfg['enable_post_count'] == 1,
-			'reset_url' => $url->get_acpmod_url(0,'&amp;action=search')
+			'reset_url' => BS_URL::get_acpmod_url(0,'&amp;action=search')
 		));
 		
 		// add additional fields
@@ -202,7 +200,6 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 		$input = FWS_Props::get()->input();
 		$user = FWS_Props::get()->user();
 		$doc = FWS_Props::get()->doc();
-		$url = FWS_Props::get()->url();
 		$msgs = FWS_Props::get()->msgs();
 		$locale = FWS_Props::get()->locale();
 
@@ -313,7 +310,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 			// ok, store them to the session and redirect to the results-page
 			$user->set_session_data('user_search_params',$search_params);
 			$user->set_session_data('user_search_ids',$user_ids);
-			$doc->redirect(FWS_Path::outer().$url->get_acpmod_url(0,'&action=default','&'));
+			$doc->redirect(FWS_Path::outer().BS_URL::get_acpmod_url(0,'&action=default','&'));
 		}
 		// show the search-form again, if we have found 0 user
 		else

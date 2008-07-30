@@ -30,7 +30,6 @@ final class BS_ACP_SubModule_usergroups_edit extends BS_ACP_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ADD_USER_GROUP,array('edit','add'));
@@ -41,14 +40,14 @@ final class BS_ACP_SubModule_usergroups_edit extends BS_ACP_SubModule
 		{
 			$renderer->add_breadcrumb(
 				$locale->lang('edit_group'),
-				$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
+				BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
 			);
 		}
 		else
 		{
 			$renderer->add_breadcrumb(
 				$locale->lang('insert_group'),
-				$url->get_acpmod_url(0,'&amp;action=edit')
+				BS_URL::get_acpmod_url(0,'&amp;action=edit')
 			);
 		}
 	}
@@ -60,7 +59,6 @@ final class BS_ACP_SubModule_usergroups_edit extends BS_ACP_SubModule
 	{
 		$input = FWS_Props::get()->input();
 		$cache = FWS_Props::get()->cache();
-		$url = FWS_Props::get()->url();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
 
@@ -71,7 +69,7 @@ final class BS_ACP_SubModule_usergroups_edit extends BS_ACP_SubModule
 		if($type == 'edit')
 		{
 			$data = $cache->get_cache('user_groups')->get_element($id);
-			$form_target = $url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id);
+			$form_target = BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id);
 			$form_title = $locale->lang('edit_group');
 			$action_type = BS_ACP_ACTION_EDIT_USER_GROUP;
 		}
@@ -89,7 +87,7 @@ final class BS_ACP_SubModule_usergroups_edit extends BS_ACP_SubModule
 			foreach($helper->get_permissions() as $name)
 				$data[$name] = 0;
 			
-			$form_target = $url->get_acpmod_url(0,'&amp;action=edit');
+			$form_target = BS_URL::get_acpmod_url(0,'&amp;action=edit');
 			$form_title = $locale->lang('insert_group');
 			$action_type = BS_ACP_ACTION_ADD_USER_GROUP;
 		}
@@ -99,7 +97,7 @@ final class BS_ACP_SubModule_usergroups_edit extends BS_ACP_SubModule
 
 		$tpl->add_array('default',$data);
 		$tpl->add_variables(array(
-			'color_picker_url' => $url->get_url('color_picker','&amp;class=group_color&amp;raute=0'),
+			'color_picker_url' => BS_URL::get_url('color_picker','&amp;class=group_color&amp;raute=0'),
 			'form_target' => $form_target,
 			'action_type' => $action_type,
 			'form_title' => $form_title,

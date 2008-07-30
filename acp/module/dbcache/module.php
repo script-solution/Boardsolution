@@ -29,11 +29,10 @@ final class BS_ACP_Module_dbcache extends BS_ACP_Module
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_REGENERATE_CACHE,'regenerate');
-		$renderer->add_breadcrumb($locale->lang('acpmod_dbcache'),$url->get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_dbcache'),BS_URL::get_acpmod_url());
 	}
 	
 	/**

@@ -43,13 +43,12 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($auth->has_global_permission('view_online_locations'));
 
-		$renderer->add_breadcrumb($locale->lang('user_locations'),$url->get_url('user_locations'));
+		$renderer->add_breadcrumb($locale->lang('user_locations'),BS_URL::get_url('user_locations'));
 	}
 	
 	/**
@@ -65,8 +64,6 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 		$functions = FWS_Props::get()->functions();
 		$user = FWS_Props::get()->user();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
-
 		$order_vals = array('username','location','date','ip','useragent');
 		$this->_order = $input->correct_var(
 			BS_URL_ORDER,'get',FWS_Input::STRING,$order_vals,'date'
@@ -76,7 +73,7 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 		);
 		$loc = $input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
 		
-		$baseurl = $url->get_url(0,'&amp;'.BS_URL_LOC.'='.$loc.'&amp;');
+		$baseurl = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'='.$loc.'&amp;');
 		
 		$view_details = $auth->has_global_permission('view_user_online_detail');
 		
@@ -87,13 +84,13 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 		if($loc == 'view_duplicates')
 		{
 			$toggle_duplicate_title = $locale->lang('hide_duplicates');
-			$toggle_duplicate_url = $url->get_url(0,$url_params);
+			$toggle_duplicate_url = BS_URL::get_url(0,$url_params);
 		}
 		else
 		{
 			$duplicate = $sessions->get_online_count() - count($locations);
 			$toggle_duplicate_title = $locale->lang('view_duplicates').' ('.$duplicate.')';
-			$toggle_duplicate_url = $url->get_url(0,$url_params.'&amp;'.BS_URL_LOC.'=view_duplicates');
+			$toggle_duplicate_url = BS_URL::get_url(0,$url_params.'&amp;'.BS_URL_LOC.'=view_duplicates');
 		}
 		
 		$tpl->add_variables(array(
@@ -187,7 +184,7 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 		$tpl->add_array('user_list',$user_list);
 		
 		// display page-split
-		$purl = $url->get_url(0,$url_params.'&amp;'.BS_URL_LOC.'='.$loc.'&amp;'.BS_URL_SITE.'={d}');
+		$purl = BS_URL::get_url(0,$url_params.'&amp;'.BS_URL_LOC.'='.$loc.'&amp;'.BS_URL_SITE.'={d}');
 		$functions->add_pagination($pagination,$purl);
 	}
 	

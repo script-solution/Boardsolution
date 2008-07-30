@@ -40,7 +40,6 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 	{
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$functions = FWS_Props::get()->functions();
 		$db = FWS_Props::get()->db();
 		$tpl = FWS_Props::get()->tpl();
@@ -61,10 +60,10 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 				$message = sprintf(
 					$locale->lang('delete_tables_question'),'"'.implode('", "',$tables).'"'
 				);
-				$yes_url = $url->get_url(
+				$yes_url = BS_DBA_URL::get_url(
 					0,'&amp;at='.BS_DBA_ACTION_DELETE_TABLES.'&amp;tables='.implode(';',$tables)
 				);
-				$no_url = $url->get_url(0);
+				$no_url = BS_DBA_URL::get_url(0);
 				
 				$functions->add_delete_message($message,$yes_url,$no_url,'');
 			}
@@ -128,7 +127,7 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 			'overhead' => FWS_StringHelper::get_formated_data_size($total_overhead,BS_DBA_LANGUAGE),
 			'entries' => number_format($total_rows,0,',','.'),
 			'action_combo' => $action_combo->to_html(),
-			'optimize_url' => $url->get_url(0,'&at='.BS_DBA_ACTION_OPTIMIZE_TABLES.'&tables=','&')
+			'optimize_url' => BS_DBA_URL::get_url(0,'&at='.BS_DBA_ACTION_OPTIMIZE_TABLES.'&tables=','&')
 		));
 	}
 }

@@ -49,8 +49,6 @@ final class BS_Front_EventUtils extends FWS_Singleton
 	public function get_current_events()
 	{
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
-
 		$ev = $this->_get_events();
 		
 		$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
@@ -67,7 +65,7 @@ final class BS_Front_EventUtils extends FWS_Singleton
 					if($cfg['enable_calendar'] == 0)
 						continue;
 	
-					$murl = $url->get_url('calendar','&amp;'.BS_URL_MODE.'=event_detail'
+					$murl = BS_URL::get_url('calendar','&amp;'.BS_URL_MODE.'=event_detail'
 						.'&amp;'.BS_URL_ID.'='.$edata['id']);
 				}
 				else
@@ -76,7 +74,7 @@ final class BS_Front_EventUtils extends FWS_Singleton
 					if($cfg['hide_denied_forums'] == 1 && in_array($edata['rubrikid'],$denied))
 						continue;
 					
-					$murl = $url->get_posts_url($edata['rubrikid'],$edata['tid']);
+					$murl = BS_URL::get_posts_url($edata['rubrikid'],$edata['tid']);
 				}
 				
 				$title = FWS_StringHelper::get_limited_string($edata['event_title'],15);

@@ -30,7 +30,6 @@ final class BS_Front_Module_delete_topics extends BS_Front_Module
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
 		
@@ -44,7 +43,7 @@ final class BS_Front_Module_delete_topics extends BS_Front_Module
 		$this->add_loc_forum_path($fid);
 		$renderer->add_breadcrumb(
 			$locale->lang('delete_topics'),
-			$url->get_url('delete_topics','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids)
+			BS_URL::get_url('delete_topics','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids)
 		);
 	}
 	
@@ -59,8 +58,6 @@ final class BS_Front_Module_delete_topics extends BS_Front_Module
 		$forums = FWS_Props::get()->forums();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		// check parameters
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$id_str = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
@@ -108,9 +105,9 @@ final class BS_Front_Module_delete_topics extends BS_Front_Module
 		
 		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_DELETE_TOPICS,
-			'target_url' => $url->get_url('delete_topics','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id_str),
+			'target_url' => BS_URL::get_url('delete_topics','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id_str),
 			'selected_topics' => $selected_topics,
-			'back_url' => $url->get_topics_url($fid)
+			'back_url' => BS_URL::get_topics_url($fid)
 		));
 	}
 }

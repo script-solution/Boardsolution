@@ -42,7 +42,6 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 		$cache = FWS_Props::get()->cache();
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
-		$url = FWS_Props::get()->url();
 		$tpl = FWS_Props::get()->tpl();
 
 		if(($delete = $input->get_var('delete','post')) != null)
@@ -52,10 +51,10 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
-				$url->get_acpmod_url(
+				BS_URL::get_acpmod_url(
 					0,'&amp;at='.BS_ACP_ACTION_DELETE_ADDFIELDS.'&amp;ids='.implode(',',$delete)
 				),
-				$url->get_acpmod_url()
+				BS_URL::get_acpmod_url()
 			);
 		}
 		
@@ -83,7 +82,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 			if($i > 0)
 			{
 				$up_ids = $elements[$i - 1]['id'].','.$data['id'];
-				$switch_up_url = $url->get_acpmod_url(
+				$switch_up_url = BS_URL::get_acpmod_url(
 					0,'&amp;at='.BS_ACP_ACTION_SWITCH_ADDFIELDS.'&amp;ids='.$up_ids
 				);
 			}
@@ -93,7 +92,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 			if($i < count($elements) - 1)
 			{
 				$down_ids = $elements[$i + 1]['id'].','.$data['id'];
-				$switch_down_url = $url->get_acpmod_url(
+				$switch_down_url = BS_URL::get_acpmod_url(
 					0,'&amp;at='.BS_ACP_ACTION_SWITCH_ADDFIELDS.'&amp;ids='.$down_ids
 				);
 			}

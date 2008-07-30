@@ -29,14 +29,13 @@ final class BS_Front_SubModule_userprofile_chpw extends BS_Front_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$cfg = FWS_Props::get()->cfg();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_CHANGE_USER_PW,'chguserpw');
 		
 		$title = $cfg['profile_max_user_changes'] != 0 ? 'user_n_pw_change' : 'pw_change';
-		$renderer->add_breadcrumb($locale->lang($title),$url->get_url(0,'&amp;'.BS_URL_LOC.'=chpw'));
+		$renderer->add_breadcrumb($locale->lang($title),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=chpw'));
 	}
 	
 	/**
@@ -48,8 +47,6 @@ final class BS_Front_SubModule_userprofile_chpw extends BS_Front_SubModule
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		// has the user the permission to change user/pw
 		if(BS_ENABLE_EXPORT)
 		{
@@ -77,7 +74,7 @@ final class BS_Front_SubModule_userprofile_chpw extends BS_Front_SubModule
 			'user_name_maxlength' => $cfg['profile_max_user_len'],
 			'password_size' => max(30,$cfg['profile_max_pw_len']),
 			'password_maxlength' => $cfg['profile_max_pw_len'],
-			'target_url' => $url->get_url('userprofile','&amp;'.BS_URL_LOC.'=chpw'),
+			'target_url' => BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=chpw'),
 			'action_type' => BS_ACTION_CHANGE_USER_PW,
 			'enable_username_change' => $cfg['profile_max_user_changes'] != 0,
 			'max_changes_notice' => $max_changes_notice,

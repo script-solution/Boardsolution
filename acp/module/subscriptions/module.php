@@ -29,11 +29,10 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_DELETE_SUBSCRIPTIONS,'delete');
-		$renderer->add_breadcrumb($locale->lang('acpmod_subscriptions'),$url->get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_subscriptions'),BS_URL::get_acpmod_url());
 	}
 	
 	/**
@@ -45,8 +44,6 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		$functions = FWS_Props::get()->functions();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$end = 15;
 		$search = $input->get_var('search','get',FWS_Input::STRING);
 		if($search != '')
@@ -66,16 +63,16 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		{
 			$ids = FWS_Array_Utils::advanced_implode(',',$delete);
 			$def_params = '&amp;site='.$site.'&amp;order='.$order.'&amp;ad='.$ad;
-			$yes_url = $url->get_acpmod_url(
+			$yes_url = BS_URL::get_acpmod_url(
 				0,'&amp;at='.BS_ACP_ACTION_DELETE_SUBSCRIPTIONS.'&amp;ids='.$ids.$def_params
 			);
-			$no_url = $url->get_acpmod_url(0,$def_params);
+			$no_url = BS_URL::get_acpmod_url(0,$def_params);
 			$functions->add_delete_message(
 				$locale->lang('delete_subscriptions_question'),$yes_url,$no_url,''
 			);
 		}
 	
-		$base_url = $url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site='.$site.'&amp;');
+		$base_url = BS_URL::get_acpmod_url(0,'&amp;search='.$search.'&amp;site='.$site.'&amp;');
 		$tpl->add_variables(array(
 			'target_url' => $base_url.'order='.$order.'&amp;ad='.$ad,
 			'username_col' => BS_ACP_Utils::get_instance()->get_order_column(
@@ -114,7 +111,7 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		{
 			if($data['forum_id'] > 0)
 			{
-				$furl = $url->get_frontend_url(
+				$furl = BS_URL::get_frontend_url(
 					'&amp;'.BS_URL_ACTION.'=topics&amp;'.BS_URL_FID.'='.$data['forum_id']
 				);
 				$info = BS_TopicUtils::get_instance()->get_displayed_name($data['forum_name'],22);
@@ -127,7 +124,7 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 			}
 			else
 			{
-				$furl = $url->get_frontend_url(
+				$furl = BS_URL::get_frontend_url(
 					'&amp;'.BS_URL_ACTION.'=redirect&amp;'.BS_URL_LOC.'=show_topic&amp;'.BS_URL_TID.'='.$data['topic_id']
 				);
 				$info = BS_TopicUtils::get_instance()->get_displayed_name($data['name'],22);
@@ -161,7 +158,7 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 			'search_val' => $search
 		));
 
-		$murl = $url->get_acpmod_url(
+		$murl = BS_URL::get_acpmod_url(
 			0,'&amp;search='.$search.'&amp;order='.$order.'&amp;ad='.$ad.'&amp;site={d}'
 		);
 		$functions->add_pagination($pagination,$murl);

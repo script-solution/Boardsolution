@@ -24,7 +24,6 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 	 */
 	public function run()
 	{
-		$url = FWS_Props::get()->url();
 		$tpl = FWS_Props::get()->tpl();
 
 		$helper = BS_Front_Module_Calendar_Helper::get_instance();
@@ -33,12 +32,12 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 		$sel_ts = FWS_Date::get_timestamp(array(0,0,0,$month,1,$year));
 		$mon_len = FWS_Date::get_formated_date('t',$sel_ts);
 		list($prevyear,$prevmonth) = $helper->get_relative_date($month,$year,-1);
-		$back_url = $url->get_url(
+		$back_url = BS_URL::get_url(
 			'calendar','&amp;'.BS_URL_YEAR.'='.$prevyear.'&amp;'.BS_URL_MONTH.'='.$prevmonth
 		);
 	
 		list($nextyear,$nextmonth) = $helper->get_relative_date($month,$year,1);
-		$forward_url = $url->get_url(
+		$forward_url = BS_URL::get_url(
 			'calendar','&amp;'.BS_URL_YEAR.'='.$nextyear.'&amp;'.BS_URL_MONTH.'='.$nextmonth
 		);
 	
@@ -62,7 +61,7 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 		for($w = 0;$w < 6;$w++)
 		{
 			$weeks[$w] = array();
-			$weeks[$w]['url'] = $url->get_url(0,'&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_WEEK.'='.$week);
+			$weeks[$w]['url'] = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_WEEK.'='.$week);
 			$weeks[$w]['days'] = array();
 	
 			$end_week = ($w * 7) + 7;

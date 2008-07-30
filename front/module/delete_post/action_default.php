@@ -28,8 +28,6 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 		$functions = FWS_Props::get()->functions();
 		$cfg = FWS_Props::get()->cfg();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		if(!$input->isset_var('submit','post'))
 			return '';
 
@@ -186,7 +184,7 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 			}
 		}
 		
-		$murl = $url->get_url(
+		$murl = BS_URL::get_url(
 			'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.$header_add
 		).'#b_'.$lastpost['id'];
 		$this->add_link($locale->lang('go_to_topic'),$murl);

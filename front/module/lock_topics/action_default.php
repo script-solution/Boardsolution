@@ -25,8 +25,6 @@ final class BS_Front_Action_lock_topics_default extends BS_Front_Action_Base
 		$functions = FWS_Props::get()->functions();
 		$auth = FWS_Props::get()->auth();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$id_str = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
 		if(!($ids = FWS_StringHelper::get_ids($id_str)))
@@ -76,7 +74,7 @@ final class BS_Front_Action_lock_topics_default extends BS_Front_Action_Base
 		BS_DAO::get_topics()->update_by_ids($topic_ids,array('locked' => $locked));
 
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('back'),$url->get_topics_url($fid));
+		$this->add_link($locale->lang('back'),BS_URL::get_topics_url($fid));
 
 		return '';
 	}

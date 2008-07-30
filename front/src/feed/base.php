@@ -79,9 +79,7 @@ abstract class BS_Front_Feed_Base extends FWS_Object
 	 */
 	protected final function get_topic_url($fid,$tid)
 	{
-		$url = FWS_Props::get()->url();
-
-		return $url->get_frontend_url(
+		return BS_URL::get_frontend_url(
 			'&amp;'.BS_URL_ACTION.'=posts'.'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid,'&amp;',false
 		);
 	}

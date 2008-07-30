@@ -34,8 +34,6 @@ final class BS_Front_Search_Result_PMHistory extends FWS_Object implements BS_Fr
 		$tpl = FWS_Props::get()->tpl();
 		$functions = FWS_Props::get()->functions();
 		$user = FWS_Props::get()->user();
-		$url = FWS_Props::get()->url();
-
 		list($order,$ad) = $request->get_order();
 		$ids = $search->get_result_ids();
 		$num = count($ids);
@@ -107,7 +105,7 @@ final class BS_Front_Search_Result_PMHistory extends FWS_Object implements BS_Fr
 			);
 		}
 
-		$murl = $url->get_url(
+		$murl = BS_URL::get_url(
 			0,'&amp;'.BS_URL_LOC.'=pmsearch'.'&amp;'.BS_URL_ID.'='.$search->get_search_id()
 				.'&amp;'.BS_URL_ORDER.'='.$order.'&amp;'.BS_URL_AD.'='.$ad
 				.'&amp;'.BS_URL_MODE.'='.$request->get_name().'&amp;'.BS_URL_SITE.'={d}'

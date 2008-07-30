@@ -29,13 +29,12 @@ final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_BAN_USER,'pmbanuser');
 		$renderer->add_action(BS_ACTION_UNBAN_USER,'pmunbanuser');
 
-		$renderer->add_breadcrumb($locale->lang('banlist'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmbanlist'));
+		$renderer->add_breadcrumb($locale->lang('banlist'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pmbanlist'));
 	}
 	
 	/**
@@ -46,7 +45,6 @@ final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 		$input = FWS_Props::get()->input();
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
 
@@ -67,10 +65,10 @@ final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 
 			$loc = '&amp;'.BS_URL_LOC.'=pmbanlist';
-			$yes_url = $url->get_url(0,$loc.'&amp;'.BS_URL_AT.'='
+			$yes_url = BS_URL::get_url(0,$loc.'&amp;'.BS_URL_AT.'='
 				.BS_ACTION_UNBAN_USER.'&amp;'.BS_URL_DEL.'='.$ids,'&amp;',true);
-			$no_url = $url->get_url(0,$loc);
-			$target_url = $url->get_url('redirect','&amp;'.BS_URL_LOC.'=del_pm_ban'
+			$no_url = BS_URL::get_url(0,$loc);
+			$target_url = BS_URL::get_url('redirect','&amp;'.BS_URL_LOC.'=del_pm_ban'
 				.'&amp;'.BS_URL_ID.'='.$ids);
 			
 			$functions->add_delete_message(
@@ -96,7 +94,7 @@ final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 		$tpl->add_array('banned_user',$banned_user);
 	
 		$tpl->add_variables(array(
-			'ban_user_url' => $url->get_url(
+			'ban_user_url' => BS_URL::get_url(
 				'userprofile',
 				'&amp;'.BS_URL_LOC.'=pmbanlist'.'&amp;'.BS_URL_AT.'='.BS_ACTION_BAN_USER,
 				'&amp;',

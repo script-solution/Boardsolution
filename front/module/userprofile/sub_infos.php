@@ -29,12 +29,11 @@ final class BS_Front_SubModule_userprofile_infos extends BS_Front_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_EDIT_PERS_PROFILE,'updateinfos');
 
-		$renderer->add_breadcrumb($locale->lang('personal_info'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=infos'));
+		$renderer->add_breadcrumb($locale->lang('personal_info'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=infos'));
 	}
 	
 	/**
@@ -48,8 +47,6 @@ final class BS_Front_SubModule_userprofile_infos extends BS_Front_SubModule
 		$user = FWS_Props::get()->user();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
-
 		$loc = $input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
 		
 		if($input->get_var(BS_URL_MODE,'get') == 1)
@@ -63,7 +60,7 @@ final class BS_Front_SubModule_userprofile_infos extends BS_Front_SubModule
 			'action_type' => BS_ACTION_EDIT_PERS_PROFILE,
 			'show_email' => !BS_ENABLE_EXPORT && $cfg['allow_email_changes'],
 			'email_value' => $form->get_input_value('user_email',$user->get_profile_val('user_email')),
-			'target_url' => $url->get_url('userprofile','&amp;'.BS_URL_LOC."=".$loc),
+			'target_url' => BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC."=".$loc),
 			'confirm_emails' => $cfg['confirm_email_addresses'],
 			'new_email_address' => $email_change['user_id'] ? $email_change['email_address'] : ''
 		));

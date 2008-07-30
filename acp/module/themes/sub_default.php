@@ -42,7 +42,6 @@ final class BS_ACP_SubModule_themes_default extends BS_ACP_SubModule
 		$cache = FWS_Props::get()->cache();
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
-		$url = FWS_Props::get()->url();
 		$tpl = FWS_Props::get()->tpl();
 
 		$delete = $input->get_var('delete','post');
@@ -53,10 +52,10 @@ final class BS_ACP_SubModule_themes_default extends BS_ACP_SubModule
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
-				$url->get_acpmod_url(
+				BS_URL::get_acpmod_url(
 					0,'&amp;at='.BS_ACP_ACTION_DELETE_THEMES.'&amp;ids='.implode(',',$delete)
 				),
-				$url->get_acpmod_url()
+				BS_URL::get_acpmod_url()
 			);
 		}
 		
@@ -77,7 +76,7 @@ final class BS_ACP_SubModule_themes_default extends BS_ACP_SubModule
 					'id' => $data['id'],
 					'theme_name' => $data['theme_name'],
 					'theme_folder' => $data['theme_folder'],
-					'edit_url' => $url->get_acpmod_url(0,'&amp;action=editor&amp;theme='.$data['theme_folder'])
+					'edit_url' => BS_URL::get_acpmod_url(0,'&amp;action=editor&amp;theme='.$data['theme_folder'])
 				);
 			}
 		}

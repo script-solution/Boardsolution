@@ -43,8 +43,6 @@ final class BS_ACP_Module_usersearch extends BS_ACP_Module
 		$tpl = FWS_Props::get()->tpl();
 		$cache = FWS_Props::get()->cache();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		$comboid = $input->get_var('comboid','get',FWS_Input::STRING);
 		$search = $input->get_var('search','post',FWS_Input::INTEGER);
 		$user_name = $input->get_var('user_name','post',FWS_Input::STRING);
@@ -89,7 +87,7 @@ final class BS_ACP_Module_usersearch extends BS_ACP_Module
 		
 		$tpl->add_variables(array(
 			'action_param' => BS_URL_ACTION,
-			'action' => $url->get_acpmod_url('usersearch','&amp;comboid='.$comboid),
+			'action' => BS_URL::get_acpmod_url('usersearch','&amp;comboid='.$comboid),
 			'user_name' => $user_name,
 			'user_email' => $user_email,
 			'date_types' => $date_types,
@@ -104,7 +102,7 @@ final class BS_ACP_Module_usersearch extends BS_ACP_Module
 		if($search != null)
 		{
 			$tpl->add_variables(array(
-				'action' => $url->get_acpmod_url('usersearch')
+				'action' => BS_URL::get_acpmod_url('usersearch')
 			));
 		
 			$user_groups = is_array($user_groups) ? $user_groups : array();

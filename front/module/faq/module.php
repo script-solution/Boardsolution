@@ -29,12 +29,11 @@ final class BS_Front_Module_faq extends BS_Front_Module
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$cfg = FWS_Props::get()->cfg();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($cfg['enable_faq'] == 1);
-		$renderer->add_breadcrumb($locale->lang('faq'),$url->get_url('faq'));
+		$renderer->add_breadcrumb($locale->lang('faq'),BS_URL::get_url('faq'));
 	}
 	
 	/**
@@ -47,8 +46,6 @@ final class BS_Front_Module_faq extends BS_Front_Module
 		$tpl = FWS_Props::get()->tpl();
 		$cache = FWS_Props::get()->cache();
 		$functions = FWS_Props::get()->functions();
-		$url = FWS_Props::get()->url();
-
 		$locale->add_language_file('faq');
 
 		$rank_names = array(
@@ -142,17 +139,17 @@ final class BS_Front_Module_faq extends BS_Front_Module
 				case $rank_names['experience_bar']:
 					$faq_text = sprintf(
 						$locale->lang('faq_text_'.$i.'_'.$cfg['post_stats_type']),
-						$url->get_url('user_experience','&amp;'.BS_URL_ID.'=0')
+						BS_URL::get_url('user_experience','&amp;'.BS_URL_ID.'=0')
 					);
 					break;
 				
 				case $rank_names['bbcode']:
 					$faq_text = sprintf(
 						$locale->lang('faq_text_'.$i),
-						$url->get_url('redirect','&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'=1'),
-						$url->get_url('redirect','&amp;'.BS_URL_LOC.'=show_topic&amp;'.BS_URL_TID.'=1'),
-						$url->get_url('download','&amp;path=uploads/file.txt'),
-						$url->get_url('download','&amp;path=image.jpg'),
+						BS_URL::get_url('redirect','&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'=1'),
+						BS_URL::get_url('redirect','&amp;'.BS_URL_LOC.'=show_topic&amp;'.BS_URL_TID.'=1'),
+						BS_URL::get_url('download','&amp;path=uploads/file.txt'),
+						BS_URL::get_url('download','&amp;path=image.jpg'),
 						highlight_string("<?php\necho \"test\";\n?>",1)
 					);
 					break;

@@ -29,12 +29,11 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_UNSUBSCRIBE_TOPIC,array('unsubscribe','topics'));
 
-		$renderer->add_breadcrumb($locale->lang('threads'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=topics'));
+		$renderer->add_breadcrumb($locale->lang('threads'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=topics'));
 	}
 	
 	/**
@@ -49,8 +48,6 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
 		$unread = FWS_Props::get()->unread();
-		$url = FWS_Props::get()->url();
-
 		// has the user the permission to view the subscriptions?
 		if($cfg['enable_email_notification'] == 0)
 		{
@@ -74,13 +71,13 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 			
 			$loc = '&amp;'.BS_URL_LOC.'='.$input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
 			$string_ids = implode(',',$delete);
-			$yes_url = $url->get_url(
+			$yes_url = BS_URL::get_url(
 				0,
 				$loc.'&amp;'.BS_URL_AT.'='.BS_ACTION_UNSUBSCRIBE_TOPIC
 					.'&amp;'.BS_URL_DEL.'='.$string_ids.'&amp;'.BS_URL_SITE.'='.$site,'&amp;',true
 			);
-			$no_url = $url->get_url(0,$loc.'&amp;'.BS_URL_SITE.'='.$site);
-			$target = $url->get_url(
+			$no_url = BS_URL::get_url(0,$loc.'&amp;'.BS_URL_SITE.'='.$site);
+			$target = BS_URL::get_url(
 				'redirect','&amp;'.BS_URL_LOC.'=del_subscr&amp;'.BS_URL_ID.'='.$string_ids
 					.'&amp;'.BS_URL_SITE.'='.$site
 			);
@@ -96,7 +93,7 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 		$pagination = new BS_Pagination($end,$num);
 		
 		$tpl->add_variables(array(
-			'target_url' => $url->get_url(0,'&amp;'.BS_URL_LOC.'=topics&amp;'.BS_URL_SITE.'='.$site),
+			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=topics&amp;'.BS_URL_SITE.'='.$site),
 			'action_type' => BS_ACTION_UNSUBSCRIBE_TOPIC,
 			'num' => $num
 		));
@@ -135,7 +132,7 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 		{
 			$info = BS_TopicUtils::get_instance()->get_displayed_name($data['name']);
 			$topic_name = '<a title="'.$info['complete'].'"';
-			$topic_name .= ' href="'.$url->get_url('posts','&amp;'.BS_URL_FID.'='.$data['rubrikid']
+			$topic_name .= ' href="'.BS_URL::get_url('posts','&amp;'.BS_URL_FID.'='.$data['rubrikid']
 																										.'&amp;'.BS_URL_TID.'='.$data['topic_id']).'">';
 			$topic_name .= $info['displayed'].'</a>';
 
@@ -156,7 +153,7 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 			);
 		}
 
-		$murl = $url->get_url(0,'&amp;'.BS_URL_LOC.'=topics&amp;'.BS_URL_SITE.'={d}');
+		$murl = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=topics&amp;'.BS_URL_SITE.'={d}');
 		$functions->add_pagination($pagination,$murl);
 		
 		$tpl->add_array('topics',$topics);

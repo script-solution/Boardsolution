@@ -43,7 +43,6 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
-		$url = FWS_Props::get()->url();
 		$cache = FWS_Props::get()->cache();
 		$auth = FWS_Props::get()->auth();
 		$tpl = FWS_Props::get()->tpl();
@@ -62,20 +61,20 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 			{
 				$functions->add_delete_message(
 					sprintf($locale->lang('delete_forums'),$namelist),
-					$url->get_acpmod_url(
+					BS_URL::get_acpmod_url(
 						0,'&amp;at='.BS_ACP_ACTION_DELETE_FORUMS.'&amp;ids='.$ids
 					),
-					$url->get_acpmod_url()
+					BS_URL::get_acpmod_url()
 				);
 			}
 			else if($action_type == 'empty')
 			{
 				$functions->add_delete_message(
 					sprintf($locale->lang('empty_forum_msg'),$namelist),
-					$url->get_acpmod_url(
+					BS_URL::get_acpmod_url(
 						0,'&amp;at='.BS_ACP_ACTION_TRUNCATE_FORUMS.'&amp;ids='.$ids
 					),
-					$url->get_acpmod_url()
+					BS_URL::get_acpmod_url()
 				);
 			}
 		}
@@ -139,7 +138,7 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 			$up_index = $this->_is_same_parent_above($nodes,$row,$data->get_parent_id());
 			if($up_index >= 0)
 			{
-				$switch_up_url = $url->get_acpmod_url(
+				$switch_up_url = BS_URL::get_acpmod_url(
 					0,'&amp;at='.BS_ACP_ACTION_SWITCH_FORUMS.'&amp;ids='.$fid.','.$nodes[$up_index]->get_id()
 				);
 			}
@@ -148,7 +147,7 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 			$down_index = $this->_is_same_parent_below($nodes,$row,$data->get_parent_id());
 			if($down_index > 0)
 			{
-				$switch_down_url = $url->get_acpmod_url(
+				$switch_down_url = BS_URL::get_acpmod_url(
 					0,'&amp;at='.BS_ACP_ACTION_SWITCH_FORUMS.'&amp;ids='.$nodes[$down_index]->get_id().','.$fid
 				);
 			}
@@ -167,7 +166,7 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 				'parent' => $parent,
 				'switch_up_url' => $switch_up_url,
 				'switch_down_url' => $switch_down_url,
-				'options_url' => $url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$fid),
+				'options_url' => BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$fid),
 				'up_index' => $up_index,
 				'down_index' => $down_index,
 				'fid' => $fid
@@ -178,7 +177,7 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 		
 		$tpl->add_array('forums',$tplforums);
 		$tpl->add_variables(array(
-			'correct_sort_url' => $url->get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_RESORT_FORUMS)
+			'correct_sort_url' => BS_URL::get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_RESORT_FORUMS)
 		));
 	}
 

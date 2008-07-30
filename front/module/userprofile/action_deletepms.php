@@ -26,8 +26,6 @@ final class BS_Front_Action_userprofile_deletepms extends BS_Front_Action_Base
 		$cfg = FWS_Props::get()->cfg();
 		$functions = FWS_Props::get()->functions();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		$del = $input->get_var(BS_URL_DEL,"get",FWS_Input::STRING);
 		if(!$user->is_loggedin() || $cfg['enable_pms'] == 0 || $del == null ||
 				$user->get_profile_val('allow_pms') == 0)
@@ -60,12 +58,12 @@ final class BS_Front_Action_userprofile_deletepms extends BS_Front_Action_Base
 		{
 			$id = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
 			$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::ID);
-			$murl = $url->get_url(
+			$murl = BS_URL::get_url(
 				0,'&amp;'.BS_URL_LOC.'=pmsearch&amp;'.BS_URL_ID.'='.$id.'&amp;'.BS_URL_SITE.'='.$site
 			);
 		}
 		else
-			$murl = $url->get_url('userprofile','&amp;'.BS_URL_LOC.'='.$loc);
+			$murl = BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'='.$loc);
 		
 		$this->add_link($locale->lang('back'),$murl);
 

@@ -135,7 +135,6 @@ class BS_PropLoader extends FWS_PropLoader
 	protected function tpl()
 	{
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 
 		$c = new FWS_Template_Handler();
@@ -150,6 +149,7 @@ class BS_PropLoader extends FWS_PropLoader
 		$js->set_shrink(BS_DEBUG <= 1);
 		$c->add_global_ref('gjs',$js);
 		$c->add_global_ref('glocale',$locale);
+		$url = new BS_URL();
 		$c->add_global_ref('gurl',$url);
 		$c->add_global_ref('guser',$user);
 		
@@ -252,14 +252,6 @@ class BS_PropLoader extends FWS_PropLoader
 	protected function functions()
 	{
 		return new BS_Functions();
-	}
-
-	/**
-	 * @return BS_URL the property
-	 */
-	protected function url()
-	{
-		return new BS_URL();
 	}
 	
 	/**

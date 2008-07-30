@@ -26,8 +26,6 @@ final class BS_Front_Action_posts_leaveevent extends BS_Front_Action_Base
 		$functions = FWS_Props::get()->functions();
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// is the user loggedin?
 		if($cfg['enable_events'] == 0 || !$user->is_loggedin())
 			return 'Events are disabled or you are not loggedin';
@@ -63,7 +61,7 @@ final class BS_Front_Action_posts_leaveevent extends BS_Front_Action_Base
 		BS_DAO::get_eventann()->leave($user->get_user_id(),$event['id']);
 
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('go_to_topic'),$url->get_posts_url($fid,$tid));
+		$this->add_link($locale->lang('go_to_topic'),BS_URL::get_posts_url($fid,$tid));
 
 		return '';
 	}

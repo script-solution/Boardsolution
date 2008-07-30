@@ -21,13 +21,12 @@ final class BS_BBCode_Content_AttachmentImage extends BS_BBCode_Content_Default
 {
 	public function get_text($inner,$param)
 	{
-		$url = FWS_Props::get()->url();
 		$cfg = FWS_Props::get()->cfg();
 
 		$inner = trim($inner);
 		list($att_width,$att_height) = explode('x',$cfg['attachments_images_size']);
-		$murl = $url->get_url('download','&amp;path='.$inner);
-		$img_url = $url->get_url(
+		$murl = BS_URL::get_url('download','&amp;path='.$inner);
+		$img_url = BS_URL::get_url(
 			'thumbnail','&amp;path='.$inner.'&amp;width='
 				.$att_width.'&amp;height='.$att_height.'&amp;method='
 				.$cfg['attachments_images_resize_method']

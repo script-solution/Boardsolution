@@ -29,7 +29,6 @@ final class BS_Front_Module_register extends BS_Front_Module
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$cfg = FWS_Props::get()->cfg();
 		$renderer = $doc->use_default_renderer();
@@ -38,7 +37,7 @@ final class BS_Front_Module_register extends BS_Front_Module
 		
 		$renderer->add_action(BS_ACTION_REGISTER,'default');
 
-		$renderer->add_breadcrumb($locale->lang('register'),$url->get_url('register'));
+		$renderer->add_breadcrumb($locale->lang('register'),BS_URL::get_url('register'));
 	}
 	
 	/**
@@ -58,7 +57,6 @@ final class BS_Front_Module_register extends BS_Front_Module
 	{
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
 
@@ -70,7 +68,7 @@ final class BS_Front_Module_register extends BS_Front_Module
 			'user_name_maxlength' => $cfg['profile_max_user_len'],
 			'password_size' => max(10,min(50,$cfg['profile_max_pw_len'])),
 			'password_maxlength' => $cfg['profile_max_pw_len'],
-			'target_url' => $url->get_url(0),
+			'target_url' => BS_URL::get_url(0),
 			'action_type' => BS_ACTION_REGISTER
 		));
 		
@@ -100,7 +98,7 @@ final class BS_Front_Module_register extends BS_Front_Module
 		$tpl->add_variables(array(
 			'email_display_mode_options' => $email_display_mode_options,
 			'enable_security_code' => $cfg['enable_security_code'] == 1,
-			'security_code_img' => $url->get_url('security_code'),
+			'security_code_img' => BS_URL::get_url('security_code'),
 			'enable_board_emails' => $cfg['enable_emails'] == 1,
 			'enable_pms' => $cfg['enable_pms'] == 1,
 			'sec_code_field' => $sec_code_field

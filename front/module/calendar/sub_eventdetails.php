@@ -22,7 +22,7 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param FWS_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -34,12 +34,10 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$renderer->add_breadcrumb(
 			$locale->lang('event_details'),
-			$url->get_url(0,'&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id)
+			BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id)
 		);
 	}
 	
@@ -49,7 +47,6 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 		$user = FWS_Props::get()->user();
 		$auth = FWS_Props::get()->auth();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
@@ -80,13 +77,13 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 			}
 			
 			$message = sprintf($locale->lang('delete_event_msg'),$event_data['event_title']);
-			$yes_url = $url->get_url(
+			$yes_url = BS_URL::get_url(
 				'calendar','&amp;'.BS_URL_AT.'='.BS_ACTION_CAL_DEL_EVENT.'&amp;'.BS_URL_DEL.'='.$id,'&amp;',true
 			);
-			$no_url = $url->get_url(
+			$no_url = BS_URL::get_url(
 				'calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id
 			);
-			$target = $url->get_url(
+			$target = BS_URL::get_url(
 				'redirect','&amp;'.BS_URL_LOC.'=del_cal_event&amp;'.BS_URL_ID.'='.$id
 			);
 			
@@ -136,10 +133,10 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 			'announcements_enabled' => $event_data['max_announcements'] >= 0,
 			'display_edit_event' => $edit_perm,
 			'display_delete_event' => $delete_perm,
-			'edit_event' => $url->get_url(
+			'edit_event' => BS_URL::get_url(
 				'calendar','&amp;'.BS_URL_LOC.'=editevent&amp;'.BS_URL_ID.'='.$id
 			),
-			'delete_event' => $url->get_url(
+			'delete_event' => BS_URL::get_url(
 				'calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_MODE.'=delete&amp;'.BS_URL_ID.'='.$id
 			)
 		));

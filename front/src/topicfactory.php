@@ -79,8 +79,6 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 		$functions = FWS_Props::get()->functions();
 		$locale = FWS_Props::get()->locale();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
-
 		// change similar-topics-display-state?
 		if($input->get_var(BS_URL_LOC,'get',FWS_Input::STRING) == 'clap_similar_topics')
 			$functions->clap_area('similar_topics');
@@ -106,7 +104,7 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 		$sql = ' t.id != '.$tid.' AND moved_tid = 0'.$search_string;
 	
 		// build search link
-		$murl = $url->get_url(
+		$murl = BS_URL::get_url(
 			'search','&amp;'.BS_URL_MODE.'=similar_topics&amp;'.BS_URL_KW.'='.implode(' ',$search_words)
 		);
 		$topics_title = sprintf($locale->lang('similar_topics'),$title);
@@ -138,8 +136,6 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 	{
 		$cfg = FWS_Props::get()->cfg();
 		$functions = FWS_Props::get()->functions();
-		$url = FWS_Props::get()->url();
-
 		$infos = $this->_get_latest_topics_infos($fid);
 		
 		$num = $cfg['threads_per_page'];
@@ -150,7 +146,7 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 		$topics->set_middle_width(60);
 		$topics->add_topics();
 	
-		$murl = $url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_SITE.'={d}');
+		$murl = BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_SITE.'={d}');
 		$num = BS_DAO::get_topics()->get_count_by_search($topics->get_user_where_clause());
 		$pagination = new BS_Pagination($cfg['threads_per_page'],$num);
 		$functions->add_pagination($pagination,$murl);
@@ -166,15 +162,13 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 		$input = FWS_Props::get()->input();
 		$functions = FWS_Props::get()->functions();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
-
 		if($input->get_var(BS_URL_LOC,'get',FWS_Input::STRING) == 'clap_current_topics')
 			$functions->clap_area('current_topics');
 		
 		$infos = $this->_get_latest_topics_infos($fid);
 		
 		$fid_param = $fid > 0 ? '&amp;'.BS_URL_FID.'='.$fid : '';
-		$murl = $url->get_url('latest_topics',$fid_param);
+		$murl = BS_URL::get_url('latest_topics',$fid_param);
 		$title = '<a href="'.$murl.'">'.$infos['title'].'</a>';
 		
 		// display the topics
@@ -185,7 +179,7 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 		$topics->set_show_forum(true);
 		$topics->set_middle_width(60);
 		
-		$current_url = $url->get_url('forums',$fid > 0 ? '&amp;'.BS_URL_FID.'='.$fid : '');
+		$current_url = BS_URL::get_url('forums',$fid > 0 ? '&amp;'.BS_URL_FID.'='.$fid : '');
 		$clap_data = $functions->get_clap_data(
 			'current_topics',$current_url.'&amp;'.BS_URL_LOC.'=clap_current_topics'
 		);

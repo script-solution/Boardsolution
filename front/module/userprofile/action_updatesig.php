@@ -25,8 +25,6 @@ final class BS_Front_Action_userprofile_updatesig extends BS_Front_Action_Base
 		$user = FWS_Props::get()->user();
 		$cfg = FWS_Props::get()->cfg();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
@@ -55,7 +53,7 @@ final class BS_Front_Action_userprofile_updatesig extends BS_Front_Action_Base
 
 		$this->set_action_performed(true);
 		$this->add_link(
-			$locale->lang('back'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=signature')
+			$locale->lang('back'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=signature')
 		);
 
 		return '';

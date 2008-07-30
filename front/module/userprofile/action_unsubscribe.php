@@ -27,8 +27,6 @@ final class BS_Front_Action_userprofile_unsubscribe extends BS_Front_Action_Base
 		$functions = FWS_Props::get()->functions();
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// has the user the permission to unsubscribe forums?
 		if(!$user->is_loggedin() || $cfg['enable_email_notification'] == 0 ||
 			 ($type == 'forums' && !$auth->has_global_permission('subscribe_forums')))
@@ -48,7 +46,7 @@ final class BS_Front_Action_userprofile_unsubscribe extends BS_Front_Action_Base
 
 		$this->set_action_performed(true);
 		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
-		$murl = $url->get_url(0,'&amp;'.BS_URL_LOC.'='.$type.'&amp;'.BS_URL_SITE.'='.$site);
+		$murl = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'='.$type.'&amp;'.BS_URL_SITE.'='.$site);
 		$this->add_link($locale->lang('back'),$murl);
 
 		return '';

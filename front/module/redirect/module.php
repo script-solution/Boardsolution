@@ -29,8 +29,6 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 		$locale = FWS_Props::get()->locale();
 		$doc = FWS_Props::get()->doc();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
-
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$loc = $input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
 
@@ -66,7 +64,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				}
 				
 				$doc->redirect(
-					$url->get_url('userprofile','&'.BS_URL_LOC.'=pmdetails&'.BS_URL_ID.'='.$pmid,'&')
+					BS_URL::get_url('userprofile','&'.BS_URL_LOC.'=pmdetails&'.BS_URL_ID.'='.$pmid,'&')
 				);
 				break;
 			
@@ -87,7 +85,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				}
 				
 				$doc->redirect(
-					$url->get_url('posts','&'.BS_URL_FID.'='.$tdata['rubrikid'].'&'.BS_URL_TID.'='.$tid,'&')
+					BS_URL::get_url('posts','&'.BS_URL_FID.'='.$tdata['rubrikid'].'&'.BS_URL_TID.'='.$tid,'&')
 				);
 				break;
 			
@@ -124,7 +122,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				{
 					if($data['id'] == $pid)
 					{
-						$murl = $url->get_url(
+						$murl = BS_URL::get_url(
 							'posts','&'.BS_URL_FID.'='.$pdata['rubrikid']
 							.'&'.BS_URL_TID.'='.$pdata['threadid'].'&'.BS_URL_SITE.'='.$page.$hl_add,'&'
 						);
@@ -152,7 +150,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 	
 				$type = $input->correct_var('posts_action','post',FWS_Input::STRING,
 					array('delete_posts','split_posts'),'delete_posts');
-				$murl = $url->get_url(
+				$murl = BS_URL::get_url(
 					$type,'&'.BS_URL_FID.'='.$fid.'&'.BS_URL_TID.'='.$tid.'&'.BS_URL_ID.'='.implode(',',$posts),'&'
 				);
 				$doc->redirect($murl);
@@ -176,27 +174,27 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				switch($topic_action)
 				{
 					case 'edit':
-						$murl = $url->get_url(
+						$murl = BS_URL::get_url(
 							'edit_topic','&'.BS_URL_FID.'='.$fid.'&'.BS_URL_ID.'='.$ids,'&'
 						);
 						break;
 					case 'open':
-						$murl = $url->get_url(
+						$murl = BS_URL::get_url(
 							'openclose_topics','&'.BS_URL_MODE.'=open&'.BS_URL_FID.'='.$fid.'&'.BS_URL_ID.'='.$ids,'&'
 						);
 						break;
 					case 'close':
-						$murl = $url->get_url(
+						$murl = BS_URL::get_url(
 							'openclose_topics','&'.BS_URL_MODE.'=close&'.BS_URL_FID.'='.$fid.'&'.BS_URL_ID.'='.$ids,'&'
 						);
 						break;
 					case 'delete':
-						$murl = $url->get_url(
+						$murl = BS_URL::get_url(
 							'delete_topics','&'.BS_URL_FID.'='.$fid.'&'.BS_URL_ID.'='.$ids,'&'
 						);
 						break;
 					case 'move':
-						$murl = $url->get_url(
+						$murl = BS_URL::get_url(
 							'move_topics','&'.BS_URL_FID.'='.$fid.'&'.BS_URL_ID.'='.$ids,'&'
 						);
 						break;
@@ -204,7 +202,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 						$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 						$action_type = BS_URL_AT.'='.BS_ACTION_CHANGE_READ_STATUS;
 						$fid_param = ($fid != null) ? '&'.BS_URL_FID.'='.$fid : '';
-						$murl = $url->get_url(
+						$murl = BS_URL::get_url(
 							0,'&'.$action_type.'&'.BS_URL_LOC.'=read&'.BS_URL_MODE.'=topics'
 							.$fid_param.'&'.BS_URL_ID.'='.$ids.'&'.BS_URL_SITE.'='.$site,'&',true
 						);
@@ -213,7 +211,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 						$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 						$action_type = BS_URL_AT.'='.BS_ACTION_CHANGE_READ_STATUS;
 						$fid_param = ($fid != null) ? '&'.BS_URL_FID.'='.$fid : '';
-						$murl = $url->get_url(
+						$murl = BS_URL::get_url(
 							0,'&'.$action_type.'&'.BS_URL_LOC.'=unread&'.BS_URL_MODE.'=topics'
 							.$fid_param.'&'.BS_URL_ID.'='.$ids.'&'.BS_URL_SITE.'='.$site,'&',true
 						);
@@ -273,7 +271,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				
 				// redirect
 				$params = '&'.BS_URL_LOC.'='.$mode.'&'.BS_URL_SITE.'='.$site.$action_type.'&'.BS_URL_DEL.'='.$ids;
-				$murl = $url->get_url('userprofile',$params,'&');
+				$murl = BS_URL::get_url('userprofile',$params,'&');
 				$doc->redirect($murl);
 				break;
 	
@@ -331,13 +329,13 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				// build url
 				if($option == 'yes')
 				{
-					$murl = $url->get_url(
+					$murl = BS_URL::get_url(
 						$action,$loc_param.'&'.BS_URL_AT.'='.$action_type.'&'.BS_URL_DEL.'='.$ids.$site_param,'&',true
 					);
 				}
 				else
 				{
-					$murl = $url->get_url(
+					$murl = BS_URL::get_url(
 						$action,$loc_param.$site_param,'&',true
 					);
 				}
@@ -352,51 +350,51 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				switch($forum_jump)
 				{
 					case 'index':
-						$murl = $url->get_url('forums','','&');
+						$murl = BS_URL::get_url('forums','','&');
 						break;
 					case 'admin':
-						$murl = str_replace('&amp;','&',$url->get_admin_url());
+						$murl = str_replace('&amp;','&',BS_URL::get_admin_url());
 						break;
 					case 'memberlist':
-						$murl = $url->get_url('memberlist','','&');
+						$murl = BS_URL::get_url('memberlist','','&');
 						break;
 					case 'linklist':
-						$murl = $url->get_url('linklist','','&');
+						$murl = BS_URL::get_url('linklist','','&');
 						break;
 					case 'faq':
-						$murl = $url->get_url('faq','','&');
+						$murl = BS_URL::get_url('faq','','&');
 						break;
 					case 'stats':
-						$murl = $url->get_url('stats','','&');
+						$murl = BS_URL::get_url('stats','','&');
 						break;
 					case 'calendar':
-						$murl = $url->get_url('calendar','','&');
+						$murl = BS_URL::get_url('calendar','','&');
 						break;
 					case 'search':
-						$murl = $url->get_url('search','','&');
+						$murl = BS_URL::get_url('search','','&');
 						break;
 					case 'profile':
-						$murl = $url->get_url('userprofile','&'.BS_URL_LOC.'=pr_infos','&');
+						$murl = BS_URL::get_url('userprofile','&'.BS_URL_LOC.'=pr_infos','&');
 						break;
 					case 'pms':
-						$murl = $url->get_url('userprofile','&'.BS_URL_LOC.'=pmoverview','&');
+						$murl = BS_URL::get_url('userprofile','&'.BS_URL_LOC.'=pmoverview','&');
 						break;
 					case 'register':
-						$murl = $url->get_url('register','','&');
+						$murl = BS_URL::get_url('register','','&');
 						break;
 					case 'unread':
-						$murl = $url->get_url('unread','','&');
+						$murl = BS_URL::get_url('unread','','&');
 						break;
 					case 'team':
-						$murl = $url->get_url('team','','&');
+						$murl = BS_URL::get_url('team','','&');
 						break;
 					case 'userloc':
-						$murl = $url->get_url('user_locations','','&');
+						$murl = BS_URL::get_url('user_locations','','&');
 						break;
 					default:
 						$parts = explode('_',$forum_jump);
 						if(count($parts) == 2 && $parts[0] == 'f' && FWS_Helper::is_integer($parts[1]))
-							$murl = $url->get_topics_url($parts[1],'&');
+							$murl = BS_URL::get_topics_url($parts[1],'&');
 						break;
 				}
 	

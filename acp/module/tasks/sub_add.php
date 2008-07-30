@@ -29,12 +29,11 @@ final class BS_ACP_SubModule_tasks_add extends BS_ACP_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ADD_TASK,array('edit','add'));
 		$renderer->set_template('tasks_edit.htm');
-		$renderer->add_breadcrumb($locale->lang('add_task'),$url->get_acpmod_url(0,'&amp;action=add'));
+		$renderer->add_breadcrumb($locale->lang('add_task'),BS_URL::get_acpmod_url(0,'&amp;action=add'));
 	}
 	
 	/**
@@ -44,8 +43,6 @@ final class BS_ACP_SubModule_tasks_add extends BS_ACP_SubModule
 	{
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		$data = array(
 			'task_title' => '',
 			'task_file' => '',
@@ -61,7 +58,7 @@ final class BS_ACP_SubModule_tasks_add extends BS_ACP_SubModule
 			'title' => $locale->lang('add_task'),
 			'is_def' => false,
 			'action_type' => BS_ACP_ACTION_ADD_TASK,
-			'form_target' => $url->get_acpmod_url(0,'&amp;action=add'),
+			'form_target' => BS_URL::get_acpmod_url(0,'&amp;action=add'),
 			'default' => $data,
 			'interval_types' => BS_ACP_Module_Tasks_Helper::get_instance()->get_interval_types()
 		));

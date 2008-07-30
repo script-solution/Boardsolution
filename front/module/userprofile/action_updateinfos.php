@@ -26,7 +26,6 @@ final class BS_Front_Action_userprofile_updateinfos extends BS_Front_Action_Base
 		$functions = FWS_Props::get()->functions();
 		$locale = FWS_Props::get()->locale();
 		$msgs = FWS_Props::get()->msgs();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 
 		// nothing to do?
@@ -114,7 +113,7 @@ final class BS_Front_Action_userprofile_updateinfos extends BS_Front_Action_Base
 		
 		$this->set_action_performed(true);
 		$this->add_link(
-			$locale->lang('back'),$url->get_url('userprofile','&amp;'.BS_URL_LOC.'=infos')
+			$locale->lang('back'),BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=infos')
 		);
 
 		return '';

@@ -27,7 +27,6 @@ final class BS_DBA_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		parent::__construct();
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$tpl = FWS_Props::get()->tpl();
 		
 		include_once(FWS_Path::server_app().'config/actions.php');
@@ -39,7 +38,7 @@ final class BS_DBA_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		$tpl->set_cache_folder(FWS_Path::server_app().'cache/');
 		
 		// add the home-breadcrumb
-		$this->add_breadcrumb($locale->lang('dbbackup'),$url->get_url('index'));
+		$this->add_breadcrumb($locale->lang('dbbackup'),BS_DBA_URL::get_url('index'));
 		
 		$this->_action_perf->set_prefix('BS_DBA_Action_');
 		$this->_action_perf->set_mod_folder('dba/module/');
@@ -71,8 +70,6 @@ final class BS_DBA_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		$tpl = FWS_Props::get()->tpl();
 		$msgs = FWS_Props::get()->msgs();
 		$user = FWS_Props::get()->user();
-		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$doc = FWS_Props::get()->doc();
 		
 		// add redirect information
@@ -85,19 +82,6 @@ final class BS_DBA_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		
 		// add some global variables
 		$tpl->add_global('gisloggedin',$user->is_loggedin());
-		$tpl->add_global('gpath',FWS_Path::client_app());
-		$tpl->add_global('gfwspath',FWS_Path::client_fw());
-		
-		$js = FWS_Javascript::get_instance();
-		$js->set_cache_folder('cache/');
-		$tpl->add_global_ref('gjs',$js);
-		$tpl->add_global_ref('glocale',$locale);
-		$tpl->add_global_ref('gurl',$url);
-		
-		// set callable methods
-		$tpl->add_allowed_method('gjs','get_file');
-		$tpl->add_allowed_method('glocale','lang');
-		$tpl->add_allowed_method('gurl','get_url');
 		
 		// add messages
 		if($msgs->contains_msg())

@@ -29,12 +29,11 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_DELETE_AVATARS,'delete');
 		$renderer->add_action(BS_ACP_ACTION_IMPORT_AVATARS,'import');
-		$renderer->add_breadcrumb($locale->lang('acpmod_avatars'),$url->get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_avatars'),BS_URL::get_acpmod_url());
 	}
 	
 	/**
@@ -46,8 +45,6 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$delete = $input->get_var('delete','post');
 		if($delete != null)
 		{
@@ -59,10 +56,10 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
-				$url->get_acpmod_url(0,
+				BS_URL::get_acpmod_url(0,
 					'&amp;at='.BS_ACP_ACTION_DELETE_AVATARS.'&amp;ids='.implode(',',$ids)
 				),
-				$url->get_acpmod_url()
+				BS_URL::get_acpmod_url()
 			);
 		}
 		
@@ -103,7 +100,7 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 		}
 
 		$tpl->add_array('avatars',$avatars);
-		$murl = $url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
+		$murl = BS_URL::get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
 		$functions->add_pagination($pagination,$murl);
 	}
 }

@@ -29,10 +29,9 @@ final class BS_Front_Module_team extends BS_Front_Module
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
-		$renderer->add_breadcrumb($locale->lang('the_team'),$url->get_url('team'));
+		$renderer->add_breadcrumb($locale->lang('the_team'),BS_URL::get_url('team'));
 	}
 	
 	/**
@@ -44,8 +43,6 @@ final class BS_Front_Module_team extends BS_Front_Module
 		$cfg = FWS_Props::get()->cfg();
 		$user = FWS_Props::get()->user();
 		$cache = FWS_Props::get()->cache();
-		$url = FWS_Props::get()->url();
-
 		$admins = array();
 		
 		$tpl->add_variables(array(
@@ -56,7 +53,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 		$admin_ids = array();
 		foreach(BS_DAO::get_profile()->get_users_by_groups(array(BS_STATUS_ADMIN)) as $data)
 		{
-			$purl = $url->get_url(
+			$purl = BS_URL::get_url(
 				'userprofile','&amp;'.BS_URL_LOC.'=pmcompose&amp;'.BS_URL_ID.'='.$data['id']
 			);
 			
@@ -98,7 +95,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 			// don't add mods twice
 			$admin_ids[$data['user_id']] = true;
 			
-			$purl = $url->get_url(
+			$purl = BS_URL::get_url(
 				'userprofile','&amp;'.BS_URL_LOC.'=pmcompose&amp;'.BS_URL_ID.'='.$data['user_id']
 			);
 			
@@ -130,7 +127,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 					if(isset($admin_ids[$udata['id']]))
 						continue;
 					
-					$purl = $url->get_url(
+					$purl = BS_URL::get_url(
 						'userprofile','&amp;'.BS_URL_LOC.'=pmcompose&amp;'.BS_URL_ID.'='.$udata['id']
 					);
 					
@@ -158,7 +155,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 			// grab all members of the group
 			foreach(BS_DAO::get_profile()->get_users_by_groups($team_groups) as $udata)
 			{
-				$purl = $url->get_url(
+				$purl = BS_URL::get_url(
 					'userprofile','&amp;'.BS_URL_LOC.'=pmcompose&amp;'.BS_URL_ID.'='.$udata['id']
 				);
 				$gname = $this->get_group_name($udata['user_group']);

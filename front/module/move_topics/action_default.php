@@ -26,8 +26,6 @@ final class BS_Front_Action_move_topics_default extends BS_Front_Action_Base
 		$user = FWS_Props::get()->user();
 		$auth = FWS_Props::get()->auth();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
@@ -230,10 +228,10 @@ final class BS_Front_Action_move_topics_default extends BS_Front_Action_Base
 			$this->set_success_msg($locale->lang('error_no_topics_moved'));
 
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('back_to_forum'),$url->get_topics_url($fid));
+		$this->add_link($locale->lang('back_to_forum'),BS_URL::get_topics_url($fid));
 		if($num == 1)
 		{
-			$murl = $url->get_url(
+			$murl = BS_URL::get_url(
 				'posts','&amp;'.BS_URL_FID.'='.$target_fid.'&amp;'.BS_URL_TID.'='.$moved_topic_ids[0]
 			);
 			$this->add_link($locale->lang('to_moved_thread'),$murl);

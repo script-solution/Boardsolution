@@ -77,8 +77,6 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 		$user = FWS_Props::get()->user();
 		$cfg = FWS_Props::get()->cfg();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// user online
 		$useronline = '';
 		$guests = 0;
@@ -132,7 +130,7 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 				}
 	
 				$time = strip_tags(FWS_Date::get_date($daten['date']));
-				$murl = $url->get_url('userdetails','&amp;'.BS_URL_ID.'='.$daten['user_id']);
+				$murl = BS_URL::get_url('userdetails','&amp;'.BS_URL_ID.'='.$daten['user_id']);
 				$name = $auth->get_colored_username(
 					$daten['user_id'],$daten['user_name'],$daten['user_group']
 				);
@@ -191,8 +189,6 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 		$auth = FWS_Props::get()->auth();
 		$cfg = FWS_Props::get()->cfg();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		$legend = '';
 		$groups = $cache->get_cache('user_groups');
 		foreach($groups as $gdata)
@@ -202,7 +198,7 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 				$gname = $auth->get_colored_groupname($gdata['id']);
 				if($cfg['enable_memberlist'] == 1)
 				{
-					$murl = $url->get_url(
+					$murl = BS_URL::get_url(
 						'memberlist',
 						'&amp;'.BS_URL_MS_GROUP.urlencode('[]').'='.$gdata['id']
 					);
@@ -216,7 +212,7 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 		// add moderator
 		if($cfg['enable_moderators'])
 		{
-			$murl = $url->get_url('memberlist','&amp;'.BS_URL_MS_MODS.'=1');
+			$murl = BS_URL::get_url('memberlist','&amp;'.BS_URL_MS_MODS.'=1');
 			$legend .= '<a href="'.$murl.'"><span style="color: #'.$cfg['mod_color'].';">';
 			$legend .= $locale->lang('moderators').'</span></a>';
 		}

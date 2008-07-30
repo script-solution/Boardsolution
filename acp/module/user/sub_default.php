@@ -46,8 +46,6 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 		$cache = FWS_Props::get()->cache();
 		$auth = FWS_Props::get()->auth();
 		$user = FWS_Props::get()->user();
-		$url = FWS_Props::get()->url();
-
 		// reset search?
 		if($input->get_var('reset','get',FWS_Input::INTEGER) == 1)
 		{
@@ -65,7 +63,7 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 			$ad = $input->get_var('ad','get',FWS_Input::STRING);
 			
 			$ids = implode(',',$delete);
-			$base_url = $url->get_acpmod_url(0,'&order='.$order.'&ad='.$ad.'&site='.$site,'&');
+			$base_url = BS_URL::get_acpmod_url(0,'&order='.$order.'&ad='.$ad.'&site='.$site,'&');
 			if($type == 'block')
 			{
 				$yes_url = $base_url.'&action=default&at='.BS_ACP_ACTION_USER_BAN.'&ids='.$ids;
@@ -100,8 +98,8 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 		
 		$tpl->add_variables(array(
 			'is_searching' => $ids !== false,
-			'new_search_url' => $url->get_acpmod_url(0,'&amp;action=search'),
-			'change_search_url' => $url->get_acpmod_url(0,'&amp;action=search&amp;use_sess=1')
+			'new_search_url' => BS_URL::get_acpmod_url(0,'&amp;action=search'),
+			'change_search_url' => BS_URL::get_acpmod_url(0,'&amp;action=search&amp;use_sess=1')
 		));
 		
 		// use the ids or show all?
@@ -148,7 +146,7 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 		}
 		
 		$site = $input->get_var('site','get',FWS_Input::INTEGER);
-		$baseurl = $url->get_acpmod_url(0);
+		$baseurl = BS_URL::get_acpmod_url(0);
 		
 		$ad_images = '<a href="'.$baseurl.'&amp;order='.$order.'&amp;ad=ASC">';
 		$ad_images .= '<img src="acp/images/asc.gif" alt="ASC" /></a>'."\n";
@@ -187,7 +185,7 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 				$locale->lang('user_experience'),$data['posts'],$data['exppoints']
 			);
 			
-			$edit_url = $url->get_acpmod_url(
+			$edit_url = BS_URL::get_acpmod_url(
 				0,'&amp;order='.$order.'&amp;site='.$site.'&amp;ad='.$ad.'&amp;action=edit&amp;id='.$data['id']
 			);
 			

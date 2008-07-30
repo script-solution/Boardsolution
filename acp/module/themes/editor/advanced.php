@@ -26,14 +26,12 @@ final class BS_ACP_Module_Themes_Editor_Advanced extends BS_ACP_Module_Themes_Ed
 	{
 		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$file = $this->_theme.'/style.css';
 		$theme = $input->get_var('theme','get',FWS_Input::STRING);
 
 		$tpl->set_template('tpleditor_formular.htm');
 		$tpl->add_variables(array(
-			'target_url' => $url->get_acpmod_url(
+			'target_url' => BS_URL::get_acpmod_url(
 				0,'&amp;action=editor&amp;theme='.$theme.'&amp;mode=advanced'
 			),
 			'action_type' => BS_ACP_ACTION_THEME_EDITOR_ADVANCED_SAVE,

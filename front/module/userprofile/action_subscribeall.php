@@ -26,8 +26,6 @@ final class BS_Front_Action_userprofile_subscribeall extends BS_Front_Action_Bas
 		$functions = FWS_Props::get()->functions();
 		$forums = FWS_Props::get()->forums();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// is the user loggedin?
 		if($cfg['enable_email_notification'] == 0 || !$user->is_loggedin())
 			return 'Subscriptions are disabled or you are a guest';
@@ -74,7 +72,7 @@ final class BS_Front_Action_userprofile_subscribeall extends BS_Front_Action_Bas
 		
 		$this->set_action_performed(true);
 		$this->add_link(
-			$locale->lang('back'),$url->get_url('userprofile','&amp;'.BS_URL_LOC.'=forums')
+			$locale->lang('back'),BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=forums')
 		);
 
 		return '';

@@ -29,14 +29,13 @@ final class BS_Front_SubModule_userprofile_pmoverview extends BS_Front_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_DELETE_PMS,'deletepms');
 		$renderer->add_action(BS_ACTION_MARK_PMS_READ,'pmmarkread');
 		$renderer->add_action(BS_ACTION_MARK_PMS_UNREAD,'pmmarkunread');
 
-		$renderer->add_breadcrumb($locale->lang('overview'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmoverview'));
+		$renderer->add_breadcrumb($locale->lang('overview'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pmoverview'));
 	}
 	
 	/**

@@ -36,8 +36,6 @@ final class BS_Front_Search_Result_PMs extends FWS_Object implements BS_Front_Se
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
 		$user = FWS_Props::get()->user();
-		$url = FWS_Props::get()->url();
-
 		$img_pm_read = $user->get_theme_item_path('images/unread/pm_read.gif');
 		$img_pm_unread = $user->get_theme_item_path('images/unread/pm_unread.gif');
 
@@ -61,7 +59,7 @@ final class BS_Front_Search_Result_PMs extends FWS_Object implements BS_Front_Se
 		}
 
 		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
-		$murl = $url->get_url(
+		$murl = BS_URL::get_url(
 			0,'&'.BS_URL_LOC.'=pmsearch&'.BS_URL_ID.'='.$search->get_search_id()
 				.'&'.BS_URL_ORDER.'='.$order.'&'.BS_URL_AD.'='.$ad
 				.'&'.BS_URL_MODE.'='.$request->get_name(),'&'
@@ -139,7 +137,7 @@ final class BS_Front_Search_Result_PMs extends FWS_Object implements BS_Front_Se
 				'pm_title' => $title,
 				'complete_title' => $complete_title,
 				'date' => FWS_Date::get_date($data['pm_date']),
-				'details_link' => $url->get_url(
+				'details_link' => BS_URL::get_url(
 					0,'&amp;'.BS_URL_LOC.'=pmdetails&amp;'.BS_URL_ID.'='.$data['id'].$hl
 				),
 				'status_title' => $status_title,

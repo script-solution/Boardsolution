@@ -151,7 +151,6 @@ final class BS_EmailFactory extends FWS_Singleton
 		$locale = FWS_Props::get()->locale();
 		$cfg = FWS_Props::get()->cfg();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
 		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
@@ -160,7 +159,7 @@ final class BS_EmailFactory extends FWS_Singleton
 		$text = $tpl->parse_string(
 			$locale->lang('change_email_email_text'),
 			array(
-				'url' => $url->get_url(
+				'url' => BS_URL::get_url(
 					'conf_email','&'.BS_URL_ID.'='.$user_id.'&'.BS_URL_PID.'='.$user_key,'&',true
 				),
 				'email' => $user_email
@@ -183,7 +182,6 @@ final class BS_EmailFactory extends FWS_Singleton
 		$locale = FWS_Props::get()->locale();
 		$cfg = FWS_Props::get()->cfg();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
 		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
@@ -192,7 +190,7 @@ final class BS_EmailFactory extends FWS_Singleton
 		$text = $tpl->parse_string(
 			$locale->lang('pw_change_text'),
 			array(
-				'url' => $url->get_frontend_url(
+				'url' => BS_URL::get_frontend_url(
 					'&'.BS_URL_ACTION.'=change_password&'.BS_URL_ID.'='.$user_id.'&'.BS_URL_KW.'='.$user_key,
 					'&',false
 				)
@@ -215,7 +213,6 @@ final class BS_EmailFactory extends FWS_Singleton
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
 		$functions = FWS_Props::get()->functions();
 
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
@@ -229,7 +226,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			$locale->lang('account_activation_email_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'url' => $url->get_url(
+				'url' => BS_URL::get_url(
 					'activate','&'.BS_URL_ID.'='.$user_id.'&'.BS_URL_KW.'='.$user_key,'&',true
 				)
 			)
@@ -249,7 +246,6 @@ final class BS_EmailFactory extends FWS_Singleton
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
 		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
@@ -259,7 +255,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			$locale->lang('account_activated_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'board_url' => $url->get_frontend_url('','&',false)
+				'board_url' => BS_URL::get_frontend_url('','&',false)
 			)
 		);
 		
@@ -277,7 +273,6 @@ final class BS_EmailFactory extends FWS_Singleton
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
 		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
@@ -287,7 +282,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			$locale->lang('account_not_activated_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'board_url' => $url->get_frontend_url('','&',false)
+				'board_url' => BS_URL::get_frontend_url('','&',false)
 			)
 		);
 		
@@ -306,8 +301,6 @@ final class BS_EmailFactory extends FWS_Singleton
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
-
 		$locale->add_language_file('email',$functions->get_def_lang_folder());
 		
 		$subject = $locale->lang('account_reactivated_title');
@@ -315,7 +308,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			$locale->lang('account_reactivated_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'board_url' => $url->get_frontend_url('','&',false)
+				'board_url' => BS_URL::get_frontend_url('','&',false)
 			)
 		);
 		
@@ -333,7 +326,6 @@ final class BS_EmailFactory extends FWS_Singleton
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
 		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
@@ -343,7 +335,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			$locale->lang('account_deactivated_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'board_url' => $url->get_frontend_url('','&',false)
+				'board_url' => BS_URL::get_frontend_url('','&',false)
 			)
 		);
 		
@@ -361,7 +353,6 @@ final class BS_EmailFactory extends FWS_Singleton
 		$locale = FWS_Props::get()->locale();
 		$cfg = FWS_Props::get()->cfg();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
 		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
@@ -371,7 +362,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			$locale->lang('new_pm_email_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'board_url' => $url->get_frontend_url('','&',false)
+				'board_url' => BS_URL::get_frontend_url('','&',false)
 			)
 		);
 		
@@ -394,13 +385,11 @@ final class BS_EmailFactory extends FWS_Singleton
 		$cfg = FWS_Props::get()->cfg();
 		$tpl = FWS_Props::get()->tpl();
 		$functions = FWS_Props::get()->functions();
-		$url = FWS_Props::get()->url();
-
 		$locale->add_language_file('email');
 
 		$murl = '';
 		if($cfg['account_activation'] == 'email')
-			$murl = $url->get_url('activate','&user_id='.$user_id.'&user_key='.$user_key,'&',true);
+			$murl = BS_URL::get_url('activate','&user_id='.$user_id.'&user_key='.$user_key,'&',true);
 		
 		$subject = sprintf(
 			$locale->lang('account_registration_email_title'),$cfg['forum_title']
@@ -430,7 +419,6 @@ final class BS_EmailFactory extends FWS_Singleton
 		$locale = FWS_Props::get()->locale();
 		$cfg = FWS_Props::get()->cfg();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
 		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
@@ -444,7 +432,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			$locale->lang('newaccount_email_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'board_url' => $url->get_frontend_url('','&',false)
+				'board_url' => BS_URL::get_frontend_url('','&',false)
 			)
 		);
 		
@@ -492,7 +480,6 @@ final class BS_EmailFactory extends FWS_Singleton
 		$locale = FWS_Props::get()->locale();
 		$cfg = FWS_Props::get()->cfg();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
 		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
@@ -504,7 +491,7 @@ final class BS_EmailFactory extends FWS_Singleton
 				'percent' => round(100 / ($cfg['pm_max_inbox'] / $current),1),
 				'current' => $current,
 				'max' => $cfg['pm_max_inbox'],
-				'board_url' => $url->get_frontend_url('','&',false)
+				'board_url' => BS_URL::get_frontend_url('','&',false)
 			)
 		);
 		
@@ -532,11 +519,9 @@ final class BS_EmailFactory extends FWS_Singleton
 		$locale = FWS_Props::get()->locale();
 		$cfg = FWS_Props::get()->cfg();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$locale->add_language_file('email');
 		
-		$murl = $url->get_frontend_url(
+		$murl = BS_URL::get_frontend_url(
 			'&'.BS_URL_ACTION.'=posts&'.BS_URL_FID.'='.$fid
 				.'&'.BS_URL_TID.'='.$tid,'&',false
 		);

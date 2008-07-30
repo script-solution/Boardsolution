@@ -44,8 +44,6 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		if($input->isset_var('delete','post'))
 		{
 			$site = $input->get_var('site','get',FWS_Input::ID);
@@ -57,10 +55,10 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
-				$url->get_acpmod_url(0,
+				BS_URL::get_acpmod_url(0,
 					'&amp;at='.BS_ACP_ACTION_DELETE_SMILEYS.'&amp;ids='.implode(',',$ids).'&amp;site='.$site
 				),
-				$url->get_acpmod_url(0,'&amp;site='.$site)
+				BS_URL::get_acpmod_url(0,'&amp;site='.$site)
 			);
 		}
 		
@@ -91,8 +89,8 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 		unset($hidden['at']);
 		$tpl->add_variables(array(
 			'page' => $page,
-			'import_url' => $url->get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_IMPORT_SMILEYS),
-			'correct_sort_url' => $url->get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_RESORT_SMILEYS),
+			'import_url' => BS_URL::get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_IMPORT_SMILEYS),
+			'correct_sort_url' => BS_URL::get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_RESORT_SMILEYS),
 			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
@@ -119,7 +117,7 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 					if($i > 0)
 					{
 						$prev = &$rows[$i - 1];
-						$switch_up_url = $url->get_acpmod_url(
+						$switch_up_url = BS_URL::get_acpmod_url(
 							0,'&amp;at='.BS_ACP_ACTION_SWITCH_SMILEYS.'&amp;ids='.$data['id'].','.$prev['id']
 								.'&amp;site='.$page
 						);
@@ -129,7 +127,7 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 					if($i < $num - 1)
 					{
 						$next = &$rows[$i + 1];
-						$switch_down_url = $url->get_acpmod_url(
+						$switch_down_url = BS_URL::get_acpmod_url(
 							0,'&amp;at='.BS_ACP_ACTION_SWITCH_SMILEYS.'&amp;ids='.$next['id'].','.$data['id']
 								.'&amp;site='.$page
 						);
@@ -154,7 +152,7 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 		$tpl->add_array('smileys',$smileys);
 		$tpl->add_variables(array('total' => $c));
 		
-		$murl = $url->get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
+		$murl = BS_URL::get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
 		$functions->add_pagination($pagination,$murl);
 	}
 	

@@ -25,8 +25,6 @@ final class BS_Front_Action_delete_topics_default extends BS_Front_Action_Base
 		$forums = FWS_Props::get()->forums();
 		$auth = FWS_Props::get()->auth();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
@@ -67,7 +65,7 @@ final class BS_Front_Action_delete_topics_default extends BS_Front_Action_Base
 		$deltopics->perform_action();
 
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('back_to_forum'),$url->get_topics_url($fid));
+		$this->add_link($locale->lang('back_to_forum'),BS_URL::get_topics_url($fid));
 
 		return '';
 	}

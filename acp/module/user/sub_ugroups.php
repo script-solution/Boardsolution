@@ -37,7 +37,6 @@ final class BS_ACP_SubModule_user_ugroups extends BS_ACP_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 
 		$this->_ids = $input->get_var('delete','post');
@@ -51,7 +50,7 @@ final class BS_ACP_SubModule_user_ugroups extends BS_ACP_SubModule
 
 		$renderer->add_breadcrumb(
 			$locale->lang('edit_groups'),
-			$url->get_acpmod_url(0,'&amp;action=ugroups&amp;ids='.implode(',',$this->_ids))
+			BS_URL::get_acpmod_url(0,'&amp;action=ugroups&amp;ids='.implode(',',$this->_ids))
 		);
 	}
 	
@@ -62,7 +61,6 @@ final class BS_ACP_SubModule_user_ugroups extends BS_ACP_SubModule
 	{
 		$cache = FWS_Props::get()->cache();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
 		$auth = FWS_Props::get()->auth();
 		$user = FWS_Props::get()->user();
 
@@ -91,7 +89,7 @@ final class BS_ACP_SubModule_user_ugroups extends BS_ACP_SubModule
 			'groups' => $group_options,
 			'maingroups' => $maingroups,
 			'action_type' => BS_ACP_ACTION_USER_EDIT_UGROUPS,
-			'target_url' => $url->get_acpmod_url(0,'&amp;action=ugroups')
+			'target_url' => BS_URL::get_acpmod_url(0,'&amp;action=ugroups')
 		));
 		
 		$this->request_formular();
@@ -122,7 +120,7 @@ final class BS_ACP_SubModule_user_ugroups extends BS_ACP_SubModule
 
 		$tpl->add_variables(array(
 			'user' => $users,
-			'back_url' => $url->get_acpmod_url()
+			'back_url' => BS_URL::get_acpmod_url()
 		));
 	}
 }

@@ -103,8 +103,6 @@ final class BS_PostingUtils extends FWS_Singleton
 	{
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		$show_quote = $show_quote && BS_PostingUtils::get_instance()->get_message_option('enable_bbcode');
 	
 		$tpl->set_template('inc_message_review.htm');
@@ -114,7 +112,7 @@ final class BS_PostingUtils extends FWS_Singleton
 			'show_quote' => $show_quote,
 			'field_id' => 'bbcode_area'.$number,
 			'number' => $number,
-			'request_url' => $url->get_url('ajax_quote','&id=%d%&type=post','&'),
+			'request_url' => BS_URL::get_url('ajax_quote','&id=%d%&type=post','&'),
 			'topic_title' => $review_title.': "'.$topic_data['name'].'"',
 			'limit_height' => false
 		));
@@ -394,7 +392,6 @@ final class BS_PostingUtils extends FWS_Singleton
 	{
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
 
@@ -438,7 +435,7 @@ final class BS_PostingUtils extends FWS_Singleton
 	    {
 	      $attachment = $attachments[$post_data['bid']][$i];
 	      $ext = FWS_FileUtils::get_extension($attachment['attachment_path']);
-	      $attachment_url = $url->get_url('download','&amp;'.BS_URL_ID.'='.$attachment['id']);
+	      $attachment_url = BS_URL::get_url('download','&amp;'.BS_URL_ID.'='.$attachment['id']);
 				$image_url = '';
 				$image_title = '';
 	
@@ -452,7 +449,7 @@ final class BS_PostingUtils extends FWS_Singleton
 	      	$params .= $att_width.'&amp;height='.$att_height;
 	        $params .= '&amp;method='.$cfg['attachments_images_resize_method'];
 	        
-	      	$image_url = $url->get_url('thumbnail',$params);
+	      	$image_url = BS_URL::get_url('thumbnail',$params);
 	        $image_title = sprintf($locale->lang('download_image'),
 	        	basename($attachment['attachment_path']));
 	      }
@@ -541,13 +538,11 @@ final class BS_PostingUtils extends FWS_Singleton
 	public function get_experience_diagram($exppoints,$rank_data,$user_id)
 	{
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
-
 		$user_stats = '';
 		if($cfg['post_stats_type'] != 'disabled')
 		{
-			$img_url = $url->get_url('user_experience','&amp;'.BS_URL_ID.'='.$user_id);
-			$faq_url = $url->get_url('faq').'#f_0';
+			$img_url = BS_URL::get_url('user_experience','&amp;'.BS_URL_ID.'='.$user_id);
+			$faq_url = BS_URL::get_url('faq').'#f_0';
 			
 			$user_stats = '<a href="'.$faq_url.'" style="cursor: help;">';
 			$user_stats .= '<img src="'.$img_url.'" alt="" /></a>';

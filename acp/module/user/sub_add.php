@@ -29,11 +29,10 @@ final class BS_ACP_SubModule_user_add extends BS_ACP_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_USER_ADD,'add');
-		$renderer->add_breadcrumb($locale->lang('register_user'),$url->get_acpmod_url(0,'&amp;action=add'));
+		$renderer->add_breadcrumb($locale->lang('register_user'),BS_URL::get_acpmod_url(0,'&amp;action=add'));
 	}
 	
 	/**

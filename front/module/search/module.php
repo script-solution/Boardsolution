@@ -29,14 +29,13 @@ final class BS_Front_Module_search extends BS_Front_Module
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($cfg['enable_search'] == 1 && $auth->has_global_permission('view_search'));
 		
-		$renderer->add_breadcrumb($locale->lang('search'),$url->get_url('search'));
+		$renderer->add_breadcrumb($locale->lang('search'),BS_URL::get_url('search'));
 	}
 	
 	/**
@@ -47,8 +46,6 @@ final class BS_Front_Module_search extends BS_Front_Module
 		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// display the search-form
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$modes = array('default','user_posts','user_topics','topic','similar_topics');
@@ -150,13 +147,13 @@ final class BS_Front_Module_search extends BS_Front_Module
 				'action_param' => BS_URL_ACTION,
 				'search_explain_keyword' => sprintf(
 					$locale->lang('search_explain_keyword'),
-					$url->get_url('faq').'#f_9',
+					BS_URL::get_url('faq').'#f_9',
 					BS_SEARCH_MIN_KEYWORD_LEN
 				),
 				'search_explain_user' => sprintf(
-					$locale->lang('search_explain_user'),$url->get_url('faq').'#f_9'
+					$locale->lang('search_explain_user'),BS_URL::get_url('faq').'#f_9'
 				),
-				'target_url' => $url->get_url(0),
+				'target_url' => BS_URL::get_url(0),
 				'keyword' => $keyword,
 				'keyword_mode_options' => $keyword_mode_options,
 				'keyword_mode' => 'and',

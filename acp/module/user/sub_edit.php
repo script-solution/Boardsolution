@@ -30,7 +30,6 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_USER_EDIT,'edit');
@@ -38,7 +37,7 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		$id = $input->get_var('id','get',FWS_Input::ID);
 		$renderer->add_breadcrumb(
 			$locale->lang('edit_user'),
-			$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
+			BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
 		);
 	}
 	
@@ -52,8 +51,6 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		$tpl = FWS_Props::get()->tpl();
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
 		{
@@ -80,7 +77,7 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		$ad = $input->correct_var('ad','get',FWS_Input::STRING,array('ASC','DESC'),'DESC');
 		$site = $input->get_var('site','get',FWS_Input::INTEGER);
 
-		$base_url = $url->get_acpmod_url(0,'&amp;order='.$order.'&amp;ad='.$ad.'&amp;site='.$site);
+		$base_url = BS_URL::get_acpmod_url(0,'&amp;order='.$order.'&amp;ad='.$ad.'&amp;site='.$site);
 		
 		$murl = $base_url.'&amp;action=edit&amp;id='.$id;
 		$back_url = $base_url;

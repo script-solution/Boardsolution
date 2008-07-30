@@ -22,8 +22,6 @@ final class BS_Tasks_email_notification extends FWS_Tasks_Base
 	public function run()
 	{
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
-
 		// can we stop here?
 		if($cfg['enable_email_notification'] == 0)
 			return;
@@ -58,7 +56,7 @@ final class BS_Tasks_email_notification extends FWS_Tasks_Base
 		{
 			foreach(BS_DAO::get_posts()->get_posts_for_email($post_ids) as $data)
 			{
-				$murl = $url->get_frontend_url(
+				$murl = BS_URL::get_frontend_url(
 					'&'.BS_URL_ACTION.'=posts&'.BS_URL_FID.'='.$data['rubrikid']
 						.'&'.BS_URL_TID.'='.$data['threadid'],
 					'&',false

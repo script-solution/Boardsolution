@@ -30,7 +30,6 @@ final class BS_ACP_SubModule_tasks_edit extends BS_ACP_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_EDIT_TASK,array('edit','edit'));
@@ -38,7 +37,7 @@ final class BS_ACP_SubModule_tasks_edit extends BS_ACP_SubModule
 		$id = $input->get_var('id','get',FWS_Input::ID);
 		$renderer->add_breadcrumb(
 			$locale->lang('edit_task'),
-			$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
+			BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
 		);
 	}
 	
@@ -51,8 +50,6 @@ final class BS_ACP_SubModule_tasks_edit extends BS_ACP_SubModule
 		$cache = FWS_Props::get()->cache();
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
 		{
@@ -81,7 +78,7 @@ final class BS_ACP_SubModule_tasks_edit extends BS_ACP_SubModule
 			'title' => $locale->lang('edit_task'),
 			'is_def' => $helper->is_default_task($data['task_file']),
 			'action_type' => BS_ACP_ACTION_EDIT_TASK,
-			'form_target' => $url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id),
+			'form_target' => BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id),
 			'default' => $data,
 			'interval_types' => $helper->get_interval_types()
 		));

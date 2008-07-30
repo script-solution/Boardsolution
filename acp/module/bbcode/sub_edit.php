@@ -30,7 +30,6 @@ final class BS_ACP_SubModule_bbcode_edit extends BS_ACP_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ADD_BBCODE,array('edit','add'));
@@ -38,12 +37,12 @@ final class BS_ACP_SubModule_bbcode_edit extends BS_ACP_SubModule
 
 		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
-			$renderer->add_breadcrumb($locale->lang('add_tag'),$url->get_acpmod_url(0,'&amp;action=edit'));
+			$renderer->add_breadcrumb($locale->lang('add_tag'),BS_URL::get_acpmod_url(0,'&amp;action=edit'));
 		else
 		{
 			$renderer->add_breadcrumb(
 				$locale->lang('edit_tag'),
-				$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
+				BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
 			);
 		}
 	}
@@ -56,8 +55,6 @@ final class BS_ACP_SubModule_bbcode_edit extends BS_ACP_SubModule
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
 		{
@@ -135,7 +132,7 @@ final class BS_ACP_SubModule_bbcode_edit extends BS_ACP_SubModule
 			'param_types' => $param_types,
 			'action_type' => $action_type,
 			'title' => $title,
-			'form_target' => $url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id.'&amp;site='.$site)
+			'form_target' => BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id.'&amp;site='.$site)
 		));
 	}
 }

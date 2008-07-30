@@ -132,7 +132,6 @@ final class BS_TopicUtils extends FWS_Singleton
 	public function get_selected_topics($topics)
 	{
 		$user = FWS_Props::get()->user();
-		$url = FWS_Props::get()->url();
 		$locale = FWS_Props::get()->locale();
 
 		$cache = array(
@@ -151,7 +150,7 @@ final class BS_TopicUtils extends FWS_Singleton
 
 			$topic_id = ($data['moved_tid'] > 0) ? $data['moved_tid'] : $data['id'];
 			$forum_id = ($data['moved_rid'] > 0) ? $data['moved_rid'] : $data['rubrikid'];
-			$murl = $url->get_posts_url($forum_id,$topic_id);
+			$murl = BS_URL::get_posts_url($forum_id,$topic_id);
 			
 			$topic_path = BS_ForumUtils::get_instance()->get_forum_path($data['rubrikid'],false);
 			$topic_path .= ' &raquo; <a href="'.$murl.'">';

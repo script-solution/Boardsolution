@@ -26,8 +26,6 @@ final class BS_Front_Action_calendar_deleteevent extends BS_Front_Action_Base
 		$user = FWS_Props::get()->user();
 		$auth = FWS_Props::get()->auth();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// check parameter
 		$id = $input->get_var(BS_URL_DEL,'get',FWS_Input::ID);
 		if($id == null)
@@ -53,7 +51,7 @@ final class BS_Front_Action_calendar_deleteevent extends BS_Front_Action_Base
 		// delete the event
 		BS_DAO::get_events()->delete_by_ids(array($id));
 
-		$this->add_link($locale->lang('back'),$url->get_url('calendar'));
+		$this->add_link($locale->lang('back'),BS_URL::get_url('calendar'));
 		$this->set_action_performed(true);
 
 		return '';

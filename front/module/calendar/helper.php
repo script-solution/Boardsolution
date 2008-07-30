@@ -387,8 +387,6 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 	 */
 	public function get_events_of($date,$max_name_len = 10,$max_events = 3)
 	{
-		$url = FWS_Props::get()->url();
-		
 		$birthdays = $this->get_birthdays();
 		$events = $this->get_events();
 		
@@ -453,13 +451,13 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 	
 				if($content['tid'])
 				{
-					$purl = $url->get_url(
+					$purl = BS_URL::get_url(
 						'posts','&amp;'.BS_URL_FID.'='.$content['rid'].'&amp;'.BS_URL_TID.'='.$content['tid']
 					);
 				}
 				else
 				{
-					$purl = $url->get_url(
+					$purl = BS_URL::get_url(
 						'calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$content['id']
 					);
 				}
@@ -481,7 +479,7 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 				FWS_String::substr($date,0,2),
 				$year
 			));
-			$curl = $url->get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_DAY.'='.$loc);
+			$curl = BS_URL::get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_DAY.'='.$loc);
 			$res['toomany'] = $curl;
 		}
 		

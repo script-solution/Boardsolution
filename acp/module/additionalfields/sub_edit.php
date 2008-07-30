@@ -30,7 +30,6 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_EDIT_ADDFIELD,'edit');
@@ -41,14 +40,14 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 		{
 			$renderer->add_breadcrumb(
 				$locale->lang('add_new_field'),
-				$url->get_acpmod_url(0,'&amp;action=add')
+				BS_URL::get_acpmod_url(0,'&amp;action=add')
 			);
 		}
 		else
 		{
 			$renderer->add_breadcrumb(
 				$locale->lang('edit_field'),
-				$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
+				BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
 			);
 		}
 	}
@@ -62,8 +61,6 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 		$cache = FWS_Props::get()->cache();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$helper = BS_ACP_Module_AdditionalFields_Helper::get_instance();
 		$id = $input->get_var('id','get',FWS_Input::ID);
 		$type = $id != null ? 'edit' : 'add';
@@ -103,7 +100,7 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 		if($type == 'edit')
 		{
 			$form_title = $locale->lang('edit_field');
-			$murl = $url->get_acpmod_url(
+			$murl = BS_URL::get_acpmod_url(
 				0,'&amp;action=edit&amp;id='.$id.'&amp;at='.BS_ACP_ACTION_EDIT_ADDFIELD
 			);
 			$submit_title = $locale->lang('save');
@@ -111,7 +108,7 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 		else
 		{
 			$form_title = $locale->lang('add_new_field');
-			$murl = $url->get_acpmod_url(0,'&amp;action=edit&amp;at='.BS_ACP_ACTION_ADD_ADDFIELD);
+			$murl = BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;at='.BS_ACP_ACTION_ADD_ADDFIELD);
 			$submit_title = $locale->lang('insert');
 		}
 		

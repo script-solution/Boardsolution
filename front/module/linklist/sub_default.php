@@ -45,8 +45,6 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 		$msgs = FWS_Props::get()->msgs();
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
-		$url = FWS_Props::get()->url();
-
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		
 		$num = BS_DAO::get_links()->get_count(1);
@@ -89,7 +87,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 					else
 						$murl = $data['link_url'];
 	
-					$redirect_url = $url->get_url('linklist_redirect','&amp;'.BS_URL_ID.'='.$data['id']);
+					$redirect_url = BS_URL::get_url('linklist_redirect','&amp;'.BS_URL_ID.'='.$data['id']);
 	
 					$links[] = array(
 						'id' => $data['id'],
@@ -108,7 +106,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 						),
 						'redirect_url' => $redirect_url,
 						'link_date' => FWS_Date::get_date($data['link_date'],false),
-						'details_url' => $url->get_url(0,'&amp;'.BS_URL_ID.'='.$data['id']).'#details',
+						'details_url' => BS_URL::get_url(0,'&amp;'.BS_URL_ID.'='.$data['id']).'#details',
 						'display' => ($id == $data['id']) ? 'block' : 'none'
 					);
 					
@@ -118,7 +116,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 				$tpl->add_array('links',$links,false);
 
 				$functions->add_pagination(
-					$pagination,$url->get_url('linklist','&amp;'.BS_URL_SITE.'={d}')
+					$pagination,BS_URL::get_url('linklist','&amp;'.BS_URL_SITE.'={d}')
 				);
 			}
 			else
@@ -129,7 +127,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 		
 		$tpl->add_variables(array(
 			'show_add_link' => $cfg['display_denied_options'] || $auth->has_global_permission('add_new_link'),
-			'add_link_url' => $url->get_url(0,'&amp;'.BS_URL_LOC.'=add')
+			'add_link_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=add')
 		));
 	}
 }

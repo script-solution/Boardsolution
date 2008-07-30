@@ -29,11 +29,10 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_robots_value('index,follow');
-		$renderer->add_breadcrumb($locale->lang('portal'),$url->get_portal_url());
+		$renderer->add_breadcrumb($locale->lang('portal'),BS_URL::get_portal_url());
 	}
 	
 	/**
@@ -43,7 +42,6 @@ final class BS_Front_Module_portal extends BS_Front_Module
 	{
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
-		$url = FWS_Props::get()->url();
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
 		$tpl = FWS_Props::get()->tpl();
@@ -71,7 +69,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 			if($cfg['display_denied_options'] ||
 					$auth->has_global_permission('view_online_locations'))
 			{
-				$user_locations = '<a href="'.$url->get_url('user_locations').'">';
+				$user_locations = '<a href="'.BS_URL::get_url('user_locations').'">';
 				$user_locations .= $online['online_total'].' '.$locale->lang('useronline').'</a>';
 			}
 			else
@@ -114,11 +112,11 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		$tpl->add_array('online',$online,false);
 		$tpl->add_variables(array(
 			'show_news' => $enable_news,
-			'forums_url' => $url->get_forums_url(),
-			'new_pm_url' => $url->get_url('userprofile','&amp;'.BS_URL_LOC.'=pmcompose'),
-			'profile_config_url' => $url->get_url('userprofile','&amp;'.BS_URL_LOC.'=pr_config'),
-			'rss20_feed' => $url->get_url('news_feed','&amp;'.BS_URL_MODE.'=rss20'),
-			'atom_feed' => $url->get_url('news_feed','&amp;'.BS_URL_MODE.'=atom'),
+			'forums_url' => BS_URL::get_forums_url(),
+			'new_pm_url' => BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=pmcompose'),
+			'profile_config_url' => BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=pr_config'),
+			'rss20_feed' => BS_URL::get_url('news_feed','&amp;'.BS_URL_MODE.'=rss20'),
+			'atom_feed' => BS_URL::get_url('news_feed','&amp;'.BS_URL_MODE.'=atom'),
 			'show_feeds' => $enable_news && $cfg['enable_news_feeds'],
 			'total_user_online' => $user_locations,
 			'view_useronline_list' => $view_useronline,
@@ -127,13 +125,13 @@ final class BS_Front_Module_portal extends BS_Front_Module
 			'lastlogin' => BS_Front_OnlineUtils::get_instance()->get_last_activity(),
 			'birthdays' => BS_Front_EventUtils::get_instance()->get_todays_birthdays(),
 			'events' => BS_Front_EventUtils::get_instance()->get_current_events(),
-			'current_topics_url' => $url->get_url('latest_topics'),
-			'calendar_url' => $url->get_url('calendar'),
-			'current_topics_url' => $url->get_url('latest_topics'),
+			'current_topics_url' => BS_URL::get_url('latest_topics'),
+			'calendar_url' => BS_URL::get_url('calendar'),
+			'current_topics_url' => BS_URL::get_url('latest_topics'),
 			'show_latest_topics' => $show_latest_topics_small,
 			'show_latest_topics_full' => !$enable_news &&
 				strpos($cfg['current_topic_loc'],'portal') !== false && $cfg['current_topic_enable'],
-			'team_url' => $url->get_url('team'),
+			'team_url' => BS_URL::get_url('team'),
 			'newest_member' => $functions->get_newest_member(),
 			'forums' => $nodes
 		));
@@ -142,7 +140,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 			$this->_add_latest_topics_small();
 		
 		$tpl->add_variables(array(
-			'search_url' => $url->get_url('search')
+			'search_url' => BS_URL::get_url('search')
 		));
 		
 		// mark the news read
@@ -197,9 +195,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 	{
 		$locale = FWS_Props::get()->locale();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
-
-		$murl = $url->get_url('latest_topics');
+		$murl = BS_URL::get_url('latest_topics');
 		$title = '<a href="'.$murl.'">'.$locale->lang('current_topics').'</a>';
 		
 		$num = $cfg['current_topic_num'];
@@ -221,7 +217,6 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		$user = FWS_Props::get()->user();
 		$cfg = FWS_Props::get()->cfg();
 		$unread = FWS_Props::get()->unread();
-		$url = FWS_Props::get()->url();
 		$tpl = FWS_Props::get()->tpl();
 
 		$cache = array(
@@ -243,13 +238,13 @@ final class BS_Front_Module_portal extends BS_Front_Module
 				$fup = $unread->get_first_unread_post($data['id']);
 				if($pagination->get_page_count() > 1)
 				{
-					$first_unread_url = $url->get_url(
+					$first_unread_url = BS_URL::get_url(
 						'redirect','&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'='.$fup
 					);
 				}
 				else
 				{
-					$first_unread_url = $url->get_url(
+					$first_unread_url = BS_URL::get_url(
 						'posts','&amp;'.BS_URL_FID.'='.$data['rubrikid'].'&amp;'.BS_URL_TID.'='.$data['id']
 						.'#b_'.$fup
 					);
@@ -258,7 +253,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		
 			// build topic-name
 			$topic_name = BS_TopicUtils::get_instance()->get_displayed_name($data['name']);
-			$posts_url = $url->get_posts_url($data['rubrikid'],$data['id'],'&amp;',1);
+			$posts_url = BS_URL::get_posts_url($data['rubrikid'],$data['id'],'&amp;',1);
 			
 			$topics[] = array(
 				'is_important' => $data['important'] == 1,
@@ -287,7 +282,6 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		$tpl = FWS_Props::get()->tpl();
 		$unread = FWS_Props::get()->unread();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$forums = FWS_Props::get()->forums();
 		$auth = FWS_Props::get()->auth();
 
@@ -356,7 +350,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 				// build comments-link
 				if($data['posts'] > 0)
 				{
-					$comments_url = $url->get_posts_url($data['rubrikid'],$data['threadid']);
+					$comments_url = BS_URL::get_posts_url($data['rubrikid'],$data['threadid']);
 					$comments = '<a href="'.$comments_url.'">';
 					$comments .= sprintf($locale->lang('xcomments'),$data['posts']).'</a>';
 				}
@@ -371,7 +365,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 					// everything ok, so show the link
 					else
 					{
-						$reply_url = $url->get_url('new_post','&amp;'.BS_URL_FID.'='.$data['rubrikid']
+						$reply_url = BS_URL::get_url('new_post','&amp;'.BS_URL_FID.'='.$data['rubrikid']
 							.'&amp;'.BS_URL_TID.'='.$data['threadid']);
 						$comments = '<a href="'.$reply_url.'">'.$locale->lang('new_comment').'</a>';
 					}
@@ -381,7 +375,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 				$news[] = array(
 					'news_title' => $data['name'],
 					'news_icon' => $news_icon,
-					'topic_url' => $url->get_posts_url($data['rubrikid'],$data['threadid']),
+					'topic_url' => BS_URL::get_posts_url($data['rubrikid'],$data['threadid']),
 					'username' => $username,
 					'date' => FWS_Date::get_date($data['post_time']),
 					'forum_path' => BS_ForumUtils::get_instance()->get_forum_path($data['rubrikid'],false),
@@ -404,8 +398,6 @@ final class BS_Front_Module_portal extends BS_Front_Module
 	private function _get_lastpost($data)
 	{
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
-
 		$pagination = new BS_Pagination($cfg['posts_per_page'],$data['posts'] + 1);
 		if($data['lastpost_id'] == 0)
 			return false;
@@ -414,7 +406,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		$site = 1;
 		if(BS_PostingUtils::get_instance()->get_posts_order() == 'ASC' && $pagination->get_page_count() > 1)
 			$site = $pagination->get_page_count();
-		$murl = $url->get_posts_url($data['rubrikid'],$data['id'],'&amp;',$site);
+		$murl = BS_URL::get_posts_url($data['rubrikid'],$data['id'],'&amp;',$site);
 
 		// determine username
 		if($data['lastpost_user'] != 0)

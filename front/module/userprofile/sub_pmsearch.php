@@ -29,12 +29,11 @@ final class BS_Front_SubModule_userprofile_pmsearch extends BS_Front_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_DELETE_PMS,'deletepms');
 
-		$renderer->add_breadcrumb($locale->lang('pm_search'),$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmsearch'));
+		$renderer->add_breadcrumb($locale->lang('pm_search'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pmsearch'));
 	}
 	
 	/**
@@ -44,7 +43,6 @@ final class BS_Front_SubModule_userprofile_pmsearch extends BS_Front_SubModule
 	{
 		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
 		$locale = FWS_Props::get()->locale();
 
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
@@ -89,7 +87,7 @@ final class BS_Front_SubModule_userprofile_pmsearch extends BS_Front_SubModule
 					if(!$site)
 						$site = 1;
 					$site_param = '&amp;'.BS_URL_SITE.'='.$site;
-					$back_url = $url->get_url(
+					$back_url = BS_URL::get_url(
 						0,'&amp;'.BS_URL_LOC.'=pmsearch&amp;'.BS_URL_ID.'='.$id.$site_param
 					);
 				
@@ -134,11 +132,11 @@ final class BS_Front_SubModule_userprofile_pmsearch extends BS_Front_SubModule
 				'action_param' => BS_URL_ACTION,
 				'search_explain_keyword' => sprintf(
 					$locale->lang('search_explain_keyword'),
-					$url->get_url('faq').'#f_9',
+					BS_URL::get_url('faq').'#f_9',
 					BS_SEARCH_MIN_KEYWORD_LEN
 				),
-				'search_explain_user' => sprintf($locale->lang('search_explain_user'),$url->get_url('faq').'#f_9'),
-				'target_url' => $url->get_url(0,'&amp;'.BS_URL_LOC.'=pmsearch'),
+				'search_explain_user' => sprintf($locale->lang('search_explain_user'),BS_URL::get_url('faq').'#f_9'),
+				'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pmsearch'),
 				'keyword_mode_combo' => $form->get_radio_boxes(
 					'keyword_mode',$keyword_mode_options,$keyword_mode_value
 				),

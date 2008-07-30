@@ -30,7 +30,6 @@ final class BS_Front_Module_print extends BS_Front_Module
 		
 		$locale = FWS_Props::get()->locale();
 		$input = FWS_Props::get()->input();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_template('popup_print.htm');
@@ -44,7 +43,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 		$this->add_loc_topic();
 		$renderer->add_breadcrumb(
 			$locale->lang('print_topic'),
-			$url->get_url('print','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid)
+			BS_URL::get_url('print','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid)
 		);
 	}
 	

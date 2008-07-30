@@ -30,7 +30,6 @@ final class BS_Front_Module_move_topics extends BS_Front_Module
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
 		
@@ -44,7 +43,7 @@ final class BS_Front_Module_move_topics extends BS_Front_Module
 		$this->add_loc_forum_path($fid);
 		$renderer->add_breadcrumb(
 			$locale->lang('move_topics'),
-			$url->get_url('move_topics','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids)
+			BS_URL::get_url('move_topics','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids)
 		);
 	}
 	
@@ -57,8 +56,6 @@ final class BS_Front_Module_move_topics extends BS_Front_Module
 		$auth = FWS_Props::get()->auth();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$id_str = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
 		if(!($ids = FWS_StringHelper::get_ids($id_str)))
 		{
@@ -116,7 +113,7 @@ final class BS_Front_Module_move_topics extends BS_Front_Module
 		
 		if(count($selected_topic_ids) == 1)
 		{
-			$murl = $url->get_url(
+			$murl = BS_URL::get_url(
 				0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id_str.'&amp;'.BS_URL_PID.'='
 			);
 			BS_PostingUtils::get_instance()->add_topic_review($last_data,true,$murl);
@@ -125,12 +122,12 @@ final class BS_Front_Module_move_topics extends BS_Front_Module
 		$target_forum = $form->get_input_value('target_forum',0);
 		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_MOVE_TOPICS,
-			'target_url' => $url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id_str),
+			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id_str),
 			'selected_topics' => $selected_topics,
 			'forum_combo' => BS_ForumUtils::get_instance()->get_recursive_forum_combo(
 				'target_forum',$target_forum,$fid
 			),
-			'back_url' => $url->get_topics_url($fid)
+			'back_url' => BS_URL::get_topics_url($fid)
 		));
 	}
 }

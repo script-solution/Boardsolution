@@ -25,8 +25,6 @@ final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 	public function run()
 	{
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$helper = BS_ACP_Module_TplEditor_Helper::get_instance();
 		$path = $helper->get_path();
 		$def_path = $helper->get_path_in_default();
@@ -77,7 +75,7 @@ final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 			if($is_dir)
 			{
 				$goto_path = ($path != '') ? $path.'/'.$item_name : $item_name;
-				$vurl = $url->get_acpmod_url(0,'&amp;action=view&amp;path='.$goto_path);
+				$vurl = BS_URL::get_acpmod_url(0,'&amp;action=view&amp;path='.$goto_path);
 				$edit_url = '';
 				$image = '';
 				$filesize = '';
@@ -87,7 +85,7 @@ final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 				$image = BS_ACP_Utils::get_instance()->get_file_image($file_path);
 				$filesize = number_format(filesize($file_path),0,',','.');
 				$vurl = '';
-				$edit_url = $url->get_acpmod_url(
+				$edit_url = BS_URL::get_acpmod_url(
 					0,'&amp;action=edit&amp;path='.$path.'&amp;file='.$item_name
 				);
 			}

@@ -30,7 +30,6 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
 		
@@ -48,7 +47,7 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 		$this->add_loc_topic();
 		$renderer->add_breadcrumb(
 			$locale->lang('newentry'),
-			$url->get_url('new_post','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
+			BS_URL::get_url('new_post','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
 				.'&amp;'.BS_URL_SITE.'='.$site)
 		);
 	}
@@ -64,8 +63,6 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 		$locale = FWS_Props::get()->locale();
 		$auth = FWS_Props::get()->auth();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		// check parameter
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
@@ -135,14 +132,14 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 		$form->add_form();
 		
 		$tpl->add_variables(array(
-			'target_url' => $url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
+			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
 				.'&amp;'.BS_URL_SITE.'='.$site),
 			'action_type' => BS_ACTION_REPLY,
-			'back_url' => $url->get_url('posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
+			'back_url' => BS_URL::get_url('posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
 				.'&amp;'.BS_URL_SITE.'='.$site)
 		));
 
-		$murl = $url->get_url(
+		$murl = BS_URL::get_url(
 			0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_SITE.'='.$site
 				.'&amp;'.BS_URL_PID.'='
 		);

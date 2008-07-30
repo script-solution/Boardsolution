@@ -22,19 +22,18 @@ final class BS_Front_SubModule_stats_timeline extends BS_Front_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param FWS_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_breadcrumb(
 			$locale->lang('stats_timeline'),
-			$url->get_url('stats','&amp;'.BS_URL_LOC.'=timeline')
+			BS_URL::get_url('stats','&amp;'.BS_URL_LOC.'=timeline')
 		);
 	}
 	

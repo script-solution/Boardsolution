@@ -58,7 +58,6 @@ final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 	public function add_pm_delete_message($back_url = null)
 	{
 		$input = FWS_Props::get()->input();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
@@ -84,7 +83,7 @@ final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 				{
 					$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 					$site_param = '&amp;'.BS_URL_SITE.'='.$site;
-					$back_url = $url->get_url(0,'&amp;'.BS_URL_LOC.'='.$loc.$site_param);
+					$back_url = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'='.$loc.$site_param);
 				}
 				else
 					$add = '&amp;'.BS_URL_ID.'='.$input->get_var(BS_URL_ID,'get');
@@ -101,11 +100,11 @@ final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 				$action_param = '&amp;'.BS_URL_AT.'='.BS_ACTION_DELETE_PMS.'&amp;';
 				$action_param .= BS_URL_DEL.'='.implode(',',$delete);
 				
-				$yes_url = $url->get_url(
+				$yes_url = BS_URL::get_url(
 					'userprofile','&amp;'.BS_URL_LOC.'='.$loc.$action_param.$site_param.$add,
 					'&amp;',true
 				);
-				$target_url = $url->get_url(
+				$target_url = BS_URL::get_url(
 					'redirect','&amp;'.BS_URL_LOC.'=del_pms&amp;'.BS_URL_ID.'='.implode(',',$delete).$site_param
 				);
 				
@@ -130,8 +129,6 @@ final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
-		$url = FWS_Props::get()->url();
-
 		$img_pm_read = $user->get_theme_item_path('images/unread/pm_read.gif');
 		$img_pm_unread = $user->get_theme_item_path('images/unread/pm_unread.gif');
 		
@@ -165,7 +162,7 @@ final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 
 		if($mode == 'overview')
 		{
-			$title_url = $url->get_url('userprofile','&amp;'.BS_URL_LOC.'=pm'.$type);
+			$title_url = BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=pm'.$type);
 			$title = '<a href="'.$title_url.'">'.$locale->lang('pm'.$type).'</a>';
 		}
 		else
@@ -173,7 +170,7 @@ final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 		
 		if($mode != 'overview' || $type == 'inbox')
 		{
-			$murl = $url->get_url('userprofile','&'.BS_URL_LOC.'='.$loc.'&'.BS_URL_SITE.'='.$site,'&');
+			$murl = BS_URL::get_url('userprofile','&'.BS_URL_LOC.'='.$loc.'&'.BS_URL_SITE.'='.$site,'&');
 			
 			$tpl->set_template('inc_userprofile_pmjs.htm');
 			$tpl->add_variables(array(
@@ -187,13 +184,13 @@ final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 
 		if($type == 'inbox')
 		{
-			$murl = $url->get_url(
+			$murl = BS_URL::get_url(
 				'redirect','&amp;'.BS_URL_LOC.'=pms&amp;'.BS_URL_MODE.'='.$loc.'&amp;'.BS_URL_SITE.'='.$site
 			);
 		}
 		else
 		{
-			$murl = $url->get_url(
+			$murl = BS_URL::get_url(
 				'userprofile','&amp;'.BS_URL_LOC.'='.$loc.'&amp;'.BS_URL_SITE.'='.$site
 			);
 		}
@@ -225,7 +222,7 @@ final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 				$reply = '';
 				if($type == 'inbox')
 				{
-					$reply_url = $url->get_url(
+					$reply_url = BS_URL::get_url(
 						'userprofile','&amp;'.BS_URL_LOC.'=pmcompose&amp;'.BS_URL_PID.'='.$data['id']
 					);
 					$reply = '<a href="'.$reply_url.'">'.$locale->lang('answer').'</a>';
@@ -253,7 +250,7 @@ final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 				'pm_title' => $title,
 				'complete_title' => $complete_title,
 				'date' => FWS_Date::get_date($data['pm_date']),
-				'details_link' => $url->get_url('userprofile','&amp;'.BS_URL_LOC.'=pmdetails&amp;'.BS_URL_ID.'='.$data['id']),
+				'details_link' => BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=pmdetails&amp;'.BS_URL_ID.'='.$data['id']),
 				'status_title' => $status_title,
 				'status_picture' => $status_picture,
 				'sender' => $sender,
@@ -266,7 +263,7 @@ final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 		
 		if($mode != 'overview')
 		{
-			$murl = $url->get_url('userprofile','&amp;'.BS_URL_LOC.'=pm'.$type.'&amp;'.BS_URL_SITE.'={d}');
+			$murl = BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=pm'.$type.'&amp;'.BS_URL_SITE.'={d}');
 			$functions->add_pagination($pagination,$murl);
 		}
 		

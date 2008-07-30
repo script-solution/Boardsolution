@@ -26,8 +26,6 @@ final class BS_Front_Action_userprofile_pmunbanuser extends BS_Front_Action_Base
 		$functions = FWS_Props::get()->functions();
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// check if we are allowed to unban a user
 		if(!$user->is_loggedin() || $cfg['enable_pms'] == 0 ||
 				$user->get_profile_val('allow_pms') == 0)
@@ -47,7 +45,7 @@ final class BS_Front_Action_userprofile_pmunbanuser extends BS_Front_Action_Base
 
 		$this->set_action_performed(true);
 		$this->add_link(
-			$locale->lang('back'),$url->get_url('userprofile','&amp;'.BS_URL_LOC.'=pmbanlist')
+			$locale->lang('back'),BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=pmbanlist')
 		);
 		
 		return '';

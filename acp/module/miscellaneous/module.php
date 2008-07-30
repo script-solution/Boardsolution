@@ -49,10 +49,9 @@ final class BS_ACP_Module_miscellaneous extends BS_ACP_SubModuleContainer
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 
-		$renderer->add_breadcrumb($locale->lang('acpmod_miscellaneous'),$url->get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_miscellaneous'),BS_URL::get_acpmod_url());
 		
 		// init submodule
 		$this->_sub->init($doc);

@@ -23,15 +23,13 @@ final class BS_Front_Feed_RSS20 extends BS_Front_Feed_Base
 	{
 		$cfg = FWS_Props::get()->cfg();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		$date = FWS_Date::get_formated_date('D, j M Y G:i:s T',time());
 		
 		$xml = '<?xml version="1.0" encoding="'.BS_RSS_FEED_ENCODING.'"?>'."\n";
 		$xml .= '<rss version="2.0">'."\n";
 		$xml .= '	<channel>'."\n";
 		$xml .= '		<title>'.$cfg['forum_title'].' :: '.$locale->lang('news').'</title>'."\n";
-		$xml .= '		<link>'.$url->get_frontend_url('','&amp;',false).'</link>'."\n";
+		$xml .= '		<link>'.BS_URL::get_frontend_url('','&amp;',false).'</link>'."\n";
 		$xml .= '		<description></description>'."\n";
 		$xml .= '		<pubDate>'.$date.'</pubDate>'."\n";
 		$xml .= "\n";

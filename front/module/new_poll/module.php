@@ -30,7 +30,6 @@ final class BS_Front_Module_new_poll extends BS_Front_Module
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$auth = FWS_Props::get()->auth();
 		$cfg = FWS_Props::get()->cfg();
 		$renderer = $doc->use_default_renderer();
@@ -45,7 +44,7 @@ final class BS_Front_Module_new_poll extends BS_Front_Module
 		$this->add_loc_forum_path($fid);
 		$renderer->add_breadcrumb(
 			$locale->lang('newpoll'),
-			$url->get_url('new_poll','&amp;'.BS_URL_FID.'='.$fid)
+			BS_URL::get_url('new_poll','&amp;'.BS_URL_FID.'='.$fid)
 		);
 	}
 	
@@ -69,7 +68,6 @@ final class BS_Front_Module_new_poll extends BS_Front_Module
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
 
@@ -105,11 +103,11 @@ final class BS_Front_Module_new_poll extends BS_Front_Module
 		
 		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_START_POLL,
-			'target_url' => $url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid).'#bottom',
+			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid).'#bottom',
 			'subscribe_topic_def' => $subt_def,
 			'enable_email_notification' => $cfg['enable_email_notification'] && $loggedin,
 			'important_allowed' => $auth->has_current_forum_perm(BS_MODE_MARK_TOPICS_IMPORTANT),
-			'back_url' => $url->get_topics_url($fid)
+			'back_url' => BS_URL::get_topics_url($fid)
 		));
 		
 		$pform = new BS_PostingForm($locale->lang('post').':');

@@ -37,14 +37,13 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($cfg['enable_calendar'] == 1 && $auth->has_global_permission('view_calendar'));
 		
-		$renderer->add_breadcrumb($locale->lang('calendar'),$url->get_url());
+		$renderer->add_breadcrumb($locale->lang('calendar'),BS_URL::get_url());
 		$renderer->set_template('calendar.htm');
 		$renderer->add_action(BS_ACTION_CAL_DEL_EVENT,'deleteevent');
 		
@@ -58,7 +57,6 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 	public function run()
 	{
 		$input = FWS_Props::get()->input();
-		$url = FWS_Props::get()->url();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
@@ -72,8 +70,9 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		// generate hidden-fields
 		$hidden_fields = array();
 		$hidden_fields[BS_URL_ACTION] = $input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING);
-		if(($sid = $url->get_splitted_session_id()) != 0)
+		if(($sid = BS_URL::get_session_id()) !== false)
 			$hidden_fields[$sid[0]] = $sid[1];
+		$url = new BS_URL();
 		$extern = $url->get_extern_vars();
 		$hidden_fields = array_merge($hidden_fields,$extern);
 	
@@ -89,7 +88,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 			'year_combo' => $form->get_combobox(BS_URL_YEAR,$years,$year),
 			'view_add_event' => $cfg['enable_calendar_events'] &&
 				($cfg['display_denied_options'] || $auth->has_global_permission('add_cal_event')),
-			'add_event_url' => $url->get_url(0,'&amp;'.BS_URL_LOC.'=editevent'),
+			'add_event_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=editevent'),
 			'submoduletpl' => $this->_sub->get_template()
 		));
 	
@@ -113,8 +112,6 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 	private function _get_month_small($year,$month)
 	{
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$helper = BS_Front_Module_Calendar_Helper::get_instance();
 		$monthdata = array();
 		
@@ -125,13 +122,13 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		$tpl->add_array('wd_short',$wd_short,false);
 		
 		$months = $helper->get_months();
-		$monthdata['url'] = $url->get_url('calendar','&amp;'.BS_URL_MONTH.'='.$month
+		$monthdata['url'] = BS_URL::get_url('calendar','&amp;'.BS_URL_MONTH.'='.$month
 			.'&amp;'.BS_URL_YEAR.'='.$year);
 		$monthdata['title'] = $months[abs($month)].' '.$year;
 		$monthdata['weeks'] = array();
 		
-		$daybaseurl = $url->get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_DAY.'=');
-		$weekbaseurl = $url->get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_WEEK.'=');
+		$daybaseurl = BS_URL::get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_DAY.'=');
+		$weekbaseurl = BS_URL::get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_WEEK.'=');
 		$today = FWS_Date::get_formated_date('jnY');
 		$month_offset = $helper->get_month_offset(FWS_Date::get_formated_date('w',$day_ts));
 		$day = 1;

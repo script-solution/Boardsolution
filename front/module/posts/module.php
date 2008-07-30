@@ -59,7 +59,6 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$forums = FWS_Props::get()->forums();
 		$functions = FWS_Props::get()->functions();
 		$unread = FWS_Props::get()->unread();
-		$url = FWS_Props::get()->url();
 		$doc = FWS_Props::get()->doc();
 
 		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
@@ -115,7 +114,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		);
 
 		$pagination = new BS_Pagination($cfg['posts_per_page'],$topic_data['posts'] + 1);
-		$purl = $url->get_url(
+		$purl = BS_URL::get_url(
 			'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_SITE.'={d}'
 		);
 
@@ -154,7 +153,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 			'threadname_ins' => $topic_data['name'],
 			'show_poll' => $topic_data['type'] > 0,
 			'show_event' => $topic_data['type'] == -1,
-			'quoteLink' => $url->get_url(
+			'quoteLink' => BS_URL::get_url(
 	    	'new_post','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
 					.'&amp;'.BS_URL_SITE.'='.$site.'&amp;'.BS_URL_PID.'='
 	    )
@@ -236,7 +235,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 
 		// show page split
 		$highlight = ($hl !== null) ? '&amp;'.BS_URL_HL.'='.urlencode($hl) : '';
-		$purl = $url->get_url(
+		$purl = BS_URL::get_url(
 			0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.$highlight.'&amp;'.BS_URL_SITE.'={d}'
 		);
 		$functions->add_pagination($pagination,$purl);
@@ -290,7 +289,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 
 		if($cfg['display_similar_topics'] == 1)
 		{
-			$current_url = $url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid
+			$current_url = BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid
 				.'&amp;'.BS_URL_TID.'='.$tid.$highlight);
 			BS_Front_TopicFactory::get_instance()->add_similar_topics(
 				$topic_data['name'],$topic_data['id'],$current_url
@@ -317,8 +316,6 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$site_add = $site != null ? '&amp;'.BS_URL_SITE.'='.$site : '';
 		
 		$display_reply = $allow_posts &&
@@ -327,7 +324,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	
 		$tpl->add_variables(array(
 			'display_reply' => $display_reply,
-			'reply_url' => $url->get_url(
+			'reply_url' => BS_URL::get_url(
 				'new_post','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.$site_add
 			)
 		));
@@ -345,8 +342,6 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$user = FWS_Props::get()->user();
 		$forums = FWS_Props::get()->forums();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		$display_subscribe = ($cfg['display_denied_options'] || $user->is_loggedin()) &&
 			$cfg['enable_email_notification'] && !$topic_data['thread_closed'] &&
@@ -354,7 +349,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	
 		$tpl->add_variables(array(
 			'enable_email_notification' => $display_subscribe,
-			'print_url' => $url->get_url('print','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid)
+			'print_url' => BS_URL::get_url('print','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid)
 		));
 	}
 	
@@ -364,7 +359,6 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	private function _add_poll()
 	{
 		$input = FWS_Props::get()->input();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$tpl = FWS_Props::get()->tpl();
 
@@ -373,10 +367,10 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 	
 		$user_voted = BS_UserUtils::get_instance()->user_voted_for_poll($topic_data['type']);
-		$result_url = $url->get_url(
+		$result_url = BS_URL::get_url(
 			0,'&amp;'.BS_URL_FID."=".$fid."&amp;".BS_URL_TID."=".$tid."&amp;".BS_URL_MODE."=results"
 		);
-		$vote_url = $url->get_posts_url($fid,$tid);
+		$vote_url = BS_URL::get_posts_url($fid,$tid);
 	
 		$show_results = !$user->is_loggedin() ||
 			$input->get_var(BS_URL_MODE,'get',FWS_Input::STRING) == 'results' || $user_voted ||
@@ -384,7 +378,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		
 		$tpl->set_template('inc_poll.htm');
 		$tpl->add_variables(array(
-			'vote_action' => $url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid),
+			'vote_action' => BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid),
 			'action_type' => BS_ACTION_VOTE
 		));
 		

@@ -34,7 +34,6 @@ final class BS_ACP_Menu extends FWS_Singleton
 	 */
 	public function get_menu_items()
 	{
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 
 		// All available items. In the following form:
@@ -209,7 +208,7 @@ final class BS_ACP_Menu extends FWS_Singleton
 					),
 					'back_to_frontend' => array(
 						'title' => 'back_to_frontend',
-						'url' => $url->get_frontend_url(),
+						'url' => BS_URL::get_frontend_url(),
 						'access' => 'all',
 						'frame' => 'document',
 					),

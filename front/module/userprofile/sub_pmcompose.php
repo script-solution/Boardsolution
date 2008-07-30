@@ -29,7 +29,6 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$input = FWS_Props::get()->input();
 		$renderer = $doc->use_default_renderer();
 		
@@ -41,7 +40,7 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		$pid = ($pid != null) ? '&amp;'.BS_URL_PID.'='.$pid : '';
 		$renderer->add_breadcrumb(
 			$locale->lang('newpm'),
-			$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmcompose'.$id.$pid)
+			BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pmcompose'.$id.$pid)
 		);
 	}
 	
@@ -55,8 +54,6 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		$locale = FWS_Props::get()->locale();
 		$msgs = FWS_Props::get()->msgs();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$helper = BS_Front_Module_UserProfile_Helper::get_instance();
 		if($helper->get_pm_permission() < 1)
 		{
@@ -147,10 +144,10 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		$tpl->add_variables(array(
 			'action_param' => BS_URL_ACTION,
 			'action_type' => BS_ACTION_SEND_PM,
-			'target_url' => $url->get_url('userprofile','&amp;'.BS_URL_LOC.'=pmcompose'.$target_add),
+			'target_url' => BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=pmcompose'.$target_add),
 			'receivers' => $receiver != null ? $receiver : array(),
 			'receiver_num' => $receiver != null && is_array($receiver) && count($receiver),
-			'user_search_url' => $url->get_url('user_search'),
+			'user_search_url' => BS_URL::get_url('user_search'),
 			'title_value' => $form->get_input_value('pm_title',$default_title)
 		));
 	}
@@ -253,7 +250,6 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 	private function _add_pm_review($user_id,$user_name)
 	{
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
 
@@ -289,7 +285,7 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 			'number' => 1,
 			'show_quote' => true,
 			'field_id' => 'bbcode_area1',
-			'request_url' => $url->get_url('ajax_quote','&id=%d%&type=pm','&'),
+			'request_url' => BS_URL::get_url('ajax_quote','&id=%d%&type=pm','&'),
 			'topic_title' => sprintf($locale->lang('pm_review'),BS_PM_REVIEW_MESSAGE_COUNT,$user_name),
 			'limit_height' => false
 		));

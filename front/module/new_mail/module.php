@@ -30,7 +30,6 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$auth = FWS_Props::get()->auth();
 		$cfg = FWS_Props::get()->cfg();
 		$renderer = $doc->use_default_renderer();
@@ -42,7 +41,7 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$renderer->add_breadcrumb(
 			$locale->lang('email'),
-			$url->get_url('new_mail','&amp;'.BS_URL_ID.'='.$id)
+			BS_URL::get_url('new_mail','&amp;'.BS_URL_ID.'='.$id)
 		);
 	}
 	
@@ -65,8 +64,6 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		// check if the id is valid
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		if($id == null)
@@ -113,7 +110,7 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 		);
 		
 		$tpl->add_variables(array(
-			'target_url' => $url->get_url('new_mail','&amp;'.BS_URL_ID.'='.$id),
+			'target_url' => BS_URL::get_url('new_mail','&amp;'.BS_URL_ID.'='.$id),
 			'receiver' => BS_UserUtils::get_instance()->get_link($id,$data['user_name'],$data['user_group']),
 			'action_type' => BS_ACTION_SEND_EMAIL,
 			'content_type_options' => $content_type_options

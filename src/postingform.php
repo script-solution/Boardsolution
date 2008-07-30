@@ -276,8 +276,6 @@ final class BS_PostingForm extends FWS_Object
 		$cfg = FWS_Props::get()->cfg();
 		$doc = FWS_Props::get()->doc();
 		$functions = FWS_Props::get()->functions();
-		$url = FWS_Props::get()->url();
-
 		$options = BS_PostingUtils::get_instance()->get_message_options($this->_type);
 	
 		// instantiate form-var-helper?
@@ -350,7 +348,7 @@ final class BS_PostingForm extends FWS_Object
 				'user_name_value' => $this->_form->get_input_value('user_name'),
 				'user_maxlength' => max(10,min(30,$cfg['profile_max_user_len'])),
 				'email_value' => $this->_form->get_input_value('email_adr'),
-				'security_code_img' => $url->get_url('security_code'),
+				'security_code_img' => BS_URL::get_url('security_code'),
 				'enable_security_code' => $cfg['use_captcha_for_guests'],
 				'sec_code_field' => $sec_code_field
 			));
@@ -359,7 +357,7 @@ final class BS_PostingForm extends FWS_Object
 		if(defined('BS_ACP'))
 			$murl = $functions->get_board_file(true).BS_URL_ACTION.'=faq#f_11';
 		else
-			$murl = $url->get_url('faq').'#f_11';
+			$murl = BS_URL::get_url('faq').'#f_11';
 		
 		if($options['enable_bbcode'])
 		{
@@ -394,7 +392,7 @@ final class BS_PostingForm extends FWS_Object
 		$tpl_bbcode_mode = $this->_form->get_input_value('bbcode_mode_'.self::$number,$bbcode_mode);
 		
 		$tpl->add_variables(array(
-			'get_post_form_url' => $url->get_url(
+			'get_post_form_url' => BS_URL::get_url(
 				'ajax_get_postform','&type='.$this->_type.'&mode=%s%&height='.$this->_textarea_height,'&'
 			),
 			'number' => self::$number,
@@ -494,8 +492,6 @@ final class BS_PostingForm extends FWS_Object
 	 */
 	private function _get_smileys_for_post()
 	{
-		$url = FWS_Props::get()->url();
-
 		$res = array(
 			'smileys' => array()
 		);
@@ -520,7 +516,7 @@ final class BS_PostingForm extends FWS_Object
 		
 		$total = count($smileys);
 		$res['more_smileys'] = $total > $base_num;
-		$res['smiley_popup_url'] = $url->get_url('smileys','&amp;'.BS_URL_ID.'='.self::$number);
+		$res['smiley_popup_url'] = BS_URL::get_url('smileys','&amp;'.BS_URL_ID.'='.self::$number);
 		$res['smiley_popup_height'] = $total * 28 + 120;
 	
 		return $res;

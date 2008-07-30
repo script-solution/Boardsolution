@@ -29,7 +29,6 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 		$locale = FWS_Props::get()->locale();
 		$input = FWS_Props::get()->input();
 		$cache = FWS_Props::get()->cache();
-		$url = FWS_Props::get()->url();
 		$sessions = FWS_Props::get()->sessions();
 		$user = FWS_Props::get()->user();
 		$auth = FWS_Props::get()->auth();
@@ -105,7 +104,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 			$nau_num = BS_DAO::get_user()->get_user_count(0,-1);
 			if($nau_num > 0)
 				$nau_num = '<span style="font-weight: bold; color: #FF0000;">'.$nau_num.'</span>';
-			$uactivate_url = $url->get_acpmod_url('useractivation');
+			$uactivate_url = BS_URL::get_acpmod_url('useractivation');
 			$tasks[] = array(
 				'name' => $locale->lang('not_activated_user'),
 				'detail' => sprintf(
@@ -120,7 +119,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 			$nal_num = BS_DAO::get_links()->get_count(0);
 			if($nal_num > 0)
 				$nal_num = '<span style="font-weight: bold; color: #FF0000;">'.$nal_num.'</span>';
-			$lactivate_url = $url->get_acpmod_url('linklist');
+			$lactivate_url = BS_URL::get_acpmod_url('linklist');
 			$tasks[] = array(
 				'name' => $locale->lang('not_activated_links'),
 				'detail' => sprintf(
@@ -211,7 +210,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 			'upload_max_filesize' => @ini_get('upload_max_filesize'),
 			'file_uploads' => $this->_get_php_flag('file_uploads'),
 			'stats' => $stats,
-			'phpinfo_url' => $url->get_acpmod_url('phpinfo')
+			'phpinfo_url' => BS_URL::get_acpmod_url('phpinfo')
 		));
 	}
 

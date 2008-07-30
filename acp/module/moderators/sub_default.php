@@ -38,7 +38,6 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 	 */
 	public function run()
 	{
-		$url = FWS_Props::get()->url();
 		$tpl = FWS_Props::get()->tpl();
 		$msgs = FWS_Props::get()->msgs();
 		$locale = FWS_Props::get()->locale();
@@ -49,11 +48,11 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 		$num = count($nodes);
 		$tplforums = array();
 		
-		$hiddenfields = $url->get_acpmod_comps();
+		$hiddenfields = BS_URL::get_acpmod_comps();
 		$hiddenfields['action'] = 'edituser';
 		
 		$tpl->add_variables(array(
-			'search_url' => $url->get_acpmod_url('usersearch','&comboid=user_','&'),
+			'search_url' => BS_URL::get_acpmod_url('usersearch','&comboid=user_','&'),
 			'action_param' => BS_URL_ACTION,
 			'hiddenfields' => $hiddenfields
 		));
@@ -94,7 +93,7 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 						foreach($forum_mods as $mdata)
 						{
 							$moderators .= $mdata['user_name'];
-							$del_url = $url->get_acpmod_url(
+							$del_url = BS_URL::get_acpmod_url(
 								0,'&amp;at='.BS_ACP_ACTION_REMOVE_MODERATORS.'&amp;f='.$data->get_id()
 								 .'&amp;uid='.$mdata['user_id']
 							);

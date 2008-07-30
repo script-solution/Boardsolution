@@ -30,7 +30,6 @@ final class BS_ACP_SubModule_themes_editor extends BS_ACP_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 
 		// hack which changes the action-type if we want to add an attribute instead of saving the form
@@ -49,7 +48,7 @@ final class BS_ACP_SubModule_themes_editor extends BS_ACP_SubModule
 		$renderer->add_breadcrumb($theme,'');
 		$renderer->add_breadcrumb(
 			$locale->lang($mode.'_mode'),
-			$url->get_acpmod_url(0,'&amp;action=editor&amp;theme='.$theme.'&amp;mode='.$mode)
+			BS_URL::get_acpmod_url(0,'&amp;action=editor&amp;theme='.$theme.'&amp;mode='.$mode)
 		);
 	}
 	

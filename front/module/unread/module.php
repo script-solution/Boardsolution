@@ -29,10 +29,9 @@ final class BS_Front_Module_unread extends BS_Front_Module
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
-		$renderer->add_breadcrumb($locale->lang('unread_threads'),$url->get_url('unread'));
+		$renderer->add_breadcrumb($locale->lang('unread_threads'),BS_URL::get_url('unread'));
 	}
 	
 	/**
@@ -44,7 +43,6 @@ final class BS_Front_Module_unread extends BS_Front_Module
 		$unread = FWS_Props::get()->unread();
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
-		$url = FWS_Props::get()->url();
 		$tpl = FWS_Props::get()->tpl();
 
 		$end = $cfg['threads_per_page'];
@@ -71,13 +69,13 @@ final class BS_Front_Module_unread extends BS_Front_Module
 		
 		$pagination = new BS_Pagination($end,$num);
 		$functions->add_pagination(
-			$pagination,$url->get_url('unread','&amp;'.BS_URL_SITE.'={d}')
+			$pagination,BS_URL::get_url('unread','&amp;'.BS_URL_SITE.'={d}')
 		);
 		$action_type = '&amp;'.BS_URL_AT.'='.BS_ACTION_CHANGE_READ_STATUS;
 		
 		$tpl->add_variables(array(
-			'target_url' => $url->get_url('redirect','&amp;'.BS_URL_LOC.'=topic_action'),
-			'js_url' => $url->get_url(
+			'target_url' => BS_URL::get_url('redirect','&amp;'.BS_URL_LOC.'=topic_action'),
+			'js_url' => BS_URL::get_url(
 				0,$action_type.'&amp;'.BS_URL_LOC.'=read&amp;'.BS_URL_MODE.'=topics&amp;'.BS_URL_ID.'=',
 				'&amp;',true
 			),

@@ -26,7 +26,6 @@ final class BS_ACP_SubModule_correctmsgs_default extends BS_ACP_SubModule
 	{
 		$user = FWS_Props::get()->user();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
 		$locale = FWS_Props::get()->locale();
 
 		$helper = BS_ACP_Module_CorrectMsgs_Helper::get_instance();
@@ -35,7 +34,7 @@ final class BS_ACP_SubModule_correctmsgs_default extends BS_ACP_SubModule
 		$incorrect = $helper->get_incorrect_messages();
 		
 		$tpl->add_variables(array(
-			'target' => $url->get_acpmod_url(0,'&amp;action=cycle&amp;pos=0'),
+			'target' => BS_URL::get_acpmod_url(0,'&amp;action=cycle&amp;pos=0'),
 			'incorrect_messages' => sprintf($locale->lang('incorrect_messages'),count($incorrect)),
 			'incorrect_num' => count($incorrect)
 		));

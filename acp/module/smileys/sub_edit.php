@@ -30,7 +30,6 @@ final class BS_ACP_SubModule_smileys_edit extends BS_ACP_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_EDIT_SMILEY,'edit');
@@ -38,7 +37,7 @@ final class BS_ACP_SubModule_smileys_edit extends BS_ACP_SubModule
 		$id = $input->get_var('id','get',FWS_Input::ID);
 		$renderer->add_breadcrumb(
 			$locale->lang('edit_smiley'),
-			$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
+			BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
 		);
 	}
 	

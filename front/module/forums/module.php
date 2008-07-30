@@ -83,8 +83,6 @@ final class BS_Front_Module_forums extends BS_Front_Module
 		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
-		$url = FWS_Props::get()->url();
-
 		$birthdays = BS_Front_EventUtils::get_instance()->get_todays_birthdays();
 		$events = BS_Front_EventUtils::get_instance()->get_current_events();
 		
@@ -100,7 +98,7 @@ final class BS_Front_Module_forums extends BS_Front_Module
 	
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$fid_param = $fid != null ? '&amp;'.BS_URL_FID.'='.$fid : '';	
-		$murl = $url->get_url(0,$fid_param.'&amp;'.BS_URL_LOC.'=clap_ministats');
+		$murl = BS_URL::get_url(0,$fid_param.'&amp;'.BS_URL_LOC.'=clap_ministats');
 		$clap_data = $functions->get_clap_data('ministats',$murl);
 		
 		$tpl->add_array('stats_data',$stats_data,false);

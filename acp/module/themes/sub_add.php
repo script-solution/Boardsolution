@@ -29,14 +29,13 @@ final class BS_ACP_SubModule_themes_add extends BS_ACP_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ADD_THEME,'add');
 
 		$renderer->add_breadcrumb(
 			$locale->lang('add_theme'),
-			$url->get_acpmod_url(0,'&amp;action=add')
+			BS_URL::get_acpmod_url(0,'&amp;action=add')
 		);
 	}
 	

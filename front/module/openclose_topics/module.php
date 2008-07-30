@@ -30,7 +30,6 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
 		
@@ -48,7 +47,7 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 		$this->add_loc_forum_path($fid);
 		$renderer->add_breadcrumb(
 			$locale->lang($mode.'_topics'),
-			$url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids.'&amp;mode='.$mode)
+			BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids.'&amp;mode='.$mode)
 		);
 	}
 	
@@ -63,8 +62,6 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 		$forums = FWS_Props::get()->forums();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$id_str = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
 		if(!($ids = FWS_StringHelper::get_ids($id_str)))
 		{
@@ -145,7 +142,7 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 		$this->request_formular(false,true);
 		
 		$mode_add = '&amp;'.BS_URL_MODE.'='.$mode;
-		$target_url = $url->get_url(
+		$target_url = BS_URL::get_url(
 			0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.implode(',',$selected_topic_ids).$mode_add
 		);
 	
@@ -161,7 +158,7 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 		
 		if(count($selected_topic_ids) == 1)
 		{
-			$murl = $url->get_url(
+			$murl = BS_URL::get_url(
 				0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_MODE.'='.$mode.'&amp;'.BS_URL_ID.'='.$id_str
 					.'&amp;'.BS_URL_PID.'='
 			);
@@ -173,7 +170,7 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 			'target_url' => $target_url,
 			'action_type' => $mode == 'open' ? BS_ACTION_OPEN_TOPICS : BS_ACTION_CLOSE_TOPICS,
 			'selected_topics' => $selected_topics,
-			'back_url' => $url->get_topics_url($fid),
+			'back_url' => BS_URL::get_topics_url($fid),
 			'notices' => array_values($notices)
 		));
 	}

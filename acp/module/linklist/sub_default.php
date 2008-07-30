@@ -43,8 +43,6 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$site = $input->get_var('site','get',FWS_Input::INTEGER);
 		
 		// display delete info?
@@ -59,10 +57,10 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
-				$url->get_acpmod_url(
+				BS_URL::get_acpmod_url(
 					0,'&amp;at='.BS_ACP_ACTION_DELETE_LINKS.'&amp;ids='.implode(',',$delete).'&amp;site='.$site
 				),
-				$url->get_acpmod_url(0,'&amp;site='.$site)
+				BS_URL::get_acpmod_url(0,'&amp;site='.$site)
 			);
 		}
 		
@@ -76,7 +74,7 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 		$order = $input->correct_var(BS_URL_ORDER,'get',FWS_Input::STRING,
 			array('url','category','clicks','date','act'),'date');
 		$ad = $input->correct_var(BS_URL_AD,'get',FWS_Input::STRING,array('ASC','DESC'),'DESC');
-		$baseurl = $url->get_acpmod_url(0,'&amp;search='.$search.'&amp;');
+		$baseurl = BS_URL::get_acpmod_url(0,'&amp;search='.$search.'&amp;');
 		$pagination = new BS_ACP_Pagination($end,$num);
 		
 		$tpl->add_variables(array(

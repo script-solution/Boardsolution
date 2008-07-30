@@ -29,12 +29,11 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_DELETE_IPLOGS,'delete');
 		$renderer->add_action(BS_ACP_ACTION_DELETE_ALL_IPLOGS,'deleteall');
-		$renderer->add_breadcrumb($locale->lang('acpmod_iplog'),$url->get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_iplog'),BS_URL::get_acpmod_url());
 	}
 	
 	/**
@@ -46,8 +45,6 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$order = $input->correct_var(BS_URL_ORDER,'get',FWS_Input::STRING,
 			array('action','date','user','ip','agent'),'date');
 		$ad = $input->correct_var(BS_URL_AD,'get',FWS_Input::STRING,array('ASC','DESC'),'DESC');
@@ -91,7 +88,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 		
 		$this->request_formular();
 		
-		$splitted = $url->get_acpmod_comps();
+		$splitted = BS_URL::get_acpmod_comps();
 		$hidden_fields = '';
 		foreach($splitted as $key => $val)
 			$hidden_fields .= '<input type="hidden" name="'.$key.'" value="'.$val.'" />'."\n";
@@ -112,7 +109,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 			'adl' => $locale->lang('action_adl')
 		);
 		
-		$baseurl = $url->get_acpmod_url(
+		$baseurl = BS_URL::get_acpmod_url(
 			0,'&amp;keyword='.$keyword.'&amp;ipaction='.$action.'&amp;date_from='
 				.$date_from.'&amp;date_to='.$date_to.'&amp;'
 		);
@@ -132,7 +129,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 		{
 			$functions->add_delete_message(
 				$locale->lang('delete_all_question'),
-				$url->get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_DELETE_ALL_IPLOGS),
+				BS_URL::get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_DELETE_ALL_IPLOGS),
 				$baseurl.'&amp;order='.$order.'&amp;ad='.$ad.'&amp;site='.$site
 			);
 		}
@@ -143,7 +140,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 			'keyword' => $keyword,
 			'date_from' => $date_from,
 			'date_to' => $date_to,
-			'reset_url' => $url->get_acpmod_url(0,'&amp;order='.$order.'&amp;ad='.$ad),
+			'reset_url' => BS_URL::get_acpmod_url(0,'&amp;order='.$order.'&amp;ad='.$ad),
 			'action' => $action,
 			'actions' => $actions,
 			'form_url' => $baseurl.'order='.$order.'&amp;ad='.$ad.'&amp;site='.$site,
@@ -218,7 +215,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 		));
 		$tpl->add_array('logs',$logs);
 		
-		$murl = $url->get_acpmod_url(
+		$murl = BS_URL::get_acpmod_url(
 			0,'&amp;order='.$order.'&amp;ad='.$ad.'&amp;keyword='.$keyword.'&amp;ipaction='
 				.$action.'&amp;date_from='.$date_from.'&amp;date_to='.$date_to.'&amp;site={d}'
 		);

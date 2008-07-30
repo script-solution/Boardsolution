@@ -26,8 +26,6 @@ final class BS_Front_Action_calendar_leaveevent extends BS_Front_Action_Base
 		$functions = FWS_Props::get()->functions();
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// is the user loggedin?
 		if($cfg['enable_calendar_events'] == 0 || !$user->is_loggedin())
 			return 'Calendar-events disabled or not loggedin';
@@ -56,7 +54,7 @@ final class BS_Front_Action_calendar_leaveevent extends BS_Front_Action_Base
 
 		BS_DAO::get_eventann()->leave($user->get_user_id(),$id);
 
-		$murl = $url->get_url('calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id);
+		$murl = BS_URL::get_url('calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id);
 		$this->add_link($locale->lang('back'),$murl);
 		$this->set_action_performed(true);
 

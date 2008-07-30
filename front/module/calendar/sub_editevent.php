@@ -22,7 +22,7 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param FWS_Page $doc
+	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
@@ -34,21 +34,19 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		if($id !== null)
 		{
 			$renderer->add_breadcrumb(
 				$locale->lang('edit_event'),
-				$url->get_url(0,'&amp;'.BS_URL_LOC.'=editevent&amp;'.BS_URL_ID.'='.$id)
+				BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=editevent&amp;'.BS_URL_ID.'='.$id)
 			);
 		}
 		else
 		{
 			$renderer->add_breadcrumb(
 				$locale->lang('add_event'),
-				$url->get_url(0,'&amp;'.BS_URL_LOC.'=editevent')
+				BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=editevent')
 			);
 		}
 	}
@@ -57,7 +55,6 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 	{
 		$cfg = FWS_Props::get()->cfg();
 		$input = FWS_Props::get()->input();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$auth = FWS_Props::get()->auth();
 		$locale = FWS_Props::get()->locale();
@@ -77,8 +74,8 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 		{
 			$default = BS_DAO::get_events()->get_by_id($id);
 			
-			$back_url = $url->get_url(0,'&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id);
-			$target_url = $url->get_url(0,'&amp;'.BS_URL_LOC.'=editevent&amp;'.BS_URL_ID.'='.$id);
+			$back_url = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id);
+			$target_url = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=editevent&amp;'.BS_URL_ID.'='.$id);
 		}
 		else
 		{
@@ -94,8 +91,8 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 				'event_title' => ''
 			);
 			
-			$back_url = $url->get_url();
-			$target_url = $url->get_url(0,'&amp;'.BS_URL_LOC.'=editevent');
+			$back_url = BS_URL::get_url();
+			$target_url = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=editevent');
 		}
 		
 		// check permission

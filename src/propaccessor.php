@@ -151,14 +151,6 @@ class BS_PropAccessor extends FWS_PropAccessor
 	{
 		return $this->get('functions');
 	}
-
-	/**
-	 * @return BS_URL the url-property
-	 */
-	public function url()
-	{
-		return $this->get('url');
-	}
 	
 	/**
 	 * @return BS_Locale the locale-property

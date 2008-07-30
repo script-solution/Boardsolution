@@ -55,7 +55,6 @@ final class BS_Front_Module_activate extends BS_Front_Module
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
 		$db = FWS_Props::get()->db();
-		$url = FWS_Props::get()->url();
 		$msgs = FWS_Props::get()->msgs();
 		
 		// check parametes
@@ -68,7 +67,7 @@ final class BS_Front_Module_activate extends BS_Front_Module
 			return;
 		}
 		
-		$murl = $url->get_frontend_url();
+		$murl = BS_URL::get_frontend_url();
 		if(BS_DAO::get_activation()->exists($id,$key))
 		{
 			$db->start_transaction();

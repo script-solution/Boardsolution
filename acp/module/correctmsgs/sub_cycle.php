@@ -28,8 +28,6 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		$helper = BS_ACP_Module_CorrectMsgs_Helper::get_instance();
 		
 		$pos = $input->get_var('pos','get',FWS_Input::INTEGER);
@@ -109,7 +107,7 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 		switch($type)
 		{
 			case 'post':
-				$furl = $url->get_frontend_url(
+				$furl = BS_URL::get_frontend_url(
 					'&amp;'.BS_URL_ACTION.'=redirect&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'='.$data['id']
 				);
 				$type_str = '<a target="_blank" href="'.$furl.'">';
@@ -117,7 +115,7 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 				break;
 			
 			case 'link':
-				$furl = $url->get_frontend_url(
+				$furl = BS_URL::get_frontend_url(
 					'&amp;'.BS_URL_ACTION.'=linklist&amp;'.BS_URL_ID.'='.$data['id']
 				);
 				$type_str = '<a target="_blank" href="'.$furl.'">';
@@ -127,14 +125,14 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 			case 'event':
 				if($data['tid'] > 0)
 				{
-					$furl = $url->get_frontend_url(
+					$furl = BS_URL::get_frontend_url(
 						'&amp;'.BS_URL_ACTION.'=redirect&amp;'.BS_URL_LOC.'=show_topic&amp;'
 							.BS_URL_TID.'='.$data['tid']
 					);
 				}
 				else
 				{
-					$furl = $url->get_frontend_url(
+					$furl = BS_URL::get_frontend_url(
 						'&amp;'.BS_URL_ACTION.'=calendar&amp;'.BS_URL_LOC.'=eventdetails&amp;'
 							.BS_URL_ID.'='.$data['id']
 					);
@@ -156,7 +154,7 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 			'type' => $type_str,
 			'next_disabled' => $pos >= count($msgs) - 1,
 			'prev_disabled' => $pos <= 0,
-			'target' => $url->get_acpmod_url(0,'&amp;action=cycle&amp;pos='.$pos)
+			'target' => BS_URL::get_acpmod_url(0,'&amp;action=cycle&amp;pos='.$pos)
 		));
 	}
 	

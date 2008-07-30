@@ -30,7 +30,6 @@ final class BS_Front_Module_new_topic extends BS_Front_Module
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
 		
@@ -43,7 +42,7 @@ final class BS_Front_Module_new_topic extends BS_Front_Module
 		$this->add_loc_forum_path($fid);
 		$renderer->add_breadcrumb(
 			$locale->lang('newthread'),
-			$url->get_url('new_topic','&amp;'.BS_URL_FID.'='.$fid)
+			BS_URL::get_url('new_topic','&amp;'.BS_URL_FID.'='.$fid)
 		);
 	}
 	
@@ -58,7 +57,6 @@ final class BS_Front_Module_new_topic extends BS_Front_Module
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
 		$auth = FWS_Props::get()->auth();
-		$url = FWS_Props::get()->url();
 		$cfg = FWS_Props::get()->cfg();
 
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
@@ -94,12 +92,12 @@ final class BS_Front_Module_new_topic extends BS_Front_Module
 		
 		$tpl->add_variables(array(
 			'important_allowed' => $auth->has_current_forum_perm(BS_MODE_MARK_TOPICS_IMPORTANT),
-			'target_url' => $url->get_url(0,'&amp;'.BS_URL_FID.'='.$fid),
+			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid),
 			'action_type' => BS_ACTION_START_TOPIC,
 			'symbols' => $symbols,
 			'subscribe_topic_def' => $subt_def,
 			'enable_email_notification' => $cfg['enable_email_notification'] && $loggedin,
-			'back_url' => $url->get_topics_url($fid)
+			'back_url' => BS_URL::get_topics_url($fid)
 		));
 		
 		$pform = new BS_PostingForm($locale->lang('post').':');

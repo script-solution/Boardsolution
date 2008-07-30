@@ -111,9 +111,7 @@ final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
 	{
 		$locale = FWS_Props::get()->locale();
 		$msgs = FWS_Props::get()->msgs();
-		$url = FWS_Props::get()->url();
-
-		$murl = $url->get_acpmod_url();
+		$murl = BS_URL::get_acpmod_url();
 		$msg = $locale->lang('maintenance_misc_success');
 		$msg .= '<p align="center" class="a_block_pad"><a href="'.$murl.'">';
 		$msg .= $locale->lang('back').'</a></p>';
@@ -129,8 +127,6 @@ final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
 	{
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		$tasks = BS_ACP_Module_miscellaneous::get_tasks();
 		$tpl->add_variables(array(
 			'not_finished' => !$this->_pm->is_finished(),
@@ -138,7 +134,7 @@ final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
 				$locale->lang('mm_action_in_progress'),$locale->lang('title_'.$tasks[$this->_name])
 			),
 			'percent' => round($this->_pm->get_percentage(),1),
-			'target_url' => $url->get_acpmod_url(0,'&action=operation&name='.$this->_name,'&')
+			'target_url' => BS_URL::get_acpmod_url(0,'&action=operation&name='.$this->_name,'&')
 		));
 	}
 }

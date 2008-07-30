@@ -26,8 +26,6 @@ final class BS_Front_Action_edit_topic_event extends BS_Front_Action_Base
 		$auth = FWS_Props::get()->auth();
 		$forums = FWS_Props::get()->forums();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 
@@ -125,7 +123,7 @@ final class BS_Front_Action_edit_topic_event extends BS_Front_Action_Base
 			BS_DAO::get_eventann()->delete_by_events(array($id));
 
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('back_to_forum'),$url->get_topics_url($fid));
+		$this->add_link($locale->lang('back_to_forum'),BS_URL::get_topics_url($fid));
 
 		return '';
 	}

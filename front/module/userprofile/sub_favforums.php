@@ -29,14 +29,13 @@ final class BS_Front_SubModule_userprofile_favforums extends BS_Front_SubModule
 		parent::init($doc);
 		
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_SAVE_FAVFORUMS,'favforums');
 
 		$renderer->add_breadcrumb(
 			$locale->lang('favorite_forums'),
-			$url->get_url(0,'&amp;'.BS_URL_LOC.'=favforums')
+			BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=favforums')
 		);
 	}
 	
@@ -48,8 +47,6 @@ final class BS_Front_SubModule_userprofile_favforums extends BS_Front_SubModule
 		$user = FWS_Props::get()->user();
 		$forums = FWS_Props::get()->forums();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
-
 		// collect the forum-ids
 		$forum_ids = array();
 		foreach(BS_DAO::get_unreadhide()->get_all_of_user($user->get_user_id()) as $data)
@@ -58,7 +55,7 @@ final class BS_Front_SubModule_userprofile_favforums extends BS_Front_SubModule
 		$forum_ids = $forums->get_nodes_with_other_ids($forum_ids,false);
 
 		$tpl->add_variables(array(
-			'target_url' => $url->get_url(0,'&amp;'.BS_URL_LOC.'=favforums'),
+			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=favforums'),
 			'action_type' => BS_ACTION_SAVE_FAVFORUMS,
 		));
 
@@ -88,7 +85,7 @@ final class BS_Front_SubModule_userprofile_favforums extends BS_Front_SubModule
 				'index' => $index,
 				'contains_forums' => $data->get_forum_type() == 'contains_cats',
 				'path_images' => $utils->get_path_images($forum,$sub_cats,$images,1),
-				'forum_url' => $url->get_topics_url($id),
+				'forum_url' => BS_URL::get_topics_url($id),
 				'selected' => in_array($id,$forum_ids)
 			);
 			

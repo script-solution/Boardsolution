@@ -24,8 +24,6 @@ final class BS_Front_Action_posts_votepoll extends BS_Front_Action_Base
 		$input = FWS_Props::get()->input();
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		// parameter valid?
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
@@ -70,7 +68,7 @@ final class BS_Front_Action_posts_votepoll extends BS_Front_Action_Base
 		BS_DAO::get_pollvotes()->create($topic_data['type'],$user->get_user_id());
 
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('go_to_topic'),$url->get_posts_url($fid,$tid));
+		$this->add_link($locale->lang('go_to_topic'),BS_URL::get_posts_url($fid,$tid));
 	
 		return '';
 	}

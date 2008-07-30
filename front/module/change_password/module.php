@@ -30,7 +30,6 @@ final class BS_Front_Module_change_password extends BS_Front_Module
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
 		
@@ -42,7 +41,7 @@ final class BS_Front_Module_change_password extends BS_Front_Module
 		$user_key = $input->get_var(BS_URL_KW,'get',FWS_Input::STRING);
 		$renderer->add_breadcrumb(
 			$locale->lang('change_password'),
-			$url->get_url('change_password','&amp;'.BS_URL_ID.'='.$user_id.'&amp;'.BS_URL_KW.'='.$user_key)
+			BS_URL::get_url('change_password','&amp;'.BS_URL_ID.'='.$user_id.'&amp;'.BS_URL_KW.'='.$user_key)
 		);
 	}
 	
@@ -63,7 +62,6 @@ final class BS_Front_Module_change_password extends BS_Front_Module
 	{
 		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
-		$url = FWS_Props::get()->url();
 		$cfg = FWS_Props::get()->cfg();
 
 		if(BS_ENABLE_EXPORT && BS_EXPORT_SEND_PW_TYPE != 'enabled')
@@ -90,7 +88,7 @@ final class BS_Front_Module_change_password extends BS_Front_Module
 		}
 
 		$tpl->add_variables(array(
-			'target_url' => $url->get_url(
+			'target_url' => BS_URL::get_url(
 				0,'&amp;'.BS_URL_ID.'='.$user_id.'&amp;'.BS_URL_KW.'='.$user_key
 			),
 			'action_type' => BS_ACTION_CHANGE_PASSWORD,

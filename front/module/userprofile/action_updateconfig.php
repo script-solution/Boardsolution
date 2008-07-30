@@ -26,8 +26,6 @@ final class BS_Front_Action_userprofile_updateconfig extends BS_Front_Action_Bas
 		$cfg = FWS_Props::get()->cfg();
 		$cache = FWS_Props::get()->cache();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
-
 		$info['reload'] = false;
 
 		// nothing to do?
@@ -171,7 +169,7 @@ final class BS_Front_Action_userprofile_updateconfig extends BS_Front_Action_Bas
 
 		$this->set_action_performed(true);
 		$this->add_link(
-			$locale->lang('back'),$url->get_url('userprofile','&amp;'.BS_URL_LOC.'=config')
+			$locale->lang('back'),BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=config')
 		);
 
 		return '';

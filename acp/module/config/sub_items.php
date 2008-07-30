@@ -30,7 +30,6 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_SAVE_SETTINGS,'save');
@@ -51,7 +50,7 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 		{
 			$manager = BS_ACP_Module_Config_Helper::get_instance()->get_manager();
 			$title = $locale->lang($manager->get_group($gid)->get_title(),false);
-			$renderer->add_breadcrumb($title,$url->get_acpmod_url(0,'&amp;action=items&amp;gid='.$gid));
+			$renderer->add_breadcrumb($title,BS_URL::get_acpmod_url(0,'&amp;action=items&amp;gid='.$gid));
 		}
 	}
 	
@@ -61,7 +60,6 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 	public function run()
 	{
 		$input = FWS_Props::get()->input();
-		$url = FWS_Props::get()->url();
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
 
@@ -78,10 +76,10 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 		$manager->display($view);
 		
 		$perline = 6;
-		$hidden_fields = $url->get_acpmod_comps();
+		$hidden_fields = BS_URL::get_acpmod_comps();
 		$hidden_fields['action'] = 'search';
 		$tpl->add_variables(array(
-			'form_target' => $url->get_acpmod_url(0,'&amp;action=items&amp;gid='.$gid),
+			'form_target' => BS_URL::get_acpmod_url(0,'&amp;action=items&amp;gid='.$gid),
 			'action_type' => BS_ACP_ACTION_SAVE_SETTINGS,
 			'title' => $locale->lang($manager->get_group($gid)->get_title(),false),
 			'items' => $view->get_items(),
