@@ -12,7 +12,7 @@
 
 // register our autoloader
 include_once(BS_PATH.'src/autoloader.php');
-PLIB_AutoLoader::register_loader('BS_Autoloader');
+FWS_AutoLoader::register_loader('BS_Autoloader');
 
 // include the files that we need at the very beginning
 include_once(BS_PATH.'config/mysql.php');
@@ -23,17 +23,17 @@ include_once(BS_PATH.'src/props.php');
 // set the accessor and loader for boardsolution
 $accessor = new BS_PropAccessor();
 $accessor->set_loader(new BS_PropLoader());
-PLIB_Props::set_accessor($accessor);
+FWS_Props::set_accessor($accessor);
 
 BS_Front_Action_Base::load_actions();
 
 // start profiler
-$profiler = PLIB_Props::get()->profiler();
+$profiler = FWS_Props::get()->profiler();
 $profiler->start();
 
 // init the session-stuff
-$sessions = PLIB_Props::get()->sessions();
-$user = PLIB_Props::get()->user();
+$sessions = FWS_Props::get()->sessions();
+$user = FWS_Props::get()->user();
 
 // disable cookies in the ACP
 if(defined('BS_ACP'))

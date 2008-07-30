@@ -20,7 +20,7 @@
 final class BS_Front_Module_ajax_quote extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -32,17 +32,17 @@ final class BS_Front_Module_ajax_quote extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$auth = PLIB_Props::get()->auth();
-		$user = PLIB_Props::get()->user();
-		$doc = PLIB_Props::get()->doc();
+		$input = FWS_Props::get()->input();
+		$auth = FWS_Props::get()->auth();
+		$user = FWS_Props::get()->user();
+		$doc = FWS_Props::get()->doc();
 
-		$id = $input->get_var('id','get',PLIB_Input::ID);
-		$type = $input->correct_var('type','get',PLIB_Input::STRING,array('post','pm'),'post');
+		$id = $input->get_var('id','get',FWS_Input::ID);
+		$type = $input->correct_var('type','get',FWS_Input::STRING,array('post','pm'),'post');
 		$res = '';
 		
 		if($id == null)
@@ -64,13 +64,13 @@ final class BS_Front_Module_ajax_quote extends BS_Front_Module
 			// check if the post comes from a forum that the user is allowed to view
 			if(!$auth->has_access_to_intern_forum($post_data['rubrikid']))
 			{
-				$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+				$this->report_error(FWS_Document_Messages::NO_ACCESS);
 				return;
 			}
 			
 			$username = $post_data['post_user'] != 0 ? $post_data['user_name'] : $post_data['post_an_user'];
 			$text = BS_PostingUtils::get_instance()->quote_text($post_data['text_posted'],$username);
-			$res = PLIB_StringHelper::htmlspecialchars_back($text);
+			$res = FWS_StringHelper::htmlspecialchars_back($text);
 		}
 		// logged in is required
 		else if($user->is_loggedin())
@@ -87,7 +87,7 @@ final class BS_Front_Module_ajax_quote extends BS_Front_Module
 			$text = BS_PostingUtils::get_instance()->quote_text(
 				$qdata['pm_text_posted'],$qdata['sender_name']
 			);
-			$res = PLIB_StringHelper::htmlspecialchars_back($text);
+			$res = FWS_StringHelper::htmlspecialchars_back($text);
 		}
 		
 		$renderer = $doc->use_raw_renderer();

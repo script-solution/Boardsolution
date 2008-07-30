@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_themes_editor extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,9 +28,9 @@ final class BS_ACP_SubModule_themes_editor extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 
 		// hack which changes the action-type if we want to add an attribute instead of saving the form
@@ -43,9 +43,9 @@ final class BS_ACP_SubModule_themes_editor extends BS_ACP_SubModule
 		$renderer->add_action(BS_ACP_ACTION_THEME_EDITOR_SIMPLE_ADD,'simpleadd');
 
 		$mode = $input->correct_var(
-			'mode','get',PLIB_Input::STRING,array('simple','advanced'),'simple'
+			'mode','get',FWS_Input::STRING,array('simple','advanced'),'simple'
 		);
-		$theme = $input->get_var('theme','get',PLIB_Input::STRING);
+		$theme = $input->get_var('theme','get',FWS_Input::STRING);
 		$renderer->add_breadcrumb($theme,'');
 		$renderer->add_breadcrumb(
 			$locale->lang($mode.'_mode'),
@@ -54,24 +54,24 @@ final class BS_ACP_SubModule_themes_editor extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
 
 		$mode = $input->correct_var(
-			'mode','get',PLIB_Input::STRING,array('simple','advanced'),'simple'
+			'mode','get',FWS_Input::STRING,array('simple','advanced'),'simple'
 		);
-		$theme = $input->get_var('theme','get',PLIB_Input::STRING);
+		$theme = $input->get_var('theme','get',FWS_Input::STRING);
 		
-		$stylefile = PLIB_Path::server_app().'themes/'.$theme.'/style.css';
+		$stylefile = FWS_Path::server_app().'themes/'.$theme.'/style.css';
 		if(!is_file($stylefile))
 		{
 			$this->report_error(
-				PLIB_Document_Messages::ERROR,
+				FWS_Document_Messages::ERROR,
 				sprintf($locale->lang('file_not_exists'),$stylefile)
 			);
 			return;

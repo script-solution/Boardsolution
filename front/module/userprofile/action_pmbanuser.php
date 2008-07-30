@@ -21,12 +21,12 @@ final class BS_Front_Action_userprofile_pmbanuser extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$functions = PLIB_Props::get()->functions();
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$functions = FWS_Props::get()->functions();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
 
 		// check if we are allowed to ban a user
 		if(!$user->is_loggedin() || $cfg['enable_pms'] == 0 ||
@@ -37,11 +37,11 @@ final class BS_Front_Action_userprofile_pmbanuser extends BS_Front_Action_Base
 		if(!$functions->has_valid_get_sid())
 			return 'Invalid session-id';
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		// if the id does not exist, check if a username does
 		if($id == null)
 		{
-			$username = $input->get_var('user_name','post',PLIB_Input::STRING);
+			$username = $input->get_var('user_name','post',FWS_Input::STRING);
 			if($username == null)
 				return 'banlist_user_not_found';
 

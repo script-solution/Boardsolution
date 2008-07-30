@@ -17,7 +17,7 @@
  * @subpackage	src.bbcode
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_BBCode_Content_Default extends PLIB_Object implements BS_BBCode_Content
+class BS_BBCode_Content_Default extends FWS_Object implements BS_BBCode_Content
 {
 	/**
 	 * The tag-id

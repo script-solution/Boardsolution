@@ -21,12 +21,12 @@ final class BS_Front_Action_userprofile_sendpm extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
-		$ips = PLIB_Props::get()->ips();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
+		$ips = FWS_Props::get()->ips();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
@@ -59,7 +59,7 @@ final class BS_Front_Action_userprofile_sendpm extends BS_Front_Action_Base
 		$this->set_action_performed(true);
 		$this->set_success_msg(sprintf(
 			$locale->lang('success_'.BS_ACTION_SEND_PM),
-			PLIB_StringHelper::get_enum($pm->get_receiver_names())
+			FWS_StringHelper::get_enum($pm->get_receiver_names())
 		));
 		$this->add_link(
 			$locale->lang('go_to_inbox'),

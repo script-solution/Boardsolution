@@ -17,7 +17,7 @@
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Search_Result_PMHistory extends PLIB_Object implements BS_Front_Search_Result
+final class BS_Front_Search_Result_PMHistory extends FWS_Object implements BS_Front_Search_Result
 {
 	public function get_name()
 	{
@@ -31,10 +31,10 @@ final class BS_Front_Search_Result_PMHistory extends PLIB_Object implements BS_F
 	
 	public function display_result($search,$request)
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$functions = PLIB_Props::get()->functions();
-		$user = PLIB_Props::get()->user();
-		$url = PLIB_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
+		$functions = FWS_Props::get()->functions();
+		$user = FWS_Props::get()->user();
+		$url = FWS_Props::get()->url();
 
 		list($order,$ad) = $request->get_order();
 		$ids = $search->get_result_ids();
@@ -69,7 +69,7 @@ final class BS_Front_Search_Result_PMHistory extends PLIB_Object implements BS_F
 		$messages = array();
 		
 		if(count($keywords) > 0)
-			$kwhl = new PLIB_KeywordHighlighter($keywords,'<span class="bs_highlight">');
+			$kwhl = new FWS_KeywordHighlighter($keywords,'<span class="bs_highlight">');
 		
 		foreach($pmlist as $data)
 		{
@@ -78,10 +78,10 @@ final class BS_Front_Search_Result_PMHistory extends PLIB_Object implements BS_F
 
 			$title = $data['pm_title'];
 			$complete_title = '';
-			if(PLIB_String::strlen($title) > BS_MAX_PM_TITLE_LEN)
+			if(FWS_String::strlen($title) > BS_MAX_PM_TITLE_LEN)
 			{
 				$complete_title = $title;
-				$title = '<span title="'.$complete_title.'">'.PLIB_String::substr($title,0,BS_MAX_PM_TITLE_LEN) . ' ...</span>';
+				$title = '<span title="'.$complete_title.'">'.FWS_String::substr($title,0,BS_MAX_PM_TITLE_LEN) . ' ...</span>';
 			}
 
 			if(count($keywords) > 0)
@@ -102,7 +102,7 @@ final class BS_Front_Search_Result_PMHistory extends PLIB_Object implements BS_F
 				'text' => $text,
 				'user_name' => $username,
 				'subject' => $title,
-				'date' => PLIB_Date::get_date($data['pm_date'],true,true),
+				'date' => FWS_Date::get_date($data['pm_date'],true,true),
 				'post_id' => $data['id']
 			);
 		}
@@ -130,7 +130,7 @@ final class BS_Front_Search_Result_PMHistory extends PLIB_Object implements BS_F
 	
 	public function get_noresults_message()
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		return $locale->lang('no_pms_found');
 	}

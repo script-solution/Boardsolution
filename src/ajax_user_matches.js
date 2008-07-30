@@ -62,20 +62,20 @@ function BS_AJAXUserSearch(root,inputId,actionParam,matchText,multiple,quotesAll
 	this.displayFoundUser = displayFoundUser;
 	
 	// store wether the focus is on the input-field
-	var inputField = PLIB_getElement(this.inputId);
+	var inputField = FWS_getElement(this.inputId);
 	
 	var linputId = this.inputId;
-	PLIB_addEvent(inputField,'focus',function() {
+	FWS_addEvent(inputField,'focus',function() {
 		if(Browser.isIE)
 			this.id = linputId;
 		__currentObj = __objects[this.id];
 	});
-	PLIB_addEvent(inputField,'blur',function() {
+	FWS_addEvent(inputField,'blur',function() {
 		__currentObj = null;
 	});
 	
 	// add onkeyup event
-	PLIB_addEvent(inputField,'keyup',function() {
+	FWS_addEvent(inputField,'keyup',function() {
 		if(Browser.isIE)
 			this.id = linputId;
 		__objects[this.id].findMatchingUser();
@@ -130,7 +130,7 @@ function findMatchingUser()
 		_isReqPending = true;
 	});
 	myAjax.setEventHandler('onfinish',function() {
-		PLIB_hideElement(tempref.waitId);
+		FWS_hideElement(tempref.waitId);
 		_isReqPending = false;
 	});
 	
@@ -144,9 +144,9 @@ function findMatchingUser()
  */
 function displayWaitCursor()
 {
-	if(!PLIB_getElement(this.waitId))
+	if(!FWS_getElement(this.waitId))
 	{
-		var inputField = PLIB_getElement(this.inputId);
+		var inputField = FWS_getElement(this.inputId);
 		var div = document.createElement('div');
 		div.id = this.waitId;
 		div.style.width = '16px';
@@ -160,7 +160,7 @@ function displayWaitCursor()
 		inputField.parentNode.appendChild(div);
 	}
 	
-	PLIB_displayElement(this.waitId,this.inputId,'tl',5);
+	FWS_displayElement(this.waitId,this.inputId,'tl',5);
 }
 
 /**
@@ -168,9 +168,9 @@ function displayWaitCursor()
  */
 function displayFoundUser(text)
 {
-	if(!PLIB_getElement(this.resultId))
+	if(!FWS_getElement(this.resultId))
 	{
-		var inputField = PLIB_getElement(this.inputId);
+		var inputField = FWS_getElement(this.inputId);
 		var div = document.createElement('div');
 		div.id = this.resultId;
 		div.onmouseover = div.focus;
@@ -222,9 +222,9 @@ function displayFoundUser(text)
 	
 	resultField.innerHTML = this.matchText + ': ' + resStr;
 	
-	PLIB_displayElement(this.resultId,this.inputId,'tlr',5);
+	FWS_displayElement(this.resultId,this.inputId,'tlr',5);
 	
-	PLIB_getElement(this.inputId).focus();
+	FWS_getElement(this.inputId).focus();
 }
 
 /**
@@ -276,8 +276,8 @@ function addUserToField(inputId,resultId,multiple,separator,quotesAllowed,userna
  */
 function hideResults(resultId)
 {
-	PLIB_hideElement(resultId);
-	PLIB_hideElement('wait_symbol');
+	FWS_hideElement(resultId);
+	FWS_hideElement('wait_symbol');
 }
 
 /**

@@ -11,7 +11,7 @@
  */
 
 /**
- * Represents the current user. Contains a PLIB_Session_Data object and some
+ * Represents the current user. Contains a FWS_Session_Data object and some
  * more information for the current user. It manages the login-state and some
  * other stuff.
  *
@@ -19,7 +19,7 @@
  * @subpackage	src.user
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_User_Current extends PLIB_User_Current
+final class BS_User_Current extends FWS_User_Current
 {
 	/**
 	 * Indicates that the user has reached the max. login tries
@@ -78,17 +78,17 @@ final class BS_User_Current extends PLIB_User_Current
 	private $_max_login_tries = false;
 
 	/**
-	 * @see PLIB_User_Current::init()
+	 * @see FWS_User_Current::init()
 	 */
 	public function init()
 	{
-		$input = PLIB_Props::get()->input();
-		$cookies = PLIB_Props::get()->cookies();
+		$input = FWS_Props::get()->input();
+		$cookies = FWS_Props::get()->cookies();
 
 		// we disable cookies if the user wants to get logged out. because if the session
 		// doesn't exist anymore we assign a new sid, login the user again and the logout fails
 		// because of a wrong session-id
-		if($input->get_var(BS_URL_AT,'get',PLIB_Input::INTEGER) === BS_ACTION_LOGOUT)
+		if($input->get_var(BS_URL_AT,'get',FWS_Input::INTEGER) === BS_ACTION_LOGOUT)
 		{
 			// delete the cookies, too
 			$cookies->delete_cookie('user');
@@ -103,11 +103,11 @@ final class BS_User_Current extends PLIB_User_Current
 	}
 
 	/**
-	 * @see PLIB_User_Current::finalize()
+	 * @see FWS_User_Current::finalize()
 	 */
 	public function finalize()
 	{
-		$ips = PLIB_Props::get()->ips();
+		$ips = FWS_Props::get()->ips();
 
 		parent::finalize();
 		
@@ -141,10 +141,10 @@ final class BS_User_Current extends PLIB_User_Current
 	 */
 	public function login($username,$pw,$hashpw = true)
 	{
-		$input = PLIB_Props::get()->input();
-		$cfg = PLIB_Props::get()->cfg();
-		$functions = PLIB_Props::get()->functions();
-		$cookies = PLIB_Props::get()->cookies();
+		$input = FWS_Props::get()->input();
+		$cfg = FWS_Props::get()->cfg();
+		$functions = FWS_Props::get()->functions();
+		$cookies = FWS_Props::get()->cookies();
 
 		$oldpw = $pw;
 		$loggedin = $this->set_userdata(0,$username);
@@ -231,11 +231,11 @@ final class BS_User_Current extends PLIB_User_Current
 	}
 
 	/**
-	 * @see PLIB_User_Current::logout()
+	 * @see FWS_User_Current::logout()
 	 */
 	public function logout()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 		
 		// collect user-data
 		$status = BS_Community_User::get_status_from_groups($user->get_all_user_groups());
@@ -252,7 +252,7 @@ final class BS_User_Current extends PLIB_User_Current
 	}
 
 	/**
-	 * @see PLIB_User_Current::set_userdata()
+	 * @see FWS_User_Current::set_userdata()
 	 *
 	 * @param int $id
 	 * @param string $user
@@ -291,11 +291,11 @@ final class BS_User_Current extends PLIB_User_Current
 	{
 		// at first we look in the selected theme
 		$path = 'themes/'.$this->_theme.'/'.$item;
-		if(is_file(PLIB_Path::server_app().$path))
-			return PLIB_Path::client_app().$path;
+		if(is_file(FWS_Path::server_app().$path))
+			return FWS_Path::client_app().$path;
 		
 		// if the file does not exist, we use the default theme
-		return PLIB_Path::client_app().'themes/default/'.$item;
+		return FWS_Path::client_app().'themes/default/'.$item;
 	}
 	
 	/**
@@ -363,7 +363,7 @@ final class BS_User_Current extends PLIB_User_Current
 
 		static $ugarray = null;
 		if($ugarray == null)
-			$ugarray = PLIB_Array_Utils::advanced_explode(',',$this->get_profile_val('user_group'));
+			$ugarray = FWS_Array_Utils::advanced_explode(',',$this->get_profile_val('user_group'));
 
 		return $ugarray;
 	}
@@ -375,7 +375,7 @@ final class BS_User_Current extends PLIB_User_Current
 	 */
 	public function use_bbcode_applet()
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		// not enabled?
 		if(!$cfg['msgs_allow_java_applet'])
@@ -394,9 +394,9 @@ final class BS_User_Current extends PLIB_User_Current
 	 */
 	private function _refresh_stats($refresh_logins)
 	{
-		$cache = PLIB_Props::get()->cache();
-		$user = PLIB_Props::get()->user();
-		$sessions = PLIB_Props::get()->sessions();
+		$cache = FWS_Props::get()->cache();
+		$user = FWS_Props::get()->user();
+		$sessions = FWS_Props::get()->sessions();
 
 		$stats_data = $cache->get_cache('stats')->current();
 		$time = time();
@@ -405,7 +405,7 @@ final class BS_User_Current extends PLIB_User_Current
 		// calculate the values for the stats
 		if($refresh_logins)
 		{
-			$yd = new PLIB_Date();
+			$yd = new FWS_Date();
 			$yd->modify('-1day');
 			$yesterday = $yd->to_format('dmY');
 			
@@ -413,9 +413,9 @@ final class BS_User_Current extends PLIB_User_Current
 				array('logins' => array('logins + 1'),'lastlogin' => time()),$user->get_user_id()
 			);
 
-			$lastlogin = PLIB_Date::get_formated_date('dmY',$stats_data['logins_last']);
+			$lastlogin = FWS_Date::get_formated_date('dmY',$stats_data['logins_last']);
 
-			if($lastlogin == PLIB_Date::get_formated_date('dmY'))
+			if($lastlogin == FWS_Date::get_formated_date('dmY'))
 			{
 				$cache->get_cache('stats')->set_element_field(
 					0,'logins_today',$stats_data['logins_today'] + 1
@@ -459,9 +459,9 @@ final class BS_User_Current extends PLIB_User_Current
 	 */
 	private function _determine_language()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$cache = PLIB_Props::get()->cache();
-		$functions = PLIB_Props::get()->functions();
+		$cfg = FWS_Props::get()->cfg();
+		$cache = FWS_Props::get()->cache();
+		$functions = FWS_Props::get()->functions();
 
 		if($this->is_loggedin() && $cfg['allow_custom_lang'] == 1)
 		{
@@ -483,8 +483,8 @@ final class BS_User_Current extends PLIB_User_Current
 	 */
 	private function _determine_theme()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$cache = PLIB_Props::get()->cache();
+		$cfg = FWS_Props::get()->cfg();
+		$cache = FWS_Props::get()->cache();
 
 		// is it a mobile device?
 		if($this->_user->uses_mobile_device())

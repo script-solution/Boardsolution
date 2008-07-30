@@ -17,11 +17,11 @@
  * @subpackage	src.tasks
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Tasks_attachments extends PLIB_Tasks_Base
+final class BS_Tasks_attachments extends FWS_Tasks_Base
 {
 	public function run()
 	{
-		if($handle = @opendir(PLIB_Path::server_app().'uploads'))
+		if($handle = @opendir(FWS_Path::server_app().'uploads'))
 		{
 			// grab all attachments from the database
 			$attachments = array();
@@ -59,15 +59,15 @@ final class BS_Tasks_attachments extends PLIB_Tasks_Base
 				// if the original-file should be deleted, too, we don't want to keep the thumbnail
 				if(count($matches) && !in_array($matches[1].'.'.$matches[2],$files))
 				{
-					$ext = PLIB_FileUtils::get_extension($file);
-					$pos = PLIB_String::strpos($file,'_thumb');
-					$start = PLIB_String::substr($file,0,$pos);
+					$ext = FWS_FileUtils::get_extension($file);
+					$pos = FWS_String::strpos($file,'_thumb');
+					$start = FWS_String::substr($file,0,$pos);
 					// does the original picture exist?
 					if(in_array($start.'.'.$ext,$all))
 						continue;
 				}
 
-				@unlink(PLIB_Path::server_app().'uploads/'.$file);
+				@unlink(FWS_Path::server_app().'uploads/'.$file);
 			}
 		}
 	}

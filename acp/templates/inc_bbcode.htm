@@ -135,11 +135,11 @@
 		
 		{set tag='color'}
 		{if bbcode.is_allowed(tag)}
-		<script type="text/javascript" src="{gjs.get_file('js/colorpicker.js','lib')}"></script>
+		<script type="text/javascript" src="{gjs.get_file('js/colorpicker.js','fws')}"></script>
 		<script type="text/javascript">
 		<!--
-		cp['{number}'] = new PLIB_ColorPicker(
-			'{glibpath}','group_color',
+		cp['{number}'] = new FWS_ColorPicker(
+			'{gfwspath}','group_color',
 			function(color) {
 				popupElementClick({number},'{tag}',color);
 			},

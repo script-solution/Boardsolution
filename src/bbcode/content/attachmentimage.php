@@ -21,8 +21,8 @@ final class BS_BBCode_Content_AttachmentImage extends BS_BBCode_Content_Default
 {
 	public function get_text($inner,$param)
 	{
-		$url = PLIB_Props::get()->url();
-		$cfg = PLIB_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
 
 		$inner = trim($inner);
 		list($att_width,$att_height) = explode('x',$cfg['attachments_images_size']);

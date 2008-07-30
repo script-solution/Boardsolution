@@ -20,19 +20,19 @@
 final class BS_DBA_Module_createbackup extends BS_DBA_Module
 {
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$msgs = PLIB_Props::get()->msgs();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
-		$backups = PLIB_Props::get()->backups();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$msgs = FWS_Props::get()->msgs();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
+		$backups = FWS_Props::get()->backups();
 
-		$mode = $input->get_var('mode','get',PLIB_Input::STRING);
+		$mode = $input->get_var('mode','get',FWS_Input::STRING);
 		if($mode == 'backup')
 		{
 			$this->_backup();
@@ -41,9 +41,9 @@ final class BS_DBA_Module_createbackup extends BS_DBA_Module
 		
 		$user->delete_session_data('BS_backup');
 		
-		$gtables = $input->get_var('tables','get',PLIB_Input::STRING);
-		$tables = PLIB_Array_Utils::advanced_explode(';',$gtables);
-		$prefix = $input->get_var('prefix','post',PLIB_Input::STRING);
+		$gtables = $input->get_var('tables','get',FWS_Input::STRING);
+		$tables = FWS_Array_Utils::advanced_explode(';',$gtables);
+		$prefix = $input->get_var('prefix','post',FWS_Input::STRING);
 		
 		if(!is_array($tables) || count($tables) == 0)
 		{
@@ -91,8 +91,8 @@ final class BS_DBA_Module_createbackup extends BS_DBA_Module
 	 */
 	private function _backup()
 	{
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		new BS_DBA_Progress(
 			$locale->lang('create_backup'),

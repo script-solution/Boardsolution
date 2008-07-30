@@ -17,16 +17,16 @@
  * @subpackage	acp.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_ACP_Module extends PLIB_Module
+abstract class BS_ACP_Module extends FWS_Module
 {
 	/**
-	 * @see PLIB_Module::request_formular()
+	 * @see FWS_Module::request_formular()
 	 *
 	 * @return BS_HTML_Formular
 	 */
 	protected final function request_formular()
 	{
-		$tpl = PLIB_Props::get()->tpl();
+		$tpl = FWS_Props::get()->tpl();
 
 		$form = new BS_HTML_Formular(false,false);
 		$tpl->add_array('form',$form);

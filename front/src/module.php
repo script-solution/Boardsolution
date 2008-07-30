@@ -23,7 +23,7 @@
  * @subpackage	front.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_Front_Module extends PLIB_Module
+abstract class BS_Front_Module extends FWS_Module
 {
 	/**
 	 * Should return wether this module is viewable by guests only. The default value is "false".
@@ -37,13 +37,13 @@ abstract class BS_Front_Module extends PLIB_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::request_formular()
+	 * @see FWS_Module::request_formular()
 	 *
 	 * @return BS_HTML_Formular
 	 */
 	protected final function request_formular()
 	{
-		$tpl = PLIB_Props::get()->tpl();
+		$tpl = FWS_Props::get()->tpl();
 
 		$args = func_get_args();
 		switch(count($args))
@@ -58,7 +58,7 @@ abstract class BS_Front_Module extends PLIB_Module
 				$form = new BS_HTML_Formular($args[0],$args[1]);
 				break;
 			default:
-				PLIB_Helper::error('Invalid number of arguments ('.count($args).')!');
+				FWS_Helper::error('Invalid number of arguments ('.count($args).')!');
 				break;
 		}
 		
@@ -75,15 +75,15 @@ abstract class BS_Front_Module extends PLIB_Module
 	 */
 	protected final function add_loc_forum_path($id)
 	{
-		$forums = PLIB_Props::get()->forums();
-		$url = PLIB_Props::get()->url();
-		$doc = PLIB_Props::get()->doc();
+		$forums = FWS_Props::get()->forums();
+		$url = FWS_Props::get()->url();
+		$doc = FWS_Props::get()->doc();
 		$renderer = $doc->get_renderer();
 		
 		if(!($renderer instanceof BS_Front_Renderer_HTML))
-			PLIB_Helper::def_error('instance','render','BS_Front_Renderer_HTML',$renderer);
+			FWS_Helper::def_error('instance','render','BS_Front_Renderer_HTML',$renderer);
 
-		if(PLIB_Helper::is_integer($id) && $id > 0)
+		if(FWS_Helper::is_integer($id) && $id > 0)
 		{
 			$path = $forums->get_path($id);
 			for($i = count($path) - 1;$i >= 0;$i--)
@@ -97,12 +97,12 @@ abstract class BS_Front_Module extends PLIB_Module
 	 */
 	protected final function add_loc_topic()
 	{
-		$url = PLIB_Props::get()->url();
-		$doc = PLIB_Props::get()->doc();
+		$url = FWS_Props::get()->url();
+		$doc = FWS_Props::get()->doc();
 		$renderer = $doc->get_renderer();
 		
 		if(!($renderer instanceof BS_Front_Renderer_HTML))
-			PLIB_Helper::def_error('instance','render','BS_Front_Renderer_HTML',$renderer);
+			FWS_Helper::def_error('instance','render','BS_Front_Renderer_HTML',$renderer);
 		
 		$tdata = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		if($tdata !== null)

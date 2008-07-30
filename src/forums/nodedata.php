@@ -17,7 +17,7 @@
  * @subpackage	src.forums
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Forums_NodeData extends PLIB_Tree_NodeData
+final class BS_Forums_NodeData extends FWS_Tree_NodeData
 {
 	/**
 	 * The data of the forum

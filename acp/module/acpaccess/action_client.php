@@ -21,13 +21,13 @@ final class BS_ACP_Action_acpaccess_client extends BS_ACP_Action_Base
 {
 	function perform_action($type = 'user')
 	{
-		$input = PLIB_Props::get()->input();
-		$auth = PLIB_Props::get()->auth();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$auth = FWS_Props::get()->auth();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
 		$permissions = $input->get_var('permission','post');
-		$aval = $input->get_var('aval','post',PLIB_Input::ID);
+		$aval = $input->get_var('aval','post',FWS_Input::ID);
 		if($aval == null || $permissions == null)
 			return 'POST-variable "aval" or "permission" is NULL';
 

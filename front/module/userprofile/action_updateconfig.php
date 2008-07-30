@@ -21,12 +21,12 @@ final class BS_Front_Action_userprofile_updateconfig extends BS_Front_Action_Bas
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		$info['reload'] = false;
 
@@ -39,35 +39,35 @@ final class BS_Front_Action_userprofile_updateconfig extends BS_Front_Action_Bas
 			return 'You are a guest';
 
 		$fonts = explode(',',$cfg['post_font_pool']);
-		PLIB_Array_Utils::trim($fonts);
+		FWS_Array_Utils::trim($fonts);
 
-		$email_display_mode = $input->correct_var('email_display_mode','post',PLIB_Input::STRING,
+		$email_display_mode = $input->correct_var('email_display_mode','post',FWS_Input::STRING,
 																							array('hide','jumble','default'),'default');
-		$post_def_font = $input->get_var('default_font','post',PLIB_Input::STRING);
+		$post_def_font = $input->get_var('default_font','post',FWS_Input::STRING);
 		$default_font = ($post_def_font !== 0 && in_array($post_def_font,$fonts)) ? $post_def_font : 0;
 		if($cfg['enable_pms'] == 1)
-			$allow_pms = $input->get_var('allow_pms','post',PLIB_Input::INT_BOOL);
+			$allow_pms = $input->get_var('allow_pms','post',FWS_Input::INT_BOOL);
 		else
 			$allow_pms = $user->get_profile_val('allow_pms');
-		$ghost_mode = $input->get_var('ghost_mode','post',PLIB_Input::INT_BOOL);
+		$ghost_mode = $input->get_var('ghost_mode','post',FWS_Input::INT_BOOL);
 		$bbcode_mode = $input->correct_var(
-			'bbcode_mode','post',PLIB_Input::STRING,array('simple','advanced','applet'),'simple'
+			'bbcode_mode','post',FWS_Input::STRING,array('simple','advanced','applet'),'simple'
 		);
-		$attach_signature = $input->get_var('attach_signature','post',PLIB_Input::INT_BOOL);
-		$allow_board_emails = $input->get_var('allow_board_emails','post',PLIB_Input::INT_BOOL);
+		$attach_signature = $input->get_var('attach_signature','post',FWS_Input::INT_BOOL);
+		$allow_board_emails = $input->get_var('allow_board_emails','post',FWS_Input::INT_BOOL);
 		$default_email_notification = $input->get_var(
-			'default_email_notification','post',PLIB_Input::INT_BOOL
+			'default_email_notification','post',FWS_Input::INT_BOOL
 		);
-		$timezone = $input->get_var('timezone','post',PLIB_Input::STRING);
-		$enable_pm_email = $input->get_var('enable_pm_email','post',PLIB_Input::INT_BOOL);
-		$emails_include_post = $input->get_var('emails_include_post','post',PLIB_Input::INT_BOOL);
-		$posts_order = $input->correct_var('posts_order','post',PLIB_Input::STRING,array('ASC','DESC'),'ASC');
+		$timezone = $input->get_var('timezone','post',FWS_Input::STRING);
+		$enable_pm_email = $input->get_var('enable_pm_email','post',FWS_Input::INT_BOOL);
+		$emails_include_post = $input->get_var('emails_include_post','post',FWS_Input::INT_BOOL);
+		$posts_order = $input->correct_var('posts_order','post',FWS_Input::STRING,array('ASC','DESC'),'ASC');
 		$email_notification_options = array('immediatly','1day','2days','1week');
 		$email_notification_type = $input->correct_var(
-			'email_notification_type','post',PLIB_Input::STRING,$email_notification_options,'immediatly'
+			'email_notification_type','post',FWS_Input::STRING,$email_notification_options,'immediatly'
 		);
 		$startmodule = $input->correct_var(
-			'startmodule','post',PLIB_Input::STRING,array('portal','forums'),'portal'
+			'startmodule','post',FWS_Input::STRING,array('portal','forums'),'portal'
 		);
 
 		$fields = array(
@@ -82,7 +82,7 @@ final class BS_Front_Action_userprofile_updateconfig extends BS_Front_Action_Bas
 		// the language
 		if($cfg['allow_custom_lang'] == 1)
 		{
-			$forum_lang = $input->get_var('lang','post',PLIB_Input::INTEGER);
+			$forum_lang = $input->get_var('lang','post',FWS_Input::INTEGER);
 			if($forum_lang == 0 || $cache->get_cache('languages')->element_exists_with(array('id' => $forum_lang)))
 				$lang = $forum_lang;
 			else
@@ -99,7 +99,7 @@ final class BS_Front_Action_userprofile_updateconfig extends BS_Front_Action_Bas
 		// the theme
 		if($cfg['allow_custom_style'] == 1)
 		{
-			$forum_style = $input->get_var('theme','post',PLIB_Input::INTEGER);
+			$forum_style = $input->get_var('theme','post',FWS_Input::INTEGER);
 			if($forum_style == 0 || $cache->get_cache('themes')->element_exists_with(array('id' => $forum_style)))
 				$style = $forum_style;
 			else

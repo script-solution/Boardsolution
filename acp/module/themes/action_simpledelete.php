@@ -21,17 +21,17 @@ final class BS_ACP_Action_themes_simpledelete extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
 
-		$theme = $input->get_var('theme','get',PLIB_Input::STRING);
+		$theme = $input->get_var('theme','get',FWS_Input::STRING);
 		if($theme == null)
 			return 'Invalid theme "'.$theme.'"';
 		
-		$file = PLIB_Path::server_app().'themes/'.$theme.'/style.css';
-		$css = new PLIB_CSS_SimpleParser($file,$file);
+		$file = FWS_Path::server_app().'themes/'.$theme.'/style.css';
+		$css = new FWS_CSS_SimpleParser($file,$file);
 		
-		$split = explode(',',$input->get_var('ids','get',PLIB_Input::STRING));
+		$split = explode(',',$input->get_var('ids','get',FWS_Input::STRING));
 		for($i = 0;$i < count($split);$i++)
 		{
 			if($split[$i] != '')

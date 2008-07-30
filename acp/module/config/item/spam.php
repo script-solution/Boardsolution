@@ -18,7 +18,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Config_Item_Spam extends PLIB_Config_Item_Default
+final class BS_ACP_Config_Item_Spam extends FWS_Config_Item_Default
 {
 	/**
 	 * The available times
@@ -31,7 +31,7 @@ final class BS_ACP_Config_Item_Spam extends PLIB_Config_Item_Default
 	
 	public function get_control($form)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$name = $this->_data->get_name();
 		$value = $this->_data->get_value();
@@ -52,13 +52,13 @@ final class BS_ACP_Config_Item_Spam extends PLIB_Config_Item_Default
 
 	public function get_value()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
 		$name = $this->_data->get_name();
 		if(!$input->isset_var($name.'_enabled','post'))
 			return 0;
 		
-		return $input->correct_var($name.'_time','post',PLIB_Input::INTEGER,$this->_elements,3600);
+		return $input->correct_var($name.'_time','post',FWS_Input::INTEGER,$this->_elements,3600);
 	}
 }
 ?>

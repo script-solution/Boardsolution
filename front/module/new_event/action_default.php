@@ -21,20 +21,20 @@ final class BS_Front_Action_new_event_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$forums = PLIB_Props::get()->forums();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
-		$cfg = PLIB_Props::get()->cfg();
-		$ips = PLIB_Props::get()->ips();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$forums = FWS_Props::get()->forums();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
+		$cfg = FWS_Props::get()->cfg();
+		$ips = FWS_Props::get()->ips();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		
 		// closed?
 		$forum_data = $forums->get_node_data($fid);
@@ -81,7 +81,7 @@ final class BS_Front_Action_new_event_default extends BS_Front_Action_Base
 		}
 		
 		// check subscriptions
-		$subscribe = $input->get_var('subscribe_topic','post',PLIB_Input::INT_BOOL);
+		$subscribe = $input->get_var('subscribe_topic','post',FWS_Input::INT_BOOL);
 		if($subscribe)
 		{
 			$sub = BS_Front_Action_Plain_SubscribeTopic::get_default($topic->get_topic_id(),false);

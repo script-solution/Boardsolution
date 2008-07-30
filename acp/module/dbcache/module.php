@@ -20,7 +20,7 @@
 final class BS_ACP_Module_dbcache extends BS_ACP_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_ACP_Module_dbcache extends BS_ACP_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_REGENERATE_CACHE,'regenerate');
@@ -37,13 +37,13 @@ final class BS_ACP_Module_dbcache extends BS_ACP_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
+		$tpl = FWS_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
 
 		$tpl->add_variables(array(
 			'action_type' => BS_ACP_ACTION_REGENERATE_CACHE
@@ -52,7 +52,7 @@ final class BS_ACP_Module_dbcache extends BS_ACP_Module
 		$entries = array();
 		foreach($cache->get_caches() as $name => $content)
 		{
-			if($content instanceof PLIB_Cache_Content)
+			if($content instanceof FWS_Cache_Content)
 				$entries[] = $name;
 		}
 		$tpl->add_array('entries',$entries);
@@ -60,14 +60,14 @@ final class BS_ACP_Module_dbcache extends BS_ACP_Module
 		// show details?
 		if($input->isset_var('name','get'))
 		{
-			$name = $input->get_var('name','get',PLIB_Input::STRING);
+			$name = $input->get_var('name','get',FWS_Input::STRING);
 			$content = $cache->get_cache($name);
 			if($content != null)
 			{
 				$tpl->add_variables(array(
 					'show_cache' => true,
 					'details_name' => $name,
-					'cache_content' => PLIB_PrintUtils::to_string($content->get_elements())
+					'cache_content' => FWS_PrintUtils::to_string($content->get_elements())
 				));
 			}
 		}

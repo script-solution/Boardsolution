@@ -36,7 +36,7 @@ final class BS_Front_Module_userprofile extends BS_Front_SubModuleContainer
 	}
 	
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -44,16 +44,16 @@ final class BS_Front_Module_userprofile extends BS_Front_SubModuleContainer
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($user->is_loggedin());
 		
 		$renderer->set_template('userprofile.htm');
 
-		switch($input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING))
+		switch($input->get_var(BS_URL_LOC,'get',FWS_Input::STRING))
 		{
 			case 'forums':
 			case 'topics':
@@ -80,15 +80,15 @@ final class BS_Front_Module_userprofile extends BS_Front_SubModuleContainer
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
-		$tpl = PLIB_Props::get()->tpl();
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$tpl = FWS_Props::get()->tpl();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
 
 		// run submodule
 		parent::run();
@@ -137,7 +137,7 @@ final class BS_Front_Module_userprofile extends BS_Front_SubModuleContainer
 	 */
 	private function _show_profile_status_bar($num,$max)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		$percent = $max == 0 ? 0 : floor((100 / $max) * $num);
 		$img = $user->get_theme_item_path('images/diagrams/profile_diagram.gif');

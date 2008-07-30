@@ -18,7 +18,7 @@
  * @subpackage	front.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_TopicFactory extends PLIB_Singleton
+final class BS_Front_TopicFactory extends FWS_Singleton
 {
 	/**
 	 * @return BS_Front_TopicFactory the instance of this class
@@ -43,14 +43,14 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 	 */
 	public function get_current_topic()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
 		if($this->_topic !== false)
 			return $this->_topic;
 		
 		$this->_topic = null;
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 	
 		if($tid != null && $fid != null)
 		{
@@ -75,19 +75,19 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 	 */
 	public function add_similar_topics($title,$tid,$current_url)
 	{
-		$input = PLIB_Props::get()->input();
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
 
 		// change similar-topics-display-state?
-		if($input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING) == 'clap_similar_topics')
+		if($input->get_var(BS_URL_LOC,'get',FWS_Input::STRING) == 'clap_similar_topics')
 			$functions->clap_area('similar_topics');
 	
 		$search_string = '';
 		$search_words = array();
-		$words = PLIB_StringHelper::get_words($title);
+		$words = FWS_StringHelper::get_words($title);
 		$ignore = $functions->get_search_ignore_words();
 		foreach(array_keys($words) as $k)
 		{
@@ -99,7 +99,7 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 		}
 	
 		if($search_string != '')
-			$search_string = ' AND ('.PLIB_String::substr($search_string,4).')';
+			$search_string = ' AND ('.FWS_String::substr($search_string,4).')';
 		else
 			$search_string = ' AND t.name LIKE \'%'.$title.'%\'';
 	
@@ -136,9 +136,9 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 	 */
 	public function add_latest_topics_full($fid = 0)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$functions = PLIB_Props::get()->functions();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$functions = FWS_Props::get()->functions();
+		$url = FWS_Props::get()->url();
 
 		$infos = $this->_get_latest_topics_infos($fid);
 		
@@ -163,12 +163,12 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 	 */
 	public function add_latest_topics_small($fid = 0)
 	{
-		$input = PLIB_Props::get()->input();
-		$functions = PLIB_Props::get()->functions();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$functions = FWS_Props::get()->functions();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
 
-		if($input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING) == 'clap_current_topics')
+		if($input->get_var(BS_URL_LOC,'get',FWS_Input::STRING) == 'clap_current_topics')
 			$functions->clap_area('current_topics');
 		
 		$infos = $this->_get_latest_topics_infos($fid);
@@ -202,8 +202,8 @@ final class BS_Front_TopicFactory extends PLIB_Singleton
 	 */
 	private function _get_latest_topics_infos($fid)
 	{
-		$forums = PLIB_Props::get()->forums();
-		$locale = PLIB_Props::get()->locale();
+		$forums = FWS_Props::get()->forums();
+		$locale = FWS_Props::get()->locale();
 
 		if($fid > 0)
 		{

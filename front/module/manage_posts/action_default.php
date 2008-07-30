@@ -21,21 +21,21 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 {
 	public function perform_action($type = 'split')
 	{
-		$input = PLIB_Props::get()->input();
-		$forums = PLIB_Props::get()->forums();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$forums = FWS_Props::get()->forums();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		if(!$input->isset_var('submit','post'))
 			return '';
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$split_type = $input->correct_var('split_type','post',PLIB_Input::STRING,
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
+		$split_type = $input->correct_var('split_type','post',FWS_Input::STRING,
 			array('selected','following'),'selected');
-		$merge_type = $input->correct_var('merge_type','post',PLIB_Input::STRING,
+		$merge_type = $input->correct_var('merge_type','post',FWS_Input::STRING,
 			array('selected','following'),'selected');
 
 		// check other parameters
@@ -71,7 +71,7 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 		if(($type == 'split' && $split_type == 'selected') ||
 				($type == 'merge' && $merge_type == 'selected'))
 		{
-			if(PLIB_Array_Utils::is_integer($ids) && count($ids) > 0)
+			if(FWS_Array_Utils::is_integer($ids) && count($ids) > 0)
 				$post_data = BS_DAO::get_posts()->get_posts_by_ids($ids,$fid,$tid);
 		}
 		else
@@ -96,21 +96,21 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 		if($type == 'split')
 		{
 			// check the target-forum
-			$target_fid = $input->get_var('target_forum','post',PLIB_Input::ID);
+			$target_fid = $input->get_var('target_forum','post',FWS_Input::ID);
 			if($target_fid == null || !$forums->node_exists($target_fid))
 				return 'The target-forum "'.$target_fid.'" doesn\'t exist';
 
-			$topic_name = $input->get_var('new_topic_name','post',PLIB_Input::STRING);
+			$topic_name = $input->get_var('new_topic_name','post',FWS_Input::STRING);
 			if(trim($topic_name) == '')
 				return 'missing_topic_name';
 
-			$symbol = $input->get_var('symbol','post',PLIB_Input::INTEGER);
+			$symbol = $input->get_var('symbol','post',FWS_Input::INTEGER);
 			$symbol = ($symbol > BS_NUMBER_OF_TOPIC_ICONS || $symbol < 0) ? 0 : (int)$symbol;
 		}
 		else
 		{
 			// determine target-forum and check topic-id
-			$topic_id = $input->get_var('topic_id','post',PLIB_Input::ID);
+			$topic_id = $input->get_var('topic_id','post',FWS_Input::ID);
 			if($topic_id == null)
 				return 'missing_topic_id';
 

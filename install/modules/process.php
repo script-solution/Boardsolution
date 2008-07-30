@@ -19,20 +19,20 @@ class BS_Install_process extends BS_Install
 {
 	public function run()
 	{
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
 
 		$type = $functions->get_session_var('install_type');
 		
-		include_once(PLIB_Path::server_app().'install/sql/sql.php');
+		include_once(FWS_Path::server_app().'install/sql/sql.php');
 		if($type == 'full')
 		{
-			include_once(PLIB_Path::server_app().'install/sql/full.php');
+			include_once(FWS_Path::server_app().'install/sql/full.php');
 			$install = new BS_InstallSQL_full($this);
 		}
 		else
 		{
-			include_once(PLIB_Path::server_app().'install/sql/update.php');
+			include_once(FWS_Path::server_app().'install/sql/update.php');
 			$install = new BS_InstallSQL_update($this);
 		}
 		

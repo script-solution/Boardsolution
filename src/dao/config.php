@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_Config extends PLIB_Singleton
+class BS_DAO_Config extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_Config the instance of this class
@@ -36,7 +36,7 @@ class BS_DAO_Config extends PLIB_Singleton
 	 */
 	public function get_all()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_CONFIG.' ORDER BY group_id ASC,sort ASC'
@@ -51,10 +51,10 @@ class BS_DAO_Config extends PLIB_Singleton
 	 */
 	public function get_by_group($group_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($group_id) || $group_id <= 0)
-			PLIB_Helper::def_error('intgt0','group_id',$group_id);
+		if(!FWS_Helper::is_integer($group_id) || $group_id <= 0)
+			FWS_Helper::def_error('intgt0','group_id',$group_id);
 		
 		return $db->sql_rows(
 			'SELECT c.*
@@ -74,10 +74,10 @@ class BS_DAO_Config extends PLIB_Singleton
 	 */
 	public function update_setting_by_name($name,$value)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 		
 		if(empty($name))
-			PLIB_Helper::def_error('notempty','name',$name);
+			FWS_Helper::def_error('notempty','name',$name);
 		
 		$db->sql_update(BS_TB_CONFIG,'WHERE name = "'.$name.'"',array(
 			'value' => $value
@@ -94,10 +94,10 @@ class BS_DAO_Config extends PLIB_Singleton
 	 */
 	public function update_setting($id,$value)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_update(BS_TB_CONFIG,'WHERE id = '.$id,array(
 			'value' => $value
@@ -113,10 +113,10 @@ class BS_DAO_Config extends PLIB_Singleton
 	 */
 	public function revert_setting($id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_update(BS_TB_CONFIG,'WHERE id = '.$id,array('value' => array('`default`')));
 		return $db->get_affected_rows();

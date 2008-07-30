@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_Themes extends PLIB_Singleton
+class BS_DAO_Themes extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_Themes the instance of this class
@@ -39,7 +39,7 @@ class BS_DAO_Themes extends PLIB_Singleton
 	 */
 	public function theme_exists($folder)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(BS_TB_THEMES,'id',' WHERE theme_folder = "'.$folder.'"') > 0;
 	}
@@ -53,12 +53,12 @@ class BS_DAO_Themes extends PLIB_Singleton
 	 */
 	public function create($name,$folder)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		if(empty($name))
-			PLIB_Helper::def_error('notempty','name',$name);
+			FWS_Helper::def_error('notempty','name',$name);
 		if(empty($folder))
-			PLIB_Helper::def_error('notempty','folder',$folder);
+			FWS_Helper::def_error('notempty','folder',$folder);
 		
 		$db->sql_insert(BS_TB_THEMES,array(
 			'theme_name' => $name,
@@ -77,12 +77,12 @@ class BS_DAO_Themes extends PLIB_Singleton
 	 */
 	public function update_by_id($id,$name,$folder = '')
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		if(empty($name))
-			PLIB_Helper::def_error('notempty','name',$name);
+			FWS_Helper::def_error('notempty','name',$name);
 		
 		$fields = array(
 			'theme_name' => $name,
@@ -101,10 +101,10 @@ class BS_DAO_Themes extends PLIB_Singleton
 	 */
 	public function delete_by_ids($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_THEMES.' WHERE id IN ('.implode(',',$ids).')'

@@ -21,14 +21,14 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
-		$cache = PLIB_Props::get()->cache();
-		$msgs = PLIB_Props::get()->msgs();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$cache = FWS_Props::get()->cache();
+		$msgs = FWS_Props::get()->msgs();
+		$user = FWS_Props::get()->user();
 
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
 			return 'Invalid id "'.$id.'"';
 		
@@ -38,7 +38,7 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 		
 		if(!BS_ENABLE_EXPORT)
 		{
-			$user_name = $input->get_var('user_name','post',PLIB_Input::STRING);
+			$user_name = $input->get_var('user_name','post',FWS_Input::STRING);
 			// check username
 			if(!BS_UserUtils::get_instance()->check_username($user_name))
 				return 'usernamenotallowed';
@@ -49,9 +49,9 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 			if(BS_DAO::get_user()->name_exists($user_name,$id))
 				return 'registeruservorhanden';
 
-			$user_pw = $input->get_var('user_pw','post',PLIB_Input::STRING);
-			$user_pw_conf = $input->get_var('user_pw_conf','post',PLIB_Input::STRING);
-			$user_email = $input->get_var('user_email','post',PLIB_Input::STRING);
+			$user_pw = $input->get_var('user_pw','post',FWS_Input::STRING);
+			$user_pw_conf = $input->get_var('user_pw_conf','post',FWS_Input::STRING);
+			$user_email = $input->get_var('user_email','post',FWS_Input::STRING);
 
 			// check inputs
 			if($user_pw != '' && $user_pw != $user_pw_conf)
@@ -59,7 +59,7 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 
 			// check email
 			$user_email = trim($user_email);
-			if(!PLIB_StringHelper::is_valid_email($user_email))
+			if(!FWS_StringHelper::is_valid_email($user_email))
 				return 'mailnotallowed';
 
 			if($functions->is_banned('mail',$user_email))
@@ -69,11 +69,11 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 			if(BS_DAO::get_user()->email_exists($user_email,$id))
 				return 'email_exists';
 		}
-		$main_group = $input->get_var('main_group','post',PLIB_Input::ID);
+		$main_group = $input->get_var('main_group','post',FWS_Input::ID);
 		$other_groups = $input->get_var('other_groups','post');
-		$post_text = $input->get_var('text','post',PLIB_Input::STRING);
-		$notify = $input->get_var('notify','post',PLIB_Input::INT_BOOL);
-		$remove_avatar = $input->get_var('remove_avatar','post',PLIB_Input::INT_BOOL);
+		$post_text = $input->get_var('text','post',FWS_Input::STRING);
+		$notify = $input->get_var('notify','post',FWS_Input::INT_BOOL);
+		$remove_avatar = $input->get_var('remove_avatar','post',FWS_Input::INT_BOOL);
 
 		$text = '';
 		$error = BS_PostingUtils::get_instance()->prepare_message_for_db($text,$post_text,'sig');
@@ -135,7 +135,7 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 
 			$avdata = BS_DAO::get_avatars()->get_by_id($data['avatar']);
 			if($avdata !== false)
-				@unlink(PLIB_Path::server_app().'images/avatars/'.$avdata['av_pfad']);
+				@unlink(FWS_Path::server_app().'images/avatars/'.$avdata['av_pfad']);
 
 			BS_DAO::get_avatars()->delete_by_ids(array($data['avatar']));
 		}

@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_bots_default extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -33,24 +33,24 @@ final class BS_ACP_SubModule_bots_default extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		// display delete-message?
 		if($input->isset_var('delete','post'))
 		{
 			$ids = $input->get_var('delete','post');
-			$site = $input->get_var('site','get',PLIB_Input::ID);
+			$site = $input->get_var('site','get',FWS_Input::ID);
 			$names = $cache->get_cache('bots')->get_field_vals_of_keys($ids,'bot_name');
-			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
+			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
@@ -61,7 +61,7 @@ final class BS_ACP_SubModule_bots_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$search = $input->get_var('search','get',PLIB_Input::STRING);
+		$search = $input->get_var('search','get',FWS_Input::STRING);
 		$bots = array();
 		foreach($cache->get_cache('bots') as $data)
 		{
@@ -114,7 +114,7 @@ final class BS_ACP_SubModule_bots_default extends BS_ACP_SubModule
 		unset($hidden['at']);
 		$tpl->add_variables(array(
 			'site' => $site,
-			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));

@@ -19,8 +19,8 @@ class BS_Install_finished extends BS_Install
 {
 	public function run()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$functions = PLIB_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$functions = FWS_Props::get()->functions();
 
 		$tpl->set_template('step_finished.htm');
 		$tpl->add_variables(array(

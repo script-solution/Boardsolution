@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_CFGGroups extends PLIB_Singleton
+class BS_DAO_CFGGroups extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_CFGGroups the instance of this class
@@ -36,7 +36,7 @@ class BS_DAO_CFGGroups extends PLIB_Singleton
 	 */
 	public function get_all()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_CONFIG_GROUPS.' ORDER BY sort ASC'

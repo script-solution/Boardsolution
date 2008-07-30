@@ -20,7 +20,7 @@
 final class BS_DBA_Module_backups extends BS_DBA_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_DBA_Page $doc
 	 */
@@ -33,22 +33,22 @@ final class BS_DBA_Module_backups extends BS_DBA_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
-		$backups = PLIB_Props::get()->backups();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$backups = FWS_Props::get()->backups();
+		$user = FWS_Props::get()->user();
 		
 		$user->delete_session_data('BS_restore');
 		$user->delete_session_data('BS_backup');
 		
-		$mode = $input->get_var('mode','get',PLIB_Input::STRING);
+		$mode = $input->get_var('mode','get',FWS_Input::STRING);
 		
 		// show delete message?
 		if(($delete = $input->get_var('delete','post')) != null)
@@ -66,7 +66,7 @@ final class BS_DBA_Module_backups extends BS_DBA_Module
 		if($mode == 'qrestore')
 		{
 			$selected_db = BS_DBA_Utils::get_instance()->get_selected_database();
-			$backup = $input->get_var('backup','get',PLIB_Input::STRING);
+			$backup = $input->get_var('backup','get',FWS_Input::STRING);
 			$message = sprintf($locale->lang('restore_backup_question'),$backup,$selected_db);
 			$yes_url = $url->get_url('restorebackup','&amp;backup='.$backup);
 			$no_url = $url->get_url(0);
@@ -79,9 +79,9 @@ final class BS_DBA_Module_backups extends BS_DBA_Module
 		{
 			$tpl_backups[] = array(
 				'backup_prefix' => $backup->prefix,
-				'date' => PLIB_Date::get_date($backup->date),
+				'date' => FWS_Date::get_date($backup->date),
 				'files' => $backup->files,
-				'size' => PLIB_StringHelper::get_formated_data_size((int)$backup->size,BS_DBA_LANGUAGE),
+				'size' => FWS_StringHelper::get_formated_data_size((int)$backup->size,BS_DBA_LANGUAGE),
 				'restore_url' => $url->get_url(0,'&amp;mode=qrestore&amp;backup='.$backup->prefix)
 			);
 		}

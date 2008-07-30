@@ -17,7 +17,7 @@
  * @subpackage	src.error
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Error_Logger extends PLIB_Object implements PLIB_Error_Logger
+final class BS_Error_Logger extends FWS_Object implements FWS_Error_Logger
 {
 	/**
 	 * Limit the number of logs. This stores the number of already logged errors
@@ -27,7 +27,7 @@ final class BS_Error_Logger extends PLIB_Object implements PLIB_Error_Logger
 	private $_log_count = 0;
 	
 	/**
-	 * @see PLIB_Error_Logger::log()
+	 * @see FWS_Error_Logger::log()
 	 *
 	 * @param int $no
 	 * @param string $msg
@@ -37,16 +37,16 @@ final class BS_Error_Logger extends PLIB_Object implements PLIB_Error_Logger
 	 */
 	public function log($no,$msg,$file,$line,$backtrace)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
 
 		if(isset($cfg['enable_error_log']))
 		{
 			if($cfg['enable_error_log'] && $this->_log_count < 5)
 			{
-				$phpself = $input->get_var('PHP_SELF','server',PLIB_Input::STRING);
-				$querystr = $input->get_var('QUERY_STRING','server',PLIB_Input::STRING);
+				$phpself = $input->get_var('PHP_SELF','server',FWS_Input::STRING);
+				$querystr = $input->get_var('QUERY_STRING','server',FWS_Input::STRING);
 				$query = $phpself.'?'.$querystr;
 				
 				$msg = ($no > 0 ? $no.': ' : '').$msg;
@@ -54,7 +54,7 @@ final class BS_Error_Logger extends PLIB_Object implements PLIB_Error_Logger
 				$sbacktrace = '';
 				if($backtrace !== null)
 				{
-					$plainbt = new PLIB_Error_BTPrinter_Plain();
+					$plainbt = new FWS_Error_BTPrinter_Plain();
 					$sbacktrace = $plainbt->print_backtrace($backtrace);
 				}
 				else
@@ -73,7 +73,7 @@ final class BS_Error_Logger extends PLIB_Object implements PLIB_Error_Logger
 	}
 
 	/**
-	 * @see PLIB_Object::get_print_vars()
+	 * @see FWS_Object::get_print_vars()
 	 *
 	 * @return array
 	 */

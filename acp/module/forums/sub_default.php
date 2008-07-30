@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -36,27 +36,27 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$url = PLIB_Props::get()->url();
-		$cache = PLIB_Props::get()->cache();
-		$auth = PLIB_Props::get()->auth();
-		$tpl = PLIB_Props::get()->tpl();
-		$forums = PLIB_Props::get()->forums();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$url = FWS_Props::get()->url();
+		$cache = FWS_Props::get()->cache();
+		$auth = FWS_Props::get()->auth();
+		$tpl = FWS_Props::get()->tpl();
+		$forums = FWS_Props::get()->forums();
 
 		if(($delete = $input->get_var('delete','post')) != null)
 		{
 			$ids = implode(',',$delete);
-			$action_type = $input->get_var('action_type','post',PLIB_Input::STRING);
+			$action_type = $input->get_var('action_type','post',FWS_Input::STRING);
 			$names = array();
 			foreach($forums->get_nodes_with_ids($delete) as $node)
 				$names[] = $node->get_name();
-			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
+			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
 			if($action_type == 'delete')
 			{
@@ -228,7 +228,7 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 	 */
 	private function _get_usergroup_shortcuts()
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		$c = 0;
 		$shortcuts = array();
@@ -238,8 +238,8 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 				continue;
 			
 			$sc = '';
-			$upper = PLIB_String::strtoupper($gdata['group_title']);
-			$glen = PLIB_String::strlen($upper);
+			$upper = FWS_String::strtoupper($gdata['group_title']);
+			$glen = FWS_String::strlen($upper);
 			for($l = 1;$l <= $glen;$l++)
 			{
 				$found = true;
@@ -252,7 +252,7 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 						break;
 					}
 					
-					$sc = PLIB_String::substr($upper,$p++,$l);
+					$sc = FWS_String::substr($upper,$p++,$l);
 				} while(isset($shortcuts[$sc]));
 				
 				if($found)
@@ -277,8 +277,8 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 	 */
 	private function _get_forum_permissions($data,$shortcuts)
 	{
-		$cache = PLIB_Props::get()->cache();
-		$auth = PLIB_Props::get()->auth();
+		$cache = FWS_Props::get()->cache();
+		$auth = FWS_Props::get()->auth();
 
 		$usergroups = $cache->get_cache('user_groups');
 		$permissions = array();
@@ -306,8 +306,8 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 				$permissions[$tplname] .= $shortcuts[$gid].',';
 			}
 			
-			$permissions[$tplname] = PLIB_String::substr(
-				$permissions[$tplname],0,PLIB_String::strlen($permissions[$tplname]) - 1
+			$permissions[$tplname] = FWS_String::substr(
+				$permissions[$tplname],0,FWS_String::strlen($permissions[$tplname]) - 1
 			);
 		}
 		
@@ -327,7 +327,7 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 		if($intern_more)
 			$permissions['intern'] .= '(...)';
 		else
-			$permissions['intern'] = PLIB_String::substr($permissions['intern'],0,-1);
+			$permissions['intern'] = FWS_String::substr($permissions['intern'],0,-1);
 		
 		return $permissions;
 	}

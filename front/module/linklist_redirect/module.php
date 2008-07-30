@@ -20,7 +20,7 @@
 final class BS_Front_Module_linklist_redirect extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -32,16 +32,16 @@ final class BS_Front_Module_linklist_redirect extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$auth = PLIB_Props::get()->auth();
-		$ips = PLIB_Props::get()->ips();
-		$doc = PLIB_Props::get()->doc();
+		$input = FWS_Props::get()->input();
+		$auth = FWS_Props::get()->auth();
+		$ips = FWS_Props::get()->ips();
+		$doc = FWS_Props::get()->doc();
 
-		$lid = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$lid = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		if($lid == null)
 		{
 			$this->report_error();
@@ -60,7 +60,7 @@ final class BS_Front_Module_linklist_redirect extends BS_Front_Module
 		$ips->add_entry('linkre_'.$lid);
 
 		$selurl = BS_DAO::get_links()->get_by_id($lid);
-		$doc->redirect(PLIB_StringHelper::htmlspecialchars_back($selurl['link_url']));
+		$doc->redirect(FWS_StringHelper::htmlspecialchars_back($selurl['link_url']));
 	}
 }
 ?>

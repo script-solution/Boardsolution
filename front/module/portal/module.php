@@ -20,7 +20,7 @@
 final class BS_Front_Module_portal extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_Front_Module_portal extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_robots_value('index,follow');
@@ -37,19 +37,19 @@ final class BS_Front_Module_portal extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$url = PLIB_Props::get()->url();
-		$locale = PLIB_Props::get()->locale();
-		$user = PLIB_Props::get()->user();
-		$tpl = PLIB_Props::get()->tpl();
-		$functions = PLIB_Props::get()->functions();
-		$unread = PLIB_Props::get()->unread();
-		$forums = PLIB_Props::get()->forums();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$url = FWS_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$tpl = FWS_Props::get()->tpl();
+		$functions = FWS_Props::get()->functions();
+		$unread = FWS_Props::get()->unread();
+		$forums = FWS_Props::get()->forums();
 
 		// portal disabled?
 		if($cfg['enable_portal'] == 0)
@@ -101,7 +101,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		{
 			$data = $node->get_data();
 			/* @var $data BS_Forums_NodeData */
-			/* @var $node PLIB_Tree_Node */
+			/* @var $node FWS_Tree_Node */
 			
 			$nodes[] = array(
 				'name' => $data->get_name(),
@@ -157,7 +157,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 	 */
 	private function _get_last_active_forums($count)
 	{
-		$forums = PLIB_Props::get()->forums();
+		$forums = FWS_Props::get()->forums();
 		
 		// build forums for the list
 		$nodes = array();
@@ -195,9 +195,9 @@ final class BS_Front_Module_portal extends BS_Front_Module
 	 */
 	private function _add_latest_topics_full()
 	{
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
 
 		$murl = $url->get_url('latest_topics');
 		$title = '<a href="'.$murl.'">'.$locale->lang('current_topics').'</a>';
@@ -218,11 +218,11 @@ final class BS_Front_Module_portal extends BS_Front_Module
 	 */
 	private function _add_latest_topics_small()
 	{
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
-		$unread = PLIB_Props::get()->unread();
-		$url = PLIB_Props::get()->url();
-		$tpl = PLIB_Props::get()->tpl();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$unread = FWS_Props::get()->unread();
+		$url = FWS_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
 
 		$cache = array(
 			'symbol_poll' =>				$user->get_theme_item_path('images/thread_type/poll.gif'),
@@ -282,17 +282,17 @@ final class BS_Front_Module_portal extends BS_Front_Module
 	 */
 	private function _add_news()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
-		$tpl = PLIB_Props::get()->tpl();
-		$unread = PLIB_Props::get()->unread();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$forums = PLIB_Props::get()->forums();
-		$auth = PLIB_Props::get()->auth();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$tpl = FWS_Props::get()->tpl();
+		$unread = FWS_Props::get()->unread();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$forums = FWS_Props::get()->forums();
+		$auth = FWS_Props::get()->auth();
 
-		$fids = PLIB_Array_Utils::advanced_explode(',',$cfg['news_forums']);
-		if(!PLIB_Array_Utils::is_integer($fids) || count($fids) == 0)
+		$fids = FWS_Array_Utils::advanced_explode(',',$cfg['news_forums']);
+		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
 			return;
 		
 		$cache = array(
@@ -383,7 +383,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 					'news_icon' => $news_icon,
 					'topic_url' => $url->get_posts_url($data['rubrikid'],$data['threadid']),
 					'username' => $username,
-					'date' => PLIB_Date::get_date($data['post_time']),
+					'date' => FWS_Date::get_date($data['post_time']),
 					'forum_path' => BS_ForumUtils::get_instance()->get_forum_path($data['rubrikid'],false),
 					'text' => $bbcode->get_message_for_output(),
 					'comments' => $comments,
@@ -403,8 +403,8 @@ final class BS_Front_Module_portal extends BS_Front_Module
 	 */
 	private function _get_lastpost($data)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
 
 		$pagination = new BS_Pagination($cfg['posts_per_page'],$data['posts'] + 1);
 		if($data['lastpost_id'] == 0)
@@ -428,7 +428,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 
 		return array(
 			'username' => $user_name,
-			'date' => PLIB_Date::get_date($data['lastpost_time']),
+			'date' => FWS_Date::get_date($data['lastpost_time']),
 			'url' => $murl.'#b_'.$data['lastpost_id'],
 		);
 	}
@@ -440,13 +440,13 @@ final class BS_Front_Module_portal extends BS_Front_Module
 	 */
 	private function _are_news_visible()
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		if($cfg['news_count'] == 0)
 			return 0;
 		
-		$fids = PLIB_Array_Utils::advanced_explode(',',$cfg['news_forums']);
-		if(!PLIB_Array_Utils::is_integer($fids) || count($fids) == 0)
+		$fids = FWS_Array_Utils::advanced_explode(',',$cfg['news_forums']);
+		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
 			return false;
 		
 		$denied = BS_ForumUtils::get_instance()->get_denied_forums(true);

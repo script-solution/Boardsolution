@@ -20,7 +20,7 @@
 final class BS_Front_Module_new_mail extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,18 +28,18 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$auth = PLIB_Props::get()->auth();
-		$cfg = PLIB_Props::get()->cfg();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$auth = FWS_Props::get()->auth();
+		$cfg = FWS_Props::get()->cfg();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($auth->has_global_permission('send_mails') && $cfg['enable_emails'] == 1);
 		
 		$renderer->add_action(BS_ACTION_SEND_EMAIL,'default');
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$renderer->add_breadcrumb(
 			$locale->lang('email'),
 			$url->get_url('new_mail','&amp;'.BS_URL_ID.'='.$id)
@@ -57,18 +57,18 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$user = PLIB_Props::get()->user();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		// check if the id is valid
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		if($id == null)
 		{
 			$this->report_error();
@@ -87,7 +87,7 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 		// check if the user has allowed board emails
 		if($data['allow_board_emails'] == 0)
 		{
-			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('user_disabled_emails'));
+			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('user_disabled_emails'));
 			return;
 		}
 
@@ -104,7 +104,7 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 		$pform = new BS_PostingForm($locale->lang('text').':');
 		$pform->add_form();
 		
-		$sec_code_field = PLIB_StringHelper::generate_random_key(15);
+		$sec_code_field = FWS_StringHelper::generate_random_key(15);
 		$user->set_session_data('sec_code_field',$sec_code_field);
 		
 		$content_type_options = array(

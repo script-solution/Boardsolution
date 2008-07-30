@@ -21,12 +21,12 @@ final class BS_ACP_Action_themes_delete extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
-		$id_str = $input->get_var('ids','get',PLIB_Input::STRING);
-		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
+		$id_str = $input->get_var('ids','get',FWS_Input::STRING);
+		if(!($ids = FWS_StringHelper::get_ids($id_str)))
 			return 'Got an invalid id-string via GET';
 		
 		// try to delete the directories
@@ -35,10 +35,10 @@ final class BS_ACP_Action_themes_delete extends BS_ACP_Action_Base
 		{
 			if(in_array($data['id'],$ids))
 			{
-				$folder = PLIB_Path::server_app().'themes/'.$data['theme_folder'];
+				$folder = FWS_Path::server_app().'themes/'.$data['theme_folder'];
 				if(is_dir($folder))
 				{
-					if(!PLIB_FileUtils::delete_folder($folder))
+					if(!FWS_FileUtils::delete_folder($folder))
 						$res = false;
 				}
 			}

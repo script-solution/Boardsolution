@@ -35,7 +35,7 @@ function showPopup(number,tag)
 		if(tag == 'color')
 			cp[number].hide();
 		else
-			PLIB_hideElement(id);
+			FWS_hideElement(id);
 		popups[tag + number] = 0;
 	}
 	else
@@ -45,10 +45,10 @@ function showPopup(number,tag)
 		if(navigator.vendor && navigator.vendor.indexOf('KDE') != -1 && typeof popups[tag] == 'undefined')
 		{
 			var body = document.getElementsByTagName('body')[0];
-			var el = PLIB_getElement(id);
+			var el = FWS_getElement(id);
 			if(el != null)
 			{
-				var btn = PLIB_getElement('tag_' + tag + '_' + number);
+				var btn = FWS_getElement('tag_' + tag + '_' + number);
 				el.parentNode.removeChild(el);
 				el.style.position = 'absolute';
 				el.style.display = 'block';
@@ -60,7 +60,7 @@ function showPopup(number,tag)
 		if(tag == 'color')
 			cp[number].toggle('tag_' + tag + '_' + number,'brl');
 		else
-			PLIB_displayElement(id,'tag_' + tag + '_' + number,'brl');
+			FWS_displayElement(id,'tag_' + tag + '_' + number,'brl');
 		popups[tag + number] = 1;
 	}
 }
@@ -74,10 +74,10 @@ function showPopup(number,tag)
  */
 function popupElementClick(number,tag,param)
 {
-	PLIB_hideElement('tag_' + tag + '_' + number + '_popup');
-	PLIB_getElement('bbcode_area' + number).focus();
+	FWS_hideElement('tag_' + tag + '_' + number + '_popup');
+	FWS_getElement('bbcode_area' + number).focus();
 	
-	var tagimg = PLIB_getElement('tag_' + tag + '_' + number);
+	var tagimg = FWS_getElement('tag_' + tag + '_' + number);
 	var text = param != '' ? '[' + tag + '=' + param + ']' : '[' + tag + ']';
 	insertBBCode(number,'bbcode_area' + number,text,tag,tagimg);
 	tagAdded[tag + number] = isItemMarked('tag_' + tag + '_' + number);

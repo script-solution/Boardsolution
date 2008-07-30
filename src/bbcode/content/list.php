@@ -45,7 +45,7 @@ final class BS_BBCode_Content_List extends BS_BBCode_Content_Default
 				break;
 		}
 		
-		$inner = PLIB_String::substr($inner,PLIB_String::strpos($inner,'[*]') + 3);
+		$inner = FWS_String::substr($inner,FWS_String::strpos($inner,'[*]') + 3);
 		$split = explode('[*]',$inner);
 		for($i = 0;$i < count($split);$i++)
 			$result .= '	<li>'.$split[$i].'</li>';

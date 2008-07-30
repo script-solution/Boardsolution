@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_CorrectMsgs_Helper extends PLIB_Singleton
+final class BS_ACP_Module_CorrectMsgs_Helper extends FWS_Singleton
 {
 	/**
 	 * @return BS_ACP_Module_CorrectMsgs_Helper the instance of this class
@@ -30,7 +30,7 @@ final class BS_ACP_Module_CorrectMsgs_Helper extends PLIB_Singleton
 	/**
 	 * The config-manager
 	 *
-	 * @var PLIB_Config_Manager
+	 * @var FWS_Config_Manager
 	 */
 	private $_manager;
 	

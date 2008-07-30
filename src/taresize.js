@@ -35,13 +35,13 @@ function BS_startDrag(ev)
 	if(!ev)
     ev = window.event;
 
-	var tar = PLIB_getElement(ta_resizer_id);
+	var tar = FWS_getElement(ta_resizer_id);
 	if(tar == null)
 		return;
 	
 	// determine positions
 	var evy = Browser.isIE ? ev.clientY + document.documentElement.scrollTop : ev.pageY;
-	var tary = PLIB_getPageOffsetTop(tar);
+	var tary = FWS_getPageOffsetTop(tar);
 	
 	// just move if we are over the resizer-element (with a little bit tolerance)
 	if(evy >= tary - 3 && evy <= tary + tar.offsetHeight + 3)
@@ -71,14 +71,14 @@ function BS_moveMouse(ev)
 	if(!ta_dragging)
 		return;
 	
-	var ta = PLIB_getElement(ta_id);
-	var tar = PLIB_getElement(ta_resizer_id);
+	var ta = FWS_getElement(ta_id);
+	var tar = FWS_getElement(ta_resizer_id);
 	if(ta == null || tar == null)
 		return;
 	
 	// determine positions
 	var evy = Browser.isIE ? ev.clientY + document.documentElement.scrollTop : ev.pageY;
-	var tay = PLIB_getPageOffsetTop(ta);
+	var tay = FWS_getPageOffsetTop(ta);
 	
 	// set new height
 	var newHeight = evy - tay - 10;

@@ -58,12 +58,12 @@ class BS_InstallFunctions extends BS_Functions
 	 */
 	public function transfer_to_session()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
 		if(!isset($_SESSION['BS11_install']))
 			$this->_init_session();
 		
-		$step_submit = $input->get_var('step_submit','post',PLIB_Input::INTEGER);
+		$step_submit = $input->get_var('step_submit','post',FWS_Input::INTEGER);
 		if($step_submit === null)
 			return;
 		
@@ -71,25 +71,25 @@ class BS_InstallFunctions extends BS_Functions
 		{
 			case 1:
 				$install_type = $input->correct_var(
-					'install_type','post',PLIB_Input::STRING,array('full','update'),'full'
+					'install_type','post',FWS_Input::STRING,array('full','update'),'full'
 				);
 				$this->set_session_var('install_type',$install_type);
 				break;
 			
 			case 2:
-				$this->set_session_var('host',$input->get_var('host','post',PLIB_Input::STRING));
-				$this->set_session_var('login',$input->get_var('login','post',PLIB_Input::STRING));
-				$this->set_session_var('password',$input->get_var('password','post',PLIB_Input::STRING));
-				$this->set_session_var('database',$input->get_var('database','post',PLIB_Input::STRING));
+				$this->set_session_var('host',$input->get_var('host','post',FWS_Input::STRING));
+				$this->set_session_var('login',$input->get_var('login','post',FWS_Input::STRING));
+				$this->set_session_var('password',$input->get_var('password','post',FWS_Input::STRING));
+				$this->set_session_var('database',$input->get_var('database','post',FWS_Input::STRING));
 				
-				$this->set_session_var('admin_login',$input->get_var('admin_login','post',PLIB_Input::STRING));
-				$this->set_session_var('admin_pw',$input->get_var('admin_pw','post',PLIB_Input::STRING));
-				$this->set_session_var('admin_email',$input->get_var('admin_email','post',PLIB_Input::STRING));
-				$this->set_session_var('board_url',$input->get_var('board_url','post',PLIB_Input::STRING));
+				$this->set_session_var('admin_login',$input->get_var('admin_login','post',FWS_Input::STRING));
+				$this->set_session_var('admin_pw',$input->get_var('admin_pw','post',FWS_Input::STRING));
+				$this->set_session_var('admin_email',$input->get_var('admin_email','post',FWS_Input::STRING));
+				$this->set_session_var('board_url',$input->get_var('board_url','post',FWS_Input::STRING));
 				break;
 			
 			case 3:
-				$this->set_session_var('table_prefix',$input->get_var('table_prefix','post',PLIB_Input::STRING));
+				$this->set_session_var('table_prefix',$input->get_var('table_prefix','post',FWS_Input::STRING));
 				break;
 		}
 	}
@@ -131,7 +131,7 @@ class BS_InstallFunctions extends BS_Functions
 	 */
 	public function reformat_text($text)
 	{
-		$text = PLIB_StringHelper::htmlspecialchars_back($text);
+		$text = FWS_StringHelper::htmlspecialchars_back($text);
 		$text = htmlspecialchars($text,ENT_QUOTES);
 		return addslashes($text);
 	}
@@ -143,17 +143,17 @@ class BS_InstallFunctions extends BS_Functions
 	 */
 	public function get_calculated_path()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
-		$host = $input->get_var('HTTP_HOST','server',PLIB_Input::STRING);
-		$phpself = $input->get_var('PHP_SELF','server',PLIB_Input::STRING);
+		$host = $input->get_var('HTTP_HOST','server',FWS_Input::STRING);
+		$phpself = $input->get_var('PHP_SELF','server',FWS_Input::STRING);
 		$path = $host.dirname($phpself);
-		if(PLIB_String::substr($path,0,7) != 'http://')
+		if(FWS_String::substr($path,0,7) != 'http://')
 			$path = 'http://'.$path;
 		
 		// remove trailing slash
 		if($path[count($path) - 1] == '/')
-			$path = PLIB_String::substr($path,0,-1);
+			$path = FWS_String::substr($path,0,-1);
 		
 		return $path;
 	}
@@ -167,8 +167,8 @@ class BS_InstallFunctions extends BS_Functions
 	 */
 	public function check_chmod($path)
 	{
-		if($path[PLIB_String::strlen($path) - 1] == '/')
-			$path = PLIB_String::substr($path,0,-1);
+		if($path[FWS_String::strlen($path) - 1] == '/')
+			$path = FWS_String::substr($path,0,-1);
 		
 		// if the file / dir does not exist it can't have a valid chmod
 		if(!file_exists($path))
@@ -258,8 +258,8 @@ class BS_InstallFunctions extends BS_Functions
 	 */
 	public function display_navigation($loc)
 	{
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
 
 		$show_refresh = false;
 	
@@ -270,7 +270,7 @@ class BS_InstallFunctions extends BS_Functions
 				$show_refresh = true;
 		}
 		
-		$phpself = $input->get_var('PHP_SELF','server',PLIB_Input::STRING);
+		$phpself = $input->get_var('PHP_SELF','server',FWS_Input::STRING);
 		$tpl->set_template('navigation.htm');
 		$tpl->add_variables(array(
 			'loc' => $loc,
@@ -298,7 +298,7 @@ class BS_InstallFunctions extends BS_Functions
 	public function get_config_status($title,$check,$in_ok = 0,$in_nok = 0,$title_out = 0,
 		$description = '',$failed_img = 'failed')
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$ok = ($in_ok === 0) ? $locale->lang('ok') : $in_ok;
 		$notok = ($in_nok === 0) ? $locale->lang('notok') : $in_nok;

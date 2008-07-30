@@ -36,9 +36,9 @@ final class BS_Front_Module_stats extends BS_Front_SubModuleContainer
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_breadcrumb($locale->lang('statistics'),'');

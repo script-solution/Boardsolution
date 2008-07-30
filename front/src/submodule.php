@@ -35,8 +35,8 @@ abstract class BS_Front_SubModule extends BS_Front_Module
 		
 		$classname = get_class($this);
 		$lastus = strrpos($classname,'_');
-		$prevlastus = strrpos(PLIB_String::substr($classname,0,$lastus),'_');
-		$this->_template = PLIB_String::strtolower(PLIB_String::substr($classname,$prevlastus + 1)).'.htm';
+		$prevlastus = strrpos(FWS_String::substr($classname,0,$lastus),'_');
+		$this->_template = FWS_String::strtolower(FWS_String::substr($classname,$prevlastus + 1)).'.htm';
 	}
 	
 	/**

@@ -17,7 +17,7 @@
  * @subpackage	src.addfield
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_AddField_Manager extends PLIB_AddField_Manager
+final class BS_AddField_Manager extends FWS_AddField_Manager
 {
 	/**
 	 * @return BS_AddField_Manager the instance of this class
@@ -42,11 +42,11 @@ final class BS_AddField_Manager extends PLIB_AddField_Manager
 	 */
 	public function is_any_required_field_empty()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		foreach($this->get_fields_at(BS_UF_LOC_USER_PROFILE) as $field)
 		{
-			/* @var $field PLIB_AddField_Field */
+			/* @var $field FWS_AddField_Field */
 			$data = $field->get_data();
 			$stored_val = $user->get_profile_val('add_'.$data->get_name());
 			if($data->is_required() && $field->is_empty($stored_val))

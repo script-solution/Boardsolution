@@ -21,14 +21,14 @@ final class BS_Front_Action_posts_votepoll extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// parameter valid?
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 		if($fid == null || $tid == null)
 			return 'The forum- or topic-id is invalid';
 
@@ -51,7 +51,7 @@ final class BS_Front_Action_posts_votepoll extends BS_Front_Action_Base
 
 		if($topic_data['multichoice'] == 0)
 		{
-			$choice = $input->get_var('vote_option','post',PLIB_Input::ID);
+			$choice = $input->get_var('vote_option','post',FWS_Input::ID);
 			if($choice == null)
 				return 'no_radiobutton_clicked';
 
@@ -60,7 +60,7 @@ final class BS_Front_Action_posts_votepoll extends BS_Front_Action_Base
 		else
 		{
 			$choice = $input->get_var('vote_option','post');
-			if($choice == null || count($choice) == 0 || !PLIB_Array_Utils::is_integer($choice))
+			if($choice == null || count($choice) == 0 || !FWS_Array_Utils::is_integer($choice))
 				return 'no_checkbox_clicked';
 
 			foreach($choice as $value)

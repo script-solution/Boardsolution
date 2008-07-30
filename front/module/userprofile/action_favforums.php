@@ -21,11 +21,11 @@ final class BS_Front_Action_userprofile_favforums extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$user = PLIB_Props::get()->user();
-		$input = PLIB_Props::get()->input();
-		$forums = PLIB_Props::get()->forums();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$user = FWS_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$forums = FWS_Props::get()->forums();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		if(!$user->is_loggedin())
 			return 'You are a guest';
@@ -38,7 +38,7 @@ final class BS_Front_Action_userprofile_favforums extends BS_Front_Action_Base
 		$fids = array();
 		foreach(array_keys($ids) as $fid)
 		{
-			if(PLIB_Helper::is_integer($fid))
+			if(FWS_Helper::is_integer($fid))
 				$fids[] = $fid;
 		}
 		$fids = $forums->get_nodes_with_other_ids($fids,false);

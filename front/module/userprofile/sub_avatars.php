@@ -20,7 +20,7 @@
 final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_UPLOAD_AVATAR,'uploadavatar');
@@ -41,30 +41,30 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$user = PLIB_Props::get()->user();
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$cfg = PLIB_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
 
 		// has the user the permission to configure the avatars?
 		if(!$user->is_loggedin() || $cfg['enable_avatars'] == 0)
 		{
-			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+			$this->report_error(FWS_Document_Messages::NO_ACCESS);
 			return;
 		}
 
-		$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 		if($site == null || $site < 1)
 			$site = 1;
 
-		if(($delete = $input->get_var('del','post')) != null && PLIB_Array_Utils::is_integer($delete))
+		if(($delete = $input->get_var('del','post')) != null && FWS_Array_Utils::is_integer($delete))
 		{
 			$id_str = implode(',',$delete);
 			$loc = '&amp;'.BS_URL_LOC.'=avatars';
@@ -80,7 +80,7 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 			$names = array();
 			foreach(BS_DAO::get_avatars()->get_by_ids($delete) as $data)
 				$names[] = $data['av_pfad'];
-			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
+			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_avatars_message'),$namelist),
@@ -119,8 +119,8 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 			$avatars[] = array(
 				'user_name' => ($data['user'] == 0) ? $locale->lang('administrator') : $data['user_name'],
 				'delete' => $delete,
-				'avatar_path' => PLIB_Path::client_app().'images/avatars/'.$data['av_pfad'],
-				'display_path' => PLIB_String::substr($data['av_pfad'],0,25).((PLIB_String::strlen($data['av_pfad']) > 25) ? '...' : ''),
+				'avatar_path' => FWS_Path::client_app().'images/avatars/'.$data['av_pfad'],
+				'display_path' => FWS_String::substr($data['av_pfad'],0,25).((FWS_String::strlen($data['av_pfad']) > 25) ? '...' : ''),
 				'use_url' => $use_url
 			);
 		}

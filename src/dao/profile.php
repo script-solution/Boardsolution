@@ -51,7 +51,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	public function get_users($sort = 'p.id',$order = 'ASC',$start = 0,$count = 0,
 		$active = 1,$banned = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$where = $this->get_activenbanned($active,$banned);
 		$sort = $this->get_sort($sort,$order);
@@ -99,10 +99,10 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	public function get_users_by_ids($ids,$sort = 'p.id',$order = 'ASC',$start = 0,$count = 0,
 		$active = 1,$banned = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		// if no ids given the query is useless
 		if(count($ids) == 0)
@@ -209,7 +209,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	public function get_users_by_custom_search($where,$sort = 'p.id',$order = 'ASC',
 		$start = 0,$count = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT '.$this->get_fields().'
@@ -230,7 +230,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_users_with_delayed_notify($user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT '.$this->get_fields().'
@@ -247,7 +247,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_newest_user()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_fetch(
 			'SELECT '.$this->get_fields().'
@@ -265,9 +265,9 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_last_active_user()
 	{
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
-		$db = PLIB_Props::get()->db();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$db = FWS_Props::get()->db();
 
 		$ghost_mode = ($user->is_admin() || $cfg['allow_ghost_mode'] == 0 ? '1' : '0');
 		return $db->sql_fetch(
@@ -288,15 +288,15 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_birthday_users_in_months($months)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($months) || count($months) == 0)
-			PLIB_Helper::def_error('intarray>0','months',$months);
+		if(!FWS_Array_Utils::is_integer($months) || count($months) == 0)
+			FWS_Helper::def_error('intarray>0','months',$months);
 		
 		$where = 'WHERE p.active = 1 AND p.banned = 0 AND p.add_birthday != "0000-00-00" AND (';
 		foreach($months as $month)
-			$where .= 'SUBSTRING(p.add_birthday,6,2) = "'.PLIB_StringHelper::ensure_2_chars($month).'" OR ';
-		$where = PLIB_String::substr($where,0,-4).')';
+			$where .= 'SUBSTRING(p.add_birthday,6,2) = "'.FWS_StringHelper::ensure_2_chars($month).'" OR ';
+		$where = FWS_String::substr($where,0,-4).')';
 		
 		return $db->sql_rows(
 			'SELECT '.$this->get_fields().'
@@ -317,17 +317,17 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_birthday_users($month,$day = 0,$number = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($month) || $month < 1 || $month > 12)
-			PLIB_Helper::def_error('numbetween','month',1,12,$month);
-		if(!PLIB_Helper::is_integer($day) || $day < 0 || $day > 31)
-			PLIB_Helper::def_error('numbetween','day',0,31,$day);
-		if(!PLIB_Helper::is_integer($number) || $number < 0)
-			PLIB_Helper::def_error('intge0','number',$number);
+		if(!FWS_Helper::is_integer($month) || $month < 1 || $month > 12)
+			FWS_Helper::def_error('numbetween','month',1,12,$month);
+		if(!FWS_Helper::is_integer($day) || $day < 0 || $day > 31)
+			FWS_Helper::def_error('numbetween','day',0,31,$day);
+		if(!FWS_Helper::is_integer($number) || $number < 0)
+			FWS_Helper::def_error('intge0','number',$number);
 		
-		$month = PLIB_StringHelper::ensure_2_chars($month);
-		$day = PLIB_StringHelper::ensure_2_chars($day);
+		$month = FWS_StringHelper::ensure_2_chars($month);
+		$day = FWS_StringHelper::ensure_2_chars($day);
 		$where = 'WHERE p.add_birthday != \'0000-00-00\' AND p.active = 1 AND p.banned = 0';
 		$where .= ' AND SUBSTRING(p.add_birthday,6,2) = '.$month;
 		if($day != 0)
@@ -347,7 +347,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_total_login_count()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$res = $db->sql_fetch(
 			'SELECT SUM(logins) as total FROM '.BS_TB_PROFILES.'
@@ -361,7 +361,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_lastlogin()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$res = $db->sql_fetch(
 			'SELECT lastlogin FROM '.BS_TB_PROFILES.'
@@ -376,7 +376,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_invalid_signature_ids()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT id FROM '.BS_TB_PROFILES.' WHERE signature_posted != "" AND signatur = ""'
@@ -401,10 +401,10 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_users_stats_postsperday($number)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($number) || $number <= 0)
-			PLIB_Helper::def_error('intgt0','number',$number);
+		if(!FWS_Helper::is_integer($number) || $number <= 0)
+			FWS_Helper::def_error('intgt0','number',$number);
 		
 		return $db->sql_rows(
 			'SELECT p.id,p.posts,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.registerdate,
@@ -431,7 +431,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function get_users_stats_grouped_by_regdate()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT registerdate,COUNT(id) num,
@@ -445,12 +445,12 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	/**
 	 * Updates the given fields for all users
 	 * 
-	 * @param array $fields the fields to update. See {@link PLIB_MySQL::sql_update} for details
+	 * @param array $fields the fields to update. See {@link FWS_MySQL::sql_update} for details
 	 * @return int the number of affected rows
 	 */
 	public function update_all($fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$db->sql_update(BS_TB_PROFILES,'',$fields);
 		return $db->get_affected_rows();
@@ -459,7 +459,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	/**
 	 * Updates the given fields for the user with the given id
 	 * 
-	 * @param array $fields the fields to update. See {@link PLIB_MySQL::sql_update} for details
+	 * @param array $fields the fields to update. See {@link FWS_MySQL::sql_update} for details
 	 * @param int $id the user-id
 	 * @return int the number of affected rows
 	 */
@@ -471,16 +471,16 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	/**
 	 * Updates the given fields for all users with the given ids
 	 * 
-	 * @param array $fields the fields to update. See {@link PLIB_MySQL::sql_update} for details
+	 * @param array $fields the fields to update. See {@link FWS_MySQL::sql_update} for details
 	 * @param array $ids an array with all user-ids
 	 * @return int the number of affected rows
 	 */
 	public function update_users_by_ids($fields,$ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_update(BS_TB_PROFILES,' WHERE id IN ('.implode(',',$ids).')',$fields);
 		return $db->get_affected_rows();
@@ -495,10 +495,10 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function update_theme_to_default($theme_ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($theme_ids) || count($theme_ids) == 0)
-			PLIB_Helper::def_error('intarray>0','theme_ids',$theme_ids);
+		if(!FWS_Array_Utils::is_integer($theme_ids) || count($theme_ids) == 0)
+			FWS_Helper::def_error('intarray>0','theme_ids',$theme_ids);
 		
 		$fields = array('forum_style' => 0);
 		$db->sql_update(
@@ -517,10 +517,10 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function add_additional_fields($name,$type,$length = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		if(empty($name))
-			PLIB_Helper::def_error('notempty','name',$name);
+			FWS_Helper::def_error('notempty','name',$name);
 		
 		$db->sql_qry(
 			'ALTER TABLE '.BS_TB_PROFILES.'
@@ -538,10 +538,10 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function change_additional_field($name,$type,$length)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		if(empty($name))
-			PLIB_Helper::def_error('notempty','name',$name);
+			FWS_Helper::def_error('notempty','name',$name);
 		
 		$db->sql_qry(
 			'ALTER TABLE '.BS_TB_PROFILES.'
@@ -557,10 +557,10 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function delete_additional_fields($name)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		if(empty($name))
-			PLIB_Helper::def_error('notempty','name',$name);
+			FWS_Helper::def_error('notempty','name',$name);
 		
 		$db->sql_qry(
 			'ALTER TABLE '.BS_TB_PROFILES.'
@@ -577,12 +577,12 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function create($id,$groups)
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
-		if(!PLIB_Array_Utils::is_integer($groups) || count($groups) == 0)
-			PLIB_Helper::def_error('intarray>0','groups',$groups);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Array_Utils::is_integer($groups) || count($groups) == 0)
+			FWS_Helper::def_error('intarray>0','groups',$groups);
 		
 		$fields = array(
 			'id' => $id,
@@ -609,7 +609,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function create_custom($fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$db->sql_insert(BS_TB_PROFILES,$fields);
 		return $db->get_last_insert_id();
@@ -623,10 +623,10 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	public function delete($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM  '.BS_TB_PROFILES.' WHERE id IN ('.implode(',',$ids).')'
@@ -643,8 +643,8 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 */
 	protected function get_field_sql_syntax($type,$length = 0)
 	{
-		if(!PLIB_Helper::is_integer($length))
-			PLIB_Helper::def_error('integer','length',$length);
+		if(!FWS_Helper::is_integer($length))
+			FWS_Helper::def_error('integer','length',$length);
 		
 		switch((string)$type)
 		{

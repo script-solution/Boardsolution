@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_user_add extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_ACP_SubModule_user_add extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_USER_ADD,'add');
@@ -37,12 +37,12 @@ final class BS_ACP_SubModule_user_add extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$cache = PLIB_Props::get()->cache();
-		$tpl = PLIB_Props::get()->tpl();
+		$cache = FWS_Props::get()->cache();
+		$tpl = FWS_Props::get()->tpl();
 
 		$this->request_formular(false,false);
 

@@ -36,10 +36,10 @@ final class BS_Front_Module_linklist extends BS_Front_SubModuleContainer
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($cfg['enable_linklist'] == 1 && $auth->has_global_permission('view_linklist'));

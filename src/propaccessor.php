@@ -18,7 +18,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_PropAccessor extends PLIB_PropAccessor
+class BS_PropAccessor extends FWS_PropAccessor
 {
 	/**
 	 * The document-instance
@@ -43,7 +43,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	public function set_doc($doc)
 	{
 		if(!($doc instanceof BS_Document))
-			PLIB_Helper::def_error('instance','doc','BS_Document',$doc);
+			FWS_Helper::def_error('instance','doc','BS_Document',$doc);
 		
 		$this->_doc = $doc;
 	}
@@ -81,7 +81,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	}
 	
 	/**
-	 * @return PLIB_Cache_Container the cache-property
+	 * @return FWS_Cache_Container the cache-property
 	 */
 	public function cache()
 	{
@@ -97,7 +97,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	}
 
 	/**
-	 * @return PLIB_Template_Handler the cfg-property
+	 * @return FWS_Template_Handler the cfg-property
 	 */
 	public function tpl()
 	{
@@ -121,7 +121,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	}
 	
 	/**
-	 * @return PLIB_MySQL the db-property
+	 * @return FWS_MySQL the db-property
 	 */
 	public function db()
 	{
@@ -129,7 +129,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	}
 	
 	/**
-	 * @return PLIB_Input the input-property
+	 * @return FWS_Input the input-property
 	 */
 	public function input()
 	{
@@ -137,7 +137,7 @@ class BS_PropAccessor extends PLIB_PropAccessor
 	}
 
 	/**
-	 * @return PLIB_Cookies the cookies-property
+	 * @return FWS_Cookies the cookies-property
 	 */
 	public function cookies()
 	{

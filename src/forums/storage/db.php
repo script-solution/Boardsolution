@@ -17,7 +17,7 @@
  * @subpackage	src.forums
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Forums_Storage_DB extends PLIB_Object implements PLIB_Tree_Storage
+final class BS_Forums_Storage_DB extends FWS_Object implements FWS_Tree_Storage
 {
 	public function get_nodes()
 	{

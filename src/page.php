@@ -17,21 +17,21 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_Page extends PLIB_Page
+abstract class BS_Page extends FWS_Page
 {
 	/**
-	 * @see PLIB_Page::_before_start()
+	 * @see FWS_Page::_before_start()
 	 */
 	protected function before_start()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
 		
 		$this->set_charset(BS_HTML_CHARSET);
-		PLIB_Path::set_outer($cfg['board_url'].'/');
+		FWS_Path::set_outer($cfg['board_url'].'/');
 		
 		// set our error-logger
-		PLIB_Error_Handler::get_instance()->set_logger(new BS_Error_Logger());
+		FWS_Error_Handler::get_instance()->set_logger(new BS_Error_Logger());
 		
 		// load language
 		$locale->add_language_file('index');

@@ -17,7 +17,7 @@
  * @subpackage	src.user
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_User_Storage_DB extends PLIB_Object implements PLIB_User_Storage
+final class BS_User_Storage_DB extends FWS_Object implements FWS_User_Storage
 {
 	/**
 	 * Stores wether we want to force an unread-update
@@ -77,14 +77,14 @@ final class BS_User_Storage_DB extends PLIB_Object implements PLIB_User_Storage
 	 * This method gives you the opportunity to perform additional checks. For example if
 	 * the user is activated.
 	 * 
-	 * @param PLIB_User_Data $userdata the data of the user
-	 * @return int the error-code or PLIB_User_Current::LOGIN_ERROR_NO_ERROR
+	 * @param FWS_User_Data $userdata the data of the user
+	 * @return int the error-code or FWS_User_Current::LOGIN_ERROR_NO_ERROR
 	 */
 	public function check_user($userdata)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$user = PLIB_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$user = FWS_Props::get()->user();
 
 		if($userdata->get_profile_val('active') == 0 && $cfg['account_activation'] == 1)
 			return BS_User_Current::LOGIN_ERROR_NOT_ACTIVATED;
@@ -95,7 +95,7 @@ final class BS_User_Storage_DB extends PLIB_Object implements PLIB_User_Storage
 		if($user->is_bot())
 			return BS_User_Current::LOGIN_ERROR_BOT;
 		
-		return PLIB_User_Current::LOGIN_ERROR_NO_ERROR;
+		return FWS_User_Current::LOGIN_ERROR_NO_ERROR;
 	}
 	
 	/**
@@ -105,8 +105,8 @@ final class BS_User_Storage_DB extends PLIB_Object implements PLIB_User_Storage
 	 */
 	public function login($id)
 	{
-		$cookies = PLIB_Props::get()->cookies();
-		$user = PLIB_Props::get()->user();
+		$cookies = FWS_Props::get()->cookies();
+		$user = FWS_Props::get()->user();
 
 		$this->_force_unread_update = true;
 
@@ -121,7 +121,7 @@ final class BS_User_Storage_DB extends PLIB_Object implements PLIB_User_Storage
 	 */
 	public function logout($id)
 	{
-		$cookies = PLIB_Props::get()->cookies();
+		$cookies = FWS_Props::get()->cookies();
 
 		$cookies->delete_cookie('user');
 		$cookies->delete_cookie('pw');

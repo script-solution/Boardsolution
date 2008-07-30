@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_Posts extends PLIB_Singleton
+class BS_DAO_Posts extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_Posts the instance of this class
@@ -36,7 +36,7 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_count()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(BS_TB_POSTS,'id','');
 	}
@@ -47,10 +47,10 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_count_in_forum($id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		return $db->sql_num(BS_TB_POSTS,'id',' WHERE rubrikid = '.$id);
 	}
@@ -61,10 +61,10 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_count_in_topic($id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		return $db->sql_num(BS_TB_POSTS,'id',' WHERE threadid = '.$id);
 	}
@@ -74,13 +74,13 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_count_today()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		$now = new PLIB_Date();
+		$now = new FWS_Date();
 		$y = $now->get_year();
 		$d = $now->get_day();
 		$m = $now->get_month();
-		$today_start = PLIB_Date::get_timestamp(array(0,0,0,$m,$d,$y));
+		$today_start = FWS_Date::get_timestamp(array(0,0,0,$m,$d,$y));
 		return $db->sql_num(BS_TB_POSTS,'id',' WHERE post_time >= '.$today_start);
 	}
 	
@@ -89,14 +89,14 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_count_yesterday()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		$now = new PLIB_Date();
+		$now = new FWS_Date();
 		$y = $now->get_year();
 		$d = $now->get_day();
 		$m = $now->get_month();
-		$yesterday_start = PLIB_Date::get_timestamp(array(0,0,0,$m,$d - 1,$y));
-		$yesterday_end = PLIB_Date::get_timestamp(array(23,59,59,$m,$d - 1,$y));
+		$yesterday_start = FWS_Date::get_timestamp(array(0,0,0,$m,$d - 1,$y));
+		$yesterday_end = FWS_Date::get_timestamp(array(23,59,59,$m,$d - 1,$y));
 		return $db->sql_num(
 			BS_TB_POSTS,'id',' WHERE post_time >= '.$yesterday_start.' AND post_time <= '.$yesterday_end
 		);
@@ -111,12 +111,12 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_first_postid_in_topic($fid,$tid)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
-			PLIB_Helper::def_error('intgt0','fid',$fid);
-		if(!PLIB_Helper::is_integer($tid) || $tid <= 0)
-			PLIB_Helper::def_error('intgt0','tid',$tid);
+		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
+			FWS_Helper::def_error('intgt0','fid',$fid);
+		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
+			FWS_Helper::def_error('intgt0','tid',$tid);
 		
 		$data = $db->sql_fetch(
 			'SELECT MIN(id) FROM '.BS_TB_POSTS.'
@@ -135,7 +135,7 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_lastpost_time()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$data = $db->sql_fetch(
 			'SELECT MAX(post_time) FROM '.BS_TB_POSTS
@@ -153,7 +153,7 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_lastedit_time()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$data = $db->sql_fetch(
 			'SELECT MAX(edited_date) FROM '.BS_TB_POSTS
@@ -176,12 +176,12 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_list($sort = 'id',$order = 'ASC',$start = 0,$count = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_POSTS.'
@@ -201,12 +201,12 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_all_from_topic($fid,$tid,$sort = 'id',$order = 'ASC')
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
-			PLIB_Helper::def_error('intgt0','fid',$fid);
-		if(!PLIB_Helper::is_integer($tid) || $tid <= 0)
-			PLIB_Helper::def_error('intgt0','tid',$tid);
+		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
+			FWS_Helper::def_error('intgt0','fid',$fid);
+		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
+			FWS_Helper::def_error('intgt0','tid',$tid);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_POSTS.'
@@ -242,14 +242,14 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_posts_by_ids($ids,$fid = 0,$tid = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
-		if(!PLIB_Helper::is_integer($fid) || $fid < 0)
-			PLIB_Helper::def_error('intge0','fid',$fid);
-		if(!PLIB_Helper::is_integer($tid) || $tid < 0)
-			PLIB_Helper::def_error('intge0','tid',$tid);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Helper::is_integer($fid) || $fid < 0)
+			FWS_Helper::def_error('intge0','fid',$fid);
+		if(!FWS_Helper::is_integer($tid) || $tid < 0)
+			FWS_Helper::def_error('intge0','tid',$tid);
 		
 		$where = 'WHERE p.id IN ('.implode(',',$ids).')';
 		if($fid > 0)
@@ -272,10 +272,10 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_posts_by_topics($tids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($tids) || count($tids) == 0)
-			PLIB_Helper::def_error('intarray>0','tids',$tids);
+		if(!FWS_Array_Utils::is_integer($tids) || count($tids) == 0)
+			FWS_Helper::def_error('intarray>0','tids',$tids);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_POSTS.'
@@ -299,14 +299,14 @@ class BS_DAO_Posts extends PLIB_Singleton
 	public function get_posts_by_search($where,$order = 'p.id ASC',$type = 'topics',$number = 0,
 		$keywords = null)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		if(!in_array($type,array('topics','posts')))
-			PLIB_Helper::def_error('inarray','type',array('topics','posts'),$type);
-		if(!PLIB_Helper::is_integer($number) || $number < 0)
-			PLIB_Helper::def_error('intge0','number',$number);
+			FWS_Helper::def_error('inarray','type',array('topics','posts'),$type);
+		if(!FWS_Helper::is_integer($number) || $number < 0)
+			FWS_Helper::def_error('intge0','number',$number);
 		if($keywords !== null && !is_array($keywords))
-			PLIB_Helper::def_error('array','keywords',$keywords);
+			FWS_Helper::def_error('array','keywords',$keywords);
 		
 		$kw_add = '';
 		if($keywords !== null)
@@ -349,14 +349,14 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_posts_for_topic($where,$order = 'p.id ASC',$start = 0,$count = 0,$keywords = null)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		if($keywords !== null && !is_array($keywords))
-			PLIB_Helper::def_error('array','keywords',$keywords);
+			FWS_Helper::def_error('array','keywords',$keywords);
 		
 		$kw_add = '';
 		if($keywords !== null)
@@ -424,14 +424,14 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_posts_from_topic($ids,$fid,$tid,$sort = 'p.id',$order = 'ASC')
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
-		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
-			PLIB_Helper::def_error('intgt0','fid',$fid);
-		if(!PLIB_Helper::is_integer($tid) || $tid <= 0)
-			PLIB_Helper::def_error('intgt0','tid',$tid);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
+			FWS_Helper::def_error('intgt0','fid',$fid);
+		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
+			FWS_Helper::def_error('intgt0','tid',$tid);
 		
 		return $db->sql_rows(
 			'SELECT
@@ -456,12 +456,12 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_posts_by_date($user_id,$mindate)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
-		if(!PLIB_Helper::is_integer($mindate) || $mindate < 0)
-			PLIB_Helper::def_error('intge0','mindate',$mindate);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($mindate) || $mindate < 0)
+			FWS_Helper::def_error('intge0','mindate',$mindate);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_POSTS.'
@@ -478,10 +478,10 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_posts_for_email($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		return $db->sql_rows(
 			'SELECT p.*,t.name,u.`'.BS_EXPORT_USER_NAME.'` user_name
@@ -510,10 +510,10 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_first_post_from_topics($tids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($tids) || count($tids) == 0)
-			PLIB_Helper::def_error('intarray>0','tids',$tids);
+		if(!FWS_Array_Utils::is_integer($tids) || count($tids) == 0)
+			FWS_Helper::def_error('intarray>0','tids',$tids);
 		
 		return $db->sql_rows(
 			'SELECT t.id,p.rubrikid,p.threadid,moved_tid,MIN(p.id) first_post,posts
@@ -534,12 +534,12 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_next_post_id($id,$tid)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
-		if(!PLIB_Helper::is_integer($tid) || $tid <= 0)
-			PLIB_Helper::def_error('intgt0','tid',$tid);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
+			FWS_Helper::def_error('intgt0','tid',$tid);
 		
 		$row = $db->sql_fetch(
 			'SELECT id FROM '.BS_TB_POSTS.'
@@ -562,14 +562,14 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_following_posts($id,$fid,$tid)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
-		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
-			PLIB_Helper::def_error('intgt0','fid',$fid);
-		if(!PLIB_Helper::is_integer($tid) || $tid <= 0)
-			PLIB_Helper::def_error('intgt0','tid',$tid);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
+			FWS_Helper::def_error('intgt0','fid',$fid);
+		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
+			FWS_Helper::def_error('intgt0','tid',$tid);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_POSTS.'
@@ -590,12 +590,12 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_news_from_forums($fids,$number = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($fids) || count($fids) == 0)
-			PLIB_Helper::def_error('intarray>0','fids',$fids);
-		if(!PLIB_Helper::is_integer($number) || $number < 0)
-			PLIB_Helper::def_error('intge0','number',$number);
+		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
+			FWS_Helper::def_error('intarray>0','fids',$fids);
+		if(!FWS_Helper::is_integer($number) || $number < 0)
+			FWS_Helper::def_error('intge0','number',$number);
 		
 		$qry = $db->sql_qry(
 			'SELECT MIN(b.id) first_post_id
@@ -640,18 +640,18 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_unread_posts($since,$user_id,$excl_fids = array(),$excl_tids = array(),$limit = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($since) || $since < 0)
-			PLIB_Helper::def_error('intge0','since',$since);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id < 0)
-			PLIB_Helper::def_error('intge0','user_id',$user_id);
-		if(!PLIB_Array_Utils::is_integer($excl_fids))
-			PLIB_Helper::def_error('intarray','excl_fids',$excl_fids);
-		if(!PLIB_Array_Utils::is_integer($excl_tids))
-			PLIB_Helper::def_error('intarray','excl_tids',$excl_tids);
-		if(!PLIB_Helper::is_integer($limit) || $limit < 0)
-			PLIB_Helper::def_error('intge0','limit',$limit);
+		if(!FWS_Helper::is_integer($since) || $since < 0)
+			FWS_Helper::def_error('intge0','since',$since);
+		if(!FWS_Helper::is_integer($user_id) || $user_id < 0)
+			FWS_Helper::def_error('intge0','user_id',$user_id);
+		if(!FWS_Array_Utils::is_integer($excl_fids))
+			FWS_Helper::def_error('intarray','excl_fids',$excl_fids);
+		if(!FWS_Array_Utils::is_integer($excl_tids))
+			FWS_Helper::def_error('intarray','excl_tids',$excl_tids);
+		if(!FWS_Helper::is_integer($limit) || $limit < 0)
+			FWS_Helper::def_error('intge0','limit',$limit);
 		
 		return $db->sql_rows(
 			'SELECT MIN(id) AS first_unread_post,threadid,rubrikid FROM '.BS_TB_POSTS.'
@@ -681,10 +681,10 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_user_posts_of_users($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		return $db->sql_rows(
 			'SELECT COUNT(p.id) num,post_user,increase_experience
@@ -711,10 +711,10 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_user_posts_in_forums($fids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($fids) || count($fids) == 0)
-			PLIB_Helper::def_error('intarray>0','fids',$fids);
+		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
+			FWS_Helper::def_error('intarray>0','fids',$fids);
 		
 		return $db->sql_rows(
 			'SELECT COUNT(*) num,post_user,f.increase_experience
@@ -735,12 +735,12 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_lastpost_id_in_forum($fid,$post_ids = array())
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
-			PLIB_Helper::def_error('intgt0','fid',$fid);
-		if(!PLIB_Array_Utils::is_integer($post_ids))
-			PLIB_Helper::def_error('intarray','post_ids',$post_ids);
+		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
+			FWS_Helper::def_error('intgt0','fid',$fid);
+		if(!FWS_Array_Utils::is_integer($post_ids))
+			FWS_Helper::def_error('intarray','post_ids',$post_ids);
 		
 		$exclude = count($post_ids) > 0 ? ' AND id NOT IN ('.implode(',',$post_ids).')' : '';
 		$data = $db->sql_fetch(
@@ -771,12 +771,12 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_lastpost_data_in_topic($id,$post_ids = array())
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
-		if(!PLIB_Array_Utils::is_integer($post_ids))
-			PLIB_Helper::def_error('intarray','post_ids',$post_ids);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Array_Utils::is_integer($post_ids))
+			FWS_Helper::def_error('intarray','post_ids',$post_ids);
 		
 		$exclude = count($post_ids) > 0 ? ' AND id NOT IN ('.implode(',',$post_ids).')' : '';
 		$data = $db->sql_fetch(
@@ -801,14 +801,14 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_last_posts_of_user($uid,$excl_forums = array(),$number = 5)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($uid) || $uid <= 0)
-			PLIB_Helper::def_error('intgt0','uid',$uid);
-		if(!PLIB_Array_Utils::is_integer($excl_forums))
-			PLIB_Helper::def_error('intarray','excl_forums',$excl_forums);
-		if(!PLIB_Helper::is_integer($number) || $number < 0)
-			PLIB_Helper::def_error('intge0','number',$number);
+		if(!FWS_Helper::is_integer($uid) || $uid <= 0)
+			FWS_Helper::def_error('intgt0','uid',$uid);
+		if(!FWS_Array_Utils::is_integer($excl_forums))
+			FWS_Helper::def_error('intarray','excl_forums',$excl_forums);
+		if(!FWS_Helper::is_integer($number) || $number < 0)
+			FWS_Helper::def_error('intge0','number',$number);
 		
 		return $db->sql_rows(
 			'SELECT p.*,t.name,MAX(p.post_time) AS post_time
@@ -829,7 +829,7 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_invalid_post_ids()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT id FROM '.BS_TB_POSTS.' WHERE text = "" AND text_posted != ""'
@@ -851,7 +851,7 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function get_post_stats_grouped_by_date()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT post_time,COUNT(id) num,
@@ -870,7 +870,7 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function create($fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$db->sql_insert(BS_TB_POSTS,$fields);
 		return $db->get_last_insert_id();
@@ -897,10 +897,10 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function update_by_ids($ids,$fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_update(BS_TB_POSTS,'WHERE id IN ('.implode(',',$ids).')',$fields);
 		return $db->get_affected_rows();
@@ -915,10 +915,10 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function update_by_topics($tids,$fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($tids) || count($tids) == 0)
-			PLIB_Helper::def_error('intarray>0','tids',$tids);
+		if(!FWS_Array_Utils::is_integer($tids) || count($tids) == 0)
+			FWS_Helper::def_error('intarray>0','tids',$tids);
 		
 		$db->sql_update(BS_TB_POSTS,'WHERE threadid IN ('.implode(',',$tids).')',$fields);
 		return $db->get_affected_rows();
@@ -933,10 +933,10 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	public function assign_posts_to_guest($id,$user_name)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_update(BS_TB_POSTS,'WHERE post_user = '.$id,array(
 			'post_user' => 0,
@@ -987,10 +987,10 @@ class BS_DAO_Posts extends PLIB_Singleton
 	 */
 	protected function delete_by($field,$ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_POSTS.' WHERE '.$field.' IN ('.implode(',',$ids).')'

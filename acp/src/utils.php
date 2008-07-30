@@ -17,7 +17,7 @@
  * @subpackage	acp.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Utils extends PLIB_Singleton
+final class BS_ACP_Utils extends FWS_Singleton
 {
 	/**
 	 * @return BS_ACP_Utils the instance of this class
@@ -35,7 +35,7 @@ final class BS_ACP_Utils extends PLIB_Singleton
 	 */
 	public function get_file_image($file)
 	{
-		switch(PLIB_FileUtils::get_extension($file))
+		switch(FWS_FileUtils::get_extension($file))
 		{
 			case 'html':
 			case 'htm':
@@ -77,10 +77,10 @@ final class BS_ACP_Utils extends PLIB_Singleton
 	 */
 	public function get_userlink($id,$name)
 	{
-		$url = PLIB_Props::get()->url();
+		$url = FWS_Props::get()->url();
 		
 		$furl = $url->get_acpmod_url('userdetails','&amp;id='.$id);
-		$user = '<a href="javascript:PLIB_openDefaultPopup(\''.$furl.'\',';
+		$user = '<a href="javascript:FWS_openDefaultPopup(\''.$furl.'\',';
 		$user .= '\'UserDetails\',800,500);">'.$name.'</a>';
 		return $user;
 	}
@@ -100,10 +100,10 @@ final class BS_ACP_Utils extends PLIB_Singleton
 		if($order == $order_value)
 		{
 			$result = $title.' <a href="'.$url.'order='.$order_value.'&amp;ad=ASC">';
-			$result .= '<img src="'.PLIB_Path::client_app().'acp/images/asc.gif" alt="ASC" />';
+			$result .= '<img src="'.FWS_Path::client_app().'acp/images/asc.gif" alt="ASC" />';
 			$result .= '</a> ';
 			$result .= '<a href="'.$url.'order='.$order_value.'&amp;ad=DESC">';
-			$result .= '<img src="'.PLIB_Path::client_app().'acp/images/desc.gif" alt="DESC" />';
+			$result .= '<img src="'.FWS_Path::client_app().'acp/images/desc.gif" alt="DESC" />';
 			$result .= '</a>';
 		}
 		else
@@ -125,7 +125,7 @@ final class BS_ACP_Utils extends PLIB_Singleton
 	 */
 	public function get_yesno($bool,$colored = false,$yesisgreen = true)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		if($colored)
 		{
@@ -142,12 +142,12 @@ final class BS_ACP_Utils extends PLIB_Singleton
 	/**
 	 * Sends an email with the mail-instance to all given users.
 	 *
-	 * @param PLIB_Email_Base $mail the email-instance
+	 * @param FWS_Email_Base $mail the email-instance
 	 * @param array $user_ids all user-ids
 	 */
 	public function send_email_to_user($mail,$user_ids)
 	{
-		$msgs = PLIB_Props::get()->msgs();
+		$msgs = FWS_Props::get()->msgs();
 
 		$error_msgs = array();
 		foreach(BS_DAO::get_user()->get_users_by_ids($user_ids) as $data)

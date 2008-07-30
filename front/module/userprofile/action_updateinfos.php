@@ -21,13 +21,13 @@ final class BS_Front_Action_userprofile_updateinfos extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cfg = PLIB_Props::get()->cfg();
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
-		$msgs = PLIB_Props::get()->msgs();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$cfg = FWS_Props::get()->cfg();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$msgs = FWS_Props::get()->msgs();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
@@ -40,11 +40,11 @@ final class BS_Front_Action_userprofile_updateinfos extends BS_Front_Action_Base
 		$email = '';
 		if(!BS_ENABLE_EXPORT && $cfg['allow_email_changes'])
 		{
-			$email = $input->get_var('user_email','post',PLIB_Input::STRING);
+			$email = $input->get_var('user_email','post',FWS_Input::STRING);
 
 			// email valid?
 			$email = trim($email);
-			if(!PLIB_StringHelper::is_valid_email($email))
+			if(!FWS_StringHelper::is_valid_email($email))
 				return 'email_missing';
 
 			// check if the email is banned
@@ -62,7 +62,7 @@ final class BS_Front_Action_userprofile_updateinfos extends BS_Front_Action_Base
 		$cfields = BS_AddField_Manager::get_instance();
 		foreach($cfields->get_fields_at(BS_UF_LOC_USER_PROFILE) as $field)
 		{
-			/* @var $field PLIB_AddField_Field */
+			/* @var $field FWS_AddField_Field */
 			$value = $field->get_value_from_formular();
 			if(($error = $field->is_valid_value($value)) !== '')
 				return sprintf($locale->lang('error_add_field_'.$error),$field->get_data()->get_title());
@@ -84,7 +84,7 @@ final class BS_Front_Action_userprofile_updateinfos extends BS_Front_Action_Base
 				// delete potentially existing old entries for this user
 				BS_DAO::get_changeemail()->delete_by_user($user->get_user_id());
 
-				$key = PLIB_StringHelper::generate_random_key();
+				$key = FWS_StringHelper::generate_random_key();
 				BS_DAO::get_changeemail()->create($user->get_user_id(),$key,$email);
 
 				$uid = $user->get_user_id();

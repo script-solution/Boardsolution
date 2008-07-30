@@ -20,7 +20,7 @@
 final class BS_Front_Module_ajax_get_postform extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -32,20 +32,20 @@ final class BS_Front_Module_ajax_get_postform extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$doc = PLIB_Props::get()->doc();
+		$input = FWS_Props::get()->input();
+		$doc = FWS_Props::get()->doc();
 
 		$type = $input->correct_var(
-			'type','get',PLIB_Input::STRING,array('post','sig','linkdesc','pm'),'post'
+			'type','get',FWS_Input::STRING,array('post','sig','linkdesc','pm'),'post'
 		);
 		$mode = $input->correct_var(
-			'mode','get',PLIB_Input::STRING,array('simple','advanced','applet'),'simple'
+			'mode','get',FWS_Input::STRING,array('simple','advanced','applet'),'simple'
 		);
-		$height = $input->get_var('height','get',PLIB_Input::STRING);
+		$height = $input->get_var('height','get',FWS_Input::STRING);
 		
 		$form = new BS_PostingForm('','',$type);
 		$form->set_textarea_height($height);

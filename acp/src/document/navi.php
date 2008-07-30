@@ -20,7 +20,7 @@
 final class BS_ACP_Document_Navi extends BS_ACP_Document
 {
 	/**
-	 * @see PLIB_Document::render()
+	 * @see FWS_Document::render()
 	 *
 	 * @return string
 	 */
@@ -28,12 +28,12 @@ final class BS_ACP_Document_Navi extends BS_ACP_Document
 	{
 		$this->prepare_rendering();
 		
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
 
-		$menu = $input->get_var(BS_COOKIE_PREFIX.'acp_menu','cookie',PLIB_Input::STRING);
+		$menu = $input->get_var(BS_COOKIE_PREFIX.'acp_menu','cookie',FWS_Input::STRING);
 			
 		$tpl->set_template('navi.htm');
 		$tpl->add_variables(array(
@@ -56,10 +56,10 @@ final class BS_ACP_Document_Navi extends BS_ACP_Document
 	 */
 	private function _load_modules()
 	{
-		$locale = PLIB_Props::get()->locale();
-		$auth = PLIB_Props::get()->auth();
-		$user = PLIB_Props::get()->user();
-		$tpl = PLIB_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$auth = FWS_Props::get()->auth();
+		$user = FWS_Props::get()->user();
+		$tpl = FWS_Props::get()->tpl();
 
 		$c = 0;
 		$m = 0;
@@ -125,7 +125,7 @@ final class BS_ACP_Document_Navi extends BS_ACP_Document
 	}
 
 	/**
-	 * @see PLIB_Document::load_module()
+	 * @see FWS_Document::load_module()
 	 *
 	 * @return BS_Front_Module
 	 */

@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_AdditionalFields_Helper extends PLIB_Singleton
+final class BS_ACP_Module_AdditionalFields_Helper extends FWS_Singleton
 {
 	/**
 	 * @return BS_ACP_Module_AdditionalFields_Helper the instance of this class
@@ -47,36 +47,36 @@ final class BS_ACP_Module_AdditionalFields_Helper extends PLIB_Singleton
 	 */
 	public function retrieve_valid_field_attributes($id,$type,&$values)
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$cache = PLIB_Props::get()->cache();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$cache = FWS_Props::get()->cache();
 
 		$manager  = BS_AddField_Manager::get_instance();
 		$field = $id == 0 ? null : $manager->get_field($id);
 		$locked = $id == 0 ? false : $field->get_data()->get_name() == 'birthday';
 		
-		$values['field_name'] = $input->get_var('field_name','post',PLIB_Input::STRING);
-		$values['display_name'] = $input->get_var('display_name','post',PLIB_Input::STRING);
-		$values['field_length'] = $input->get_var('field_length','post',PLIB_Input::INTEGER);
+		$values['field_name'] = $input->get_var('field_name','post',FWS_Input::STRING);
+		$values['display_name'] = $input->get_var('display_name','post',FWS_Input::STRING);
+		$values['field_length'] = $input->get_var('field_length','post',FWS_Input::INTEGER);
 		$values['field_type'] = $input->correct_var(
-			'field_type','post',PLIB_Input::STRING,array('int','line','text','date','enum'),'line'
+			'field_type','post',FWS_Input::STRING,array('int','line','text','date','enum'),'line'
 		);
-		$values['allowed_values'] = $input->get_var('field_values','post',PLIB_Input::STRING);
-		$values['field_suffix'] = $input->get_var('field_suffix','post',PLIB_Input::STRING);
-		$values['field_custom_display'] = PLIB_StringHelper::htmlspecialchars_back(
-			$input->get_var('field_custom_display','post',PLIB_Input::STRING)
+		$values['allowed_values'] = $input->get_var('field_values','post',FWS_Input::STRING);
+		$values['field_suffix'] = $input->get_var('field_suffix','post',FWS_Input::STRING);
+		$values['field_custom_display'] = FWS_StringHelper::htmlspecialchars_back(
+			$input->get_var('field_custom_display','post',FWS_Input::STRING)
 		);
 		$values['field_validation'] = $input->get_var(
-			'field_validation','post',PLIB_Input::STRING
+			'field_validation','post',FWS_Input::STRING
 		);
 		$values['field_is_required'] = $input->get_var(
-			'field_is_required','post',PLIB_Input::INT_BOOL
+			'field_is_required','post',FWS_Input::INT_BOOL
 		);
 		$values['field_edit_notice'] = $input->get_var(
-			'field_edit_notice','post',PLIB_Input::STRING
+			'field_edit_notice','post',FWS_Input::STRING
 		);
 		$values['display_always'] = $input->get_var(
-			'display_always','post',PLIB_Input::INT_BOOL
+			'display_always','post',FWS_Input::INT_BOOL
 		);
 
 		if(!$locked && !preg_match('/^[a-z0-9_]+$/i',$values['field_name']))
@@ -119,7 +119,7 @@ final class BS_ACP_Module_AdditionalFields_Helper extends PLIB_Singleton
 		$values['field_show_type'] = 0;
 		foreach($this->get_locations() as $loc)
 		{
-			if($input->get_var('loc_'.$loc,'post',PLIB_Input::INT_BOOL) == 1)
+			if($input->get_var('loc_'.$loc,'post',FWS_Input::INT_BOOL) == 1)
 				$values['field_show_type'] |= $loc;
 		}
 		

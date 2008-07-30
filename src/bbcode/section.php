@@ -18,7 +18,7 @@
  * @subpackage	src.bbcode
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_BBCode_Section extends PLIB_Object
+final class BS_BBCode_Section extends FWS_Object
 {
 	/**
 	 * The id of the tag
@@ -169,7 +169,7 @@ final class BS_BBCode_Section extends PLIB_Object
 						$valid_param = preg_match('/^#[a-f0-9]{6}|[a-z-]+$/i',$this->_param);
 						break;
 					case 'url':
-						$param = PLIB_StringHelper::correct_homepage($this->_param);
+						$param = FWS_StringHelper::correct_homepage($this->_param);
 						if($param === false)
 							$valid_param = false;
 						else
@@ -179,7 +179,7 @@ final class BS_BBCode_Section extends PLIB_Object
 						}
 						break;
 					case 'mail':
-						$valid_param = PLIB_StringHelper::is_valid_email($this->_param);
+						$valid_param = FWS_StringHelper::is_valid_email($this->_param);
 						break;
 					
 					// by default it is valid

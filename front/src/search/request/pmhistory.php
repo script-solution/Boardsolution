@@ -49,9 +49,9 @@ final class BS_Front_Search_Request_PMHistory extends BS_Front_Search_Request_PM
 	
 	public function get_url_params()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
-		$id = $input->get_var(BS_URL_KW,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_KW,'get',FWS_Input::ID);
 		return array(BS_URL_KW => $id);
 	}
 	
@@ -67,17 +67,17 @@ final class BS_Front_Search_Request_PMHistory extends BS_Front_Search_Request_PM
 
 	public function get_order()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
 		$order_vals = array('subject','folder','date');
-		$order = $input->get_var('order','post',PLIB_Input::STRING);
+		$order = $input->get_var('order','post',FWS_Input::STRING);
 		if($order == null)
-			$order = $input->get_var(BS_URL_ORDER,'get',PLIB_Input::STRING);
+			$order = $input->get_var(BS_URL_ORDER,'get',FWS_Input::STRING);
 		$order = in_array($order,$order_vals) ? $order : 'date';
 		
-		$ad = $input->get_var('ad','post',PLIB_Input::STRING);
+		$ad = $input->get_var('ad','post',FWS_Input::STRING);
 		if($ad == null)
-			$ad = $input->get_var(BS_URL_AD,'get',PLIB_Input::STRING);
+			$ad = $input->get_var(BS_URL_AD,'get',FWS_Input::STRING);
 		$ad = $ad == 'ASC' ? 'ASC' : 'DESC';
 		
 		return array($order,$ad);
@@ -94,7 +94,7 @@ final class BS_Front_Search_Request_PMHistory extends BS_Front_Search_Request_PM
 
 	public function get_title($search)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		return sprintf(
 			$locale->lang('search_result_pm_history'),
@@ -109,12 +109,12 @@ final class BS_Front_Search_Request_PMHistory extends BS_Front_Search_Request_PM
 	 */
 	private function _get_search_condition()
 	{
-		$input = PLIB_Props::get()->input();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
+		$user = FWS_Props::get()->user();
 
-		$id = $input->get_var(BS_URL_KW,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_KW,'get',FWS_Input::ID);
 		if($id == null)
 		{
 			$msgs->add_error($locale->lang('search_pm_id_invalid'));

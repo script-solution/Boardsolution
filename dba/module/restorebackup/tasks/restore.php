@@ -17,19 +17,19 @@
  * @subpackage	dba.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends PLIB_Object
-	implements PLIB_Progress_Task
+final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends FWS_Object
+	implements FWS_Progress_Task
 {
 	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
-		$input = PLIB_Props::get()->input();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
-		$user = PLIB_Props::get()->user();
-		$backups = PLIB_Props::get()->backups();
+		$input = FWS_Props::get()->input();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$backups = FWS_Props::get()->backups();
 
 		parent::__construct();
 		
@@ -39,7 +39,7 @@ final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends PLIB_Object
 			// ensure that we start a new progress
 			BS_DBA_Progress::clear_progress();
 			
-			$prefix = $input->get_var('backup','get',PLIB_Input::STRING);
+			$prefix = $input->get_var('backup','get',FWS_Input::STRING);
 			$backup = $backups->get_backup($prefix);
 			if($backup == null)
 			{
@@ -57,22 +57,22 @@ final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends PLIB_Object
 	
 	public function get_total_operations()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 		$data = $user->get_session_data('BS_restore');
 		return $data['total'];
 	}
 
 	public function run($pos,$ops)
 	{
-		$db = PLIB_Props::get()->db();
-		$user = PLIB_Props::get()->user();
+		$db = FWS_Props::get()->db();
+		$user = FWS_Props::get()->user();
 		$data = $user->get_session_data('BS_restore');
 
 		// import file
 		$filename = $this->_get_next_file($pos);
 		if($filename != '')
 		{
-			$statements = PLIB_SQLParser::get_statements_from_File('backups/'.$filename);
+			$statements = FWS_SQLParser::get_statements_from_File('backups/'.$filename);
 			foreach($statements as $sql)
 				$db->sql_qry($sql);
 		}
@@ -90,7 +90,7 @@ final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends PLIB_Object
 	 */
 	private function _get_next_file($pos)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 		$data = $user->get_session_data('BS_restore');
 		
 		if($handle = @opendir('backups'))

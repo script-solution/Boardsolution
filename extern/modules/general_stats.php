@@ -120,8 +120,8 @@ final class BS_API_Module_general_stats extends BS_API_Module
 	
 	public function run()
 	{
-		$functions = PLIB_Props::get()->functions();
-		$cache = PLIB_Props::get()->cache();
+		$functions = FWS_Props::get()->functions();
+		$cache = FWS_Props::get()->cache();
 
 		$stats = $functions->get_stats();
 		$stats_data = $cache->get_cache('stats')->current();

@@ -18,7 +18,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DAO extends PLIB_UtilBase
+final class BS_DAO extends FWS_UtilBase
 {
 	/**
 	 * @return BS_DAO_ACPAccess the DAO for the acp-access-table

@@ -18,7 +18,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_PropLoader extends PLIB_PropLoader
+class BS_PropLoader extends FWS_PropLoader
 {
 	/**
 	 * @return BS_Auth the property
@@ -53,12 +53,12 @@ class BS_PropLoader extends PLIB_PropLoader
 	}
 	
 	/**
-	 * @return PLIB_Cache_Container the property
+	 * @return FWS_Cache_Container the property
 	 */
 	protected function cache()
 	{
-		$storage = new PLIB_Cache_Storage_DB(BS_TB_CACHE,'table_name','table_content');
-		$cache = new PLIB_Cache_Container($storage);
+		$storage = new FWS_Cache_Storage_DB(BS_TB_CACHE,'table_name','table_content');
+		$cache = new FWS_Cache_Container($storage);
 		
 		// config
 		$s = new BS_Cache_Source_Config();
@@ -66,7 +66,7 @@ class BS_PropLoader extends PLIB_PropLoader
 		
 		$config = $cache->get_cache('config');
 		if($config->get_element_count() == 0)
-			PLIB_Helper::error('The Config-entries are missing',false);
+			FWS_Helper::error('The Config-entries are missing',false);
 		
 		// stats
 		$s = new BS_Cache_Source_Stats();
@@ -79,7 +79,7 @@ class BS_PropLoader extends PLIB_PropLoader
 		);
 		foreach($defs as $name => $table)
 		{
-			$s = new PLIB_Cache_Source_SimpleDB($table,null,null);
+			$s = new FWS_Cache_Source_SimpleDB($table,null,null);
 			$cache->init_content($name,$s);
 		}
 		
@@ -95,16 +95,16 @@ class BS_PropLoader extends PLIB_PropLoader
 		);
 		foreach($defids as $name => $table)
 		{
-			$s = new PLIB_Cache_Source_SimpleDB($table);
+			$s = new FWS_Cache_Source_SimpleDB($table);
 			$cache->init_content($name,$s);
 		}
 		
 		// user-fields
-		$s = new PLIB_Cache_Source_SimpleDB(BS_TB_USER_FIELDS,'id','field_sort','ASC');
+		$s = new FWS_Cache_Source_SimpleDB(BS_TB_USER_FIELDS,'id','field_sort','ASC');
 		$cache->init_content('user_fields',$s);
 		
 		// user_ranks
-		$s = new PLIB_Cache_Source_SimpleDB(BS_TB_RANKS,'id','post_from','ASC');
+		$s = new FWS_Cache_Source_SimpleDB(BS_TB_RANKS,'id','post_from','ASC');
 		$cache->init_content('user_ranks',$s);
 		
 		// moderators
@@ -123,29 +123,29 @@ class BS_PropLoader extends PLIB_PropLoader
 	 */
 	protected function cfg()
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		$cfg = $cache->get_cache('config')->get_elements_quick();
 		return $cfg;
 	}
 
 	/**
-	 * @return PLIB_Template_Handler the property
+	 * @return FWS_Template_Handler the property
 	 */
 	protected function tpl()
 	{
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
 
-		$c = new PLIB_Template_Handler();
-		$c->set_cache_folder(PLIB_Path::server_app().'cache/');
+		$c = new FWS_Template_Handler();
+		$c->set_cache_folder(FWS_Path::server_app().'cache/');
 		
 		// add some global variables
-		$c->add_global('gpath',PLIB_Path::client_app());
-		$c->add_global('glibpath',PLIB_Path::client_lib());
+		$c->add_global('gpath',FWS_Path::client_app());
+		$c->add_global('gfwspath',FWS_Path::client_fw());
 		
-		$js = PLIB_Javascript::get_instance();
+		$js = FWS_Javascript::get_instance();
 		$js->set_cache_folder('cache/');
 		$js->set_shrink(BS_DEBUG <= 1);
 		$c->add_global_ref('gjs',$js);
@@ -187,11 +187,11 @@ class BS_PropLoader extends PLIB_PropLoader
 	}
 	
 	/**
-	 * @return PLIB_MySQL the property
+	 * @return FWS_MySQL the property
 	 */
 	protected function db()
 	{
-		$c = PLIB_MySQL::get_instance();
+		$c = FWS_MySQL::get_instance();
 		$c->connect(BS_MYSQL_HOST,BS_MYSQL_LOGIN,BS_MYSQL_PASSWORD,BS_MYSQL_DATABASE);
 		$c->set_use_transactions(BS_USE_TRANSACTIONS);
 		$c->init(BS_DB_CHARSET);
@@ -200,48 +200,48 @@ class BS_PropLoader extends PLIB_PropLoader
 	}
 	
 	/**
-	 * @return PLIB_Input the property
+	 * @return FWS_Input the property
 	 */
 	protected function input()
 	{
-		$c = PLIB_Input::get_instance();
+		$c = FWS_Input::get_instance();
 		
 		// predefine values
-		/*$c->set_predef(TDL_URL_ACTION,'get',PLIB_Input::STRING);
-		$c->set_predef(TDL_URL_ORDER,'get',PLIB_Input::STRING,
+		/*$c->set_predef(TDL_URL_ACTION,'get',FWS_Input::STRING);
+		$c->set_predef(TDL_URL_ORDER,'get',FWS_Input::STRING,
 			array('changed','type','title','project','start','fixed'));
-		$c->set_predef(TDL_URL_AD,'get',PLIB_Input::STRING,array('ASC','DESC'));
-		$c->set_predef(TDL_URL_MODE,'get',PLIB_Input::STRING);
-		$c->set_predef(TDL_URL_LOC,'get',PLIB_Input::STRING);
-		$c->set_predef(TDL_URL_AT,'get',PLIB_Input::INTEGER);
-		$c->set_predef(TDL_URL_ID,'get',PLIB_Input::ID);
-		$c->set_predef(TDL_URL_IDS,'get',PLIB_Input::STRING);
-		$c->set_predef(TDL_URL_SID,'get',PLIB_Input::ID);
-		$c->set_predef(TDL_URL_SITE,'get',PLIB_Input::INTEGER);
-		$c->set_predef(TDL_URL_LIMIT,'get',PLIB_Input::INTEGER);
-		$c->set_predef(TDL_URL_S_KEYWORD,'get',PLIB_Input::STRING);
-		$c->set_predef(TDL_URL_S_FROM_CHANGED_DATE,'get',PLIB_Input::STRING);
-		$c->set_predef(TDL_URL_S_TO_CHANGED_DATE,'get',PLIB_Input::STRING);
-		$c->set_predef(TDL_URL_S_FROM_START_DATE,'get',PLIB_Input::STRING);
-		$c->set_predef(TDL_URL_S_TO_START_DATE,'get',PLIB_Input::STRING);
-		$c->set_predef(TDL_URL_S_FROM_FIXED_DATE,'get',PLIB_Input::STRING);
-		$c->set_predef(TDL_URL_S_TO_FIXED_DATE,'get',PLIB_Input::STRING);
-		$c->set_predef(TDL_URL_S_TYPE,'get',PLIB_Input::STRING,
+		$c->set_predef(TDL_URL_AD,'get',FWS_Input::STRING,array('ASC','DESC'));
+		$c->set_predef(TDL_URL_MODE,'get',FWS_Input::STRING);
+		$c->set_predef(TDL_URL_LOC,'get',FWS_Input::STRING);
+		$c->set_predef(TDL_URL_AT,'get',FWS_Input::INTEGER);
+		$c->set_predef(TDL_URL_ID,'get',FWS_Input::ID);
+		$c->set_predef(TDL_URL_IDS,'get',FWS_Input::STRING);
+		$c->set_predef(TDL_URL_SID,'get',FWS_Input::ID);
+		$c->set_predef(TDL_URL_SITE,'get',FWS_Input::INTEGER);
+		$c->set_predef(TDL_URL_LIMIT,'get',FWS_Input::INTEGER);
+		$c->set_predef(TDL_URL_S_KEYWORD,'get',FWS_Input::STRING);
+		$c->set_predef(TDL_URL_S_FROM_CHANGED_DATE,'get',FWS_Input::STRING);
+		$c->set_predef(TDL_URL_S_TO_CHANGED_DATE,'get',FWS_Input::STRING);
+		$c->set_predef(TDL_URL_S_FROM_START_DATE,'get',FWS_Input::STRING);
+		$c->set_predef(TDL_URL_S_TO_START_DATE,'get',FWS_Input::STRING);
+		$c->set_predef(TDL_URL_S_FROM_FIXED_DATE,'get',FWS_Input::STRING);
+		$c->set_predef(TDL_URL_S_TO_FIXED_DATE,'get',FWS_Input::STRING);
+		$c->set_predef(TDL_URL_S_TYPE,'get',FWS_Input::STRING,
 			array('','bug','feature','improvement','test'));
-		$c->set_predef(TDL_URL_S_PRIORITY,'get',PLIB_Input::STRING,
+		$c->set_predef(TDL_URL_S_PRIORITY,'get',FWS_Input::STRING,
 			array('','current','next','anytime'));
-		$c->set_predef(TDL_URL_S_STATUS,'get',PLIB_Input::STRING,
+		$c->set_predef(TDL_URL_S_STATUS,'get',FWS_Input::STRING,
 			array('','open','running','fixed','not_tested'));
-		$c->set_predef(TDL_URL_S_CATEGORY,'get',PLIB_Input::ID);*/
+		$c->set_predef(TDL_URL_S_CATEGORY,'get',FWS_Input::ID);*/
 		return $c;
 	}
 
 	/**
-	 * @return PLIB_Cookies the property
+	 * @return FWS_Cookies the property
 	 */
 	protected function cookies()
 	{
-		$c = new PLIB_Cookies(BS_COOKIE_PREFIX);
+		$c = new FWS_Cookies(BS_COOKIE_PREFIX);
 		$c->set_lifetime(BS_COOKIE_LIFETIME);
 		return $c;
 	}

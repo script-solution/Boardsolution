@@ -30,10 +30,10 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 	 */
 	public static function get_default($fid,$tid = 1,$add_topic = true)
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
 		
-		$post_text = $input->get_var('text','post',PLIB_Input::STRING);
+		$post_text = $input->get_var('text','post',FWS_Input::STRING);
 		$use_bbcode = $input->isset_var('use_bbcode','post') ? 1 : 0;
 		$use_smileys = $input->isset_var('use_smileys','post') ? 1 : 0;
 		
@@ -45,8 +45,8 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 		// support guest-posts
 		if(!$user->is_loggedin())
 		{
-			$user_name = $input->get_var('user_name','post',PLIB_Input::STRING);
-			$user_email = $input->get_var('email_adr','post',PLIB_Input::STRING);
+			$user_name = $input->get_var('user_name','post',FWS_Input::STRING);
+			$user_email = $input->get_var('email_adr','post',FWS_Input::STRING);
 			$post->set_guest($user_name,$user_email);
 		}
 		
@@ -161,8 +161,8 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 	{
 		parent::__construct();
 		
-		if(!PLIB_Helper::is_integer($user_id) || $user_id < 0)
-			PLIB_Helper::def_error('intge0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id < 0)
+			FWS_Helper::def_error('intge0','user_id',$user_id);
 		
 		$this->_fid = (int)$fid;
 		$this->_tid = (int)$tid;
@@ -239,8 +239,8 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 	
 	public function check_data()
 	{
-		$user = PLIB_Props::get()->user();
-		$forums = PLIB_Props::get()->forums();
+		$user = FWS_Props::get()->user();
+		$forums = FWS_Props::get()->forums();
 
 		// are all parameters valid?
 		if($this->_fid == null || $this->_tid == null)
@@ -278,7 +278,7 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 				return 'invalid_username';
 			
 			$this->_guest_email = trim($this->_guest_email);
-			if($this->_guest_email != '' && !PLIB_StringHelper::is_valid_email($this->_guest_email))
+			if($this->_guest_email != '' && !FWS_StringHelper::is_valid_email($this->_guest_email))
 				return 'invalid_email';
 		}
 		
@@ -294,11 +294,11 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
-		$db = PLIB_Props::get()->db();
-		$cfg = PLIB_Props::get()->cfg();
-		$functions = PLIB_Props::get()->functions();
-		$forums = PLIB_Props::get()->forums();
-		$cache = PLIB_Props::get()->cache();
+		$db = FWS_Props::get()->db();
+		$cfg = FWS_Props::get()->cfg();
+		$functions = FWS_Props::get()->functions();
+		$forums = FWS_Props::get()->forums();
+		$cache = FWS_Props::get()->cache();
 
 		parent::perform_action();
 		

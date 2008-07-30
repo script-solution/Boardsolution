@@ -18,7 +18,7 @@
  * @subpackage	front.src.post
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Post_Data extends PLIB_Object
+final class BS_Front_Post_Data extends FWS_Object
 {
 	/**
 	 * A cache for profile-data. As soon as we need a value for the profile it will be created
@@ -111,12 +111,12 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function __construct($no,$container,$data)
 	{
-		if(!PLIB_Helper::is_integer($no) || $no < 0)
-			PLIB_Helper::def_error('intge0','no',$no);
+		if(!FWS_Helper::is_integer($no) || $no < 0)
+			FWS_Helper::def_error('intge0','no',$no);
 		if(!($container instanceof BS_Front_Post_Container))
-			PLIB_Helper::def_error('instance','container','BS_Front_Post_Container',$container);
+			FWS_Helper::def_error('instance','container','BS_Front_Post_Container',$container);
 		if(!is_array($data))
-			PLIB_Helper::def_error('array','data',$data);
+			FWS_Helper::def_error('array','data',$data);
 		
 		$this->_no = $no;
 		$this->_container = $container;
@@ -138,7 +138,7 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function get_post_number()
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		$page = $this->_container->get_pagination()->get_page();
 		return (($page - 1) * $cfg['posts_per_page']) + $this->_no + 1;
@@ -163,7 +163,7 @@ final class BS_Front_Post_Data extends PLIB_Object
 	public function get_field($name)
 	{
 		if(!isset($this->_data[$name]))
-			PLIB_Helper::error('The field "'.$name.'" doesn\'t exist!');
+			FWS_Helper::error('The field "'.$name.'" doesn\'t exist!');
 		
 		return $this->_data[$name];
 	}
@@ -173,7 +173,7 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function get_post_url()
 	{
-		$url = PLIB_Props::get()->url();
+		$url = FWS_Props::get()->url();
 
 		return $url->get_url(
 			'redirect','&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'='.$this->get_field('bid')
@@ -206,7 +206,7 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function get_guest_email()
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		if($this->_data['post_an_mail'] != '')
     	return $this->_data['post_an_mail'];
@@ -219,7 +219,7 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function get_user_group()
 	{
-		$auth = PLIB_Props::get()->auth();
+		$auth = FWS_Props::get()->auth();
 
 		return $auth->get_groupname((int)$this->_data['user_group']);
 	}
@@ -229,8 +229,8 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function get_user_stats()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
 
 		if(isset(self::$_profiles[$this->_data['id']]['stats']))
 			return self::$_profiles[$this->_data['id']]['stats'];
@@ -259,8 +259,8 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function get_user_ip()
 	{
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
 
 		if(isset(self::$_profiles[$this->_data['id']]['userstatus']))
 			return self::$_profiles[$this->_data['id']]['userstatus'];
@@ -279,8 +279,8 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function get_user_status()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
 
 		if($cfg['enable_user_ranks'] == 1 && $this->_data['post_user'] > 0)
 			return '';
@@ -297,7 +297,7 @@ final class BS_Front_Post_Data extends PLIB_Object
 		if(isset(self::$_profiles[$this->_data['id']]['regdate']))
 			return self::$_profiles[$this->_data['id']]['regdate'];
 		
-		$date = PLIB_Date::get_date($this->_data['registerdate']);
+		$date = FWS_Date::get_date($this->_data['registerdate']);
 		self::$_profiles[$this->_data['id']]['regdate'] = $date;
 		return $date;
 	}
@@ -307,7 +307,7 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function get_rank()
 	{
-		$functions = PLIB_Props::get()->functions();
+		$functions = FWS_Props::get()->functions();
 
 		if(isset(self::$_profiles[$this->_data['id']]['rank']))
 			return self::$_profiles[$this->_data['id']]['rank'];
@@ -322,8 +322,8 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function get_rank_title()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
 
 		if($cfg['enable_user_ranks'] == 1 && $this->_data['post_user'] > 0)
 			return $locale->lang('rank');
@@ -336,8 +336,8 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function get_rank_images()
 	{
-		$cache = PLIB_Props::get()->cache();
-		$functions = PLIB_Props::get()->functions();
+		$cache = FWS_Props::get()->cache();
+		$functions = FWS_Props::get()->functions();
 
 		if(isset(self::$_profiles[$this->_data['id']]['rankimg']))
 			return self::$_profiles[$this->_data['id']]['rankimg'];
@@ -370,7 +370,7 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function get_avatar()
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		if(isset(self::$_profiles[$this->_data['id']]['avatar']))
 			return self::$_profiles[$this->_data['id']]['avatar'];
@@ -387,7 +387,7 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function get_additional_fields()
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$fields = array();
 	  if($this->_data['post_user'] != 0)
@@ -442,13 +442,13 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function get_post_buttons()
 	{
-		$auth = PLIB_Props::get()->auth();
-		$forums = PLIB_Props::get()->forums();
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$auth = FWS_Props::get()->auth();
+		$forums = FWS_Props::get()->forums();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		static $cache = null;
 		if($cache === null)
@@ -456,9 +456,9 @@ final class BS_Front_Post_Data extends PLIB_Object
 			$cache = array(
 				'can_reply'					=> $auth->has_current_forum_perm(BS_MODE_REPLY),
 				'fclosed'						=> $forums->forum_is_closed($this->_data['rubrikid']),
-				'fid'								=> $input->get_var(BS_URL_FID,'get',PLIB_Input::ID),
-				'tid'								=> $input->get_var(BS_URL_TID,'get',PLIB_Input::ID),
-				'action'						=> $input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING),
+				'fid'								=> $input->get_var(BS_URL_FID,'get',FWS_Input::ID),
+				'tid'								=> $input->get_var(BS_URL_TID,'get',FWS_Input::ID),
+				'action'						=> $input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING),
 				'site'							=> $this->_container->get_pagination()->get_page(),
 				'total_pages'				=> $this->_container->get_pagination()->get_page_count(),
 				'total_posts'				=> $this->_container->get_post_count(),
@@ -538,12 +538,12 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function get_profile_buttons()
 	{
-		$auth = PLIB_Props::get()->auth();
-		$user = PLIB_Props::get()->user();
-		$url = PLIB_Props::get()->url();
-		$sessions = PLIB_Props::get()->sessions();
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
+		$auth = FWS_Props::get()->auth();
+		$user = FWS_Props::get()->user();
+		$url = FWS_Props::get()->url();
+		$sessions = FWS_Props::get()->sessions();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
 
 		static $cache = null;
 		if($cache === null)
@@ -579,7 +579,7 @@ final class BS_Front_Post_Data extends PLIB_Object
 	  $btns .= '</a>';
 	
 		// email button
-	  if($cfg['enable_emails'] == 1 && PLIB_StringHelper::is_valid_email($this->_data['email']) &&
+	  if($cfg['enable_emails'] == 1 && FWS_StringHelper::is_valid_email($this->_data['email']) &&
 			 $this->_data['allow_board_emails'] == 1 &&
 			 ($cfg['display_denied_options'] || $cache['send_mails']))
 	  {
@@ -610,7 +610,7 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function is_unread()
 	{
-		$unread = PLIB_Props::get()->unread();
+		$unread = FWS_Props::get()->unread();
 
 		if($unread->is_unread_thread($this->_data['threadid']))
 		{
@@ -625,9 +625,9 @@ final class BS_Front_Post_Data extends PLIB_Object
 	 */
 	public function get_post_image()
 	{
-		$unread = PLIB_Props::get()->unread();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
+		$unread = FWS_Props::get()->unread();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
 
 		// determine post unread image
 	  if($unread->is_unread_thread($this->_data['threadid']))

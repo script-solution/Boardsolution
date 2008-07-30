@@ -17,7 +17,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Unread extends PLIB_Object
+final class BS_Unread extends FWS_Object
 {
 	/**
 	 * The unread-storage-implementation
@@ -73,8 +73,8 @@ final class BS_Unread extends PLIB_Object
 	 */
 	public function __construct()
 	{
-		$user = PLIB_Props::get()->user();
-		$cookies = PLIB_Props::get()->cookies();
+		$user = FWS_Props::get()->user();
+		$cookies = FWS_Props::get()->cookies();
 
 		if($user->is_loggedin())
 		{
@@ -177,8 +177,8 @@ final class BS_Unread extends PLIB_Object
 	 */
 	public function update_unread()
 	{
-		$user = PLIB_Props::get()->user();
-		$input = PLIB_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$input = FWS_Props::get()->input();
 
 		$update = false;
 		if($user->force_unread_update())
@@ -208,14 +208,14 @@ final class BS_Unread extends PLIB_Object
 	 */
 	public function mark_topics_unread($ids)
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		// determine if we have to grab news
 		$grab_news = $cfg['enable_portal_news'] && $cfg['enable_portal'];
 		if($grab_news)
 		{
-			$news_fids = PLIB_Array_Utils::advanced_explode(',',$cfg['news_forums']);
-			if(!PLIB_Array_Utils::is_integer($news_fids) || count($news_fids) == 0)
+			$news_fids = FWS_Array_Utils::advanced_explode(',',$cfg['news_forums']);
+			if(!FWS_Array_Utils::is_integer($news_fids) || count($news_fids) == 0)
 				$grab_news = false;
 		}
 		
@@ -294,7 +294,7 @@ final class BS_Unread extends PLIB_Object
 	 */
 	public function mark_forum_read($id)
 	{
-		$forums = PLIB_Props::get()->forums();
+		$forums = FWS_Props::get()->forums();
 
 		//  we'll mark all sub-forums read, too, if we don't show all subforums in the forums-view
 		$data = $forums->get_node_data($id);
@@ -347,9 +347,9 @@ final class BS_Unread extends PLIB_Object
 	 */
 	private function _create_list()
 	{
-		$cache = PLIB_Props::get()->cache();
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
+		$cache = FWS_Props::get()->cache();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
 
 		$last_update = $this->_storage->get_last_update();
 		$stats = $cache->get_cache('stats')->get_element(0,false);
@@ -381,8 +381,8 @@ final class BS_Unread extends PLIB_Object
 		$grab_news = $cfg['enable_portal_news'] && $cfg['enable_portal'];
 		if($grab_news)
 		{
-			$news_fids = PLIB_Array_Utils::advanced_explode(',',$cfg['news_forums']);
-			if(!PLIB_Array_Utils::is_integer($news_fids) || count($news_fids) == 0)
+			$news_fids = FWS_Array_Utils::advanced_explode(',',$cfg['news_forums']);
+			if(!FWS_Array_Utils::is_integer($news_fids) || count($news_fids) == 0)
 				$grab_news = false;
 		}
 

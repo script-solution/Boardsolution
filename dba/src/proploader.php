@@ -32,21 +32,21 @@ final class BS_DBA_PropLoader extends BS_PropLoader
 	/**
 	 * @see BS_PropLoader::sessions()
 	 *
-	 * @return PLIB_Session_Manager
+	 * @return FWS_Session_Manager
 	 */
 	protected function sessions()
 	{
-		return new PLIB_Session_Manager(new PLIB_Session_Storage_PHP());
+		return new FWS_Session_Manager(new FWS_Session_Storage_PHP());
 	}
 
 	/**
 	 * @see BS_PropLoader::user()
 	 *
-	 * @return PLIB_User_Current
+	 * @return FWS_User_Current
 	 */
 	protected function user()
 	{
-		$user = new PLIB_User_Current(new BS_DBA_User_Storage_DBA());
+		$user = new FWS_User_Current(new BS_DBA_User_Storage_DBA());
 		$user->set_use_cookies(false);
 		return $user;
 	}
@@ -64,11 +64,11 @@ final class BS_DBA_PropLoader extends BS_PropLoader
 	/**
 	 * @see BS_PropLoader::db()
 	 *
-	 * @return PLIB_MySQL
+	 * @return FWS_MySQL
 	 */
 	protected function db()
 	{
-		$c = PLIB_MySQL::get_instance();
+		$c = FWS_MySQL::get_instance();
 		$db = BS_DBA_Utils::get_instance()->get_selected_database();
 		$c->connect(BS_MYSQL_HOST,BS_MYSQL_LOGIN,BS_MYSQL_PASSWORD,$db);
 		$c->set_use_transactions(BS_USE_TRANSACTIONS);
@@ -82,7 +82,7 @@ final class BS_DBA_PropLoader extends BS_PropLoader
 	 */
 	protected function backups()
 	{
-		return new BS_DBA_Backup_Manager(PLIB_Path::server_app().'dba/backups/backups.txt');
+		return new BS_DBA_Backup_Manager(FWS_Path::server_app().'dba/backups/backups.txt');
 	}
 }
 ?>

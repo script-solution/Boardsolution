@@ -21,13 +21,13 @@ final class BS_ACP_Action_bbcode_edit extends BS_ACP_Action_Base
 {
 	public function perform_action($mode = 'edit')
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
 
 		// check id if we want to edit
 		if($mode == 'edit')
 		{
-			$id = $input->get_var('id','get',PLIB_Input::ID);
+			$id = $input->get_var('id','get',FWS_Input::ID);
 			if($id == null)
 				return 'The parameter id is invalid';
 			
@@ -37,24 +37,24 @@ final class BS_ACP_Action_bbcode_edit extends BS_ACP_Action_Base
 		}
 		
 		// grab parameters from POST
-		$name = $input->get_var('name','post',PLIB_Input::STRING);
-		$type = $input->get_var('type','post',PLIB_Input::STRING);
-		$type_custom = $input->get_var('type_custom','post',PLIB_Input::STRING);
-		$content = $input->get_var('content','post',PLIB_Input::STRING);
-		$content_custom = $input->get_var('content_custom','post',PLIB_Input::STRING);
+		$name = $input->get_var('name','post',FWS_Input::STRING);
+		$type = $input->get_var('type','post',FWS_Input::STRING);
+		$type_custom = $input->get_var('type_custom','post',FWS_Input::STRING);
+		$content = $input->get_var('content','post',FWS_Input::STRING);
+		$content_custom = $input->get_var('content_custom','post',FWS_Input::STRING);
 		$param = $input->correct_var(
-			'param','post',PLIB_Input::STRING,array('no','optional','required'),'no'
+			'param','post',FWS_Input::STRING,array('no','optional','required'),'no'
 		);
 		$param_type = $input->correct_var(
-			'param_type','post',PLIB_Input::STRING,
+			'param_type','post',FWS_Input::STRING,
 			array('text','integer','identifier','color','url','mail'),'text'
 		);
-		$replacement = $input->get_var('replacement','post',PLIB_Input::STRING);
-		$replacement_param = $input->get_var('replacement_param','post',PLIB_Input::STRING);
-		$allowed_content = $input->get_var('allowed_content','post',PLIB_Input::STRING);
-		$allow_nesting = $input->get_var('allow_nesting','post',PLIB_Input::INT_BOOL);
-		$ignore_whitespace = $input->get_var('ignore_whitespace','post',PLIB_Input::INT_BOOL);
-		$ignore_unknown_tags = $input->get_var('ignore_unknown_tags','post',PLIB_Input::INT_BOOL);
+		$replacement = $input->get_var('replacement','post',FWS_Input::STRING);
+		$replacement_param = $input->get_var('replacement_param','post',FWS_Input::STRING);
+		$allowed_content = $input->get_var('allowed_content','post',FWS_Input::STRING);
+		$allow_nesting = $input->get_var('allow_nesting','post',FWS_Input::INT_BOOL);
+		$ignore_whitespace = $input->get_var('ignore_whitespace','post',FWS_Input::INT_BOOL);
+		$ignore_unknown_tags = $input->get_var('ignore_unknown_tags','post',FWS_Input::INT_BOOL);
 		
 		// check parameters
 		if(empty($name))
@@ -84,10 +84,10 @@ final class BS_ACP_Action_bbcode_edit extends BS_ACP_Action_Base
 		if($param != 'required' && empty($replacement))
 			return 'replacement_required';
 		
-		$replacement = PLIB_StringHelper::htmlspecialchars_back($replacement);
-		$replacement_param = PLIB_StringHelper::htmlspecialchars_back($replacement_param);
+		$replacement = FWS_StringHelper::htmlspecialchars_back($replacement);
+		$replacement_param = FWS_StringHelper::htmlspecialchars_back($replacement_param);
 		
-		$allowed_content_types = PLIB_Array_Utils::advanced_explode(',',$allowed_content);
+		$allowed_content_types = FWS_Array_Utils::advanced_explode(',',$allowed_content);
 		foreach($allowed_content_types as $actype)
 		{
 			if(!in_array($actype,$types))

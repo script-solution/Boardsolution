@@ -17,7 +17,7 @@
  * @subpackage	front.src.renderer
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
+final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 {
 	/**
 	 * Wether this page is viewable by guests only
@@ -54,9 +54,9 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 	{
 		parent::__construct();
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
 		
 		// always set the location in html-pages
 		$user->set_location();
@@ -134,9 +134,9 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see PLIB_Document_Renderer_HTML_Default::load_action_perf()
+	 * @see FWS_Document_Renderer_HTML_Default::load_action_perf()
 	 *
-	 * @return PLIB_Actions_Performer
+	 * @return FWS_Actions_Performer
 	 */
 	protected function load_action_perf()
 	{
@@ -150,28 +150,28 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 	{
 		parent::before_start();
 		
-		$doc = PLIB_Props::get()->doc();
+		$doc = FWS_Props::get()->doc();
 		
 		// set the default template if not already done
 		$template = '';
 		if($this->get_template() === null)
 		{
 			$classname = get_class($doc->get_module());
-			$prefixlen = PLIB_String::strlen('BS_Front_Module_');
-			$template = PLIB_String::strtolower(PLIB_String::substr($classname,$prefixlen)).'.htm';
+			$prefixlen = FWS_String::strlen('BS_Front_Module_');
+			$template = FWS_String::strtolower(FWS_String::substr($classname,$prefixlen)).'.htm';
 			$this->set_template($template);
 		}
 	}
 
 	/**
-	 * @see PLIB_Page::before_render()
+	 * @see FWS_Page::before_render()
 	 */
 	protected function before_render()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
-		$doc = PLIB_Props::get()->doc();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$doc = FWS_Props::get()->doc();
 		
 		// add redirect information
 		$redirect = $doc->get_redirect();
@@ -193,7 +193,7 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 		// TODO add current module
 		
 		// handle messages
-		$msgs = PLIB_Props::get()->msgs();
+		$msgs = FWS_Props::get()->msgs();
 		if($msgs->contains_msg())
 			$this->_handle_msgs($msgs);
 		
@@ -203,13 +203,13 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 	/**
 	 * Handles the collected messages
 	 *
-	 * @param PLIB_Document_Messages $msgs
+	 * @param FWS_Document_Messages $msgs
 	 */
 	private function _handle_msgs($msgs)
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
 		
 		if($msgs->contains_no_access())
 			$functions->show_login_form();
@@ -218,9 +218,9 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 			$amsgs = $msgs->get_all_messages();
 			$links = $msgs->get_links();
 			$tpl->set_template('inc_messages.htm');
-			$tpl->add_array('errors',$amsgs[PLIB_Document_Messages::ERROR]);
-			$tpl->add_array('warnings',$amsgs[PLIB_Document_Messages::WARNING]);
-			$tpl->add_array('notices',$amsgs[PLIB_Document_Messages::NOTICE]);
+			$tpl->add_array('errors',$amsgs[FWS_Document_Messages::ERROR]);
+			$tpl->add_array('warnings',$amsgs[FWS_Document_Messages::WARNING]);
+			$tpl->add_array('notices',$amsgs[FWS_Document_Messages::NOTICE]);
 			$tpl->add_array('links',$links);
 			$tpl->add_variables(array(
 				'title' => $locale->lang('information'),
@@ -231,17 +231,17 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see PLIB_Page::content()
+	 * @see FWS_Page::content()
 	 */
 	protected function content()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
-		$msgs = PLIB_Props::get()->msgs();
-		$functions = PLIB_Props::get()->functions();
-		$auth = PLIB_Props::get()->auth();
-		$doc = PLIB_Props::get()->doc();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$msgs = FWS_Props::get()->msgs();
+		$functions = FWS_Props::get()->functions();
+		$auth = FWS_Props::get()->auth();
+		$doc = FWS_Props::get()->doc();
 
 		$module = $doc->get_module();
 		
@@ -259,7 +259,7 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 				if($doc->get_module_name() != 'login' && $cfg['enable_board'] == 0 &&
 					!$user->is_admin())
 				{
-					$msg = nl2br(PLIB_StringHelper::htmlspecialchars_back($cfg['board_disabled_text']));
+					$msg = nl2br(FWS_StringHelper::htmlspecialchars_back($cfg['board_disabled_text']));
 					$msg .= $locale->lang('board_deactivated_notice');
 					$msgs->add_notice($msg);
 					$this->set_error();
@@ -282,11 +282,11 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see PLIB_Page::header()
+	 * @see FWS_Page::header()
 	 */
 	protected function header()
 	{
-		$doc = PLIB_Props::get()->doc();
+		$doc = FWS_Props::get()->doc();
 		
 		// add module-independend actions
 		$actions = array(
@@ -296,7 +296,7 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 		);
 		foreach($actions as $id => $action)
 		{
-			include_once(PLIB_Path::server_app().'front/src/action/'.$action.'.php');
+			include_once(FWS_Path::server_app().'front/src/action/'.$action.'.php');
 			$classname = 'BS_Front_Action_'.$action;
 			$a = new $classname($id);
 			$this->_action_perf->add_action($a);
@@ -307,14 +307,14 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 		
 		
 		// prepare header-templates
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
-		$input = PLIB_Props::get()->input();
-		$auth = PLIB_Props::get()->auth();
-		$unread = PLIB_Props::get()->unread();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$auth = FWS_Props::get()->auth();
+		$unread = FWS_Props::get()->unread();
 
 		$breadcrumbs = $this->get_breadcrumbs();
 		$page_title = str_replace($locale->lang('home'),$cfg['forum_title'],$breadcrumbs);
@@ -334,7 +334,7 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 			'cssblocks' => $this->get_css_blocks(),
 			'jsfiles' => $this->get_js_files(),
 			'jsblocks' => $this->get_js_blocks(),
-			'action' => $input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING),
+			'action' => $input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING),
 			'robots_value' => $this->get_robots_value(),
 			'rss20_feed' => $url->get_url('news_feed','&amp;'.BS_URL_MODE.'=rss20'),
 			'atom_feed' => $url->get_url('news_feed','&amp;'.BS_URL_MODE.'=atom'),
@@ -477,11 +477,11 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 			$lastlogin = false;
 			if($user->is_loggedin())
 			{
-				if($ll = $input->get_var(BS_COOKIE_PREFIX.'lastlogin','cookie',PLIB_Input::INTEGER))
-					$lastlogin = PLIB_Date::get_date($ll);
+				if($ll = $input->get_var(BS_COOKIE_PREFIX.'lastlogin','cookie',FWS_Input::INTEGER))
+					$lastlogin = FWS_Date::get_date($ll);
 			}
 			
-			$cdate = new PLIB_Date();
+			$cdate = new FWS_Date();
 			$tpl->add_variables(array(
 				'enable_portal' => $cfg['enable_portal'] == 1,
 				'unread_news_title' => $unread_news_title,
@@ -502,18 +502,18 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see PLIB_Page::footer()
+	 * @see FWS_Page::footer()
 	 */
 	protected function footer()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
-		$db = PLIB_Props::get()->db();
-		$tpl = PLIB_Props::get()->tpl();
-		$functions = PLIB_Props::get()->functions();
-		$forums = PLIB_Props::get()->forums();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
+		$db = FWS_Props::get()->db();
+		$tpl = FWS_Props::get()->tpl();
+		$functions = FWS_Props::get()->functions();
+		$forums = FWS_Props::get()->forums();
 
 		if($this->_show_bottom)
 		{
@@ -574,11 +574,11 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 			$debug = '&nbsp;';
 			if(BS_DEBUG > 0)
 			{
-				$profiler = PLIB_Props::get()->profiler();
+				$profiler = FWS_Props::get()->profiler();
 				$qry_num = $db->get_performed_query_num();
 				$debug = $profiler->get_time().' '.$locale->lang('sec').', '
 					.$qry_num.' '.$locale->lang('qrys').', '
-					.PLIB_StringHelper::get_formated_data_size($profiler->get_memory_usage());
+					.FWS_StringHelper::get_formated_data_size($profiler->get_memory_usage());
 			}
 			
 			$tpl->set_template('inc_bottom.htm');
@@ -595,7 +595,7 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 		// show footer
 		$tpl->set_template('inc_footer.htm');
 		$tpl->add_variables(array(
-			'queries' => BS_DEBUG == 2 ? PLIB_PrintUtils::to_string($db->get_performed_queries()) : '',
+			'queries' => BS_DEBUG == 2 ? FWS_PrintUtils::to_string($db->get_performed_queries()) : '',
 			'show_bottom' => $this->_show_bottom
 		));
 		$tpl->restore_template();
@@ -610,8 +610,8 @@ final class BS_Front_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 	 */
 	private function _show_top_link($cfg_entry,$auth_entry = '')
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
 
 		$display = true;
 		if($cfg[$cfg_entry] == 0)

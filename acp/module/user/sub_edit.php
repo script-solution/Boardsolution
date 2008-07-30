@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,14 +28,14 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_USER_EDIT,'edit');
 		
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		$renderer->add_breadcrumb(
 			$locale->lang('edit_user'),
 			$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
@@ -43,18 +43,18 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$tpl = PLIB_Props::get()->tpl();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$tpl = FWS_Props::get()->tpl();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
 		{
 			$this->report_error();
@@ -76,9 +76,9 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		}
 
 		$order_vals = array('user','reg','group','experience');
-		$order = $input->correct_var('order','get',PLIB_Input::STRING,$order_vals,'experience');
-		$ad = $input->correct_var('ad','get',PLIB_Input::STRING,array('ASC','DESC'),'DESC');
-		$site = $input->get_var('site','get',PLIB_Input::INTEGER);
+		$order = $input->correct_var('order','get',FWS_Input::STRING,$order_vals,'experience');
+		$ad = $input->correct_var('ad','get',FWS_Input::STRING,array('ASC','DESC'),'DESC');
+		$site = $input->get_var('site','get',FWS_Input::INTEGER);
 
 		$base_url = $url->get_acpmod_url(0,'&amp;order='.$order.'&amp;ad='.$ad.'&amp;site='.$site);
 		
@@ -100,7 +100,7 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 			}
 		}
 		
-		$ogroupdb = PLIB_Array_Utils::advanced_explode(',',$data['user_group']);
+		$ogroupdb = FWS_Array_Utils::advanced_explode(',',$data['user_group']);
 		unset($ogroupdb[0]);
 		$tpl->add_variables(array(
 			'action_type' => BS_ACP_ACTION_USER_EDIT,
@@ -140,7 +140,7 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		$tplfields = array();
 		foreach($fields as $field)
 		{
-			/* @var $field PLIB_AddField_Field */
+			/* @var $field FWS_AddField_Field */
 			$fdata = $field->get_data();
 			$field_name = $fdata->get_name();
 			$stored_val = $data['add_'.$field_name];

@@ -21,10 +21,10 @@ final class BS_Front_Action_sendpw_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$user = PLIB_Props::get()->user();
-		$functions = PLIB_Props::get()->functions();
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$functions = FWS_Props::get()->functions();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
 
 		// check if the user is allowed to do this
 		if((BS_ENABLE_EXPORT && BS_EXPORT_SEND_PW_TYPE != 'enabled') || $user->is_loggedin())
@@ -34,13 +34,13 @@ final class BS_Front_Action_sendpw_default extends BS_Front_Action_Base
 			return 'invalid_security_code';
 
 		// check if the email exists
-		$email_address = $input->get_var('email','post',PLIB_Input::STRING);
+		$email_address = $input->get_var('email','post',FWS_Input::STRING);
 		$data = BS_DAO::get_user()->get_user_by_email($email_address);
 		if($data === false)
 			return 'sendpw_invalid_email';
 		
 		// send the email
-		$key = PLIB_StringHelper::generate_random_key();
+		$key = FWS_StringHelper::generate_random_key();
 		$email = BS_EmailFactory::get_instance()->get_change_pw_mail($data['id'],$email_address,$key);
 		if(!$email->send_mail())
 			return sprintf($locale->lang('error_mail_error'),$email->get_error_message());

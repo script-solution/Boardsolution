@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_ACP_Module_Themes_Editor_Base extends PLIB_Object
+abstract class BS_ACP_Module_Themes_Editor_Base extends FWS_Object
 {
 	/**
 	 * The selected theme
@@ -31,14 +31,14 @@ abstract class BS_ACP_Module_Themes_Editor_Base extends PLIB_Object
 	 */
 	public function __construct()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
 
 		parent::__construct();
 		
-		$theme = $input->get_var('theme','get',PLIB_Input::STRING);
+		$theme = $input->get_var('theme','get',FWS_Input::STRING);
 		if($theme == null || !BS_DAO::get_themes()->theme_exists($theme))
-			PLIB_Helper::error($locale->lang('theme_invalid'));
+			FWS_Helper::error($locale->lang('theme_invalid'));
 		
 		$this->_theme = 'themes/'.$theme;
 	}

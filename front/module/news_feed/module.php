@@ -20,7 +20,7 @@
 final class BS_Front_Module_news_feed extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -32,13 +32,13 @@ final class BS_Front_Module_news_feed extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$input = PLIB_Props::get()->input();
-		$doc = PLIB_Props::get()->doc();
+		$cfg = FWS_Props::get()->cfg();
+		$input = FWS_Props::get()->input();
+		$doc = FWS_Props::get()->doc();
 
 		if(!$cfg['enable_news_feeds'])
 		{
@@ -46,7 +46,7 @@ final class BS_Front_Module_news_feed extends BS_Front_Module
 			return;
 		}
 		
-		$mode = $input->get_var(BS_URL_MODE,'get',PLIB_Input::STRING,array('rss20','atom'),'rss20');
+		$mode = $input->get_var(BS_URL_MODE,'get',FWS_Input::STRING,array('rss20','atom'),'rss20');
 		
 		// load feed-generator
 		if($mode == 'rss20')

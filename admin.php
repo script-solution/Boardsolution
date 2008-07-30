@@ -17,31 +17,31 @@ define('BS_PATH','');
 
 include_once(BS_PATH.'config/userdef.php');
 
-// define libpath for init.php
-if(!defined('PLIB_PATH'))
-	define('PLIB_PATH',BS_PATH.BS_LIB_PATH);
+// define fwspath for init.php
+if(!defined('FWS_PATH'))
+	define('FWS_PATH',BS_PATH.BS_FWS_PATH);
 
-// init the library
-include_once(PLIB_PATH.'init.php');
+// init the framework
+include_once(FWS_PATH.'init.php');
 
 // set the path
-PLIB_Path::set_server_app(BS_PATH);
-PLIB_Path::set_client_app(BS_PATH);
+FWS_Path::set_server_app(BS_PATH);
+FWS_Path::set_client_app(BS_PATH);
 
 // init boardsolution
 include_once(BS_PATH.'src/init.php');
 
-$input = PLIB_Props::get()->input();
+$input = FWS_Props::get()->input();
 $pages = array('navi','content','frameset');
-$page = $input->correct_var('page','get',PLIB_Input::IDENTIFIER,$pages,'frameset');
+$page = $input->correct_var('page','get',FWS_Input::IDENTIFIER,$pages,'frameset');
 
 $class = 'BS_ACP_Document_'.$page;
 if(class_exists($class))
 {
 	$doc = new $class();
-	PLIB_Props::get()->set_doc($doc);
+	FWS_Props::get()->set_doc($doc);
 	echo $doc->render();
 }
 else
-	PLIB_Helper::error('The class "'.$class.'" does not exist!');
+	FWS_Helper::error('The class "'.$class.'" does not exist!');
 ?>

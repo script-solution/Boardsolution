@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,16 +28,16 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_SAVE_SETTINGS,'save');
 		$renderer->add_action(BS_ACP_ACTION_REVERT_SETTING,'revert');
 
 		// set group-id
-		$gid = $input->get_var('gid','get',PLIB_Input::ID);
+		$gid = $input->get_var('gid','get',FWS_Input::ID);
 		if($gid == null)
 			$gid = $input->set_var('gid','get',1);
 		
@@ -46,7 +46,7 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 		$helper->get_manager()->load_group($gid);
 
 		// add bread crumb
-		$gid = $input->get_var('gid','get',PLIB_Input::ID);
+		$gid = $input->get_var('gid','get',FWS_Input::ID);
 		if($gid != null)
 		{
 			$manager = BS_ACP_Module_Config_Helper::get_instance()->get_manager();
@@ -56,16 +56,16 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$url = PLIB_Props::get()->url();
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$url = FWS_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
 
-		$gid = $input->get_var('gid','get',PLIB_Input::ID);
+		$gid = $input->get_var('gid','get',FWS_Input::ID);
 		if($gid == null)
 		{
 			$this->report_error();
@@ -85,7 +85,7 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 			'action_type' => BS_ACP_ACTION_SAVE_SETTINGS,
 			'title' => $locale->lang($manager->get_group($gid)->get_title(),false),
 			'items' => $view->get_items(),
-			'form_target' => $input->get_var('SERVER_PHPSELF','server',PLIB_Input::STRING),
+			'form_target' => $input->get_var('SERVER_PHPSELF','server',FWS_Input::STRING),
 			'hidden_fields' => $hidden_fields,
 			'groups_per_line' => $perline,
 			'group_rows' => $helper->get_groups($gid,$perline),

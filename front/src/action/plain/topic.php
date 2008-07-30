@@ -29,17 +29,17 @@ final class BS_Front_Action_Plain_Topic extends BS_Front_Action_Plain
 	 */
 	public static function get_default($post,$type = 0)
 	{
-		$input = PLIB_Props::get()->input();
-		$auth = PLIB_Props::get()->auth();
+		$input = FWS_Props::get()->input();
+		$auth = FWS_Props::get()->auth();
 		
-		$topic_name = $input->get_var('topic_name','post',PLIB_Input::STRING);
-		$allow_posts = $input->get_var('allow_posts','post',PLIB_Input::INT_BOOL);
+		$topic_name = $input->get_var('topic_name','post',FWS_Input::STRING);
+		$allow_posts = $input->get_var('allow_posts','post',FWS_Input::INT_BOOL);
 		if($auth->has_current_forum_perm(BS_MODE_MARK_TOPICS_IMPORTANT) &&
-			 $input->get_var('important','post',PLIB_Input::INT_BOOL) == 1)
+			 $input->get_var('important','post',FWS_Input::INT_BOOL) == 1)
 			$important = 1;
 		else
 			$important = 0;
-		$symbol = $input->get_var('symbol','post',PLIB_Input::INTEGER);
+		$symbol = $input->get_var('symbol','post',FWS_Input::INTEGER);
 		$symbol = ($symbol > BS_NUMBER_OF_TOPIC_ICONS || $symbol < 0) ? 0 : (int)$symbol;
 		
 		return new BS_Front_Action_Plain_Topic(
@@ -113,10 +113,10 @@ final class BS_Front_Action_Plain_Topic extends BS_Front_Action_Plain
 	{
 		parent::__construct();
 		
-		if(!PLIB_Helper::is_integer($type))
-			PLIB_Helper::def_error('type','numeric',$type);
+		if(!FWS_Helper::is_integer($type))
+			FWS_Helper::def_error('type','numeric',$type);
 		if(!($post instanceof BS_Front_Action_Plain_Post))
-			PLIB_Helper::def_error('instance','post','BS_Front_Action_Plain_Post',$post);
+			FWS_Helper::def_error('instance','post','BS_Front_Action_Plain_Post',$post);
 		
 		$this->_name = (string)$name;
 		$this->_type = (int)$type;
@@ -162,7 +162,7 @@ final class BS_Front_Action_Plain_Topic extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		parent::perform_action();
 		

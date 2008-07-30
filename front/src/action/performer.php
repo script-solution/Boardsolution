@@ -18,7 +18,7 @@
  * @subpackage	src.action
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Action_Performer extends PLIB_Actions_Performer
+final class BS_Front_Action_Performer extends FWS_Actions_Performer
 {
 	/**
 	 * Constructor
@@ -30,19 +30,19 @@ final class BS_Front_Action_Performer extends PLIB_Actions_Performer
 	
 	public function get_action_type()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
-		$action_type = $input->get_var('action_type','post',PLIB_Input::INTEGER);
+		$action_type = $input->get_var('action_type','post',FWS_Input::INTEGER);
 		if($action_type === null)
-			$action_type = $input->get_var(BS_URL_AT,'get',PLIB_Input::INTEGER);
+			$action_type = $input->get_var(BS_URL_AT,'get',FWS_Input::INTEGER);
 
 		return $action_type;
 	}
 	
 	protected function before_action_performed($id,$action)
 	{
-		$db = PLIB_Props::get()->db();
-		$locale = PLIB_Props::get()->locale();
+		$db = FWS_Props::get()->db();
+		$locale = FWS_Props::get()->locale();
 
 		parent::before_action_performed($id,$action);
 		
@@ -55,10 +55,10 @@ final class BS_Front_Action_Performer extends PLIB_Actions_Performer
 	
 	protected function after_action_performed($id,$action,&$message)
 	{
-		$db = PLIB_Props::get()->db();
-		$input = PLIB_Props::get()->input();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
+		$db = FWS_Props::get()->db();
+		$input = FWS_Props::get()->input();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
 
 		parent::after_action_performed($id,$action,$message);
 		
@@ -98,12 +98,12 @@ final class BS_Front_Action_Performer extends PLIB_Actions_Performer
 	 */
 	private function _add_attachment()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$user = PLIB_Props::get()->user();
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$user = FWS_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
 
 		// has the user the permission to attach files?
 		if($cfg['attachments_enable'] == 0 ||
@@ -145,14 +145,14 @@ final class BS_Front_Action_Performer extends PLIB_Actions_Performer
 										 str_replace('|',', ',$cfg['attachments_filetypes']));
 	
 		// does the file already exist?
-		$name = PLIB_FileUtils::clean_filename($_FILES['attachment']['name']);
-		$ext = PLIB_FileUtils::get_extension($name);
-		$base = PLIB_String::substr($name,0,PLIB_String::strlen($name) - PLIB_String::strlen($ext) - 1);
-		for($i = 1;is_file(PLIB_Path::server_app().'uploads/'.$name);$i++)
+		$name = FWS_FileUtils::clean_filename($_FILES['attachment']['name']);
+		$ext = FWS_FileUtils::get_extension($name);
+		$base = FWS_String::substr($name,0,FWS_String::strlen($name) - FWS_String::strlen($ext) - 1);
+		for($i = 1;is_file(FWS_Path::server_app().'uploads/'.$name);$i++)
 			$name = $base.$i.'.'.$ext;
 	
 		// try to move the uploaded file
-		$target_path = PLIB_Path::server_app().'uploads/'.$name;
+		$target_path = FWS_Path::server_app().'uploads/'.$name;
 		if(!@move_uploaded_file($_FILES['attachment']['tmp_name'],$target_path))
 			return 'attachment_upload_failed';
 	
@@ -176,10 +176,10 @@ final class BS_Front_Action_Performer extends PLIB_Actions_Performer
 	 */
 	private function _remove_attachment()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$input = PLIB_Props::get()->input();
-		$functions = PLIB_Props::get()->functions();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$input = FWS_Props::get()->input();
+		$functions = FWS_Props::get()->functions();
 
 		if($cfg['attachments_enable'] == 0 ||
 			 !$auth->has_global_permission('attachments_add'))
@@ -194,7 +194,7 @@ final class BS_Front_Action_Performer extends PLIB_Actions_Performer
 		if($split[0] == 'file' && preg_match('/^uploads\//',$file_paths[$split[1]]))
 		{
 			$file_paths[$split[1]] = str_replace('../','',$file_paths[$split[1]]);
-			@unlink(PLIB_Path::server_app().$file_paths[$split[1]]);
+			@unlink(FWS_Path::server_app().$file_paths[$split[1]]);
 	
 			unset($file_paths[$split[1]]);
 			$input->set_var('attached_file_paths','post',$file_paths);
@@ -202,7 +202,7 @@ final class BS_Front_Action_Performer extends PLIB_Actions_Performer
 				$input->set_var('attached_file_paths','post',null);
 		}
 		// or does it already exist in the database?
-		else if(PLIB_Helper::is_integer($split[1]))
+		else if(FWS_Helper::is_integer($split[1]))
 		{
 			$path = BS_DAO::get_attachments()->get_by_id($split[1]);
 			if(!$path)

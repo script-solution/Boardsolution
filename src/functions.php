@@ -17,15 +17,15 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Functions extends PLIB_Object
+final class BS_Functions extends FWS_Object
 {
 	/**
 	 * @return string the name of the folder of the default-language
 	 */
 	public function get_def_lang_folder()
 	{
-		$cache = PLIB_Props::get()->cache();
-		$cfg = PLIB_Props::get()->cfg();
+		$cache = FWS_Props::get()->cache();
+		$cfg = FWS_Props::get()->cfg();
 
 		static $folder = null;
 		if($folder === null)
@@ -44,10 +44,10 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function has_valid_get_sid()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
 
-		$get_sid = $input->get_var(BS_URL_SID,'get',PLIB_Input::STRING);
+		$get_sid = $input->get_var(BS_URL_SID,'get',FWS_Input::STRING);
 		return $get_sid == $user->get_session_id();
 	}
 	
@@ -58,9 +58,9 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function get_start_url()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$url = FWS_Props::get()->url();
 
 		if($cfg['enable_portal'] == 1 &&
 			($user->is_loggedin() || $user->get_profile_val('startmodule') == 'portal'))
@@ -75,14 +75,14 @@ final class BS_Functions extends PLIB_Object
 	 * the post-field has to have the name "security_code"
 	 *
 	 * @param boolean $require_enabled turn this on if you want to require that
-	 * 								PLIB_Props::get()->cfg()['enable_security_code'] is 1
+	 * 								FWS_Props::get()->cfg()['enable_security_code'] is 1
 	 * @return boolean true if the code is equal
 	 */
 	public function check_security_code($require_enabled = true)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
-		$input = PLIB_Props::get()->input();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$input = FWS_Props::get()->input();
 
 		// is the security-code disabled?
 		if($require_enabled && $cfg['enable_security_code'] == 0)
@@ -90,11 +90,11 @@ final class BS_Functions extends PLIB_Object
 
 		// check the security-code
 		$name = $user->get_session_data('sec_code_field');
-		$security_code = $input->get_var($name,'post',PLIB_Input::STRING);
+		$security_code = $input->get_var($name,'post',FWS_Input::STRING);
 		$session_code = $user->get_session_data('security_code');
 		if($session_code != null)
 		{
-			if($session_code != PLIB_String::strtoupper($security_code))
+			if($session_code != FWS_String::strtoupper($security_code))
 				return false;
 
 			$user->delete_session_data('security_code');
@@ -108,20 +108,20 @@ final class BS_Functions extends PLIB_Object
 	/**
 	 * Generates the pagination from the given object
 	 *
-	 * @param PLIB_Pagination $pagination the PLIB_Pagination-object
+	 * @param FWS_Pagination $pagination the FWS_Pagination-object
 	 * @param string $url the URL containing {d} at the position where to put the page-number
 	 * @return string the result
 	 */
 	public function add_pagination($pagination,$url)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$tpl = PLIB_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
 
-		if(!($pagination instanceof PLIB_Pagination))
-			PLIB_Helper::def_error('instance','pagination','PLIB_Pagination',$pagination);
+		if(!($pagination instanceof FWS_Pagination))
+			FWS_Helper::def_error('instance','pagination','FWS_Pagination',$pagination);
 		
 		if(empty($url))
-			PLIB_Helper::def_error('empty','url',$url);
+			FWS_Helper::def_error('empty','url',$url);
 		
 		if($cfg['show_always_page_split'] == 1 || $pagination->get_page_count() > 1)
 		{
@@ -132,7 +132,7 @@ final class BS_Functions extends PLIB_Object
 			{
 				$number = $n;
 				$link = '';
-				if(PLIB_Helper::is_integer($n))
+				if(FWS_Helper::is_integer($n))
 					$link = str_replace('{d}',$n,$url);
 				else
 					$link = '';
@@ -166,7 +166,7 @@ final class BS_Functions extends PLIB_Object
 	/**
 	 * A small version of the pagination
 	 *
-	 * @param PLIB_Pagination $pagination the PLIB_Pagination-object
+	 * @param FWS_Pagination $pagination the FWS_Pagination-object
 	 * @param string $link the URL containing {d} at the position where to put the page-number
 	 * @return string the pagination
 	 */
@@ -177,7 +177,7 @@ final class BS_Functions extends PLIB_Object
 		$numbers = $pagination->get_page_numbers();
 		foreach($numbers as $n)
 		{
-			if(PLIB_Helper::is_integer($n))
+			if(FWS_Helper::is_integer($n))
 			{
 				if($n == $page)
 					$res .= $n.' ';
@@ -200,7 +200,7 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function get_page_split_tiny($total_pages,$link)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$result = '';
 		if($total_pages > 1)
@@ -234,9 +234,9 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function get_stats($complete = true)
 	{
-		$cache = PLIB_Props::get()->cache();
-		$forums = PLIB_Props::get()->forums();
-		$locale = PLIB_Props::get()->locale();
+		$cache = FWS_Props::get()->cache();
+		$forums = FWS_Props::get()->forums();
+		$locale = FWS_Props::get()->locale();
 
 		$stats_data = $cache->get_cache('stats')->current();
 		
@@ -259,12 +259,12 @@ final class BS_Functions extends PLIB_Object
 			$stats_data['posts_yesterday'] = BS_DAO::get_posts()->get_count_yesterday();
 		
 			if($stats_data['posts_last'] > 0)
-				$stats_data['posts_last'] = PLIB_Date::get_date($stats_data['posts_last']);
+				$stats_data['posts_last'] = FWS_Date::get_date($stats_data['posts_last']);
 			else
 				$stats_data['posts_last'] = $locale->lang('no_posts_found');
 		
 			if($stats_data['logins_last'] > 0)
-				$stats_data['logins_last'] = PLIB_Date::get_date($stats_data['logins_last']);
+				$stats_data['logins_last'] = FWS_Date::get_date($stats_data['logins_last']);
 			else
 				$stats_data['logins_last'] = $locale->lang('no_logins_found');
 		}
@@ -288,7 +288,7 @@ final class BS_Functions extends PLIB_Object
 		$board_path = BS_FRONTEND_FILE;
 		if($append_sep)
 		{
-			if(PLIB_String::strpos(BS_FRONTEND_FILE,'?') !== false)
+			if(FWS_String::strpos(BS_FRONTEND_FILE,'?') !== false)
 				$board_path .= '&amp;';
 			else
 				$board_path .= '?';
@@ -304,10 +304,10 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function clap_area($name)
 	{
-		$input = PLIB_Props::get()->input();
-		$cookies = PLIB_Props::get()->cookies();
+		$input = FWS_Props::get()->input();
+		$cookies = FWS_Props::get()->cookies();
 
-		$display = $input->get_var(BS_COOKIE_PREFIX.$name,'cookie',PLIB_Input::INT_BOOL);
+		$display = $input->get_var(BS_COOKIE_PREFIX.$name,'cookie',FWS_Input::INT_BOOL);
 		if($display !== null && $display == 0)
 			$display = 1;
 		else
@@ -332,10 +332,10 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function get_clap_data($name,$url,$display = 'table-row-group')
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
 
-		$clap_cookie = $input->get_var(BS_COOKIE_PREFIX.$name,'cookie',PLIB_Input::INT_BOOL);
+		$clap_cookie = $input->get_var(BS_COOKIE_PREFIX.$name,'cookie',FWS_Input::INT_BOOL);
 		$hide = ($clap_cookie === null || $clap_cookie == 1) ? '' : ' style="display: none;"';
 	
 		$clap_image = ($clap_cookie === null || $clap_cookie == 1) ? 'open' : 'closed';
@@ -358,17 +358,17 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function clap_forum($id)
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
 		$hidden_forums = $input->get_var(
-			BS_COOKIE_PREFIX.'hidden_forums','cookie',PLIB_Input::STRING
+			BS_COOKIE_PREFIX.'hidden_forums','cookie',FWS_Input::STRING
 		);
 		if(!$hidden_forums)
 			$ids = array();
 		else
-			$ids = PLIB_Array_Utils::advanced_explode(',',$hidden_forums);
+			$ids = FWS_Array_Utils::advanced_explode(',',$hidden_forums);
 	
-		if(!PLIB_Array_Utils::is_integer($ids))
+		if(!FWS_Array_Utils::is_integer($ids))
 			$ids = array();
 	
 		$index = array_search($id,$ids);
@@ -390,13 +390,13 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function is_banned($type,$value)
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		foreach($cache->get_cache('banlist') as $data)
 		{
 			if($data['bann_type'] == $type)
 			{
-				if(PLIB_String::strpos($data['bann_name'],'*') !== false)
+				if(FWS_String::strpos($data['bann_name'],'*') !== false)
 				{
 					$match = '';
 					$parts = explode('*',$data['bann_name']);
@@ -429,7 +429,7 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function add_delete_message($message,$yes_url,$no_url,$delete_target = '')
 	{
-		$tpl = PLIB_Props::get()->tpl();
+		$tpl = FWS_Props::get()->tpl();
 
 		$tpl->set_template('inc_delete_message.htm');
 		$tpl->add_variables(array(
@@ -451,14 +451,14 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function show_login_form($display_denied_reasons = true)
 	{
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
-		$locale = PLIB_Props::get()->locale();
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$msgs = PLIB_Props::get()->msgs();
-		$doc = PLIB_Props::get()->doc();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$msgs = FWS_Props::get()->msgs();
+		$doc = FWS_Props::get()->doc();
 
 		if(!$user->is_loggedin())
 		{
@@ -569,9 +569,9 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function get_search_keywords()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
-		$hl = $input->get_var(BS_URL_HL,'get',PLIB_Input::STRING);
+		$hl = $input->get_var(BS_URL_HL,'get',FWS_Input::STRING);
 		if($hl !== null)
 		{
 			// undo the stuff of the input-class
@@ -605,7 +605,7 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function get_order_column($title,$order_value,$def_ascdesc,$order,$url)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		$preurl = $url.BS_URL_ORDER.'='.$order_value.'&amp;'.BS_URL_AD.'=';
 		if($order == $order_value)
@@ -664,7 +664,7 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function get_rank_data($points)
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		// points = 0 is a special case
 		$ranks = $cache->get_cache('user_ranks');
@@ -705,10 +705,10 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function get_rank_images($ranknum,$rank_pos,$user_id,$group_ids,$is_mod = false)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
-		$user = PLIB_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$user = FWS_Props::get()->user();
 
 		$result = '';
 		
@@ -757,33 +757,33 @@ final class BS_Functions extends PLIB_Object
 			case 'jpeg':
 			case 'jpg':
 			case 'png':
-				return PLIB_Path::client_app().'images/filetypes/image.gif';
+				return FWS_Path::client_app().'images/filetypes/image.gif';
 	
 			case 'txt':
 			case 'ini':
-				return PLIB_Path::client_app().'images/filetypes/text.gif';
+				return FWS_Path::client_app().'images/filetypes/text.gif';
 	
 			case 'pdf':
-				return PLIB_Path::client_app().'images/filetypes/pdf.gif';
+				return FWS_Path::client_app().'images/filetypes/pdf.gif';
 	
 			case 'htm':
 			case 'html':
-				return PLIB_Path::client_app().'images/filetypes/html.gif';
+				return FWS_Path::client_app().'images/filetypes/html.gif';
 	
 			case 'zip':
 			case 'rar':
 			case 'tar':
 			case 'gzip':
-				return PLIB_Path::client_app().'images/filetypes/archive.gif';
+				return FWS_Path::client_app().'images/filetypes/archive.gif';
 	
 			case 'css':
-				return PLIB_Path::client_app().'images/filetypes/css.gif';
+				return FWS_Path::client_app().'images/filetypes/css.gif';
 	
 			case 'js':
-				return PLIB_Path::client_app().'images/filetypes/js.gif';
+				return FWS_Path::client_app().'images/filetypes/js.gif';
 	
 			default:
-				return PLIB_Path::client_app().'images/filetypes/unknown.gif';
+				return FWS_Path::client_app().'images/filetypes/unknown.gif';
 		}
 	}
 	
@@ -795,13 +795,13 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function check_attachment_extension($attachment)
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		if($cfg['attachments_filetypes'] == '')
 			return false;
 	
-		$extension = PLIB_FileUtils::get_extension($attachment);
-		$types = explode('|',PLIB_String::strtolower($cfg['attachments_filetypes']));
+		$extension = FWS_FileUtils::get_extension($attachment);
+		$types = explode('|',FWS_String::strtolower($cfg['attachments_filetypes']));
 		return in_array($extension,$types);
 	}
 	
@@ -813,8 +813,8 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function get_pm_attachment_prefix($attachments)
 	{
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
 
 		static $img_attachment = '';
 		if(!$img_attachment)
@@ -838,17 +838,17 @@ final class BS_Functions extends PLIB_Object
 	/**
 	 * deletes the attachment with given path including the thumbnail
 	 *
-	 * @param string $path the path of the attachment (without PLIB_Path::server_app())
+	 * @param string $path the path of the attachment (without FWS_Path::server_app())
 	 */
 	public function delete_attachment($path)
 	{
 		// delete the thumbnail, if it exists
-		$ext = PLIB_FileUtils::get_extension($path,false);
-		$start = PLIB_String::substr($path,0,PLIB_String::strlen($path) - PLIB_String::strlen($ext) - 1);
-		if(is_file(PLIB_Path::server_app().$start.'_thumb.'.$ext))
-			@unlink(PLIB_Path::server_app().$start.'_thumb.'.$ext);
+		$ext = FWS_FileUtils::get_extension($path,false);
+		$start = FWS_String::substr($path,0,FWS_String::strlen($path) - FWS_String::strlen($ext) - 1);
+		if(is_file(FWS_Path::server_app().$start.'_thumb.'.$ext))
+			@unlink(FWS_Path::server_app().$start.'_thumb.'.$ext);
 	
-		@unlink(PLIB_Path::server_app().$path);
+		@unlink(FWS_Path::server_app().$path);
 	}
 	
 	/**
@@ -862,8 +862,8 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function get_link_rating($total,$votes,$text = 1,$multi = 2)
 	{
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
 
 		static $images = null;
 		if($images === null)
@@ -935,18 +935,18 @@ final class BS_Functions extends PLIB_Object
 	 * @param string $receiver the receiver
 	 * @param string $subject the subject of the mail
 	 * @param string $message the message
-	 * @return PLIB_Email_Base the email-class
+	 * @return FWS_Email_Base the email-class
 	 */
 	public function get_mailer($receiver = '',$subject = '',$message = '')
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		// use php-mail()?
 		if($cfg['mail_method'] == 'mail')
-			$c = new PLIB_Email_PHP($receiver,$subject,$message);
+			$c = new FWS_Email_PHP($receiver,$subject,$message);
 		else
 		{
-			$c = new PLIB_Email_SMTP($receiver,$subject,$message);
+			$c = new FWS_Email_SMTP($receiver,$subject,$message);
 			// set SMTP-properties
 			$c->set_smtp_host($cfg['smtp_host']);
 			$c->set_smtp_port($cfg['smtp_port']);
@@ -972,12 +972,12 @@ final class BS_Functions extends PLIB_Object
 	 */
 	public function get_search_ignore_words()
 	{
-		$functions = PLIB_Props::get()->functions();
+		$functions = FWS_Props::get()->functions();
 
 		// we use the default-forum-language, because we guess that most of the posts will be in
 		// this language
 		$lang = $functions->get_def_lang_folder();
-		$file = PLIB_Path::server_app().'language/'.$lang.'/search_words.txt';
+		$file = FWS_Path::server_app().'language/'.$lang.'/search_words.txt';
 	
 		if(!file_exists($file))
 			return array();

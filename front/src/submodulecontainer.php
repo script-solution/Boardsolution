@@ -36,25 +36,25 @@ abstract class BS_Front_SubModuleContainer extends BS_Front_Module
 	 */
 	public function __construct($module,$submodules = array(),$default = 'default')
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
 		if(count($submodules) == 0)
-			PLIB_Helper::error('Please provide the possible submodules of this module!');
+			FWS_Helper::error('Please provide the possible submodules of this module!');
 		
-		$sub = $input->correct_var(BS_URL_LOC,'get',PLIB_Input::STRING,$submodules,$default);
+		$sub = $input->correct_var(BS_URL_LOC,'get',FWS_Input::STRING,$submodules,$default);
 		
 		// include the sub-module and create it
-		include_once(PLIB_Path::server_app().'front/module/'.$module.'/sub_'.$sub.'.php');
+		include_once(FWS_Path::server_app().'front/module/'.$module.'/sub_'.$sub.'.php');
 		$classname = 'BS_Front_SubModule_'.$module.'_'.$sub;
 		$this->_sub = new $classname();
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$tpl = PLIB_Props::get()->tpl();
+		$tpl = FWS_Props::get()->tpl();
 		$tpl->set_template($this->_sub->get_template());
 		$this->_sub->run();
 		$tpl->restore_template();

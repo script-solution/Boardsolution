@@ -21,12 +21,12 @@ final class BS_DBA_Action_index_delete extends BS_DBA_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$db = PLIB_Props::get()->db();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$db = FWS_Props::get()->db();
+		$locale = FWS_Props::get()->locale();
 
-		$stables = $input->get_var('tables','get',PLIB_Input::STRING);
-		$tables = PLIB_Array_Utils::advanced_explode(';',$stables);
+		$stables = $input->get_var('tables','get',FWS_Input::STRING);
+		$tables = FWS_Array_Utils::advanced_explode(';',$stables);
 		if(count($tables) > 0)
 			$db->sql_qry('DROP TABLE `'.implode('`, `',$tables).'`');
 		

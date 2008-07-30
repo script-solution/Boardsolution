@@ -20,7 +20,7 @@
 final class BS_Front_SubModule_userprofile_pmoverview extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_Front_SubModule_userprofile_pmoverview extends BS_Front_SubModule
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_DELETE_PMS,'deletepms');
@@ -40,14 +40,14 @@ final class BS_Front_SubModule_userprofile_pmoverview extends BS_Front_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
 		$helper = BS_Front_Module_UserProfile_Helper::get_instance();
 		if($helper->get_pm_permission() < 1)
 		{
-			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+			$this->report_error(FWS_Document_Messages::NO_ACCESS);
 			return;
 		}
 		

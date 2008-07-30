@@ -17,7 +17,7 @@
  * @subpackage	src.cache
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Cache_Source_Stats extends PLIB_Object implements PLIB_Cache_Source
+final class BS_Cache_Source_Stats extends FWS_Object implements FWS_Cache_Source
 {
 	public function get_content()
 	{

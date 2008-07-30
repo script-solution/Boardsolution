@@ -21,10 +21,10 @@ final class BS_ACP_Action_moderators_add extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
-		$forums = PLIB_Props::get()->forums();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
+		$forums = FWS_Props::get()->forums();
 
 		$new_mods = $input->get_var('user_add','post');
 		$nodes = $forums->get_all_nodes();
@@ -34,7 +34,7 @@ final class BS_ACP_Action_moderators_add extends BS_ACP_Action_Base
 			$node = $nodes[$i];
 			$data = $node->get_data();
 			if($data->get_forum_type() == 'contains_threads')
-				$mods[$data->get_id()] = PLIB_Array_Utils::advanced_explode(',',$new_mods[$data->get_id()]);
+				$mods[$data->get_id()] = FWS_Array_Utils::advanced_explode(',',$new_mods[$data->get_id()]);
 		}
 
 		if(!is_array($mods) || count($mods) == 0)
@@ -43,7 +43,7 @@ final class BS_ACP_Action_moderators_add extends BS_ACP_Action_Base
 		$count = 0;
 		foreach($mods as $fid => $user_names)
 		{
-			PLIB_Array_Utils::trim($user_names);
+			FWS_Array_Utils::trim($user_names);
 			foreach(BS_DAO::get_user()->get_users_by_names($user_names) as $data)
 			{
 				if(!BS_DAO::get_mods()->is_user_mod_in_forum($data['id'],$fid))

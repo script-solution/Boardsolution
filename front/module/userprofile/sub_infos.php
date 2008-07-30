@@ -20,7 +20,7 @@
 final class BS_Front_SubModule_userprofile_infos extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_Front_SubModule_userprofile_infos extends BS_Front_SubModule
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_EDIT_PERS_PROFILE,'updateinfos');
@@ -38,19 +38,19 @@ final class BS_Front_SubModule_userprofile_infos extends BS_Front_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
-		$user = PLIB_Props::get()->user();
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
 
-		$loc = $input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING);
+		$loc = $input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
 		
 		if($input->get_var(BS_URL_MODE,'get') == 1)
 			$msgs->add_notice($locale->lang('fill_required_fields_notice'));
@@ -73,7 +73,7 @@ final class BS_Front_SubModule_userprofile_infos extends BS_Front_SubModule
 		$additional_fields = array();
 		foreach($cfields->get_fields_at(BS_UF_LOC_USER_PROFILE) as $field)
 		{
-			/* @var $field PLIB_AddField_Field */
+			/* @var $field FWS_AddField_Field */
 			$data = $field->get_data();
 			$stored_val = $user->get_profile_val('add_'.$data->get_name());
 			$value = $field->get_value_from_formular($stored_val);

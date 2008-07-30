@@ -18,7 +18,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Config_Item_Size extends PLIB_Config_Item_Default
+final class BS_ACP_Config_Item_Size extends FWS_Config_Item_Default
 {
 	public function get_control($form)
 	{
@@ -33,10 +33,10 @@ final class BS_ACP_Config_Item_Size extends PLIB_Config_Item_Default
 
 	public function get_value()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
-		$x = $input->get_var($this->_data->get_name().'_x','post',PLIB_Input::INTEGER);
-		$y = $input->get_var($this->_data->get_name().'_y','post',PLIB_Input::INTEGER);
+		$x = $input->get_var($this->_data->get_name().'_x','post',FWS_Input::INTEGER);
+		$y = $input->get_var($this->_data->get_name().'_y','post',FWS_Input::INTEGER);
 		if(!$x)
 			$x = 0;
 		if(!$y)

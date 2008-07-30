@@ -21,9 +21,9 @@ final class BS_ACP_Action_languages_update extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
 		$names = $input->get_var('names','post');
 		$folders = $input->get_var('folders','post');
@@ -34,7 +34,7 @@ final class BS_ACP_Action_languages_update extends BS_ACP_Action_Base
 		foreach($names as $id => $value)
 		{
 			$data = $cache->get_cache('languages')->get_element($id);
-			if(PLIB_Helper::is_integer($id) && isset($folders[$id]) &&
+			if(FWS_Helper::is_integer($id) && isset($folders[$id]) &&
 				($data['lang_name'] != $value || $data['lang_folder'] != $folders[$id]))
 			{
 				BS_DAO::get_langs()->update_by_id($id,$value,$folders[$id]);

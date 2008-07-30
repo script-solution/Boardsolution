@@ -20,7 +20,7 @@
 final class BS_DBA_Module_index extends BS_DBA_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_DBA_Page $doc
 	 */
@@ -34,28 +34,28 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$functions = PLIB_Props::get()->functions();
-		$db = PLIB_Props::get()->db();
-		$tpl = PLIB_Props::get()->tpl();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$functions = FWS_Props::get()->functions();
+		$db = FWS_Props::get()->db();
+		$tpl = FWS_Props::get()->tpl();
+		$user = FWS_Props::get()->user();
 		
 		$user->delete_session_data('BS_restore');
 		$user->delete_session_data('BS_backup');
 		
-		$mode = $input->get_var('mode','get',PLIB_Input::STRING);
+		$mode = $input->get_var('mode','get',FWS_Input::STRING);
 		
 		// show delete message?
 		if($mode == 'qdelete')
 		{
-			$stables = $input->get_var('tables','get',PLIB_Input::STRING);
-			$tables = PLIB_Array_Utils::advanced_explode(';',$stables);
+			$stables = $input->get_var('tables','get',FWS_Input::STRING);
+			$tables = FWS_Array_Utils::advanced_explode(';',$stables);
 			if(count($tables) > 0)
 			{
 				$message = sprintf(
@@ -96,7 +96,7 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 				$create_date = BS_DBA_Utils::get_instance()->mysql_date_to_time($data['Create_time']);
 				
 				if($create_date >= 0)
-					$create_date = PLIB_Date::get_date($create_date);
+					$create_date = FWS_Date::get_date($create_date);
 				else
 					$create_date = $locale->lang('notavailable');
 				
@@ -119,13 +119,13 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 			'optimize' => $locale->lang('optimize'),
 			'delete' => $locale->lang('delete')
 		);
-		$action_combo = new PLIB_HTML_ComboBox('action','action');
+		$action_combo = new FWS_HTML_ComboBox('action','action');
 		$action_combo->set_options($actions);
 		$action_combo->set_custom_attribute('onchange','performAction(this);');
 		
 		$tpl->add_variables(array(
-			'size' => PLIB_StringHelper::get_formated_data_size($total_size,BS_DBA_LANGUAGE),
-			'overhead' => PLIB_StringHelper::get_formated_data_size($total_overhead,BS_DBA_LANGUAGE),
+			'size' => FWS_StringHelper::get_formated_data_size($total_size,BS_DBA_LANGUAGE),
+			'overhead' => FWS_StringHelper::get_formated_data_size($total_overhead,BS_DBA_LANGUAGE),
 			'entries' => number_format($total_rows,0,',','.'),
 			'action_combo' => $action_combo->to_html(),
 			'optimize_url' => $url->get_url(0,'&at='.BS_DBA_ACTION_OPTIMIZE_TABLES.'&tables=','&')

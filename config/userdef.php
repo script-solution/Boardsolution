@@ -30,11 +30,11 @@ define('BS_FRONTEND_FILE','index.php?option=com_joobs&amp;Itemid=26');
 ############################ GENERAL ############################
 
 /**
- * Der Pfad zur PHPLibrary (relativ) mit / am Ende.
+ * Der Pfad zu FrameWorkSolution (relativ) mit / am Ende.
  * 
- * The path to the PHPLibrary (relative) with trailing slash.
+ * The path to FrameWorkSolution (relative) with trailing slash.
  */
-define('BS_LIB_PATH','../PHPLib/');
+define('BS_FWS_PATH','../PHPLib/');
 
 /**
  * Hiermit koennen Debug-Infos konfiguriert werden:

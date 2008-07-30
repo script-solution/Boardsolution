@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_Config_Manager extends PLIB_Config_Manager
+final class BS_ACP_Module_Config_Manager extends FWS_Config_Manager
 {
 	protected function get_item($data)
 	{
@@ -26,7 +26,7 @@ final class BS_ACP_Module_Config_Manager extends PLIB_Config_Manager
 			return $item;
 		
 		$type = $data->get_type();
-		$file = PLIB_Path::server_app().'acp/module/config/item/'.$type.'.php';
+		$file = FWS_Path::server_app().'acp/module/config/item/'.$type.'.php';
 		if(is_file($file))
 		{
 			include_once($file);

@@ -21,14 +21,14 @@ final class BS_ACP_Action_useractivation_delete extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
 
 		if(BS_ENABLE_EXPORT)
 			return 'The community is exported';
 		
-		$idstr = $input->get_var('ids','get',PLIB_Input::STRING);
-		if(!($ids = PLIB_StringHelper::get_ids($idstr)))
+		$idstr = $input->get_var('ids','get',FWS_Input::STRING);
+		if(!($ids = FWS_StringHelper::get_ids($idstr)))
 			return 'Got an invalid id-string via GET';
 		
 		// delete user

@@ -21,19 +21,19 @@ final class BS_ACP_Action_tpleditor_edit extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
 
 		$helper = BS_ACP_Module_TplEditor_Helper::get_instance();
 		$path = $helper->get_path();
 		
-		$file = $input->get_var('file','get',PLIB_Input::STRING);
-		$content = $input->get_var('file_content','post',PLIB_Input::STRING);
+		$file = $input->get_var('file','get',FWS_Input::STRING);
+		$content = $input->get_var('file_content','post',FWS_Input::STRING);
 		
 		if($fp = @fopen($path.'/'.$file,'w'))
 		{
 			flock($fp,LOCK_EX);
-			$content = PLIB_StringHelper::htmlspecialchars_back(stripslashes(trim($content)),ENT_QUOTES);
+			$content = FWS_StringHelper::htmlspecialchars_back(stripslashes(trim($content)),ENT_QUOTES);
 			fwrite($fp,$content);
 			flock($fp,LOCK_UN);
 			fclose($fp);

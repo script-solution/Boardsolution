@@ -17,7 +17,7 @@
  * @subpackage	dba.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DBA_Utils extends PLIB_Singleton
+final class BS_DBA_Utils extends FWS_Singleton
 {
 	/**
 	 * @return BS_DBA_Utils the instance of this class
@@ -32,7 +32,7 @@ final class BS_DBA_Utils extends PLIB_Singleton
 	 */
 	public function get_selected_database()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 		$db = $user->get_session_data('database');
 		if($db === false)
 			$db = BS_MYSQL_DATABASE;
@@ -48,7 +48,7 @@ final class BS_DBA_Utils extends PLIB_Singleton
 	 */
 	public function mysql_date_to_time($date)
 	{
-		return PLIB_Date::get_timestamp($date,PLIB_Date::TZ_GMT);
+		return FWS_Date::get_timestamp($date,FWS_Date::TZ_GMT);
 	}
 	
 	protected function get_print_vars()

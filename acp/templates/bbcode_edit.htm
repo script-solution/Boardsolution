@@ -5,20 +5,20 @@
 <!--
 function toggleParameter()
 {
-	var cb = PLIB_getElement('param');
+	var cb = FWS_getElement('param');
 	var ids = new Array('p_type','p_replace');
 	for(var i = 0;i < ids.length;i++)
 	{
 		if(cb.value == 'no')
-			PLIB_hideElement(ids[i]);
+			FWS_hideElement(ids[i]);
 		else
-			PLIB_showElement(ids[i]);
+			FWS_showElement(ids[i]);
 	}
 	
 	if(cb.value == 'required')
-		PLIB_hideElement('no_p_replace');
+		FWS_hideElement('no_p_replace');
 	else
-		PLIB_showElement('no_p_replace');
+		FWS_showElement('no_p_replace');
 }
 //-->
 </script>

@@ -21,9 +21,9 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 {
 	public function run()
 	{
-		$url = PLIB_Props::get()->url();
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
 
 		$helper = BS_Front_Module_Calendar_Helper::get_instance();
 		$week_start = $helper->get_week_timestamp();
@@ -38,8 +38,8 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 			'calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_WEEK.'='.$forward
 		);
 	
-		$weekname = PLIB_Date::get_formated_date('W',$week_start);
-		$year = PLIB_Date::get_formated_date('o',$week_start);
+		$weekname = FWS_Date::get_formated_date('W',$week_start);
+		$year = FWS_Date::get_formated_date('o',$week_start);
 		$tpl->add_variables(array(
 			'title' => sprintf($locale->lang('week_in_year'),$weekname,$year),
 			'back' => $back_url,
@@ -49,7 +49,7 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 		$rows = array();
 	
 		$wd_detail = $helper->get_weekdays();
-		$today = PLIB_Date::get_formated_date('dm');
+		$today = FWS_Date::get_formated_date('dm');
 		$timestamp = $week_start;
 		for($l = 0;$l < 2;$l++)
 		{
@@ -63,9 +63,9 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 				{
 					$ts = $timestamp + ($d * 86400);
 	
-					$weekno = PLIB_Date::get_formated_date('w',$ts);
+					$weekno = FWS_Date::get_formated_date('w',$ts);
 					$rows[$l]['day_titles'][] = array(
-						'name' => $wd_detail[$weekno].', '.PLIB_Date::get_formated_date('date',$ts),
+						'name' => $wd_detail[$weekno].', '.FWS_Date::get_formated_date('date',$ts),
 						'timestamp' => $ts
 					);
 				}
@@ -75,7 +75,7 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 			{
 				if($l == 0 || $d < 4)
 				{
-					$event_index = PLIB_Date::get_formated_date('dm',$timestamp);
+					$event_index = FWS_Date::get_formated_date('dm',$timestamp);
 					$border = $event_index == $today ? 'bs_calendar_border_today' : 'bs_calendar_border';
 					
 					$rows[$l]['days'][] = array(

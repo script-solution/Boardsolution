@@ -20,35 +20,35 @@
 final class BS_ACP_SubModule_massemail_default extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$msgs = PLIB_Props::get()->msgs();
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
-		$cache = PLIB_Props::get()->cache();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$msgs = FWS_Props::get()->msgs();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$cache = FWS_Props::get()->cache();
+		$url = FWS_Props::get()->url();
 
 		// we have to clear the position here to ensure that we will start again
 		// if the last progress hasn't be cleaned up, however.
-		$storage = new PLIB_Progress_Storage_Session('massemail_');
+		$storage = new FWS_Progress_Storage_Session('massemail_');
 		$storage->clear();
 		
 		// has the form have been submitted?
 		$error = false;
-		if($input->get_var('selectedButton','post',PLIB_Input::STRING) == 'submit')
+		if($input->get_var('selectedButton','post',FWS_Input::STRING) == 'submit')
 		{
 			if(!$this->_check_formular())
 				$error = true;
 		}
 		
 		// show preview?
-		$show_preview = $input->get_var('selectedButton','post',PLIB_Input::STRING) == 'preview';
+		$show_preview = $input->get_var('selectedButton','post',FWS_Input::STRING) == 'preview';
 		if($show_preview)
 		{
-			$content_type = $input->get_var('content_type','post',PLIB_Input::STRING);
+			$content_type = $input->get_var('content_type','post',FWS_Input::STRING);
 			$res = BS_PostingUtils::get_instance()->get_post_preview_text(
 				'posts',$content_type == 'html',$content_type == 'html'
 			);
@@ -80,8 +80,8 @@ final class BS_ACP_SubModule_massemail_default extends BS_ACP_SubModule
 		$tpl->restore_template();
 		
 		// load vars
-		$user_ids = PLIB_Array_Utils::advanced_explode(',',$input->get_var('recipient_user','post'));
-		if(!PLIB_Array_Utils::is_integer($user_ids))
+		$user_ids = FWS_Array_Utils::advanced_explode(',',$input->get_var('recipient_user','post'));
+		if(!FWS_Array_Utils::is_integer($user_ids))
 			$user_ids = array();
 		
 		// grab user-names from db
@@ -112,7 +112,7 @@ final class BS_ACP_SubModule_massemail_default extends BS_ACP_SubModule
 		);
 		
 		// build user and group combos
-		$user_combo = new PLIB_HTML_ComboBox(
+		$user_combo = new FWS_HTML_ComboBox(
 			'user','user_intern',array(),null,5,true
 		);
 		$user_combo->set_options($user);
@@ -122,7 +122,7 @@ final class BS_ACP_SubModule_massemail_default extends BS_ACP_SubModule
 		if(!is_array($sel_groups))
 			$sel_groups = array();
 		
-		$group_combo = new PLIB_HTML_ComboBox(
+		$group_combo = new FWS_HTML_ComboBox(
 			'recipient_groups[]','recipient_groups',$sel_groups,null,count($groups),true
 		);
 		$group_combo->set_options($groups);
@@ -144,19 +144,19 @@ final class BS_ACP_SubModule_massemail_default extends BS_ACP_SubModule
 	 */
 	private function _check_formular()
 	{
-		$input = PLIB_Props::get()->input();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
 
-		$subject = $input->get_var('subject','post',PLIB_Input::STRING);
+		$subject = $input->get_var('subject','post',FWS_Input::STRING);
 		if($subject == '')
 		{
 			$msgs->add_error($locale->lang('mass_email_missing_subject'));
 			return false;
 		}
 		
-		$text = $input->get_var('text','post',PLIB_Input::STRING);
+		$text = $input->get_var('text','post',FWS_Input::STRING);
 		if($text == '')
 		{
 			$msgs->add_error($locale->lang('mass_email_missing_text'));
@@ -171,7 +171,7 @@ final class BS_ACP_SubModule_massemail_default extends BS_ACP_SubModule
 		}
 		
 		// everything is ok, so we can continue :)
-		if($input->get_var('method','post',PLIB_Input::STRING) == 'BCC')
+		if($input->get_var('method','post',FWS_Input::STRING) == 'BCC')
 		{
 			$res = $this->_send_emails_bcc();
 			if($res !== true)
@@ -205,18 +205,18 @@ final class BS_ACP_SubModule_massemail_default extends BS_ACP_SubModule
 	 */
 	private function _send_emails_bcc()
 	{
-		$input = PLIB_Props::get()->input();
-		$functions = PLIB_Props::get()->functions();
+		$input = FWS_Props::get()->input();
+		$functions = FWS_Props::get()->functions();
 
 		$receiver = BS_ACP_Module_MassEmail_Helper::get_instance()->get_receiver();
 		if(count($receiver['groups']) == 0 && count($receiver['user']) == 0)
 			return 'No receiver set';
 
-		$subject = $input->get_var('subject','post',PLIB_Input::STRING);
+		$subject = $input->get_var('subject','post',FWS_Input::STRING);
 		$text = BS_ACP_Module_MassEmail_Helper::get_instance()->get_mail_text();
 		$mail = $functions->get_mailer('',$subject,$text);
 
-		if($input->get_var('content_type','post',PLIB_Input::STRING) == 'html')
+		if($input->get_var('content_type','post',FWS_Input::STRING) == 'html')
 			$mail->set_content_type('text/html');
 
 		$user = BS_DAO::get_user()->get_users_by_groups($receiver['groups'],$receiver['user']);

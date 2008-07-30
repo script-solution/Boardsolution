@@ -20,7 +20,7 @@
 final class BS_ACP_Module_phpinfo extends BS_ACP_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_ACP_Module_phpinfo extends BS_ACP_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		// disable gzip here
@@ -40,11 +40,11 @@ final class BS_ACP_Module_phpinfo extends BS_ACP_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$tpl = PLIB_Props::get()->tpl();
+		$tpl = FWS_Props::get()->tpl();
 
 		ob_start();
 		phpinfo(INFO_GENERAL | INFO_CONFIGURATION | INFO_MODULES | INFO_VARIABLES);
@@ -52,9 +52,9 @@ final class BS_ACP_Module_phpinfo extends BS_ACP_Module
 		ob_clean();
 
 		// extract the interesting part
-		$bodypos = PLIB_String::strpos($phpinfo,'<body>');
-		$endbodypos = PLIB_String::strpos($phpinfo,'</body>');
-		$phpinfo = PLIB_String::substr($phpinfo,$bodypos + 6,$endbodypos - ($bodypos + 6));
+		$bodypos = FWS_String::strpos($phpinfo,'<body>');
+		$endbodypos = FWS_String::strpos($phpinfo,'</body>');
+		$phpinfo = FWS_String::substr($phpinfo,$bodypos + 6,$endbodypos - ($bodypos + 6));
 		
 		// format to our own style
 		$phpinfo = str_replace('<td>','<td class="a_main">',$phpinfo);

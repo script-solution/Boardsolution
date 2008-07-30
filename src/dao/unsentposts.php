@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_UnsentPosts extends PLIB_Singleton
+class BS_DAO_UnsentPosts extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_UnsentPosts the instance of this class
@@ -40,7 +40,7 @@ class BS_DAO_UnsentPosts extends PLIB_Singleton
 	 */
 	public function get_notification_list()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$time = time();
 		return $db->sql_rows(
@@ -67,18 +67,18 @@ class BS_DAO_UnsentPosts extends PLIB_Singleton
 	 */
 	public function create($post_id,$user_ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($post_id) || $post_id <= 0)
-			PLIB_Helper::def_error('intgt0','post_id',$post_id);
-		if(!PLIB_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
-			PLIB_Helper::def_error('intarray>0','user_ids',$user_ids);
+		if(!FWS_Helper::is_integer($post_id) || $post_id <= 0)
+			FWS_Helper::def_error('intgt0','post_id',$post_id);
+		if(!FWS_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
+			FWS_Helper::def_error('intarray>0','user_ids',$user_ids);
 		
 		// TODO free the result
 		$sql = 'INSERT INTO '.BS_TB_UNSENT_POSTS.' (post_id,user_id) VALUES ';
 		foreach($user_ids as $uid)
 			$sql .= '('.$post_id.','.$uid.'),';
-		$sql = PLIB_String::substr($sql,0,-1);
+		$sql = FWS_String::substr($sql,0,-1);
 		$db->sql_qry($sql);
 	}
 	
@@ -90,10 +90,10 @@ class BS_DAO_UnsentPosts extends PLIB_Singleton
 	 */
 	public function delete_by_users($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_UNSENT_POSTS.' WHERE user_id IN ('.implode(',',$ids).')'

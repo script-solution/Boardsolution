@@ -71,17 +71,17 @@ final class BS_Front_Search_Request_PMSearch extends BS_Front_Search_Request_PMB
 
 	public function get_order()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
 		$order_vals = array('subject','folder','date');
-		$order = $input->get_var('order','post',PLIB_Input::STRING);
+		$order = $input->get_var('order','post',FWS_Input::STRING);
 		if($order == null)
-			$order = $input->get_var(BS_URL_ORDER,'get',PLIB_Input::STRING);
+			$order = $input->get_var(BS_URL_ORDER,'get',FWS_Input::STRING);
 		$order = in_array($order,$order_vals) ? $order : 'date';
 		
-		$ad = $input->get_var('ad','post',PLIB_Input::STRING);
+		$ad = $input->get_var('ad','post',FWS_Input::STRING);
 		if($ad == null)
-			$ad = $input->get_var(BS_URL_AD,'get',PLIB_Input::STRING);
+			$ad = $input->get_var(BS_URL_AD,'get',FWS_Input::STRING);
 		$ad = $ad == 'ASC' ? 'ASC' : 'DESC';
 		
 		return array($order,$ad);
@@ -98,7 +98,7 @@ final class BS_Front_Search_Request_PMSearch extends BS_Front_Search_Request_PMB
 
 	public function get_title($search)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$num = count($search->get_result_ids());
 		
@@ -126,22 +126,22 @@ final class BS_Front_Search_Request_PMSearch extends BS_Front_Search_Request_PMB
 	 */
 	private function _get_search_condition()
 	{
-		$input = PLIB_Props::get()->input();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
 
-		$keyword = $input->get_var('keyword','post',PLIB_Input::STRING);
+		$keyword = $input->get_var('keyword','post',FWS_Input::STRING);
 		if($keyword === null)
-			$keyword = $input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
+			$keyword = $input->get_var(BS_URL_KW,'get',FWS_Input::STRING);
 		
-		$username = $input->get_var('un','post',PLIB_Input::STRING);
+		$username = $input->get_var('un','post',FWS_Input::STRING);
 		if($username === null)
-			$username = $input->get_var(BS_URL_UN,'get',PLIB_Input::STRING);
+			$username = $input->get_var(BS_URL_UN,'get',FWS_Input::STRING);
 		
-		$keyword_mode = $input->get_var('keyword_mode','post',PLIB_Input::STRING);
+		$keyword_mode = $input->get_var('keyword_mode','post',FWS_Input::STRING);
 		$keyword_mode = ($keyword_mode == 'and') ? 'AND' : 'OR';
 		
-		$keyword_len = PLIB_String::strlen($keyword);
+		$keyword_len = FWS_String::strlen($keyword);
 		if($keyword_len == 0 && $username == '')
 		{
 			$msgs->add_error(
@@ -150,7 +150,7 @@ final class BS_Front_Search_Request_PMSearch extends BS_Front_Search_Request_PMB
 			return null;
 		}
 
-		if($keyword_len > 255 || PLIB_String::strlen($username) > 255)
+		if($keyword_len > 255 || FWS_String::strlen($username) > 255)
 		{
 			$msgs->add_error($locale->lang('keyword_max_length'));
 			return null;
@@ -181,7 +181,7 @@ final class BS_Front_Search_Request_PMSearch extends BS_Front_Search_Request_PMB
 			$i = 0;
 			foreach($this->_keywords['un'] as $string)
 			{
-				$string = str_replace('*','%',trim(PLIB_String::strtolower($string)));
+				$string = str_replace('*','%',trim(FWS_String::strtolower($string)));
 				$un .= ($un != ' (' && $i > 0) ? ' OR ' : '';
 				$un .= "((LOWER(u1.`".BS_EXPORT_USER_NAME."`) LIKE '%".$string."%' AND pm_type = 'outbox')";
 				$un .= " OR (LOWER(u2.`".BS_EXPORT_USER_NAME."`) LIKE '%".$string."%' AND pm_type = 'inbox'))";

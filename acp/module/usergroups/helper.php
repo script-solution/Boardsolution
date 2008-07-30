@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_UserGroups_Helper extends PLIB_Singleton
+final class BS_ACP_Module_UserGroups_Helper extends FWS_Singleton
 {
 	/**
 	 * @return BS_ACP_Module_UserGroups_Helper the instance of this class

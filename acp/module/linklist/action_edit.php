@@ -21,10 +21,10 @@ final class BS_ACP_Action_linklist_edit extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
 
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
 			return 'Invalid id "'.$id.'"';
 		
@@ -32,10 +32,10 @@ final class BS_ACP_Action_linklist_edit extends BS_ACP_Action_Base
 		if($data === false)
 			return 'A link with id="'.$id.'" could not been found';
 		
-		$url = $input->get_var('url','post',PLIB_Input::STRING);
-		$new_category = $input->get_var('new_category','post',PLIB_Input::STRING);
-		$category = $input->get_var('category','post',PLIB_Input::STRING);
-		$description = $input->get_var('text','post',PLIB_Input::STRING);
+		$url = $input->get_var('url','post',FWS_Input::STRING);
+		$new_category = $input->get_var('new_category','post',FWS_Input::STRING);
+		$category = $input->get_var('category','post',FWS_Input::STRING);
+		$description = $input->get_var('text','post',FWS_Input::STRING);
 		
 		if($url != '')
 		{

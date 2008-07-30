@@ -21,18 +21,18 @@ final class BS_Front_Action_calendar_editevent extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// nothing to do?
-		if(!$input->isset_var('submit','post',PLIB_Input::STRING))
+		if(!$input->isset_var('submit','post',FWS_Input::STRING))
 			return '';
 		
 		// check parameter
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		if($id == null)
 			return 'Invalid id "'.$id.'"';
 
@@ -50,17 +50,17 @@ final class BS_Front_Action_calendar_editevent extends BS_Front_Action_Base
 		}
 
 		// is the topic or the location empty?
-		$topic_name = $input->get_var('topic_name','post',PLIB_Input::STRING);
-		$location = $input->get_var('location','post',PLIB_Input::STRING);
+		$topic_name = $input->get_var('topic_name','post',FWS_Input::STRING);
+		$location = $input->get_var('location','post',FWS_Input::STRING);
 		if(trim($topic_name) == '' || trim($location) == '')
 			return 'terminleer';
 
 		// get form variables
-		$open_end = $input->get_var('open_end','post',PLIB_Input::STRING);
-		$max_announcements = $input->get_var('max_announcements','post',PLIB_Input::INTEGER);
-		$timeout_type = $input->correct_var('timeout_type','post',PLIB_Input::STRING,array('begin','custom'),'begin');
-		$enable_announcements = $input->get_var('enable_announcements','post',PLIB_Input::INT_BOOL);
-		$description_posted = $input->get_var('text','post',PLIB_Input::STRING);
+		$open_end = $input->get_var('open_end','post',FWS_Input::STRING);
+		$max_announcements = $input->get_var('max_announcements','post',FWS_Input::INTEGER);
+		$timeout_type = $input->correct_var('timeout_type','post',FWS_Input::STRING,array('begin','custom'),'begin');
+		$enable_announcements = $input->get_var('enable_announcements','post',FWS_Input::INT_BOOL);
+		$description_posted = $input->get_var('text','post',FWS_Input::STRING);
 
 		$form = new BS_HTML_Formular();
 		

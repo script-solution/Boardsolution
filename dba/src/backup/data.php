@@ -17,7 +17,7 @@
  * @subpackage	dba.src.backup
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DBA_Backup_Data extends PLIB_Object
+final class BS_DBA_Backup_Data extends FWS_Object
 {
 	/**
 	 * the prefix of the backup

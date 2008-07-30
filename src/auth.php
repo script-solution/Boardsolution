@@ -18,7 +18,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Auth extends PLIB_Object
+final class BS_Auth extends FWS_Object
 {
 	/**
 	 * User-group permissions
@@ -60,13 +60,13 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function __construct()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$cache = PLIB_Props::get()->cache();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$cache = FWS_Props::get()->cache();
 
 		$this->_calculate_group_perm();
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		if($fid !== null && $fid > 0)
 		{
 			if($user->is_loggedin() && !$user->is_admin())
@@ -100,7 +100,7 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function is_ipblock_enabled($type)
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		return $cfg[$type] > 0 && $this->_user_group_perm['disable_ip_blocks'] == 0;
 	}
@@ -115,15 +115,15 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function is_moderator_in_current_forum($user_id = 0,$group_ids = '')
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
 
 		// current user?
 		if($user_id == 0)
 			return $this->_is_current_forum_mod;
 		
 		// check for the given user-id and user-groups
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$is_mod = $cache->get_cache('moderators')->element_exists_with(array(
 			'rid' => $fid,'user_id' => $user_id
 		));
@@ -132,7 +132,7 @@ final class BS_Auth extends PLIB_Object
 		
 		// is one of the groups super-mod?
 		$ugroups = $cache->get_cache('user_groups');
-		foreach(PLIB_Array_Utils::advanced_explode(',',$group_ids) as $group_id)
+		foreach(FWS_Array_Utils::advanced_explode(',',$group_ids) as $group_id)
 		{
 			$gdata = $ugroups->get_element($group_id);
 			if($gdata['is_super_mod'] == 1)
@@ -151,7 +151,7 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function is_moderator_in_any_forum($user_id = 0,$group_ids = '')
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		// the current user?
 		if($user_id == 0)
@@ -159,7 +159,7 @@ final class BS_Auth extends PLIB_Object
 		
 		// is one of the groups super-mod?
 		$ugroups = $cache->get_cache('user_groups');
-		foreach(PLIB_Array_Utils::advanced_explode(',',$group_ids) as $group_id)
+		foreach(FWS_Array_Utils::advanced_explode(',',$group_ids) as $group_id)
 		{
 			$gdata = $ugroups->get_element($group_id);
 			if($gdata['is_super_mod'] == 1)
@@ -186,11 +186,11 @@ final class BS_Auth extends PLIB_Object
 	public function get_usergroup_list($group_ids,$add_links = true,$one_line = true,
 		$show_hidden = false)
 	{
-		$url = PLIB_Props::get()->url();
-		$cache = PLIB_Props::get()->cache();
+		$url = FWS_Props::get()->url();
+		$cache = FWS_Props::get()->cache();
 
 		$user_groups = '';
-		$ugroups = PLIB_Array_Utils::advanced_explode(",",$group_ids);
+		$ugroups = FWS_Array_Utils::advanced_explode(",",$group_ids);
 		$i = 0;
 		foreach($ugroups as $gid)
 		{
@@ -221,7 +221,7 @@ final class BS_Auth extends PLIB_Object
 			$i++;
 		}
 		
-		return PLIB_String::substr($user_groups,0,-2);
+		return FWS_String::substr($user_groups,0,-2);
 	}
 
 	/**
@@ -232,7 +232,7 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function get_groupname($group_id)
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		$data = $cache->get_cache('user_groups')->get_element($group_id);
 		if($data != null)
@@ -249,7 +249,7 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function get_colored_groupname($group_id)
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		$gdata = $cache->get_cache('user_groups')->get_element($group_id);
 		return '<span style="color: #'.$gdata['group_color'].';">'.$gdata['group_title'].'</span>';
@@ -278,8 +278,8 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function get_user_color($id,$group_ids)
 	{
-		$cache = PLIB_Props::get()->cache();
-		$cfg = PLIB_Props::get()->cfg();
+		$cache = FWS_Props::get()->cache();
+		$cfg = FWS_Props::get()->cfg();
 
 		$gdata = $cache->get_cache('user_groups')->get_element((int)$group_ids);
 		if($gdata['overrides_mod'] == 0 && $this->is_moderator_in_any_forum($id,$group_ids))
@@ -304,8 +304,8 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function get_user_images($id,$group_ids)
 	{
-		$cache = PLIB_Props::get()->cache();
-		$cfg = PLIB_Props::get()->cfg();
+		$cache = FWS_Props::get()->cache();
+		$cfg = FWS_Props::get()->cfg();
 
 		$ugroups = $cache->get_cache('user_groups');
 		$gdata = $ugroups->get_element((int)$group_ids);
@@ -349,8 +349,8 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function has_current_forum_perm($action,$post_user = 0)
 	{
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
 
 		// the admin has always permission
 		if($user->is_admin())
@@ -458,7 +458,7 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function has_permission_in_forum($action,$fid)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		// admins have always permission!
 		if($user->is_admin())
@@ -481,7 +481,7 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function is_in_group($groups,$group)
 	{
-		return in_array($group,PLIB_Array_Utils::advanced_explode(',',$groups));
+		return in_array($group,FWS_Array_Utils::advanced_explode(',',$groups));
 	}
 	
 	/**
@@ -492,7 +492,7 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function is_in_any_group($groups)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		return count(array_intersect($user->get_all_user_groups(),$groups)) > 0;
 	}
@@ -505,7 +505,7 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function has_global_permission($operation)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		// the admin has always permission
 		if($user->is_admin())
@@ -521,7 +521,7 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function has_board_access()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		if(!$this->has_global_permission('enter_board'))
 			return false;
@@ -542,8 +542,8 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function has_acp_access()
 	{
-		$user = PLIB_Props::get()->user();
-		$cache = PLIB_Props::get()->cache();
+		$user = FWS_Props::get()->user();
+		$cache = FWS_Props::get()->cache();
 
 		if($user->is_admin())
 			return true;
@@ -574,8 +574,8 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function has_access_to_module($module)
 	{
-		$user = PLIB_Props::get()->user();
-		$cache = PLIB_Props::get()->cache();
+		$user = FWS_Props::get()->user();
+		$cache = FWS_Props::get()->cache();
 
 		if($user->is_admin() || $module == 'faq')
 			return true;
@@ -615,12 +615,12 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function has_access_to_intern_forum($id = 0)
 	{
-		$input = PLIB_Props::get()->input();
-		$forums = PLIB_Props::get()->forums();
-		$user = PLIB_Props::get()->user();
-		$cache = PLIB_Props::get()->cache();
+		$input = FWS_Props::get()->input();
+		$forums = FWS_Props::get()->forums();
+		$user = FWS_Props::get()->user();
+		$cache = FWS_Props::get()->cache();
 
-		$fid = ($id == 0) ? $input->get_var(BS_URL_FID,'get',PLIB_Input::ID) : $id;
+		$fid = ($id == 0) ? $input->get_var(BS_URL_FID,'get',FWS_Input::ID) : $id;
 
 		$forum_data = $forums->get_node_data($fid);
 		if($forum_data === null)
@@ -666,10 +666,10 @@ final class BS_Auth extends PLIB_Object
 	 */
 	public function get_forum_mods($fid)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$cache = PLIB_Props::get()->cache();
-		$user = PLIB_Props::get()->user();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$cache = FWS_Props::get()->cache();
+		$user = FWS_Props::get()->user();
+		$url = FWS_Props::get()->url();
 
 		$output = '';
 		
@@ -751,7 +751,7 @@ final class BS_Auth extends PLIB_Object
 			
 			$total++;
 		}
-		$output = PLIB_String::substr($output,0,PLIB_String::strlen($output) - 2);
+		$output = FWS_String::substr($output,0,FWS_String::strlen($output) - 2);
 		
 		// add super-moderators (except admin)
 		// we can do this once, because it does not depend on the forum-id
@@ -814,9 +814,9 @@ final class BS_Auth extends PLIB_Object
 	 */
 	private function _init_forum_perm()
 	{
-		$input = PLIB_Props::get()->input();
-		$forums = PLIB_Props::get()->forums();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$forums = FWS_Props::get()->forums();
+		$user = FWS_Props::get()->user();
 
 		if($this->_forum_perm !== null)
 			return;
@@ -848,7 +848,7 @@ final class BS_Auth extends PLIB_Object
 		}
 		
 		// is there a current-forum-id?
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		if($fid == null)
 			return;
 		
@@ -883,8 +883,8 @@ final class BS_Auth extends PLIB_Object
 	 */
 	private function _calculate_group_perm()
 	{
-		$cache = PLIB_Props::get()->cache();
-		$user = PLIB_Props::get()->user();
+		$cache = FWS_Props::get()->cache();
+		$user = FWS_Props::get()->user();
 
 		$permissions = array(
 			'view_memberlist',

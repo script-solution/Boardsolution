@@ -20,7 +20,7 @@
 final class BS_Front_Module_thumbnail extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -32,20 +32,20 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
 
-		$ipath = $input->get_var('path','get',PLIB_Input::STRING);
+		$ipath = $input->get_var('path','get',FWS_Input::STRING);
 		
 		$file = basename($ipath);
 		$path = dirname($ipath).'/'.$file;
 		
-		if(!preg_match("/^uploads\\//",$path) || !file_exists(PLIB_Path::server_app().$path))
+		if(!preg_match("/^uploads\\//",$path) || !file_exists(FWS_Path::server_app().$path))
 		{
 			$this->report_error();
 			return;
@@ -78,9 +78,9 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 			return;
 		}
 		
-		$i_width = $input->get_var('width','get',PLIB_Input::INTEGER);
-		$i_height = $input->get_var('height','get',PLIB_Input::INTEGER);
-		$i_method = $input->correct_var('method','get',PLIB_Input::INTEGER,
+		$i_width = $input->get_var('width','get',FWS_Input::INTEGER);
+		$i_height = $input->get_var('height','get',FWS_Input::INTEGER);
+		$i_method = $input->correct_var('method','get',FWS_Input::INTEGER,
 			array('width_fixed','height_fixed','both'),'width_fixed');
 		
 		// ensure that the parameters are valid
@@ -90,25 +90,25 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 	    $i_height = 150;
 	  
 	  // check if the gd-library is installed
-	  if(!PLIB_PHPConfig::is_gd_installed())
+	  if(!FWS_PHPConfig::is_gd_installed())
 		{
-			$this->report_error(PLIB_Document_Messages::ERROR,'GD-Library could not be found!');
+			$this->report_error(FWS_Document_Messages::ERROR,'GD-Library could not be found!');
 			return;
 		}
 	  
 	  // is the image readable?
-	  $src_size = @getimagesize(PLIB_Path::server_app().$path);
+	  $src_size = @getimagesize(FWS_Path::server_app().$path);
 	  if(!$src_size)
 		{
-			$this->report_error(PLIB_Document_Messages::ERROR,'The image is not readable!');
+			$this->report_error(FWS_Document_Messages::ERROR,'The image is not readable!');
 			return;
 		}
 	
 		// check if we have to generate the thumbnail
-		$real_path = PLIB_Path::server_app().$path;
-		$ext = PLIB_FileUtils::get_extension($path,false);
-		$filename = 'uploads/'.PLIB_FileUtils::get_name($path,false);
-		if(!is_file(PLIB_Path::server_app().$filename.'_thumb.'.$ext))
+		$real_path = FWS_Path::server_app().$path;
+		$ext = FWS_FileUtils::get_extension($path,false);
+		$filename = 'uploads/'.FWS_FileUtils::get_name($path,false);
+		if(!is_file(FWS_Path::server_app().$filename.'_thumb.'.$ext))
 		{
 			// determine size
 		  switch($i_method)
@@ -135,22 +135,22 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 		  }
 		
 			// create the destination image
-			$dest = new PLIB_GD_Image((int)$width,(int)$height,PLIB_PHPConfig::is_gd2_installed());
+			$dest = new FWS_GD_Image((int)$width,(int)$height,FWS_PHPConfig::is_gd2_installed());
 		  
 			// load the source-image
 			switch($src_size[2])
 		  {
 		    case 1:
-					$src = PLIB_GD_Image::load_from($real_path,'gif');
+					$src = FWS_GD_Image::load_from($real_path,'gif');
 					break;
 		    case 2:
-					$src = PLIB_GD_Image::load_from($real_path,'jpeg');
+					$src = FWS_GD_Image::load_from($real_path,'jpeg');
 					break;
 		    case 3:
-					$src = PLIB_GD_Image::load_from($real_path,'png');
+					$src = FWS_GD_Image::load_from($real_path,'png');
 					break;
 		    default:
-					$this->report_error(PLIB_Document_Messages::ERROR,'Invalid image-type!');
+					$this->report_error(FWS_Document_Messages::ERROR,'Invalid image-type!');
 					return;
 		  }
 		  
@@ -176,7 +176,7 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 		  }
 		  
 		  // finally create the image
-		  $target = PLIB_Path::server_app().$filename.'_thumb.'.$ext;
+		  $target = FWS_Path::server_app().$filename.'_thumb.'.$ext;
 		  switch($src_size[2])
 		  {
 		  	case 1:
@@ -192,7 +192,7 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 		      break;
 		    
 		    default:
-		    	$this->report_error(PLIB_Document_Messages::ERROR,'Unable to create image!');
+		    	$this->report_error(FWS_Document_Messages::ERROR,'Unable to create image!');
 		    	return;
 		  }
 		  
@@ -202,10 +202,10 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 		  $src->destroy();
 		}
 		
-		$doc = PLIB_Props::get()->doc();
+		$doc = FWS_Props::get()->doc();
 		$renderer = $doc->use_download_renderer();
 		$renderer->set_headers(false);
-		$renderer->set_file(PLIB_Path::server_app().$filename.'_thumb.'.$ext);
+		$renderer->set_file(FWS_Path::server_app().$filename.'_thumb.'.$ext);
 		
 		// set the appropriate header
 		switch($ext)

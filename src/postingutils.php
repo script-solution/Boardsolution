@@ -17,7 +17,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_PostingUtils extends PLIB_Singleton
+final class BS_PostingUtils extends FWS_Singleton
 {
 	/**
 	 * @return BS_PostingUtils the instance of this class
@@ -35,7 +35,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 */
 	public function get_post_pages($num)
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		$per_page = $cfg['posts_per_page'];
 		$show = ($num % $per_page);
@@ -50,8 +50,8 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 */
 	public function get_posts_order()
 	{
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
 
 		if($user->is_loggedin())
 			return $user->get_profile_val('posts_order');
@@ -101,9 +101,9 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 */
 	public function add_topic_review($topic_data,$show_quote = true,$quote_post_url = '',$number = 1)
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		$show_quote = $show_quote && BS_PostingUtils::get_instance()->get_message_option('enable_bbcode');
 	
@@ -132,7 +132,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 				'quote_post_url' => $quote_post_url.$post->get_field('bid'),
 				'post_id' => $post->get_field('bid'),
 				'user_name' => $post->get_username(),
-				'date' => PLIB_Date::get_date($post->get_field('post_time'),true),
+				'date' => FWS_Date::get_date($post->get_field('post_time'),true),
 				'text' => $post->get_post_text(false,false,false)
 			);
 		}
@@ -151,10 +151,10 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 */
 	public function get_post_preview_text($location = 'posts',$use_smileys = -1,$use_bbcode = -1)
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
 
-		$post_text = $input->get_var('text','post',PLIB_Input::STRING);
+		$post_text = $input->get_var('text','post',FWS_Input::STRING);
 		$text = '';
 		$error = $this->prepare_message_for_db($text,$post_text,$location,$use_smileys,$use_bbcode);
 		
@@ -207,8 +207,8 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 */
 	public function add_post_preview($location = 'posts',$use_smileys = -1,$use_bbcode = -1)
 	{
-		$msgs = PLIB_Props::get()->msgs();
-		$tpl = PLIB_Props::get()->tpl();
+		$msgs = FWS_Props::get()->msgs();
+		$tpl = FWS_Props::get()->tpl();
 
 		$res = $this->get_post_preview_text($location,$use_smileys,$use_bbcode);
 		
@@ -235,7 +235,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 */
 	public function get_message_option($name,$location = 'posts')
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		switch($location)
 		{
@@ -262,7 +262,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 */
 	public function get_message_options($location = 'posts')
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		switch($location)
 		{
@@ -307,8 +307,8 @@ final class BS_PostingUtils extends PLIB_Singleton
 	public function prepare_message_for_db(&$text,$text_posted,$location = 'posts',$use_smileys = -1,
 		$use_bbcode = -1)
 	{
-		$locale = PLIB_Props::get()->locale();
-		$input = PLIB_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$input = FWS_Props::get()->input();
 
 		$options = $this->get_message_options($location);
 		$locale->add_language_file('messages');
@@ -321,7 +321,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 		}
 	
 		// is the post short enough?
-		if(PLIB_String::strlen($text_posted) > $options['max_length'])
+		if(FWS_String::strlen($text_posted) > $options['max_length'])
 			return 'maxpostlen';
 	
 		if($location == 'posts')
@@ -350,7 +350,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 			list($pos,$err) = $bbcode->get_error_code();
 			return sprintf(
 				$locale->lang('error_bbcode_'.$err),
-				PLIB_StringHelper::get_text_part($text_posted,$pos,20),
+				FWS_StringHelper::get_text_part($text_posted,$pos,20),
 				$pos
 			);
 		}
@@ -392,11 +392,11 @@ final class BS_PostingUtils extends PLIB_Singleton
 		$show_attachments = false,$show_signature = false,$show_edited_notice = false,
 		$attachments = array(),$wordwrap_codes = false)
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
 
 		$tpl->set_template('inc_post_text.htm');
 		
@@ -416,7 +416,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 		// highlight keywords?
 	  if($highlight_keywords !== null)
 	  {
-	  	$kwhl = new PLIB_KeywordHighlighter($highlight_keywords,'<span class="bs_highlight">');
+	  	$kwhl = new FWS_KeywordHighlighter($highlight_keywords,'<span class="bs_highlight">');
 	  	$text = $kwhl->highlight($text);
 	  }
 		
@@ -437,7 +437,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 	  	for($i = 0;$i < count($attachments[$post_data['bid']]);$i++)
 	    {
 	      $attachment = $attachments[$post_data['bid']][$i];
-	      $ext = PLIB_FileUtils::get_extension($attachment['attachment_path']);
+	      $ext = FWS_FileUtils::get_extension($attachment['attachment_path']);
 	      $attachment_url = $url->get_url('download','&amp;'.BS_URL_ID.'='.$attachment['id']);
 				$image_url = '';
 				$image_title = '';
@@ -502,7 +502,7 @@ final class BS_PostingUtils extends PLIB_Singleton
 	    $tpl->add_variables(array(
 	    	'edited' => sprintf(
 		    	$locale->lang('last_edited_by_user'),$post_data['edited_times'],
-					PLIB_Date::get_date($post_data['edited_date']),$user
+					FWS_Date::get_date($post_data['edited_date']),$user
 				)
 	   	));
 	  }
@@ -518,12 +518,12 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 */
 	public function add_default_font(&$input,$default_font)
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		if($default_font !== 0)
 		{
 			$fonts = explode(',',$cfg['post_font_pool']);
-			PLIB_Array_Utils::trim($fonts);
+			FWS_Array_Utils::trim($fonts);
 			
 			if(in_array($default_font,$fonts))
 				$input = '<div style="font-family: \''.$default_font.'\';">'.$input.'</div>';
@@ -540,8 +540,8 @@ final class BS_PostingUtils extends PLIB_Singleton
 	 */
 	public function get_experience_diagram($exppoints,$rank_data,$user_id)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
 
 		$user_stats = '';
 		if($cfg['post_stats_type'] != 'disabled')

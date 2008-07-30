@@ -21,12 +21,12 @@ final class BS_Front_Action_posts_leaveevent extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
-		$functions = PLIB_Props::get()->functions();
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$functions = FWS_Props::get()->functions();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// is the user loggedin?
 		if($cfg['enable_events'] == 0 || !$user->is_loggedin())
@@ -37,8 +37,8 @@ final class BS_Front_Action_posts_leaveevent extends BS_Front_Action_Base
 			return 'The session-id is invalid';
 
 		// check parameters
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 
 		if($fid == null || $tid == null)
 			return 'The forum-id or topic-id is invalid';

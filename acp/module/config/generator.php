@@ -12,15 +12,15 @@
  */
 
 define('BS_PATH','../../../');
-define('PLIB_PATH',BS_PATH.'../PHPLib/');
-include_once(PLIB_PATH.'init.php');
+define('FWS_PATH',BS_PATH.'../PHPLib/');
+include_once(FWS_PATH.'init.php');
 
 // connect to db
 include_once(BS_PATH.'config/userdef.php');
 include_once(BS_PATH.'config/general.php');
 include_once(BS_PATH.'config/mysql.php');
 include_once(BS_PATH.'config/community.php');
-$db = PLIB_MySQL::get_instance();
+$db = FWS_MySQL::get_instance();
 $db->connect(BS_MYSQL_HOST,BS_MYSQL_LOGIN,BS_MYSQL_PASSWORD,BS_MYSQL_DATABASE);
 $db->init(BS_DB_CHARSET);
 
@@ -1545,7 +1545,7 @@ Bitte haben Sie Verständnis."
  * who needs profile_max_pw_len? min.length would be better ;)
  */
 
-$regen = PLIB_Input::get_instance()->get_var('regen','get',PLIB_Input::INT_BOOL) == 1;
+$regen = FWS_Input::get_instance()->get_var('regen','get',FWS_Input::INT_BOOL) == 1;
 
 if($regen)
 {

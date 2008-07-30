@@ -17,7 +17,7 @@
  * @subpackage	front.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_EventUtils extends PLIB_Singleton
+final class BS_Front_EventUtils extends FWS_Singleton
 {
 	/**
 	 * @return BS_Front_EventUtils the instance of this class
@@ -48,8 +48,8 @@ final class BS_Front_EventUtils extends PLIB_Singleton
 	 */
 	public function get_current_events()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
 
 		$ev = $this->_get_events();
 		
@@ -79,12 +79,12 @@ final class BS_Front_EventUtils extends PLIB_Singleton
 					$murl = $url->get_posts_url($edata['rubrikid'],$edata['tid']);
 				}
 				
-				$title = PLIB_StringHelper::get_limited_string($edata['event_title'],15);
+				$title = FWS_StringHelper::get_limited_string($edata['event_title'],15);
 				$events['list'][] = array(
 					'url' => $murl,
 					'title_complete' => $title['complete'],
 					'title' => $title['displayed'],
-					'date' => PLIB_Date::get_date($edata['event_begin'],false)
+					'date' => FWS_Date::get_date($edata['event_begin'],false)
 				);
 			}
 		}
@@ -145,7 +145,7 @@ final class BS_Front_EventUtils extends PLIB_Singleton
 		$bds = array('list' => array(),'more' => $ev['more']);
 		if(is_array($ev))
 		{
-			$current_year = PLIB_Date::get_formated_date('Y');
+			$current_year = FWS_Date::get_formated_date('Y');
 			foreach($ev['birthdays'] as $edata)
 			{
 				$split = explode('-',$edata['add_birthday']);
@@ -171,8 +171,8 @@ final class BS_Front_EventUtils extends PLIB_Singleton
 	private function _get_birthdays()
 	{
 		$more = false;
-		$month = PLIB_Date::get_formated_date('m');
-		$day = PLIB_Date::get_formated_date('d');
+		$month = FWS_Date::get_formated_date('m');
+		$day = FWS_Date::get_formated_date('d');
 		$userlist = BS_DAO::get_profile()->get_birthday_users($month,$day,(BS_MINISTATS_MAX_EVENTS + 1));
 		
 		if(count($userlist) == BS_MINISTATS_MAX_EVENTS)

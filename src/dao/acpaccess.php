@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_ACPAccess extends PLIB_Singleton
+class BS_DAO_ACPAccess extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_Profile the instance of this class
@@ -39,7 +39,7 @@ class BS_DAO_ACPAccess extends PLIB_Singleton
 	 */
 	public function get_all()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT a.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
@@ -56,7 +56,7 @@ class BS_DAO_ACPAccess extends PLIB_Singleton
 	 */
 	public function get_by_module($module)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT a.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
@@ -76,12 +76,12 @@ class BS_DAO_ACPAccess extends PLIB_Singleton
 	 */
 	public function create($module,$type,$id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		if(!in_array($type,array('user','group')))
-			PLIB_Helper::def_error('inarray','type',array('user','group'),$type);
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+			FWS_Helper::def_error('inarray','type',array('user','group'),$type);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_insert(BS_TB_ACP_ACCESS,array(
 			'module' => $module,
@@ -100,12 +100,12 @@ class BS_DAO_ACPAccess extends PLIB_Singleton
 	 */
 	public function delete($type,$ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		if(!in_array($type,array('user','group')))
-			PLIB_Helper::def_error('inarray','type',array('user','group'),$type);
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+			FWS_Helper::def_error('inarray','type',array('user','group'),$type);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_ACP_ACCESS.'
@@ -122,7 +122,7 @@ class BS_DAO_ACPAccess extends PLIB_Singleton
 	 */
 	public function delete_module($module)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_ACP_ACCESS.' WHERE module = "'.$module.'"'

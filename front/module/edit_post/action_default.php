@@ -21,25 +21,25 @@ final class BS_Front_Action_edit_post_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
-		$cfg = PLIB_Props::get()->cfg();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
+		$cfg = FWS_Props::get()->cfg();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// nothing to do?
-		if(!$input->isset_var('submit','post',PLIB_Input::STRING))
+		if(!$input->isset_var('submit','post',FWS_Input::STRING))
 			return '';
 
 		// the user has to be logged in
 		if(!$user->is_loggedin())
 			return 'nichteingeloggt';
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 
 		// parameters valid?
 		if($id == null || $fid == null || $tid == null)
@@ -69,14 +69,14 @@ final class BS_Front_Action_edit_post_default extends BS_Front_Action_Base
 		if($locked)
 			return 'no_permission_to_edit_post';
 
-		$post_text = $input->get_var('text','post',PLIB_Input::STRING);
+		$post_text = $input->get_var('text','post',FWS_Input::STRING);
 
 		$text = '';
 		$error = BS_PostingUtils::get_instance()->prepare_message_for_db($text,$post_text);
 		if($error != '')
 			return $error;
 
-		$lock_post = $input->get_var('lock_post','post',PLIB_Input::INT_BOOL);
+		$lock_post = $input->get_var('lock_post','post',FWS_Input::INT_BOOL);
 		$use_bbcode = $input->isset_var('use_bbcode','post') ? 1 : 0;
 		$use_smileys = $input->isset_var('use_smileys','post') ? 1 : 0;
 
@@ -129,7 +129,7 @@ final class BS_Front_Action_edit_post_default extends BS_Front_Action_Base
 		$cache->get_cache('stats')->set_element_field(0,'last_edit',time());
 		$cache->store('stats');
 
-		$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::ID);
+		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::ID);
 		$murl = $url->get_url(
 			'posts',
 			'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_SITE.'='.$site

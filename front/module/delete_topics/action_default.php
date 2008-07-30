@@ -21,26 +21,26 @@ final class BS_Front_Action_delete_topics_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$forums = PLIB_Props::get()->forums();
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$forums = FWS_Props::get()->forums();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
 
 		// check parameter
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		if($fid == null)
 			return 'The forum id "'.$fid.'" is invalid';
 
 		if(!$forums->node_exists($fid))
 			return 'The forum with id "'.$fid.'" does not exist';
 
-		$id_str = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
-		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
+		$id_str = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
+		if(!($ids = FWS_StringHelper::get_ids($id_str)))
 			return 'No valid id-string got via GET';
 
 		// collect the topic-ids we are allowed to delete

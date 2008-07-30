@@ -72,7 +72,7 @@ final class BS_Front_Action_Plain_Poll extends BS_Front_Action_Plain
 	
 	public function check_data()
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		// calculate the options
 		$this->_option_lines = array();
@@ -98,7 +98,7 @@ final class BS_Front_Action_Plain_Poll extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		parent::perform_action();
 

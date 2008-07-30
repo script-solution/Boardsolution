@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_Events extends PLIB_Singleton
+class BS_DAO_Events extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_Events the instance of this class
@@ -36,7 +36,7 @@ class BS_DAO_Events extends PLIB_Singleton
 	 */
 	public function get_count()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(BS_TB_EVENTS,'*','');
 	}
@@ -49,10 +49,10 @@ class BS_DAO_Events extends PLIB_Singleton
 	 */
 	public function get_by_id($id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$row = $db->sql_fetch('SELECT * FROM '.BS_TB_EVENTS.' WHERE id = '.$id);
 		if(!$row)
@@ -69,10 +69,10 @@ class BS_DAO_Events extends PLIB_Singleton
 	 */
 	public function get_by_topic_id($tid)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($tid) || $tid <= 0)
-			PLIB_Helper::def_error('intgt0','tid',$tid);
+		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
+			FWS_Helper::def_error('intgt0','tid',$tid);
 		
 		$row = $db->sql_fetch('SELECT * FROM '.BS_TB_EVENTS.' WHERE tid = '.$tid);
 		if(!$row)
@@ -90,12 +90,12 @@ class BS_DAO_Events extends PLIB_Singleton
 	 */
 	public function get_list($start = 0,$count = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_EVENTS.'
@@ -113,12 +113,12 @@ class BS_DAO_Events extends PLIB_Singleton
 	 */
 	public function get_events_between($min_date,$max_date,$excl_fids = array())
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($min_date) || $min_date < 0)
-			PLIB_Helper::def_error('intge0','min_date',$min_date);
-		if(!PLIB_Helper::is_integer($max_date) || $max_date < 0)
-			PLIB_Helper::def_error('intge0','max_date',$max_date);
+		if(!FWS_Helper::is_integer($min_date) || $min_date < 0)
+			FWS_Helper::def_error('intge0','min_date',$min_date);
+		if(!FWS_Helper::is_integer($max_date) || $max_date < 0)
+			FWS_Helper::def_error('intge0','max_date',$max_date);
 		
 		return $db->sql_rows(
 			'SELECT e.*,t.rubrikid
@@ -139,12 +139,12 @@ class BS_DAO_Events extends PLIB_Singleton
 	 */
 	public function get_next_events($seconds,$number = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($seconds) || $seconds < 0)
-			PLIB_Helper::def_error('intge0','seconds',$seconds);
-		if(!PLIB_Helper::is_integer($number) || $number < 0)
-			PLIB_Helper::def_error('intge0','number',$number);
+		if(!FWS_Helper::is_integer($seconds) || $seconds < 0)
+			FWS_Helper::def_error('intge0','seconds',$seconds);
+		if(!FWS_Helper::is_integer($number) || $number < 0)
+			FWS_Helper::def_error('intge0','number',$number);
 		
 		$timeout = time() + $seconds;
 		return $db->sql_rows(
@@ -165,7 +165,7 @@ class BS_DAO_Events extends PLIB_Singleton
 	 */
 	public function get_invalid_event_ids()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT id FROM '.BS_TB_EVENTS.' WHERE description = "" AND description_posted != ""'
@@ -180,7 +180,7 @@ class BS_DAO_Events extends PLIB_Singleton
 	 */
 	public function create($fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$db->sql_insert(BS_TB_EVENTS,$fields);
 		return $db->get_last_insert_id();
@@ -195,10 +195,10 @@ class BS_DAO_Events extends PLIB_Singleton
 	 */
 	public function update($id,$fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_update(BS_TB_EVENTS,'WHERE id = '.$id,$fields);
 		return $db->get_affected_rows();
@@ -213,10 +213,10 @@ class BS_DAO_Events extends PLIB_Singleton
 	 */
 	public function update_by_topicid($tid,$fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($tid) || $tid <= 0)
-			PLIB_Helper::def_error('intgt0','tid',$tid);
+		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
+			FWS_Helper::def_error('intgt0','tid',$tid);
 		
 		$db->sql_update(BS_TB_EVENTS,'WHERE tid = '.$tid,$fields);
 		return $db->get_affected_rows();
@@ -253,10 +253,10 @@ class BS_DAO_Events extends PLIB_Singleton
 	 */
 	protected function delete_by($field,$ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_EVENTS.' WHERE '.$field.' IN ('.implode(',',$ids).')'

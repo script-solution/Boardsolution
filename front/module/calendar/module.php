@@ -36,10 +36,10 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($cfg['enable_calendar'] == 1 && $auth->has_global_permission('view_calendar'));
@@ -53,15 +53,15 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$url = PLIB_Props::get()->url();
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
+		$input = FWS_Props::get()->input();
+		$url = FWS_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
 
 		// run submodule
 		parent::run();
@@ -71,7 +71,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		
 		// generate hidden-fields
 		$hidden_fields = array();
-		$hidden_fields[BS_URL_ACTION] = $input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING);
+		$hidden_fields[BS_URL_ACTION] = $input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING);
 		if(($sid = $url->get_splitted_session_id()) != 0)
 			$hidden_fields[$sid[0]] = $sid[1];
 		$extern = $url->get_extern_vars();
@@ -83,7 +83,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		
 		$form = $this->request_formular(false,false);
 		$tpl->add_variables(array(
-			'target' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'target' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden_fields' => $hidden_fields,
 			'month_combo' => $form->get_combobox(BS_URL_MONTH,$helper->get_months(),$month),
 			'year_combo' => $form->get_combobox(BS_URL_YEAR,$years,$year),
@@ -112,14 +112,14 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 	 */
 	private function _get_month_small($year,$month)
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		$helper = BS_Front_Module_Calendar_Helper::get_instance();
 		$monthdata = array();
 		
-		$day_ts = PLIB_Date::get_timestamp(array(0,0,0,$month,1,$year));
-		$mon_len = PLIB_Date::get_formated_date('t',$day_ts);
+		$day_ts = FWS_Date::get_timestamp(array(0,0,0,$month,1,$year));
+		$mon_len = FWS_Date::get_formated_date('t',$day_ts);
 	
 		$wd_short = $helper->get_weekdays_short();
 		$tpl->add_array('wd_short',$wd_short,false);
@@ -132,11 +132,11 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		
 		$daybaseurl = $url->get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_DAY.'=');
 		$weekbaseurl = $url->get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_WEEK.'=');
-		$today = PLIB_Date::get_formated_date('jnY');
-		$month_offset = $helper->get_month_offset(PLIB_Date::get_formated_date('w',$day_ts));
+		$today = FWS_Date::get_formated_date('jnY');
+		$month_offset = $helper->get_month_offset(FWS_Date::get_formated_date('w',$day_ts));
 		$day = 1;
-		$weektime = PLIB_Date::get_timestamp(
-			array(0,0,0,$month,1,$year),PLIB_Date::TZ_USER,'-'.$month_offset.'days'
+		$weektime = FWS_Date::get_timestamp(
+			array(0,0,0,$month,1,$year),FWS_Date::TZ_USER,'-'.$month_offset.'days'
 		);
 		
 		$events = $helper->get_events();
@@ -153,7 +153,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 			{
 				if(($w == 0 && $d > $month_offset) || ($w != 0 && $day <= $mon_len))
 				{
-					// don't use PLIB_StringHelper::ensure_2_digits() here (too many calls)
+					// don't use FWS_StringHelper::ensure_2_digits() here (too many calls)
 					$birth_index = $day < 10 ? '0'.$day : $day;
 					$birth_index .= $month < 10 ? '0'.$month : $month;
 					if(isset($events[$birth_index.$year]) || isset($birthdays[$birth_index]))

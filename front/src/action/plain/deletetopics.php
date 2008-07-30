@@ -81,9 +81,9 @@ final class BS_Front_Action_Plain_DeleteTopics extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
-		$db = PLIB_Props::get()->db();
-		$forums = PLIB_Props::get()->forums();
-		$functions = PLIB_Props::get()->functions();
+		$db = FWS_Props::get()->db();
+		$forums = FWS_Props::get()->forums();
+		$functions = FWS_Props::get()->functions();
 
 		parent::perform_action();
 		

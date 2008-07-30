@@ -22,12 +22,12 @@
  * @author			Nils Asmussen <nils@script-solution.de>
  */
 final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
-	implements PLIB_Progress_Listener
+	implements FWS_Progress_Listener
 {
 	/**
 	 * The progress-manager
 	 *
-	 * @var PLIB_Progress_Manager
+	 * @var FWS_Progress_Manager
 	 */
 	private $_pm;
 	
@@ -39,7 +39,7 @@ final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
 	private $_name;
 	
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -47,21 +47,21 @@ final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_breadcrumb($locale->lang('miscellaneous_in_progress'));
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
-		$storage = new PLIB_Progress_Storage_Session('misc_');
-		$this->_pm = new PLIB_Progress_Manager($storage);
+		$storage = new FWS_Progress_Storage_Session('misc_');
+		$this->_pm = new FWS_Progress_Manager($storage);
 		$this->_pm->set_ops_per_cycle(BS_MM_OPERATIONS_PER_CYCLE);
 		$this->_pm->add_listener($this);
 		
@@ -71,13 +71,13 @@ final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
 			$this->_name = key($refresh);
 		}
 		else
-			$this->_name = $input->get_var('name','get',PLIB_Input::STRING);
+			$this->_name = $input->get_var('name','get',FWS_Input::STRING);
 		
 		$tasks = BS_ACP_Module_miscellaneous::get_tasks();
 		if(!isset($tasks[$this->_name]))
-			PLIB_Helper::error('The task "'.$this->_name.'" does not exist!');
+			FWS_Helper::error('The task "'.$this->_name.'" does not exist!');
 		
-		$file = PLIB_Path::server_app().'acp/module/miscellaneous/tasks/'.$this->_name.'.php';
+		$file = FWS_Path::server_app().'acp/module/miscellaneous/tasks/'.$this->_name.'.php';
 		if(is_file($file))
 		{
 			include_once($file);
@@ -90,11 +90,11 @@ final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
 			}
 		}
 		
-		PLIB_Helper::error('The file or class for the task "'.$this->_name.'" does not exist!');
+		FWS_Helper::error('The file or class for the task "'.$this->_name.'" does not exist!');
 	}
 
 	/**
-	 * @see PLIB_Progress_Listener::cycle_finished()
+	 * @see FWS_Progress_Listener::cycle_finished()
 	 *
 	 * @param int $pos
 	 * @param int $total
@@ -105,13 +105,13 @@ final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
 	}
 
 	/**
-	 * @see PLIB_Progress_Listener::progress_finished()
+	 * @see FWS_Progress_Listener::progress_finished()
 	 */
 	public function progress_finished()
 	{
-		$locale = PLIB_Props::get()->locale();
-		$msgs = PLIB_Props::get()->msgs();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$msgs = FWS_Props::get()->msgs();
+		$url = FWS_Props::get()->url();
 
 		$murl = $url->get_acpmod_url();
 		$msg = $locale->lang('maintenance_misc_success');
@@ -127,9 +127,9 @@ final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
 	 */
 	private function _populate_template()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		$tasks = BS_ACP_Module_miscellaneous::get_tasks();
 		$tpl->add_variables(array(

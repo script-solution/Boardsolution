@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_Config_Helper extends PLIB_Singleton
+final class BS_ACP_Module_Config_Helper extends FWS_Singleton
 {
 	/**
 	 * @return BS_ACP_Module_Config_Helper the instance of this class
@@ -30,7 +30,7 @@ final class BS_ACP_Module_Config_Helper extends PLIB_Singleton
 	/**
 	 * The config-manager
 	 *
-	 * @var PLIB_Config_Manager
+	 * @var FWS_Config_Manager
 	 */
 	private $_manager;
 	
@@ -54,7 +54,7 @@ final class BS_ACP_Module_Config_Helper extends PLIB_Singleton
 	 */
 	public function get_groups($gid,$perline)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$tplcells = array();
 		foreach($this->get_manager()->get_groups() as $group)
@@ -70,11 +70,11 @@ final class BS_ACP_Module_Config_Helper extends PLIB_Singleton
 				);
 			}
 		}
-		return PLIB_Array_Utils::convert_to_2d($tplcells,$perline);
+		return FWS_Array_Utils::convert_to_2d($tplcells,$perline);
 	}
 	
 	/**
-	 * @return PLIB_Config_Manager the manager
+	 * @return FWS_Config_Manager the manager
 	 */
 	public function get_manager()
 	{

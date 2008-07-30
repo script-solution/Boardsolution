@@ -20,16 +20,16 @@
 final class BS_Front_SubModule_stats_timeline extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
-	 * @param PLIB_Page $doc
+	 * @param FWS_Page $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_breadcrumb(
@@ -39,11 +39,11 @@ final class BS_Front_SubModule_stats_timeline extends BS_Front_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$tpl = PLIB_Props::get()->tpl();
+		$tpl = FWS_Props::get()->tpl();
 		
 		$time_stats = $this->get_timeline_data();
 		$max = $this->get_timeline_max($time_stats);
@@ -67,13 +67,13 @@ final class BS_Front_SubModule_stats_timeline extends BS_Front_SubModule
 			if($data['post_time'] < $min)
 				$min = $data['post_time'];
 			
-			$ydate = PLIB_String::substr($data['date'],0,4);
+			$ydate = FWS_String::substr($data['date'],0,4);
 			if(!isset($time_stats[$ydate]['total']['posts']))
 				$time_stats[$ydate]['total']['posts'] = $data['num'];
 			else
 				$time_stats[$ydate]['total']['posts'] += $data['num'];
 			
-			$mdate = PLIB_String::substr($data['date'],4);
+			$mdate = FWS_String::substr($data['date'],4);
 			if(!isset($time_stats[$ydate][$mdate]['posts']))
 				$time_stats[$ydate][$mdate]['posts'] = $data['num'];
 			else
@@ -85,13 +85,13 @@ final class BS_Front_SubModule_stats_timeline extends BS_Front_SubModule
 			if($data['post_time'] < $min)
 				$min = $data['post_time'];
 			
-			$ydate = PLIB_String::substr($data['date'],0,4);
+			$ydate = FWS_String::substr($data['date'],0,4);
 			if(!isset($time_stats[$ydate]['total']['topics']))
 				$time_stats[$ydate]['total']['topics'] = $data['num'];
 			else
 				$time_stats[$ydate]['total']['topics'] += $data['num'];
 			
-			$mdate = PLIB_String::substr($data['date'],4);
+			$mdate = FWS_String::substr($data['date'],4);
 			if(!isset($time_stats[$ydate][$mdate]['topics']))
 				$time_stats[$ydate][$mdate]['topics'] = $data['num'];
 			else
@@ -103,13 +103,13 @@ final class BS_Front_SubModule_stats_timeline extends BS_Front_SubModule
 			if($data['registerdate'] < $min)
 				$min = $data['registerdate'];
 			
-			$ydate = PLIB_String::substr($data['date'],0,4);
+			$ydate = FWS_String::substr($data['date'],0,4);
 			if(!isset($time_stats[$ydate]['total']['user']))
 				$time_stats[$ydate]['total']['user'] = $data['num'];
 			else
 				$time_stats[$ydate]['total']['user'] += $data['num'];
 			
-			$mdate = PLIB_String::substr($data['date'],4);
+			$mdate = FWS_String::substr($data['date'],4);
 			if(!isset($time_stats[$ydate][$mdate]['user']))
 				$time_stats[$ydate][$mdate]['user'] = $data['num'];
 			else
@@ -117,10 +117,10 @@ final class BS_Front_SubModule_stats_timeline extends BS_Front_SubModule
 		}
 		
 		// ensure that all months and years are in the array
-		$cy = PLIB_Date::get_formated_date('Y');
-		$cm = PLIB_Date::get_formated_date('n');
-		$y = PLIB_Date::get_formated_date('Y',$min);
-		$m = PLIB_Date::get_formated_date('n',$min);
+		$cy = FWS_Date::get_formated_date('Y');
+		$cm = FWS_Date::get_formated_date('n');
+		$y = FWS_Date::get_formated_date('Y',$min);
+		$m = FWS_Date::get_formated_date('n',$min);
 		while($y < $cy || ($y == $cy && $m <= $cm))
 		{
 			if(!isset($time_stats[$y]['total']['posts']))
@@ -235,7 +235,7 @@ final class BS_Front_SubModule_stats_timeline extends BS_Front_SubModule
 	 */
 	private function get_month_name($month)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		static $months = null;
 		if($months === null)

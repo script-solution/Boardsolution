@@ -17,7 +17,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ForumUtils extends PLIB_Singleton
+final class BS_ForumUtils extends FWS_Singleton
 {
 	/**
 	 * @return BS_ForumUtils the instance of this class
@@ -35,24 +35,24 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 */
 	public function get_forum_list($parent_id)
 	{
-		$input = PLIB_Props::get()->input();
-		$functions = PLIB_Props::get()->functions();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$user = PLIB_Props::get()->user();
-		$url = PLIB_Props::get()->url();
-		$forums = PLIB_Props::get()->forums();
+		$input = FWS_Props::get()->input();
+		$functions = FWS_Props::get()->functions();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$user = FWS_Props::get()->user();
+		$url = FWS_Props::get()->url();
+		$forums = FWS_Props::get()->forums();
 
-		if($input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING) == 'clapforum' &&
-			 ($id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID)) != null)
+		if($input->get_var(BS_URL_LOC,'get',FWS_Input::STRING) == 'clapforum' &&
+			 ($id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID)) != null)
 			$functions->clap_forum($id);
 	
 		$start_layer = $parent_id == 0 ? 1 : $forums->get_node($parent_id)->get_layer() + 2;
 		$num = 0;
-		$cookie = $input->get_var(BS_COOKIE_PREFIX.'hidden_forums','cookie',PLIB_Input::STRING);
+		$cookie = $input->get_var(BS_COOKIE_PREFIX.'hidden_forums','cookie',FWS_Input::STRING);
 		if($cookie == null)
 			$cookie = $input->set_var(BS_COOKIE_PREFIX.'hidden_forums','cookie','');
 	
@@ -103,7 +103,7 @@ final class BS_ForumUtils extends PLIB_Singleton
 			{
 				$node = $sub_nodes[$i];
 				$daten = $node->get_data();
-				/* @var $node PLIB_Tree_Node */
+				/* @var $node FWS_Tree_Node */
 				/* @var $daten BS_Forums_NodeData */
 				$forum_id = $daten->get_id();
 				$forum_type_cats = $daten->get_forum_type() == 'contains_cats';
@@ -258,7 +258,7 @@ final class BS_ForumUtils extends PLIB_Singleton
 			$tpl->add_variables(array(
 				'clap_forum_bottom' => $open_div,
 				'forum_cookie' => $input->get_var(
-					BS_COOKIE_PREFIX.'hidden_forums','cookie',PLIB_Input::STRING
+					BS_COOKIE_PREFIX.'hidden_forums','cookie',FWS_Input::STRING
 				)
 			));
 			
@@ -274,8 +274,8 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 */
 	public function get_denied_forums($include_categories = true)
 	{
-		$user = PLIB_Props::get()->user();
-		$forums = PLIB_Props::get()->forums();
+		$user = FWS_Props::get()->user();
+		$forums = FWS_Props::get()->forums();
 
 		$ugroup = $user->get_user_group();
 		if($ugroup == BS_STATUS_ADMIN && !$include_categories)
@@ -322,8 +322,8 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 */
 	public function get_intern_forum_permissions()
 	{
-		$user = PLIB_Props::get()->user();
-		$cache = PLIB_Props::get()->cache();
+		$user = FWS_Props::get()->user();
+		$cache = FWS_Props::get()->cache();
 
 		$result = array();
 		$all_groups = $user->get_all_user_groups();
@@ -351,11 +351,11 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 */
 	public function get_forum_path($rid = 0,$start_with_raquo = true)
 	{
-		$input = PLIB_Props::get()->input();
-		$forums = PLIB_Props::get()->forums();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$forums = FWS_Props::get()->forums();
+		$url = FWS_Props::get()->url();
 
-		$id = ($rid != 0) ? $rid : $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$id = ($rid != 0) ? $rid : $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$res = '';
 		if($id != null)
 		{
@@ -367,7 +367,7 @@ final class BS_ForumUtils extends PLIB_Singleton
 					$res .= ' &raquo; ';
 				$res .= '<a href="'.$url->get_topics_url($path[$i][1]).'"';
 	
-				$name = PLIB_StringHelper::get_limited_string($path[$i][0],BS_MAX_FORUM_TITLE_LENGTH);
+				$name = FWS_StringHelper::get_limited_string($path[$i][0],BS_MAX_FORUM_TITLE_LENGTH);
 				if($name['complete'] != '')
 					$res .= ' title="'.$name['complete'].'">'.$name['displayed'];
 				else
@@ -394,12 +394,12 @@ final class BS_ForumUtils extends PLIB_Singleton
 	public function get_recursive_forum_combo($name,$select,$disabled_forum,
 		$disable_categories = true,$add_all_forums_option = false)
 	{
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$forums = PLIB_Props::get()->forums();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$forums = FWS_Props::get()->forums();
 
 		$denied = $this->get_denied_forums(false);
-		$multiple = PLIB_String::substr($name,-2,2) == '[]';
+		$multiple = FWS_String::substr($name,-2,2) == '[]';
 		
 		if($multiple)
 			$result = '<select name="'.$name.'" multiple="multiple" size="10">'."\n";
@@ -461,7 +461,7 @@ final class BS_ForumUtils extends PLIB_Singleton
 	/**
 	 * returns the path for the given forum
 	 *
-	 * @param PLIB_Tree_Node $node the node of the forum
+	 * @param FWS_Tree_Node $node the node of the forum
 	 * @param array $sub_cats an associative array of the form:
 	 * 	<code>array(<parent_id> => <sub_id>)</code>
 	 * @param array $images an array with the images: <code>array('dot' => ...,'middle' => ...)</code>
@@ -471,7 +471,7 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 */
 	public function get_path_images($node,$sub_cats,$images,$start_layer = 0)
 	{
-		$forums = PLIB_Props::get()->forums();
+		$forums = FWS_Props::get()->forums();
 
 		$path_img = array();
 		$layer = $node->get_layer();
@@ -528,9 +528,9 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 */
 	private function _get_subforum_info($parent_id)
 	{
-		$url = PLIB_Props::get()->url();
-		$auth = PLIB_Props::get()->auth();
-		$forums = PLIB_Props::get()->forums();
+		$url = FWS_Props::get()->url();
+		$auth = FWS_Props::get()->auth();
+		$forums = FWS_Props::get()->forums();
 
 		$thread_num = 0;
 		$post_num = 0;
@@ -583,7 +583,7 @@ final class BS_ForumUtils extends PLIB_Singleton
 		}
 	
 		if($sub_forums != '')
-			$sub_forums = PLIB_String::substr($sub_forums,0,PLIB_String::strlen($sub_forums) - 2);
+			$sub_forums = FWS_String::substr($sub_forums,0,FWS_String::strlen($sub_forums) - 2);
 			
 		return array(
 			"threads" => $thread_num,
@@ -602,7 +602,7 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 */
 	private function _get_forum_lastpost($data,$post_order)
 	{
-		$url = PLIB_Props::get()->url();
+		$url = FWS_Props::get()->url();
 
 		if(!isset($data['tposts']))
 			$data['tposts'] = 0;
@@ -635,7 +635,7 @@ final class BS_ForumUtils extends PLIB_Singleton
 			$user_name = $data['post_an_user'];
 	
 		return array(
-			'date' => PLIB_Date::get_date($data['post_time']),
+			'date' => FWS_Date::get_date($data['post_time']),
 			'username' => $user_name,
 			'lastpost_url' => $lastpost_url.'#b_'.$data['lastpost_id'],
 			'topic_complete' => $topic_name['complete'],
@@ -655,13 +655,13 @@ final class BS_ForumUtils extends PLIB_Singleton
 	 */
 	private function _get_forum_image($id,&$is_unread)
 	{
-		$forums = PLIB_Props::get()->forums();
-		$unread = PLIB_Props::get()->unread();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
+		$forums = FWS_Props::get()->forums();
+		$unread = FWS_Props::get()->unread();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
 
 		$data = $forums->get_node_data($id);
 

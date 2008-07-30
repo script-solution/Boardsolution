@@ -21,12 +21,12 @@ final class BS_ACP_Action_themes_add extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
-		$theme_name = $input->get_var('theme_name','post',PLIB_Input::STRING);
-		$theme_folder = $input->get_var('theme_folder','post',PLIB_Input::STRING);
+		$theme_name = $input->get_var('theme_name','post',FWS_Input::STRING);
+		$theme_folder = $input->get_var('theme_folder','post',FWS_Input::STRING);
 		if(!preg_match('/^[a-z0-9_]+$/i',$theme_folder))
 			return 'invalid_theme_folder_name';
 		
@@ -38,38 +38,38 @@ final class BS_ACP_Action_themes_add extends BS_ACP_Action_Base
 
 		$msg = '';
 		
-		$result = $this->_create_directory(PLIB_Path::server_app().'themes/'.$theme_folder);
+		$result = $this->_create_directory(FWS_Path::server_app().'themes/'.$theme_folder);
 		if(!$result)
 			$msg = $locale->lang('error_creating_directory_structure_failed').'<br />';
 
 		if($msg == '')
 		{
-			$result = $this->_create_directory(PLIB_Path::server_app().'themes/'.$theme_folder.'/templates');
+			$result = $this->_create_directory(FWS_Path::server_app().'themes/'.$theme_folder.'/templates');
 			if(!$result)
 				$msg = $locale->lang('error_creating_directory_structure_failed').'<br />';
 		}
 		
 		if($msg == '')
 		{
-			$result = $this->_create_directory(PLIB_Path::server_app().'themes/'.$theme_folder.'/images');
+			$result = $this->_create_directory(FWS_Path::server_app().'themes/'.$theme_folder.'/images');
 			if(!$result)
 				$msg = $locale->lang('error_creating_directory_structure_failed').'<br />';
 		}
 
 		if($msg == '')
 		{
-			$result = PLIB_FileUtils::copy(
-				PLIB_Path::server_app().'themes/default/style.css',
-				PLIB_Path::server_app().'themes/'.$theme_folder.'/style.css'
+			$result = FWS_FileUtils::copy(
+				FWS_Path::server_app().'themes/default/style.css',
+				FWS_Path::server_app().'themes/'.$theme_folder.'/style.css'
 			);
 			if(!$result)
 				$msg = $locale->lang('error_creating_directory_structure_failed').'<br />';
 		}
 
 		// don't report errors here. the index-files are not really important
-		$this->_create_index_file(PLIB_Path::server_app().'themes/'.$theme_folder);
-		$this->_create_index_file(PLIB_Path::server_app().'themes/'.$theme_folder.'/templates');
-		$this->_create_index_file(PLIB_Path::server_app().'themes/'.$theme_folder.'/images');
+		$this->_create_index_file(FWS_Path::server_app().'themes/'.$theme_folder);
+		$this->_create_index_file(FWS_Path::server_app().'themes/'.$theme_folder.'/templates');
+		$this->_create_index_file(FWS_Path::server_app().'themes/'.$theme_folder.'/images');
 		
 		$this->set_success_msg($msg.$locale->lang('theme_add_success'));
 		$this->set_action_performed(true);
@@ -87,7 +87,7 @@ final class BS_ACP_Action_themes_add extends BS_ACP_Action_Base
 	{
 		if(@mkdir($path))
 		{
-			if(@chown($path,fileowner(PLIB_Path::server_app().'themes/default')))
+			if(@chown($path,fileowner(FWS_Path::server_app().'themes/default')))
 				return @chmod($path,0777);
 		}
 
@@ -103,7 +103,7 @@ final class BS_ACP_Action_themes_add extends BS_ACP_Action_Base
 	private function _create_index_file($directory)
 	{
 		$content = "<html>\r\n<body>\r\n</body>\r\n</html>";
-		return PLIB_FileUtils::write($directory.'/index.htm',$content) !== false;
+		return FWS_FileUtils::write($directory.'/index.htm',$content) !== false;
 	}
 }
 ?>

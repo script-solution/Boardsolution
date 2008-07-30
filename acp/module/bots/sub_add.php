@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_bots_add extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_ACP_SubModule_bots_add extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ADD_BOT,'add');
@@ -38,14 +38,14 @@ final class BS_ACP_SubModule_bots_add extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		$data = array(
 			'bot_name' => '',
@@ -57,7 +57,7 @@ final class BS_ACP_SubModule_bots_add extends BS_ACP_SubModule
 		
 		$this->request_formular();
 		
-		$site = $input->get_var('site','get',PLIB_Input::INTEGER);
+		$site = $input->get_var('site','get',FWS_Input::INTEGER);
 		$tpl->add_variables(array(
 			'default' => $data,
 			'site' => $site,

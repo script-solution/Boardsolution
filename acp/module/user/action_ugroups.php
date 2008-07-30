@@ -21,15 +21,15 @@ final class BS_ACP_Action_user_ugroups extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
+		$user = FWS_Props::get()->user();
 
 		$main_group = $input->get_var('main_group','post');
 		$other_groups = $input->get_var('other_groups','post');
-		$idstr = $input->get_var('delete','post',PLIB_Input::STRING);
-		$ids = PLIB_Array_Utils::advanced_explode(',',$idstr);
+		$idstr = $input->get_var('delete','post',FWS_Input::STRING);
+		$ids = FWS_Array_Utils::advanced_explode(',',$idstr);
 		
 		if(!is_array($ids) || count($ids) == 0)
 			return 'No valid ids got via POST';
@@ -38,7 +38,7 @@ final class BS_ACP_Action_user_ugroups extends BS_ACP_Action_Base
 		$users = array();
 		foreach($ids as $uid)
 		{
-			if(!PLIB_Helper::is_integer($uid))
+			if(!FWS_Helper::is_integer($uid))
 				return 'The id "'.$uid.'" is invalid';
 			
 			$uid = (int)$uid;

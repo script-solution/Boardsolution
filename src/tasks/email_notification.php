@@ -17,12 +17,12 @@
  * @subpackage	src.tasks
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Tasks_email_notification extends PLIB_Tasks_Base
+final class BS_Tasks_email_notification extends FWS_Tasks_Base
 {
 	public function run()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
 
 		// can we stop here?
 		if($cfg['enable_email_notification'] == 0)
@@ -83,7 +83,7 @@ final class BS_Tasks_email_notification extends PLIB_Tasks_Base
 						}
 
 						// add the post-text
-						$text = PLIB_StringHelper::htmlspecialchars_back($data['text_posted']);
+						$text = FWS_StringHelper::htmlspecialchars_back($data['text_posted']);
 						$udata['topics'][count($udata['topics']) - 1]['posts'][] = array(
 							'text' => $text,
 							'user_name' => $data['user_name'] ? $data['user_name'] : $data['post_an_user']
@@ -135,8 +135,8 @@ final class BS_Tasks_email_notification extends PLIB_Tasks_Base
 	 */
 	private function _get_email_language_data($language)
 	{
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
 		static $languages = array();
 

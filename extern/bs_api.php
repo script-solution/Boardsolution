@@ -15,23 +15,23 @@ if(!defined('BS_PATH'))
 
 include_once(BS_PATH.'config/userdef.php');
 
-// define libpath for init.php
-if(!defined('PLIB_PATH'))
-	define('PLIB_PATH',BS_PATH.BS_LIB_PATH);
+// define fwspath for init.php
+if(!defined('FWS_PATH'))
+	define('FWS_PATH',BS_PATH.BS_FWS_PATH);
 
-// init the library
-include_once(PLIB_PATH.'init.php');
+// init the framework
+include_once(FWS_PATH.'init.php');
 
 // set the path
-PLIB_Path::set_server_app(BS_PATH);
-PLIB_Path::set_client_app(BS_PATH);
+FWS_Path::set_server_app(BS_PATH);
+FWS_Path::set_client_app(BS_PATH);
 
 // init boardsolution
 include_once(BS_PATH.'src/init.php');
-$cfg = PLIB_Props::get()->cfg();
-$locale = PLIB_Props::get()->locale();
-PLIB_Path::set_outer($cfg['board_url'].'/');
-PLIB_Error_Handler::get_instance()->set_logger(new BS_Error_Logger());
+$cfg = FWS_Props::get()->cfg();
+$locale = FWS_Props::get()->locale();
+FWS_Path::set_outer($cfg['board_url'].'/');
+FWS_Error_Handler::get_instance()->set_logger(new BS_Error_Logger());
 $locale->add_language_file('index');
 
 // load extern-API stuff
@@ -46,8 +46,8 @@ ob_start();
  */
 function BS_finish()
 {
-	$db = PLIB_Props::get()->db();
-	$sessions = PLIB_Props::get()->sessions();
+	$db = FWS_Props::get()->db();
+	$sessions = FWS_Props::get()->sessions();
 	
 	$sessions->finalize();
 	$db->disconnect();

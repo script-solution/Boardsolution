@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_Config_Data extends PLIB_Config_Data
+final class BS_ACP_Module_Config_Data extends FWS_Config_Data
 {
 	/**
 	 * Indicates wether the setting affects the messages:

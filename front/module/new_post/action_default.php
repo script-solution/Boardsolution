@@ -21,14 +21,14 @@ final class BS_Front_Action_new_post_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$auth = PLIB_Props::get()->auth();
-		$forums = PLIB_Props::get()->forums();
-		$user = PLIB_Props::get()->user();
-		$ips = PLIB_Props::get()->ips();
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$auth = FWS_Props::get()->auth();
+		$forums = FWS_Props::get()->forums();
+		$user = FWS_Props::get()->user();
+		$ips = FWS_Props::get()->ips();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
 
 		// anything to do?
 		if(!$input->isset_var('submit','post'))
@@ -39,8 +39,8 @@ final class BS_Front_Action_new_post_default extends BS_Front_Action_Base
 			return 'You have no permission to reply in this forum';
 
 		// are all parameters valid?
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 		
 		// closed?
 		$forum_data = $forums->get_node_data($fid);

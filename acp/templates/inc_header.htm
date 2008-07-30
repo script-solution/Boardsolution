@@ -16,8 +16,8 @@
 </script>
 {endif}
 <script type="text/javascript" src="{gjs.get_file('src/functions.js')}"></script>
-<script type="text/javascript" src="{gjs.get_file('js/basic.js','lib')}"></script>
-<script type="text/javascript" src="{gjs.get_file('js/ajax.js','lib')}"></script>
+<script type="text/javascript" src="{gjs.get_file('js/basic.js','fws')}"></script>
+<script type="text/javascript" src="{gjs.get_file('js/ajax.js','fws')}"></script>
 {loop jsfiles as file}
 <script type="{file:type}" src="{file:src}"></script>
 {endloop}
@@ -30,13 +30,13 @@ function setCookie(name,value,lifetime)
 		";path={cookie_path};domain={cookie_domain}";
 }
 
-var myAjax = new PLIB_Ajax();
+var myAjax = new FWS_Ajax();
 myAjax.setMimeType('text/plain; {charset}');
 myAjax.setEventHandler('onstart',function() {
-	PLIB_displayWaitBar('ajax_wait_bar');
+	FWS_displayWaitBar('ajax_wait_bar');
 });
 myAjax.setEventHandler('onfinish',function() {
-	PLIB_hideElement('ajax_wait_bar');
+	FWS_hideElement('ajax_wait_bar');
 });
 //-->
 </script>

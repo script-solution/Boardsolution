@@ -17,7 +17,7 @@
  * @subpackage	src.session
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Session_Storage_DB extends PLIB_Object implements PLIB_Session_Storage
+final class BS_Session_Storage_DB extends FWS_Object implements FWS_Session_Storage
 {
 	public function load_list()
 	{

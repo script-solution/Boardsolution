@@ -17,7 +17,7 @@
  * @subpackage	acp.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Menu extends PLIB_Singleton
+final class BS_ACP_Menu extends FWS_Singleton
 {
 	/**
 	 * @return BS_ACP_Menu the instance of this class
@@ -34,8 +34,8 @@ final class BS_ACP_Menu extends PLIB_Singleton
 	 */
 	public function get_menu_items()
 	{
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
 
 		// All available items. In the following form:
 		// array(

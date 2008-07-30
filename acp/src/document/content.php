@@ -20,7 +20,7 @@
 final class BS_ACP_Document_Content extends BS_ACP_Document
 {
 	/**
-	 * @see PLIB_Document::use_default_renderer()
+	 * @see FWS_Document::use_default_renderer()
 	 *
 	 * @return BS_ACP_Renderer_Content
 	 */
@@ -36,7 +36,7 @@ final class BS_ACP_Document_Content extends BS_ACP_Document
 	}
 	
 	/**
-	 * @see PLIB_Document::prepare_rendering()
+	 * @see FWS_Document::prepare_rendering()
 	 */
 	protected function prepare_rendering()
 	{
@@ -54,7 +54,7 @@ final class BS_ACP_Document_Content extends BS_ACP_Document
 	 */
 	protected function load_module()
 	{
-		$this->_module_name = PLIB_Helper::get_module_name(
+		$this->_module_name = FWS_Helper::get_module_name(
 			'BS_ACP_Module_','loc','index','acp/module/'
 		);
 		$class = 'BS_ACP_Module_'.$this->_module_name;

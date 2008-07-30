@@ -21,13 +21,13 @@ final class BS_Front_Action_register_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$ips = PLIB_Props::get()->ips();
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$ips = FWS_Props::get()->ips();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))

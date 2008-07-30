@@ -17,7 +17,7 @@
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
+final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 {
 	/**
 	 * @return BS_Front_Module_Calendar_Helper the instance of this class
@@ -88,7 +88,7 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	 */
 	public function get_months()
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		if($this->_months === null)
 		{
@@ -115,7 +115,7 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	 */
 	public function get_weekdays_short()
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		if($this->_weekdays_short === null)
 		{
@@ -137,7 +137,7 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	 */
 	public function get_weekdays()
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		if($this->_weekdays === null)
 		{
@@ -161,29 +161,29 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	 */
 	public function get_week_timestamp()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
 		if($this->_week === null)
 		{
-			$uday = $input->get_var(BS_URL_DAY,'get',PLIB_Input::INTEGER);
-			$uweek = $input->get_var(BS_URL_WEEK,'get',PLIB_Input::INTEGER);
+			$uday = $input->get_var(BS_URL_DAY,'get',FWS_Input::INTEGER);
+			$uweek = $input->get_var(BS_URL_WEEK,'get',FWS_Input::INTEGER);
 			
 			// ensure that all parameters are valid
 			$this->_week = $uday !== null ? $uday : $uweek;
-			if(!PLIB_Date::is_valid_timestamp($this->_week))
+			if(!FWS_Date::is_valid_timestamp($this->_week))
 				$this->_week = time();
 			
 			if($uday !== null)
 			{
 				// map the weekday to the week which starts on monday
-				$year = PLIB_Date::get_formated_date('Y',$uday);
-				$month = PLIB_Date::get_formated_date('m',$uday);
-				$day = PLIB_Date::get_formated_date('d',$uday);
-				$weekday = PLIB_Date::get_formated_date('w',$uday);
+				$year = FWS_Date::get_formated_date('Y',$uday);
+				$month = FWS_Date::get_formated_date('m',$uday);
+				$day = FWS_Date::get_formated_date('d',$uday);
+				$weekday = FWS_Date::get_formated_date('w',$uday);
 				$weekday = $weekday == 0 ? 6 : $weekday - 1;
 				
-				$this->_week = PLIB_Date::get_timestamp(
-					array(0,0,0,$month,$day,$year),PLIB_Date::TZ_USER,'-'.$weekday.'days'
+				$this->_week = FWS_Date::get_timestamp(
+					array(0,0,0,$month,$day,$year),FWS_Date::TZ_USER,'-'.$weekday.'days'
 				);
 			}
 		}
@@ -198,32 +198,32 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	 */
 	public function get_date()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
 		if($this->_month === null)
 		{
-			$month = $input->get_var(BS_URL_MONTH,'get',PLIB_Input::INTEGER);
-			$year = $input->get_var(BS_URL_YEAR,'get',PLIB_Input::INTEGER);
+			$month = $input->get_var(BS_URL_MONTH,'get',FWS_Input::INTEGER);
+			$year = $input->get_var(BS_URL_YEAR,'get',FWS_Input::INTEGER);
 			
 			// no month and year given but day/week instead?
 			if($month == null && $year == null)
 			{
-				$day = $input->get_var(BS_URL_DAY,'get',PLIB_Input::INTEGER);
-				$week = $input->get_var(BS_URL_WEEK,'get',PLIB_Input::INTEGER);
+				$day = $input->get_var(BS_URL_DAY,'get',FWS_Input::INTEGER);
+				$week = $input->get_var(BS_URL_WEEK,'get',FWS_Input::INTEGER);
 				$ts = $day != null ? $day : $week;
-				if(!PLIB_Date::is_valid_timestamp($ts))
+				if(!FWS_Date::is_valid_timestamp($ts))
 					$ts = time();
 				
-				$month = PLIB_Date::get_formated_date('m',$ts);
-				$year = PLIB_Date::get_formated_date('Y',$ts);
+				$month = FWS_Date::get_formated_date('m',$ts);
+				$year = FWS_Date::get_formated_date('Y',$ts);
 			}
 		
 			// ensure that all parameters are valid
 			if($month == null || $month <= 0 || $month > 12 || $year == null ||
 				 $year >= 2037 || $year <= 1970)
 			{
-				$month = PLIB_Date::get_formated_date('m');
-				$year = PLIB_Date::get_formated_date('Y');
+				$month = FWS_Date::get_formated_date('m');
+				$year = FWS_Date::get_formated_date('Y');
 			}
 			
 			$this->_month = $month;
@@ -296,7 +296,7 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	 */
 	public function get_events()
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		if($this->_events === null)
 		{
@@ -307,15 +307,15 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 			list($year,$month) = $this->get_date();
 			
 			$this->_events = array();
-			$min_date = PLIB_Date::get_timestamp(
-				array(0,0,0,$month,1,$year),PLIB_Date::TZ_USER,'-1month'
+			$min_date = FWS_Date::get_timestamp(
+				array(0,0,0,$month,1,$year),FWS_Date::TZ_USER,'-1month'
 			);
-			$max_date = PLIB_Date::get_timestamp(
-				array(0,0,0,$month,1,$year),PLIB_Date::TZ_USER,'+2months'
+			$max_date = FWS_Date::get_timestamp(
+				array(0,0,0,$month,1,$year),FWS_Date::TZ_USER,'+2months'
 			);
 			foreach(BS_DAO::get_events()->get_events_between($min_date,$max_date,$denied) as $data)
 			{
-				$date_key = PLIB_Date::get_formated_date('dmY',$data['event_begin']);
+				$date_key = FWS_Date::get_formated_date('dmY',$data['event_begin']);
 				$array = array(
 					'id' => $data['id'],
 					'tid' => $data['tid'],
@@ -328,16 +328,16 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 				else
 					$this->_events[$date_key] = array($array);
 				
-				$end_key = $data['event_end'] > 0 ? PLIB_Date::get_formated_date('dmY',$data['event_end']) : 0;
+				$end_key = $data['event_end'] > 0 ? FWS_Date::get_formated_date('dmY',$data['event_end']) : 0;
 				if($data['event_end'] > 0 && $end_key != $date_key)
 				{
-					$day = PLIB_String::substr($date_key,0,2);
-					$month = PLIB_String::substr($date_key,2,2);
-					$year = PLIB_String::substr($date_key,4,4);
+					$day = FWS_String::substr($date_key,0,2);
+					$month = FWS_String::substr($date_key,2,2);
+					$year = FWS_String::substr($date_key,4,4);
 					for($i = 1;$end_key != $date_key;$i++)
 					{
-						$next = PLIB_Date::get_timestamp(array(0,0,0,$month,$day + $i,$year));
-						$date_key = PLIB_Date::get_formated_date('dmY',$next);
+						$next = FWS_Date::get_timestamp(array(0,0,0,$month,$day + $i,$year));
+						$date_key = FWS_Date::get_formated_date('dmY',$next);
 						if(isset($this->_events[$date_key]))
 							$this->_events[$date_key][] = $array;
 						else
@@ -387,7 +387,7 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	 */
 	public function get_events_of($date,$max_name_len = 10,$max_events = 3)
 	{
-		$url = PLIB_Props::get()->url();
+		$url = FWS_Props::get()->url();
 		
 		$birthdays = $this->get_birthdays();
 		$events = $this->get_events();
@@ -409,10 +409,10 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 				}
 	
 				$username_strip = $content['user_name'];
-				$username_len = PLIB_String::strlen($username_strip);
+				$username_len = FWS_String::strlen($username_strip);
 				if($username_len > $max_name_len)
 				{
-					$username = PLIB_String::substr($username_strip,0,$max_name_len - 2).'...';
+					$username = FWS_String::substr($username_strip,0,$max_name_len - 2).'...';
 					$title = '" title="'.$username_strip;
 				}
 				else
@@ -447,9 +447,9 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	
 				$name = $content['name'];
 				$name_strip = $name;
-				$name_len = PLIB_String::strlen($name_strip);
+				$name_len = FWS_String::strlen($name_strip);
 				if($name_len > $max_name_len)
-					$name_strip = PLIB_String::substr($name,0,$max_name_len - 2).'...';
+					$name_strip = FWS_String::substr($name,0,$max_name_len - 2).'...';
 	
 				if($content['tid'])
 				{
@@ -475,10 +475,10 @@ final class BS_Front_Module_Calendar_Helper extends PLIB_Singleton
 	
 		if($count > $max_events)
 		{
-			$loc = PLIB_Date::get_timestamp(array(
+			$loc = FWS_Date::get_timestamp(array(
 				0,0,0,
-				PLIB_String::substr($date,2,2),
-				PLIB_String::substr($date,0,2),
+				FWS_String::substr($date,2,2),
+				FWS_String::substr($date,0,2),
 				$year
 			));
 			$curl = $url->get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_DAY.'='.$loc);

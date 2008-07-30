@@ -19,9 +19,9 @@ class BS_Install_dbcheck extends BS_Install
 {
 	public function run()
 	{
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
 
 		$prefix = $functions->get_session_var('table_prefix');
 		$type = $functions->get_session_var('install_type');
@@ -81,8 +81,8 @@ class BS_Install_dbcheck extends BS_Install
 	
 	public function check_inputs(&$check)
 	{
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
 
 		$prefix = $functions->get_session_var('table_prefix');
 		$type = $functions->get_session_var('install_type');

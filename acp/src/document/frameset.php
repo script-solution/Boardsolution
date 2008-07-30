@@ -33,15 +33,15 @@ final class BS_ACP_Document_Frameset extends BS_ACP_Document
 	{
 		parent::prepare_rendering();
 		
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
 		
 		// login the user?
 		if($input->isset_var('login','post'))
 		{
-			$username = $input->get_var('user_login','post',PLIB_Input::STRING);
-			$pw = $input->get_var('pw_login','post',PLIB_Input::STRING);
+			$username = $input->get_var('user_login','post',FWS_Input::STRING);
+			$pw = $input->get_var('pw_login','post',FWS_Input::STRING);
 			$error_code = $user->login($username,$pw,true);
 			if($error_code == BS_User_Current::LOGIN_ERROR_MAX_LOGIN_TRIES)
 				$this->_error_msg = $locale->lang('max_login_tries_notice');
@@ -55,7 +55,7 @@ final class BS_ACP_Document_Frameset extends BS_ACP_Document
 	}
 	
 	/**
-	 * @see PLIB_Document::render()
+	 * @see FWS_Document::render()
 	 *
 	 * @return string
 	 */
@@ -63,17 +63,17 @@ final class BS_ACP_Document_Frameset extends BS_ACP_Document
 	{
 		$this->prepare_rendering();
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$user = FWS_Props::get()->user();
 		
 		if($user->is_loggedin())
 		{
-			$navi_file = PLIB_Path::client_app().'admin.php?page=navi&amp;';
+			$navi_file = FWS_Path::client_app().'admin.php?page=navi&amp;';
 			$navi_file .= BS_URL_SID.'='.$user->get_session_id();
 			
-			$content_file = PLIB_Path::client_app().'admin.php?page=content&amp;';
+			$content_file = FWS_Path::client_app().'admin.php?page=content&amp;';
 			$content_file .= BS_URL_SID.'='.$user->get_session_id();
 			
 		  $tpl->set_template('frameset.htm');
@@ -89,7 +89,7 @@ final class BS_ACP_Document_Frameset extends BS_ACP_Document
 		{
 		  $tpl->set_template('login.htm');
 		  $tpl->add_variables(array(
-		  	'login_target' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+		  	'login_target' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 		  	'error_msg' => $this->_error_msg,
 				'charset' => 'charset='.BS_HTML_CHARSET,
 		  	'page_title' => sprintf($locale->lang('page_title'),BS_VERSION)
@@ -102,7 +102,7 @@ final class BS_ACP_Document_Frameset extends BS_ACP_Document
 	}
 
 	/**
-	 * @see PLIB_Document::load_module()
+	 * @see FWS_Document::load_module()
 	 *
 	 * @return BS_Front_Module
 	 */

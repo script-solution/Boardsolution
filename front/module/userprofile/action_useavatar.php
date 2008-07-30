@@ -21,12 +21,12 @@ final class BS_Front_Action_userprofile_useavatar extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
-		$functions = PLIB_Props::get()->functions();
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$functions = FWS_Props::get()->functions();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// has the user the permission?
 		if(!$user->is_loggedin() || $cfg['enable_avatars'] == 0)
@@ -37,7 +37,7 @@ final class BS_Front_Action_userprofile_useavatar extends BS_Front_Action_Base
 			return 'Invalid session-id';
 
 		// does the avatar exist?
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		if($id == null)
 			return 'The id "'.$id.'" is invalid';
 		
@@ -53,7 +53,7 @@ final class BS_Front_Action_userprofile_useavatar extends BS_Front_Action_Base
 		$user->set_profile_val('avatar',$id);
 
 		$this->set_action_performed(true);
-		$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 		$murl = $url->get_url('userprofile','&amp;'.BS_URL_LOC.'=avatars&amp;'.BS_URL_SITE.'='.$site);
 		$this->add_link($locale->lang('back'),$murl);
 

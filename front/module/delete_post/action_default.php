@@ -21,24 +21,24 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$forums = PLIB_Props::get()->forums();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
-		$functions = PLIB_Props::get()->functions();
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$forums = FWS_Props::get()->forums();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
+		$functions = FWS_Props::get()->functions();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		if(!$input->isset_var('submit','post'))
 			return '';
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 
 		// check ids of the posts to delete
 		$ids = $input->get_var('selected_posts','post');
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			return 'split_no_posts_selected';
 
 		// check other parameters

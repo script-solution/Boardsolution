@@ -19,7 +19,7 @@
  * @subpackage	extern.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_API_Module extends PLIB_Object
+abstract class BS_API_Module extends FWS_Object
 {
 	/**
 	 * should do all necessary operations so that one can access all information

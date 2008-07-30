@@ -20,13 +20,13 @@
 final class BS_ACP_SubModule_acpaccess_default extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
 		$options = BS_ACP_Module_ACPAccess_Helper::get_instance()->get_group_options();
 		

@@ -20,21 +20,21 @@
 final class BS_ACP_Module_index extends BS_ACP_Module
 {
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$url = PLIB_Props::get()->url();
-		$sessions = PLIB_Props::get()->sessions();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$url = FWS_Props::get()->url();
+		$sessions = FWS_Props::get()->sessions();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
 
 		// check cookie-domain
 		if($cfg['cookie_domain'] == '')
@@ -62,7 +62,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 			$tplfolder = 'themes/'.$theme['theme_folder'].'/templates';
 			if(is_dir($tplfolder))
 			{
-				$tpls = PLIB_FileUtils::get_dir_content($tplfolder);
+				$tpls = FWS_FileUtils::get_dir_content($tplfolder);
 				foreach($tpls as $template)
 				{
 					if(is_file($tplfolder.'/'.$template))
@@ -74,7 +74,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 		$not_writable = array();
 		foreach($writable_items as $item)
 		{
-			if(!PLIB_FileUtils::is_writable(PLIB_Path::server_app().$item))
+			if(!FWS_FileUtils::is_writable(FWS_Path::server_app().$item))
 				$not_writable[] = $item;
 		}
 		
@@ -89,7 +89,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 		
 		
 		// versions
-		$gd_version = PLIB_PHPConfig::get_gd_version();
+		$gd_version = FWS_PHPConfig::get_gd_version();
 		$tpl->add_variables(array(
 			'php_version' => PHP_VERSION,
 			'mysql_version' => $this->_get_mysql_version(),
@@ -163,7 +163,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 				}
 			}
 
-			$a_user_agent = PLIB_StringHelper::get_limited_string($data['user_agent'],35);
+			$a_user_agent = FWS_StringHelper::get_limited_string($data['user_agent'],35);
 			if($a_user_agent['complete'] != '')
 			{
 				$user_agent = '<span title="'.$a_user_agent['complete'].'">';
@@ -177,7 +177,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 				'location' => $location,
 				'ip' => $data['user_ip'],
 				'agent' => $user_agent,
-				'date' => PLIB_Date::get_date($data['date'])
+				'date' => FWS_Date::get_date($data['date'])
 			);
 		}
 		
@@ -188,16 +188,16 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 		$dbsize = $this->_get_db_size();
 		if($dbsize >= 0)
 		{
-			$stats['database_size'] = PLIB_StringHelper::get_formated_data_size(
+			$stats['database_size'] = FWS_StringHelper::get_formated_data_size(
 				$dbsize,$locale->get_thousands_separator(),$locale->get_dec_separator()
 			);
 		}
 		else
 			$stats['database_size'] = $locale->lang('notavailable');
 		
-		$stats['upload_dir_size'] = $this->_get_dir_size(PLIB_Path::server_app().'uploads');
-		$stats['avatar_dir_size'] = $this->_get_dir_size(PLIB_Path::server_app().'images/avatars');
-		$stats['smiley_dir_size'] = $this->_get_dir_size(PLIB_Path::server_app().'images/smileys');
+		$stats['upload_dir_size'] = $this->_get_dir_size(FWS_Path::server_app().'uploads');
+		$stats['avatar_dir_size'] = $this->_get_dir_size(FWS_Path::server_app().'images/avatars');
+		$stats['smiley_dir_size'] = $this->_get_dir_size(FWS_Path::server_app().'images/smileys');
 
 		$tpl->add_variables(array(
 			'safe_mode' => $this->_get_php_flag('safe_mode'),
@@ -223,7 +223,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 	 */
 	private function _get_php_flag($flag)
 	{
-		return BS_ACP_Utils::get_instance()->get_yesno(PLIB_PHPConfig::is_enabled($flag));
+		return BS_ACP_Utils::get_instance()->get_yesno(FWS_PHPConfig::is_enabled($flag));
 	}
 
 	/**
@@ -233,7 +233,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 	 */
 	private function _get_db_size()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$dbsize = 0;
 		$version = $this->_get_mysql_version();
@@ -242,7 +242,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 		$constants = get_defined_constants();
 		foreach($constants as $c => $v)
 		{
-			if(PLIB_String::substr($c,0,6) == 'BS_TB_')
+			if(FWS_String::substr($c,0,6) == 'BS_TB_')
 				$tables[$v] = true;
 		}
 
@@ -273,7 +273,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 	 */
 	private function _get_mysql_version()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		static $version = null;
 		if($version == null)
@@ -290,10 +290,10 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 	 */
 	private function _get_dir_size($dir)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
-		$size = PLIB_FileUtils::get_dir_size($dir,false);
-		return PLIB_StringHelper::get_formated_data_size(
+		$size = FWS_FileUtils::get_dir_size($dir,false);
+		return FWS_StringHelper::get_formated_data_size(
 			$size,$locale->get_thousands_separator(),$locale->get_dec_separator()
 		);
 	}

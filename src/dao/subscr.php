@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_Subscr extends PLIB_Singleton
+class BS_DAO_Subscr extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_Subscr the instance of this class
@@ -36,7 +36,7 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 */
 	public function get_count()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(BS_TB_SUBSCR,'id','');
 	}
@@ -47,7 +47,7 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 */
 	public function get_count_by_keyword($keyword)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(
 			BS_TB_SUBSCR.' s','s.id','LEFT JOIN '.BS_TB_FORUMS.' f ON f.id = s.forum_id
@@ -66,10 +66,10 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 */
 	public function get_subscr_topics_count($user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		return $db->sql_num(BS_TB_SUBSCR,'id',' WHERE topic_id != 0 AND user_id = '.$user_id);
 	}
@@ -82,10 +82,10 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 */
 	public function get_subscr_forums_count($user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		return $db->sql_num(BS_TB_SUBSCR,'id',' WHERE forum_id != 0 AND user_id = '.$user_id);
 	}
@@ -99,12 +99,12 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 */
 	public function has_subscribed_topic($user_id,$tid)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
-		if(!PLIB_Helper::is_integer($tid) || $tid <= 0)
-			PLIB_Helper::def_error('intgt0','tid',$tid);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
+			FWS_Helper::def_error('intgt0','tid',$tid);
 		
 		return $db->sql_num(
 			BS_TB_SUBSCR,'id',' WHERE topic_id = '.$tid.' AND user_id = '.$user_id
@@ -120,12 +120,12 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 */
 	public function has_subscribed_forum($user_id,$fid)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
-		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
-			PLIB_Helper::def_error('intgt0','fid',$fid);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
+			FWS_Helper::def_error('intgt0','fid',$fid);
 		
 		return $db->sql_num(
 			BS_TB_SUBSCR,'id',' WHERE forum_id = '.$fid.' AND user_id = '.$user_id
@@ -154,12 +154,12 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 */
 	public function get_list($keyword,$sort = 'id',$order = 'ASC',$start = 0,$count = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		return $db->sql_rows(
 			'SELECT
@@ -190,16 +190,16 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 */
 	public function get_subscr_topics_of_user($user_id,$ids = array(),$start = 0,$count = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
-		if(!PLIB_Array_Utils::is_integer($ids))
-			PLIB_Helper::def_error('intarray','ids',$ids);
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Array_Utils::is_integer($ids))
+			FWS_Helper::def_error('intarray','ids',$ids);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		return $db->sql_rows(
 			'SELECT s.*,t.*
@@ -221,12 +221,12 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 */
 	public function get_subscr_forums_of_user($user_id,$ids = array())
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
-		if(!PLIB_Array_Utils::is_integer($ids))
-			PLIB_Helper::def_error('intarray','ids',$ids);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Array_Utils::is_integer($ids))
+			FWS_Helper::def_error('intarray','ids',$ids);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_SUBSCR.'
@@ -252,14 +252,14 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 */
 	public function get_subscribed_users($fid,$tid,$user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
-			PLIB_Helper::def_error('intgt0','fid',$fid);
-		if(!PLIB_Helper::is_integer($tid) || $tid <= 0)
-			PLIB_Helper::def_error('intgt0','tid',$tid);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
+			FWS_Helper::def_error('intgt0','fid',$fid);
+		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
+			FWS_Helper::def_error('intgt0','tid',$tid);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		return $db->sql_rows(
 			'SELECT u.`'.BS_EXPORT_USER_EMAIL.'` user_email,p.emails_include_post
@@ -280,10 +280,10 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 */
 	public function get_timedout_subscr_ids($timeout)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($timeout) || $timeout <= 0)
-			PLIB_Helper::def_error('intgt0','timeout',$timeout);
+		if(!FWS_Helper::is_integer($timeout) || $timeout <= 0)
+			FWS_Helper::def_error('intgt0','timeout',$timeout);
 		
 		$rows = $db->sql_rows(
 			'SELECT s.id
@@ -307,12 +307,12 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 */
 	public function subscribe_forum($fid,$user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
-			PLIB_Helper::def_error('intgt0','fid',$fid);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
+			FWS_Helper::def_error('intgt0','fid',$fid);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$db->sql_insert(BS_TB_SUBSCR,array(
 			'forum_id' => $fid,
@@ -331,12 +331,12 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 */
 	public function subscribe_topic($tid,$user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($tid) || $tid <= 0)
-			PLIB_Helper::def_error('intgt0','tid',$tid);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
+			FWS_Helper::def_error('intgt0','tid',$tid);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$db->sql_insert(BS_TB_SUBSCR,array(
 			'topic_id' => $tid,
@@ -355,12 +355,12 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 */
 	public function delete_by_ids_from_user($ids,$user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_SUBSCR.'
@@ -411,10 +411,10 @@ class BS_DAO_Subscr extends PLIB_Singleton
 	 */
 	protected function delete_by($field,$ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_SUBSCR.' WHERE '.$field.' IN ('.implode(',',$ids).')'

@@ -17,11 +17,11 @@
  * @subpackage	src.tasks
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Tasks_logged_ips extends PLIB_Tasks_Base
+final class BS_Tasks_logged_ips extends FWS_Tasks_Base
 {
 	public function run()
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		BS_DAO::get_logips()->delete_timedout($cfg['ip_log_days'] * 86400);
 	}

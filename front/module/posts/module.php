@@ -20,7 +20,7 @@
 final class BS_Front_Module_posts extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,7 +28,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_robots_value('index,follow');
@@ -38,46 +38,46 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$renderer->add_action(BS_ACTION_LEAVE_EVENT,'leaveevent');
 		$renderer->add_action(BS_ACTION_SUBSCRIBE_TOPIC,'subscribetopic');
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$this->add_loc_forum_path($fid);
 		$this->add_loc_topic();
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$ips = PLIB_Props::get()->ips();
-		$cookies = PLIB_Props::get()->cookies();
-		$auth = PLIB_Props::get()->auth();
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
-		$tpl = PLIB_Props::get()->tpl();
-		$forums = PLIB_Props::get()->forums();
-		$functions = PLIB_Props::get()->functions();
-		$unread = PLIB_Props::get()->unread();
-		$url = PLIB_Props::get()->url();
-		$doc = PLIB_Props::get()->doc();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$ips = FWS_Props::get()->ips();
+		$cookies = FWS_Props::get()->cookies();
+		$auth = FWS_Props::get()->auth();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
+		$forums = FWS_Props::get()->forums();
+		$functions = FWS_Props::get()->functions();
+		$unread = FWS_Props::get()->unread();
+		$url = FWS_Props::get()->url();
+		$doc = FWS_Props::get()->doc();
 
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 
 		// check if the parameters are valid
 		if($tid == null || $fid == null)
 		{
 			// send 404 for search-engines and such
 			$doc->set_header('HTTP/1.0 404 Not Found','');
-			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('thread_not_found'));
+			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('thread_not_found'));
 			return;
 		}
 
 		// increase the views of the topic
 		$viewed_topics = $input->get_var(
-			BS_COOKIE_PREFIX.'viewed_topics','cookie',PLIB_Input::STRING
+			BS_COOKIE_PREFIX.'viewed_topics','cookie',FWS_Input::STRING
 		);
 		$viewed_topic_ids = $viewed_topics != null ? explode(',',$viewed_topics) : array();
 		$spam_threadview_timeout = $ips->get_timeout('spam_threadview');
@@ -98,14 +98,14 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		{
 			// send 404 for search-engines and such
 			$doc->set_header('HTTP/1.0 404 Not Found','');
-			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('thread_not_found'));
+			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('thread_not_found'));
 			return;
 		}
 
 		// check if the user is allowed to view this topic
 		if(!$auth->has_access_to_intern_forum($fid))
 		{
-			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+			$this->report_error(FWS_Document_Messages::NO_ACCESS);
 			return;
 		}
 
@@ -137,9 +137,9 @@ final class BS_Front_Module_posts extends BS_Front_Module
 			($cfg['display_denied_options'] || $auth->has_global_permission('view_search'));
 		
 		$spagiurl = $purl;
-		if(($hl = $input->get_var(BS_URL_HL,'get',PLIB_Input::STRING)) !== null)
+		if(($hl = $input->get_var(BS_URL_HL,'get',FWS_Input::STRING)) !== null)
 		{
-			$hl = stripslashes(PLIB_StringHelper::htmlspecialchars_back($hl));
+			$hl = stripslashes(FWS_StringHelper::htmlspecialchars_back($hl));
 			$spagiurl .= '&amp;'.BS_URL_HL.'='.urlencode($hl);
 		}
 		
@@ -208,7 +208,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 				'user_name' => $post->get_username(),
 				'user_name_plain' => $post->get_username(false),
 				'an_email_ins' => $post->get_guest_email(),
-				'post_date' => PLIB_Date::get_date($post->get_field('post_time'),true),
+				'post_date' => FWS_Date::get_date($post->get_field('post_time'),true),
 				'main_table_class' => $post->get_css_class('main'),
 				'left_table_class' => $post->get_css_class('left'),
 				'posts_bar_class' => $post->get_css_class('bar'),
@@ -312,12 +312,12 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	 */
 	private function _add_posting_options_top($allow_posts,$fid,$tid,$site)
 	{
-		$user = PLIB_Props::get()->user();
-		$forums = PLIB_Props::get()->forums();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$user = FWS_Props::get()->user();
+		$forums = FWS_Props::get()->forums();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		$site_add = $site != null ? '&amp;'.BS_URL_SITE.'='.$site : '';
 		
@@ -341,11 +341,11 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	 */
 	private function _add_posting_options_bottom($fid,$tid)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
-		$forums = PLIB_Props::get()->forums();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$forums = FWS_Props::get()->forums();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		$display_subscribe = ($cfg['display_denied_options'] || $user->is_loggedin()) &&
@@ -363,13 +363,13 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	 */
 	private function _add_poll()
 	{
-		$input = PLIB_Props::get()->input();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
+		$tpl = FWS_Props::get()->tpl();
 
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 	
 		$user_voted = BS_UserUtils::get_instance()->user_voted_for_poll($topic_data['type']);
@@ -379,7 +379,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$vote_url = $url->get_posts_url($fid,$tid);
 	
 		$show_results = !$user->is_loggedin() ||
-			$input->get_var(BS_URL_MODE,'get',PLIB_Input::STRING) == 'results' || $user_voted ||
+			$input->get_var(BS_URL_MODE,'get',FWS_Input::STRING) == 'results' || $user_voted ||
 			$topic_data['thread_closed'] == 1;
 		
 		$tpl->set_template('inc_poll.htm');
@@ -446,13 +446,13 @@ final class BS_Front_Module_posts extends BS_Front_Module
 			{
 				if($pdata['multichoice'] == 1)
 				{
-					$vote_button =  new PLIB_HTML_Checkbox(
+					$vote_button =  new FWS_HTML_Checkbox(
 						'vote_option[]','vote_'.$i.'_'.$pdata['id'],null,null,'',$pdata['id']
 					);
 				}
 				else
 				{
-					$vote_button = new PLIB_HTML_RadioButtonGroup('vote_option','vote_'.$i,null);
+					$vote_button = new FWS_HTML_RadioButtonGroup('vote_option','vote_'.$i,null);
 					$vote_button->add_option($pdata['id'],'');
 				}
 				$vote_button->set_custom_attribute('onclick','this.checked = !this.checked;');
@@ -485,22 +485,22 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	 */
 	private function _add_event()
 	{
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
 
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 	
 		$event_data = BS_DAO::get_events()->get_by_topic_id($tid);
 		if($event_data['event_end'] == 0)
 			$event_end = 'open';
 		else
-			$event_end = PLIB_Date::get_date($event_data['event_end']);
+			$event_end = FWS_Date::get_date($event_data['event_end']);
 		
 		$tpl->set_template('inc_event.htm');
 		$tpl->add_variables(array(
 			'location' => $event_data['event_location'],
-			'event_begin' => PLIB_Date::get_date($event_data['event_begin']),
+			'event_begin' => FWS_Date::get_date($event_data['event_begin']),
 			'event_end' => $event_end,
 			'description' => nl2br($event_data['description']),
 			'show_announcements' => $event_data['max_announcements'] >= 0
@@ -509,9 +509,9 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		if($event_data['max_announcements'] >= 0)
 		{
 			if($event_data['timeout'] == 0)
-				$timeout = PLIB_Date::get_date($event_data['event_begin']);
+				$timeout = FWS_Date::get_date($event_data['event_begin']);
 			else
-				$timeout = PLIB_Date::get_date($event_data['timeout']);
+				$timeout = FWS_Date::get_date($event_data['timeout']);
 			
 			$event = new BS_Event($event_data);
 			$tpl->add_variables(array(

@@ -19,7 +19,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Location extends PLIB_Object
+final class BS_Location extends FWS_Object
 {
 	/**
 	 * Creates an instance of this class from the current location
@@ -30,17 +30,17 @@ final class BS_Location extends PLIB_Object
 	public static function get_instance()
 	{
 		// cache some properties
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 		
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$action = $input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
+		$action = $input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING);
 	
 		$location = '';
 		if(defined('BS_ACP'))
 		{
-			$loc = $input->get_var('loc','get',PLIB_Input::STRING);
-			$location = 'acp:'.PLIB_FileUtils::get_name($loc,false);
+			$loc = $input->get_var('loc','get',FWS_Input::STRING);
+			$location = 'acp:'.FWS_FileUtils::get_name($loc,false);
 		}
 		else
 		{
@@ -49,7 +49,7 @@ final class BS_Location extends PLIB_Object
 				switch($action)
 				{
 					case 'userdetails':
-						$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+						$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 						if($id != null)
 						{
 							$user = BS_DAO::get_user()->get_user_by_id($id);
@@ -119,11 +119,11 @@ final class BS_Location extends PLIB_Object
 	 */
 	public function decode($enable_links = true)
 	{
-		$locale = PLIB_Props::get()->locale();
-		$forums = PLIB_Props::get()->forums();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$forums = FWS_Props::get()->forums();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$url = FWS_Props::get()->url();
 
 		$parts = explode(':',$this->_location);
 		if(count($parts) < 1)

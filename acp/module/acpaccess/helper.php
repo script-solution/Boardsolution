@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_ACPAccess_Helper extends PLIB_Singleton
+final class BS_ACP_Module_ACPAccess_Helper extends FWS_Singleton
 {
 	/**
 	 * @return BS_ACP_Module_ACPAccess_Helper the instance of this class
@@ -34,7 +34,7 @@ final class BS_ACP_Module_ACPAccess_Helper extends PLIB_Singleton
 	 */
 	public function get_group_options()
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		$options = array();
 		foreach($cache->get_cache('user_groups') as $row)

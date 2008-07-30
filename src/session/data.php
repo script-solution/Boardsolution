@@ -18,7 +18,7 @@
  * @subpackage	src.session
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Session_Data extends PLIB_Session_Data
+final class BS_Session_Data extends FWS_Session_Data
 {
 	/**
 	 * The location of the user
@@ -155,7 +155,7 @@ final class BS_Session_Data extends PLIB_Session_Data
 	public function set_user_group($group)
 	{
 		if(empty($group) || !is_string($group))
-			PLIB_Helper::def_error('notempty','group',$group);
+			FWS_Helper::def_error('notempty','group',$group);
 		
 		$this->_user_group = $group;
 	}
@@ -168,7 +168,7 @@ final class BS_Session_Data extends PLIB_Session_Data
 	public function set_location($location)
 	{
 		if(!is_string($location))
-			PLIB_Helper::def_error('string','location',$location);
+			FWS_Helper::def_error('string','location',$location);
 
 		$this->_has_changed |= $location != $this->_location;
 		$this->_location = $location;
@@ -183,11 +183,11 @@ final class BS_Session_Data extends PLIB_Session_Data
 	 */
 	private function _get_bot_name($agent,$ip)
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		foreach($cache->get_cache('bots') as $bot)
 		{
-			if(PLIB_String::strpos($agent,$bot['bot_match']) !== false)
+			if(FWS_String::strpos($agent,$bot['bot_match']) !== false)
 			{
 				// is a ip-range given?
 				if($bot['bot_ip_start'] != '')

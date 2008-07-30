@@ -17,10 +17,10 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements PLIB_Progress_Listener
+final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements FWS_Progress_Listener
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,7 +28,7 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_MODULE,'module');
@@ -36,11 +36,11 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		if($user->get_session_data('mail_pos') === false)
 		{
@@ -51,8 +51,8 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 			}
 		}
 
-		$storage = new PLIB_Progress_Storage_Session('massemail_');
-		$this->_pm = new PLIB_Progress_Manager($storage);
+		$storage = new FWS_Progress_Storage_Session('massemail_');
+		$this->_pm = new FWS_Progress_Manager($storage);
 		$this->_pm->set_ops_per_cycle(BS_EMAILS_PER_PAGE);
 		$this->_pm->add_listener($this);
 		
@@ -61,7 +61,7 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 	}
 
 	/**
-	 * @see PLIB_Progress_Listener::cycle_finished()
+	 * @see FWS_Progress_Listener::cycle_finished()
 	 *
 	 * @param int $pos
 	 * @param int $total
@@ -72,13 +72,13 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 	}
 
 	/**
-	 * @see PLIB_Progress_Listener::progress_finished()
+	 * @see FWS_Progress_Listener::progress_finished()
 	 */
 	public function progress_finished()
 	{
-		$user = PLIB_Props::get()->user();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
 
 		$error_msgs = $user->get_session_data('mail_errors');
 		if(count($error_msgs) > 0)
@@ -102,10 +102,10 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 	 */
 	private function _populate_template()
 	{
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		$total = $user->get_session_data('mail_total');
 		$success = $user->get_session_data('mail_send_success');
@@ -126,21 +126,21 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 	 */
 	private function _transfer_to_session()
 	{
-		$user = PLIB_Props::get()->user();
-		$input = PLIB_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$input = FWS_Props::get()->input();
 
 		$receiver = BS_ACP_Module_MassEmail_Helper::get_instance()->get_receiver();
 		if(count($receiver['groups']) == 0 && count($receiver['user']) == 0)
 			return false;
 
 		$user->set_session_data(
-			'mail_subject',$input->get_var('subject','post',PLIB_Input::STRING)
+			'mail_subject',$input->get_var('subject','post',FWS_Input::STRING)
 		);
 		$user->set_session_data(
 			'mail_text',BS_ACP_Module_MassEmail_Helper::get_instance()->get_mail_text()
 		);
 		$user->set_session_data(
-			'mail_content_type',$input->get_var('content_type','post',PLIB_Input::STRING)
+			'mail_content_type',$input->get_var('content_type','post',FWS_Input::STRING)
 		);
 		$user->set_session_data('mail_groups',$receiver['groups']);
 		$user->set_session_data('mail_user',$receiver['user']);

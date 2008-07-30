@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_Config_View_Default extends PLIB_Object implements PLIB_Config_View
+final class BS_ACP_Module_Config_View_Default extends FWS_Object implements FWS_Config_View
 {
 	/**
 	 * The items for the template
@@ -57,7 +57,7 @@ final class BS_ACP_Module_Config_View_Default extends PLIB_Object implements PLI
 		parent::__construct();
 		
 		if(!in_array($mode,array('default','search')))
-			PLIB_Helper::def_error('inarray','mode',array('default','search'),$mode);
+			FWS_Helper::def_error('inarray','mode',array('default','search'),$mode);
 		
 		$this->_mode = $mode;
 		$this->_form = new BS_HTML_Formular();
@@ -80,13 +80,13 @@ final class BS_ACP_Module_Config_View_Default extends PLIB_Object implements PLI
 	}
 	
 	/**
-	 * @see PLIB_Config_View::begin_group()
+	 * @see FWS_Config_View::begin_group()
 	 *
 	 * @param int $id
 	 */
 	public function begin_group($item,$group)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		// ignore the group for the first entry
 		if($this->_mode != 'search' && count($this->_items) <= 1)
@@ -121,13 +121,13 @@ final class BS_ACP_Module_Config_View_Default extends PLIB_Object implements PLI
 	}
 
 	/**
-	 * @see PLIB_Config_View::show_item()
+	 * @see FWS_Config_View::show_item()
 	 *
-	 * @param PLIB_Config_Item $item
+	 * @param FWS_Config_Item $item
 	 */
 	public function show_item($item)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$data = $item->get_data();
 		if(!isset($this->_items[$data->get_id()]))

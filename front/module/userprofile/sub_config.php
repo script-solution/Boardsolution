@@ -20,7 +20,7 @@
 final class BS_Front_SubModule_userprofile_config extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_Front_SubModule_userprofile_config extends BS_Front_SubModule
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_EDIT_PERS_CONFIG,'updateconfig');
@@ -41,16 +41,16 @@ final class BS_Front_SubModule_userprofile_config extends BS_Front_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
-		$cache = PLIB_Props::get()->cache();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
+		$cache = FWS_Props::get()->cache();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
 
 		$this->request_formular(false);
 		
@@ -141,7 +141,7 @@ final class BS_Front_SubModule_userprofile_config extends BS_Front_SubModule
 			'def_attach_signature' => $user->get_profile_val('attach_signature'),
 			'bbcode_mode_options' => $bbcode_mode_options,
 			'def_bbcode_mode' => $user->get_profile_val('bbcode_mode'),
-			'current_time' => PLIB_Date::get_date(time(),true,false),
+			'current_time' => FWS_Date::get_date(time(),true,false),
 			'enable_email_notification' => $cfg['enable_email_notification'],
 			'allow_board_emails' => $cfg['enable_emails'],
 			'enable_signatures' => $cfg['enable_signatures'],

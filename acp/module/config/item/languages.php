@@ -18,11 +18,11 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Config_Item_Languages extends PLIB_Config_Item_Default
+final class BS_ACP_Config_Item_Languages extends FWS_Config_Item_Default
 {
 	public function get_control($form)
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		$langs = array();
 		foreach($cache->get_cache('languages') as $data)
@@ -35,9 +35,9 @@ final class BS_ACP_Config_Item_Languages extends PLIB_Config_Item_Default
 
 	public function get_value()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
-		return $input->get_var($this->_data->get_name(),'post',PLIB_Input::ID);
+		return $input->get_var($this->_data->get_name(),'post',FWS_Input::ID);
 	}
 }
 ?>

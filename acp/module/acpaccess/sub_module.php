@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_acpaccess_module extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,14 +28,14 @@ final class BS_ACP_SubModule_acpaccess_module extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_MODULE,'module');
 
-		$module = $input->get_var('module','get',PLIB_Input::STRING);
+		$module = $input->get_var('module','get',FWS_Input::STRING);
 		$renderer->add_breadcrumb(
 			$locale->lang('edit_permissions_for_module'),
 			$url->get_acpmod_url(0,'&amp;action=module&amp;module='.$module)
@@ -43,16 +43,16 @@ final class BS_ACP_SubModule_acpaccess_module extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
 
-		$module = $input->get_var('module','get',PLIB_Input::STRING);
+		$module = $input->get_var('module','get',FWS_Input::STRING);
 		if(BS_ACP_Module_ACPAccess_Helper::get_instance()->get_module_name($module) === '')
 		{
 			$this->report_error();
@@ -70,11 +70,11 @@ final class BS_ACP_SubModule_acpaccess_module extends BS_ACP_SubModule
 				$groups[] = $data['access_value'];
 		}
 		
-		$groupcombo = new PLIB_HTML_ComboBox('groups[]','groups',$groups,null,count($options),true);
+		$groupcombo = new FWS_HTML_ComboBox('groups[]','groups',$groups,null,count($options),true);
 		$groupcombo->set_options($options);
 		$groupcombo->set_css_attribute('width','100%');
 		
-		$usercombo = new PLIB_HTML_ComboBox('user_intern','user_intern',array(),null,5,true);
+		$usercombo = new FWS_HTML_ComboBox('user_intern','user_intern',array(),null,5,true);
 		$usercombo->set_options($user);
 		$usercombo->set_css_attribute('width','100%');
 

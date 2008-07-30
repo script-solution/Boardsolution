@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_PMs extends PLIB_Singleton
+class BS_DAO_PMs extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_PMs the instance of this class
@@ -36,7 +36,7 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function get_count()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(BS_TB_PMS,'id','');
 	}
@@ -50,10 +50,10 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function get_count_in_folder($folder,$user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$user_field = $folder == 'inbox' ? 'receiver_id' : 'sender_id';
 		return $db->sql_num(
@@ -69,10 +69,10 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function get_unread_pms_count($user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		return $db->sql_num(
 			BS_TB_PMS,'id',' WHERE receiver_id = '.$user_id." AND pm_type = 'inbox' AND pm_read = 0"
@@ -87,10 +87,10 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function get_by_id($id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$row = $db->sql_fetch(
 			'SELECT * FROM '.BS_TB_PMS.' WHERE id = '.$id
@@ -111,12 +111,12 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function get_pm_details($id,$userid)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
-		if(!PLIB_Helper::is_integer($userid) || $userid <= 0)
-			PLIB_Helper::def_error('intgt0','userid',$userid);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($userid) || $userid <= 0)
+			FWS_Helper::def_error('intgt0','userid',$userid);
 		
 		$row = $db->sql_fetch(
 			'SELECT p.*,u.`'.BS_EXPORT_USER_NAME.'` sender_name,
@@ -152,12 +152,12 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function get_list($sort = 'id',$order = 'ASC',$start = 0,$count = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_PMS.'
@@ -176,12 +176,12 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function get_pm_in_folder($id,$folder,$user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$user_field = $folder == 'inbox' ? 'receiver_id' : 'sender_id';
 		$other_user_field = $folder == 'inbox' ? 'sender_id' : 'receiver_id';
@@ -209,14 +209,14 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function get_pms_in_folder($folder,$user_id,$start = 0,$count = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		$uid_field = $folder == 'inbox' ? 'receiver_id' : 'sender_id';
 		$other_uid_field = $folder == 'inbox' ? 'sender_id' : 'receiver_id';
@@ -246,16 +246,16 @@ class BS_DAO_PMs extends PLIB_Singleton
 	public function get_pms_of_user_by_ids($userid,$ids,$sort = 'id',$order = 'ASC',$start = 0,
 		$count = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($userid) || $userid <= 0)
-			PLIB_Helper::def_error('intgt0','userid',$userid);
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($userid) || $userid <= 0)
+			FWS_Helper::def_error('intgt0','userid',$userid);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		return $db->sql_rows(
 			'SELECT p.*,u.`'.BS_EXPORT_USER_NAME.'` user_name,pr.user_group
@@ -279,10 +279,10 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function get_pm_ids_by_search($user_id,$where)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$rows = $db->sql_rows(
 			'SELECT p.id
@@ -310,14 +310,14 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function get_last_pms_with_user($uid1,$uid2,$number = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($uid1) || $uid1 <= 0)
-			PLIB_Helper::def_error('intgt0','uid1',$uid1);
-		if(!PLIB_Helper::is_integer($uid2) || $uid2 <= 0)
-			PLIB_Helper::def_error('intgt0','uid2',$uid2);
-		if(!PLIB_Helper::is_integer($number) || $number < 0)
-			PLIB_Helper::def_error('intge0','number',$number);
+		if(!FWS_Helper::is_integer($uid1) || $uid1 <= 0)
+			FWS_Helper::def_error('intgt0','uid1',$uid1);
+		if(!FWS_Helper::is_integer($uid2) || $uid2 <= 0)
+			FWS_Helper::def_error('intgt0','uid2',$uid2);
+		if(!FWS_Helper::is_integer($number) || $number < 0)
+			FWS_Helper::def_error('intge0','number',$number);
 		
 		return $db->sql_rows(
 			'SELECT p.*,u.`'.BS_EXPORT_USER_NAME.'` sender_name,pr.user_group
@@ -364,7 +364,7 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function get_invalid_pm_ids()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT id FROM '.BS_TB_PMS.' WHERE pm_text = "" AND pm_text_posted != ""'
@@ -379,7 +379,7 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function create($fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$db->sql_insert(BS_TB_PMS,$fields);
 		return $db->get_last_insert_id();
@@ -394,12 +394,12 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function set_attachment_count($id,$count)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		$db->sql_update(BS_TB_PMS,'WHERE id = '.$id,array('attachment_count' => $count));
 		return $db->get_affected_rows();
@@ -415,12 +415,12 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function set_read_flag($ids,$user_id,$flag)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$db->sql_update(
 			BS_TB_PMS,
@@ -440,10 +440,10 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function update_text($id,$text,$text_posted)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_update(BS_TB_PMS,'WHERE id = '.$id,array(
 			'pm_text' => $text,
@@ -461,12 +461,12 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function delete_pms_of_user($ids,$user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_PMS.' WHERE id IN ('.implode(',',$ids).') AND
@@ -484,10 +484,10 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	public function delete_by_user_ids($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_PMS.'
@@ -508,12 +508,12 @@ class BS_DAO_PMs extends PLIB_Singleton
 	 */
 	protected function get_np_pm_id_of_user($pm_id,$user_id,$folder = 'inbox',$op = '>')
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($pm_id) || $pm_id <= 0)
-			PLIB_Helper::def_error('intgt0','pm_id',$pm_id);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($pm_id) || $pm_id <= 0)
+			FWS_Helper::def_error('intgt0','pm_id',$pm_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		if($folder == 'inbox')
 			$where = 'receiver_id = '.$user_id.' AND pm_type = "inbox"';

@@ -7,16 +7,16 @@ var quotedPosts = new Array();
  */
 function toggleQuote(postId)
 {
-	var link = PLIB_getElement('quote_link_' + postId);
+	var link = FWS_getElement('quote_link_' + postId);
 	if(quotedPosts.contains(postId))
 	{
-		PLIB_removeClassName(link,'bs_button_selected');
+		FWS_removeClassName(link,'bs_button_selected');
 		quotedPosts.removeEntry(postId);
 		link.innerHTML = link.innerHTML.substr(0,link.innerHTML.length - 1) + '+';
 	}
 	else
 	{
-		PLIB_addClassName(link,'bs_button_selected');
+		FWS_addClassName(link,'bs_button_selected');
 		quotedPosts.push(postId);
 		link.innerHTML = link.innerHTML.substr(0,link.innerHTML.length - 1) + '-';
 	}

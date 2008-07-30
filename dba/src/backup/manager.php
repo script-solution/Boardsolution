@@ -17,7 +17,7 @@
  * @subpackage	dba.src.backup
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DBA_Backup_Manager extends PLIB_Object
+final class BS_DBA_Backup_Manager extends FWS_Object
 {
 	/**
 	 * The file which contains the backups
@@ -84,15 +84,15 @@ final class BS_DBA_Backup_Manager extends PLIB_Object
 		{
 			if($backup->prefix == $prefix)
 			{
-				if($dir = opendir(PLIB_Path::server_app().'dba/backups'))
+				if($dir = opendir(FWS_Path::server_app().'dba/backups'))
 				{
 					while($file = readdir($dir))
 					{
 						if($file != '.' && $file != '..')
 						{
-							if(PLIB_FileUtils::get_extension($file) == 'sql' &&
-									PLIB_String::starts_with($file,$prefix))
-								@unlink(PLIB_Path::server_app().'dba/backups/'.$file);
+							if(FWS_FileUtils::get_extension($file) == 'sql' &&
+									FWS_String::starts_with($file,$prefix))
+								@unlink(FWS_Path::server_app().'dba/backups/'.$file);
 						}
 					}
 					closedir($dir);
@@ -140,8 +140,8 @@ final class BS_DBA_Backup_Manager extends PLIB_Object
 			$str .= BS_DBA_LINE_WRAP;
 		}
 		
-		$file = PLIB_Path::server_app().'dba/backups/backups.txt';
-		$res = PLIB_FileUtils::write($file,$str);
+		$file = FWS_Path::server_app().'dba/backups/backups.txt';
+		$res = FWS_FileUtils::write($file,$str);
 		@chmod($file,0666);
 		return $res;
 	}

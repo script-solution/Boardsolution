@@ -18,7 +18,7 @@
  * @subpackage	src.session
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Session_Manager extends PLIB_Session_Manager
+final class BS_Session_Manager extends FWS_Session_Manager
 {
 	/**
 	 * Constructor
@@ -29,14 +29,14 @@ final class BS_Session_Manager extends PLIB_Session_Manager
 	}
 	
   /**
-   * @param PLIB_Session_Data $user
+   * @param FWS_Session_Data $user
    * @param string $currentsid
    */
   protected function check_online_timeout($user,$currentsid)
   {
   	// We want to treat acp-users different from frontend-users
   	$loc = $user->get_location();
-  	$timeout = PLIB_String::starts_with($loc,'acp:') ? BS_ACP_ONLINE_TIMEOUT : BS_ONLINE_TIMEOUT;
+  	$timeout = FWS_String::starts_with($loc,'acp:') ? BS_ACP_ONLINE_TIMEOUT : BS_ONLINE_TIMEOUT;
   	return $user->get_date() < (time() - $timeout) && $user->get_session_id() != $currentsid;
   }
 	
@@ -82,7 +82,7 @@ final class BS_Session_Manager extends PLIB_Session_Manager
 	 */
 	public function get_user_at_location($location = 'forums',$id = -1,$hide_duplicates = true)
 	{
-		$forums = PLIB_Props::get()->forums();
+		$forums = FWS_Props::get()->forums();
 
 		$bots = array();
 		$user = array();
@@ -92,7 +92,7 @@ final class BS_Session_Manager extends PLIB_Session_Manager
 			/* @var $u BS_Session_Data */
 			
 			// skip admin-locations in the board
-			if($location != 'all' && PLIB_String::substr($u->get_location(),0,4) == 'acp:')
+			if($location != 'all' && FWS_String::substr($u->get_location(),0,4) == 'acp:')
 				continue;
 			
 			$add = false;
@@ -204,8 +204,8 @@ final class BS_Session_Manager extends PLIB_Session_Manager
 	 */
 	public function get_last_login()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
 
 		// at first we look in the session-table (sorted by date descending)
 		$last = null;

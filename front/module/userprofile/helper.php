@@ -17,7 +17,7 @@
  * @subpackage	front.modules
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Module_UserProfile_Helper extends PLIB_Singleton
+final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 {
 	/**
 	 * @return BS_Front_Module_UserProfile_Helper the instance of this class
@@ -57,32 +57,32 @@ final class BS_Front_Module_UserProfile_Helper extends PLIB_Singleton
 	 */
 	public function add_pm_delete_message($back_url = null)
 	{
-		$input = PLIB_Props::get()->input();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
+		$input = FWS_Props::get()->input();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
 
-		$loc = $input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING);
+		$loc = $input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
 		if($loc == 'pminbox' || $loc == 'pmoutbox' || $loc == 'pmoverview' || $loc == 'pmsearch')
 		{
 			$delete = $input->get_var('delete','post');
 			if($delete == null)
 			{
-				$delstr = $input->get_var(BS_URL_DEL,'get',PLIB_Input::STRING);
-				$delete = PLIB_Array_Utils::advanced_explode(',',$delstr);
+				$delstr = $input->get_var(BS_URL_DEL,'get',FWS_Input::STRING);
+				$delete = FWS_Array_Utils::advanced_explode(',',$delstr);
 			}
 	
-			$operation = $input->get_var('operation','post',PLIB_Input::STRING);
+			$operation = $input->get_var('operation','post',FWS_Input::STRING);
 			if($operation == null)
-				$operation = $input->get_var(BS_URL_MODE,'get',PLIB_Input::STRING);
+				$operation = $input->get_var(BS_URL_MODE,'get',FWS_Input::STRING);
 	
-			if($operation == 'delete' && $delete != null && PLIB_Array_Utils::is_integer($delete))
+			if($operation == 'delete' && $delete != null && FWS_Array_Utils::is_integer($delete))
 			{
 				$add = '';
 				if($back_url === null)
 				{
-					$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+					$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 					$site_param = '&amp;'.BS_URL_SITE.'='.$site;
 					$back_url = $url->get_url(0,'&amp;'.BS_URL_LOC.'='.$loc.$site_param);
 				}
@@ -92,10 +92,10 @@ final class BS_Front_Module_UserProfile_Helper extends PLIB_Singleton
 				$names = array();
 				foreach(BS_DAO::get_pms()->get_pms_of_user_by_ids($user->get_user_id(),$delete) as $data)
 					$names[] = $data['pm_title'];
-				$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
+				$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 				
-				$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
-				$loc = $input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING);
+				$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
+				$loc = $input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
 				
 				$site_param = '&amp;'.BS_URL_SITE.'='.$site;
 				$action_param = '&amp;'.BS_URL_AT.'='.BS_ACTION_DELETE_PMS.'&amp;';
@@ -125,12 +125,12 @@ final class BS_Front_Module_UserProfile_Helper extends PLIB_Singleton
 	 */
 	public function add_folder($type = 'inbox',$mode = 'overview')
 	{
-		$user = PLIB_Props::get()->user();
-		$tpl = PLIB_Props::get()->tpl();
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$url = PLIB_Props::get()->url();
+		$user = FWS_Props::get()->user();
+		$tpl = FWS_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$url = FWS_Props::get()->url();
 
 		$img_pm_read = $user->get_theme_item_path('images/unread/pm_read.gif');
 		$img_pm_unread = $user->get_theme_item_path('images/unread/pm_unread.gif');
@@ -151,8 +151,8 @@ final class BS_Front_Module_UserProfile_Helper extends PLIB_Singleton
 
 		$tpl->set_template('userprofile_pm'.$type.'.htm');
 
-		$loc = $input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING);
-		$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+		$loc = $input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
+		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 
 		$pmlist = BS_DAO::get_pms()->get_pms_in_folder(
 			$type,$user->get_user_id(),$pagination->get_start(),$end
@@ -210,10 +210,10 @@ final class BS_Front_Module_UserProfile_Helper extends PLIB_Singleton
 		{
 			$title = $data['pm_title'];
 			$complete_title = '';
-			if(PLIB_String::strlen($title) > BS_MAX_PM_TITLE_LEN)
+			if(FWS_String::strlen($title) > BS_MAX_PM_TITLE_LEN)
 			{
 				$complete_title = $title;
-				$title = PLIB_String::substr($title,0,BS_MAX_PM_TITLE_LEN) . ' ...';
+				$title = FWS_String::substr($title,0,BS_MAX_PM_TITLE_LEN) . ' ...';
 			}
 
 			if($data['user_name'] != '')
@@ -252,7 +252,7 @@ final class BS_Front_Module_UserProfile_Helper extends PLIB_Singleton
 				'prefix' => $functions->get_pm_attachment_prefix($data['attachment_count']),
 				'pm_title' => $title,
 				'complete_title' => $complete_title,
-				'date' => PLIB_Date::get_date($data['pm_date']),
+				'date' => FWS_Date::get_date($data['pm_date']),
 				'details_link' => $url->get_url('userprofile','&amp;'.BS_URL_LOC.'=pmdetails&amp;'.BS_URL_ID.'='.$data['id']),
 				'status_title' => $status_title,
 				'status_picture' => $status_picture,
@@ -287,8 +287,8 @@ final class BS_Front_Module_UserProfile_Helper extends PLIB_Singleton
 	 */
 	public function get_pm_permission()
 	{
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
 
 		if($this->_pms_perm == 0)
 		{
@@ -308,7 +308,7 @@ final class BS_Front_Module_UserProfile_Helper extends PLIB_Singleton
 	 */
 	public function get_inbox_num()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		if($this->_inbox_num == -1)
 			$this->_inbox_num = BS_DAO::get_pms()->get_count_in_folder('inbox',$user->get_user_id());
@@ -321,7 +321,7 @@ final class BS_Front_Module_UserProfile_Helper extends PLIB_Singleton
 	 */
 	public function get_outbox_num()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		if($this->_outbox_num == -1)
 			$this->_outbox_num = BS_DAO::get_pms()->get_count_in_folder('outbox',$user->get_user_id());

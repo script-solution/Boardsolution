@@ -21,8 +21,8 @@ final class BS_ACP_Action_banlist_add extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
 		BS_DAO::get_bans()->create();
 		$cache->refresh('banlist');

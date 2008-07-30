@@ -28,7 +28,7 @@ final class BS_ACP_Module_bbcode extends BS_ACP_SubModuleContainer
 	}
 
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -36,8 +36,8 @@ final class BS_ACP_Module_bbcode extends BS_ACP_SubModuleContainer
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 
 		$renderer->add_breadcrumb($locale->lang('acpmod_bbcode'),$url->get_acpmod_url());

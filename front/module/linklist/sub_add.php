@@ -20,7 +20,7 @@
 final class BS_Front_SubModule_linklist_add extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_Front_SubModule_linklist_add extends BS_Front_SubModule
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_ADD_LINK,'addlink');
@@ -41,19 +41,19 @@ final class BS_Front_SubModule_linklist_add extends BS_Front_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$auth = PLIB_Props::get()->auth();
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$auth = FWS_Props::get()->auth();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		if(!$auth->has_global_permission('add_new_link'))
 		{
-			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+			$this->report_error(FWS_Document_Messages::NO_ACCESS);
 			return;
 		}
 		

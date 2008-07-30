@@ -20,7 +20,7 @@
 final class BS_Front_Module_faq extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,9 +28,9 @@ final class BS_Front_Module_faq extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$cfg = PLIB_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($cfg['enable_faq'] == 1);
@@ -38,16 +38,16 @@ final class BS_Front_Module_faq extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$tpl = PLIB_Props::get()->tpl();
-		$cache = PLIB_Props::get()->cache();
-		$functions = PLIB_Props::get()->functions();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
+		$cache = FWS_Props::get()->cache();
+		$functions = FWS_Props::get()->functions();
+		$url = FWS_Props::get()->url();
 
 		$locale->add_language_file('faq');
 

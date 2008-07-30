@@ -20,16 +20,16 @@
 final class BS_Front_Module_memberlist extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
 	public function init($doc)
 	{
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($cfg['enable_memberlist'] == 1 &&
@@ -38,55 +38,55 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$functions = PLIB_Props::get()->functions();
-		$cfg = PLIB_Props::get()->cfg();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
-		$auth = PLIB_Props::get()->auth();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$functions = FWS_Props::get()->functions();
+		$cfg = FWS_Props::get()->cfg();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
+		$auth = FWS_Props::get()->auth();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		// change search-display-state?
-		if($input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING) == 'clapsearch')
+		if($input->get_var(BS_URL_LOC,'get',FWS_Input::STRING) == 'clapsearch')
 			$functions->clap_area('memberlist_search');
 
 		$allowed_order_vals = array('name','lastlogin','posts','user_group','register');
 		$order = $input->correct_var(
-			BS_URL_ORDER,'get',PLIB_Input::STRING,$allowed_order_vals,'register'
+			BS_URL_ORDER,'get',FWS_Input::STRING,$allowed_order_vals,'register'
 		);
 		
-		$ad = $input->correct_var(BS_URL_AD,'get',PLIB_Input::STRING,array('ASC','DESC'),'DESC');
+		$ad = $input->correct_var(BS_URL_AD,'get',FWS_Input::STRING,array('ASC','DESC'),'DESC');
 		
 		$allowed_limit_vals = array(5,10,15,30,50,$cfg['members_per_page']);
 		$limit = $input->correct_var(
-			BS_URL_LIMIT,'get',PLIB_Input::INTEGER,$allowed_limit_vals,$cfg['members_per_page']
+			BS_URL_LIMIT,'get',FWS_Input::INTEGER,$allowed_limit_vals,$cfg['members_per_page']
 		);
 
-		$s_name = $input->get_var(BS_URL_MS_NAME,'get',PLIB_Input::STRING);
-		$s_email = $input->get_var(BS_URL_MS_EMAIL,'get',PLIB_Input::STRING);
+		$s_name = $input->get_var(BS_URL_MS_NAME,'get',FWS_Input::STRING);
+		$s_email = $input->get_var(BS_URL_MS_EMAIL,'get',FWS_Input::STRING);
 		$s_group = $input->get_var(BS_URL_MS_GROUP,'get');
-		$s_from_posts = $input->get_var(BS_URL_MS_FROM_POSTS,'get',PLIB_Input::INTEGER);
-		$s_to_posts = $input->get_var(BS_URL_MS_TO_POSTS,'get',PLIB_Input::INTEGER);
-		$s_from_points = $input->get_var(BS_URL_MS_FROM_POINTS,'get',PLIB_Input::INTEGER);
-		$s_to_points = $input->get_var(BS_URL_MS_TO_POINTS,'get',PLIB_Input::INTEGER);
-		$s_from_reg = PLIB_StringHelper::get_clean_date(
-			$input->get_var(BS_URL_MS_FROM_REG,'get',PLIB_Input::STRING)
+		$s_from_posts = $input->get_var(BS_URL_MS_FROM_POSTS,'get',FWS_Input::INTEGER);
+		$s_to_posts = $input->get_var(BS_URL_MS_TO_POSTS,'get',FWS_Input::INTEGER);
+		$s_from_points = $input->get_var(BS_URL_MS_FROM_POINTS,'get',FWS_Input::INTEGER);
+		$s_to_points = $input->get_var(BS_URL_MS_TO_POINTS,'get',FWS_Input::INTEGER);
+		$s_from_reg = FWS_StringHelper::get_clean_date(
+			$input->get_var(BS_URL_MS_FROM_REG,'get',FWS_Input::STRING)
 		);
-		$s_to_reg = PLIB_StringHelper::get_clean_date(
-			$input->get_var(BS_URL_MS_TO_REG,'get',PLIB_Input::STRING)
+		$s_to_reg = FWS_StringHelper::get_clean_date(
+			$input->get_var(BS_URL_MS_TO_REG,'get',FWS_Input::STRING)
 		);
-		$s_from_lastlogin = PLIB_StringHelper::get_clean_date(
-			$input->get_var(BS_URL_MS_FROM_LASTLOGIN,'get',PLIB_Input::STRING)
+		$s_from_lastlogin = FWS_StringHelper::get_clean_date(
+			$input->get_var(BS_URL_MS_FROM_LASTLOGIN,'get',FWS_Input::STRING)
 		);
-		$s_to_lastlogin = PLIB_StringHelper::get_clean_date(
-			$input->get_var(BS_URL_MS_TO_LASTLOGIN,'get',PLIB_Input::STRING)
+		$s_to_lastlogin = FWS_StringHelper::get_clean_date(
+			$input->get_var(BS_URL_MS_TO_LASTLOGIN,'get',FWS_Input::STRING)
 		);
-		$s_mods = $input->get_var(BS_URL_MS_MODS,'get',PLIB_Input::INT_BOOL);
+		$s_mods = $input->get_var(BS_URL_MS_MODS,'get',FWS_Input::INT_BOOL);
 		
 		// build the URL
 		$baseurl = $url->get_url('memberlist','&amp;');
@@ -123,7 +123,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 			$where .= ' AND u.`'.BS_EXPORT_USER_EMAIL."` LIKE '%".str_replace('*','%',$s_email)."%'";
 		}
 
-		if($s_group != null && PLIB_Array_Utils::is_integer($s_group) && count($s_group) > 0)
+		if($s_group != null && FWS_Array_Utils::is_integer($s_group) && count($s_group) > 0)
 		{
 			$c = 0;
 			$where .= ' AND (';
@@ -141,11 +141,11 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 			
 			if($c > 0)
 			{
-				$where = PLIB_String::substr($where,0,-4);
+				$where = FWS_String::substr($where,0,-4);
 				$where .= ')';
 			}
 			else
-				$where = PLIB_String::substr($where,0,-6);
+				$where = FWS_String::substr($where,0,-6);
 		}
 		// in this case we don't want to find any user
 		else if($s_group != null)
@@ -177,18 +177,18 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 			
 			if($c > 0)
 			{
-				$where = PLIB_String::substr($where,0,-4);
+				$where = FWS_String::substr($where,0,-4);
 				$where .= ')';
 			}
 			else
-				$where = PLIB_String::substr($where,0,-6);
+				$where = FWS_String::substr($where,0,-6);
 		}
 		
-		$where .= PLIB_StringHelper::build_int_range_sql('p.posts',$s_from_posts,$s_to_posts);
-		$where .= PLIB_StringHelper::build_int_range_sql('p.exppoints',$s_from_points,$s_to_points);
+		$where .= FWS_StringHelper::build_int_range_sql('p.posts',$s_from_posts,$s_to_posts);
+		$where .= FWS_StringHelper::build_int_range_sql('p.exppoints',$s_from_points,$s_to_points);
 
-		$where .= PLIB_StringHelper::build_date_range_sql('p.registerdate',$s_from_reg,$s_to_reg);
-		$where .= PLIB_StringHelper::build_date_range_sql('p.lastlogin',$s_from_lastlogin,$s_to_lastlogin);
+		$where .= FWS_StringHelper::build_date_range_sql('p.registerdate',$s_from_reg,$s_to_reg);
+		$where .= FWS_StringHelper::build_date_range_sql('p.lastlogin',$s_from_lastlogin,$s_to_lastlogin);
 
 		// check how many entries exist
 		$num = BS_DAO::get_user()->get_custom_search_user_count($where);
@@ -241,13 +241,13 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 					
 					if($data['email_display_mode'] == 'jumble')
 					{
-						$lhs = new PLIB_HTML_LimitedString($user_email,25);
+						$lhs = new FWS_HTML_LimitedString($user_email,25);
 						$email = '<span title="'.strip_tags($user_email).'">';
 						$email .= $lhs->get().'</span>';
 					}
 					else if($data['email_display_mode'] == 'default')
 					{
-						$lhs = new PLIB_HTML_LimitedString($user_email,25);
+						$lhs = new FWS_HTML_LimitedString($user_email,25);
 						$email = '<span title="'.$data['user_email'].'">'.$lhs->get().'</span>';
 					}
 					else
@@ -255,7 +255,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 				}
 
 				if($data['lastlogin'] != 0)
-					$lastlogin = PLIB_Date::get_date($data['lastlogin']);
+					$lastlogin = FWS_Date::get_date($data['lastlogin']);
 				else
 					$lastlogin = $locale->lang('notavailable');
 				
@@ -269,7 +269,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 					'email' => $email,
 					'posts' => $data['posts'],
 					'lastlogin' => $lastlogin,
-					'register_date' => PLIB_Date::get_date($data['registerdate']),
+					'register_date' => FWS_Date::get_date($data['registerdate']),
 					'user_group' => $auth->get_groupname((int)$data['user_group']),
 					'send_pm_title' => sprintf($locale->lang('send_pm_to_user'),$data['user_name'])
 				);
@@ -333,7 +333,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 			'clap_image' => $clap_data['link'],
 			'search_row_params' => $clap_data['divparams'],
 			'hidden_fields' => $hidden_fields,
-			'search_target' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'search_target' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'name_param' => BS_URL_MS_NAME,
 			'email_param' => BS_URL_MS_EMAIL,
 			'group_param' => BS_URL_MS_GROUP,

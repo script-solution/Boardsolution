@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -35,34 +35,34 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
-		$cache = PLIB_Props::get()->cache();
-		$auth = PLIB_Props::get()->auth();
-		$user = PLIB_Props::get()->user();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$cache = FWS_Props::get()->cache();
+		$auth = FWS_Props::get()->auth();
+		$user = FWS_Props::get()->user();
+		$url = FWS_Props::get()->url();
 
 		// reset search?
-		if($input->get_var('reset','get',PLIB_Input::INTEGER) == 1)
+		if($input->get_var('reset','get',FWS_Input::INTEGER) == 1)
 		{
 			$user->delete_session_data('user_search_ids');
 			$user->delete_session_data('user_search_params');
 		}
 		
 		// show delete-message
-		$type = $input->get_var('action_type','post',PLIB_Input::STRING);
+		$type = $input->get_var('action_type','post',FWS_Input::STRING);
 		if(($delete = $input->get_var('delete','post')) != null && $type != 'none')
 		{
 			// grab get-parameter
-			$site = $input->get_var('site','get',PLIB_Input::INTEGER);
-			$order = $input->get_var('order','get',PLIB_Input::STRING);
-			$ad = $input->get_var('ad','get',PLIB_Input::STRING);
+			$site = $input->get_var('site','get',FWS_Input::INTEGER);
+			$order = $input->get_var('order','get',FWS_Input::STRING);
+			$ad = $input->get_var('ad','get',FWS_Input::STRING);
 			
 			$ids = implode(',',$delete);
 			$base_url = $url->get_acpmod_url(0,'&order='.$order.'&ad='.$ad.'&site='.$site,'&');
@@ -87,14 +87,14 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 			$names = array();
 			foreach(BS_DAO::get_user()->get_users_by_ids($delete,1,-1) as $data)
 				$names[] = $data['user_name'];
-			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
+			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
 			$functions->add_delete_message(sprintf($message,$namelist),$yes_url,$no_url);
 		}
 		
 		$order_vals = array('user','experience','group','blocked','regdate');
-		$order = $input->correct_var('order','get',PLIB_Input::STRING,$order_vals,'experience');
-		$ad = $input->correct_var('ad','get',PLIB_Input::STRING,array('ASC','DESC'),'DESC');
+		$order = $input->correct_var('order','get',FWS_Input::STRING,$order_vals,'experience');
+		$ad = $input->correct_var('ad','get',FWS_Input::STRING,array('ASC','DESC'),'DESC');
 		
 		$ids = $user->get_session_data('user_search_ids');
 		
@@ -105,7 +105,7 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 		));
 		
 		// use the ids or show all?
-		if($ids === false || !PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
+		if($ids === false || !FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			$ids = false;
 		
 		switch($order)
@@ -147,7 +147,7 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$site = $input->get_var('site','get',PLIB_Input::INTEGER);
+		$site = $input->get_var('site','get',FWS_Input::INTEGER);
 		$baseurl = $url->get_acpmod_url(0);
 		
 		$ad_images = '<a href="'.$baseurl.'&amp;order='.$order.'&amp;ad=ASC">';
@@ -192,7 +192,7 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 			);
 			
 			$users[] = array(
-				'register_date' => PLIB_Date::get_date($data['registerdate'],false),
+				'register_date' => FWS_Date::get_date($data['registerdate'],false),
 				'user_experience' => $user_experience,
 				'group_combo' => $auth->get_usergroup_list($data['user_group'],false,false,true),
 				'edit_url' => $edit_url,

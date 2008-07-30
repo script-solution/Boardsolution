@@ -21,12 +21,12 @@ final class BS_ACP_Action_usergroups_delete extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
-		$id_str = $input->get_var('ids','get',PLIB_Input::STRING);
-		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
+		$id_str = $input->get_var('ids','get',FWS_Input::STRING);
+		if(!($ids = FWS_StringHelper::get_ids($id_str)))
 			return 'Got an invalid id-string via GET';
 		
 		// remove admins, guests and users
@@ -35,7 +35,7 @@ final class BS_ACP_Action_usergroups_delete extends BS_ACP_Action_Base
 		// update the user-group
 		foreach(BS_DAO::get_profile()->get_users_by_groups($ids) as $data)
 		{
-			$groups = PLIB_Array_Utils::advanced_explode(',',$data['user_group']);
+			$groups = FWS_Array_Utils::advanced_explode(',',$data['user_group']);
 			// remove all groups to remove from the groups of this user
 			$new_groups = array_diff($groups,$ids);
 			

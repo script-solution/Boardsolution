@@ -21,9 +21,9 @@ final class BS_ACP_Action_dbcache_regenerate extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
 		$names = $input->get_var('delete','post');
 		if(count($names) == 0)

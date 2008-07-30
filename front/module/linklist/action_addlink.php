@@ -21,13 +21,13 @@ final class BS_Front_Action_linklist_addlink extends BS_Front_Action_Base
 {
 	function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$ips = PLIB_Props::get()->ips();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$ips = FWS_Props::get()->ips();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
@@ -47,19 +47,19 @@ final class BS_Front_Action_linklist_addlink extends BS_Front_Action_Base
 		}
 
 		// grab input-params
-		$link = $input->get_var('link_url','post',PLIB_Input::STRING);
-		$new_category = $input->get_var('new_category','post',PLIB_Input::STRING);
-		$category = $input->get_var('link_category','post',PLIB_Input::STRING);
+		$link = $input->get_var('link_url','post',FWS_Input::STRING);
+		$new_category = $input->get_var('new_category','post',FWS_Input::STRING);
+		$category = $input->get_var('link_category','post',FWS_Input::STRING);
 
 		// check if the link exists
-		$link = PLIB_StringHelper::correct_homepage($link);
+		$link = FWS_StringHelper::correct_homepage($link);
 		if(BS_DAO::get_links()->url_exists($link))
 			return 'linkschoneingefuegt';
 
 		if(trim($link) == '')
 			return 'fillallfields';
 
-		$post_text = $input->get_var('text','post',PLIB_Input::STRING);
+		$post_text = $input->get_var('text','post',FWS_Input::STRING);
 		$text = '';
 		$error = BS_PostingUtils::get_instance()->prepare_message_for_db($text,$post_text,'desc');
 		if($error != '')

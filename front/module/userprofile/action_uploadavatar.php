@@ -21,11 +21,11 @@ final class BS_Front_Action_userprofile_uploadavatar extends BS_Front_Action_Bas
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
@@ -67,8 +67,8 @@ final class BS_Front_Action_userprofile_uploadavatar extends BS_Front_Action_Bas
 		}
 
 		// use a unique avatar-name
-		$ext = PLIB_FileUtils::get_extension($_FILES['bild_upload']['name']);
-		$name = $user->get_user_id().'_'.PLIB_Date::get_formated_date('YmdHis').'.'.$ext;
+		$ext = FWS_FileUtils::get_extension($_FILES['bild_upload']['name']);
+		$name = $user->get_user_id().'_'.FWS_Date::get_formated_date('YmdHis').'.'.$ext;
 
 		// ensure that every user can't upload more than the specified number of avatars
 		$num = BS_DAO::get_avatars()->get_count_of_user($user->get_user_id());
@@ -82,7 +82,7 @@ final class BS_Front_Action_userprofile_uploadavatar extends BS_Front_Action_Bas
 			return 'wrongfiletype';
 
 		// upload the file
-		$target_path = PLIB_Path::server_app().'images/avatars/'.$name;
+		$target_path = FWS_Path::server_app().'images/avatars/'.$name;
 		if(!@move_uploaded_file($_FILES['bild_upload']['tmp_name'],$target_path))
 			return 'errorwhileuploading';
 

@@ -20,18 +20,18 @@
 final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$url = PLIB_Props::get()->url();
-		$tpl = PLIB_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
 
 		$helper = BS_Front_Module_Calendar_Helper::get_instance();
 		list($year,$month) = $helper->get_date();
 		
-		$sel_ts = PLIB_Date::get_timestamp(array(0,0,0,$month,1,$year));
-		$mon_len = PLIB_Date::get_formated_date('t',$sel_ts);
+		$sel_ts = FWS_Date::get_timestamp(array(0,0,0,$month,1,$year));
+		$mon_len = FWS_Date::get_formated_date('t',$sel_ts);
 		list($prevyear,$prevmonth) = $helper->get_relative_date($month,$year,-1);
 		$back_url = $url->get_url(
 			'calendar','&amp;'.BS_URL_YEAR.'='.$prevyear.'&amp;'.BS_URL_MONTH.'='.$prevmonth
@@ -53,11 +53,11 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 		));
 		
 		$weeks = array();
-		$today = PLIB_Date::get_formated_date('date');
-		$month_offset = $helper->get_month_offset(PLIB_Date::get_formated_date('w',$sel_ts));
+		$today = FWS_Date::get_formated_date('date');
+		$month_offset = $helper->get_month_offset(FWS_Date::get_formated_date('w',$sel_ts));
 		$day = 1;
-		$week = PLIB_Date::get_timestamp(
-			array(0,0,0,$month,1,$year),PLIB_Date::TZ_USER,'-'.$month_offset.'days'
+		$week = FWS_Date::get_timestamp(
+			array(0,0,0,$month,1,$year),FWS_Date::TZ_USER,'-'.$month_offset.'days'
 		);
 		for($w = 0;$w < 6;$w++)
 		{
@@ -76,11 +76,11 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 				
 				if(!$isempty)
 				{
-					$days_ts = PLIB_Date::get_timestamp(array(0,0,0,$month,$day,$year));
-					$sday = PLIB_StringHelper::ensure_2_chars($day);
-					$smonth = PLIB_StringHelper::ensure_2_chars($month);
+					$days_ts = FWS_Date::get_timestamp(array(0,0,0,$month,$day,$year));
+					$sday = FWS_StringHelper::ensure_2_chars($day);
+					$smonth = FWS_StringHelper::ensure_2_chars($month);
 					$birthday_index = $sday.$smonth;
-					$days = PLIB_Date::get_formated_date('date',$days_ts);
+					$days = FWS_Date::get_formated_date('date',$days_ts);
 					$day++;
 					
 					$event = $helper->get_events_of($birthday_index);

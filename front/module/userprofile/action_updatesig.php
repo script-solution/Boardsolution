@@ -21,11 +21,11 @@ final class BS_Front_Action_userprofile_updatesig extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
@@ -38,7 +38,7 @@ final class BS_Front_Action_userprofile_updatesig extends BS_Front_Action_Base
 		if($cfg['enable_signatures'] == 0)
 			return 'Signatures are disabled';
 
-		$post_text = $input->get_var('text','post',PLIB_Input::STRING);
+		$post_text = $input->get_var('text','post',FWS_Input::STRING);
 
 		$text = '';
 		$error = BS_PostingUtils::get_instance()->prepare_message_for_db($text,$post_text,'sig');

@@ -20,7 +20,7 @@
 final class BS_Front_Module_delete_post extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,20 +28,20 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($user->is_loggedin());
 		
 		$renderer->add_action(BS_ACTION_DELETE_POSTS,'default');
 
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 
 		$this->add_loc_forum_path($fid);
 		$this->add_loc_topic();
@@ -52,21 +52,21 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$forums = PLIB_Props::get()->forums();
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$forums = FWS_Props::get()->forums();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 
 		// check other parameters
 		if($fid == null || $tid == null || $id == null)
@@ -99,7 +99,7 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 		// delete not allowed?
 		if(!$auth->has_current_forum_perm(BS_MODE_DELETE_POSTS,$post_data['post_user']))
 		{
-			$this->report_error(PLIB_Document_Messages::NO_ACCESS,$locale->lang('permission_denied'));
+			$this->report_error(FWS_Document_Messages::NO_ACCESS,$locale->lang('permission_denied'));
 			return;
 		}
 		
@@ -130,7 +130,7 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 			'action_type' => BS_ACTION_DELETE_POSTS,
 			'text' => $text,
 			'user_name' => $username,
-			'date' => PLIB_Date::get_date($post_data['post_time'],true,true),
+			'date' => FWS_Date::get_date($post_data['post_time'],true,true),
 			'post_id' => $post_data['pid'],
 			'back_url' => $url->get_url(
 				'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid

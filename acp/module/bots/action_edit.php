@@ -21,15 +21,15 @@ final class BS_ACP_Action_bots_edit extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
 		
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
 			return 'The id "'.$id.'" is invalid';
 		

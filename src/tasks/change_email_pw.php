@@ -17,7 +17,7 @@
  * @subpackage	src.tasks
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Tasks_change_email_pw extends PLIB_Tasks_Base
+final class BS_Tasks_change_email_pw extends FWS_Tasks_Base
 {
 	public function run()
 	{

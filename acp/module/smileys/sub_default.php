@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -36,24 +36,24 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		if($input->isset_var('delete','post'))
 		{
-			$site = $input->get_var('site','get',PLIB_Input::ID);
+			$site = $input->get_var('site','get',FWS_Input::ID);
 			$ids = $input->get_var('delete','post');
 			$names = array();
 			foreach(BS_DAO::get_smileys()->get_by_ids($ids) as $smiley)
 				$names[] = $smiley['smiley_path'];
-			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
+			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
@@ -64,7 +64,7 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$search = $input->get_var('search','get',PLIB_Input::STRING);
+		$search = $input->get_var('search','get',FWS_Input::STRING);
 		$num = BS_DAO::get_smileys()->get_count();
 		$matches = array();
 		if($num)
@@ -93,7 +93,7 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 			'page' => $page,
 			'import_url' => $url->get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_IMPORT_SMILEYS),
 			'correct_sort_url' => $url->get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_RESORT_SMILEYS),
-			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));

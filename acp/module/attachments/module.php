@@ -20,7 +20,7 @@
 final class BS_ACP_Module_attachments extends BS_ACP_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_DELETE_ATTACHMENTS,'delete');
@@ -37,15 +37,15 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		$attachments = $this->_get_attachments();
 		$files = $this->_get_files();
@@ -54,7 +54,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 		if($delete != null)
 		{
 			$ids = $input->get_var('delete','post');
-			$paths = PLIB_Array_Utils::advanced_implode('|',$ids);
+			$paths = FWS_Array_Utils::advanced_implode('|',$ids);
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_files_question'),$paths),
 				$url->get_acpmod_url(0,
@@ -64,7 +64,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 			);
 		}
 
-		$search = $input->get_var('search','get',PLIB_Input::STRING);
+		$search = $input->get_var('search','get',FWS_Input::STRING);
 		if($search != '')
 		{
 			foreach($files as $pos => $file)
@@ -101,19 +101,19 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 				$data = $attachments->get_element('uploads/'.$filename);
 				$orig_data = null;
 
-				$ext = PLIB_FileUtils::get_extension($filename);
+				$ext = FWS_FileUtils::get_extension($filename);
 
 				// check if it is a thumbnail
 				if($data == null && preg_match('/.+_thumb\.(jpeg|jpg|png)$/',$filename))
 				{
-					$pos = PLIB_String::strpos($filename,'_thumb');
-					$startp = PLIB_String::substr($filename,0,$pos);
-					$target = PLIB_String::strtolower('uploads/'.$startp.'.'.$ext);
+					$pos = FWS_String::strpos($filename,'_thumb');
+					$startp = FWS_String::substr($filename,0,$pos);
+					$target = FWS_String::strtolower('uploads/'.$startp.'.'.$ext);
 
 					// does the original picture exist?
 					foreach($attachments as $dba)
 					{
-						if(PLIB_String::strtolower($dba['attachment_path']) == $target)
+						if(FWS_String::strtolower($dba['attachment_path']) == $target)
 						{
 							$orig_data = &$dba;
 							$is_db_attachment = true;
@@ -162,7 +162,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 					$last_mod = filemtime('uploads/'.$filename);
 					$title .= '<br /><div class="a_desc">'.$locale->lang('uploaded').': ';
 					if($last_mod > 0)
-						$title .= PLIB_Date::get_date($last_mod);
+						$title .= FWS_Date::get_date($last_mod);
 					else
 						$title .= $locale->lang('notavailable');
 					$title .= '</div>';
@@ -205,7 +205,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 		$tpl->add_variables(array(
 			'failed' => $failed,
 			'site' => $site,
-			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));
@@ -222,7 +222,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 	private function _get_files()
 	{
 		$files = array();
-		$dir = opendir(PLIB_Path::server_app().'uploads');
+		$dir = opendir(FWS_Path::server_app().'uploads');
 		while($file = readdir($dir))
 		{
 			if($file != '.' && $file != '..' && $file != '.htaccess')
@@ -237,7 +237,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 	/**
 	 * initializes the attachment-cache
 	 * 
-	 * @return PLIB_Array_2Dim the attachments
+	 * @return FWS_Array_2Dim the attachments
 	 */
 	private function _get_attachments()
 	{
@@ -245,7 +245,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 		foreach(BS_DAO::get_attachments()->get_all_with_names() as $data)
 			$content[$data['attachment_path']] = $data;
 
-		return new PLIB_Array_2Dim($content);
+		return new FWS_Array_2Dim($content);
 	}
 }
 ?>

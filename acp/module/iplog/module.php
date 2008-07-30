@@ -20,7 +20,7 @@
 final class BS_ACP_Module_iplog extends BS_ACP_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_DELETE_IPLOGS,'delete');
@@ -38,24 +38,24 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
-		$order = $input->correct_var(BS_URL_ORDER,'get',PLIB_Input::STRING,
+		$order = $input->correct_var(BS_URL_ORDER,'get',FWS_Input::STRING,
 			array('action','date','user','ip','agent'),'date');
-		$ad = $input->correct_var(BS_URL_AD,'get',PLIB_Input::STRING,array('ASC','DESC'),'DESC');
+		$ad = $input->correct_var(BS_URL_AD,'get',FWS_Input::STRING,array('ASC','DESC'),'DESC');
 		
-		$keyword = $input->get_var('keyword','get',PLIB_Input::STRING);
-		$date_from = $input->get_var('date_from','get',PLIB_Input::STRING);
-		$date_to = $input->get_var('date_to','get',PLIB_Input::STRING);
-		$action = $input->get_var('ipaction','get',PLIB_Input::STRING);
+		$keyword = $input->get_var('keyword','get',FWS_Input::STRING);
+		$date_from = $input->get_var('date_from','get',FWS_Input::STRING);
+		$date_to = $input->get_var('date_to','get',FWS_Input::STRING);
+		$action = $input->get_var('ipaction','get',FWS_Input::STRING);
 		
 		$where = '';
 		if($keyword)
@@ -65,7 +65,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 			$where .= ' OR l.user_agent LIKE "%'.$keyword.'%")';
 		}
 		if($date_from || $date_to)
-			$where .= PLIB_StringHelper::build_date_range_sql('l.date',$date_from,$date_to);
+			$where .= FWS_StringHelper::build_date_range_sql('l.date',$date_from,$date_to);
 		if($action)
 		{
 			$action_qry = '';
@@ -83,7 +83,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 			$where .= ' AND l.action'.$action_qry;
 		}
 		if($where)
-			$where = ' WHERE '.PLIB_String::substr($where,4);
+			$where = ' WHERE '.FWS_String::substr($where,4);
 		
 		$num = BS_DAO::get_logips()->get_count_by_search($where);
 		$end = 15;
@@ -117,7 +117,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 				.$date_from.'&amp;date_to='.$date_to.'&amp;'
 		);
 		
-		$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 		if($input->isset_var('delete','post'))
 		{
 			$ids = $input->get_var('delete','post');
@@ -128,7 +128,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 				$baseurl.'order='.$order.'&amp;ad='.$ad.'&amp;site='.$site
 			);
 		}
-		else if($input->get_var('ask','get',PLIB_Input::STRING) == 'deleteall')
+		else if($input->get_var('ask','get',FWS_Input::STRING) == 'deleteall')
 		{
 			$functions->add_delete_message(
 				$locale->lang('delete_all_question'),
@@ -138,7 +138,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 		}
 		
 		$tpl->add_variables(array(
-			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden_fields' => $hidden_fields,
 			'keyword' => $keyword,
 			'date_from' => $date_from,
@@ -197,11 +197,11 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 			else
 				$user = '<i>'.$locale->lang('guest').'</i>';
 			
-			if(PLIB_String::substr($data['action'],0,4) == 'adl_' ||
-				PLIB_String::substr($data['action'],0,7) == 'linkre_')
+			if(FWS_String::substr($data['action'],0,4) == 'adl_' ||
+				FWS_String::substr($data['action'],0,7) == 'linkre_')
 				$data['action'] = strtok($data['action'],'_');
 			
-			$user_agent = PLIB_StringHelper::get_limited_string($data['user_agent'],25);
+			$user_agent = FWS_StringHelper::get_limited_string($data['user_agent'],25);
 			
 			$logs[] = array(
 				'id' => $data['id'],
@@ -209,7 +209,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 				'user_name' => $user,
 				'user_ip' => $data['user_ip'],
 				'user_agent' => '<span title="'.$user_agent['complete'].'">'.$user_agent['displayed'].'</span>',
-				'date' => PLIB_Date::get_date($data['date'])
+				'date' => FWS_Date::get_date($data['date'])
 			);
 		}
 		

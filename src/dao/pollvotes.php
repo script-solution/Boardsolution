@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_PollVotes extends PLIB_Singleton
+class BS_DAO_PollVotes extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_ChangePW the instance of this class
@@ -40,12 +40,12 @@ class BS_DAO_PollVotes extends PLIB_Singleton
 	 */
 	public function user_voted($poll_id,$user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($poll_id) || $poll_id <= 0)
-			PLIB_Helper::def_error('intgt0','poll_id',$poll_id);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($poll_id) || $poll_id <= 0)
+			FWS_Helper::def_error('intgt0','poll_id',$poll_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		return $db->sql_num(
 			BS_TB_POLL_VOTES,'user_id',' WHERE poll_id = '.$poll_id.' AND user_id = '.$user_id
@@ -61,12 +61,12 @@ class BS_DAO_PollVotes extends PLIB_Singleton
 	 */
 	public function create($poll_id,$user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($poll_id) || $poll_id <= 0)
-			PLIB_Helper::def_error('intgt0','poll_id',$poll_id);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($poll_id) || $poll_id <= 0)
+			FWS_Helper::def_error('intgt0','poll_id',$poll_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$db->sql_insert(BS_TB_POLL_VOTES,array(
 			'poll_id' => $poll_id,
@@ -83,10 +83,10 @@ class BS_DAO_PollVotes extends PLIB_Singleton
 	 */
 	public function delete_by_polls($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_POLL_VOTES.' WHERE poll_id IN ('.implode(',',$ids).')'

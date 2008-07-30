@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_Activation extends PLIB_Singleton
+class BS_DAO_Activation extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_Activation the instance of this class
@@ -40,10 +40,10 @@ class BS_DAO_Activation extends PLIB_Singleton
 	 */
 	public function exists($id,$key)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		return $db->sql_num(
 			BS_TB_ACTIVATION,'user_id',' WHERE user_id = '.$id.' AND user_key = "'.$key.'"'
@@ -58,10 +58,10 @@ class BS_DAO_Activation extends PLIB_Singleton
 	 */
 	public function get_by_user($id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$row = $db->sql_fetch(
 			'SELECT * FROM '.BS_TB_ACTIVATION.' WHERE user_id = '.$id
@@ -79,10 +79,10 @@ class BS_DAO_Activation extends PLIB_Singleton
 	 */
 	public function get_timedout_entries($timeout)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($timeout) || $timeout <= 0)
-			PLIB_Helper::def_error('intgt0','timeout',$timeout);
+		if(!FWS_Helper::is_integer($timeout) || $timeout <= 0)
+			FWS_Helper::def_error('intgt0','timeout',$timeout);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_ACTIVATION.' a
@@ -100,10 +100,10 @@ class BS_DAO_Activation extends PLIB_Singleton
 	 */
 	public function create($id,$key)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_insert(BS_TB_ACTIVATION,array(
 			'user_id' => $id,
@@ -121,10 +121,10 @@ class BS_DAO_Activation extends PLIB_Singleton
 	 */
 	public function delete($id,$key)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_ACTIVATION.' WHERE user_id = '.$id.' AND user_key = "'.$key.'"'
@@ -140,10 +140,10 @@ class BS_DAO_Activation extends PLIB_Singleton
 	 */
 	public function delete_by_users($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_ACTIVATION.' WHERE user_id IN ('.implode(',',$ids).')'

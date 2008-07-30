@@ -20,9 +20,9 @@
 final class BS_Front_Module_security_code extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
-	 * @param PLIB_Page $doc
+	 * @param FWS_Page $doc
 	 */
 	public function init($doc)
 	{
@@ -32,18 +32,18 @@ final class BS_Front_Module_security_code extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$user = PLIB_Props::get()->user();
-		$doc = PLIB_Props::get()->doc();
+		$user = FWS_Props::get()->user();
+		$doc = FWS_Props::get()->doc();
 		
-		$imagedir = PLIB_Path::server_app().'images/gd/';
-		$captcha = new PLIB_GD_Captcha();
-		$captcha->add_ttf_font(new PLIB_GD_Font_TTF($imagedir.'scratch.ttf'),35);
-		$captcha->add_ttf_font(new PLIB_GD_Font_TTF($imagedir.'veramono.ttf'),35);
-		$captcha->add_ttf_font(new PLIB_GD_Font_TTF($imagedir.'thros.ttf'),40);
+		$imagedir = FWS_Path::server_app().'images/gd/';
+		$captcha = new FWS_GD_Captcha();
+		$captcha->add_ttf_font(new FWS_GD_Font_TTF($imagedir.'scratch.ttf'),35);
+		$captcha->add_ttf_font(new FWS_GD_Font_TTF($imagedir.'veramono.ttf'),35);
+		$captcha->add_ttf_font(new FWS_GD_Font_TTF($imagedir.'thros.ttf'),40);
 		$captcha->create_image();
 		
 		$renderer = $doc->use_gdimage_renderer();

@@ -21,12 +21,12 @@ final class BS_DBA_Action_backups_delete extends BS_DBA_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$backups = PLIB_Props::get()->backups();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$backups = FWS_Props::get()->backups();
 
-		$ibackups = $input->get_var('backups','get',PLIB_Input::STRING);
-		$abackups = PLIB_Array_Utils::advanced_explode(',',$ibackups);
+		$ibackups = $input->get_var('backups','get',FWS_Input::STRING);
+		$abackups = FWS_Array_Utils::advanced_explode(',',$ibackups);
 		if(count($abackups) == 0)
 			return 'No backups specified via GET "backups"';
 		

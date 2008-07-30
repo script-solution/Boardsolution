@@ -17,7 +17,7 @@
  * @subpackage	src.bbcode
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_BBCode_Helper extends PLIB_Singleton
+final class BS_BBCode_Helper extends FWS_Singleton
 {
 	/**
 	 * @return BS_BBCode_Helper the instance of this class
@@ -134,7 +134,7 @@ final class BS_BBCode_Helper extends PLIB_Singleton
 			$this->_load_tags();
 		
 		$sallowed = BS_PostingUtils::get_instance()->get_message_option('allowed_tags',$location);
-		$allowed = PLIB_Array_Utils::advanced_explode(',',$sallowed);
+		$allowed = FWS_Array_Utils::advanced_explode(',',$sallowed);
 		foreach(array_keys($this->_tags) as $name)
 		{
 			if(!in_array($name,$allowed))
@@ -201,8 +201,8 @@ final class BS_BBCode_Helper extends PLIB_Singleton
 		$this->_tags = array();
 		foreach(BS_DAO::get_bbcodes()->get_list() as $tag)
 		{
-			$con = PLIB_Array_Utils::advanced_explode(',',$tag['allowed_content']);
-			$tag['allowed_content'] = PLIB_Array_Utils::get_fast_access($con);
+			$con = FWS_Array_Utils::advanced_explode(',',$tag['allowed_content']);
+			$tag['allowed_content'] = FWS_Array_Utils::get_fast_access($con);
 			$this->_tags[$tag['name']] = $tag;
 		}
 	}

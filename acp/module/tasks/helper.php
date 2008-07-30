@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_Tasks_Helper extends PLIB_Singleton
+final class BS_ACP_Module_Tasks_Helper extends FWS_Singleton
 {
 	/**
 	 * @return BS_ACP_Module_Tasks_Helper the instance of this class
@@ -48,7 +48,7 @@ final class BS_ACP_Module_Tasks_Helper extends PLIB_Singleton
 	 */
 	public function get_interval_types()
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 		
 		return array(
 			'days' => $locale->lang('days'),
@@ -75,7 +75,7 @@ final class BS_ACP_Module_Tasks_Helper extends PLIB_Singleton
 			case 'minutes':
 				return $interval * 60;
 			default:
-				PLIB_Helper::error('Invalid value for $type ("'.$type.'")!');
+				FWS_Helper::error('Invalid value for $type ("'.$type.'")!');
 				return 0;
 		}
 	}

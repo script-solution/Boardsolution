@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_bbcode_edit extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,15 +28,15 @@ final class BS_ACP_SubModule_bbcode_edit extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ADD_BBCODE,array('edit','add'));
 		$renderer->add_action(BS_ACP_ACTION_EDIT_BBCODE,array('edit','edit'));
 
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
 			$renderer->add_breadcrumb($locale->lang('add_tag'),$url->get_acpmod_url(0,'&amp;action=edit'));
 		else
@@ -49,16 +49,16 @@ final class BS_ACP_SubModule_bbcode_edit extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
 		{
 			$data = array(
@@ -119,13 +119,13 @@ final class BS_ACP_SubModule_bbcode_edit extends BS_ACP_SubModule
 			'optional' => $locale->lang('tag_param_optional'),
 			'required' => $locale->lang('tag_param_required')
 		);
-		$param_combo = new PLIB_HTML_ComboBox('param','param',null,$data['param']);
+		$param_combo = new FWS_HTML_ComboBox('param','param',null,$data['param']);
 		$param_combo->set_options($params);
 		if($form->get_condition())
 			$param_combo->set_value($form->get_input_value('param'));
 		$param_combo->set_custom_attribute('onchange','toggleParameter();');
 		
-		$site = $input->get_var('site','get',PLIB_Input::INTEGER);
+		$site = $input->get_var('site','get',FWS_Input::INTEGER);
 		$tpl->add_variables(array(
 			'default' => $data,
 			'site' => $site,

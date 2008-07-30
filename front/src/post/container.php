@@ -18,7 +18,7 @@
  * @subpackage	front.src.post
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Post_Container extends PLIB_Object
+final class BS_Front_Post_Container extends FWS_Object
 {
 	/**
 	 * All posts in BS_Front_Post_Data objects
@@ -46,7 +46,7 @@ final class BS_Front_Post_Container extends PLIB_Object
 	/**
 	 * The pagination
 	 *
-	 * @var PLIB_Pagination
+	 * @var FWS_Pagination
 	 */
 	private $_pagination;
 	
@@ -70,7 +70,7 @@ final class BS_Front_Post_Container extends PLIB_Object
 	 * @param int $fid the forum-id (0 = ignore)
 	 * @param int $tid the topic-id (0 = ignore)
 	 * @param array $ids optionally you can specify all post-ids
-	 * @param PLIB_Pagination $pagination the pagination (null = all posts)
+	 * @param FWS_Pagination $pagination the pagination (null = all posts)
 	 * @param string $order the value for the ORDER BY statement
 	 * @param string $search additional search-conditions for WHERE (not beginning with AND)
 	 * @param array $keywords an numeric array with all keywords
@@ -79,9 +79,9 @@ final class BS_Front_Post_Container extends PLIB_Object
 		$keywords = null)
 	{
 		if(!$ids && !$fid && !$tid && !$search)
-			PLIB_Helper::error('Please provide at least one of the parameters $fid,$tid,$search and $ids!');
+			FWS_Helper::error('Please provide at least one of the parameters $fid,$tid,$search and $ids!');
 		if($keywords !== null && !is_array($keywords))
-			PLIB_Helper::def_error('array','keywords',$keywords);
+			FWS_Helper::def_error('array','keywords',$keywords);
 		
 		$this->_pagination = $pagination;
 		$this->_keywords = $keywords;
@@ -107,7 +107,7 @@ final class BS_Front_Post_Container extends PLIB_Object
 			$start = $pagination->get_start();
 			$count = $pagination->get_per_page();
 		}
-		$where = 'WHERE '.PLIB_String::substr($where,0,-5);
+		$where = 'WHERE '.FWS_String::substr($where,0,-5);
 		
 		$postlist = BS_DAO::get_posts()->get_posts_for_topic(
 			$where,$order,$start,$count,$this->_keywords
@@ -169,7 +169,7 @@ final class BS_Front_Post_Container extends PLIB_Object
 	}
 	
 	/**
-	 * @return PLIB_Pagination the pagination
+	 * @return FWS_Pagination the pagination
 	 */
 	public function get_pagination()
 	{

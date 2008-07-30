@@ -21,12 +21,12 @@ final class BS_Front_Action_userprofile_subscribeall extends BS_Front_Action_Bas
 {
 	public function perform_action()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
-		$functions = PLIB_Props::get()->functions();
-		$forums = PLIB_Props::get()->forums();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$functions = FWS_Props::get()->functions();
+		$forums = FWS_Props::get()->forums();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// is the user loggedin?
 		if($cfg['enable_email_notification'] == 0 || !$user->is_loggedin())

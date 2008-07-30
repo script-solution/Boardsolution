@@ -20,7 +20,7 @@
 final class BS_Front_Module_conf_email extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,7 +28,7 @@ final class BS_Front_Module_conf_email extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_template('extern_conf.htm');
@@ -46,20 +46,20 @@ final class BS_Front_Module_conf_email extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$db = PLIB_Props::get()->db();
-		$url = PLIB_Props::get()->url();
-		$msgs = PLIB_Props::get()->msgs();
-		$doc = PLIB_Props::get()->doc();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$db = FWS_Props::get()->db();
+		$url = FWS_Props::get()->url();
+		$msgs = FWS_Props::get()->msgs();
+		$doc = FWS_Props::get()->doc();
 
 		// check parametes
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$key = $input->get_var(BS_URL_PID,'get',PLIB_Input::STRING);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
+		$key = $input->get_var(BS_URL_PID,'get',FWS_Input::STRING);
 		
 		if($id == null || $key == null)
 		{
@@ -70,7 +70,7 @@ final class BS_Front_Module_conf_email extends BS_Front_Module
 		$data = BS_DAO::get_changeemail()->get_by_user($id,$key);
 		if($data === false)
 		{
-			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('email_change_failed'));
+			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('email_change_failed'));
 			return;
 		}
 		

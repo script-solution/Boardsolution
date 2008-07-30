@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_Forums extends PLIB_Singleton
+class BS_DAO_Forums extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_Forums the instance of this class
@@ -36,7 +36,7 @@ class BS_DAO_Forums extends PLIB_Singleton
 	 */
 	public function get_count()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(BS_TB_FORUMS,'id','');
 	}
@@ -52,12 +52,12 @@ class BS_DAO_Forums extends PLIB_Singleton
 	 */
 	public function get_list($sort = 'id',$order = 'ASC',$start = 0,$count = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_FORUMS.'
@@ -74,7 +74,7 @@ class BS_DAO_Forums extends PLIB_Singleton
 	 */
 	public function get_all_for_cache()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT f.*,b.post_user lastpost_userid,b.post_time lastpost_time,
@@ -98,7 +98,7 @@ class BS_DAO_Forums extends PLIB_Singleton
 	 */
 	public function create($fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$db->sql_insert(BS_TB_FORUMS,$fields);
 		return $db->get_last_insert_id();
@@ -137,10 +137,10 @@ class BS_DAO_Forums extends PLIB_Singleton
 	 */
 	public function update_by_ids($ids,$fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_update(BS_TB_FORUMS,'WHERE id IN ('.implode(',',$ids).')',$fields);
 		return $db->get_affected_rows();
@@ -154,10 +154,10 @@ class BS_DAO_Forums extends PLIB_Singleton
 	 */
 	public function reset_attributes($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_update(BS_TB_FORUMS,'WHERE id IN ('.implode(',',$ids).')',array(
 			'threads' => 0,
@@ -175,10 +175,10 @@ class BS_DAO_Forums extends PLIB_Singleton
 	 */
 	public function delete_by_ids($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry('DELETE FROM '.BS_TB_FORUMS.' WHERE id IN ('.implode(',',$ids).')');
 		return $db->get_affected_rows();

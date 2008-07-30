@@ -21,14 +21,14 @@ final class BS_Front_Action_userprofile_deletepms extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
-		$del = $input->get_var(BS_URL_DEL,"get",PLIB_Input::STRING);
+		$del = $input->get_var(BS_URL_DEL,"get",FWS_Input::STRING);
 		if(!$user->is_loggedin() || $cfg['enable_pms'] == 0 || $del == null ||
 				$user->get_profile_val('allow_pms') == 0)
 			return 'You are a guest, PMs are disabled, no ids have been given or you\'ve disabled PMs';
@@ -37,7 +37,7 @@ final class BS_Front_Action_userprofile_deletepms extends BS_Front_Action_Base
 		if(!$functions->has_valid_get_sid())
 			return 'Invalid session-id';
 
-		if(!($ids = PLIB_StringHelper::get_ids($del)))
+		if(!($ids = FWS_StringHelper::get_ids($del)))
 			return 'Invalid id-string got via GET';
 
 		// collect attachments
@@ -55,11 +55,11 @@ final class BS_Front_Action_userprofile_deletepms extends BS_Front_Action_Base
 
 		// finish
 		$this->set_action_performed(true);
-		$loc = $input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING);
+		$loc = $input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
 		if($loc == 'pmsearch')
 		{
-			$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
-			$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::ID);
+			$id = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
+			$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::ID);
 			$murl = $url->get_url(
 				0,'&amp;'.BS_URL_LOC.'=pmsearch&amp;'.BS_URL_ID.'='.$id.'&amp;'.BS_URL_SITE.'='.$site
 			);

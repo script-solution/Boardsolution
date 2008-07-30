@@ -43,7 +43,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function get_user_count($active = -1,$banned = -1)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(
 			BS_TB_PROFILES.' p','p.id',$this->get_activenbanned($active,$banned)
@@ -58,10 +58,10 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function id_exists($user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		return $db->sql_num(BS_TB_PROFILES,'id',' WHERE id = '.$user_id) > 0;
 	}
@@ -75,7 +75,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function name_exists($user_name,$user_id = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(
 			BS_TB_USER,
@@ -94,7 +94,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function email_exists($user_email,$user_id = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(
 			BS_TB_USER,
@@ -129,10 +129,10 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function get_users_by_ids($ids,$active = 1,$banned = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids))
-			PLIB_Helper::def_error('intarray','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids))
+			FWS_Helper::def_error('intarray','ids',$ids);
 		
 		// if no ids given the query is useless
 		if(count($ids) == 0)
@@ -194,7 +194,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function get_users_like_name($name,$max = 6)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT '.$this->get_fields().'
@@ -216,7 +216,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function get_users_by_groups_count($group_ids,$user_ids = array())
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$where = $this->get_user_by_groups_where($group_ids,$user_ids);
 		return $db->sql_num(BS_TB_PROFILES,'id',$where);
@@ -250,7 +250,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	public function get_search_user_count($user_name = '',$user_email = '',$register_date = 0,
 		$user_groups = array())
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$where = $this->get_search_where_clause($user_name,$user_email,$register_date,$user_groups);
 		return $db->sql_num(
@@ -268,7 +268,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function get_custom_search_user_count($where)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(
 			BS_TB_PROFILES.' p',
@@ -287,14 +287,14 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function create($user_name,$user_email,$user_pw)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		if(empty($user_name))
-			PLIB_Helper::def_error('notempty','user_name',$user_name);
+			FWS_Helper::def_error('notempty','user_name',$user_name);
 		if(empty($user_email))
-			PLIB_Helper::def_error('notempty','user_email',$user_email);
+			FWS_Helper::def_error('notempty','user_email',$user_email);
 		if(empty($user_pw))
-			PLIB_Helper::def_error('notempty','user_pw',$user_pw);
+			FWS_Helper::def_error('notempty','user_pw',$user_pw);
 		
 		$db->sql_insert(BS_TB_USER,array(
 			BS_EXPORT_USER_NAME => $user_name,
@@ -315,10 +315,10 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function update($id,$user_name = '',$user_pw = '',$user_email = '')
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		// nothing to do?
 		if(empty($user_name) && empty($user_pw) && empty($user_email))
@@ -345,10 +345,10 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 */
 	public function delete($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_USER.' WHERE `'.BS_EXPORT_USER_ID.'` IN ('.implode(',',$ids).')'

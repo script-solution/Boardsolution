@@ -17,16 +17,16 @@
  * @subpackage	dba.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_Object
-	implements PLIB_Progress_Task
+final class BS_DBA_Module_CreateBackup_Tasks_Backup extends FWS_Object
+	implements FWS_Progress_Task
 {
 	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
 
 		parent::__construct();
 		
@@ -35,7 +35,7 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_Object
 			$structure = $input->isset_var('structure','post');
 			$data = $input->isset_var('data','post');
 			$tables = $input->get_var('tables','post');
-			$prefix = $input->get_var('prefix','post',PLIB_Input::STRING);
+			$prefix = $input->get_var('prefix','post',FWS_Input::STRING);
 			
 			if(!$data && !$tables)
 			{
@@ -63,8 +63,8 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_Object
 
 	public function run($pos,$ops)
 	{
-		$db = PLIB_Props::get()->db();
-		$user = PLIB_Props::get()->user();
+		$db = FWS_Props::get()->db();
+		$user = FWS_Props::get()->user();
 		
 		$data = $user->get_session_data('BS_backup');
 		
@@ -92,7 +92,7 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_Object
 					$create_syntax = preg_replace('/\) ENGINE=.*/',') TYPE=MyISAM;',$create_syntax);
 				
 				$create_syntax = trim($create_syntax);
-				if(PLIB_String::substr($create_syntax,-1,1) != ';')
+				if(FWS_String::substr($create_syntax,-1,1) != ';')
 					$create_syntax .= ';';
 				
 				$content .= $create_syntax.BS_DBA_LINE_WRAP.BS_DBA_LINE_WRAP;
@@ -100,7 +100,7 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_Object
 			
 			// store to file
 			$prefix = $data['prefix'];
-			$filename = PLIB_Path::server_app().'dba/backups/'.$prefix.'structure.sql';
+			$filename = FWS_Path::server_app().'dba/backups/'.$prefix.'structure.sql';
 			if($this->_store_to_file($filename,$content))
 			{
 				$data['total_files']++;
@@ -144,7 +144,7 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_Object
 				$field_num = $db->sql_num_fields($fqry);
 				for($i = 0;$i < $field_num;$i++)
 					$order .= '`'.$db->sql_field_name($fqry,$i).'` ASC,';
-				$order = PLIB_String::substr($order,0,PLIB_String::strlen($order) - 1);
+				$order = FWS_String::substr($order,0,FWS_String::strlen($order) - 1);
 				
 				$query = $db->sql_qry(
 					'SELECT * FROM '.$data['tables'][$x].' '.$order.'
@@ -165,8 +165,8 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_Object
 						$values_tmp .= "'".$value."',";
 					}
 	
-					$fields = PLIB_String::substr($fields_tmp,0,PLIB_String::strlen($fields_tmp) - 1);
-					$values = PLIB_String::substr($values_tmp,0,PLIB_String::strlen($values_tmp) - 1);
+					$fields = FWS_String::substr($fields_tmp,0,FWS_String::strlen($fields_tmp) - 1);
+					$values = FWS_String::substr($values_tmp,0,FWS_String::strlen($values_tmp) - 1);
 	
 					$content .= 'INSERT INTO '.$data['tables'][$x];
 					$content .= ' ('.$fields.') VALUES ('.$values.");".BS_DBA_LINE_WRAP;
@@ -183,7 +183,7 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_Object
 			// store the file
 			$prefix = $data['prefix'];
 			$file = $data['file'];
-			$filename = PLIB_Path::server_app().'dba/backups/'.$prefix.'data'.$file.'.sql';
+			$filename = FWS_Path::server_app().'dba/backups/'.$prefix.'data'.$file.'.sql';
 			if($this->_store_to_file($filename,$content))
 			{
 				$data['total_files']++;
@@ -196,7 +196,7 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_Object
 		// are we finished?
 		if(!$data['data'] || $data['file'] >= $step_count)
 		{
-			$backups = PLIB_Props::get()->backups();
+			$backups = FWS_Props::get()->backups();
 			$backups->add_backup(
 				$data['prefix'],$data['total_files'],
 				$data['backup_size']
@@ -213,8 +213,8 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_Object
 	 */
 	private function _count_rows()
 	{
-		$db = PLIB_Props::get()->db();
-		$user = PLIB_Props::get()->user();
+		$db = FWS_Props::get()->db();
+		$user = FWS_Props::get()->user();
 		
 		$data = $user->get_session_data('BS_backup');
 		if(!$data['data'])
@@ -245,7 +245,7 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends PLIB_Object
 	 */
 	private function _store_to_file($file,$content)
 	{
-		$res = PLIB_FileUtils::write($file,$content);
+		$res = FWS_FileUtils::write($file,$content);
 		if($res)
 			@chmod($file,0666);
 		return $res;

@@ -18,7 +18,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_IPs extends PLIB_Object
+final class BS_IPs extends FWS_Object
 {
 	/**
 	 * Returns the data of the entry of given action (and the current user)
@@ -28,7 +28,7 @@ final class BS_IPs extends PLIB_Object
 	 */
 	public function get_entry($action)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		$name = strtok($action,'_');
 		$timeout = $this->get_timeout($name);
@@ -65,7 +65,7 @@ final class BS_IPs extends PLIB_Object
 	 */
 	public function get_timeout($action)
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		switch($action)
 		{

@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -34,21 +34,21 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$url = PLIB_Props::get()->url();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$url = FWS_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
 
 		if(($delete = $input->get_var('delete','post')) != null)
 		{
 			$rows = $cache->get_cache('user_fields')->get_field_vals_of_keys($delete,'display_name');
-			$namelist = PLIB_StringHelper::get_enum($rows,$locale->lang('and'));
+			$namelist = FWS_StringHelper::get_enum($rows,$locale->lang('and'));
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
@@ -59,7 +59,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$search = $input->get_var('search','get',PLIB_Input::STRING);
+		$search = $input->get_var('search','get',FWS_Input::STRING);
 		$fields = $cache->get_cache('user_fields');
 		
 		$sort_options = array();
@@ -121,7 +121,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 		unset($hidden['at']);
 		$tpl->add_array('fields',$tplfields);
 		$tpl->add_variables(array(
-			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));
@@ -159,7 +159,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 	 */
 	private function _get_field_type_name($type)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		switch($type)
 		{
@@ -193,9 +193,9 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 		foreach($helper->get_locations() as $loc)
 		{
 			if(($display & $loc) != 0)
-				$result[] = '<img src="'.PLIB_Path::client_app().'acp/images/ok.gif" alt="ok" />';
+				$result[] = '<img src="'.FWS_Path::client_app().'acp/images/ok.gif" alt="ok" />';
 			else
-				$result[] = '<img src="'.PLIB_Path::client_app().'acp/images/failed.gif" alt="failed" />';
+				$result[] = '<img src="'.FWS_Path::client_app().'acp/images/failed.gif" alt="failed" />';
 		}
 
 		return $result;

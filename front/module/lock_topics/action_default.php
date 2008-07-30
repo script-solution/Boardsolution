@@ -21,15 +21,15 @@ final class BS_Front_Action_lock_topics_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$functions = PLIB_Props::get()->functions();
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$functions = FWS_Props::get()->functions();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$id_str = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
-		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$id_str = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
+		if(!($ids = FWS_StringHelper::get_ids($id_str)))
 			return 'Invalid id-string got via GET';
 
 		// check if the session-id is valid
@@ -59,9 +59,9 @@ final class BS_Front_Action_lock_topics_default extends BS_Front_Action_Base
 			return 'no_topics_chosen';
 
 		// grab vars
-		$edit_topic = $input->get_var('edit_topic','post',PLIB_Input::INT_BOOL);
-		$openclose_topic = $input->get_var('openclose_topic','post',PLIB_Input::INT_BOOL);
-		$posts_topic = $input->get_var('posts_topic','post',PLIB_Input::INT_BOOL);
+		$edit_topic = $input->get_var('edit_topic','post',FWS_Input::INT_BOOL);
+		$openclose_topic = $input->get_var('openclose_topic','post',FWS_Input::INT_BOOL);
+		$posts_topic = $input->get_var('posts_topic','post',FWS_Input::INT_BOOL);
 
 		// build locked-value
 		$locked = 0;

@@ -21,16 +21,16 @@ final class BS_Front_Action_edit_topic_poll extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
-		$forums = PLIB_Props::get()->forums();
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
+		$forums = FWS_Props::get()->forums();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 
 		// are the parameters valid?
 		if($id == null || $fid == null)
@@ -84,15 +84,15 @@ final class BS_Front_Action_edit_topic_poll extends BS_Front_Action_Base
 		$can_edit_options = $auth->has_global_permission('always_edit_poll_options') ||
 			$total_votes == 0;
 
-		$important = $input->get_var('important','post',PLIB_Input::INT_BOOL);
-		$allow_posts = $input->get_var('allow_posts','post',PLIB_Input::INT_BOOL);
+		$important = $input->get_var('important','post',FWS_Input::INT_BOOL);
+		$allow_posts = $input->get_var('allow_posts','post',FWS_Input::INT_BOOL);
 
 		$fields = array(
 			'comallow' => $allow_posts
 		);
 		
 		if($can_edit_options)
-			$fields['name'] = $input->get_var('topic_name','post',PLIB_Input::STRING);
+			$fields['name'] = $input->get_var('topic_name','post',FWS_Input::STRING);
 
 		// check if the user is allowed to mark a topic important
 		if($auth->has_current_forum_perm(BS_MODE_MARK_TOPICS_IMPORTANT))
@@ -103,8 +103,8 @@ final class BS_Front_Action_edit_topic_poll extends BS_Front_Action_Base
 
 		if($can_edit_options)
 		{
-			$multichoice = $input->get_var('multichoice','post',PLIB_Input::INT_BOOL);
-			$options = $input->get_var('poll_options','post',PLIB_Input::STRING);
+			$multichoice = $input->get_var('multichoice','post',FWS_Input::INT_BOOL);
+			$options = $input->get_var('poll_options','post',FWS_Input::STRING);
 			$lines = explode("\n",trim($options));
 			
 			// determine the "real" options

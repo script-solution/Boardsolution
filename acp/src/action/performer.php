@@ -17,7 +17,7 @@
  * @subpackage	acp.src.action
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Action_Performer extends PLIB_Actions_Performer
+final class BS_ACP_Action_Performer extends FWS_Actions_Performer
 {
 	/**
 	 * Constructor
@@ -29,7 +29,7 @@ final class BS_ACP_Action_Performer extends PLIB_Actions_Performer
 	
 	protected function before_action_performed($id,$action)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		parent::before_action_performed($id,$action);
 		

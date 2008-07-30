@@ -28,7 +28,7 @@ final class BS_ACP_Module_bots extends BS_ACP_SubModuleContainer
 	}
 
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -36,8 +36,8 @@ final class BS_ACP_Module_bots extends BS_ACP_SubModuleContainer
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 
 		$renderer->add_breadcrumb($locale->lang('acpmod_bots'),$url->get_acpmod_url());
@@ -54,13 +54,13 @@ final class BS_ACP_Module_bots extends BS_ACP_SubModuleContainer
 	 */
 	public static function check_values()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 		
-		$bot_name = $input->get_var('bot_name','post',PLIB_Input::STRING);
-		$bot_match = $input->get_var('bot_match','post',PLIB_Input::STRING);
-		$bot_ip_start = $input->get_var('bot_ip_start','post',PLIB_Input::STRING);
-		$bot_ip_end = $input->get_var('bot_ip_end','post',PLIB_Input::STRING);
-		$bot_access = $input->get_var('bot_access','post',PLIB_Input::INT_BOOL);
+		$bot_name = $input->get_var('bot_name','post',FWS_Input::STRING);
+		$bot_match = $input->get_var('bot_match','post',FWS_Input::STRING);
+		$bot_ip_start = $input->get_var('bot_ip_start','post',FWS_Input::STRING);
+		$bot_ip_end = $input->get_var('bot_ip_end','post',FWS_Input::STRING);
+		$bot_access = $input->get_var('bot_access','post',FWS_Input::INT_BOOL);
 
 		if(trim($bot_name) == '')
 			return 'bot_name_empty';

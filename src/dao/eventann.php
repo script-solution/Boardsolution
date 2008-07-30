@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_EventAnn extends PLIB_Singleton
+class BS_DAO_EventAnn extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_EventAnn the instance of this class
@@ -39,10 +39,10 @@ class BS_DAO_EventAnn extends PLIB_Singleton
 	 */
 	public function get_count_of_event($event_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($event_id) || $event_id <= 0)
-			PLIB_Helper::def_error('intgt0','event_id',$event_id);
+		if(!FWS_Helper::is_integer($event_id) || $event_id <= 0)
+			FWS_Helper::def_error('intgt0','event_id',$event_id);
 		
 		return $db->sql_num(BS_TB_EVENT_ANN,'*','WHERE event_id = '.$event_id);
 	}
@@ -56,12 +56,12 @@ class BS_DAO_EventAnn extends PLIB_Singleton
 	 */
 	public function is_announced($user_id,$event_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
-		if(!PLIB_Helper::is_integer($event_id) || $event_id <= 0)
-			PLIB_Helper::def_error('intgt0','event_id',$event_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($event_id) || $event_id <= 0)
+			FWS_Helper::def_error('intgt0','event_id',$event_id);
 		
 		return $db->sql_num(
 			BS_TB_EVENT_ANN,'*','WHERE user_id = '.$user_id.' AND event_id = '.$event_id
@@ -76,10 +76,10 @@ class BS_DAO_EventAnn extends PLIB_Singleton
 	 */
 	public function get_user_of_event($event_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($event_id) || $event_id <= 0)
-			PLIB_Helper::def_error('intgt0','event_id',$event_id);
+		if(!FWS_Helper::is_integer($event_id) || $event_id <= 0)
+			FWS_Helper::def_error('intgt0','event_id',$event_id);
 		
 		return $db->sql_rows(
 			'SELECT e.user_id,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.user_group
@@ -98,12 +98,12 @@ class BS_DAO_EventAnn extends PLIB_Singleton
 	 */
 	public function announce($user_id,$event_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
-		if(!PLIB_Helper::is_integer($event_id) || $event_id <= 0)
-			PLIB_Helper::def_error('intgt0','event_id',$event_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($event_id) || $event_id <= 0)
+			FWS_Helper::def_error('intgt0','event_id',$event_id);
 		
 		$db->sql_insert(BS_TB_EVENT_ANN,array(
 			'user_id' => $user_id,
@@ -120,12 +120,12 @@ class BS_DAO_EventAnn extends PLIB_Singleton
 	 */
 	public function leave($user_id,$event_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
-		if(!PLIB_Helper::is_integer($event_id) || $event_id <= 0)
-			PLIB_Helper::def_error('intgt0','event_id',$event_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($event_id) || $event_id <= 0)
+			FWS_Helper::def_error('intgt0','event_id',$event_id);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_EVENT_ANN.' WHERE user_id = '.$user_id.' AND event_id = '.$event_id
@@ -141,10 +141,10 @@ class BS_DAO_EventAnn extends PLIB_Singleton
 	 */
 	public function delete_by_events($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_EVENT_ANN.' WHERE event_id IN ('.implode(',',$ids).')'
@@ -160,10 +160,10 @@ class BS_DAO_EventAnn extends PLIB_Singleton
 	 */
 	public function delete_by_users($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_EVENT_ANN.' WHERE user_id IN ('.implode(',',$ids).')'

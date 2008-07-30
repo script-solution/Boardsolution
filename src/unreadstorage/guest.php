@@ -17,7 +17,7 @@
  * @subpackage	src.unreadstorage
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_UnreadStorage_Guest extends PLIB_Object implements BS_UnreadStorage
+final class BS_UnreadStorage_Guest extends FWS_Object implements BS_UnreadStorage
 {
 	/**
 	 * The unread-data
@@ -52,9 +52,9 @@ final class BS_UnreadStorage_Guest extends PLIB_Object implements BS_UnreadStora
 	 */
 	public function __construct()
 	{
-		$cookies = PLIB_Props::get()->cookies();
+		$cookies = FWS_Props::get()->cookies();
 
-		$sdata = $cookies->get_cookie('unread',PLIB_Input::STRING);
+		$sdata = $cookies->get_cookie('unread',FWS_Input::STRING);
 		if(!$sdata)
 			return;
 		
@@ -139,9 +139,9 @@ final class BS_UnreadStorage_Guest extends PLIB_Object implements BS_UnreadStora
 	 */
 	public function get_last_update()
 	{
-		$cookies = PLIB_Props::get()->cookies();
+		$cookies = FWS_Props::get()->cookies();
 
-		$time = $cookies->get_cookie('unread_update',PLIB_Input::STRING);
+		$time = $cookies->get_cookie('unread_update',FWS_Input::STRING);
 		if($time === null || $time <= 0)
 		{
 			$time = time();
@@ -157,7 +157,7 @@ final class BS_UnreadStorage_Guest extends PLIB_Object implements BS_UnreadStora
 	 */
 	public function set_last_update($time)
 	{
-		$cookies = PLIB_Props::get()->cookies();
+		$cookies = FWS_Props::get()->cookies();
 
 		$cookies->set_cookie('unread_update',$time);
 	}
@@ -233,7 +233,7 @@ final class BS_UnreadStorage_Guest extends PLIB_Object implements BS_UnreadStora
 	 */
 	private function _store()
 	{
-		$cookies = PLIB_Props::get()->cookies();
+		$cookies = FWS_Props::get()->cookies();
 
 		$d = array();
 		foreach($this->_data as $pid => $is_news)

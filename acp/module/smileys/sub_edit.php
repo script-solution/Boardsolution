@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_smileys_edit extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,14 +28,14 @@ final class BS_ACP_SubModule_smileys_edit extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_EDIT_SMILEY,'edit');
 
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		$renderer->add_breadcrumb(
 			$locale->lang('edit_smiley'),
 			$url->get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
@@ -43,14 +43,14 @@ final class BS_ACP_SubModule_smileys_edit extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
 
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
 		{
 			$this->report_error();
@@ -69,7 +69,7 @@ final class BS_ACP_SubModule_smileys_edit extends BS_ACP_SubModule
 		$tpl->add_array('smiley',$data);
 		$tpl->add_variables(array(
 			'action_type' => BS_ACP_ACTION_EDIT_SMILEY,
-			'site' => $input->get_var('site','get',PLIB_Input::INTEGER),
+			'site' => $input->get_var('site','get',FWS_Input::INTEGER),
 			'id' => $id
 		));
 	}

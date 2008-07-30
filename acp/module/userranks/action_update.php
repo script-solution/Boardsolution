@@ -21,15 +21,15 @@ final class BS_ACP_Action_userranks_update extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
 		$post_to = $input->get_var('post_to','post');
 		$rank_name = $input->get_var('rank_name','post');
 
 		$count = 0;
-		if(PLIB_Array_Utils::is_integer($post_to))
+		if(FWS_Array_Utils::is_integer($post_to))
 		{
 			asort($post_to);
 

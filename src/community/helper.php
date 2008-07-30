@@ -17,7 +17,7 @@
  * @subpackage	src.community
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Community_Helper extends PLIB_UtilBase
+final class BS_Community_Helper extends FWS_UtilBase
 {
 	/**
 	 * Login's the given user. Actually the user will not be logged in but the cookies will be
@@ -28,7 +28,7 @@ final class BS_Community_Helper extends PLIB_UtilBase
 	 */
 	public static function login($name,$pw)
 	{
-		$cookies = PLIB_Props::get()->cookies();
+		$cookies = FWS_Props::get()->cookies();
 		
 		$cookies->set_cookie('user',$name);
 		$cookies->set_cookie('pw',$pw);
@@ -41,8 +41,8 @@ final class BS_Community_Helper extends PLIB_UtilBase
 	 */
 	public static function logout($id)
 	{
-		$sessions = PLIB_Props::get()->sessions();
-		$cookies = PLIB_Props::get()->cookies();
+		$sessions = FWS_Props::get()->sessions();
+		$cookies = FWS_Props::get()->cookies();
 		
 		/* @var sessions BS_Session_Manager */
 		foreach($sessions->get_online_list() as $data)

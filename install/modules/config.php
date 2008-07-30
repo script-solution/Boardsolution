@@ -19,9 +19,9 @@ class BS_Install_config extends BS_Install
 {
 	public function run()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
 
 		// validate values
 		$gd_installed = extension_loaded('gd') && function_exists('imagecreate');
@@ -119,8 +119,8 @@ class BS_Install_config extends BS_Install
 	
 	public function check_inputs(&$check)
 	{
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
 
 		$check['php'] = phpversion();
 		$mysql_version = @mysql_get_server_info();
@@ -159,11 +159,11 @@ class BS_Install_config extends BS_Install
 			
 			$check['admin_login'] = $admin_login != '';
 			$check['admin_pw'] = $admin_pw != '';
-			$check['admin_email'] = PLIB_StringHelper::is_valid_email($admin_email);
+			$check['admin_email'] = FWS_StringHelper::is_valid_email($admin_email);
 		}
 		
 		$board_url = $functions->get_session_var('board_url');
-		$check['board_url'] = PLIB_String::substr($board_url,0,7) == "http://" && $board_url[PLIB_String::strlen($board_url) - 1] != '/';
+		$check['board_url'] = FWS_String::substr($board_url,0,7) == "http://" && $board_url[FWS_String::strlen($board_url) - 1] != '/';
 		
 		// any errors?
 		$errors = array();

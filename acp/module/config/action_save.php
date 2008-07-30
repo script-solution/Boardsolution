@@ -21,8 +21,8 @@ final class BS_ACP_Action_Config_save extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
 		$helper = BS_ACP_Module_Config_Helper::get_instance();
 		if($helper->get_manager()->save_changes())

@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_Unread extends PLIB_Singleton
+class BS_DAO_Unread extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_Unread the instance of this class
@@ -40,12 +40,12 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function get_all_by_type($type,$ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		if(!in_array($type,array('rubrikid','threadid')))
-			PLIB_Helper::def_error('inarray','type',array('rubrikid','threadid'),$type);
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+			FWS_Helper::def_error('inarray','type',array('rubrikid','threadid'),$type);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		return $db->sql_rows(
 			'SELECT u.* FROM '.BS_TB_UNREAD.' u
@@ -62,10 +62,10 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function get_all_of_user($id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		return $db->sql_rows(
 			'SELECT u.*,p.rubrikid,p.threadid FROM '.BS_TB_UNREAD.' u
@@ -83,12 +83,12 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function create($userid,$postids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($userid) || $userid <= 0)
-			PLIB_Helper::def_error('intgt0','userid',$userid);
+		if(!FWS_Helper::is_integer($userid) || $userid <= 0)
+			FWS_Helper::def_error('intgt0','userid',$userid);
 		if(!is_array($postids) || count($postids) == 0)
-			PLIB_Helper::def_error('array>0','postids',$postids);
+			FWS_Helper::def_error('array>0','postids',$postids);
 		
 		$sql = 'INSERT INTO '.BS_TB_UNREAD.' (post_id,user_id,is_news) VALUES ';
 		$i = 0;
@@ -111,12 +111,12 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function update_by_post($post_id,$new_post_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($post_id) || $post_id <= 0)
-			PLIB_Helper::def_error('intgt0','post_id',$post_id);
-		if(!PLIB_Helper::is_integer($new_post_id) || $new_post_id <= 0)
-			PLIB_Helper::def_error('intgt0','new_post_id',$new_post_id);
+		if(!FWS_Helper::is_integer($post_id) || $post_id <= 0)
+			FWS_Helper::def_error('intgt0','post_id',$post_id);
+		if(!FWS_Helper::is_integer($new_post_id) || $new_post_id <= 0)
+			FWS_Helper::def_error('intgt0','new_post_id',$new_post_id);
 		
 		$db->sql_update(BS_TB_UNREAD,'WHERE post_id = '.$post_id,array(
 			'post_id' => $new_post_id
@@ -132,10 +132,10 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function delete_by_user($id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_UNREAD.' WHERE user_id = '.$id
@@ -151,10 +151,10 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function delete_posts($post_ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($post_ids) || count($post_ids) == 0)
-			PLIB_Helper::def_error('intarray>0','post_ids',$post_ids);
+		if(!FWS_Array_Utils::is_integer($post_ids) || count($post_ids) == 0)
+			FWS_Helper::def_error('intarray>0','post_ids',$post_ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_UNREAD.' WHERE post_id IN ('.implode(',',$post_ids).')'
@@ -171,12 +171,12 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function delete_posts_of_user($id,$post_ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
-		if(!PLIB_Array_Utils::is_integer($post_ids) || count($post_ids) == 0)
-			PLIB_Helper::def_error('intarray>0','post_ids',$post_ids);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Array_Utils::is_integer($post_ids) || count($post_ids) == 0)
+			FWS_Helper::def_error('intarray>0','post_ids',$post_ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_UNREAD.'
@@ -193,10 +193,10 @@ class BS_DAO_Unread extends PLIB_Singleton
 	 */
 	public function delete_news_of_user($id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_UNREAD.'

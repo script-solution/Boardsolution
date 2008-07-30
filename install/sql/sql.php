@@ -40,7 +40,7 @@ class BS_InstallSQL
 	 */
 	public function start()
 	{
-		$functions = PLIB_Props::get()->functions();
+		$functions = FWS_Props::get()->functions();
 
 		$prefix = $functions->get_session_var('table_prefix');
 		$install_type = $functions->get_session_var('install_type');
@@ -97,8 +97,8 @@ class BS_InstallSQL
 					if($access_handle = @fopen('dbbackup/access.php','w'))
 					{
 						$content = '<?php'."\n";
-						$content .= 'define(\'BS_DBA_USERNAME\',\''.PLIB_StringHelper::generate_random_key(6).'\');'."\n";
-						$content .= 'define(\'BS_DBA_PASSWORD\',\''.PLIB_StringHelper::generate_random_key(10).'\');'."\n";
+						$content .= 'define(\'BS_DBA_USERNAME\',\''.FWS_StringHelper::generate_random_key(6).'\');'."\n";
+						$content .= 'define(\'BS_DBA_PASSWORD\',\''.FWS_StringHelper::generate_random_key(10).'\');'."\n";
 						$content .= '?>';
 						flock($access_handle,LOCK_EX);
 						fwrite($access_handle,$content);
@@ -181,7 +181,7 @@ class BS_InstallSQL
 	 */
 	public function _get_mysql_config()
 	{
-		$functions = PLIB_Props::get()->functions();
+		$functions = FWS_Props::get()->functions();
 
 		$host = $functions->get_session_var('host');
 		$login = $functions->get_session_var('login');

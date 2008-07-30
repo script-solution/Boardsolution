@@ -20,19 +20,19 @@
 final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		$helper = BS_ACP_Module_CorrectMsgs_Helper::get_instance();
 		
-		$pos = $input->get_var('pos','get',PLIB_Input::INTEGER);
+		$pos = $input->get_var('pos','get',FWS_Input::INTEGER);
 		if($pos === null)
 			$pos = 0;
 		
@@ -92,7 +92,7 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 		
 		$error = '';
 		if($input->isset_var('test','post'))
-			$data['text_posted'] = $input->get_var('text','post',PLIB_Input::STRING);
+			$data['text_posted'] = $input->get_var('text','post',FWS_Input::STRING);
 
 		$err = $this->_update_message($data['id'],$data['text_posted'],$data['use_bbcode'],
 			$data['use_smileys'],$type,$input->isset_var('test','post'));

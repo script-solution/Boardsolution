@@ -21,7 +21,7 @@ final class BS_BBCode_Content_Attachment extends BS_BBCode_Content_Default
 {
 	public function get_text($inner,$param)
 	{
-		$url = PLIB_Props::get()->url();
+		$url = FWS_Props::get()->url();
 		$murl = $url->get_url('download','&amp;path='.$param);
 		return '<a href="'.$murl.'">'.$inner.'</a>';
 	}

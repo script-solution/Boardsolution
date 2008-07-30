@@ -20,14 +20,14 @@
  * with the specified data!
  * <br>
  * Note that you have to make sure that the data which will be inserted into the database is
- * escaped! Because by default this happens in {@link PLIB_Input}. If you specify the values
+ * escaped! Because by default this happens in {@link FWS_Input}. If you specify the values
  * manually you have to escape them manually, too.
  * 
  * @package			Boardsolution
  * @subpackage	front.src.action
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_Front_Action_Plain extends PLIB_Object
+abstract class BS_Front_Action_Plain extends FWS_Object
 {
 	/**
 	 * Stores wether the data has been checked
@@ -54,7 +54,7 @@ abstract class BS_Front_Action_Plain extends PLIB_Object
 	public function perform_action()
 	{
 		if(!$this->_data_checked)
-			PLIB_Helper::error('You have to check the data first via check_data() (and that it'
+			FWS_Helper::error('You have to check the data first via check_data() (and that it'
 				.' has not detected an error)!');
 	}
 }

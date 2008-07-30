@@ -17,7 +17,7 @@
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Search_Manager extends PLIB_Object
+final class BS_Front_Search_Manager extends FWS_Object
 {
 	/**
 	 * An array of all found ids
@@ -51,7 +51,7 @@ final class BS_Front_Search_Manager extends PLIB_Object
 		parent::__construct();
 		
 		if(!($request instanceof BS_Front_Search_Request))
-			PLIB_Helper::def_error('instance','request','BS_Front_Search_Request',$request);
+			FWS_Helper::def_error('instance','request','BS_Front_Search_Request',$request);
 		
 		$this->_search_id = $search_id;
 		$this->_request = $request;
@@ -98,12 +98,12 @@ final class BS_Front_Search_Manager extends PLIB_Object
 	 */
 	private function _perform_search()
 	{
-		$auth = PLIB_Props::get()->auth();
-		$ips = PLIB_Props::get()->ips();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
+		$ips = FWS_Props::get()->ips();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
 
 		$spam_enabled = $auth->is_ipblock_enabled('spam_search');
 		
@@ -156,14 +156,14 @@ final class BS_Front_Search_Manager extends PLIB_Object
 	 */
 	private function _init_existing_search($search_id)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		$data = BS_DAO::get_search()->get_by_id($search_id);
 		if($data === false || $data['session_id'] != $user->get_session_id())
 			return false;
 
 		if($this->_request->get_name() != $data['search_mode'])
-			PLIB_Helper::def_error('Invalid search-mode. "'.$this->_request->get_name().'" expected!');
+			FWS_Helper::def_error('Invalid search-mode. "'.$this->_request->get_name().'" expected!');
 		
 		$this->_result_ids = explode(',',$data['result_ids']);
 		$this->_request->set_result_type($data['result_type']);

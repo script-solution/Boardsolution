@@ -18,7 +18,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Config_Item_Color extends PLIB_Config_Item_Line
+final class BS_ACP_Config_Item_Color extends FWS_Config_Item_Line
 {
 	/**
 	 * Wether we've already added the color-picker
@@ -29,14 +29,14 @@ final class BS_ACP_Config_Item_Color extends PLIB_Config_Item_Line
 	
 	public function get_control($form)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$str = '#'.parent::get_control($form);
 		
 		// add color-picker javascript?
 		if(!self::$_added_color_picker)
 		{
-			$file = PLIB_Javascript::get_instance()->get_file('js/colorpicker.js','lib');
+			$file = FWS_Javascript::get_instance()->get_file('js/colorpicker.js','fws');
 			$str .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
 			self::$_added_color_picker = true;
 		}
@@ -45,7 +45,7 @@ final class BS_ACP_Config_Item_Color extends PLIB_Config_Item_Line
 		$id = $this->_data->get_id();
 		$str .= '<script type="text/javascript">'."\n";
 		$str .= '<!--'."\n";
-		$str .= 'var cp_'.$id.' = new PLIB_ColorPicker("'.PLIB_Path::client_lib().'",';
+		$str .= 'var cp_'.$id.' = new FWS_ColorPicker("'.FWS_Path::client_fw().'",';
 		$str .= '"'.$this->_data->get_name().'");'."\n";
 		$str .= '//-->'."\n";
 		$str .= '</script>'."\n";

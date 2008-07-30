@@ -18,7 +18,7 @@
  * @subpackage	src.bbcode
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_BBCode_Parser extends PLIB_Object
+final class BS_BBCode_Parser extends FWS_Object
 {
 	/**
 	 * Open tags at a opening-tag which does not allow open tags
@@ -120,7 +120,7 @@ final class BS_BBCode_Parser extends PLIB_Object
 		$this->_location = $loc;
 		$this->_enable_bbcode = $enable_bbcode;
 		$this->_enable_smileys = $enable_smileys;
-		$this->_board_path = PLIB_Path::client_app();
+		$this->_board_path = FWS_Path::client_app();
 		BS_BBCode_Helper::get_instance()->reset();
 	}
 
@@ -232,8 +232,8 @@ final class BS_BBCode_Parser extends PLIB_Object
 	 */
 	public function get_message_for_output($wordwrap_codes = false)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$functions = PLIB_Props::get()->functions();
+		$cfg = FWS_Props::get()->cfg();
+		$functions = FWS_Props::get()->functions();
 
 		if($wordwrap_codes)
 		{
@@ -248,7 +248,7 @@ final class BS_BBCode_Parser extends PLIB_Object
 		$this->_text = str_replace('{BSF}',
 			$this->_board_path.$functions->get_board_file(true),$this->_text);
 		$this->_text = preg_replace(
-			'/{LANG=([^}]+?)}/e','PLIB_Props::get()->locale()->lang("\\1")',$this->_text
+			'/{LANG=([^}]+?)}/e','FWS_Props::get()->locale()->lang("\\1")',$this->_text
 		);
 
 		// replace paths
@@ -263,7 +263,7 @@ final class BS_BBCode_Parser extends PLIB_Object
 	 */
 	private function _replace_remaining_stuff()
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		$search = array();
 		$replace = array();
@@ -337,8 +337,8 @@ final class BS_BBCode_Parser extends PLIB_Object
 	 */
 	private function _smiley_sort_cmp($a,$b)
 	{
-		$lena = PLIB_String::strlen($a['code']);
-		$lenb = PLIB_String::strlen($b['code']);
+		$lena = FWS_String::strlen($a['code']);
+		$lenb = FWS_String::strlen($b['code']);
 		if($lena == $lenb)
 			return 0;
 
@@ -385,12 +385,12 @@ final class BS_BBCode_Parser extends PLIB_Object
 	 */
 	private function _replace_badwords($input)
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		$search = array();
 		$replace = array();
 
-		$badwords_highlight = PLIB_StringHelper::htmlspecialchars_back($cfg['badwords_highlight']);
+		$badwords_highlight = FWS_StringHelper::htmlspecialchars_back($cfg['badwords_highlight']);
 		foreach($this->_get_badwords() as $data)
 		{
 			if($data['word'] != '')
@@ -421,7 +421,7 @@ final class BS_BBCode_Parser extends PLIB_Object
 	 */
 	private function _get_badwords()
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		static $badwords = null;
 		if($badwords === null)
@@ -486,9 +486,9 @@ final class BS_BBCode_Parser extends PLIB_Object
 			if($info[0] == '')
 				continue;
 
-			$tag = PLIB_String::strtolower($info[0]);
+			$tag = FWS_String::strtolower($info[0]);
 			$tags[3][$key][0] = $tag;
-			$tag_name = ($tag[0] != '/') ? $tag : PLIB_String::substr($tag,1);
+			$tag_name = ($tag[0] != '/') ? $tag : FWS_String::substr($tag,1);
 
 			// if the tag is not known skip it
 			if(!isset($bbctags[$tag_name]) || ($tags[4][$key][0][0] != '=' && $tags[4][$key][0] != ']'))
@@ -563,13 +563,13 @@ final class BS_BBCode_Parser extends PLIB_Object
 					$swap_with = -1;
 					for($k = $key + 1;$k < $tagcount;$k++)
 					{
-						$ktagname = PLIB_String::strtolower($tags[3][$k][0]);
+						$ktagname = FWS_String::strtolower($tags[3][$k][0]);
 						// if it is an opening-tag we stop here
 						if($ktagname[0] != '/')
 							break;
 						
 						// have we found the tag?
-						$ktagname = PLIB_String::substr($ktagname,1);
+						$ktagname = FWS_String::substr($ktagname,1);
 						if($ktagname == $target_tag)
 						{
 							$swap_with = $k;
@@ -592,14 +592,14 @@ final class BS_BBCode_Parser extends PLIB_Object
 						}
 						
 						// we have to move the text from the one tag to the other
-						$bracketpos = PLIB_String::strpos($tags[0][$key][0],'[');
+						$bracketpos = FWS_String::strpos($tags[0][$key][0],'[');
 						$t = $tags[0][$key];
 						$tags[0][$key] = array(
-							PLIB_String::substr($t[0],0,$bracketpos).$tags[0][$swap_with][0],
+							FWS_String::substr($t[0],0,$bracketpos).$tags[0][$swap_with][0],
 							$tags[0][$swap_with][1]
 						);
 						$tags[0][$swap_with] = array(
-							PLIB_String::substr($t[0],$bracketpos),
+							FWS_String::substr($t[0],$bracketpos),
 							$t[1]
 						);
 					}
@@ -611,7 +611,7 @@ final class BS_BBCode_Parser extends PLIB_Object
 				if($list_open > 0 && $open_tags[$open_count - 1] != 'list')
 				{
 					// if there is a list-point in a tag in a list, report an error
-					if(PLIB_String::strpos($tags[1][$key][0],'[*]') !== false)
+					if(FWS_String::strpos($tags[1][$key][0],'[*]') !== false)
 						return array($tags[1][$key][1],self::ERR_INVALID_LIST_POINT_POSITION);
 				}
 
@@ -745,8 +745,8 @@ final class BS_BBCode_Parser extends PLIB_Object
 			
 			if($tag != '')
 			{
-				$tag = PLIB_String::strtolower($tag);
-				$tag_name = ($tag[0] != '/') ? $tag : PLIB_String::substr($tag,1);
+				$tag = FWS_String::strtolower($tag);
+				$tag_name = ($tag[0] != '/') ? $tag : FWS_String::substr($tag,1);
 			}
 
 			// is the bbcode-tag unknown?
@@ -812,7 +812,7 @@ final class BS_BBCode_Parser extends PLIB_Object
 						for($i = 2;$i < $l;$i++)
 							$param .= '='.$parts[$i];
 
-						$param = PLIB_String::substr($param,0,-1);
+						$param = FWS_String::substr($param,0,-1);
 					}
 					$sections[$sec_len++] = new BS_BBCode_Section($next_id++,$tag_name,$param,'');
 

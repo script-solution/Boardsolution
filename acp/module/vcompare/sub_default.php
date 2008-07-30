@@ -20,20 +20,20 @@
 final class BS_ACP_SubModule_vcompare_default extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$tpl = PLIB_Props::get()->tpl();
+		$tpl = FWS_Props::get()->tpl();
 
 		$this->request_formular();
 		
-		$http = new PLIB_HTTP('www.script-solution.de');
+		$http = new FWS_HTTP('www.script-solution.de');
 		$versions = $http->get('/bsversions/versions.xml');
 		if($versions === false)
 		{
 			$this->report_error(
-				PLIB_Document_Messages::ERROR,$http->get_error_code().': '.$http->get_error_message()
+				FWS_Document_Messages::ERROR,$http->get_error_code().': '.$http->get_error_message()
 			);
 			return;
 		}

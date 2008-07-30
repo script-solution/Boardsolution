@@ -17,7 +17,7 @@
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Search_Utils extends PLIB_UtilBase
+final class BS_Front_Search_Utils extends FWS_UtilBase
 {
 	/**
 	 * Returns the SQL-order for posts or topics.
@@ -48,17 +48,17 @@ final class BS_Front_Search_Utils extends PLIB_UtilBase
 	
 	/**
 	 * Checks wether the given keyword is valid. If not a message will be added to
-	 * <var>PLIB_Props::get()->msgs()</var> and false will be returned.
+	 * <var>FWS_Props::get()->msgs()</var> and false will be returned.
 	 *
 	 * @param string $keyword the entered keyword
 	 * @return boolean true if ok, false otherwise
 	 */
 	public static function is_valid_keyword($keyword)
 	{
-		$locale = PLIB_Props::get()->locale();
-		$msgs = PLIB_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
+		$msgs = FWS_Props::get()->msgs();
 		
-		$keyword_len = PLIB_String::strlen($keyword);
+		$keyword_len = FWS_String::strlen($keyword);
 		if($keyword_len == 0)
 		{
 			$msgs->add_error(
@@ -77,7 +77,7 @@ final class BS_Front_Search_Utils extends PLIB_UtilBase
 	}
 	
 	/**
-	 * Expects that the given string comes from e.g. <var>PLIB_Props::get()->input()->get_var()</var>
+	 * Expects that the given string comes from e.g. <var>FWS_Props::get()->input()->get_var()</var>
 	 * and escapes / prepares it to be passed to {@link extract_keywords}.
 	 * That means the method expects that addslashes() and htmlspecialchars() have been done.
 	 * 
@@ -87,7 +87,7 @@ final class BS_Front_Search_Utils extends PLIB_UtilBase
 	public static function escape($input)
 	{
 		$input = stripslashes($input);
-		$input = PLIB_StringHelper::htmlspecialchars_back($input);
+		$input = FWS_StringHelper::htmlspecialchars_back($input);
 		return str_replace('\'','\\\'',$input);
 	}
 	
@@ -101,31 +101,31 @@ final class BS_Front_Search_Utils extends PLIB_UtilBase
 	 */
 	public static function extract_keywords($input)
 	{
-		$functions = PLIB_Props::get()->functions();
+		$functions = FWS_Props::get()->functions();
 		
 		static $ignore = null;
 		if($ignore === null)
 			$ignore = $functions->get_search_ignore_words();
 		
 		$sections = array();
-		while(($start = PLIB_String::strpos($input,'"')) !== false)
+		while(($start = FWS_String::strpos($input,'"')) !== false)
 		{
-			if(($inter_section = trim(PLIB_String::substr($input,0,$start))) != '')
+			if(($inter_section = trim(FWS_String::substr($input,0,$start))) != '')
 				self::_add_words($sections,$ignore,$inter_section);
 
-			$ende = PLIB_String::strpos(substr($input,$start + 1),'"');
+			$ende = FWS_String::strpos(substr($input,$start + 1),'"');
 			if($ende !== false)
 			{
 				if($start > 0)
-					$sec = PLIB_String::substr($input,$start - 1,1).PLIB_String::substr($input,$start + 1,$ende);
+					$sec = FWS_String::substr($input,$start - 1,1).FWS_String::substr($input,$start + 1,$ende);
 				else
-					$sec = PLIB_String::substr($input,$start + 1,$ende);
+					$sec = FWS_String::substr($input,$start + 1,$ende);
 
 				$sec = trim($sec);
-				if(PLIB_String::strlen($sec) >= BS_SEARCH_MIN_KEYWORD_LEN && !isset($ignore[$sec]))
+				if(FWS_String::strlen($sec) >= BS_SEARCH_MIN_KEYWORD_LEN && !isset($ignore[$sec]))
 					$sections[] = $sec;
 
-				$input = PLIB_String::substr($input,$start + 2 + $ende);
+				$input = FWS_String::substr($input,$start + 2 + $ende);
 			}
 			else
 			{
@@ -194,7 +194,7 @@ final class BS_Front_Search_Utils extends PLIB_UtilBase
 		for($i = 0;$i < $len;$i++)
 		{
 			if(($trimmed = trim($split[$i])) != '' &&
-					PLIB_String::strlen($trimmed) >= BS_SEARCH_MIN_KEYWORD_LEN && !isset($ignore[$trimmed]))
+					FWS_String::strlen($trimmed) >= BS_SEARCH_MIN_KEYWORD_LEN && !isset($ignore[$trimmed]))
 				$sections[] = $trimmed;
 		}
 	}

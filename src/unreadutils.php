@@ -17,7 +17,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_UnreadUtils extends PLIB_Singleton
+final class BS_UnreadUtils extends FWS_Singleton
 {
 	/**
 	 * @return BS_UnreadUtils the instance of this class
@@ -37,7 +37,7 @@ final class BS_UnreadUtils extends PLIB_Singleton
 	public function remove_forums($fids)
 	{
 		if(!is_array($fids))
-			PLIB_Helper::def_error('array','fids',$fids);
+			FWS_Helper::def_error('array','fids',$fids);
 		
 		$this->_remove($fids,'rubrikid');
 	}
@@ -51,7 +51,7 @@ final class BS_UnreadUtils extends PLIB_Singleton
 	public function remove_topics($tids)
 	{
 		if(!is_array($tids))
-			PLIB_Helper::def_error('array','tids',$tids);
+			FWS_Helper::def_error('array','tids',$tids);
 		
 		$this->_remove($tids,'threadid');
 	}
@@ -90,9 +90,9 @@ final class BS_UnreadUtils extends PLIB_Singleton
 	public function remove_posts($pids,$tid)
 	{
 		if(!is_array($pids))
-			PLIB_Helper::def_error('array','pids',$pids);
-		if(!PLIB_Helper::is_integer($tid) || $tid <= 0)
-			PLIB_Helper::def_error('intgt0','tid',$tid);
+			FWS_Helper::def_error('array','pids',$pids);
+		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
+			FWS_Helper::def_error('intgt0','tid',$tid);
 		
 		// nothing to do?
 		if(count($pids) == 0)

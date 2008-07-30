@@ -21,14 +21,14 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cfg = PLIB_Props::get()->cfg();
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
-		$cache = PLIB_Props::get()->cache();
-		$cookies = PLIB_Props::get()->cookies();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$cfg = FWS_Props::get()->cfg();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$cache = FWS_Props::get()->cache();
+		$cookies = FWS_Props::get()->cookies();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
@@ -42,10 +42,10 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 		if(!$user->is_loggedin())
 			return 'You are a guest';
 
-		$user_name = $input->get_var('user_name','post',PLIB_Input::STRING);
-		$new_password = $input->get_var('new_password','post',PLIB_Input::STRING);
-		$new_password_conf = $input->get_var('new_password_conf','post',PLIB_Input::STRING);
-		$current_password = $input->get_var('current_password','post',PLIB_Input::STRING);
+		$user_name = $input->get_var('user_name','post',FWS_Input::STRING);
+		$new_password = $input->get_var('new_password','post',FWS_Input::STRING);
+		$new_password_conf = $input->get_var('new_password_conf','post',FWS_Input::STRING);
+		$current_password = $input->get_var('current_password','post',FWS_Input::STRING);
 
 		$change_username = false;
 		$change_password = false;
@@ -66,7 +66,7 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 			if(BS_DAO::get_user()->name_exists($user_name,$user->get_user_id()))
 				return 'registeruservorhanden';
 
-			$len = PLIB_String::strlen($user_name);
+			$len = FWS_String::strlen($user_name);
 			if($len < $cfg['profile_min_user_len'] && $len > $cfg['profile_max_user_len'])
 				return sprintf($locale->lang('error_wronguserlen'),
 											 $cfg['profile_min_user_len'],

@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_TplEditor_Helper extends PLIB_Singleton
+final class BS_ACP_Module_TplEditor_Helper extends FWS_Singleton
 {
 	/**
 	 * @return BS_ACP_Module_TplEditor_Helper the instance of this class
@@ -46,21 +46,21 @@ final class BS_ACP_Module_TplEditor_Helper extends PLIB_Singleton
 	 */
 	public function __construct()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
 		parent::__construct();
 		
-		$path = $input->get_var('path','get',PLIB_Input::STRING);
-		$path = PLIB_FileUtils::clean_path($path);
-		$path = PLIB_FileUtils::ensure_no_trailing_slash($path);
+		$path = $input->get_var('path','get',FWS_Input::STRING);
+		$path = FWS_FileUtils::clean_path($path);
+		$path = FWS_FileUtils::ensure_no_trailing_slash($path);
 		if($path == null)
 		{
-			$this->_path = PLIB_Path::server_app().'themes';
+			$this->_path = FWS_Path::server_app().'themes';
 			$this->_path_in_default = $this->_path;
 		}
 		else
 		{
-			$this->_path = PLIB_Path::server_app().$path;
+			$this->_path = FWS_Path::server_app().$path;
 			$this->_path_in_default = preg_replace('/themes\/[^\/]+/','themes/default',$this->_path);
 		}
 	}

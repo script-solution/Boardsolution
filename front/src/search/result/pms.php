@@ -17,7 +17,7 @@
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Search_Result_PMs extends PLIB_Object implements BS_Front_Search_Result
+final class BS_Front_Search_Result_PMs extends FWS_Object implements BS_Front_Search_Result
 {
 	public function get_name()
 	{
@@ -31,12 +31,12 @@ final class BS_Front_Search_Result_PMs extends PLIB_Object implements BS_Front_S
 
 	public function display_result($search,$request)
 	{
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$user = PLIB_Props::get()->user();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$user = FWS_Props::get()->user();
+		$url = FWS_Props::get()->url();
 
 		$img_pm_read = $user->get_theme_item_path('images/unread/pm_read.gif');
 		$img_pm_unread = $user->get_theme_item_path('images/unread/pm_unread.gif');
@@ -60,7 +60,7 @@ final class BS_Front_Search_Result_PMs extends PLIB_Object implements BS_Front_S
 				break;
 		}
 
-		$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 		$murl = $url->get_url(
 			0,'&'.BS_URL_LOC.'=pmsearch&'.BS_URL_ID.'='.$search->get_search_id()
 				.'&'.BS_URL_ORDER.'='.$order.'&'.BS_URL_AD.'='.$ad
@@ -89,7 +89,7 @@ final class BS_Front_Search_Result_PMs extends PLIB_Object implements BS_Front_S
 		$hl = '';
 		if(count($keywords) > 0)
 		{
-			$kwhl = new PLIB_KeywordHighlighter($keywords,'<span class="bs_highlight">');
+			$kwhl = new FWS_KeywordHighlighter($keywords,'<span class="bs_highlight">');
 			$urlkw = '';
 			foreach($keywords as $kw)
 				$urlkw .= '"'.$kw.'" ';
@@ -105,10 +105,10 @@ final class BS_Front_Search_Result_PMs extends PLIB_Object implements BS_Front_S
 		{
 			$title = $data['pm_title'];
 			$complete_title = '';
-			if(PLIB_String::strlen($title) > BS_MAX_PM_TITLE_LEN)
+			if(FWS_String::strlen($title) > BS_MAX_PM_TITLE_LEN)
 			{
 				$complete_title = $title;
-				$title = PLIB_String::substr($title,0,BS_MAX_PM_TITLE_LEN) . ' ...';
+				$title = FWS_String::substr($title,0,BS_MAX_PM_TITLE_LEN) . ' ...';
 			}
 
 			if(count($keywords) > 0)
@@ -138,7 +138,7 @@ final class BS_Front_Search_Result_PMs extends PLIB_Object implements BS_Front_S
 				'prefix' => $functions->get_pm_attachment_prefix($data['attachment_count']),
 				'pm_title' => $title,
 				'complete_title' => $complete_title,
-				'date' => PLIB_Date::get_date($data['pm_date']),
+				'date' => FWS_Date::get_date($data['pm_date']),
 				'details_link' => $url->get_url(
 					0,'&amp;'.BS_URL_LOC.'=pmdetails&amp;'.BS_URL_ID.'='.$data['id'].$hl
 				),
@@ -161,7 +161,7 @@ final class BS_Front_Search_Result_PMs extends PLIB_Object implements BS_Front_S
 	
 	public function get_noresults_message()
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		return $locale->lang('no_pms_found');
 	}

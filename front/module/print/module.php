@@ -20,7 +20,7 @@
 final class BS_Front_Module_print extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,17 +28,17 @@ final class BS_Front_Module_print extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$input = PLIB_Props::get()->input();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_template('popup_print.htm');
 		$renderer->set_show_headline(false);
 		$renderer->set_show_bottom(false);
 		
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 		
 		$this->add_loc_forum_path($fid);
 		$this->add_loc_topic();
@@ -49,19 +49,19 @@ final class BS_Front_Module_print extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$auth = PLIB_Props::get()->auth();
-		$user = PLIB_Props::get()->user();
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$auth = FWS_Props::get()->auth();
+		$user = FWS_Props::get()->user();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 		
 		// are the parameters valid?
 		if($fid == null || $tid == null)
@@ -74,7 +74,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		if($topic_data === null)
 		{
-			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('thread_not_found'));
+			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('thread_not_found'));
 			return;
 		}
 		
@@ -95,7 +95,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 		$theme = $user->get_theme();
 		$tpl->set_template('inc_popup_header.htm');
 		$tpl->add_variables(array(
-			'css_file' => PLIB_Path::client_app().'themes/'.$theme.'/templates/popup_print_style.css',
+			'css_file' => FWS_Path::client_app().'themes/'.$theme.'/templates/popup_print_style.css',
 			'page_title' => $cfg['forum_title'].' &raquo; '.strip_tags($add_location),
 		));
 		$tpl->restore_template();
@@ -156,7 +156,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 			if($edata['event_end'] == 0)
 				$event_end = 'open';
 			else
-				$event_end = PLIB_Date::get_date($edata['event_end'],true,false);
+				$event_end = FWS_Date::get_date($edata['event_end'],true,false);
 			
 			$tpl->add_variables(array(
 				'event_title' => $topic_data['name']
@@ -165,7 +165,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 			$tpl->set_template('inc_event.htm');
 			$tpl->add_variables(array(
 				'location' => $edata['event_location'],
-				'event_begin' => PLIB_Date::get_date($edata['event_begin'],true,false),
+				'event_begin' => FWS_Date::get_date($edata['event_begin'],true,false),
 				'event_end' => $event_end,
 				'description' => nl2br($edata['description']),
 				'show_announcements' => $edata['max_announcements'] >= 0
@@ -177,7 +177,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 				
 				$event = new BS_Event($edata);
 				$tpl->add_variables(array(
-					'timeout' => PLIB_Date::get_date($timeout_date,true,false),
+					'timeout' => FWS_Date::get_date($timeout_date,true,false),
 					'can_leave' => false,
 					'can_announce' => false,
 					'announcement_list' => $event->get_announcement_list(false),
@@ -209,7 +209,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 			/* @var $post BS_Front_Post_Data */
 			$posts[] = array(
 				'user_name' => $post->get_username(false),
-				'date' => PLIB_Date::get_date($post->get_field('post_time'),true),
+				'date' => FWS_Date::get_date($post->get_field('post_time'),true),
 				'text' => $post->get_post_text(false,false,false,true)
 			);
 		}

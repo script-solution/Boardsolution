@@ -27,21 +27,21 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 	 */
 	public static function get_default()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
 		
 		$receiver = $input->get_var('receiver','post');
 		if(!is_array($receiver))
 			$receiver = array();
 		// read additional receivers from the textfield if the user hasn't transferred them
-		$new_receiver = $input->get_var('new_receiver','post',PLIB_Input::STRING);
+		$new_receiver = $input->get_var('new_receiver','post',FWS_Input::STRING);
 		if($new_receiver)
 		{
-			$other = PLIB_Array_Utils::advanced_explode(',',$new_receiver);
-			$receiver = array_merge($receiver,PLIB_Array_Utils::trim($other));
+			$other = FWS_Array_Utils::advanced_explode(',',$new_receiver);
+			$receiver = array_merge($receiver,FWS_Array_Utils::trim($other));
 		}
-		$title = $input->get_var('pm_title','post',PLIB_Input::STRING);
-		$post_text = $input->get_var('text','post',PLIB_Input::STRING);
+		$title = $input->get_var('pm_title','post',FWS_Input::STRING);
+		$post_text = $input->get_var('text','post',FWS_Input::STRING);
 		$att = BS_Front_Action_Plain_Attachments::get_default();
 		
 		return new BS_Front_Action_Plain_PM($user->get_user_id(),$receiver,$title,$post_text,$att);
@@ -124,10 +124,10 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 	{
 		parent::__construct();
 		
-		if(!PLIB_Helper::is_integer($user_id) || $user_id < 0)
-			PLIB_Helper::def_error('intge0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id < 0)
+			FWS_Helper::def_error('intge0','user_id',$user_id);
 		if($att !== null && !($att instanceof BS_Front_Action_Plain_Attachments))
-			PLIB_Helper::def_error('instance','att','BS_Front_Action_Plain_Attachments',$att);
+			FWS_Helper::def_error('instance','att','BS_Front_Action_Plain_Attachments',$att);
 		
 		$this->_user_id = (int)$user_id;
 		$this->_title = (string)$title;
@@ -146,8 +146,8 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 	
 	public function check_data()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
 
 		// pms disabled?
 		if($cfg['enable_pms'] == 0)
@@ -230,9 +230,9 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
-		$db = PLIB_Props::get()->db();
-		$cfg = PLIB_Props::get()->cfg();
-		$msgs = PLIB_Props::get()->msgs();
+		$db = FWS_Props::get()->db();
+		$cfg = FWS_Props::get()->cfg();
+		$msgs = FWS_Props::get()->msgs();
 
 		parent::perform_action();
 		

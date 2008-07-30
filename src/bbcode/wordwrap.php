@@ -17,7 +17,7 @@
  * @subpackage	src.bbcode
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_BBCode_WordWrap extends PLIB_UtilBase
+final class BS_BBCode_WordWrap extends FWS_UtilBase
 {
 	/**
 	 * A special wordwrap function which takes care of HTML-tags and &...;
@@ -38,11 +38,11 @@ final class BS_BBCode_WordWrap extends PLIB_UtilBase
 			$line = $split[$i];
 			$complete = '';
 			$pos = 0;
-			while(PLIB_String::strlen($line) > $length)
+			while(FWS_String::strlen($line) > $length)
 			{
 				$pos = self::_get_break_pos_in_line($line,$length);
-				$complete .= PLIB_String::substr($line,0,$pos[0]);
-				$line = PLIB_String::substr($line,$pos[1]);
+				$complete .= FWS_String::substr($line,0,$pos[0]);
+				$line = FWS_String::substr($line,$pos[1]);
 				if($line != '')
 					$complete .= "\n";
 			}
@@ -70,19 +70,19 @@ final class BS_BBCode_WordWrap extends PLIB_UtilBase
 	 */
 	private static function _get_break_pos_in_line($line,$length)
 	{
-		$len = PLIB_String::strlen($line);
+		$len = FWS_String::strlen($line);
 		$break_pos = 0;
 		$continue_pos = 0;
 		$c = 0;
 		for($a = 0;$a < $len;$a++)
 		{
-			$char = PLIB_String::substr($line,$a,1);
+			$char = FWS_String::substr($line,$a,1);
 
 			// skip tags
 			if($char == '<')
 			{
-				$end = PLIB_String::substr($line,$a);
-				$end_len = PLIB_String::strlen($end);
+				$end = FWS_String::substr($line,$a);
+				$end_len = FWS_String::strlen($end);
 
 				// we can't simply search for the next ">" because there may be comments in the tag
 				// for example: <img src="<!--EMP-->images/..." ... />
@@ -90,7 +90,7 @@ final class BS_BBCode_WordWrap extends PLIB_UtilBase
 				$tag_end_pos = false;
 				for($p = 1;$p < $end_len;$p++)
 				{
-					$echar = PLIB_String::substr($end,$p,1);
+					$echar = FWS_String::substr($end,$p,1);
 					if($echar == '<')
 						$open++;
 					else if($echar == '>')
@@ -114,7 +114,7 @@ final class BS_BBCode_WordWrap extends PLIB_UtilBase
 
 				// check if it is a block-tag or a code-tag (code-tags are represented as <CODEx>
 				// at this point of time)
-				$tag = PLIB_String::substr($end,1,$tag_end_pos - 1);
+				$tag = FWS_String::substr($end,1,$tag_end_pos - 1);
 				if(in_array($tag,array('/li','/ol','/ul','/div')) || preg_match('/^CODE\d+$/',$tag))
 				{
 					// it is a block-tag therefore this will result in a wordwrap by the browser
@@ -136,8 +136,8 @@ final class BS_BBCode_WordWrap extends PLIB_UtilBase
 			// skip &...;
 			if($char == '&')
 			{
-				$end = PLIB_String::substr($line,$a);
-				$tag_end_pos = PLIB_String::strpos($end,';');
+				$end = FWS_String::substr($line,$a);
+				$tag_end_pos = FWS_String::strpos($end,';');
 				$a += $tag_end_pos;
 				$c++;
 				continue;
@@ -146,7 +146,7 @@ final class BS_BBCode_WordWrap extends PLIB_UtilBase
 			$c++;
 
 			// a space is a potential break position
-			if(PLIB_String::is_whitespace($char))
+			if(FWS_String::is_whitespace($char))
 			{
 				if($c <= $length)
 					$break_pos = $a;

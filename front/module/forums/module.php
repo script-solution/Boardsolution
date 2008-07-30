@@ -20,7 +20,7 @@
 final class BS_Front_Module_forums extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -32,14 +32,14 @@ final class BS_Front_Module_forums extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$auth = PLIB_Props::get()->auth();
+		$cfg = FWS_Props::get()->cfg();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$auth = FWS_Props::get()->auth();
 
 		$forums = BS_ForumUtils::get_instance();
 		
@@ -49,7 +49,7 @@ final class BS_Front_Module_forums extends BS_Front_Module
 		$display_lt = $cfg['current_topic_enable'] == 1 && ($display_lt_bottom || $display_lt_top);
 		if($display_lt)
 		{
-			$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+			$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 			BS_Front_TopicFactory::get_instance()->add_latest_topics_small($fid);
 		}
 		
@@ -78,12 +78,12 @@ final class BS_Front_Module_forums extends BS_Front_Module
 	 */
 	private function _add_forum_bottom()
 	{
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
 
 		$birthdays = BS_Front_EventUtils::get_instance()->get_todays_birthdays();
 		$events = BS_Front_EventUtils::get_instance()->get_current_events();
@@ -95,10 +95,10 @@ final class BS_Front_Module_forums extends BS_Front_Module
 		$total .= ', '.$stats_data['posts_total'].' '.(($stats_data['posts_total'] == 1) ? $locale->lang('post') : $locale->lang('posts'));
 		$total .= ', '.$stats_data['total_users'].' '.(($stats_data['total_users'] == 1) ? $locale->lang('registereduser1') : $locale->lang('registereduser'));
 		
-		if($input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING) == 'clap_ministats')
+		if($input->get_var(BS_URL_LOC,'get',FWS_Input::STRING) == 'clap_ministats')
 			$functions->clap_area('ministats');
 	
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$fid_param = $fid != null ? '&amp;'.BS_URL_FID.'='.$fid : '';	
 		$murl = $url->get_url(0,$fid_param.'&amp;'.BS_URL_LOC.'=clap_ministats');
 		$clap_data = $functions->get_clap_data('ministats',$murl);

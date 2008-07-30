@@ -27,19 +27,19 @@ final class BS_Front_Action_Plain_Event extends BS_Front_Action_Plain
 	 */
 	public static function get_default()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
 		
 		// grab variables from POST
-		$topic_name = $input->get_var('topic_name','post',PLIB_Input::STRING);
-		$location = $input->get_var('location','post',PLIB_Input::STRING);
-		$open_end = $input->get_var('open_end','post',PLIB_Input::STRING);
-		$max_announcements = $input->get_var('max_announcements','post',PLIB_Input::INTEGER);
+		$topic_name = $input->get_var('topic_name','post',FWS_Input::STRING);
+		$location = $input->get_var('location','post',FWS_Input::STRING);
+		$open_end = $input->get_var('open_end','post',FWS_Input::STRING);
+		$max_announcements = $input->get_var('max_announcements','post',FWS_Input::INTEGER);
 		$timeout_type = $input->correct_var(
-			'timeout_type','post',PLIB_Input::STRING,array('begin','self'),'begin'
+			'timeout_type','post',FWS_Input::STRING,array('begin','self'),'begin'
 		);
-		$enable_announcements = $input->get_var('enable_announcements','post',PLIB_Input::INT_BOOL);
-		$description = $input->get_var('text','post',PLIB_Input::STRING);
+		$enable_announcements = $input->get_var('enable_announcements','post',FWS_Input::INT_BOOL);
+		$description = $input->get_var('text','post',FWS_Input::STRING);
 
 		$form = new BS_HTML_Formular(true,true);
 		
@@ -179,7 +179,7 @@ final class BS_Front_Action_Plain_Event extends BS_Front_Action_Plain
 	
 	public function check_data()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		if($this->_tid === null || $this->_tid < 0)
 			return 'Invalid topic-id "'.$this->_tid.'"';
@@ -226,7 +226,7 @@ final class BS_Front_Action_Plain_Event extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		parent::perform_action();
 		

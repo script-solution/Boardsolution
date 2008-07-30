@@ -20,7 +20,7 @@
 final class BS_ACP_Module_userdetails extends BS_ACP_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -34,17 +34,17 @@ final class BS_ACP_Module_userdetails extends BS_ACP_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$auth = PLIB_Props::get()->auth();
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
+		$auth = FWS_Props::get()->auth();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
 		
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
 		{
 			$this->report_error();

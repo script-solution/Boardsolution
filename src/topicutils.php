@@ -17,7 +17,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_TopicUtils extends PLIB_Singleton
+final class BS_TopicUtils extends FWS_Singleton
 {
 	/**
 	 * @return BS_TopicUtils the instance of this class
@@ -37,7 +37,7 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 */
 	public function is_locked($locked,$type,$post_locked = 0)
 	{
-		$auth = PLIB_Props::get()->auth();
+		$auth = FWS_Props::get()->auth();
 
 		// nothing locked?
 		if($locked == 0)
@@ -68,7 +68,7 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 *
 	 * @param string $title the title of the topic
 	 * @param int $length the max. length of the topic.
-	 * 	<code>(0 = PLIB_Props::get()->cfg()['thread_max_title_len'])</code>
+	 * 	<code>(0 = FWS_Props::get()->cfg()['thread_max_title_len'])</code>
 	 * @return array an array of the form:
 	 * 	<code>
 	 * 		array(
@@ -79,10 +79,10 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 */
 	public function get_displayed_name($title,$length = 0)
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		$max_length = ($length === 0) ? $cfg['thread_max_title_len'] : $length;
-		return PLIB_StringHelper::get_limited_string($title,$max_length);
+		return FWS_StringHelper::get_limited_string($title,$max_length);
 	}
 	
 	/**
@@ -95,8 +95,8 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 */
 	public function get_status_data($cache,$topic_data,$is_unread)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
 
 		$result = array();
 		$is_hot = $topic_data['posts'] >= $cfg['thread_hot_posts_count'] ||
@@ -131,9 +131,9 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 */
 	public function get_selected_topics($topics)
 	{
-		$user = PLIB_Props::get()->user();
-		$url = PLIB_Props::get()->url();
-		$locale = PLIB_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$url = FWS_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
 
 		$cache = array(
 			'symbol_poll' =>				$user->get_theme_item_path('images/thread_type/poll.gif'),
@@ -178,8 +178,8 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 */
 	public function get_symbol($cache,$topic_type,$symbol)
 	{
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
 
 		$result = '&nbsp;';
 	
@@ -212,8 +212,8 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 */
 	public function get_symbols($form,$select = 0)
 	{
-		$locale = PLIB_Props::get()->locale();
-		$user = PLIB_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$user = FWS_Props::get()->user();
 
 		$symbols = '';
 		for($i = 0;$i <= BS_NUMBER_OF_TOPIC_ICONS;$i++)
@@ -247,10 +247,10 @@ final class BS_TopicUtils extends PLIB_Singleton
 	 */
 	public function get_action_combobox($location = 'topics',$is_closed = false)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
 
 		$edit_perm				= $cfg['display_denied_options'] ||
 												$auth->has_global_permission('edit_own_threads') ||

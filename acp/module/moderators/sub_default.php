@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -34,16 +34,16 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$url = PLIB_Props::get()->url();
-		$tpl = PLIB_Props::get()->tpl();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
-		$cache = PLIB_Props::get()->cache();
-		$forums = PLIB_Props::get()->forums();
+		$url = FWS_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
+		$cache = FWS_Props::get()->cache();
+		$forums = FWS_Props::get()->forums();
 
 		$nodes = $forums->get_all_nodes();
 		$num = count($nodes);
@@ -99,7 +99,7 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 								 .'&amp;uid='.$mdata['user_id']
 							);
 							$moderators .= ' <a href="'.$del_url.'">';
-							$moderators .= '<img src="'.PLIB_Path::client_app().'acp/images/delete_small.png"';
+							$moderators .= '<img src="'.FWS_Path::client_app().'acp/images/delete_small.png"';
 							$moderators .= ' alt="'.$locale->lang('remove').'"';
 							$moderators .= ' title="'.$locale->lang('remove').'" />';
 							$moderators .= '</a>'."\n";

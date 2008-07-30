@@ -101,7 +101,7 @@ define('BS_EVENTS_COLOR','#808000');
 final class BS_Front_Module_stats_diagram extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -113,16 +113,16 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
 
-		$id = $input->get_var('id','get',PLIB_Input::ID);
-		$key = $input->get_var('key','get',PLIB_Input::STRING);
+		$id = $input->get_var('id','get',FWS_Input::ID);
+		$key = $input->get_var('key','get',FWS_Input::STRING);
 		
 		// check if the parameters is valid
 		if($id == null || $key == null)
@@ -142,8 +142,8 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 		
 		####################### grab data from db #######################
 		
-		$dnow = new PLIB_Date();
-		$now = PLIB_Date::get_timestamp(
+		$dnow = new FWS_Date();
+		$now = FWS_Date::get_timestamp(
 			array(12,0,0,$dnow->get_month(),$dnow->get_day(),$dnow->get_year()),false
 		);
 		$start = $now - (86400 * (BS_NUMBER_OF_DAYS - 1));
@@ -152,7 +152,7 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 		$topic_times = array();
 		for($time = $start;$time <= $now;$time += 86400)
 		{
-			$date = PLIB_Date::get_formated_date('m/d/Y',$time);
+			$date = FWS_Date::get_formated_date('m/d/Y',$time);
 			$post_times[$date] = 0;
 			$topic_times['topic'][$date] = 0;
 			$topic_times['poll'][$date] = 0;
@@ -163,7 +163,7 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 		$max = array('type' => 'posts','index' => 0,'value' => 0);
 		foreach(BS_DAO::get_posts()->get_posts_by_date($id,$start) as $data)
 		{
-			$date = PLIB_Date::get_formated_date('m/d/Y',$data['post_time']);
+			$date = FWS_Date::get_formated_date('m/d/Y',$data['post_time']);
 			$post_times[$date]++;
 		
 			if($post_times[$date] > $max['value'])
@@ -180,7 +180,7 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 			else
 				$type = 'poll';
 		
-			$date = PLIB_Date::get_formated_date('m/d/Y',$data['post_time']);
+			$date = FWS_Date::get_formated_date('m/d/Y',$data['post_time']);
 			$topic_times[$type][$date]++;
 		
 			if($topic_times[$type][$date] > $max['value'])
@@ -192,33 +192,33 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 		####################### Generate the image #######################
 		
 		
-		$font = new PLIB_GD_Font_TTF(PLIB_Path::server_app().BS_FONT_FILE);
+		$font = new FWS_GD_Font_TTF(FWS_Path::server_app().BS_FONT_FILE);
 		$padding_left = 30;
 		$padding_top = 1;
 		$padding_right = 100;
 		$padding_bottom = 45;
 		
-		$img = new PLIB_GD_Image(BS_IMG_WIDTH,BS_IMG_HEIGHT,true);
-		$img->set_background(new PLIB_GD_Color(BS_BACKGROUND_COLOR));
+		$img = new FWS_GD_Image(BS_IMG_WIDTH,BS_IMG_HEIGHT,true);
+		$img->set_background(new FWS_GD_Color(BS_BACKGROUND_COLOR));
 		$g = $img->get_graphics();
 		
-		$rect = new PLIB_GD_Rectangle(
+		$rect = new FWS_GD_Rectangle(
 			$padding_left,
 			$padding_top,
 			BS_IMG_WIDTH - $padding_right - 1 - $padding_left,
 			BS_IMG_HEIGHT - $padding_bottom - $padding_top
 		);
-		$diagram_bg = new PLIB_GD_Color(BS_DIAGRAM_BG_COLOR);
+		$diagram_bg = new FWS_GD_Color(BS_DIAGRAM_BG_COLOR);
 		$g->get_rect_view($rect)->fill($diagram_bg);
 		
 		// draw horizontal lines and the steps on the left side
-		$colborder = new PLIB_GD_Color(BS_BORDER_COLOR);
-		$colpattern = new PLIB_GD_Color(BS_PATTERN_COLOR);
-		$fontcolor = new PLIB_GD_Color(BS_FONT_COLOR);
-		$steppad = new PLIB_GD_Padding(2);
-		$steppos = new PLIB_GD_BoxPosition(PLIB_GD_BoxPosition::LAST,PLIB_GD_BoxPosition::FIRST);
-		$stepattr = new PLIB_GD_TextAttributes($font,BS_FONT_SIZE,$fontcolor);
-		$steptext = new PLIB_GD_Text('dummy',$stepattr);
+		$colborder = new FWS_GD_Color(BS_BORDER_COLOR);
+		$colpattern = new FWS_GD_Color(BS_PATTERN_COLOR);
+		$fontcolor = new FWS_GD_Color(BS_FONT_COLOR);
+		$steppad = new FWS_GD_Padding(2);
+		$steppos = new FWS_GD_BoxPosition(FWS_GD_BoxPosition::LAST,FWS_GD_BoxPosition::FIRST);
+		$stepattr = new FWS_GD_TextAttributes($font,BS_FONT_SIZE,$fontcolor);
+		$steptext = new FWS_GD_Text('dummy',$stepattr);
 		$y = 0;
 		$val = $max['value'];
 		$y_step = (BS_IMG_HEIGHT - $padding_top - $padding_bottom) / BS_LEFT_SCALE_STEPS;
@@ -229,9 +229,9 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 			if($i > 0)
 				$g->draw_line_int($padding_left - 10,$y,$padding_left,$y,$colborder);
 			
-			$steptext = new PLIB_GD_Text($val,$stepattr);
+			$steptext = new FWS_GD_Text($val,$stepattr);
 			$tview = $g->get_text_view($steptext);
-			$steprect = new PLIB_GD_Rectangle(0,$y,$padding_left,$y_step);
+			$steprect = new FWS_GD_Rectangle(0,$y,$padding_left,$y_step);
 			$tview->draw_in_rect($steprect,$steppad,$steppos);
 			
 			if($i > 0)
@@ -263,8 +263,8 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 		$diagram->get_next_position(next($post_times));
 		
 		// draw posts-graph
-		$colpostsline = new PLIB_GD_Color(BS_POSTS_COLOR);
-		$dateattr = new PLIB_GD_TextAttributes($font,BS_FONT_SIZE_SMALL,$fontcolor);
+		$colpostsline = new FWS_GD_Color(BS_POSTS_COLOR);
+		$dateattr = new FWS_GD_TextAttributes($font,BS_FONT_SIZE_SMALL,$fontcolor);
 		foreach($post_times as $date => $posts)
 		{
 			$last = $diagram->get_last_position();
@@ -275,20 +275,20 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 			if($posts > 0)
 			{
 				$rect_width = $xdiff / 4;
-				$rect3d = new PLIB_GD_Rectangle(
-					new PLIB_GD_Point($last->get_x(),$pos->get_y()),
-					new PLIB_GD_Dimension($rect_width - 2,(BS_IMG_HEIGHT - $padding_bottom - 1) - $pos->get_y())
+				$rect3d = new FWS_GD_Rectangle(
+					new FWS_GD_Point($last->get_x(),$pos->get_y()),
+					new FWS_GD_Dimension($rect_width - 2,(BS_IMG_HEIGHT - $padding_bottom - 1) - $pos->get_y())
 				);
 				$g->get_rect_view($rect3d)->fill_3d($colpostsline);
 			}
 		
 			// build date
-			$str = PLIB_Date::get_formated_date('shortdate',$date);
-			$daterect = new PLIB_GD_Rectangle(
-				new PLIB_GD_Point($last->get_x(),BS_IMG_HEIGHT - $padding_bottom),
-				new PLIB_GD_Dimension($xdiff,$padding_bottom)
+			$str = FWS_Date::get_formated_date('shortdate',$date);
+			$daterect = new FWS_GD_Rectangle(
+				new FWS_GD_Point($last->get_x(),BS_IMG_HEIGHT - $padding_bottom),
+				new FWS_GD_Dimension($xdiff,$padding_bottom)
 			);
-			$datetext = new PLIB_GD_Text($str,$dateattr);
+			$datetext = new FWS_GD_Text($str,$dateattr);
 			$g->get_text_view($datetext)->draw_in_rect($daterect,null,null,270);
 			
 			// draw pattern and border
@@ -318,13 +318,13 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 			switch($type)
 			{
 				case 'topic':
-					$blockcolor = new PLIB_GD_Color(BS_TOPICS_COLOR);
+					$blockcolor = new FWS_GD_Color(BS_TOPICS_COLOR);
 					break;
 				case 'poll':
-					$blockcolor = new PLIB_GD_Color(BS_POLLS_COLOR);
+					$blockcolor = new FWS_GD_Color(BS_POLLS_COLOR);
 					break;
 				case 'event':
-					$blockcolor = new PLIB_GD_Color(BS_EVENTS_COLOR);
+					$blockcolor = new FWS_GD_Color(BS_EVENTS_COLOR);
 					break;
 			}
 			
@@ -337,9 +337,9 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 				if($topics > 0)
 				{
 					$rect_width = ($pos->get_x() - $last->get_x()) / 4;
-					$rect3d = new PLIB_GD_Rectangle(
-						new PLIB_GD_Point($last->get_x() + $rect_width * $i,$pos->get_y()),
-						new PLIB_GD_Dimension($rect_width - 2,(BS_IMG_HEIGHT - $padding_bottom - 1) - $pos->get_y())
+					$rect3d = new FWS_GD_Rectangle(
+						new FWS_GD_Point($last->get_x() + $rect_width * $i,$pos->get_y()),
+						new FWS_GD_Dimension($rect_width - 2,(BS_IMG_HEIGHT - $padding_bottom - 1) - $pos->get_y())
 					);
 					$g->get_rect_view($rect3d)->fill_3d($blockcolor);
 				}
@@ -349,46 +349,46 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 		}
 		
 		// the legend
-		$legend = new PLIB_GD_Rectangle((BS_IMG_WIDTH - $padding_right) + 5,0,$padding_right - 10,100);
+		$legend = new FWS_GD_Rectangle((BS_IMG_WIDTH - $padding_right) + 5,0,$padding_right - 10,100);
 		$legendview = $g->get_rect_view($legend);
 		$legendview->fill($diagram_bg);
 		$legendview->draw($colborder);
 		
-		$legendattr = new PLIB_GD_TextAttributes($font,BS_FONT_SIZE,$fontcolor);
-		$text = new PLIB_GD_Text(html_entity_decode($locale->lang('legend')),$legendattr);
+		$legendattr = new FWS_GD_TextAttributes($font,BS_FONT_SIZE,$fontcolor);
+		$text = new FWS_GD_Text(html_entity_decode($locale->lang('legend')),$legendattr);
 		$tview = $g->get_text_view($text);
 		$textheight = $text->get_height();
-		$textpad = new PLIB_GD_Padding(4);
+		$textpad = new FWS_GD_Padding(4);
 		
 		// draw underlined title
 		$legendattr->set_underline(true);
-		$tview->draw_in_rect($legend,$textpad,PLIB_GD_BoxPosition::$TOP_CENTER);
+		$tview->draw_in_rect($legend,$textpad,FWS_GD_BoxPosition::$TOP_CENTER);
 		$legendattr->set_underline(false);
 		
 		// draw texts
-		$textpos = PLIB_GD_BoxPosition::$TOP_LEFT;
+		$textpos = FWS_GD_BoxPosition::$TOP_LEFT;
 		$text->set_text(html_entity_decode($locale->lang('posts')));
-		$legendattr->set_foreground(new PLIB_GD_Color(BS_POSTS_COLOR));
+		$legendattr->set_foreground(new FWS_GD_Color(BS_POSTS_COLOR));
 		$legend->translate(0,$textheight + 9);
 		$tview->draw_in_rect($legend,$textpad,$textpos);
 		
 		$text->set_text(html_entity_decode($locale->lang('threads')));
-		$legendattr->set_foreground(new PLIB_GD_Color(BS_TOPICS_COLOR));
+		$legendattr->set_foreground(new FWS_GD_Color(BS_TOPICS_COLOR));
 		$legend->translate(0,$textheight + 9);
 		$tview->draw_in_rect($legend,$textpad,$textpos);
 		
 		$text->set_text(html_entity_decode($locale->lang('polls')));
-		$legendattr->set_foreground(new PLIB_GD_Color(BS_POLLS_COLOR));
+		$legendattr->set_foreground(new FWS_GD_Color(BS_POLLS_COLOR));
 		$legend->translate(0,$textheight + 9);
 		$tview->draw_in_rect($legend,$textpad,$textpos);
 		
 		$text->set_text(html_entity_decode($locale->lang('events')));
-		$legendattr->set_foreground(new PLIB_GD_Color(BS_EVENTS_COLOR));
+		$legendattr->set_foreground(new FWS_GD_Color(BS_EVENTS_COLOR));
 		$legend->translate(0,$textheight + 9);
 		$tview->draw_in_rect($legend,$textpad,$textpos);
 		
 		// finish
-		$doc = PLIB_Props::get()->doc();
+		$doc = FWS_Props::get()->doc();
 		$renderer = $doc->use_gdimage_renderer();
 		$renderer->set_image($img);
 	}
@@ -399,7 +399,7 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
  * 
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_HorizontalDiagram extends PLIB_Object
+class BS_HorizontalDiagram extends FWS_Object
 {
 	/**
 	 * The width of the diagram-area
@@ -483,18 +483,18 @@ class BS_HorizontalDiagram extends PLIB_Object
 	/**
 	 * returns the last position
 	 *
-	 * @return PLIB_GD_Point the last position
+	 * @return FWS_GD_Point the last position
 	 */
 	public function get_last_position()
 	{
-		return new PLIB_GD_Point($this->_x,$this->_y);
+		return new FWS_GD_Point($this->_x,$this->_y);
 	}
 
 	/**
 	 * calculates the next position depending on the given value
 	 *
 	 * @param int $value the value at the next position
-	 * @return PLIB_GD_Point an position
+	 * @return FWS_GD_Point an position
 	 */
 	public function get_next_position($value)
 	{
@@ -510,7 +510,7 @@ class BS_HorizontalDiagram extends PLIB_Object
 			$y_sub = $this->_height / $div;
 		
 		$this->_y = $this->_padding_top + $this->_height - $y_sub;
-		return new PLIB_GD_Point($this->_x,$this->_y);
+		return new FWS_GD_Point($this->_x,$this->_y);
 	}
 	
 	protected function get_print_vars()

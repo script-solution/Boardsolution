@@ -21,12 +21,12 @@ final class BS_Front_Action_calendar_leaveevent extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
-		$functions = PLIB_Props::get()->functions();
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$functions = FWS_Props::get()->functions();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// is the user loggedin?
 		if($cfg['enable_calendar_events'] == 0 || !$user->is_loggedin())
@@ -37,7 +37,7 @@ final class BS_Front_Action_calendar_leaveevent extends BS_Front_Action_Base
 			return 'Invalid session-id';
 
 		// check parameters
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		if($id == null)
 			return 'The id "'.$id.'" is invalid';
 

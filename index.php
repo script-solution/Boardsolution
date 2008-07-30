@@ -112,23 +112,23 @@ if(is_file(BS_PATH.'install.php'))
 
 include_once(BS_PATH.'config/userdef.php');
 
-// define libpath for init.php
-if(!defined('PLIB_PATH'))
-	define('PLIB_PATH',BS_PATH.BS_LIB_PATH);
+// define fwspath for init.php
+if(!defined('FWS_PATH'))
+	define('FWS_PATH',BS_PATH.BS_FWS_PATH);
 
-// init the library
-include_once(PLIB_PATH.'init.php');
+// init the framework
+include_once(FWS_PATH.'init.php');
 
 // set the path
-PLIB_Path::set_server_app(BS_PATH);
+FWS_Path::set_server_app(BS_PATH);
 // TODO change!
 if(defined('_JEXEC'))
 {
-	PLIB_Path::set_client_app(JURI::base(true).'/bs/');
-	PLIB_Path::set_client_lib(JURI::base(true).'/bs/lib/');
+	FWS_Path::set_client_app(JURI::base(true).'/bs/');
+	FWS_Path::set_client_fw(JURI::base(true).'/bs/fws/');
 }
 else
-	PLIB_Path::set_client_app(BS_PATH);
+	FWS_Path::set_client_app(BS_PATH);
 
 // init boardsolution
 include_once(BS_PATH.'src/init.php');
@@ -142,7 +142,7 @@ if(defined('_JEXEC'))
 
 // show the page
 $doc = new BS_Front_Document();
-PLIB_Props::get()->set_doc($doc);
+FWS_Props::get()->set_doc($doc);
 echo $doc->render();
 return $doc;
 ?>

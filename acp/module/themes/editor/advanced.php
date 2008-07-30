@@ -24,12 +24,12 @@ final class BS_ACP_Module_Themes_Editor_Advanced extends BS_ACP_Module_Themes_Ed
 	 */
 	public function display()
 	{
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		$file = $this->_theme.'/style.css';
-		$theme = $input->get_var('theme','get',PLIB_Input::STRING);
+		$theme = $input->get_var('theme','get',FWS_Input::STRING);
 
 		$tpl->set_template('tpleditor_formular.htm');
 		$tpl->add_variables(array(
@@ -40,7 +40,7 @@ final class BS_ACP_Module_Themes_Editor_Advanced extends BS_ACP_Module_Themes_Ed
 			'image' => BS_ACP_Utils::get_instance()->get_file_image($file),
 			'filename' => $file,
 			'filesize' => number_format(filesize($file),0,',','.'),
-			'last_modification' => PLIB_Date::get_date(filemtime($file)),
+			'last_modification' => FWS_Date::get_date(filemtime($file)),
 			'file_content' => trim(file_get_contents($file)),
 			'back_button' => false
 		));

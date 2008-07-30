@@ -20,7 +20,7 @@
 final class BS_Front_Module_user_search extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -35,17 +35,17 @@ final class BS_Front_Module_user_search extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$url = FWS_Props::get()->url();
 
 		// has the user the permission to view the user-search?
 		if($cfg['enable_memberlist'] == 0 || !$auth->has_global_permission('view_memberlist'))
@@ -59,8 +59,8 @@ final class BS_Front_Module_user_search extends BS_Front_Module
 			$hidden_fields[$sid[0]] = $sid[1];
 		$hidden_fields = array_merge($hidden_fields,$url->get_extern_vars());
 		
-		$name = $input->get_var(BS_URL_MS_NAME,'get',PLIB_Input::STRING);
-		$email = $input->get_var(BS_URL_MS_EMAIL,'get',PLIB_Input::STRING);
+		$name = $input->get_var(BS_URL_MS_NAME,'get',FWS_Input::STRING);
+		$email = $input->get_var(BS_URL_MS_EMAIL,'get',FWS_Input::STRING);
 		
 		$limit = $cfg['members_per_page'];
 		$num = BS_DAO::get_user()->get_search_user_count($name,$email);
@@ -70,10 +70,10 @@ final class BS_Front_Module_user_search extends BS_Front_Module
 			'num' => $num,
 			'charset' => BS_HTML_CHARSET,
 			'result_title' => sprintf($locale->lang('user_search_result'),$num),
-			'search_target' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'search_target' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden_fields' => $hidden_fields,
 			'action_param' => BS_URL_ACTION,
-			'action_value' => $input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING),
+			'action_value' => $input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING),
 			'name_param' => BS_URL_MS_NAME,
 			'name_value' => $name,
 			'email_param' => BS_URL_MS_EMAIL,

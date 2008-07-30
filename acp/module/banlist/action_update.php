@@ -21,8 +21,8 @@ final class BS_ACP_Action_banlist_update extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
 
 		$types = $input->get_var('types','post');
 		$values = $input->get_var('values','post');
@@ -32,7 +32,7 @@ final class BS_ACP_Action_banlist_update extends BS_ACP_Action_Base
 		$valid_types = array('mail','user','ip');
 		foreach($values as $id => $value)
 		{
-			if(PLIB_Helper::is_integer($id))
+			if(FWS_Helper::is_integer($id))
 			{
 				$type = in_array($types[$id],$valid_types) ? $types[$id] : 'ip';
 				BS_DAO::get_bans()->update_by_id($id,$value,$type);

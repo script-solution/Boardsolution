@@ -21,14 +21,14 @@ final class BS_ACP_Action_forums_delete extends BS_ACP_Action_Base
 {
 	public function perform_action($type = 'delete')
 	{
-		$input = PLIB_Props::get()->input();
-		$forums = PLIB_Props::get()->forums();
-		$functions = PLIB_Props::get()->functions();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$forums = FWS_Props::get()->forums();
+		$functions = FWS_Props::get()->functions();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
-		$id_str = $input->get_var('ids','get',PLIB_Input::STRING);
-		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
+		$id_str = $input->get_var('ids','get',FWS_Input::STRING);
+		if(!($ids = FWS_StringHelper::get_ids($id_str)))
 			return 'Got an invalid id-string via GET';
 		
 		// if we delete a forum we have to delete the sub-forums, too
@@ -136,7 +136,7 @@ final class BS_ACP_Action_forums_delete extends BS_ACP_Action_Base
 		$cache->refresh('moderators');
 		
 		// refresh forums
-		PLIB_Props::get()->reload('forums');
+		FWS_Props::get()->reload('forums');
 		
 		if($type == 'delete')
 			$this->set_success_msg($locale->lang('delete_forums_successfully'));

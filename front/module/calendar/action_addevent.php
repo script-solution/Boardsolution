@@ -21,14 +21,14 @@ final class BS_Front_Action_calendar_addevent extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// nothing to do?
-		if(!$input->isset_var('submit','post',PLIB_Input::STRING))
+		if(!$input->isset_var('submit','post',FWS_Input::STRING))
 			return '';
 		
 		// has the user permission to start an event?

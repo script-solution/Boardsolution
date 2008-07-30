@@ -17,7 +17,7 @@
  * @subpackage	src.unreadstorage
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_UnreadStorage_User extends PLIB_Object implements BS_UnreadStorage
+final class BS_UnreadStorage_User extends FWS_Object implements BS_UnreadStorage
 {
 	/**
 	 * The unread forums
@@ -45,7 +45,7 @@ final class BS_UnreadStorage_User extends PLIB_Object implements BS_UnreadStorag
 	 */
 	public function __construct()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		foreach(BS_DAO::get_unread()->get_all_of_user($user->get_user_id()) as $data)
 		{
@@ -104,7 +104,7 @@ final class BS_UnreadStorage_User extends PLIB_Object implements BS_UnreadStorag
 	 */
 	public function get_last_update()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		return $user->get_profile_val('last_unread_update');
 	}
@@ -116,7 +116,7 @@ final class BS_UnreadStorage_User extends PLIB_Object implements BS_UnreadStorag
 	 */
 	public function set_last_update($time)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		BS_DAO::get_profile()->update_user_by_id(
 			array('last_unread_update' => $time),$user->get_user_id()
@@ -131,7 +131,7 @@ final class BS_UnreadStorage_User extends PLIB_Object implements BS_UnreadStorag
 	 */
 	public function add_post_ids($ids)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		BS_DAO::get_unread()->create($user->get_user_id(),$ids);
 	}
@@ -143,7 +143,7 @@ final class BS_UnreadStorage_User extends PLIB_Object implements BS_UnreadStorag
 	 */
 	public function remove_post_ids($ids)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		BS_DAO::get_unread()->delete_posts_of_user($user->get_user_id(),$ids);
 	}
@@ -153,7 +153,7 @@ final class BS_UnreadStorage_User extends PLIB_Object implements BS_UnreadStorag
 	 */
 	public function remove_all()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		BS_DAO::get_unread()->delete_by_user($user->get_user_id());
 	}
@@ -163,7 +163,7 @@ final class BS_UnreadStorage_User extends PLIB_Object implements BS_UnreadStorag
 	 */
 	public function remove_all_news()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		BS_DAO::get_unread()->delete_news_of_user($user->get_user_id());
 	}

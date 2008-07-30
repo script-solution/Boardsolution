@@ -27,7 +27,7 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 	private $_helper;
 	
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -35,15 +35,15 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ADD_FORUM,array('edit','add'));
 		$renderer->add_action(BS_ACP_ACTION_EDIT_FORUM,array('edit','edit'));
 
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id != null)
 		{
 			$renderer->add_breadcrumb(
@@ -63,19 +63,19 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$url = PLIB_Props::get()->url();
-		$locale = PLIB_Props::get()->locale();
-		$auth = PLIB_Props::get()->auth();
-		$cache = PLIB_Props::get()->cache();
-		$tpl = PLIB_Props::get()->tpl();
-		$forums = PLIB_Props::get()->forums();
+		$input = FWS_Props::get()->input();
+		$url = FWS_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$auth = FWS_Props::get()->auth();
+		$cache = FWS_Props::get()->cache();
+		$tpl = FWS_Props::get()->tpl();
+		$forums = FWS_Props::get()->forums();
 
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		$type = $id != null ? 'edit' : 'add';
 		
 		$this->request_formular();
@@ -136,7 +136,7 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 			}
 		}
 		
-		$usercb = new PLIB_HTML_ComboBox('user_intern','user_intern',null,array(),5,true);
+		$usercb = new FWS_HTML_ComboBox('user_intern','user_intern',null,array(),5,true);
 		$usercb->set_options($options);
 		$usercb->set_css_attribute('width','100%');
 		
@@ -154,7 +154,7 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 			);
 		}
 		
-		$forumtype = new PLIB_HTML_ComboBox('forum_type','forum_type',$forum['forum_type']);
+		$forumtype = new FWS_HTML_ComboBox('forum_type','forum_type',$forum['forum_type']);
 		$forumtype->set_options($forum_type_options);
 		$forumtype->set_custom_attribute('onchange','toggleForumType()');
 		
@@ -183,7 +183,7 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 	 */
 	private function _get_parent_combobox($forums,$fid,$parent_id,$name)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$return = '<select name="'.$name.'">'."\n";
 		$sel = ($parent_id == 0) ? ' selected="selected"' : '';
@@ -226,8 +226,8 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 	 */
 	private function _add_access_combo($type,$permissions = array())
 	{
-		$cache = PLIB_Props::get()->cache();
-		$tpl = PLIB_Props::get()->tpl();
+		$cache = FWS_Props::get()->cache();
+		$tpl = FWS_Props::get()->tpl();
 
 		$radios = array();
 		foreach($cache->get_cache('user_groups') as $data)

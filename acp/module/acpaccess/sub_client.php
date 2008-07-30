@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,16 +28,16 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$cache = PLIB_Props::get()->cache();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$cache = FWS_Props::get()->cache();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_GROUP,array('client','group'));
 		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_USER,array('client','user'));
 
-		$type = $input->get_var('type','get',PLIB_Input::STRING);
+		$type = $input->get_var('type','get',FWS_Input::STRING);
 		$murl = $url->get_acpmod_url(0,'&amp;action=client&amp;type='.$type);
 		
 		if($type == 'user')
@@ -63,17 +63,17 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
-		$cache = PLIB_Props::get()->cache();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$cache = FWS_Props::get()->cache();
+		$tpl = FWS_Props::get()->tpl();
 
-		$type = $input->get_var('type','get',PLIB_Input::STRING);
+		$type = $input->get_var('type','get',FWS_Input::STRING);
 		$group = $this->_get_group();
 		$username = $this->_get_username();
 		
@@ -82,7 +82,7 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 			$data = BS_DAO::get_profile()->get_user_by_name($username);
 			if($data === false || $auth->is_in_group($data['user_group'],BS_STATUS_ADMIN))
 			{
-				$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('user_not_found'));
+				$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('user_not_found'));
 				return;
 			}
 
@@ -90,7 +90,7 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 			$col_title = $locale->lang('current_module_permission');
 			$atype = 'user';
 			$aval = $data['id'];
-			$usergroups = PLIB_Array_Utils::advanced_explode(',',$data['user_group']);
+			$usergroups = FWS_Array_Utils::advanced_explode(',',$data['user_group']);
 			$action_type = BS_ACP_ACTION_ACPACCESS_USER;
 		}
 		else
@@ -189,11 +189,11 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 	 */
 	private function _get_username()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
-		$username = $input->get_var('user_name','post',PLIB_Input::STRING);
+		$username = $input->get_var('user_name','post',FWS_Input::STRING);
 		if($username == null)
-			$username = $input->get_var('name','get',PLIB_Input::STRING);
+			$username = $input->get_var('name','get',FWS_Input::STRING);
 		return $username;
 	}
 	
@@ -204,11 +204,11 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 	 */
 	private function _get_group()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
-		$group = $input->get_var('user_group','post',PLIB_Input::ID);
+		$group = $input->get_var('user_group','post',FWS_Input::ID);
 		if($group == null)
-			$group = $input->get_var('group','get',PLIB_Input::ID);
+			$group = $input->get_var('group','get',FWS_Input::ID);
 		return $group;
 	}
 }

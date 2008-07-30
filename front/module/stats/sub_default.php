@@ -20,32 +20,32 @@
 final class BS_Front_SubModule_stats_default extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
-	 * @param PLIB_Page $doc
+	 * @param FWS_Page $doc
 	 */
 	public function init($doc)
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_breadcrumb($locale->lang('general'),$url->get_url('stats'));
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
-		$url = PLIB_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$url = FWS_Props::get()->url();
 
 		$limit = 10;
 		$time = time();
@@ -100,7 +100,7 @@ final class BS_Front_SubModule_stats_default extends BS_Front_SubModule
 			{
 				$seconds = $time - $userlist[$i]['lastlogin'];
 				$val = ($seconds == 0) ? 0 : round(100 / ($min / $seconds),2);
-				$text = PLIB_Date::get_date(time() - $seconds);
+				$text = FWS_Date::get_date(time() - $seconds);
 				$lastlogin_stats['data'][] = $this->_get_stats_data(
 					$i,$val,$userlist[$i]['id'],$userlist[$i]['user_name'],$userlist[$i]['user_group'],$text
 				);
@@ -237,7 +237,7 @@ final class BS_Front_SubModule_stats_default extends BS_Front_SubModule
 	 */
 	private function _get_stats_data($row,$percent,$user_id,$username,$user_groups,$text)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 		
 		$x_var = $row + 1;
 		$username = BS_UserUtils::get_instance()->get_link($user_id,$username,$user_groups);

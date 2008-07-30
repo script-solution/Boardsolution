@@ -21,9 +21,9 @@ final class BS_Front_Action_logout extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$user = PLIB_Props::get()->user();
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
 
 		$username = $user->get_user_name();
 

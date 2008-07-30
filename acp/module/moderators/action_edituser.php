@@ -21,12 +21,12 @@ final class BS_ACP_Action_moderators_edituser extends BS_ACP_Action_Base
 {
 	function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
 		$user = $input->get_var('user','post');
-		if(!is_array($user) || count($user) == 0 || !PLIB_Array_Utils::is_integer($user))
+		if(!is_array($user) || count($user) == 0 || !FWS_Array_Utils::is_integer($user))
 			return 'Got an invalid user-array from POST';
 		
 		$forums = $input->get_var('forums','post');
@@ -36,9 +36,9 @@ final class BS_ACP_Action_moderators_edituser extends BS_ACP_Action_Base
 		// check array
 		foreach($forums as $uid => $fids)
 		{
-			if(!PLIB_Helper::is_integer($uid) || !in_array($uid,$user))
+			if(!FWS_Helper::is_integer($uid) || !in_array($uid,$user))
 				return 'Invalid user-id "'.$uid.'"';
-			if(!PLIB_Array_Utils::is_integer($fids))
+			if(!FWS_Array_Utils::is_integer($fids))
 				return 'Invalid forum-ids for user-id "'.$uid.'"';
 		}
 		

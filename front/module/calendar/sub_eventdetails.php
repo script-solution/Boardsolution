@@ -20,9 +20,9 @@
 final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
-	 * @param PLIB_Page $doc
+	 * @param FWS_Page $doc
 	 */
 	public function init($doc)
 	{
@@ -32,11 +32,11 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 		$renderer->add_action(BS_ACTION_CAL_JOIN_EVENT,'joinevent');
 		$renderer->add_action(BS_ACTION_CAL_LEAVE_EVENT,'leaveevent');
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$renderer->add_breadcrumb(
 			$locale->lang('event_details'),
 			$url->get_url(0,'&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id)
@@ -45,28 +45,28 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 	
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 	
 		$event_data = BS_DAO::get_events()->get_by_id($id);
 		
 		// does the event exist?
 		if($event_data === false)
 		{
-			$this->report_error(PLIB_Document_Messages::ERROR,'');
+			$this->report_error(FWS_Document_Messages::ERROR,'');
 			return;
 		}
 	
 		// check permission
-		$mode = $input->get_var(BS_URL_MODE,'get',PLIB_Input::STRING);
+		$mode = $input->get_var(BS_URL_MODE,'get',FWS_Input::STRING);
 		if($mode == 'delete')
 		{
 			if(!$user->is_admin())
@@ -74,7 +74,7 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 				if($event_data['user_id'] != $user->get_user_id() ||
 					!$auth->has_global_permission('delete_cal_event'))
 				{
-					$this->report_error(PLIB_Document_Messages::NO_ACCESS,'');
+					$this->report_error(FWS_Document_Messages::NO_ACCESS,'');
 					return;
 				}
 			}
@@ -96,12 +96,12 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 		if($event_data['event_end'] == 0)
 			$event_end = 'open';
 		else
-			$event_end = PLIB_Date::get_date($event_data['event_end']);
+			$event_end = FWS_Date::get_date($event_data['event_end']);
 		
 		if($event_data['timeout'] == 0)
-			$timeout = PLIB_Date::get_date($event_data['event_begin']);
+			$timeout = FWS_Date::get_date($event_data['event_begin']);
 		else
-			$timeout = PLIB_Date::get_date($event_data['timeout']);
+			$timeout = FWS_Date::get_date($event_data['timeout']);
 		
 		$bbcode = new BS_BBCode_Parser(
 			$event_data['description'],'desc',true,true
@@ -111,7 +111,7 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 		$tpl->add_variables(array(
 			'event_title' => $event_data['event_title'],
 			'location' => $event_data['event_location'],
-			'event_begin' => PLIB_Date::get_date($event_data['event_begin']),
+			'event_begin' => FWS_Date::get_date($event_data['event_begin']),
 			'event_end' => $event_end,
 			'description' => $text
 		));

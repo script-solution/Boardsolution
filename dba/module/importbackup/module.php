@@ -20,7 +20,7 @@
 final class BS_DBA_Module_importbackup extends BS_DBA_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_DBA_Page $doc
 	 */
@@ -33,12 +33,12 @@ final class BS_DBA_Module_importbackup extends BS_DBA_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$user = PLIB_Props::get()->user();
+		$tpl = FWS_Props::get()->tpl();
+		$user = FWS_Props::get()->user();
 
 		$user->delete_session_data('BS_restore');
 		$user->delete_session_data('BS_backup');

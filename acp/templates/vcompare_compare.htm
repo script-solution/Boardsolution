@@ -7,7 +7,7 @@
 {endloop}
 <div class="a_block">
 	<div class="a_menubar">
-		<a href="javascript:PLIB_getElement('dlform').submit();">
+		<a href="javascript:FWS_getElement('dlform').submit();">
 		<img src="{gpath}acp/images/download.png" alt="{glocale.lang('vcompare_download_changes')}" title="{glocale.lang('vcompare_download_changes')}" />
 		{glocale.lang('vcompare_download_changes')}
 		</a>
@@ -32,7 +32,7 @@
 		{if item:isfile == false}
 		<div class="a_main" style="margin-top: 1px; {if item:color}background-color: {item:color};{endif}">
 			<div style="padding-left: {item:layer * 15}px;">
-				<a href="javascript:PLIB_toggleElement('{item:id}');">
+				<a href="javascript:FWS_toggleElement('{item:id}');">
 				<img src="{gpath}acp/images/directory.gif" alt="Folder" />
 				{item:name}
 				</a>

@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_AddFields extends PLIB_Singleton
+class BS_DAO_AddFields extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_AddFields the instance of this class
@@ -39,10 +39,10 @@ class BS_DAO_AddFields extends PLIB_Singleton
 	 */
 	public function get_by_id($id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$row = $db->sql_fetch(
 			'SELECT * FROM '.BS_TB_USER_FIELDS.' WHERE id = '.$id
@@ -61,7 +61,7 @@ class BS_DAO_AddFields extends PLIB_Singleton
 	 */
 	public function create($fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$db->sql_insert(BS_TB_USER_FIELDS,$fields);
 		return $db->get_last_insert_id();
@@ -76,10 +76,10 @@ class BS_DAO_AddFields extends PLIB_Singleton
 	 */
 	public function update($id,$fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_update(BS_TB_USER_FIELDS,'WHERE id = '.$id,$fields);
 		return $db->get_affected_rows();
@@ -93,7 +93,7 @@ class BS_DAO_AddFields extends PLIB_Singleton
 	 */
 	public function dec_sort($lower)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$db->sql_update(BS_TB_USER_FIELDS,'WHERE field_sort > '.$lower,array(
 			'field_sort' => array('field_sort - 1')
@@ -110,7 +110,7 @@ class BS_DAO_AddFields extends PLIB_Singleton
 	 */
 	public function update_sort_by_id($sort,$id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$db->sql_update(BS_TB_USER_FIELDS,'WHERE id = '.$id,array(
 			'field_sort' => $sort
@@ -126,10 +126,10 @@ class BS_DAO_AddFields extends PLIB_Singleton
 	 */
 	public function delete($id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_USER_FIELDS.' WHERE id = '.$id

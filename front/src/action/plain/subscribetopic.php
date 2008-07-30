@@ -29,7 +29,7 @@ final class BS_Front_Action_Plain_SubscribeTopic extends BS_Front_Action_Plain
 	 */
 	public static function get_default($topic_id,$exists = true)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 		
 		return new BS_Front_Action_Plain_SubscribeTopic($topic_id,$user->get_user_id(),$exists);
 	}
@@ -86,8 +86,8 @@ final class BS_Front_Action_Plain_SubscribeTopic extends BS_Front_Action_Plain
 	
 	public function check_data()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
 
 		// check if the user is allowed to subscribe this topic
 		if($cfg['enable_email_notification'] == 1 && $this->_user_id > 0)
@@ -128,8 +128,8 @@ final class BS_Front_Action_Plain_SubscribeTopic extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
-		$db = PLIB_Props::get()->db();
-		$cfg = PLIB_Props::get()->cfg();
+		$db = FWS_Props::get()->db();
+		$cfg = FWS_Props::get()->cfg();
 
 		parent::perform_action();
 		

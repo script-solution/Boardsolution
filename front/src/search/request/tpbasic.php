@@ -17,7 +17,7 @@
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_Front_Search_Request_TPBasic extends PLIB_Object
+abstract class BS_Front_Search_Request_TPBasic extends FWS_Object
 	implements BS_Front_Search_Request
 {
 	/**
@@ -43,8 +43,8 @@ abstract class BS_Front_Search_Request_TPBasic extends PLIB_Object
 	 */
 	protected final function get_result_ids_impl($type = 'posts',$search_cond,$limit,$keywords = null)
 	{
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
 
 		// limit the search to the allowed forums
 		$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);

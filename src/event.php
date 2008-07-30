@@ -17,7 +17,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Event extends PLIB_Object
+final class BS_Event extends FWS_Object
 {
 	/**
 	 * The event-data
@@ -47,10 +47,10 @@ final class BS_Event extends PLIB_Object
 	 */
 	public function __construct($event)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 		
 		if(!is_array($event))
-			PLIB_Helper::def_error('array','event',$event);
+			FWS_Helper::def_error('array','event',$event);
 		
 		parent::__construct();
 		
@@ -127,7 +127,7 @@ final class BS_Event extends PLIB_Object
 	 */
 	public function is_open()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		if(!$user->is_loggedin())
 			return false;

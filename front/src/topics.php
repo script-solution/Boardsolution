@@ -17,7 +17,7 @@
  * @subpackage	front.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Topics extends PLIB_Object
+final class BS_Front_Topics extends FWS_Object
 {
 	/**
 	 * do you want to limit the query to a specific forum?
@@ -185,8 +185,8 @@ final class BS_Front_Topics extends PLIB_Object
 		else
 			$this->_order = 'lastpost';
 		$this->_ad = in_array($ad,array('ASC','DESC')) ? $ad : 'DESC';
-		$this->_number_of_topics = PLIB_Helper::is_integer($number) ? $number : 0;
-		$this->_fid = PLIB_Helper::is_integer($fid) ? $fid : 0;
+		$this->_number_of_topics = FWS_Helper::is_integer($number) ? $number : 0;
+		$this->_fid = FWS_Helper::is_integer($fid) ? $fid : 0;
 		$this->_firstsite = $firstsite;
 	}
 
@@ -228,7 +228,7 @@ final class BS_Front_Topics extends PLIB_Object
 	 */
 	public function set_middle_width($width)
 	{
-		$w = (PLIB_Helper::is_integer($width) && $width >= 0 && $width <= 100) ? $width : 50;
+		$w = (FWS_Helper::is_integer($width) && $width >= 0 && $width <= 100) ? $width : 50;
 		$this->_middle_width = $w;
 	}
 	
@@ -331,13 +331,13 @@ final class BS_Front_Topics extends PLIB_Object
 	 */
 	public function add_topics()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
-		$tpl = PLIB_Props::get()->tpl();
-		$input = PLIB_Props::get()->input();
-		$unread = PLIB_Props::get()->unread();
-		$functions = PLIB_Props::get()->functions();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$tpl = FWS_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$unread = FWS_Props::get()->unread();
+		$functions = FWS_Props::get()->functions();
+		$url = FWS_Props::get()->url();
 
 		if($this->_total_topic_num != 0)
 		{
@@ -397,7 +397,7 @@ final class BS_Front_Topics extends PLIB_Object
 				$num = $this->_total_topic_num >= 0 ? $this->_total_topic_num : 0;
 				// ensure that the first site is displayed?
 				if($this->_firstsite)
-					$pagination = new PLIB_Pagination($this->_number_of_topics,$num,1);
+					$pagination = new FWS_Pagination($this->_number_of_topics,$num,1);
 				else
 					$pagination = new BS_Pagination($this->_number_of_topics,$num);
 				$start = $pagination->get_start();
@@ -499,7 +499,7 @@ final class BS_Front_Topics extends PLIB_Object
 		if(!$this->_show_views)
 			$total_colspan--;
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$redirect_url = '';
 		if(isset($pagination) && $pagination !== null)
 		{
@@ -534,7 +534,7 @@ final class BS_Front_Topics extends PLIB_Object
 		if($this->_total_topic_num != 0)
 		{
 			if(!is_null($this->_keywords))
-				$kwhl = new PLIB_KeywordHighlighter($this->_keywords,'<span class="bs_highlight">');
+				$kwhl = new FWS_KeywordHighlighter($this->_keywords,'<span class="bs_highlight">');
 			
 			$post_order = BS_PostingUtils::get_instance()->get_posts_order();
 			$is_important = false;
@@ -592,7 +592,7 @@ final class BS_Front_Topics extends PLIB_Object
 				if(!is_null($this->_keywords))
 				{
 					$data['name'] = $kwhl->highlight($data['name']);
-					$ls = new PLIB_HTML_LimitedString($data['name'],$cfg['thread_max_title_len']);
+					$ls = new FWS_HTML_LimitedString($data['name'],$cfg['thread_max_title_len']);
 					$res = $ls->get();
 					if($ls->has_cut())
 						$topic_name = array('displayed' => $res,'complete' => strip_tags($data['name']));
@@ -683,7 +683,7 @@ final class BS_Front_Topics extends PLIB_Object
 			$username = $data['post_an_user'];
 		
 		return array(
-			'date' => PLIB_Date::get_date($data['post_time']),
+			'date' => FWS_Date::get_date($data['post_time']),
 			'username' => $username
 		);
 	}
@@ -698,7 +698,7 @@ final class BS_Front_Topics extends PLIB_Object
 	 */
 	private function _get_topic_lastpost(&$data,$posts_order,$pages)
 	{
-		$url = PLIB_Props::get()->url();
+		$url = FWS_Props::get()->url();
 		
 		if($data['lastpost_id'] == 0)
 			return false;
@@ -720,7 +720,7 @@ final class BS_Front_Topics extends PLIB_Object
 			$user_name = $data['lastpost_an_user'];
 
 		return array(
-			'date' => PLIB_Date::get_date($data['lastpost_time']),
+			'date' => FWS_Date::get_date($data['lastpost_time']),
 			'username' => $user_name,
 			'url' => $murl.'#b_'.$data['lastpost_id']
 		);

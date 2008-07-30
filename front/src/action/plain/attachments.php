@@ -30,8 +30,8 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 	 */
 	public static function get_default($post_id = 0,$topic_id = 0,$pm_id = 0)
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
 		
 		$file_paths = $input->get_var('attached_file_paths','post');
 		return new BS_Front_Action_Plain_Attachments(
@@ -141,8 +141,8 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 	
 	public function check_data()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
 
 		// attachments allowed?
 		if($cfg['attachments_enable'] == 0)
@@ -186,8 +186,8 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
-		$db = PLIB_Props::get()->db();
-		$cfg = PLIB_Props::get()->cfg();
+		$db = FWS_Props::get()->db();
+		$cfg = FWS_Props::get()->cfg();
 
 		parent::perform_action();
 		
@@ -196,8 +196,8 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 		for($i = 0;$i < $this->_limit;$i++)
 		{
 			// is the path-beginning valid?
-			PLIB_FileUtils::clean_path($this->_file_paths[$i]);
-			if(PLIB_String::substr($this->_file_paths[$i],0,8) != 'uploads/')
+			FWS_FileUtils::clean_path($this->_file_paths[$i]);
+			if(FWS_String::substr($this->_file_paths[$i],0,8) != 'uploads/')
 				continue;
 	
 			// the file has to exist

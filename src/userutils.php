@@ -17,7 +17,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_UserUtils extends PLIB_Singleton
+final class BS_UserUtils extends FWS_Singleton
 {
 	/**
 	 * @return BS_UserUtils the instance of this class
@@ -39,9 +39,9 @@ final class BS_UserUtils extends PLIB_Singleton
 	 */
 	public function get_link($id,$name,$group_ids = '',$color = false,$style = '')
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$url = FWS_Props::get()->url();
 
 		static $user_cache = array();
 		
@@ -86,7 +86,7 @@ final class BS_UserUtils extends PLIB_Singleton
 	 */
 	public function user_voted_for_poll($pollid,$userid = 0)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		if($userid == 0)
 		{
@@ -106,7 +106,7 @@ final class BS_UserUtils extends PLIB_Singleton
 	 */
 	public function user_voted_for_link($linkid)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		static $votes = null;
 		if($votes === null)
@@ -117,7 +117,7 @@ final class BS_UserUtils extends PLIB_Singleton
 			else
 			{
 				$votes = BS_DAO::get_linkvotes()->get_votes_of_user($userid);
-				$votes = PLIB_Array_Utils::get_fast_access($votes);
+				$votes = FWS_Array_Utils::get_fast_access($votes);
 			}
 		}
 		
@@ -134,8 +134,8 @@ final class BS_UserUtils extends PLIB_Singleton
 	 */
 	public function get_displayed_email($email,$mode,$use_link = false)
 	{
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
 
 		// admins can always view the email-address
 		if($user->is_admin())
@@ -174,7 +174,7 @@ final class BS_UserUtils extends PLIB_Singleton
 	public function get_avatar_path($data)
 	{
 		if($data['av_pfad'] != '' && ($data['aowner'] == $data['post_user'] || $data['aowner'] == 0))
-			return PLIB_Path::client_app().'images/avatars/'.$data['av_pfad'];
+			return FWS_Path::client_app().'images/avatars/'.$data['av_pfad'];
 	
 		return '';
 	}
@@ -189,14 +189,14 @@ final class BS_UserUtils extends PLIB_Singleton
 	 */
 	public function get_profile_avatar($avatar_id,$user_id)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		if($avatar_id > 0)
 		{
 			$avatar = BS_DAO::get_avatars()->get_by_id($avatar_id);
 			if($avatar !== false && ($avatar['user'] == $user_id || $avatar['user'] == 0))
 			{
-				$image = PLIB_Path::client_app().'images/avatars/'.$avatar['av_pfad'];
+				$image = FWS_Path::client_app().'images/avatars/'.$avatar['av_pfad'];
 				return '<img src="'.$image.'" alt="" />';
 			}
 	
@@ -214,7 +214,7 @@ final class BS_UserUtils extends PLIB_Singleton
 	 */
 	public function check_username($user_name)
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		if(preg_match("/([\"\\/|'])/i",$user_name))
 			return false;

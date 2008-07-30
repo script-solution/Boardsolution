@@ -18,7 +18,7 @@
  * @subpackage	src.community
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Community_Manager extends PLIB_Singleton
+final class BS_Community_Manager extends FWS_Singleton
 {
 	/**
 	 * @return BS_Community_Manager the instance of this class
@@ -66,9 +66,9 @@ final class BS_Community_Manager extends PLIB_Singleton
 	public function register_import($import)
 	{
 		if(!($import instanceof BS_Community_Import))
-			PLIB_Helper::def_error('instance','import','BS_Community_Import',$import);
+			FWS_Helper::def_error('instance','import','BS_Community_Import',$import);
 		if($this->_export !== null)
-			PLIB_Helper::error('You can\'t export and import the community at the same time!');
+			FWS_Helper::error('You can\'t export and import the community at the same time!');
 		
 		$this->_import = $import;
 	}
@@ -81,9 +81,9 @@ final class BS_Community_Manager extends PLIB_Singleton
 	public function register_export($export)
 	{
 		if(!($export instanceof BS_Community_Export))
-			PLIB_Helper::def_error('instance','export','BS_Community_Export',$export);
+			FWS_Helper::def_error('instance','export','BS_Community_Export',$export);
 		if($this->_import !== null)
-			PLIB_Helper::error('You can\'t export and import the community at the same time!');
+			FWS_Helper::error('You can\'t export and import the community at the same time!');
 		
 		$this->_export = $export;
 	}

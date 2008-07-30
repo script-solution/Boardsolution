@@ -20,7 +20,7 @@
 final class BS_Front_Module_topics extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,32 +28,32 @@ final class BS_Front_Module_topics extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_robots_value('index,follow');		
 		$renderer->add_action(BS_ACTION_SUBSCRIBE_FORUM,'subscribeforum');
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$this->add_loc_forum_path($fid);
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
-		$functions = PLIB_Props::get()->functions();
-		$forums = PLIB_Props::get()->forums();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
+		$functions = FWS_Props::get()->functions();
+		$forums = FWS_Props::get()->forums();
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 
 		// if the topic id is set some things may be wrong...
 		if($input->isset_var(BS_URL_TID,'get'))
@@ -63,7 +63,7 @@ final class BS_Front_Module_topics extends BS_Front_Module
 		}
 		
 		// invalid forum-id?
-		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
+		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
 		{
 			$this->report_error();
 			return;
@@ -76,26 +76,26 @@ final class BS_Front_Module_topics extends BS_Front_Module
 		{
 			// send a 404 for search-engines and such
 			$doc->set_header('HTTP/1.0 404 Not Found','');
-			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('forum_not_found'));
+			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('forum_not_found'));
 			return;
 		}
 
 		$order_options = array('lastpost','topic_name','topic_type','replies','views');
 		$order = $input->correct_var(
-			BS_URL_ORDER,'get',PLIB_Input::STRING,$order_options,'lastpost',false
+			BS_URL_ORDER,'get',FWS_Input::STRING,$order_options,'lastpost',false
 		);
 
-		$ad = $input->correct_var(BS_URL_AD,'get',PLIB_Input::STRING,array('ASC','DESC'),'DESC');
+		$ad = $input->correct_var(BS_URL_AD,'get',FWS_Input::STRING,array('ASC','DESC'),'DESC');
 
 		$limit_options = array(5,8,10,15,30,100,$cfg['threads_per_page']);
 		$limit = $input->correct_var(
-			BS_URL_LIMIT,'get',PLIB_Input::INTEGER,$limit_options,$cfg['threads_per_page']
+			BS_URL_LIMIT,'get',FWS_Input::INTEGER,$limit_options,$cfg['threads_per_page']
 		);
 
 		// check if the user is allowed to view the forum
 		if(!$auth->has_access_to_intern_forum($fid))
 		{
-			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+			$this->report_error(FWS_Document_Messages::NO_ACCESS);
 			return;
 		}
 
@@ -168,7 +168,7 @@ final class BS_Front_Module_topics extends BS_Front_Module
 
 			if($input->isset_var(BS_URL_ORDER,'get'))
 			{
-				$ad = $input->get_var(BS_URL_AD,'get',PLIB_Input::STRING);
+				$ad = $input->get_var(BS_URL_AD,'get',FWS_Input::STRING);
 				$params = '&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ORDER.'='.$order;
 				$params .= '&amp;'.BS_URL_AD.'='.$ad.'&amp;'.BS_URL_LIMIT.'='.$limit;
 				$params .= '&amp;'.BS_URL_SITE.'={d}';
@@ -210,15 +210,15 @@ final class BS_Front_Module_topics extends BS_Front_Module
 	 */
 	private function _add_options_top()
 	{
-		$input = PLIB_Props::get()->input();
-		$forums = PLIB_Props::get()->forums();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$user = PLIB_Props::get()->user();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$forums = FWS_Props::get()->forums();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$user = FWS_Props::get()->user();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$forum_data = $forums->get_node_data($fid);
 		$type = $forum_data->get_forum_type();
 		$closed = $forum_data->get_forum_is_closed();
@@ -250,9 +250,9 @@ final class BS_Front_Module_topics extends BS_Front_Module
 	 */
 	private function _add_options_bottom()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
 
 		$tpl->add_variables(array(
 			'display_topic_actions' => $cfg['display_denied_options'] || $user->is_loggedin(),
@@ -265,16 +265,16 @@ final class BS_Front_Module_topics extends BS_Front_Module
 	 */
 	private function _add_bottom()
 	{
-		$input = PLIB_Props::get()->input();
-		$forums = PLIB_Props::get()->forums();
-		$auth = PLIB_Props::get()->auth();
-		$url = PLIB_Props::get()->url();
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$forums = FWS_Props::get()->forums();
+		$auth = FWS_Props::get()->auth();
+		$url = FWS_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$forum_data = $forums->get_node_data($fid);
 
 		// check if the user is allowed to view the forum
@@ -293,9 +293,9 @@ final class BS_Front_Module_topics extends BS_Front_Module
 		{
 			$form = $this->request_formular(false,false);
 			
-			$order = $input->get_var(BS_URL_ORDER,'get',PLIB_Input::STRING);
-			$ad = $input->get_var(BS_URL_AD,'get',PLIB_Input::STRING);
-			$limit = $input->get_var(BS_URL_LIMIT,'get',PLIB_Input::INTEGER);
+			$order = $input->get_var(BS_URL_ORDER,'get',FWS_Input::STRING);
+			$ad = $input->get_var(BS_URL_AD,'get',FWS_Input::STRING);
+			$limit = $input->get_var(BS_URL_LIMIT,'get',FWS_Input::INTEGER);
 
 			$order_options = array(
 				'lastpost' => $locale->lang('date'),
@@ -361,10 +361,10 @@ final class BS_Front_Module_topics extends BS_Front_Module
 			$options[] = $locale->lang('allow_delete_own_posts_false');
 
 		// change search-display-state?
-		if($input->get_var(BS_URL_KW,'get',PLIB_Input::STRING) == 'clap_options')
+		if($input->get_var(BS_URL_KW,'get',FWS_Input::STRING) == 'clap_options')
 			$functions->clap_area('topic_options');
 
-		$clap_cookie = $input->get_var(BS_COOKIE_PREFIX.'topic_options','cookie',PLIB_Input::INT_BOOL);
+		$clap_cookie = $input->get_var(BS_COOKIE_PREFIX.'topic_options','cookie',FWS_Input::INT_BOOL);
 		$img_type = ($clap_cookie === null || $clap_cookie == 1) ? 'open' : 'closed';
 
 		$tpl->add_variables(array(
@@ -372,10 +372,10 @@ final class BS_Front_Module_topics extends BS_Front_Module
 			'hide_options' => ($clap_cookie === null || $clap_cookie == 1) ? '' : ' style="display: none;"',
 			'cookie_prefix' => BS_COOKIE_PREFIX,
 			'options' => $options,
-			'php_self' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'php_self' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'action_param' => BS_URL_ACTION,
 			'fid_param' => BS_URL_FID,
-			'fid' => $input->get_var(BS_URL_FID,'get',PLIB_Input::ID),
+			'fid' => $input->get_var(BS_URL_FID,'get',FWS_Input::ID),
 			'hidden_fields' => $hidden_fields,
 			'order_ins' => $order_ins,
 			'ascdesc_ins' => $ascdesc_ins,

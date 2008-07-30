@@ -64,9 +64,9 @@ final class BS_API_Module_online_user extends BS_API_Module
 
 	public function run()
 	{
-		$sessions = PLIB_Props::get()->sessions();
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
+		$sessions = FWS_Props::get()->sessions();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
 
 		$online = $sessions->get_user_at_location();
 

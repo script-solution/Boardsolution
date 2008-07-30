@@ -18,7 +18,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_DAO_UserBase extends PLIB_Singleton
+abstract class BS_DAO_UserBase extends FWS_Singleton
 {
 	/**
 	 * Builds the WHERE-clause for the search-methods
@@ -34,10 +34,10 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	{
 		$user_name = str_replace('*','%',(string)$user_name);
 		$user_email = str_replace('*','%',(string)$user_email);
-		if(!PLIB_Helper::is_integer($register_date) || $register_date < 0)
-			PLIB_Helper::def_error('intge0','register_date',$register_date);
-		if(!PLIB_Array_Utils::is_integer($user_groups))
-			PLIB_Helper::def_error('intarray','user_groups',$user_groups);
+		if(!FWS_Helper::is_integer($register_date) || $register_date < 0)
+			FWS_Helper::def_error('intge0','register_date',$register_date);
+		if(!FWS_Array_Utils::is_integer($user_groups))
+			FWS_Helper::def_error('intarray','user_groups',$user_groups);
 		
 		$where = ' WHERE p.active = 1 AND p.banned = 0';
 		if($user_name != null)
@@ -51,7 +51,7 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 			$where .= ' AND (';
 			foreach($user_groups as $id)
 				$where .= 'FIND_IN_SET('.$id.',p.user_group) OR ';
-			$where = PLIB_String::substr($where,0,PLIB_String::strlen($where) - 4).')';
+			$where = FWS_String::substr($where,0,FWS_String::strlen($where) - 4).')';
 		}
 		
 		return $where;
@@ -69,7 +69,7 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	 */
 	protected function get_users_by_groups_impl($fields,$group_ids,$user_ids,$start = 0,$count = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$where = $this->get_user_by_groups_where($group_ids,$user_ids);
 		$limit = $this->get_limit($start,$count);
@@ -91,10 +91,10 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	 */
 	protected function get_user_by_groups_where($group_ids,$user_ids)
 	{
-		if(!PLIB_Array_Utils::is_integer($group_ids))
-			PLIB_Helper::def_error('intarray','group_ids',$group_ids);
-		if(!PLIB_Array_Utils::is_integer($user_ids))
-			PLIB_Helper::def_error('intarray','user_ids',$user_ids);
+		if(!FWS_Array_Utils::is_integer($group_ids))
+			FWS_Helper::def_error('intarray','group_ids',$group_ids);
+		if(!FWS_Array_Utils::is_integer($user_ids))
+			FWS_Helper::def_error('intarray','user_ids',$user_ids);
 		
 		$where = '';
 		if(count($group_ids) > 0 || count($user_ids) > 0)
@@ -108,7 +108,7 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 			if(count($user_ids) > 0)
 				$where .= ' p.id IN ('.implode(',',$user_ids).') OR ';
 			
-			$where = PLIB_String::substr($where,0,PLIB_String::strlen($where) - 4).')';
+			$where = FWS_String::substr($where,0,FWS_String::strlen($where) - 4).')';
 		}
 		
 		return $where;
@@ -124,7 +124,7 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	 */
 	protected function get_user_by_email_impl($fields,$email)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_fetch(
 			'SELECT '.$fields.'
@@ -144,10 +144,10 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	 */
 	protected function get_users_by_names_impl($fields,$names)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		if(!is_array($names))
-			PLIB_Helper::def_error('array','names',$names);
+			FWS_Helper::def_error('array','names',$names);
 		
 		// if no ids given the query is useless
 		if(count($names) == 0)
@@ -171,10 +171,10 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	 */
 	protected function get_activenbanned($active,$banned)
 	{
-		if(!PLIB_Helper::is_integer($active) || !in_array($active,array(-1,0,1)))
-			PLIB_Helper::def_error('numbetween','active',-1,1,$active);
-		if(!PLIB_Helper::is_integer($banned) || !in_array($banned,array(-1,0,1)))
-			PLIB_Helper::def_error('numbetween','banned',-1,1,$banned);
+		if(!FWS_Helper::is_integer($active) || !in_array($active,array(-1,0,1)))
+			FWS_Helper::def_error('numbetween','active',-1,1,$active);
+		if(!FWS_Helper::is_integer($banned) || !in_array($banned,array(-1,0,1)))
+			FWS_Helper::def_error('numbetween','banned',-1,1,$banned);
 		
 		$where = ' WHERE 1';
 		if($active >= 0)
@@ -195,7 +195,7 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	protected function get_sort($sort,$order)
 	{
 		if(!in_array($order,array('ASC','DESC')))
-			PLIB_Helper::def_error('in_array','order',array('ASC','DESC'),$order);
+			FWS_Helper::def_error('in_array','order',array('ASC','DESC'),$order);
 		
 		return 'ORDER BY '.$sort.' '.$order;
 	}
@@ -209,10 +209,10 @@ abstract class BS_DAO_UserBase extends PLIB_Singleton
 	 */
 	protected function get_limit($start,$count)
 	{
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		if($count > 0)
 			return 'LIMIT '.$start.','.$count;

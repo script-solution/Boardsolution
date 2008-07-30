@@ -18,7 +18,7 @@
  * @subpackage	src.community
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Community_User extends PLIB_Object
+final class BS_Community_User extends FWS_Object
 {
 	/**
 	 * Determines the user-status from the given groups-array
@@ -42,7 +42,7 @@ final class BS_Community_User extends PLIB_Object
 	 */
 	public static function get_instance_from_data($data)
 	{
-		$groups = PLIB_Array_Utils::advanced_explode(',',$data['user_group']);
+		$groups = FWS_Array_Utils::advanced_explode(',',$data['user_group']);
 		$status = self::get_status_from_groups($groups);
 		return new BS_Community_User(
 			$data['id'],$data['user_name'],$data['user_email'],$status,md5($data['user_pw'])

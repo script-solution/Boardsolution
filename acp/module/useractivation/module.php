@@ -20,7 +20,7 @@
 final class BS_ACP_Module_useractivation extends BS_ACP_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_USER_ACT_DELETE,'delete');
@@ -39,16 +39,16 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
-		$input = PLIB_Props::get()->input();
-		$functions = PLIB_Props::get()->functions();
-		$url = PLIB_Props::get()->url();
-		$tpl = PLIB_Props::get()->tpl();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$functions = FWS_Props::get()->functions();
+		$url = FWS_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
 
 		// community exported?
 		if(BS_ENABLE_EXPORT)
@@ -58,7 +58,7 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 		}
 		
 		// show delete-message?
-		$action_type = $input->get_var('action_type','post',PLIB_Input::STRING);
+		$action_type = $input->get_var('action_type','post',FWS_Input::STRING);
 		if(($ids = $input->get_var('delete','post')) != null && $action_type != 'none')
 		{
 			if($action_type == 'delete')
@@ -77,7 +77,7 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 			$names = array();
 			foreach(BS_DAO::get_user()->get_users_by_ids($ids,0) as $user)
 				$names[] = $user['user_name'];
-			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
+			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
 			$functions->add_delete_message(
 				sprintf($msg,$namelist),
@@ -100,7 +100,7 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 				'id' => $data['id'],
 				'user_name' => BS_ACP_Utils::get_instance()->get_userlink($data['id'],$data['user_name']),
 				'user_email' => $data['user_email'],
-				'register_date' => PLIB_Date::get_date($data["registerdate"],true)
+				'register_date' => FWS_Date::get_date($data["registerdate"],true)
 			);
 		}
 		

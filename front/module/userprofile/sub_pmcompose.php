@@ -20,7 +20,7 @@
 final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,15 +28,15 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$input = PLIB_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$input = FWS_Props::get()->input();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_SEND_PM,'sendpm');
 		
-		$uid = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$pid = $input->get_var(BS_URL_PID,'get',PLIB_Input::ID);
+		$uid = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
+		$pid = $input->get_var(BS_URL_PID,'get',FWS_Input::ID);
 		$id = ($uid != null) ? '&amp;'.BS_URL_ID.'='.$uid : '';
 		$pid = ($pid != null) ? '&amp;'.BS_URL_PID.'='.$pid : '';
 		$renderer->add_breadcrumb(
@@ -46,29 +46,29 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
-		$msgs = PLIB_Props::get()->msgs();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$msgs = FWS_Props::get()->msgs();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		$helper = BS_Front_Module_UserProfile_Helper::get_instance();
 		if($helper->get_pm_permission() < 1)
 		{
-			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+			$this->report_error(FWS_Document_Messages::NO_ACCESS);
 			return;
 		}
 		
 		if($input->isset_var('preview','post'))
 			BS_PostingUtils::get_instance()->add_post_preview('posts',1,1);
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$pid = $input->get_var(BS_URL_PID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
+		$pid = $input->get_var(BS_URL_PID,'get',FWS_Input::ID);
 
 		// quote a pm
 		if($pid != null)
@@ -87,7 +87,7 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		if($receiver == null || !is_array($receiver))
 			$receiver = array();
 
-		$new_receiver = $input->get_var('new_receiver','post',PLIB_Input::STRING);
+		$new_receiver = $input->get_var('new_receiver','post',FWS_Input::STRING);
 		if($new_receiver === null)
 		{
 			if($pid != null && $edaten['user_name'] != '')
@@ -164,8 +164,8 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 	 */
 	private function _add_new_receiver(&$receiver,$new_receiver)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
 
 		if($new_receiver == null)
 			return false;
@@ -180,9 +180,9 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		$add_error = false;
 
 		$user_names = explode(',',$new_receiver);
-		PLIB_Array_Utils::trim($user_names);
+		FWS_Array_Utils::trim($user_names);
 
-		$un_str = PLIB_Array_Utils::advanced_implode("','",$user_names);
+		$un_str = FWS_Array_Utils::advanced_implode("','",$user_names);
 		if(count($un_str) == 0)
 		{
 			if(count($receiver) == 0)
@@ -252,10 +252,10 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 	 */
 	private function _add_pm_review($user_id,$user_name)
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$locale = PLIB_Props::get()->locale();
-		$user = PLIB_Props::get()->user();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$user = FWS_Props::get()->user();
 
 		$tpl->set_template('inc_message_review.htm');
 	
@@ -279,7 +279,7 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 				'text' => $text,
 				'user_name' => $username,
 				'subject' => '<span style="font-weight: normal;">'.$data['pm_title'].'</span>',
-				'date' => PLIB_Date::get_date($data['pm_date'],true,true),
+				'date' => FWS_Date::get_date($data['pm_date'],true,true),
 				'post_id' => $data['id']
 			);
 		}

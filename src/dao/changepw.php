@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_ChangePW extends PLIB_Singleton
+class BS_DAO_ChangePW extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_ChangePW the instance of this class
@@ -40,10 +40,10 @@ class BS_DAO_ChangePW extends PLIB_Singleton
 	 */
 	public function exists($id,$key = '')
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		return $db->sql_num(
 			BS_TB_CHANGE_PW,'user_id',' WHERE user_id = '.$id.($key ? ' AND user_key = "'.$key.'"' : '')
@@ -59,10 +59,10 @@ class BS_DAO_ChangePW extends PLIB_Singleton
 	 */
 	public function create($user_id,$key)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$db->sql_insert(BS_TB_CHANGE_PW,array(
 			'user_id' => $user_id,
@@ -81,10 +81,10 @@ class BS_DAO_ChangePW extends PLIB_Singleton
 	 */
 	public function update_by_user($user_id,$key)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$db->sql_update(BS_TB_CHANGE_PW,'WHERE user_id = '.$user_id,array(
 			'user_key' => $key,
@@ -101,10 +101,10 @@ class BS_DAO_ChangePW extends PLIB_Singleton
 	 */
 	public function delete_by_user($id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_qry('DELETE FROM '.BS_TB_CHANGE_PW.' WHERE user_id = '.$id);
 		return $db->get_affected_rows();
@@ -118,10 +118,10 @@ class BS_DAO_ChangePW extends PLIB_Singleton
 	 */
 	public function delete_timedout($timeout)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($timeout) || $timeout <= 0)
-			PLIB_Helper::def_error('intgt0','timeout',$timeout);
+		if(!FWS_Helper::is_integer($timeout) || $timeout <= 0)
+			FWS_Helper::def_error('intgt0','timeout',$timeout);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_CHANGE_PW.'

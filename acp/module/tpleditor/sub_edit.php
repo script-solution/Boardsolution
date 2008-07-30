@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,16 +28,16 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_EDIT_TPL,'edit');
 
 		$helper = BS_ACP_Module_TplEditor_Helper::get_instance();
 		$path = $helper->get_path();
-		$file = $input->get_var('file','get',PLIB_Input::STRING);
+		$file = $input->get_var('file','get',FWS_Input::STRING);
 		$renderer->add_breadcrumb(
 			$locale->lang('edit'),
 			$url->get_acpmod_url(0,'&amp;action=edit&amp;path='.$path.'&amp;file='.$file)
@@ -45,15 +45,15 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
-		$file = $input->get_var('file','get',PLIB_Input::STRING);
+		$file = $input->get_var('file','get',FWS_Input::STRING);
 		$helper = BS_ACP_Module_TplEditor_Helper::get_instance();
 		$path = $helper->get_path();
 		$def_path = $helper->get_path_in_default();
@@ -80,7 +80,7 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 		
 		$cpath = '';
 		$path_links = '';
-		foreach(PLIB_Array_Utils::advanced_explode('/',$path) as $part)
+		foreach(FWS_Array_Utils::advanced_explode('/',$path) as $part)
 		{
 			$cpath .= $part.'/';
 			$murl = $url->get_acpmod_url('tpleditor','&amp;path='.$cpath);
@@ -93,7 +93,7 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 			'image' => BS_ACP_Utils::get_instance()->get_file_image($real_file),
 			'filename' => $path_links.$file,
 			'filesize' => number_format(filesize($real_file),0,',','.'),
-			'last_modification' => PLIB_Date::get_date(filemtime($real_file)),
+			'last_modification' => FWS_Date::get_date(filemtime($real_file)),
 			'file_content' => $file_content,
 			'back_url' => $url->get_acpmod_url(0,'&amp;action=view&amp;path='.$path),
 			'back_button' => true

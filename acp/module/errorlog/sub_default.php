@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -34,21 +34,21 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
-		$order = $input->correct_var(BS_URL_ORDER,'get',PLIB_Input::STRING,
+		$order = $input->correct_var(BS_URL_ORDER,'get',FWS_Input::STRING,
 			array('error','date','user'),'date');
-		$ad = $input->correct_var(BS_URL_AD,'get',PLIB_Input::STRING,array('ASC','DESC'),'DESC');
-		$search = $input->get_var('search','get',PLIB_Input::STRING);
-		$site = $input->get_var('site','get',PLIB_Input::INTEGER);
+		$ad = $input->correct_var(BS_URL_AD,'get',FWS_Input::STRING,array('ASC','DESC'),'DESC');
+		$search = $input->get_var('search','get',FWS_Input::STRING);
+		$site = $input->get_var('site','get',FWS_Input::INTEGER);
 		
 		$params = '&amp;order='.$order.'&amp;ad='.$ad.'&amp;search='.$search.'&amp;site='.$site;
 		
@@ -58,7 +58,7 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 			$names = array();
 			foreach(BS_DAO::get_logerrors()->get_by_ids($ids) as $data)
 				$names[] = $data['message'];
-			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
+			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
@@ -68,7 +68,7 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 				$url->get_acpmod_url(0,$params)
 			);
 		}
-		else if($input->get_var('ask','get',PLIB_Input::STRING) == 'deleteall')
+		else if($input->get_var('ask','get',FWS_Input::STRING) == 'deleteall')
 		{
 			$functions->add_delete_message(
 				$locale->lang('delete_all_question'),
@@ -100,7 +100,7 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 			'col_user' => BS_ACP_Utils::get_instance()->get_order_column(
 				$locale->lang('username'),'user','ASC',$order,$baseurl
 			),
-			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search,
 			'delete_all_url' => $url->get_acpmod_url(0,$params.'&amp;ask=deleteall')
@@ -147,7 +147,7 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 			$logs[] = array(
 				'user' => $user,
 				'id' => $data['id'],
-				'date' => PLIB_Date::get_date($data['date']),
+				'date' => FWS_Date::get_date($data['date']),
 				'query' => htmlspecialchars($data['query'],ENT_QUOTES),
 				'error_msg' => $data['message'],
 				'backtrace' => $backtrace

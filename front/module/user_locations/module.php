@@ -34,7 +34,7 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 	private $_ad = 'DESC';
 	
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -42,9 +42,9 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$auth = PLIB_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($auth->has_global_permission('view_online_locations'));
@@ -53,28 +53,28 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$auth = PLIB_Props::get()->auth();
-		$sessions = PLIB_Props::get()->sessions();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$functions = PLIB_Props::get()->functions();
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$auth = FWS_Props::get()->auth();
+		$sessions = FWS_Props::get()->sessions();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$functions = FWS_Props::get()->functions();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
 
 		$order_vals = array('username','location','date','ip','useragent');
 		$this->_order = $input->correct_var(
-			BS_URL_ORDER,'get',PLIB_Input::STRING,$order_vals,'date'
+			BS_URL_ORDER,'get',FWS_Input::STRING,$order_vals,'date'
 		);
 		$this->_ad = $input->correct_var(
-			BS_URL_AD,'get',PLIB_Input::STRING,array('ASC','DESC'),'DESC'
+			BS_URL_AD,'get',FWS_Input::STRING,array('ASC','DESC'),'DESC'
 		);
-		$loc = $input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING);
+		$loc = $input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
 		
 		$baseurl = $url->get_url(0,'&amp;'.BS_URL_LOC.'='.$loc.'&amp;');
 		
@@ -162,7 +162,7 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 			$user_agent = '';
 			if($view_details)
 			{
-				$a_user_agent = PLIB_StringHelper::get_limited_string($data['user_agent'],35);
+				$a_user_agent = FWS_StringHelper::get_limited_string($data['user_agent'],35);
 				if($a_user_agent['complete'] != '')
 				{
 					$user_agent = '<span title="'.$a_user_agent['complete'].'">';
@@ -180,7 +180,7 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 				'location' => $location,
 				'user_ip' => $data['user_ip'],
 				'user_agent' => $user_agent,
-				'date' => PLIB_Date::get_date($data['date'])
+				'date' => FWS_Date::get_date($data['date'])
 			);
 		}
 		

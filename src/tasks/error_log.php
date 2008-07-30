@@ -17,11 +17,11 @@
  * @subpackage	src.tasks
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Tasks_error_log extends PLIB_Tasks_Base
+final class BS_Tasks_error_log extends FWS_Tasks_Base
 {
 	public function run()
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		if($cfg['error_log_days'] > 0)
 			BS_DAO::get_logerrors()->delete_timedout(3600 * 24 * $cfg['error_log_days']);

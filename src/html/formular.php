@@ -17,7 +17,7 @@
  * @subpackage	src.html
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_HTML_Formular extends PLIB_HTML_Formular
+final class BS_HTML_Formular extends FWS_HTML_Formular
 {
 	/**
 	 * Constructor
@@ -27,11 +27,11 @@ final class BS_HTML_Formular extends PLIB_HTML_Formular
 	 */
 	public function __construct($check_attachments = true,$check_preview = false)
 	{
-		$doc = PLIB_Props::get()->doc();
-		$input = PLIB_Props::get()->input();
+		$doc = FWS_Props::get()->doc();
+		$input = FWS_Props::get()->input();
 		$renderer = $doc->get_renderer();
 		
-		if($renderer instanceof PLIB_Document_Renderer_HTML_Default)
+		if($renderer instanceof FWS_Document_Renderer_HTML_Default)
 			$condition = $renderer->get_action_result() === -1;
 		else
 			$condition = false;
@@ -47,23 +47,23 @@ final class BS_HTML_Formular extends PLIB_HTML_Formular
 	
 	protected function get_js_calendar_style()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		return $user->get_theme_item_path('calendar.css');
 	}
 	
 	protected function get_js_calendar_lang()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
-		return PLIB_Javascript::get_instance()->get_file(
+		return FWS_Javascript::get_instance()->get_file(
 			'language/'.$user->get_language().'/calendar_lang.js'
 		);
 	}
 	
 	protected function get_js_calendar_image()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		return $user->get_theme_item_path('images/calendar.png');
 	}
@@ -77,7 +77,7 @@ final class BS_HTML_Formular extends PLIB_HTML_Formular
 	 */
 	public function get_timezone_combo($name = 'timezone',$default = 0)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		$tz = timezone_identifiers_list();
 		$zones = array();

@@ -18,7 +18,7 @@
  * @subpackage	src.forums
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Forums_Manager extends PLIB_Tree_Manager
+final class BS_Forums_Manager extends FWS_Tree_Manager
 {
 	/**
 	 * Constructor
@@ -29,7 +29,7 @@ final class BS_Forums_Manager extends PLIB_Tree_Manager
 	}
 
 	/**
-	 * @see PLIB_Tree_Manager::first_node_access()
+	 * @see FWS_Tree_Manager::first_node_access()
 	 */
 	protected function first_node_access()
 	{
@@ -137,7 +137,7 @@ final class BS_Forums_Manager extends PLIB_Tree_Manager
 	 */
 	public function is_unread_forum($id)
 	{
-		$unread = PLIB_Props::get()->unread();
+		$unread = FWS_Props::get()->unread();
 
 		$node = $this->get_node($id);
 		if($node !== null)
@@ -154,12 +154,12 @@ final class BS_Forums_Manager extends PLIB_Tree_Manager
 	/**
 	 * Calculates recursivly if the given node is unread (or any of it's childs)
 	 *
-	 * @param PLIB_Tree_Node $node the node
+	 * @param FWS_Tree_Node $node the node
 	 * @return boolean true if any sub-forum is unread
 	 */
 	private function _is_unread_forum_rek($node)
 	{
-		$unread = PLIB_Props::get()->unread();
+		$unread = FWS_Props::get()->unread();
 
 		foreach($node->get_childs() as $child)
 		{

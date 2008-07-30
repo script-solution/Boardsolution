@@ -21,10 +21,10 @@ final class BS_ACP_Action_smileys_switch extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
-		$ids = $input->get_var('ids','get',PLIB_Input::STRING);
-		if(!($aids = PLIB_StringHelper::get_ids($ids)) || count($aids) != 2)
+		$ids = $input->get_var('ids','get',FWS_Input::STRING);
+		if(!($aids = FWS_StringHelper::get_ids($ids)) || count($aids) != 2)
 			return 'Got an invalid id-string via GET (need 2 ids)';
 		
 		list($id1,$id2) = $aids;

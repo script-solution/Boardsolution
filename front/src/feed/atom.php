@@ -21,16 +21,16 @@ final class BS_Front_Feed_Atom extends BS_Front_Feed_Base
 {
 	protected function get_news_XML($news)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
 
-		$date = PLIB_Date::get_formated_date('Y-m-d\TH:i:s\Z',time());
+		$date = FWS_Date::get_formated_date('Y-m-d\TH:i:s\Z',time());
 		
 		$xml = '<?xml version="1.0" encoding="'.BS_RSS_FEED_ENCODING.'"?>'."\n";
 		$xml .= '<feed xmlns="http://www.w3.org/2005/Atom">'."\n";
 		$xml .= '	<title>'.$cfg['forum_title'].' :: '.$locale->lang('news').'</title>'."\n";
 		$xml .= '	<updated>'.$date.'</updated>'."\n";
-		$xml .= '	<id>'.md5(PLIB_Path::outer()).'</id>'."\n";
+		$xml .= '	<id>'.md5(FWS_Path::outer()).'</id>'."\n";
 		$xml .= "\n";
 		
 		foreach($news as $data)
@@ -42,7 +42,7 @@ final class BS_Front_Feed_Atom extends BS_Front_Feed_Base
 				$username = $data['post_an_user'];
 			
 			// date
-			$pub_date = PLIB_Date::get_formated_date('Y-m-d\TH:i:s\Z',$data['post_time']);
+			$pub_date = FWS_Date::get_formated_date('Y-m-d\TH:i:s\Z',$data['post_time']);
 			
 			$xml .= '	<entry>'."\n";
 			$xml .= '		<title>'.$data['name'].'</title>'."\n";

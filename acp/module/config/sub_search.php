@@ -27,7 +27,7 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 	private $_keyword;
 	
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -35,9 +35,9 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_SAVE_SETTINGS,'save');
@@ -46,7 +46,7 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 		$renderer->set_template('config_items.htm');
 
 		// init manager
-		$this->_keyword = $input->get_var('kw','get',PLIB_Input::STRING);
+		$this->_keyword = $input->get_var('kw','get',FWS_Input::STRING);
 		if($this->_keyword !== null)
 		{
 			$this->_keyword = $this->_prepare_keyword($this->_keyword);
@@ -55,7 +55,7 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 		}
 
 		// add bread crumb
-		$keyword = $input->get_var('kw','get',PLIB_Input::STRING);
+		$keyword = $input->get_var('kw','get',FWS_Input::STRING);
 		if($keyword != null)
 		{
 			$renderer->add_breadcrumb(
@@ -66,16 +66,16 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$url = PLIB_Props::get()->url();
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$url = FWS_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
 
-		$keyword = $input->get_var('kw','get',PLIB_Input::STRING);
+		$keyword = $input->get_var('kw','get',FWS_Input::STRING);
 		if($this->_keyword === null)
 		{
 			$this->report_error();
@@ -88,7 +88,7 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 		$manager->display($view);
 		
 		// highlight the keyword
-		$hl = new PLIB_KeywordHighlighter(array($this->_keyword),'<span class="bs_highlight">','</span>');
+		$hl = new FWS_KeywordHighlighter(array($this->_keyword),'<span class="bs_highlight">','</span>');
 		$items = $view->get_items();
 		foreach($items as $k => $item)
 		{
@@ -105,7 +105,7 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 			'action_type' => BS_ACP_ACTION_SAVE_SETTINGS,
 			'title' => sprintf($locale->lang('config_search_result'),$this->_keyword),
 			'items' => $items,
-			'form_target' => $input->get_var('SERVER_PHPSELF','server',PLIB_Input::STRING),
+			'form_target' => $input->get_var('SERVER_PHPSELF','server',FWS_Input::STRING),
 			'hidden_fields' => $hidden_fields,
 			'groups_per_line' => $perline,
 			'group_rows' => $helper->get_groups(0,$perline),
@@ -127,7 +127,7 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 	 */
 	private function _prepare_keyword($keyword)
 	{
-		$keyword = PLIB_String::strtolower($keyword);
+		$keyword = FWS_String::strtolower($keyword);
 		// replace german umlaute
 		$uml = array("\xE3\xA4","\xE3\xB6","\xE3\xBC","\xE3\x9F");
 		$repl = array('&auml;','&ouml;','&uuml;','&szlig');

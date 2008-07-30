@@ -17,7 +17,7 @@
  * @subpackage	front.src.action
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_Front_Action_Base extends PLIB_Actions_Base
+abstract class BS_Front_Action_Base extends FWS_Actions_Base
 {
 	/**
 	 * An array for all actions that defines for which action a status-page should be displayed
@@ -32,7 +32,7 @@ abstract class BS_Front_Action_Base extends PLIB_Actions_Base
 	public static function load_actions()
 	{
 		$action_msgs = array();
-		include_once(PLIB_Path::server_app().'config/actions.php');
+		include_once(FWS_Path::server_app().'config/actions.php');
 		self::$_action_msgs = $action_msgs;
 	}
 	

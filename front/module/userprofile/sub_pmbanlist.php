@@ -20,7 +20,7 @@
 final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_BAN_USER,'pmbanuser');
@@ -39,32 +39,32 @@ final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
 
 		$helper = BS_Front_Module_UserProfile_Helper::get_instance();
 		if($helper->get_pm_permission() < 1)
 		{
-			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+			$this->report_error(FWS_Document_Messages::NO_ACCESS);
 			return;
 		}
 
 		$del = $input->get_var('del','post');
-		if($del != null && PLIB_Array_Utils::is_integer($del))
+		if($del != null && FWS_Array_Utils::is_integer($del))
 		{
 			$ids = implode(',',$del);
 			$names = array();
 			foreach(BS_DAO::get_userbans()->get_by_user($user->get_user_id(),$del) as $i => $data)
 				$names[] = $data['user_name'];
-			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
+			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 
 			$loc = '&amp;'.BS_URL_LOC.'=pmbanlist';
 			$yes_url = $url->get_url(0,$loc.'&amp;'.BS_URL_AT.'='

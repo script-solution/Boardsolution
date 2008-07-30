@@ -17,7 +17,7 @@
  * @subpackage	src.user
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_User_Data extends PLIB_User_Data
+final class BS_User_Data extends FWS_User_Data
 {
 	/**
 	 * Additional user-data
@@ -33,7 +33,7 @@ final class BS_User_Data extends PLIB_User_Data
 	 */
 	public function __construct($data)
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		parent::__construct($data['id'],$data['user_name'],$data['user_pw']);
 		
@@ -69,7 +69,7 @@ final class BS_User_Data extends PLIB_User_Data
 	public function get_profile_val($name)
 	{
 		if(!isset($this->_data[$name]))
-			PLIB_Helper::error('The profile-field "'.$name.'" does not exist!');
+			FWS_Helper::error('The profile-field "'.$name.'" does not exist!');
 		
 		return $this->_data[$name];
 	}
@@ -83,9 +83,9 @@ final class BS_User_Data extends PLIB_User_Data
 	public function set_profile_val($name,$value)
 	{
 		if(!isset($this->_data[$name]))
-			PLIB_Helper::error('The profile-field "'.$name.'" does not exist!');
+			FWS_Helper::error('The profile-field "'.$name.'" does not exist!');
 		if($value !== null && !is_scalar($value))
-			PLIB_Helper::def_error('scalar','value',$value);
+			FWS_Helper::def_error('scalar','value',$value);
 		
 		$this->_data[$name] = $value;
 	}

@@ -20,7 +20,7 @@
 final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,12 +28,12 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$input = PLIB_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$input = FWS_Props::get()->input();
 		$renderer = $doc->use_default_renderer();
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$renderer->add_breadcrumb(
 			$locale->lang('details'),
 			$url->get_url(0,'&amp;'.BS_URL_LOC.'=pmdetails&amp;'.BS_URL_ID.'='.$id)
@@ -41,27 +41,27 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$cfg = PLIB_Props::get()->cfg();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$cfg = FWS_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		$helper = BS_Front_Module_UserProfile_Helper::get_instance();
 		if($helper->get_pm_permission() < 1)
 		{
-			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+			$this->report_error(FWS_Document_Messages::NO_ACCESS);
 			return;
 		}
 
 		// pm-id valid?
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		if($id == null)
 		{
 			$this->report_error();
@@ -105,7 +105,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		$keywords = $functions->get_search_keywords();
 		if($keywords != null)
 		{
-			$kwhl = new PLIB_KeywordHighlighter($keywords,'<span class="bs_highlight">');
+			$kwhl = new FWS_KeywordHighlighter($keywords,'<span class="bs_highlight">');
 			$text = $kwhl->highlight($text);
 		}
 
@@ -139,7 +139,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		// show top
 		$add = '&amp;'.BS_URL_ID.'='.$id.'&amp;'.BS_URL_KW.'='.$data['pm_type'];
 		$tpl->add_variables(array(
-			'date' => PLIB_Date::get_date($data['pm_date']),
+			'date' => FWS_Date::get_date($data['pm_date']),
 			'text' => $text,
 			'type' => $data['pm_type'],
 			'subject' => $data['pm_title'],
@@ -160,7 +160,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 			// show attachments
 			foreach(BS_DAO::get_attachments()->get_by_pmid($data['id']) as $adata)
 			{
-				$ext = PLIB_FileUtils::get_extension($adata['attachment_path']);
+				$ext = FWS_FileUtils::get_extension($adata['attachment_path']);
 				$attachment_url = $url->get_url('download','&amp;'.BS_URL_ID.'='.$adata['id']);
 	
 				$is_image = $cfg['attachments_images_show'] == 1 &&

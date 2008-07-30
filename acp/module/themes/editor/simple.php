@@ -22,7 +22,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 	/**
 	 * The CSS-object which contains the classes and attributes
 	 *
-	 * @var PLIB_CSS_SimpleParser
+	 * @var FWS_CSS_SimpleParser
 	 */
 	private $_css;
 	
@@ -152,7 +152,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 	{
 		parent::__construct();
 
-		$this->_css = new PLIB_CSS_SimpleParser($this->_theme.'/style.css',$this->_theme.'/style.css');
+		$this->_css = new FWS_CSS_SimpleParser($this->_theme.'/style.css',$this->_theme.'/style.css');
 	
 		// add unknown classes to its own group
 		$used_classes = array();
@@ -181,14 +181,14 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 	 */
 	public function display()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
 
-		$class = $input->get_var('class','get',PLIB_Input::STRING);
-		$theme = $input->get_var('theme','get',PLIB_Input::STRING);
+		$class = $input->get_var('class','get',FWS_Input::STRING);
+		$theme = $input->get_var('theme','get',FWS_Input::STRING);
 
 		$del = $input->get_var('del','post');
 		if($input->isset_var('delete','post') && $del != null)
@@ -322,7 +322,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 	 */
 	private function _get_attribute_name($attr)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		if($locale->contains_lang('attr_'.$attr))
 			return $locale->lang('attr_'.$attr);
@@ -337,7 +337,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 	 */
 	private function _get_tag_name($tag)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		switch($tag)
 		{
@@ -437,7 +437,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 	 */
 	private function _get_picture_exlain($class)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		switch($class)
 		{
@@ -680,15 +680,15 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 	 */
 	private function _get_color_form($class,$attribute_name,$value)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$id = $class.'|'.$attribute_name;
 		$clearid = preg_replace('/[^a-z0-9_]/i','_',$id);
 		$res = '<script type="text/javascript">'."\n";
 		$res .= '<!--'."\n";
-		$res .= 'var cp_'.$clearid.' = new PLIB_ColorPicker("'.PLIB_Path::client_lib().'","'.$id.'",';
+		$res .= 'var cp_'.$clearid.' = new FWS_ColorPicker("'.FWS_Path::client_fw().'","'.$id.'",';
 		$res .= 'function(color) {'."\n";
-		$res .= '	PLIB_getElement(\''.$id.'|preview\').style.backgroundColor = "#"+color;'."\n";
+		$res .= '	FWS_getElement(\''.$id.'|preview\').style.backgroundColor = "#"+color;'."\n";
 		$res .= '});'."\n";
 		$res .= '//-->'."\n";
 		$res .= '</script>'."\n";
@@ -710,8 +710,8 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 		$res .= ' onmouseover="this.style.cursor = \'pointer\';"';
 		$res .= ' onmouseout="this.style.cursor = \'default\';"';
 		$res .= ' onclick="cp_'.$clearid.'.toggle(this.id,\'rt\');';
-		$res .= ' PLIB_getElement(\''.$id.'|preview\').style.backgroundColor =';
-		$res .= ' PLIB_getElement(\''.$id.'\').value;" />';
+		$res .= ' FWS_getElement(\''.$id.'|preview\').style.backgroundColor =';
+		$res .= ' FWS_getElement(\''.$id.'\').value;" />';
 		
 		return $res;
 	}
@@ -726,7 +726,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 	 */
 	private function _get_form_element($class,$attribute,$value)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$form = new BS_HTML_Formular(false,false);
 		switch($attribute)

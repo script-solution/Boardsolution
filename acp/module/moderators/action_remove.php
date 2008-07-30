@@ -21,12 +21,12 @@ final class BS_ACP_Action_moderators_remove extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
-		$fid = $input->get_var('f','get',PLIB_Input::ID);
-		$uid = $input->get_var('uid','get',PLIB_Input::ID);
+		$fid = $input->get_var('f','get',FWS_Input::ID);
+		$uid = $input->get_var('uid','get',FWS_Input::ID);
 		if($fid == null || $uid == null)
 			return 'GET-parameters "fid" and/or "uid" are invalid';
 		

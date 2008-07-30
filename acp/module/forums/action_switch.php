@@ -21,11 +21,11 @@ final class BS_ACP_Action_forums_switch extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$forums = PLIB_Props::get()->forums();
+		$input = FWS_Props::get()->input();
+		$forums = FWS_Props::get()->forums();
 
-		$id_str = $input->get_var('ids','get',PLIB_Input::STRING);
-		if(!($ids = PLIB_StringHelper::get_ids($id_str)) || count($ids) != 2)
+		$id_str = $input->get_var('ids','get',FWS_Input::STRING);
+		if(!($ids = FWS_StringHelper::get_ids($id_str)) || count($ids) != 2)
 			return 'Got an invalid id-string via GET';
 		
 		// check if the forums exist and have the same parent
@@ -40,7 +40,7 @@ final class BS_ACP_Action_forums_switch extends BS_ACP_Action_Base
 		BS_DAO::get_forums()->update_sort($fid2,array('sortierung + 1'));
 		
 		// refresh forums
-		PLIB_Props::get()->reload('forums');
+		FWS_Props::get()->reload('forums');
 		
 		$this->set_show_status_page(false);
 		$this->set_action_performed(true);

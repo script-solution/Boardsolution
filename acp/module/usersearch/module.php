@@ -20,7 +20,7 @@
 final class BS_ACP_Module_usersearch extends BS_ACP_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -34,38 +34,38 @@ final class BS_ACP_Module_usersearch extends BS_ACP_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$auth = PLIB_Props::get()->auth();
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$auth = FWS_Props::get()->auth();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
-		$comboid = $input->get_var('comboid','get',PLIB_Input::STRING);
-		$search = $input->get_var('search','post',PLIB_Input::INTEGER);
-		$user_name = $input->get_var('user_name','post',PLIB_Input::STRING);
-		$user_email = $input->get_var('user_email','post',PLIB_Input::STRING);
-		$reg_day = $input->get_var('reg_day','post',PLIB_Input::INTEGER);
-		$reg_month = $input->get_var('reg_month','post',PLIB_Input::INTEGER);
-		$reg_year = $input->get_var('reg_year','post',PLIB_Input::INTEGER);
+		$comboid = $input->get_var('comboid','get',FWS_Input::STRING);
+		$search = $input->get_var('search','post',FWS_Input::INTEGER);
+		$user_name = $input->get_var('user_name','post',FWS_Input::STRING);
+		$user_email = $input->get_var('user_email','post',FWS_Input::STRING);
+		$reg_day = $input->get_var('reg_day','post',FWS_Input::INTEGER);
+		$reg_month = $input->get_var('reg_month','post',FWS_Input::INTEGER);
+		$reg_year = $input->get_var('reg_year','post',FWS_Input::INTEGER);
 		$user_groups = $input->get_var('user_groups','post');
 		$reg_mode = $input->correct_var(
-			'sreg_mode','post',PLIB_Input::STRING,array('ever','date'),'ever'
+			'sreg_mode','post',FWS_Input::STRING,array('ever','date'),'ever'
 		);
 		
 		if($reg_day != null)
-			$reg_time = PLIB_Date::get_timestamp(array(0,0,0,$reg_month,$reg_day,$reg_year));
+			$reg_time = FWS_Date::get_timestamp(array(0,0,0,$reg_month,$reg_day,$reg_year));
 		else
 		{
-			$reg_time = PLIB_Date::get_timestamp(array(
+			$reg_time = FWS_Date::get_timestamp(array(
 				0,0,0,
-				PLIB_Date::get_formated_date('m'),
-				PLIB_Date::get_formated_date('d'),
-				PLIB_Date::get_formated_date('Y')
+				FWS_Date::get_formated_date('m'),
+				FWS_Date::get_formated_date('d'),
+				FWS_Date::get_formated_date('Y')
 			));
 		}
 		

@@ -21,14 +21,14 @@ final class BS_ACP_Action_acpaccess_module extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
 
-		$module = $input->get_var('module','get',PLIB_Input::STRING);
+		$module = $input->get_var('module','get',FWS_Input::STRING);
 		$groups = $input->get_var('groups','post');
-		$user = $input->get_var('selectedUsers','post',PLIB_Input::STRING);
+		$user = $input->get_var('selectedUsers','post',FWS_Input::STRING);
 
 		// check if module exists
 		if(BS_ACP_Module_ACPAccess_Helper::get_instance()->get_module_name($module) === '')
@@ -39,7 +39,7 @@ final class BS_ACP_Action_acpaccess_module extends BS_ACP_Action_Base
 		BS_DAO::get_acpaccess()->delete_module($module);
 
 		// add groups
-		if(PLIB_Array_Utils::is_integer($groups))
+		if(FWS_Array_Utils::is_integer($groups))
 		{
 			$groups = array_unique($groups);
 			foreach($groups as $gid)
@@ -51,7 +51,7 @@ final class BS_ACP_Action_acpaccess_module extends BS_ACP_Action_Base
 		}
 
 		// now add the user
-		if($uids = PLIB_StringHelper::get_ids($user))
+		if($uids = FWS_StringHelper::get_ids($user))
 		{
 			$uids = array_unique($uids);
 			foreach($uids as $uid)

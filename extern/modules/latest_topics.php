@@ -43,7 +43,7 @@ final class BS_API_Module_latest_topics extends BS_API_Module
 	
 	public function run($params = array('limit' => 10))
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		// denied forums?
 		$denied = array();
@@ -54,7 +54,7 @@ final class BS_API_Module_latest_topics extends BS_API_Module
 		if(!$params)
 			$params = array();
 		
-		if(!isset($params['limit']) || !PLIB_Helper::is_integer($params['limit']))
+		if(!isset($params['limit']) || !FWS_Helper::is_integer($params['limit']))
 			$params['limit'] = 10;
 		
 		// lets grab the topics

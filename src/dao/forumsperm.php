@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_ForumsPerm extends PLIB_Singleton
+class BS_DAO_ForumsPerm extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_ForumsPerm the instance of this class
@@ -36,7 +36,7 @@ class BS_DAO_ForumsPerm extends PLIB_Singleton
 	 */
 	public function get_all()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_FORUMS_PERM
@@ -53,22 +53,22 @@ class BS_DAO_ForumsPerm extends PLIB_Singleton
 	 */
 	public function set_permissions($fid,$type,$groups)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		if(count($groups) == 0)
 			return 0;
 		
-		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
-			PLIB_Helper::def_error('intgt0','fid',$fid);
+		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
+			FWS_Helper::def_error('intgt0','fid',$fid);
 		if(!in_array($type,array('topic','poll','event','reply')))
-			PLIB_Helper::def_error('inarray','type',array('topic','poll','event','reply'),$type);
-		if(!PLIB_Array_Utils::is_integer($groups))
-			PLIB_Helper::def_error('intarray','groups',$groups);
+			FWS_Helper::def_error('inarray','type',array('topic','poll','event','reply'),$type);
+		if(!FWS_Array_Utils::is_integer($groups))
+			FWS_Helper::def_error('intarray','groups',$groups);
 		
 		$sql = 'INSERT INTO '.BS_TB_FORUMS_PERM.' (forum_id,type,group_id) VALUES ';
 		foreach($groups as $gid)
 			$sql .= '('.$fid.',"'.$type.'",'.$gid.'),';
-		$sql = PLIB_String::substr($sql,0,-1);
+		$sql = FWS_String::substr($sql,0,-1);
 		$db->sql_qry($sql);
 		return $db->get_affected_rows();
 	}
@@ -81,10 +81,10 @@ class BS_DAO_ForumsPerm extends PLIB_Singleton
 	 */
 	public function delete_by_forums($fids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($fids) || count($fids) == 0)
-			PLIB_Helper::def_error('intarray>0','fids',$fids);
+		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
+			FWS_Helper::def_error('intarray>0','fids',$fids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_FORUMS_PERM.' WHERE forum_id IN ('.implode(',',$fids).')'
@@ -100,10 +100,10 @@ class BS_DAO_ForumsPerm extends PLIB_Singleton
 	 */
 	public function delete_by_groups($gids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($gids) || count($gids) == 0)
-			PLIB_Helper::def_error('intarray>0','gids',$gids);
+		if(!FWS_Array_Utils::is_integer($gids) || count($gids) == 0)
+			FWS_Helper::def_error('intarray>0','gids',$gids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_FORUMS_PERM.' WHERE group_id IN ('.implode(',',$gids).')'

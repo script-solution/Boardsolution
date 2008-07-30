@@ -20,7 +20,7 @@
 final class BS_Front_Module_ajax_get_user extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -32,19 +32,19 @@ final class BS_Front_Module_ajax_get_user extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$input = PLIB_Props::get()->input();
-		$doc = PLIB_Props::get()->doc();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$input = FWS_Props::get()->input();
+		$doc = FWS_Props::get()->doc();
 
 		// the user has to have access to the memberlist to get existing usernames
 		if($cfg['enable_memberlist'] == 1 && $auth->has_global_permission('view_memberlist'))
 		{
-			$keyword = $input->get_var('kw','get',PLIB_Input::STRING);
+			$keyword = $input->get_var('kw','get',FWS_Input::STRING);
 			
 			// limit the search to 6
 			$found_user = array();
@@ -59,7 +59,7 @@ final class BS_Front_Module_ajax_get_user extends BS_Front_Module
 			if(count($users) > 5)
 				$found_user[] = '...';
 			
-			$result = PLIB_StringHelper::htmlspecialchars_back(implode(',',$found_user));
+			$result = FWS_StringHelper::htmlspecialchars_back(implode(',',$found_user));
 			$renderer = $doc->use_raw_renderer();
 			$renderer->set_content($result);
 		}

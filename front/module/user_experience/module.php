@@ -66,7 +66,7 @@ define('BS_PROGRESS_CIRCLE_EMPTY_COLOR','#FFFFFF');
 final class BS_Front_Module_user_experience extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -78,17 +78,17 @@ final class BS_Front_Module_user_experience extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$functions = PLIB_Props::get()->functions();
-		$cfg = PLIB_Props::get()->cfg();
-		$cache = PLIB_Props::get()->cache();
+		$input = FWS_Props::get()->input();
+		$functions = FWS_Props::get()->functions();
+		$cfg = FWS_Props::get()->cfg();
+		$cache = FWS_Props::get()->cache();
 
 		// check parameter
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		
 		// for the faq-example :)
 		if($id == 0)
@@ -179,11 +179,11 @@ final class BS_Front_Module_user_experience extends BS_Front_Module
 		}
 		
 		// initialization
-		$img = new PLIB_GD_Image(BS_IMG_WIDTH,BS_IMG_HEIGHT,false);
-		$img->set_background(new PLIB_GD_Color(BS_BACKGROUND_COLOR));
+		$img = new FWS_GD_Image(BS_IMG_WIDTH,BS_IMG_HEIGHT,false);
+		$img->set_background(new FWS_GD_Color(BS_BACKGROUND_COLOR));
 		$g = $img->get_graphics();
 		
-		$linecolor = new PLIB_GD_Color(BS_LINE_COLOR);
+		$linecolor = new FWS_GD_Color(BS_LINE_COLOR);
 		
 		// draw total experience-progress
 		if($cfg['post_stats_type'] != 'current_rank')
@@ -191,15 +191,15 @@ final class BS_Front_Module_user_experience extends BS_Front_Module
 		else
 			$filled_end = $bar_filled;
 		
-		$rect = new PLIB_GD_Rectangle($bar_start,0,$filled_end - $bar_start,BS_IMG_HEIGHT - 1);
-		$cbar_start = new PLIB_GD_Color(BS_PROGRESS_BAR_START_COLOR);
-		$cbar_end = new PLIB_GD_Color(BS_PROGRESS_BAR_END_COLOR);
+		$rect = new FWS_GD_Rectangle($bar_start,0,$filled_end - $bar_start,BS_IMG_HEIGHT - 1);
+		$cbar_start = new FWS_GD_Color(BS_PROGRESS_BAR_START_COLOR);
+		$cbar_end = new FWS_GD_Color(BS_PROGRESS_BAR_END_COLOR);
 		$colors = array($cbar_start->get_comps(false),$cbar_end->get_comps(false));
 		
 		// determine the color at the end-position and replace it in the colors
 		if($rect->get_size()->get_width() > 0)
 		{
-			$cf = new PLIB_GD_ColorFade($bar_length,$bar_length,$colors);
+			$cf = new FWS_GD_ColorFade($bar_length,$bar_length,$colors);
 			$filled_length = $filled_end - BS_HALF_HEIGHT;
 			if($filled_length < $bar_length)
 				$colors[1] = $cf->get_color_at($filled_length)->get_comps(false);
@@ -209,22 +209,22 @@ final class BS_Front_Module_user_experience extends BS_Front_Module
 		}
 		
 		// fill the not-filled area :)
-		$bar_empty_color = new PLIB_GD_Color(BS_PROGRESS_BAR_EMPTY_COLOR);
-		$bar_empty_rect = new PLIB_GD_Rectangle($filled_end,0,BS_IMG_WIDTH - 1,BS_IMG_HEIGHT - 1);
+		$bar_empty_color = new FWS_GD_Color(BS_PROGRESS_BAR_EMPTY_COLOR);
+		$bar_empty_rect = new FWS_GD_Rectangle($filled_end,0,BS_IMG_WIDTH - 1,BS_IMG_HEIGHT - 1);
 		$g->get_rect_view($bar_empty_rect)->fill($bar_empty_color);
 		
 		// draw progress in the current rank
 		if($cfg['post_stats_type'] != 'current_rank')
 		{
-			$circle_color = new PLIB_GD_Color(BS_PROGRESS_CIRCLE_COLOR);
-			$circle_empty_color = new PLIB_GD_Color(BS_PROGRESS_CIRCLE_EMPTY_COLOR);
+			$circle_color = new FWS_GD_Color(BS_PROGRESS_CIRCLE_COLOR);
+			$circle_empty_color = new FWS_GD_Color(BS_PROGRESS_CIRCLE_EMPTY_COLOR);
 			
 			$angle = $progress_in_rank == 0 ? 270 : 270 + (360 / $progress_in_rank);
 			$angle_end = $angle > 360 ? $angle - 360 : $angle;
 			
-			$pos = new PLIB_GD_Point(BS_HALF_HEIGHT,BS_HALF_HEIGHT);
-			$size = new PLIB_GD_Dimension(BS_IMG_HEIGHT - 1,BS_IMG_HEIGHT - 1);
-			$ellipse = new PLIB_GD_Ellipse($pos,$size);
+			$pos = new FWS_GD_Point(BS_HALF_HEIGHT,BS_HALF_HEIGHT);
+			$size = new FWS_GD_Dimension(BS_IMG_HEIGHT - 1,BS_IMG_HEIGHT - 1);
+			$ellipse = new FWS_GD_Ellipse($pos,$size);
 			$eview = $g->get_ellipse_view($ellipse);
 			if($angle == $angle_end || $angle_end == 270)
 				$eview->fill_part($circle_empty_color,0,360);
@@ -242,18 +242,18 @@ final class BS_Front_Module_user_experience extends BS_Front_Module
 		if($cfg['post_stats_type'] == 'current_rank')
 		{
 			$g->draw_line(
-				new PLIB_GD_Point($bar_start,0),new PLIB_GD_Point($bar_start,BS_IMG_HEIGHT),$linecolor
+				new FWS_GD_Point($bar_start,0),new FWS_GD_Point($bar_start,BS_IMG_HEIGHT),$linecolor
 			);
 		}
 		
-		$start = new PLIB_GD_Point($bar_start,0);
-		$end = new PLIB_GD_Point(BS_IMG_WIDTH,0);
+		$start = new FWS_GD_Point($bar_start,0);
+		$end = new FWS_GD_Point(BS_IMG_WIDTH,0);
 		$g->draw_line($start,$end,$linecolor);
 		$g->draw_line($start->derive(0,BS_IMG_HEIGHT - 1),$end->derive(0,BS_IMG_HEIGHT - 1),$linecolor);
 		$g->draw_line($end->derive(-1,0),$end->derive(-1,BS_IMG_HEIGHT - 1),$linecolor);
 		
 		// set image to the renderer
-		$doc = PLIB_Props::get()->doc();
+		$doc = FWS_Props::get()->doc();
 		$renderer = $doc->use_gdimage_renderer();
 		$renderer->set_image($img);
 	}

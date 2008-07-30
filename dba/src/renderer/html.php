@@ -17,7 +17,7 @@
  * @subpackage	dba.src.renderer
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DBA_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
+final class BS_DBA_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 {
 	/**
 	 * Constructor
@@ -26,17 +26,17 @@ final class BS_DBA_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 	{
 		parent::__construct();
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$tpl = PLIB_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
 		
-		include_once(PLIB_Path::server_app().'config/actions.php');
+		include_once(FWS_Path::server_app().'config/actions.php');
 		
 		$locale->add_language_file('dbbackup',BS_DBA_LANGUAGE);
 		$locale->add_language_file('index',BS_DBA_LANGUAGE);
 
 		$tpl->set_path('dba/templates/');
-		$tpl->set_cache_folder(PLIB_Path::server_app().'cache/');
+		$tpl->set_cache_folder(FWS_Path::server_app().'cache/');
 		
 		// add the home-breadcrumb
 		$this->add_breadcrumb($locale->lang('dbbackup'),$url->get_url('index'));
@@ -46,34 +46,34 @@ final class BS_DBA_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see PLIB_Document_Renderer_HTML_Default::before_start()
+	 * @see FWS_Document_Renderer_HTML_Default::before_start()
 	 */
 	protected function before_start()
 	{
-		$doc = PLIB_Props::get()->doc();
+		$doc = FWS_Props::get()->doc();
 		
 		// set the default template if not already done
 		$template = '';
 		if($this->get_template() === null)
 		{
 			$classname = get_class($doc->get_module());
-			$prefixlen = PLIB_String::strlen('BS_DBA_Module_');
-			$template = PLIB_String::strtolower(PLIB_String::substr($classname,$prefixlen)).'.htm';
+			$prefixlen = FWS_String::strlen('BS_DBA_Module_');
+			$template = FWS_String::strtolower(FWS_String::substr($classname,$prefixlen)).'.htm';
 			$this->set_template($template);
 		}
 	}
 	
 	/**
-	 * @see PLIB_Document_Renderer_HTML_Default::before_render()
+	 * @see FWS_Document_Renderer_HTML_Default::before_render()
 	 */
 	protected function before_render()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$msgs = PLIB_Props::get()->msgs();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$doc = PLIB_Props::get()->doc();
+		$tpl = FWS_Props::get()->tpl();
+		$msgs = FWS_Props::get()->msgs();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$doc = FWS_Props::get()->doc();
 		
 		// add redirect information
 		$redirect = $doc->get_redirect();
@@ -85,10 +85,10 @@ final class BS_DBA_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 		
 		// add some global variables
 		$tpl->add_global('gisloggedin',$user->is_loggedin());
-		$tpl->add_global('gpath',PLIB_Path::client_app());
-		$tpl->add_global('glibpath',PLIB_Path::client_lib());
+		$tpl->add_global('gpath',FWS_Path::client_app());
+		$tpl->add_global('gfwspath',FWS_Path::client_fw());
 		
-		$js = PLIB_Javascript::get_instance();
+		$js = FWS_Javascript::get_instance();
 		$js->set_cache_folder('cache/');
 		$tpl->add_global_ref('gjs',$js);
 		$tpl->add_global_ref('glocale',$locale);
@@ -107,19 +107,19 @@ final class BS_DBA_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 	/**
 	 * Handles the collected messages
 	 *
-	 * @param PLIB_Document_Messages $msgs
+	 * @param FWS_Document_Messages $msgs
 	 */
 	protected function handle_msgs($msgs)
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
 		
 		$amsgs = $msgs->get_all_messages();
 		$links = $msgs->get_links();
 		$tpl->set_template('inc_messages.htm');
-		$tpl->add_array('errors',$amsgs[PLIB_Document_Messages::ERROR]);
-		$tpl->add_array('warnings',$amsgs[PLIB_Document_Messages::WARNING]);
-		$tpl->add_array('notices',$amsgs[PLIB_Document_Messages::NOTICE]);
+		$tpl->add_array('errors',$amsgs[FWS_Document_Messages::ERROR]);
+		$tpl->add_array('warnings',$amsgs[FWS_Document_Messages::WARNING]);
+		$tpl->add_array('notices',$amsgs[FWS_Document_Messages::NOTICE]);
 		$tpl->add_array('links',$links);
 		$tpl->add_variables(array(
 			'title' => $locale->lang('information'),
@@ -129,23 +129,23 @@ final class BS_DBA_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see PLIB_Document_Renderer_HTML_Default::header()
+	 * @see FWS_Document_Renderer_HTML_Default::header()
 	 */
 	protected function header()
 	{
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$functions = PLIB_Props::get()->functions();
-		$db = PLIB_Props::get()->db();
-		$user = PLIB_Props::get()->user();
-		$doc = PLIB_Props::get()->doc();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$functions = FWS_Props::get()->functions();
+		$db = FWS_Props::get()->db();
+		$user = FWS_Props::get()->user();
+		$doc = FWS_Props::get()->doc();
 		
 		$this->perform_actions();
 		
 		// change db?
 		if($input->isset_var('selectdb','post'))
 		{
-			$dbname = $input->get_var('database','post',PLIB_Input::STRING);
+			$dbname = $input->get_var('database','post',FWS_Input::STRING);
 			if($dbname !== null)
 			{
 				if($db->sql_fetch_assoc($db->sql_qry('SHOW DATABASES LIKE "'.$dbname.'"')))
@@ -154,7 +154,7 @@ final class BS_DBA_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 		}
 		
 		$breadcrumbs = $this->get_breadcrumbs();
-		$class = PLIB_String::strtolower(get_class($doc->get_module()));
+		$class = FWS_String::strtolower(get_class($doc->get_module()));
 		$selected_db = BS_DBA_Utils::get_instance()->get_selected_database();
 		$show_db_combo = $user->is_loggedin() &&
 			($class == 'bs_dba_module_index' || $class == 'bs_dba_module_backups');
@@ -169,7 +169,7 @@ final class BS_DBA_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 			$db->sql_free($qry);
 			
 			//form.get_combobox('database',databases,selected_db)
-			$dbcombo = new PLIB_HTML_ComboBox('database','database',$selected_db,null);
+			$dbcombo = new FWS_HTML_ComboBox('database','database',$selected_db,null);
 			$dbcombo->set_options($dbs);
 			$dbcombo->set_option_style(BS_MYSQL_DATABASE,'font-weight','bold');
 		}
@@ -187,11 +187,11 @@ final class BS_DBA_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see PLIB_Document_Renderer_HTML_Default::content()
+	 * @see FWS_Document_Renderer_HTML_Default::content()
 	 */
 	protected function content()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		if(!$user->is_loggedin())
 			$this->set_template('login.htm');
@@ -200,16 +200,16 @@ final class BS_DBA_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see PLIB_Document_Renderer_HTML_Default::footer()
+	 * @see FWS_Document_Renderer_HTML_Default::footer()
 	 */
 	protected function footer()
 	{
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$db = PLIB_Props::get()->db();
-		$profiler = PLIB_Props::get()->profiler();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$db = FWS_Props::get()->db();
+		$profiler = FWS_Props::get()->profiler();
 
-		$mem = PLIB_StringHelper::get_formated_data_size(
+		$mem = FWS_StringHelper::get_formated_data_size(
 			$profiler->get_memory_usage(),$locale->get_thousands_separator(),
 			$locale->get_dec_separator()
 		);
@@ -220,7 +220,7 @@ final class BS_DBA_Renderer_HTML extends PLIB_Document_Renderer_HTML_Default
 			'time' => $profiler->get_time(),
 			'query_count' => $db->get_performed_query_num(),
 			'memory' => $mem,
-			'queries' => PLIB_PrintUtils::to_string($db->get_performed_queries())
+			'queries' => FWS_PrintUtils::to_string($db->get_performed_queries())
 		));
 		$tpl->restore_template();
 	}

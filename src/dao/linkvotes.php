@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_LinkVotes extends PLIB_Singleton
+class BS_DAO_LinkVotes extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_LinkVotes the instance of this class
@@ -39,10 +39,10 @@ class BS_DAO_LinkVotes extends PLIB_Singleton
 	 */
 	public function get_votes_of_user($user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$rows = $db->sql_rows(
 			'SELECT link_id FROM '.BS_TB_LINK_VOTES.' WHERE user_id = '.$user_id
@@ -61,12 +61,12 @@ class BS_DAO_LinkVotes extends PLIB_Singleton
 	 */
 	public function vote($link_id,$user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($link_id) || $link_id <= 0)
-			PLIB_Helper::def_error('intgt0','link_id',$link_id);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($link_id) || $link_id <= 0)
+			FWS_Helper::def_error('intgt0','link_id',$link_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$db->sql_insert(BS_TB_LINK_VOTES,array(
 			'link_id' => $link_id,
@@ -82,10 +82,10 @@ class BS_DAO_LinkVotes extends PLIB_Singleton
 	 */
 	public function delete_by_links($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_LINK_VOTES.' WHERE link_id IN ('.implode(',',$ids).')'

@@ -20,7 +20,7 @@
 final class BS_Front_Module_download extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -32,22 +32,22 @@ final class BS_Front_Module_download extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
-		$ips = PLIB_Props::get()->ips();
-		$doc = PLIB_Props::get()->doc();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
+		$ips = FWS_Props::get()->ips();
+		$doc = FWS_Props::get()->doc();
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		
 		if($id === null)
 		{
 			// ok, then try the path
-			$path = $input->get_var('path','get',PLIB_Input::STRING);
+			$path = $input->get_var('path','get',FWS_Input::STRING);
 			if($path === null || !preg_match('/^uploads\//',$path))
 			{
 				$this->report_error();
@@ -72,7 +72,7 @@ final class BS_Front_Module_download extends BS_Front_Module
 		// do we have got the data?
 		if(!$auth->has_global_permission('attachments_download'))
 		{
-			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+			$this->report_error(FWS_Document_Messages::NO_ACCESS);
 			return;
 		}
 
@@ -90,11 +90,11 @@ final class BS_Front_Module_download extends BS_Front_Module
 
 		if(!$dl_allowed)
 		{
-			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+			$this->report_error(FWS_Document_Messages::NO_ACCESS);
 			return;
 		}
 		
-		if(!is_file(PLIB_Path::server_app().$data['attachment_path']))
+		if(!is_file(FWS_Path::server_app().$data['attachment_path']))
 		{
 			$this->report_error();
 			return;
@@ -105,7 +105,7 @@ final class BS_Front_Module_download extends BS_Front_Module
 		$ips->add_entry('adl_'.$data['id']);
 		
 		$renderer = $doc->use_download_renderer();
-		$renderer->set_file(PLIB_Path::server_app().$data['attachment_path']);
+		$renderer->set_file(FWS_Path::server_app().$data['attachment_path']);
 	}
 }
 ?>

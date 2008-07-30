@@ -17,7 +17,7 @@
  * @subpackage	src.cache
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Cache_Source_CustomDB extends PLIB_Object implements PLIB_Cache_Source
+final class BS_Cache_Source_CustomDB extends FWS_Object implements FWS_Cache_Source
 {
 	/**
 	 * The SQL-query
@@ -44,9 +44,9 @@ final class BS_Cache_Source_CustomDB extends PLIB_Object implements PLIB_Cache_S
 		parent::__construct();
 		
 		if(empty($sql))
-			PLIB_Helper::def_error('notempty','sql',$sql);
+			FWS_Helper::def_error('notempty','sql',$sql);
 		if($key !== null && empty($key))
-			PLIB_Helper::error('$key is not null but empty!');
+			FWS_Helper::error('$key is not null but empty!');
 		
 		$this->_sql = $sql;
 		$this->_key = $key;
@@ -54,7 +54,7 @@ final class BS_Cache_Source_CustomDB extends PLIB_Object implements PLIB_Cache_S
 	
 	public function get_content()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		// perform query
 		$res = $db->sql_qry($this->_sql);

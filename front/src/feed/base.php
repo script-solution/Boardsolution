@@ -17,7 +17,7 @@
  * @subpackage	src.feed
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_Front_Feed_Base extends PLIB_Object
+abstract class BS_Front_Feed_Base extends FWS_Object
 {
 	/**
 	 * Returns the RSS-feed for the latest news
@@ -26,10 +26,10 @@ abstract class BS_Front_Feed_Base extends PLIB_Object
 	 */
 	public final function get_news()
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
-		$fids = PLIB_Array_Utils::advanced_explode(',',$cfg['news_forums']);
-		if(!PLIB_Array_Utils::is_integer($fids) || count($fids) == 0)
+		$fids = FWS_Array_Utils::advanced_explode(',',$cfg['news_forums']);
+		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
 			return '';
 		
 		$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
@@ -66,7 +66,7 @@ abstract class BS_Front_Feed_Base extends PLIB_Object
 		$use_smileys = BS_PostingUtils::get_instance()->get_message_option('enable_smileys') &&
 			$data['use_smileys'];
 		$bbcode = new BS_BBCode_Parser($data['text'],'posts',$use_bbcode,$use_smileys);
-		$bbcode->set_board_path(PLIB_Path::outer());
+		$bbcode->set_board_path(FWS_Path::outer());
 		return $bbcode->get_message_for_output(true);
 	}
 	
@@ -79,7 +79,7 @@ abstract class BS_Front_Feed_Base extends PLIB_Object
 	 */
 	protected final function get_topic_url($fid,$tid)
 	{
-		$url = PLIB_Props::get()->url();
+		$url = FWS_Props::get()->url();
 
 		return $url->get_frontend_url(
 			'&amp;'.BS_URL_ACTION.'=posts'.'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid,'&amp;',false

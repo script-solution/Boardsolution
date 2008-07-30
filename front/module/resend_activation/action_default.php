@@ -21,10 +21,10 @@ final class BS_Front_Action_resend_activation_default extends BS_Front_Action_Ba
 {
 	public function perform_action()
 	{
-		$functions = PLIB_Props::get()->functions();
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$user = PLIB_Props::get()->user();
+		$functions = FWS_Props::get()->functions();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$user = FWS_Props::get()->user();
 
 		if($user->is_loggedin())
 			return 'You are loggedin';
@@ -35,7 +35,7 @@ final class BS_Front_Action_resend_activation_default extends BS_Front_Action_Ba
 		if(!$functions->check_security_code())
 			return 'invalid_security_code';
 
-		$email = $input->get_var('email','post',PLIB_Input::STRING);
+		$email = $input->get_var('email','post',FWS_Input::STRING);
 		if($email === null)
 			return 'The email-address "'.$email.'" is invalid';
 

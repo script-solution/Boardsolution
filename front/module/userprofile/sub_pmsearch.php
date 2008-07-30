@@ -20,7 +20,7 @@
 final class BS_Front_SubModule_userprofile_pmsearch extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_Front_SubModule_userprofile_pmsearch extends BS_Front_SubModule
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_DELETE_PMS,'deletepms');
@@ -38,18 +38,18 @@ final class BS_Front_SubModule_userprofile_pmsearch extends BS_Front_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
 		$modes = array('pms','history');
-		$mode = $input->correct_var(BS_URL_MODE,'get',PLIB_Input::STRING,$modes,'pms');
+		$mode = $input->correct_var(BS_URL_MODE,'get',FWS_Input::STRING,$modes,'pms');
 		
 		$submitted = $input->isset_var('submit','post');
 		if($mode != 'pms' || $submitted || $id != null)
@@ -82,10 +82,10 @@ final class BS_Front_SubModule_userprofile_pmsearch extends BS_Front_SubModule
 			if($mode == 'pms')
 			{
 				$delete = $input->get_var('delete','post');
-				$operation = $input->get_var('operation','post',PLIB_Input::STRING);
-				if($operation == 'delete' && $delete != null && PLIB_Array_Utils::is_integer($delete))
+				$operation = $input->get_var('operation','post',FWS_Input::STRING);
+				if($operation == 'delete' && $delete != null && FWS_Array_Utils::is_integer($delete))
 				{
-					$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+					$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 					if(!$site)
 						$site = 1;
 					$site_param = '&amp;'.BS_URL_SITE.'='.$site;
@@ -103,10 +103,10 @@ final class BS_Front_SubModule_userprofile_pmsearch extends BS_Front_SubModule
 		else
 		{
 			$order = $input->correct_var(
-				'order','post',PLIB_Input::STRING,array('date','subject','folder'),'date'
+				'order','post',FWS_Input::STRING,array('date','subject','folder'),'date'
 			);
 			$ad = $input->correct_var(
-				'ad','post',PLIB_Input::STRING,array('ASC','DESC'),'DESC'
+				'ad','post',FWS_Input::STRING,array('ASC','DESC'),'DESC'
 			);
 			
 			$form = new BS_HTML_Formular();
@@ -127,8 +127,8 @@ final class BS_Front_SubModule_userprofile_pmsearch extends BS_Front_SubModule
 			);
 
 			$keyword_mode_value = $form->get_input_value('keyword_mode','and');
-			$keyword = stripslashes($input->get_var('keyword','post',PLIB_Input::STRING));
-			$username = stripslashes($input->get_var('un','post',PLIB_Input::STRING));
+			$keyword = stripslashes($input->get_var('keyword','post',FWS_Input::STRING));
+			$username = stripslashes($input->get_var('un','post',FWS_Input::STRING));
 
 			$tpl->add_variables(array(
 				'action_param' => BS_URL_ACTION,

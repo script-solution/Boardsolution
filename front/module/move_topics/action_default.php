@@ -21,24 +21,24 @@ final class BS_Front_Action_move_topics_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$forums = PLIB_Props::get()->forums();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$forums = FWS_Props::get()->forums();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
 
 		// parameters valid?
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$id_str = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
-		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$id_str = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
+		if(!($ids = FWS_StringHelper::get_ids($id_str)))
 			return 'Got an invalid id-string via GET';
 
-		$target_fid = $input->get_var('target_forum','post',PLIB_Input::ID);
+		$target_fid = $input->get_var('target_forum','post',FWS_Input::ID);
 
 		if($fid == null || $target_fid == null)
 			return 'The forum-id "'.$fid.'" or "'.$target_fid.'" is invalid';
@@ -54,8 +54,8 @@ final class BS_Front_Action_move_topics_default extends BS_Front_Action_Base
 		if(!$user->is_loggedin() || !$auth->has_current_forum_perm(BS_MODE_MOVE_TOPICS))
 			return 'You are a guest or have no permission to move topics';
 
-		$post_reason = $input->get_var('post_reason','post',PLIB_Input::INT_BOOL);
-		$leave_link = $input->get_var('leave_link','post',PLIB_Input::INT_BOOL);
+		$post_reason = $input->get_var('post_reason','post',FWS_Input::INT_BOOL);
+		$leave_link = $input->get_var('leave_link','post',FWS_Input::INT_BOOL);
 
 		$forum_data = $forums->get_node_data($fid);
 		$target_forum_data = $forums->get_node_data($target_fid);

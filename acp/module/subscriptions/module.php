@@ -20,7 +20,7 @@
 final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_DELETE_SUBSCRIPTIONS,'delete');
@@ -37,18 +37,18 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		$end = 15;
-		$search = $input->get_var('search','get',PLIB_Input::STRING);
+		$search = $input->get_var('search','get',FWS_Input::STRING);
 		if($search != '')
 			$num = BS_DAO::get_subscr()->get_count_by_keyword($search);
 		else
@@ -57,14 +57,14 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		$site = $pagination->get_page();
 		
 		$order_vals = array('username','date','lastlogin','lastpost');
-		$order = $input->correct_var('order','get',PLIB_Input::STRING,$order_vals,'date');
-		$ad = $input->correct_var('ad','get',PLIB_Input::STRING,array('ASC','DESC'),'DESC');
+		$order = $input->correct_var('order','get',FWS_Input::STRING,$order_vals,'date');
+		$ad = $input->correct_var('ad','get',FWS_Input::STRING,array('ASC','DESC'),'DESC');
 
 		// display delete-message?
 		$delete = $input->get_var('delete','post');
-		if($delete != null && PLIB_Array_Utils::is_integer($delete))
+		if($delete != null && FWS_Array_Utils::is_integer($delete))
 		{
-			$ids = PLIB_Array_Utils::advanced_implode(',',$delete);
+			$ids = FWS_Array_Utils::advanced_implode(',',$delete);
 			$def_params = '&amp;site='.$site.'&amp;order='.$order.'&amp;ad='.$ad;
 			$yes_url = $url->get_acpmod_url(
 				0,'&amp;at='.BS_ACP_ACTION_DELETE_SUBSCRIPTIONS.'&amp;ids='.$ids.$def_params
@@ -123,7 +123,7 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 				if($data['flastpost_time'] == 0)
 					$lastpost = $locale->lang('notavailable');
 				else
-					$lastpost = PLIB_Date::get_date($data['flastpost_time']);
+					$lastpost = FWS_Date::get_date($data['flastpost_time']);
 			}
 			else
 			{
@@ -136,15 +136,15 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 				if($data['lastpost_time'] == 0)
 					$lastpost = $locale->lang('notavailable');
 				else
-					$lastpost = PLIB_Date::get_date($data['lastpost_time']);
+					$lastpost = FWS_Date::get_date($data['lastpost_time']);
 			}
 			
 			$subscriptions[] = array(
 				'id' => $data['id'],
 				'name' => $name,
 				'username' => BS_ACP_Utils::get_instance()->get_userlink($data['user_id'],$data['user_name']),
-				'subscription_date' => PLIB_Date::get_date($data['sub_date']),
-				'lastlogin' => PLIB_Date::get_date($data['lastlogin']),
+				'subscription_date' => FWS_Date::get_date($data['sub_date']),
+				'lastlogin' => FWS_Date::get_date($data['lastlogin']),
 				'lastpost' => $lastpost
 			);
 		}
@@ -156,7 +156,7 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		unset($hidden['search']);
 		unset($hidden['at']);
 		$tpl->add_variables(array(
-			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));

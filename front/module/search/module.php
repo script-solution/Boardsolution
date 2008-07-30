@@ -20,7 +20,7 @@
 final class BS_Front_Module_search extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,10 +28,10 @@ final class BS_Front_Module_search extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($cfg['enable_search'] == 1 && $auth->has_global_permission('view_search'));
@@ -40,21 +40,21 @@ final class BS_Front_Module_search extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// display the search-form
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$modes = array('default','user_posts','user_topics','topic','similar_topics');
-		$mode = $input->correct_var(BS_URL_MODE,'get',PLIB_Input::STRING,$modes,'default');
-		$keywords = $input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
-		$usernames = $input->get_var(BS_URL_UN,'get',PLIB_Input::STRING);
+		$mode = $input->correct_var(BS_URL_MODE,'get',FWS_Input::STRING,$modes,'default');
+		$keywords = $input->get_var(BS_URL_KW,'get',FWS_Input::STRING);
+		$usernames = $input->get_var(BS_URL_UN,'get',FWS_Input::STRING);
 		
 		$submitted = $input->isset_var('submit','post');
 		if($mode != 'default' || $submitted || $id != null || $keywords != null || $usernames != null)
@@ -95,10 +95,10 @@ final class BS_Front_Module_search extends BS_Front_Module
 		else
 		{
 			$order_vals = array('lastpost','topic_name','topic_type','replies','views','relevance');
-			$order = $input->correct_var('order','post',PLIB_Input::STRING,$order_vals,'relevance');
-			$ad = $input->correct_var('ad','post',PLIB_Input::STRING,array('ASC','DESC'),'DESC');
+			$order = $input->correct_var('order','post',FWS_Input::STRING,$order_vals,'relevance');
+			$ad = $input->correct_var('ad','post',FWS_Input::STRING,array('ASC','DESC'),'DESC');
 			$limit_vals = array(10,25,50,100,250,500);
-			$limit = $input->correct_var('limit','post',PLIB_Input::INTEGER,$limit_vals,250);
+			$limit = $input->correct_var('limit','post',FWS_Input::INTEGER,$limit_vals,250);
 
 			// the condition is true if we should have been displayed the result but
 			// there has occurred an error
@@ -138,8 +138,8 @@ final class BS_Front_Module_search extends BS_Front_Module
 				'topics' => $locale->lang('threads')
 			);
 
-			$keyword = stripslashes($input->get_var('keyword','post',PLIB_Input::STRING));
-			$username = stripslashes($input->get_var('un','post',PLIB_Input::STRING));
+			$keyword = stripslashes($input->get_var('keyword','post',FWS_Input::STRING));
+			$username = stripslashes($input->get_var('un','post',FWS_Input::STRING));
 			
 			$selection = $input->get_var('fid','post');
 			$forum_combo = BS_ForumUtils::get_instance()->get_recursive_forum_combo(

@@ -21,12 +21,12 @@ final class BS_Front_Action_userprofile_pmunbanuser extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
-		$functions = PLIB_Props::get()->functions();
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$functions = FWS_Props::get()->functions();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// check if we are allowed to unban a user
 		if(!$user->is_loggedin() || $cfg['enable_pms'] == 0 ||
@@ -38,8 +38,8 @@ final class BS_Front_Action_userprofile_pmunbanuser extends BS_Front_Action_Base
 			return 'Invalid session-id';
 
 		// check parameter
-		$ids = $input->get_var(BS_URL_DEL,'get',PLIB_Input::STRING);
-		if(!($ids = PLIB_StringHelper::get_ids($ids)))
+		$ids = $input->get_var(BS_URL_DEL,'get',FWS_Input::STRING);
+		if(!($ids = FWS_StringHelper::get_ids($ids)))
 			return 'Invalid id-sstring got via GET';
 
 		// delete the user from our banlist

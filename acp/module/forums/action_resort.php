@@ -21,12 +21,12 @@ final class BS_ACP_Action_forums_resort extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$this->_resort_forums(0);
 		
 		// refresh forums
-		PLIB_Props::get()->reload('forums');
+		FWS_Props::get()->reload('forums');
 		
 		$this->set_success_msg($locale->lang('sort_successfully_corrected'));
 		$this->set_action_performed(true);
@@ -41,7 +41,7 @@ final class BS_ACP_Action_forums_resort extends BS_ACP_Action_Base
 	 */
 	private function _resort_forums($parent_id)
 	{
-		$forums = PLIB_Props::get()->forums();
+		$forums = FWS_Props::get()->forums();
 
 		$sub_forums = $forums->get_direct_sub_nodes($parent_id);
 		if($sub_forums != null)
@@ -49,7 +49,7 @@ final class BS_ACP_Action_forums_resort extends BS_ACP_Action_Base
 			$i = 1;
 			foreach($sub_forums as $node)
 			{
-				/* @var $node PLIB_Tree_Node */
+				/* @var $node FWS_Tree_Node */
 				$data = $node->get_data();
 				
 				BS_DAO::get_forums()->update_sort($data->get_id(),$i);

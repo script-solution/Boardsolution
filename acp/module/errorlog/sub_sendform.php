@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_errorlog_sendform extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_ACP_SubModule_errorlog_sendform extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		
 		$renderer = $doc->use_default_renderer();
 		$renderer->add_action(BS_ACP_ACTION_SEND_ERRORS,'send');
@@ -37,11 +37,11 @@ final class BS_ACP_SubModule_errorlog_sendform extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$tpl = PLIB_Props::get()->tpl();
+		$tpl = FWS_Props::get()->tpl();
 
 		$tpl->add_variables(array(
 			'action_type' => BS_ACP_ACTION_SEND_ERRORS

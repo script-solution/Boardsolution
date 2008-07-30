@@ -20,14 +20,14 @@
 final class BS_ACP_SubModule_correctmsgs_default extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$user = PLIB_Props::get()->user();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$locale = PLIB_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
 
 		$helper = BS_ACP_Module_CorrectMsgs_Helper::get_instance();
 		

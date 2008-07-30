@@ -21,11 +21,11 @@ final class BS_Front_Feed_RSS20 extends BS_Front_Feed_Base
 {
 	protected function get_news_XML($news)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
-		$date = PLIB_Date::get_formated_date('D, j M Y G:i:s T',time());
+		$date = FWS_Date::get_formated_date('D, j M Y G:i:s T',time());
 		
 		$xml = '<?xml version="1.0" encoding="'.BS_RSS_FEED_ENCODING.'"?>'."\n";
 		$xml .= '<rss version="2.0">'."\n";
@@ -45,7 +45,7 @@ final class BS_Front_Feed_RSS20 extends BS_Front_Feed_Base
 				$username = $data['post_an_user'];
 			
 			// date
-			$pub_date = PLIB_Date::get_formated_date('D, j M Y G:i:s T',$data['post_time']);
+			$pub_date = FWS_Date::get_formated_date('D, j M Y G:i:s T',$data['post_time']);
 			
 			$xml .= '		<item>'."\n";
 			$xml .= '			<title>'.$data['name'].'</title>'."\n";

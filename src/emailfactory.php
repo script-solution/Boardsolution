@@ -11,13 +11,13 @@
  */
 
 /**
- * Contains methods that build instances of {@link PLIB_Email_Base} for each email-text
+ * Contains methods that build instances of {@link FWS_Email_Base} for each email-text
  *
  * @package			Boardsolution
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_EmailFactory extends PLIB_Singleton
+final class BS_EmailFactory extends FWS_Singleton
 {
 	/**
 	 * @return BS_EmailFactory the instance of this class
@@ -28,17 +28,17 @@ final class BS_EmailFactory extends PLIB_Singleton
 	}
 	
 	/**
-	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 * You'll have to set the receivers by yourself.
 	 *
-	 * @return PLIB_Email_Base the email-instance
+	 * @return FWS_Email_Base the email-instance
 	 */
 	public function get_new_link_mail()
 	{
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$tpl = PLIB_Props::get()->tpl();
-		$functions = PLIB_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
+		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
 		
@@ -55,21 +55,21 @@ final class BS_EmailFactory extends PLIB_Singleton
 	}
 	
 	/**
-	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 * Note that the default-language will be used because the account has just been created and
 	 * therefore the default-language is set.
 	 *
 	 * @param string $user_name the user-name
 	 * @param string $user_email the receiver-email-address
 	 * @param string $user_pw the password of the user
-	 * @return PLIB_Email_Base the email-instance
+	 * @return FWS_Email_Base the email-instance
 	 */
 	public function get_new_registration_mail($user_name,$user_email,$user_pw)
 	{
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$cfg = PLIB_Props::get()->cfg();
-		$tpl = PLIB_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$cfg = FWS_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
 
 		$locale->add_language_file('email',$functions->get_def_lang_folder());
 		
@@ -90,7 +90,7 @@ final class BS_EmailFactory extends PLIB_Singleton
 	}
 	
 	/**
-	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 * It will be used the language with given id.
 	 *
 	 * @param int $langid the language-id to use for the email
@@ -99,18 +99,18 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 * @param string $oldemail the old email-address
 	 * @param string $newemail the new email-address
 	 * @param string $password if changed, the password
-	 * @return PLIB_Email_Base the email-instance
+	 * @return FWS_Email_Base the email-instance
 	 */
 	public function get_account_changed_mail($langid,$oldname,$newname,$oldemail,$newemail,$password)
 	{
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$cfg = PLIB_Props::get()->cfg();
-		$tpl = PLIB_Props::get()->tpl();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$cfg = FWS_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
 
-		if(!PLIB_Helper::is_integer($langid) || $langid <= 0)
-			PLIB_Helper::def_error('intgt0','langid',$langid);
+		if(!FWS_Helper::is_integer($langid) || $langid <= 0)
+			FWS_Helper::def_error('intgt0','langid',$langid);
 		
 		$lang_data = $cache->get_cache('languages')->get_element($langid);
 		if($lang_data != null)
@@ -139,20 +139,20 @@ final class BS_EmailFactory extends PLIB_Singleton
 	}
 	
 	/**
-	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 *
 	 * @param int $user_id the user-id
 	 * @param string $user_email the email of the user
 	 * @param string $user_key the key for the email-change
-	 * @return PLIB_Email_Base the email-instance
+	 * @return FWS_Email_Base the email-instance
 	 */
 	public function get_change_email_mail($user_id,$user_email,$user_key)
 	{
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$functions = PLIB_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
 		
@@ -171,20 +171,20 @@ final class BS_EmailFactory extends PLIB_Singleton
 	}
 	
 	/**
-	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 *
 	 * @param int $user_id the user-id
 	 * @param string $user_email the email of the user
 	 * @param string $user_key the key for the password-change
-	 * @return PLIB_Email_Base the email-instance
+	 * @return FWS_Email_Base the email-instance
 	 */
 	public function get_change_pw_mail($user_id,$user_email,$user_key)
 	{
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$functions = PLIB_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
 
@@ -203,23 +203,23 @@ final class BS_EmailFactory extends PLIB_Singleton
 	}
 	
 	/**
-	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 *
 	 * @param int $user_id the id of the user
 	 * @param string $user_email the email-address
 	 * @param string $user_key the activation-key of the user
-	 * @return PLIB_Email_Base the email-instance
+	 * @return FWS_Email_Base the email-instance
 	 */
 	public function get_account_activation_mail($user_id,$user_email,$user_key)
 	{
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
-		$functions = PLIB_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
+		$functions = FWS_Props::get()->functions();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$locale->add_language_file('email');
 
@@ -239,18 +239,18 @@ final class BS_EmailFactory extends PLIB_Singleton
 	}
 	
 	/**
-	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 * You'll have to set the receivers by yourself. Note that the default language will be used.
 	 * 
-	 * @return PLIB_Email_Base the email-instance
+	 * @return FWS_Email_Base the email-instance
 	 */
 	public function get_account_activated_mail()
 	{
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
-		$functions = PLIB_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
+		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
 		
@@ -267,18 +267,18 @@ final class BS_EmailFactory extends PLIB_Singleton
 	}
 	
 	/**
-	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 * You'll have to set the receivers by yourself. Note that the default language will be used.
 	 * 
-	 * @return PLIB_Email_Base the email-instance
+	 * @return FWS_Email_Base the email-instance
 	 */
 	public function get_account_not_activated_mail()
 	{
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
-		$functions = PLIB_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
+		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
 		
@@ -295,18 +295,18 @@ final class BS_EmailFactory extends PLIB_Singleton
 	}
 	
 	/**
-	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 * You'll have to set the receivers by yourself. Note that the default language will be used.
 	 * 
-	 * @return PLIB_Email_Base the email-instance
+	 * @return FWS_Email_Base the email-instance
 	 */
 	public function get_account_reactivated_mail()
 	{
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
 
 		$locale->add_language_file('email',$functions->get_def_lang_folder());
 		
@@ -323,18 +323,18 @@ final class BS_EmailFactory extends PLIB_Singleton
 	}
 	
 	/**
-	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 * You'll have to set the receivers by yourself.
 	 * 
-	 * @return PLIB_Email_Base the email-instance
+	 * @return FWS_Email_Base the email-instance
 	 */
 	public function get_account_deactivated_mail()
 	{
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
-		$functions = PLIB_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
+		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
 		
@@ -351,18 +351,18 @@ final class BS_EmailFactory extends PLIB_Singleton
 	}
 	
 	/**
-	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 *
 	 * @param string $email the email-address
-	 * @return PLIB_Email_Base the email-instance
+	 * @return FWS_Email_Base the email-instance
 	 */
 	public function get_new_pm_mail($email)
 	{
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$functions = PLIB_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
 		
@@ -379,22 +379,22 @@ final class BS_EmailFactory extends PLIB_Singleton
 	}
 	
 	/**
-	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 *
 	 * @param int $user_id the user-id
 	 * @param string $user_name the user-name
 	 * @param string $user_email the email-address
 	 * @param string $user_pw the password
 	 * @param string $user_key the key for the activation
-	 * @return PLIB_Email_Base the email-instance
+	 * @return FWS_Email_Base the email-instance
 	 */
 	public function get_register_mail($user_id,$user_name,$user_email,$user_pw,$user_key = '')
 	{
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$tpl = PLIB_Props::get()->tpl();
-		$functions = PLIB_Props::get()->functions();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
+		$functions = FWS_Props::get()->functions();
+		$url = FWS_Props::get()->url();
 
 		$locale->add_language_file('email');
 
@@ -420,18 +420,18 @@ final class BS_EmailFactory extends PLIB_Singleton
 	}
 	
 	/**
-	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 *
 	 * @param string $user_name the username that has created an account
-	 * @return PLIB_Email_Base the email-instance
+	 * @return FWS_Email_Base the email-instance
 	 */
 	public function get_new_account_mail($user_name)
 	{
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$functions = PLIB_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
 
@@ -452,20 +452,20 @@ final class BS_EmailFactory extends PLIB_Singleton
 	}
 	
 	/**
-	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 *
 	 * @param string $subject the subject-template
 	 * @param string $text the text-template
 	 * @param string $user_name the name of the user who gets the email
 	 * @param string $user_email the receiver-address
 	 * @param array $topics all topics to add
-	 * @return PLIB_Email_Base the email-instance
+	 * @return FWS_Email_Base the email-instance
 	 */
 	public function get_delayed_email_notification_mail($subject,$text,$user_name,$user_email,$topics)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$tpl = PLIB_Props::get()->tpl();
-		$functions = PLIB_Props::get()->functions();
+		$cfg = FWS_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
+		$functions = FWS_Props::get()->functions();
 
 		$subject = sprintf($subject,$cfg['forum_title']);
 		$text = $tpl->parse_string(
@@ -481,19 +481,19 @@ final class BS_EmailFactory extends PLIB_Singleton
 	}
 	
 	/**
-	 * Builds the instance of {@link PLIB_Email_Base} with the corresponding subject and text.
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 *
 	 * @param int $current the current number of PMs in the inbox
 	 * @param string $email the email-address to send the email to
-	 * @return PLIB_Email_Base the email-instance
+	 * @return FWS_Email_Base the email-instance
 	 */
 	public function get_pm_inbox_full_mail($current,$email)
 	{
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$functions = PLIB_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
 		
@@ -529,10 +529,10 @@ final class BS_EmailFactory extends PLIB_Singleton
 	 */
 	public function get_new_post_texts($fid,$tid,$pid,$text,$user_name)
 	{
-		$locale = PLIB_Props::get()->locale();
-		$cfg = PLIB_Props::get()->cfg();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		$locale->add_language_file('email');
 		
@@ -566,7 +566,7 @@ final class BS_EmailFactory extends PLIB_Singleton
 			array(
 				'forum_name' => $cfg['forum_title'],
 				'board_url' => $murl,
-				'text' => PLIB_StringHelper::htmlspecialchars_back($text),
+				'text' => FWS_StringHelper::htmlspecialchars_back($text),
 				'user_name' => $user_name
 			)
 		);

@@ -36,21 +36,21 @@ abstract class BS_ACP_SubModuleContainer extends BS_ACP_Module
 	 */
 	public function __construct($module,$actions = array(),$default = 'default')
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
 		if(count($actions) == 0)
-			PLIB_Helper::error('Please provide the possible submodules of this module!');
+			FWS_Helper::error('Please provide the possible submodules of this module!');
 		
-		$action = $input->correct_var('action','get',PLIB_Input::STRING,$actions,$default);
+		$action = $input->correct_var('action','get',FWS_Input::STRING,$actions,$default);
 		
 		// include the sub-module and create it
-		include_once(PLIB_Path::server_app().'acp/module/'.$module.'/sub_'.$action.'.php');
+		include_once(FWS_Path::server_app().'acp/module/'.$module.'/sub_'.$action.'.php');
 		$classname = 'BS_ACP_SubModule_'.$module.'_'.$action;
 		$this->_sub = new $classname();
 	}
 
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -62,12 +62,12 @@ abstract class BS_ACP_SubModuleContainer extends BS_ACP_Module
 		
 		$classname = get_class($this->_sub);
 		$lastus = strrpos($classname,'_');
-		$prevlastus = strrpos(PLIB_String::substr($classname,0,$lastus),'_');
-		$renderer->set_template(PLIB_String::strtolower(PLIB_String::substr($classname,$prevlastus + 1)).'.htm');
+		$prevlastus = strrpos(FWS_String::substr($classname,0,$lastus),'_');
+		$renderer->set_template(FWS_String::strtolower(FWS_String::substr($classname,$prevlastus + 1)).'.htm');
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{

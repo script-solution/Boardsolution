@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_Forums_Helper extends PLIB_Singleton
+final class BS_ACP_Module_Forums_Helper extends FWS_Singleton
 {
 	/**
 	 * @return BS_ACP_Module_Forums_Helper the instance of this class
@@ -36,7 +36,7 @@ final class BS_ACP_Module_Forums_Helper extends PLIB_Singleton
 	 */
 	public function is_no_sub_category($parent_id,$target_id)
 	{
-		$forums = PLIB_Props::get()->forums();
+		$forums = FWS_Props::get()->forums();
 		
 		if($parent_id == $target_id)
 			return false;
@@ -64,11 +64,11 @@ final class BS_ACP_Module_Forums_Helper extends PLIB_Singleton
 	 */
 	public function refresh_intern_access($id,$selected_user,$selected_groups,$is_intern)
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		$regen = false;
 		$intern = $cache->get_cache('intern');
-		$user_ids = PLIB_Array_Utils::advanced_explode(',',$selected_user);
+		$user_ids = FWS_Array_Utils::advanced_explode(',',$selected_user);
 
 		if($is_intern)
 		{

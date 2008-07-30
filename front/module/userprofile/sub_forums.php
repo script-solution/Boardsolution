@@ -20,7 +20,7 @@
 final class BS_Front_SubModule_userprofile_forums extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_Front_SubModule_userprofile_forums extends BS_Front_SubModule
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_UNSUBSCRIBE_FORUM,array('unsubscribe','forums'));
@@ -39,33 +39,33 @@ final class BS_Front_SubModule_userprofile_forums extends BS_Front_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$forums = PLIB_Props::get()->forums();
+		$cfg = FWS_Props::get()->cfg();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$forums = FWS_Props::get()->forums();
 
 		// has the user the permission to view the subscriptions?
 		if($cfg['enable_email_notification'] == 0)
 		{
-			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+			$this->report_error(FWS_Document_Messages::NO_ACCESS);
 			return;
 		}
 
-		$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 		if($site == null)
 			$site = 1;
 
 		// display delete info
 		if(($delete = $input->get_var('delete','post')) != null &&
-			PLIB_Array_Utils::is_integer($delete))
+			FWS_Array_Utils::is_integer($delete))
 		{
 			$subscr = BS_DAO::get_subscr()->get_subscr_forums_of_user($user->get_user_id(),$delete);
 			$names = array();
@@ -75,9 +75,9 @@ final class BS_Front_SubModule_userprofile_forums extends BS_Front_SubModule
 				if($forum !== false)
 					$names[] = $forum->get_name();
 			}
-			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
+			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
-			$loc = '&amp;'.BS_URL_LOC.'='.$input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING);
+			$loc = '&amp;'.BS_URL_LOC.'='.$input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
 			$string_ids = implode(',',$delete);
 			$yes_url = $url->get_url(
 				0,
@@ -124,11 +124,11 @@ final class BS_Front_SubModule_userprofile_forums extends BS_Front_SubModule
 			{
 				$data = $nodes[$index]->get_data();
 				if($data->get_lastpost_time() > 0)
-					$lastpost = PLIB_Date::get_date($data->get_lastpost_time());
+					$lastpost = FWS_Date::get_date($data->get_lastpost_time());
 				else
 					$lastpost = $locale->lang('notavailable');
 				$tplforums[] = array(
-					'subscribe_date' => PLIB_Date::get_date($sub_data[$data->get_id()]['sub_date']),
+					'subscribe_date' => FWS_Date::get_date($sub_data[$data->get_id()]['sub_date']),
 					'last_post' => $lastpost,
 					'id' => $sub_data[$data->get_id()]['id'],
 					'position' => BS_ForumUtils::get_instance()->get_forum_path($data->get_id(),false)

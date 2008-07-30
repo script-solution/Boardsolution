@@ -21,14 +21,14 @@ final class BS_Front_Action_new_mail_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$ips = PLIB_Props::get()->ips();
-		$user = PLIB_Props::get()->user();
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$ips = FWS_Props::get()->ips();
+		$user = FWS_Props::get()->user();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
@@ -44,22 +44,22 @@ final class BS_Front_Action_new_mail_default extends BS_Front_Action_Base
 				return 'ipmail';
 		}
 
-		$receiver_id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$subject = $input->get_var('subject','post',PLIB_Input::STRING);
-		$text = $input->get_var('text','post',PLIB_Input::STRING);
-		$content_type = $input->correct_var('content_type','post',PLIB_Input::STRING,
+		$receiver_id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
+		$subject = $input->get_var('subject','post',FWS_Input::STRING);
+		$text = $input->get_var('text','post',FWS_Input::STRING);
+		$content_type = $input->correct_var('content_type','post',FWS_Input::STRING,
 			array('plain','html'),'plain');
 		$email_address = '';
 
 		if(!$user->is_loggedin())
 		{
-			$user_name = $input->get_var('user_name','post',PLIB_Input::STRING);
+			$user_name = $input->get_var('user_name','post',FWS_Input::STRING);
 			if(!BS_UserUtils::get_instance()->check_username($user_name))
 				return 'invalid_username';
 	
-			$user_email = $input->get_var('email_adr','post',PLIB_Input::STRING);
+			$user_email = $input->get_var('email_adr','post',FWS_Input::STRING);
 			$user_email = trim($user_email);
-			if($user_email != '' && !PLIB_StringHelper::is_valid_email($user_email))
+			if($user_email != '' && !FWS_StringHelper::is_valid_email($user_email))
 				return 'invalid_email';
 	
 			// check security-code
@@ -112,13 +112,13 @@ final class BS_Front_Action_new_mail_default extends BS_Front_Action_Base
 				list($pos,$err) = $bbcode->get_error_code();
 				return sprintf(
 					$locale->lang('error_bbcode_'.$err),
-					PLIB_StringHelper::get_text_part($text,$pos,20),
+					FWS_StringHelper::get_text_part($text,$pos,20),
 					$pos
 				);
 			}
 
 			// build text for email
-			$bbcode->set_board_path(PLIB_Path::outer());
+			$bbcode->set_board_path(FWS_Path::outer());
 			$bbcode->stripslashes();
 			$text = $bbcode->get_message_for_output();
 		}

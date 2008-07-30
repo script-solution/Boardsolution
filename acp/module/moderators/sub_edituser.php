@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_moderators_edituser extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,14 +28,14 @@ final class BS_ACP_SubModule_moderators_edituser extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_CONFIG_MOD_FORUMS,'edituser');
 		
-		$usernames = $input->get_var('usernames','get',PLIB_Input::STRING);
+		$usernames = $input->get_var('usernames','get',FWS_Input::STRING);
 		$renderer->add_breadcrumb(
 			$locale->lang('config_mod_forums'),
 			$url->get_acpmod_url(0,'&amp;action=edituser&amp;usernames='.$usernames)
@@ -43,19 +43,19 @@ final class BS_ACP_SubModule_moderators_edituser extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
 
-		$usernames = $input->get_var('usernames','get',PLIB_Input::STRING);
+		$usernames = $input->get_var('usernames','get',FWS_Input::STRING);
 		$auser = preg_split('/\s*,\s*/',$usernames);
 		if(count($auser) == 0)
 		{
-			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('username_not_found'));
+			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('username_not_found'));
 			return;
 		}
 		
@@ -67,7 +67,7 @@ final class BS_ACP_SubModule_moderators_edituser extends BS_ACP_SubModule
 		// any user found?
 		if(count($user_ids) == 0)
 		{
-			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('username_not_found'));
+			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('username_not_found'));
 			return;
 		}
 		

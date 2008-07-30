@@ -17,7 +17,7 @@
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_Front_Search_Request_PMBasic extends PLIB_Object implements BS_Front_Search_Request
+abstract class BS_Front_Search_Request_PMBasic extends FWS_Object implements BS_Front_Search_Request
 {
 	/**
 	 * The result-object
@@ -39,9 +39,9 @@ abstract class BS_Front_Search_Request_PMBasic extends PLIB_Object implements BS
 	 */
 	protected final function get_result_ids_impl($search_cond)
 	{
-		$user = PLIB_Props::get()->user();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
 
 		$ids = BS_DAO::get_pms()->get_pm_ids_by_search($user->get_user_id(),$search_cond);
 		if(count($ids) == 0)

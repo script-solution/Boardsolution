@@ -21,17 +21,17 @@ final class BS_Front_Action_change_password_default extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$user = FWS_Props::get()->user();
 
 		// check if the user is allowed to do this
 		if((BS_ENABLE_EXPORT && BS_EXPORT_SEND_PW_TYPE != 'enabled') || $user->is_loggedin())
 			return 'Community exported and send-pw-type not enabled or not loggedin';
 
-		$user_id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$user_key = $input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
+		$user_id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
+		$user_key = $input->get_var(BS_URL_KW,'get',FWS_Input::STRING);
 
 		// check parameter
 		if($user_id == null || $user_key == null)
@@ -42,8 +42,8 @@ final class BS_Front_Action_change_password_default extends BS_Front_Action_Base
 			return 'Invalid user-id or user-key';
 
 		// check new password
-		$password = $input->get_var('password','post',PLIB_Input::STRING);
-		$password_conf = $input->get_var('password_conf','post',PLIB_Input::STRING);
+		$password = $input->get_var('password','post',FWS_Input::STRING);
+		$password_conf = $input->get_var('password_conf','post',FWS_Input::STRING);
 
 		if($password == null || $password_conf == null)
 			return 'missing_password';
@@ -66,7 +66,7 @@ final class BS_Front_Action_change_password_default extends BS_Front_Action_Base
 		BS_DAO::get_changepw()->delete_by_user($user_id);
 		
 		// fire community-event
-		$groups = PLIB_Array_Utils::advanced_explode(',',$userdata['user_group']);
+		$groups = FWS_Array_Utils::advanced_explode(',',$userdata['user_group']);
 		$status = BS_Community_User::get_status_from_groups($groups);
 		$u = new BS_Community_User(
 			$user_id,$userdata['user_name'],$userdata['user_email'],$status,$dbpw,

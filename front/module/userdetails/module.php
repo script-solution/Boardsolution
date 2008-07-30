@@ -20,7 +20,7 @@
 final class BS_Front_Module_userdetails extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,14 +28,14 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		
 		$renderer->set_has_access($user->get_user_id() == $id || $auth->has_global_permission('view_userdetails'));
 		
@@ -46,21 +46,21 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
-		$sessions = PLIB_Props::get()->sessions();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
+		$sessions = FWS_Props::get()->sessions();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 
 		// check wether the parameter is valid
 		if($id == null)
@@ -181,7 +181,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 			foreach($postlist as $data)
 			{
 				$last_posts[] = array(
-					'date' => PLIB_Date::get_date($data['post_time']),
+					'date' => FWS_Date::get_date($data['post_time']),
 					'forum_path' => BS_ForumUtils::get_instance()->get_forum_path($data['rubrikid'],false),
 					'topic_url' => $url->get_url(
 						'redirect','&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'='.$data['id']
@@ -251,7 +251,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 		$pid = '&amp;'.BS_URL_PID.'='.$user_data['id'];
 		
 		if($user_data['lastlogin'] > 0)
-			$lastlogin = PLIB_Date::get_date($user_data['lastlogin']);
+			$lastlogin = FWS_Date::get_date($user_data['lastlogin']);
 		else
 			$lastlogin = $locale->lang('notavailable');
 		
@@ -262,7 +262,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 			'experience_diagram' => $user_stats,
 			'lastlogin' => $lastlogin,
 			'posts_per_day' => $posts_per_day,
-			'register_date' => PLIB_Date::get_date($user_data['registerdate'],false),
+			'register_date' => FWS_Date::get_date($user_data['registerdate'],false),
 			'user_groups' => $auth->get_usergroup_list($user_data['user_group']),
 			'signature' => $signature,
 			'last_posts' => $last_posts,

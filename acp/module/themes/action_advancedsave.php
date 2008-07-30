@@ -21,19 +21,19 @@ final class BS_ACP_Action_themes_advancedsave extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
 
-		$theme = $input->get_var('theme','get',PLIB_Input::STRING);
+		$theme = $input->get_var('theme','get',FWS_Input::STRING);
 		if($theme == null)
 			return 'Invalid theme "'.$theme.'"';
 		
-		$file = PLIB_Path::server_app().'themes/'.$theme.'/style.css';
+		$file = FWS_Path::server_app().'themes/'.$theme.'/style.css';
 		
-		$content = $input->get_var('file_content','post',PLIB_Input::STRING);
-		$content = PLIB_StringHelper::htmlspecialchars_back(stripslashes(trim($content)),ENT_QUOTES);
+		$content = $input->get_var('file_content','post',FWS_Input::STRING);
+		$content = FWS_StringHelper::htmlspecialchars_back(stripslashes(trim($content)),ENT_QUOTES);
 		
-		if(!PLIB_FileUtils::write($file,$content))
+		if(!FWS_FileUtils::write($file,$content))
 			return sprintf($locale->lang('file_not_saved'),$file);
 		
 		$this->set_action_performed(true);

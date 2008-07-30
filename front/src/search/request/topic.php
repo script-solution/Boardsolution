@@ -67,20 +67,20 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 	
 	public function get_result_ids()
 	{
-		$input = PLIB_Props::get()->input();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
 
-		$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 		if($tid == null)
 		{
 			$msgs->add_error($locale->lang('no_posts_found'));
 			return null;
 		}
 		
-		$keyword = $input->get_var('keyword','post',PLIB_Input::STRING);
+		$keyword = $input->get_var('keyword','post',FWS_Input::STRING);
 		if($keyword === null)
-			$keyword = $input->get_var(BS_URL_KW,'get',PLIB_Input::STRING);
+			$keyword = $input->get_var(BS_URL_KW,'get',FWS_Input::STRING);
 		
 		if(!BS_Front_Search_Utils::is_valid_keyword($keyword))
 			return null;
@@ -106,7 +106,7 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 	
 	public function get_title($search)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		return sprintf(
 			$locale->lang('search_topic_for_posts'),

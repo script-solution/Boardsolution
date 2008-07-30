@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_usergroups_edit extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,15 +28,15 @@ final class BS_ACP_SubModule_usergroups_edit extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ADD_USER_GROUP,array('edit','add'));
 		$renderer->add_action(BS_ACP_ACTION_EDIT_USER_GROUP,array('edit','edit'));
 
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id != null)
 		{
 			$renderer->add_breadcrumb(
@@ -54,18 +54,18 @@ final class BS_ACP_SubModule_usergroups_edit extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$url = PLIB_Props::get()->url();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$url = FWS_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
 
 		$helper = BS_ACP_Module_UserGroups_Helper::get_instance();
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		$type = $id != null ? 'edit' : 'add';
 
 		if($type == 'edit')

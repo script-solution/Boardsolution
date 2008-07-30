@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_Avatars extends PLIB_Singleton
+class BS_DAO_Avatars extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_Avatars the instance of this class
@@ -36,7 +36,7 @@ class BS_DAO_Avatars extends PLIB_Singleton
 	 */
 	public function get_count()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(BS_TB_AVATARS,'id','');
 	}
@@ -47,7 +47,7 @@ class BS_DAO_Avatars extends PLIB_Singleton
 	 */
 	public function get_count_for_keyword($keyword)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(
 			BS_TB_AVATARS.' a','a.id','LEFT JOIN '.BS_TB_USER.' u ON a.user = u.`'.BS_EXPORT_USER_ID.'`
@@ -61,10 +61,10 @@ class BS_DAO_Avatars extends PLIB_Singleton
 	 */
 	public function get_count_of_user($user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		return $db->sql_num(BS_TB_AVATARS,'id',' WHERE user = '.$user_id);
 	}
@@ -76,10 +76,10 @@ class BS_DAO_Avatars extends PLIB_Singleton
 	 */
 	public function get_count_for_user($user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		return $db->sql_num(BS_TB_AVATARS,'id',' WHERE user = '.$user_id.' OR user = 0');
 	}
@@ -89,7 +89,7 @@ class BS_DAO_Avatars extends PLIB_Singleton
 	 */
 	public function get_all()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows('SELECT * FROM '.BS_TB_AVATARS);
 	}
@@ -133,8 +133,8 @@ class BS_DAO_Avatars extends PLIB_Singleton
 	 */
 	public function get_list_for_user($user_id,$start = 0,$count = 0)
 	{
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		return $this->get_list_impl('WHERE a.user = '.$user_id.' OR a.user = 0',$start,$count);
 	}
@@ -162,10 +162,10 @@ class BS_DAO_Avatars extends PLIB_Singleton
 	 */
 	public function get_by_ids($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_AVATARS.' WHERE id IN ('.implode(',',$ids).')'
@@ -181,12 +181,12 @@ class BS_DAO_Avatars extends PLIB_Singleton
 	 */
 	public function get_by_ids_from_user($ids,$user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_AVATARS.'
@@ -203,12 +203,12 @@ class BS_DAO_Avatars extends PLIB_Singleton
 	 */
 	public function create($path,$user_id = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		if(empty($path))
-			PLIB_Helper::def_error('notempty','path',$path);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+			FWS_Helper::def_error('notempty','path',$path);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$db->sql_insert(BS_TB_AVATARS,array(
 			'av_pfad' => $path,
@@ -225,10 +225,10 @@ class BS_DAO_Avatars extends PLIB_Singleton
 	 */
 	public function delete_by_ids($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_AVATARS.' WHERE id IN ('.implode(',',$ids).')'
@@ -245,12 +245,12 @@ class BS_DAO_Avatars extends PLIB_Singleton
 	 */
 	public function delete_by_ids_from_user($ids,$user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_AVATARS.' WHERE id IN ('.implode(',',$ids).') AND user = '.$user_id
@@ -266,10 +266,10 @@ class BS_DAO_Avatars extends PLIB_Singleton
 	 */
 	public function delete_by_users($user_ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
-			PLIB_Helper::def_error('intarray>0','user_ids',$user_ids);
+		if(!FWS_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
+			FWS_Helper::def_error('intarray>0','user_ids',$user_ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_AVATARS.' WHERE user IN ('.implode(',',$user_ids).')'
@@ -287,12 +287,12 @@ class BS_DAO_Avatars extends PLIB_Singleton
 	 */
 	protected function get_list_impl($where,$start,$count)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		return $db->sql_rows(
 			'SELECT a.*,u.`'.BS_EXPORT_USER_NAME.'` user_name

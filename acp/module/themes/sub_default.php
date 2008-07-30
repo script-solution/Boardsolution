@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_themes_default extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -34,22 +34,22 @@ final class BS_ACP_SubModule_themes_default extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$url = PLIB_Props::get()->url();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$url = FWS_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
 
 		$delete = $input->get_var('delete','post');
 		if($delete != null)
 		{
 			$names = $cache->get_cache('themes')->get_field_vals_of_keys($delete,'theme_name');
-			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
+			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
@@ -60,7 +60,7 @@ final class BS_ACP_SubModule_themes_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$search = $input->get_var('search','get',PLIB_Input::STRING);
+		$search = $input->get_var('search','get',FWS_Input::STRING);
 		$this->request_formular();
 		
 		$tpl->add_variables(array(
@@ -88,7 +88,7 @@ final class BS_ACP_SubModule_themes_default extends BS_ACP_SubModule
 		unset($hidden['at']);
 		$tpl->add_array('themes',$themes);
 		$tpl->add_variables(array(
-			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));

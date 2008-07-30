@@ -20,7 +20,7 @@
 final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -33,21 +33,21 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
-		$user = PLIB_Props::get()->user();
-		$functions = PLIB_Props::get()->functions();
-		$msgs = PLIB_Props::get()->msgs();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$functions = FWS_Props::get()->functions();
+		$msgs = FWS_Props::get()->msgs();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$url = FWS_Props::get()->url();
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		
 		$num = BS_DAO::get_links()->get_count(1);
 		$end = BS_LINKLIST_LINKS_PER_PAGE;
@@ -84,8 +84,8 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 					$bbcode = new BS_BBCode_Parser($data['link_desc'],'desc',$enable_bbcode,$enable_smileys);
 					$description = $bbcode->get_message_for_output();
 	
-					if(PLIB_String::strlen($data['link_url']) > 35)
-						$murl = '<span title="'.$data['link_url'].'">'.PLIB_String::substr($data['link_url'],0,35).'...</span>';
+					if(FWS_String::strlen($data['link_url']) > 35)
+						$murl = '<span title="'.$data['link_url'].'">'.FWS_String::substr($data['link_url'],0,35).'...</span>';
 					else
 						$murl = $data['link_url'];
 	
@@ -107,7 +107,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 								$data['user_id'],$data['user_name'],$data['user_group']
 						),
 						'redirect_url' => $redirect_url,
-						'link_date' => PLIB_Date::get_date($data['link_date'],false),
+						'link_date' => FWS_Date::get_date($data['link_date'],false),
 						'details_url' => $url->get_url(0,'&amp;'.BS_URL_ID.'='.$data['id']).'#details',
 						'display' => ($id == $data['id']) ? 'block' : 'none'
 					);

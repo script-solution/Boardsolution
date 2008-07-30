@@ -49,8 +49,8 @@ final class BS_API_Module_unread extends BS_API_Module
 	
 	public function run()
 	{
-		$user = PLIB_Props::get()->user();
-		$unread = PLIB_Props::get()->unread();
+		$user = FWS_Props::get()->user();
+		$unread = FWS_Props::get()->unread();
 
 		if($user->is_loggedin())
 		{

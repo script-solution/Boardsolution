@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_LogIPs extends PLIB_Singleton
+class BS_DAO_LogIPs extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_LogErrors the instance of this class
@@ -39,7 +39,7 @@ class BS_DAO_LogIPs extends PLIB_Singleton
 	 */
 	public function get_count_by_search($where)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(
 			BS_TB_LOG_IPS.' l','l.id',
@@ -58,10 +58,10 @@ class BS_DAO_LogIPs extends PLIB_Singleton
 	 */
 	public function get_by_action_for_ip($action,$ip,$timeout = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($timeout) || $timeout < 0)
-			PLIB_Helper::def_error('intge0','timeout',$timeout);
+		if(!FWS_Helper::is_integer($timeout) || $timeout < 0)
+			FWS_Helper::def_error('intge0','timeout',$timeout);
 		
 		$data = $db->sql_fetch(
 			'SELECT * FROM '.BS_TB_LOG_IPS.'
@@ -85,12 +85,12 @@ class BS_DAO_LogIPs extends PLIB_Singleton
 	 */
 	public function get_list_by_search($where,$sort = 'l.id',$order = 'ASC',$start = 0,$count = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		return $db->sql_rows(
 			'SELECT l.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
@@ -110,8 +110,8 @@ class BS_DAO_LogIPs extends PLIB_Singleton
 	 */
 	public function create($action)
 	{
-		$db = PLIB_Props::get()->db();
-		$user = PLIB_Props::get()->user();
+		$db = FWS_Props::get()->db();
+		$user = FWS_Props::get()->user();
 
 		$db->sql_insert(BS_TB_LOG_IPS,array(
 			'user_ip' => $user->get_user_ip(),
@@ -128,7 +128,7 @@ class BS_DAO_LogIPs extends PLIB_Singleton
 	 */
 	public function clear()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$db->sql_qry('TRUNCATE TABLE '.BS_TB_LOG_IPS);
 	}
@@ -141,10 +141,10 @@ class BS_DAO_LogIPs extends PLIB_Singleton
 	 */
 	public function delete_by_ids($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_LOG_IPS.' WHERE id IN ('.implode(',',$ids).')'
@@ -160,10 +160,10 @@ class BS_DAO_LogIPs extends PLIB_Singleton
 	 */
 	public function delete_timedout($timeout)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($timeout) || $timeout <= 0)
-			PLIB_Helper::def_error('intgt0','timeout',$timeout);
+		if(!FWS_Helper::is_integer($timeout) || $timeout <= 0)
+			FWS_Helper::def_error('intgt0','timeout',$timeout);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_LOG_ERRORS.' WHERE date < '.(time() - $timeout)

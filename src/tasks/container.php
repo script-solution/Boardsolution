@@ -17,7 +17,7 @@
  * @subpackage	src.tasks
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Tasks_Container extends PLIB_Tasks_Container
+final class BS_Tasks_Container extends FWS_Tasks_Container
 {
 	/**
 	 * Constructor
@@ -25,7 +25,7 @@ final class BS_Tasks_Container extends PLIB_Tasks_Container
 	public function __construct()
 	{
 		$storage = new BS_Tasks_Storage_DB();
-		parent::__construct($storage,PLIB_Path::server_app().'src/tasks/','BS_Tasks_');
+		parent::__construct($storage,FWS_Path::server_app().'src/tasks/','BS_Tasks_');
 	}
 }
 ?>

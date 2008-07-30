@@ -53,14 +53,14 @@ class BS_Install extends BS_Base
 	 */
 	public function BS_Install($path,$step)
 	{
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
 
 		BS_Base::BS_Base($path,array('sql_helper','sess','url','unread','forums','cache','db'));
 		
 		$this->lang_name = $input->correct_var(
-			'lang','get',PLIB_Input::STRING,array('en','ger_du','ger_sie'),'ger_du'
+			'lang','get',FWS_Input::STRING,array('en','ger_du','ger_sie'),'ger_du'
 		);
 		$this->step = $step;
 		$this->_log = '';
@@ -78,8 +78,8 @@ class BS_Install extends BS_Base
 	 */
 	public function display()
 	{
-		$functions = PLIB_Props::get()->functions();
-		$input = PLIB_Props::get()->input();
+		$functions = FWS_Props::get()->functions();
+		$input = FWS_Props::get()->input();
 
 		session_name('PHPSESSID');
 		session_start();
@@ -89,7 +89,7 @@ class BS_Install extends BS_Base
 		// navigate backwards?
 		if($input->isset_var('back','post') && $this->step > 0)
 		{
-			$phpself = $input->get_var('PHP_SELF','server',PLIB_Input::STRING);
+			$phpself = $input->get_var('PHP_SELF','server',FWS_Input::STRING);
 			// we can't use functions->redirect() here because BS_FOLDER_URL is not set yet
 			header('Location: '.$phpself.'?step='.($this->step - 1).'&lang='.$this->lang_name);
 			exit;
@@ -99,12 +99,12 @@ class BS_Install extends BS_Base
 		$this->_check = array();
 		$this->_check_result = $this->check_inputs($this->_check);
 		$redirect = $input->isset_var('forward','post') ||
-			$input->get_var('forward','get',PLIB_Input::INTEGER) == 1;
+			$input->get_var('forward','get',FWS_Input::INTEGER) == 1;
 		
 		// navigate forwards?
 		if($this->_check_result[0] && $redirect)
 		{
-			$phpself = $input->get_var('PHP_SELF','server',PLIB_Input::STRING);
+			$phpself = $input->get_var('PHP_SELF','server',FWS_Input::STRING);
 			header('Location: '.$phpself.'?step='.($this->step + 1).'&lang='.$this->lang_name);
 			exit;
 		}
@@ -126,11 +126,11 @@ class BS_Install extends BS_Base
 	 */
 	public function _display_head()
 	{
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
-		$functions = PLIB_Props::get()->functions();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
+		$functions = FWS_Props::get()->functions();
 
-		$phpself = $input->get_var('PHP_SELF','server',PLIB_Input::STRING);
+		$phpself = $input->get_var('PHP_SELF','server',FWS_Input::STRING);
 		$tpl->set_template('inc_header.htm');
 		$tpl->add_variables(array(
 			'show_lang_choose' => $this->step < 5,
@@ -169,8 +169,8 @@ class BS_Install extends BS_Base
 	 */
 	public function _display_foot()
 	{
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
 
 		if($this->step < 5)
 			$functions->display_navigation('bottom');

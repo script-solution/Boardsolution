@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_MODULE,'module');
@@ -40,23 +40,23 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$cache = PLIB_Props::get()->cache();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
-		$cfg = PLIB_Props::get()->cfg();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$cache = FWS_Props::get()->cache();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
 
 		// search?
 		if($input->isset_var('submit','post'))
 			$this->_perform_search();
 		
 		// init the search
-		$use_sess = $input->get_var('use_sess','get',PLIB_Input::INT_BOOL);
+		$use_sess = $input->get_var('use_sess','get',FWS_Input::INT_BOOL);
 		if($use_sess)
 			$sp = $user->get_session_data('user_search_params');
 		else
@@ -131,8 +131,8 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 				case 'int':
 					if(!$use_sess)
 					{
-						$from = $input->get_var('add_from_'.$field_name,'post',PLIB_Input::INTEGER);
-						$to = $input->get_var('add_to_'.$field_name,'post',PLIB_Input::INTEGER);
+						$from = $input->get_var('add_from_'.$field_name,'post',FWS_Input::INTEGER);
+						$to = $input->get_var('add_to_'.$field_name,'post',FWS_Input::INTEGER);
 					}
 					else
 					{
@@ -157,8 +157,8 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 				case 'date':
 					if(!$use_sess)
 					{
-						$from = $input->get_var('add_from_'.$field_name,'post',PLIB_Input::INTEGER);
-						$to = $input->get_var('add_to_'.$field_name,'post',PLIB_Input::INTEGER);
+						$from = $input->get_var('add_from_'.$field_name,'post',FWS_Input::INTEGER);
+						$to = $input->get_var('add_to_'.$field_name,'post',FWS_Input::INTEGER);
 					}
 					else
 					{
@@ -198,13 +198,13 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 	 */
 	private function _perform_search()
 	{
-		$cache = PLIB_Props::get()->cache();
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$doc = PLIB_Props::get()->doc();
-		$url = PLIB_Props::get()->url();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
+		$cache = FWS_Props::get()->cache();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$doc = FWS_Props::get()->doc();
+		$url = FWS_Props::get()->url();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
 
 		$search_params = $this->_get_search_params();
 		
@@ -229,7 +229,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 			$where .= ' AND p.signature_posted LIKE "%'.$keyword.'%"';
 		}
 
-		if($search_params['group'] != null && PLIB_Array_Utils::is_integer($search_params['group']))
+		if($search_params['group'] != null && FWS_Array_Utils::is_integer($search_params['group']))
 		{
 			$where .= ' AND (';
 			$groups = $cache->get_cache('user_groups');
@@ -240,21 +240,21 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 				if($gdata !== null && $gid != BS_STATUS_GUEST)
 					$where .= 'FIND_IN_SET('.$gid.',p.user_group) > 0 OR ';
 			}
-			$where = PLIB_String::substr($where,0,PLIB_String::strlen($where) - 4);
+			$where = FWS_String::substr($where,0,FWS_String::strlen($where) - 4);
 			$where .= ')';
 		}
 		// in this case we don't want to find any user
 		else if($search_params['group'] != null)
 			$where .= ' AND p.user_group = -1';
 
-		$where .= PLIB_StringHelper::build_int_range_sql('p.posts',$search_params['from_posts'],
+		$where .= FWS_StringHelper::build_int_range_sql('p.posts',$search_params['from_posts'],
 			$search_params['to_posts']);
-		$where .= PLIB_StringHelper::build_int_range_sql('p.exppoints',$search_params['from_points'],
+		$where .= FWS_StringHelper::build_int_range_sql('p.exppoints',$search_params['from_points'],
 			$search_params['to_points']);
 
-		$where .= PLIB_StringHelper::build_date_range_sql('p.registerdate',$search_params['from_reg'],
+		$where .= FWS_StringHelper::build_date_range_sql('p.registerdate',$search_params['from_reg'],
 			$search_params['to_reg']);
-		$where .= PLIB_StringHelper::build_date_range_sql('p.lastlogin',$search_params['from_lastlogin'],
+		$where .= FWS_StringHelper::build_date_range_sql('p.lastlogin',$search_params['from_lastlogin'],
 			$search_params['to_lastlogin']);
 		
 		$cfields = BS_AddField_Manager::get_instance();
@@ -269,9 +269,9 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 			switch($data->get_type())
 			{
 				case 'int':
-					$from = $input->get_var('add_from_'.$field_name,'post',PLIB_Input::INTEGER);
-					$to = $input->get_var('add_to_'.$field_name,'post',PLIB_Input::INTEGER);
-					$where .= PLIB_StringHelper::build_int_range_sql('p.add_'.$field_name,$from,$to);
+					$from = $input->get_var('add_from_'.$field_name,'post',FWS_Input::INTEGER);
+					$to = $input->get_var('add_to_'.$field_name,'post',FWS_Input::INTEGER);
+					$where .= FWS_StringHelper::build_int_range_sql('p.add_'.$field_name,$from,$to);
 					
 					$search_params['add_from_'.$field_name] = $from;
 					$search_params['add_to_'.$field_name] = $to;
@@ -286,9 +286,9 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 					break;
 				
 				case 'date':
-					$from = $input->get_var('add_from_'.$field_name,'post',PLIB_Input::STRING);
-					$to = $input->get_var('add_to_'.$field_name,'post',PLIB_Input::STRING);
-					$where .= PLIB_StringHelper::build_date_range_sql('p.add_'.$field_name,$from,$to);
+					$from = $input->get_var('add_from_'.$field_name,'post',FWS_Input::STRING);
+					$to = $input->get_var('add_to_'.$field_name,'post',FWS_Input::STRING);
+					$where .= FWS_StringHelper::build_date_range_sql('p.add_'.$field_name,$from,$to);
 					
 					$search_params['add_from_'.$field_name] = $from;
 					$search_params['add_to_'.$field_name] = $to;
@@ -296,7 +296,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 				
 				case 'enum':
 					$selected = $input->get_var('add_'.$field_name,'post');
-					if(is_array($selected) && PLIB_Array_Utils::is_integer($selected) && count($selected) > 0)
+					if(is_array($selected) && FWS_Array_Utils::is_integer($selected) && count($selected) > 0)
 						$where .= ' AND p.`add_'.$field_name.'` IN ('.implode(',',$selected).')';
 					$search_params['add_'.$field_name] = $selected;
 					break;
@@ -313,7 +313,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 			// ok, store them to the session and redirect to the results-page
 			$user->set_session_data('user_search_params',$search_params);
 			$user->set_session_data('user_search_ids',$user_ids);
-			$doc->redirect(PLIB_Path::outer().$url->get_acpmod_url(0,'&action=default','&'));
+			$doc->redirect(FWS_Path::outer().$url->get_acpmod_url(0,'&action=default','&'));
 		}
 		// show the search-form again, if we have found 0 user
 		else
@@ -327,33 +327,33 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 	 */
 	private function _get_search_params()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
-		$from_reg = $input->get_var('from_reg','post',PLIB_Input::STRING);
-		$to_reg = $input->get_var('to_reg','post',PLIB_Input::STRING);
-		$from_lastlogin = $input->get_var('from_lastlogin','post',PLIB_Input::STRING);
-		$to_lastlogin = $input->get_var('to_lastlogin','post',PLIB_Input::STRING);
+		$from_reg = $input->get_var('from_reg','post',FWS_Input::STRING);
+		$to_reg = $input->get_var('to_reg','post',FWS_Input::STRING);
+		$from_lastlogin = $input->get_var('from_lastlogin','post',FWS_Input::STRING);
+		$to_lastlogin = $input->get_var('to_lastlogin','post',FWS_Input::STRING);
 		
 		return array(
-			'name' => $input->get_var('user_name','post',PLIB_Input::STRING),
-			'email' => $input->get_var('user_email','post',PLIB_Input::STRING),
+			'name' => $input->get_var('user_name','post',FWS_Input::STRING),
+			'email' => $input->get_var('user_email','post',FWS_Input::STRING),
 			'group' => $input->get_var('user_group','post'),
-			'from_posts' => $input->get_var('from_posts','post',PLIB_Input::INTEGER),
-			'to_posts' => $input->get_var('to_posts','post',PLIB_Input::INTEGER),
-			'from_points' => $input->get_var('from_pts','post',PLIB_Input::INTEGER),
-			'to_points' => $input->get_var('to_pts','post',PLIB_Input::INTEGER),
-			'from_reg' => PLIB_StringHelper::get_clean_date($from_reg),
-			'to_reg' => PLIB_StringHelper::get_clean_date($to_reg),
-			'from_lastlogin' => PLIB_StringHelper::get_clean_date($from_lastlogin),
-			'to_lastlogin' => PLIB_StringHelper::get_clean_date($to_lastlogin),
-			'signature' => $input->get_var('signature','post',PLIB_Input::STRING)
+			'from_posts' => $input->get_var('from_posts','post',FWS_Input::INTEGER),
+			'to_posts' => $input->get_var('to_posts','post',FWS_Input::INTEGER),
+			'from_points' => $input->get_var('from_pts','post',FWS_Input::INTEGER),
+			'to_points' => $input->get_var('to_pts','post',FWS_Input::INTEGER),
+			'from_reg' => FWS_StringHelper::get_clean_date($from_reg),
+			'to_reg' => FWS_StringHelper::get_clean_date($to_reg),
+			'from_lastlogin' => FWS_StringHelper::get_clean_date($from_lastlogin),
+			'to_lastlogin' => FWS_StringHelper::get_clean_date($to_lastlogin),
+			'signature' => $input->get_var('signature','post',FWS_Input::STRING)
 		);
 	}
 	
 	/**
 	 * Builds a date-control and returns it
 	 * 
-	 * @param PLIB_HTML_Formular $form the html-formular
+	 * @param FWS_HTML_Formular $form the html-formular
 	 * @param string $from_param the name of the from-input-box
 	 * @param string $to_param the name of the to-input-box
 	 * @param string $from_val the value of the from-input-box
@@ -362,7 +362,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 	 */
 	private function _get_date_control($form,$from_param,$to_param,$from_val,$to_val)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$html = $locale->lang('between').' ';
 		$html .= $form->get_date_chooser_textbox($from_param,$from_val);
@@ -382,7 +382,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 	 */
 	private function _get_int_control($from_param,$to_param,$from_val,$to_val)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$html = $locale->lang('From').' <input type="text" name="'.$from_param.'" size="10"';
 		$html .= ' value="'.$from_val.'" />'."\n";

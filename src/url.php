@@ -17,7 +17,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_URL extends PLIB_URL
+final class BS_URL extends FWS_URL
 {
 	/**
 	 * Constructor
@@ -58,13 +58,13 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_acpmod_comps()
 	{
-		$user = PLIB_Props::get()->user();
-		$input = PLIB_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$input = FWS_Props::get()->input();
 
 		return array(
 			'page' => 'content',
 			BS_URL_SID => $user->get_session_id(),
-			'loc' => $input->get_var('loc','get',PLIB_Input::IDENTIFIER)
+			'loc' => $input->get_var('loc','get',FWS_Input::IDENTIFIER)
 		);
 	}
 	
@@ -78,15 +78,15 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_acpmod_url($module = 0,$additional = '',$separator = '&amp;')
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
 
 		$this->init();
 
 		// collect infos
 		if($module === 0)
 		{
-			$action_param = $input->get_var('loc','get',PLIB_Input::IDENTIFIER);
+			$action_param = $input->get_var('loc','get',FWS_Input::IDENTIFIER);
 			if($action_param == null)
 				$action = '';
 			else
@@ -110,9 +110,9 @@ final class BS_URL extends PLIB_URL
 		if($parameters == '')
 			$url = $php_self;
 		else if($separator == '&' && $parameters[0] == $separator)
-			$url = $php_self.'?'.PLIB_String::substr($parameters,1);
-		else if($separator == '&amp;' && PLIB_String::substr($parameters,0,5) == '&amp;')
-			$url = $php_self.'?'.PLIB_String::substr($parameters,5);
+			$url = $php_self.'?'.FWS_String::substr($parameters,1);
+		else if($separator == '&amp;' && FWS_String::substr($parameters,0,5) == '&amp;')
+			$url = $php_self.'?'.FWS_String::substr($parameters,5);
 		else
 			$url = $php_self.'?'.$parameters;
 
@@ -126,7 +126,7 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_admin_url($additional = '',$separator = '&amp;')
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		$this->init();
 		
@@ -137,9 +137,9 @@ final class BS_URL extends PLIB_URL
 			$sid = $separator.BS_URL_SID.'='.$user->get_session_id();
 		
 		if($additional == '')
-			return PLIB_Path::client_app().'admin.php?'.PLIB_String::substr($sid,5);
+			return FWS_Path::client_app().'admin.php?'.FWS_String::substr($sid,5);
 
-		return PLIB_Path::client_app().'admin.php?'.$additional.$sid;
+		return FWS_Path::client_app().'admin.php?'.$additional.$sid;
 	}
 	
 	/**
@@ -152,7 +152,7 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_frontend_url($additional = '',$separator = '&amp;',$use_sid = true)
 	{
-		$functions = PLIB_Props::get()->functions();
+		$functions = FWS_Props::get()->functions();
 
 		$this->init();
 		
@@ -179,10 +179,10 @@ final class BS_URL extends PLIB_URL
 	 * Note that this method does NOT append the external vars. Therefore you should
 	 * always create a link to a standalone-file!
 	 * 
-	 * @param string $file the file (starting at PLIB_Path::client_app())
+	 * @param string $file the file (starting at FWS_Path::client_app())
 	 * @param string $additional additional parameters
 	 * @param string $separator the separator for the parameters (default = &amp;)
-	 * @param boolean $absolute use PLIB_Path::outer() (=absolute) or PLIB_Path::client_app()?
+	 * @param boolean $absolute use FWS_Path::outer() (=absolute) or FWS_Path::client_app()?
 	 * @return string the url
 	 */
 	public function get_file_url($file,$additional = '',$separator = '&amp;',$absolute = false)
@@ -197,14 +197,14 @@ final class BS_URL extends PLIB_URL
 			$parameters = $this->_session_id;
 		$parameters .= $additional;
 		
-		$first_sep = PLIB_String::strpos($file,'?') !== false ? $separator : '?';
-		$base = $absolute ? PLIB_Path::outer() : PLIB_Path::client_app();
+		$first_sep = FWS_String::strpos($file,'?') !== false ? $separator : '?';
+		$base = $absolute ? FWS_Path::outer() : FWS_Path::client_app();
 		if($parameters == '')
 			$url = $base.$file;
-		else if($separator == '&' && PLIB_String::substr($parameters,0,1) == $separator)
-			$url = $base.$file.$first_sep.PLIB_String::substr($parameters,1);
-		else if($separator == '&amp;' && PLIB_String::substr($parameters,0,5) == '&amp;')
-			$url = $base.$file.$first_sep.PLIB_String::substr($parameters,5);
+		else if($separator == '&' && FWS_String::substr($parameters,0,1) == $separator)
+			$url = $base.$file.$first_sep.FWS_String::substr($parameters,1);
+		else if($separator == '&amp;' && FWS_String::substr($parameters,0,5) == '&amp;')
+			$url = $base.$file.$first_sep.FWS_String::substr($parameters,5);
 		else
 			$url = $base.$file.$first_sep.$parameters;
 
@@ -220,8 +220,8 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_portal_url($separator = '&amp;')
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
 
 		if($cfg['enable_modrewrite'])
 		{
@@ -234,7 +234,7 @@ final class BS_URL extends PLIB_URL
 					$sessionid_add = '';
 			}
 			
-			return PLIB_Path::outer().'portal'.$sessionid_add.'.html';
+			return FWS_Path::outer().'portal'.$sessionid_add.'.html';
 		}
 		
 		return $this->get_url('portal','',$separator);
@@ -249,8 +249,8 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_forums_url($separator = '&amp;')
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
 
 		if($cfg['enable_modrewrite'])
 		{
@@ -263,7 +263,7 @@ final class BS_URL extends PLIB_URL
 					$sessionid_add = '';
 			}
 			
-			return PLIB_Path::outer().'forums'.$sessionid_add.'.html';
+			return FWS_Path::outer().'forums'.$sessionid_add.'.html';
 		}
 		
 		return $this->get_url('forums','',$separator);
@@ -280,13 +280,13 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_topics_url($fid,$separator = '&amp;',$site = 0)
 	{
-		$input = PLIB_Props::get()->input();
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
 
 		if($site === 0)
 		{
-			$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::ID);
+			$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::ID);
 			if($site === null)
 				$site = 1;
 		}
@@ -302,7 +302,7 @@ final class BS_URL extends PLIB_URL
 					$sessionid_add = '';
 			}
 			
-			return PLIB_Path::outer().'topics_'.$fid.'_'.$site.$sessionid_add.'.html';
+			return FWS_Path::outer().'topics_'.$fid.'_'.$site.$sessionid_add.'.html';
 		}
 		
 		return $this->get_url(
@@ -322,13 +322,13 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_posts_url($fid,$tid,$separator = '&amp;',$site = 0)
 	{
-		$input = PLIB_Props::get()->input();
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
 
 		if($site === 0)
 		{
-			$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::ID);
+			$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::ID);
 			if($site === null)
 				$site = 1;
 		}
@@ -344,7 +344,7 @@ final class BS_URL extends PLIB_URL
 					$sessionid_add = '';
 			}
 			
-			return PLIB_Path::outer().'posts_'.$fid.'_'.$tid.'_'.$site.$sessionid_add.'.html';
+			return FWS_Path::outer().'posts_'.$fid.'_'.$tid.'_'.$site.$sessionid_add.'.html';
 		}
 		
 		return $this->get_url(
@@ -359,7 +359,7 @@ final class BS_URL extends PLIB_URL
 	 */
 	public function get_splitted_session_id()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		$this->init();
 		

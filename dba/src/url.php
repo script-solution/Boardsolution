@@ -17,7 +17,7 @@
  * @subpackage	dba.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DBA_URL extends PLIB_Singleton
+final class BS_DBA_URL extends FWS_Singleton
 {
 	/**
 	 * @return BS_DBA_URL the instance of this class
@@ -37,13 +37,13 @@ final class BS_DBA_URL extends PLIB_Singleton
 	 */
 	public function get_url($target = 0,$additional = '',$separator = '&amp;')
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
 
 		// always pass the session-id via URL
 		$session_id = $separator.'sid='.$user->get_session_id();
 		
-		$action_param = $input->get_var('action','get',PLIB_Input::STRING);
+		$action_param = $input->get_var('action','get',FWS_Input::STRING);
 		if($target === 0)
 			$action = 'action='.$action_param;
 		else if($target === -1)
@@ -52,9 +52,9 @@ final class BS_DBA_URL extends PLIB_Singleton
 			$action = 'action='.$target;
 		
 		$parameters = $action.$session_id.$additional;
-		if(PLIB_String::starts_with($parameters,$separator))
-			$parameters = PLIB_String::substr($parameters,strlen($separator));
-		$url = $input->get_var('PHP_SELF','server',PLIB_Input::STRING);
+		if(FWS_String::starts_with($parameters,$separator))
+			$parameters = FWS_String::substr($parameters,strlen($separator));
+		$url = $input->get_var('PHP_SELF','server',FWS_Input::STRING);
 		if($parameters != '')
 			$url .= '?'.$parameters;
 		

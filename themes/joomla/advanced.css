@@ -15,13 +15,13 @@ div#ajax_wait_bar {
 	border: 1px dotted #fff;
 }
 
-#plib_image_viewer {
+#fws_image_viewer {
 	border: 1px dotted #444;
 	background-color: #fff;
 	padding: 5px;
 	cursor: pointer;
 }
-#plib_image_viewer_bg {
+#fws_image_viewer_bg {
 	background-color: #444;
 }
 

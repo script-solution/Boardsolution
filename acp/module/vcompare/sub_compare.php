@@ -82,7 +82,7 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 	private $_error = true;
 	
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -90,17 +90,17 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_breadcrumb(BS_VERSION.' vs. '.$this->_compare_version);
 		
-		$http = new PLIB_HTTP('www.script-solution.de');
+		$http = new FWS_HTTP('www.script-solution.de');
 		$this->_versions = $http->get('/bsversions/versions.xml');
 		if($this->_versions === false)
 		{
 			$this->report_error(
-				PLIB_Document_Messages::ERROR,$http->get_error_code().': '.$http->get_error_message()
+				FWS_Document_Messages::ERROR,$http->get_error_code().': '.$http->get_error_message()
 			);
 			return;
 		}
@@ -110,11 +110,11 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		foreach($xml->version as $v)
 			$cbversions[(string)$v['id']] = (string)$v['name'];
 		
-		$compare = $input->get_var('compare','post',PLIB_Input::STRING);
+		$compare = $input->get_var('compare','post',FWS_Input::STRING);
 		if(!isset($cbversions[$compare]))
 		{
 			$this->report_error(
-				PLIB_Document_Messages::ERROR,'Version with id "'.$compare.'" doesn\'t exist!'
+				FWS_Document_Messages::ERROR,'Version with id "'.$compare.'" doesn\'t exist!'
 			);
 			return;
 		}
@@ -134,25 +134,25 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$tpl = FWS_Props::get()->tpl();
 
 		if($this->_error)
 			return;
 		
-		$compare = $input->get_var('compare','post',PLIB_Input::STRING);
+		$compare = $input->get_var('compare','post',FWS_Input::STRING);
 		
 		// now load the xml-document for that version
-		$http = new PLIB_HTTP('www.script-solution.de');
+		$http = new FWS_HTTP('www.script-solution.de');
 		$versioninfo = $http->get('/bsversions/v'.$this->_file.'.txt');
 		if($versioninfo === false)
 		{
 			$this->report_error(
-				PLIB_Document_Messages::ERROR,$http->get_error_code().': '.$http->get_error_message()
+				FWS_Document_Messages::ERROR,$http->get_error_code().': '.$http->get_error_message()
 			);
 			return;
 		}
@@ -233,13 +233,13 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 				}
 				else
 				{
-					$hash = PLIB_String::substr($line,0,32);
-					$path = PLIB_String::substr($line,33);
+					$hash = FWS_String::substr($line,0,32);
+					$path = FWS_String::substr($line,33);
 					$slash = strpos($path,'/');
-					$var = PLIB_String::substr($path,0,$slash);
-					$path = $vars[$var].PLIB_String::substr($path,$slash);
-					if(PLIB_String::starts_with($path,'./'))
-						$path = PLIB_String::substr($path,2);
+					$var = FWS_String::substr($path,0,$slash);
+					$path = $vars[$var].FWS_String::substr($path,$slash);
+					if(FWS_String::starts_with($path,'./'))
+						$path = FWS_String::substr($path,2);
 					$paths[$path] = $hash;
 					// add parent-dirs
 					while(($path = dirname($path)) != '.')
@@ -282,7 +282,7 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 	 */
 	private function _build_items(&$items,$folder,$name,$layer = 0)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		// we don't want to have a root-folder for all
 		if($layer > 0)
@@ -302,7 +302,7 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		foreach($folder[0] as $path => $item)
 		{
 			if(is_array($item))
-				$this->_build_items($items,$item,PLIB_String::substr($path,1),$layer + 1);
+				$this->_build_items($items,$item,FWS_String::substr($path,1),$layer + 1);
 			else
 			{
 				if($item != self::ADD)
@@ -313,7 +313,7 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 						$locale->get_thousands_separator(),
 						$locale->get_dec_separator()
 					);
-					$changed = PLIB_Date::get_date(filemtime($path));
+					$changed = FWS_Date::get_date(filemtime($path));
 				}
 				
 				$items[] = array(
@@ -370,13 +370,13 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		// read the folder-content and sort it
 		$structure = array();
 		$changed = self::EQUAL;
-		$items = PLIB_FileUtils::get_dir_content($dir,false,true);
+		$items = FWS_FileUtils::get_dir_content($dir,false,true);
 		usort($items,array($this,'_sort_paths'));
 		
 		foreach($items as $item)
 		{
 			// cut the "./"
-			$item = PLIB_String::substr($item,2);
+			$item = FWS_String::substr($item,2);
 			// do we want to compare the file?
 			if(strpos($item,'.svn') === false && !preg_match($exregex,$item) && preg_match($alregex,$item))
 			{

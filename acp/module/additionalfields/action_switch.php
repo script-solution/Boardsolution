@@ -21,11 +21,11 @@ final class BS_ACP_Action_additionalfields_switch extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
 
-		$id_str = $input->get_var('ids','get',PLIB_Input::STRING);
-		if(!($ids = PLIB_StringHelper::get_ids($id_str)) || count($ids) != 2)
+		$id_str = $input->get_var('ids','get',FWS_Input::STRING);
+		if(!($ids = FWS_StringHelper::get_ids($id_str)) || count($ids) != 2)
 			return 'Got an invalid id-string via GET';
 		
 		list($id1,$id2) = $ids;

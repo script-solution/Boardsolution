@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_Mods extends PLIB_Singleton
+class BS_DAO_Mods extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_Mods the instance of this class
@@ -40,12 +40,12 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 */
 	public function is_user_mod_in_forum($user_id,$fid)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
-		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
-			PLIB_Helper::def_error('intgt0','fid',$fid);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
+			FWS_Helper::def_error('intgt0','fid',$fid);
 		
 		return $db->sql_num(BS_TB_MODS,'id',' WHERE rid = '.$fid.' AND user_id = '.$user_id) > 0;
 	}
@@ -58,10 +58,10 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 */
 	public function get_by_user_ids($user_ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
-			PLIB_Helper::def_error('intarray>0','user_ids',$user_ids);
+		if(!FWS_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
+			FWS_Helper::def_error('intarray>0','user_ids',$user_ids);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_MODS.'
@@ -77,7 +77,7 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 */
 	public function get_all_grouped_by_user()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT m.*,p.user_group,u.`'.BS_EXPORT_USER_NAME.'` user_name
@@ -97,12 +97,12 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 */
 	public function create($fid,$user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
-			PLIB_Helper::def_error('intgt0','fid',$fid);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
+			FWS_Helper::def_error('intgt0','fid',$fid);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$db->sql_insert(BS_TB_MODS,array(
 			'rid' => $fid,
@@ -119,17 +119,17 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 */
 	public function create_multiple($fids,$user_id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($fids) || count($fids) == 0)
-			PLIB_Helper::def_error('intarray>0','fids',$fids);
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
+			FWS_Helper::def_error('intarray>0','fids',$fids);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$sql = 'INSERT INTO '.BS_TB_MODS.' (user_id,rid) VALUES ';
 		foreach($fids as $fid)
 			$sql .= '('.$user_id.','.$fid.'),';
-		$sql = PLIB_String::substr($sql,0,-1);
+		$sql = FWS_String::substr($sql,0,-1);
 		$db->sql_qry($sql);
 	}
 	
@@ -142,12 +142,12 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 */
 	public function delete_user_from_forum($user_id,$fid)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
-		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
-			PLIB_Helper::def_error('intgt0','fid',$fid);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
+			FWS_Helper::def_error('intgt0','fid',$fid);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_MODS.' WHERE rid = '.$fid.' AND user_id = '.$user_id
@@ -186,10 +186,10 @@ class BS_DAO_Mods extends PLIB_Singleton
 	 */
 	protected function delete_by($field,$ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_MODS.' WHERE '.$field.' IN ('.implode(',',$ids).')'

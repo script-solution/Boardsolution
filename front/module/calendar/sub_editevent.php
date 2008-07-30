@@ -20,9 +20,9 @@
 final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
-	 * @param PLIB_Page $doc
+	 * @param FWS_Page $doc
 	 */
 	public function init($doc)
 	{
@@ -32,11 +32,11 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 		$renderer->add_action(BS_ACTION_CAL_ADD_EVENT,'addevent');
 		$renderer->add_action(BS_ACTION_CAL_EDIT_EVENT,'editevent');
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		if($id !== null)
 		{
 			$renderer->add_breadcrumb(
@@ -55,22 +55,22 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 	
 	public function run()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$input = PLIB_Props::get()->input();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$input = FWS_Props::get()->input();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
 
 		// calendar-events disabled?
 		if($cfg['enable_calendar_events'] == 0)
 		{
-			$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+			$this->report_error(FWS_Document_Messages::NO_ACCESS);
 			return;
 		}
 		
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$type = $id !== null ? 'edit' : 'add';
 		
 		if($type == 'edit')
@@ -82,7 +82,7 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 		}
 		else
 		{
-			$day = $input->get_var(BS_URL_DAY,'get',PLIB_Input::INTEGER);
+			$day = $input->get_var(BS_URL_DAY,'get',FWS_Input::INTEGER);
 			$default = array(
 				'user_id' => 0,
 				'max_announcements' => 0,
@@ -106,7 +106,7 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 				if($default['user_id'] != $user->get_user_id() ||
 						!$auth->has_global_permission('edit_cal_event'))
 				{
-					$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+					$this->report_error(FWS_Document_Messages::NO_ACCESS);
 					return;
 				}
 			}
@@ -114,7 +114,7 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 			{
 				if(!$auth->has_global_permission('add_cal_event'))
 				{
-					$this->report_error(PLIB_Document_Messages::NO_ACCESS);
+					$this->report_error(FWS_Document_Messages::NO_ACCESS);
 					return;
 				}
 			}

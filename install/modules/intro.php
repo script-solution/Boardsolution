@@ -19,7 +19,7 @@ class BS_Install_intro extends BS_Install
 {
 	public function run()
 	{
-		$tpl = PLIB_Props::get()->tpl();
+		$tpl = FWS_Props::get()->tpl();
 
 		$tpl->set_template('step_intro.htm');
 		echo $tpl->parse_template();

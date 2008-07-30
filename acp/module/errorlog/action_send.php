@@ -21,9 +21,9 @@ final class BS_ACP_Action_errorlog_send extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
-		$http = new PLIB_HTTP('www.script-solution.de',80);
+		$http = new FWS_HTTP('www.script-solution.de',80);
 		$response = $http->post('/bserrors/receive.php',array('errors' => $this->_get_error_xml()));
 		if($response === false)
 			return 'send_errors_failed';
@@ -41,15 +41,15 @@ final class BS_ACP_Action_errorlog_send extends BS_ACP_Action_Base
 	 */
 	private function _get_error_xml()
 	{
-		$input = PLIB_Props::get()->input();
-		$db = PLIB_Props::get()->db();
+		$input = FWS_Props::get()->input();
+		$db = FWS_Props::get()->db();
 
-		$email = $input->get_var('email','post',PLIB_Input::STRING);
-		$text = $input->get_var('text','post',PLIB_Input::STRING);
+		$email = $input->get_var('email','post',FWS_Input::STRING);
+		$text = $input->get_var('text','post',FWS_Input::STRING);
 		
 		$xml = '<?xml version="1.0" encoding="ISO-8859-1"?>'."\n";
 		$xml .= '<errors>'."\n";
-		$xml .= '	<id>'.md5(PLIB_Path::outer()).'</id>'."\n";
+		$xml .= '	<id>'.md5(FWS_Path::outer()).'</id>'."\n";
 		$xml .= '	<version>'.BS_VERSION.'</version>'."\n";
 		$xml .= '	<phpversion>'.phpversion().'</phpversion>'."\n";
 		$xml .= '	<mysqlversion>'.$db->get_server_version().'</mysqlversion>'."\n";

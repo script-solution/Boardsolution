@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,15 +28,15 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_EDIT_ADDFIELD,'edit');
 		$renderer->add_action(BS_ACP_ACTION_ADD_ADDFIELD,'add');
 
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
 		{
 			$renderer->add_breadcrumb(
@@ -54,18 +54,18 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		$helper = BS_ACP_Module_AdditionalFields_Helper::get_instance();
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		$type = $id != null ? 'edit' : 'add';
 		
 		if($type == 'edit')
@@ -162,7 +162,7 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 	 */
 	private function _get_location_name($loc)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		switch($loc)
 		{
@@ -186,13 +186,13 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 	 */
 	private function _get_field_display_from_post()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
 		$helper = BS_ACP_Module_AdditionalFields_Helper::get_instance();
 		$result = 0;
 		foreach($helper->get_locations() as $loc)
 		{
-			$loc_val = $input->get_var('loc_'.$loc,'post',PLIB_Input::INT_BOOL);
+			$loc_val = $input->get_var('loc_'.$loc,'post',FWS_Input::INT_BOOL);
 			if($loc_val == 1)
 				$result |= $loc;
 		}

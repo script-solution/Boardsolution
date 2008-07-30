@@ -21,15 +21,15 @@ final class BS_Front_Action_edit_topic_event extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$auth = PLIB_Props::get()->auth();
-		$forums = PLIB_Props::get()->forums();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
+		$forums = FWS_Props::get()->forums();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 
 		// are the parameters valid?
 		if($id == null || $fid == null)
@@ -62,14 +62,14 @@ final class BS_Front_Action_edit_topic_event extends BS_Front_Action_Base
 			return 'shadow_thread_deny';
 
 		// collect variables
-		$topic_name = $input->get_var('topic_name','post',PLIB_Input::STRING);
-		$location = $input->get_var('location','post',PLIB_Input::STRING);
-		$open_end = $input->get_var('open_end','post',PLIB_Input::STRING);
-		$max_announcements = $input->get_var('max_announcements','post',PLIB_Input::INTEGER);
-		$allow_posts = $input->get_var('allow_posts','post',PLIB_Input::INT_BOOL);
-		$timeout_type = $input->get_var('timeout_type','post',PLIB_Input::STRING);
-		$important = $input->get_var('important','post',PLIB_Input::INT_BOOL);
-		$enable_announcements = $input->get_var('enable_announcements','post',PLIB_Input::INT_BOOL);
+		$topic_name = $input->get_var('topic_name','post',FWS_Input::STRING);
+		$location = $input->get_var('location','post',FWS_Input::STRING);
+		$open_end = $input->get_var('open_end','post',FWS_Input::STRING);
+		$max_announcements = $input->get_var('max_announcements','post',FWS_Input::INTEGER);
+		$allow_posts = $input->get_var('allow_posts','post',FWS_Input::INT_BOOL);
+		$timeout_type = $input->get_var('timeout_type','post',FWS_Input::STRING);
+		$important = $input->get_var('important','post',FWS_Input::INT_BOOL);
+		$enable_announcements = $input->get_var('enable_announcements','post',FWS_Input::INT_BOOL);
 
 		// topic-name or location empty?
 		if(trim($topic_name) == '' || trim($location) == '')

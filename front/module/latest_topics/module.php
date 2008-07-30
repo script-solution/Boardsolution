@@ -20,7 +20,7 @@
 final class BS_Front_Module_latest_topics extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_Front_Module_latest_topics extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$doc->use_default_renderer()->set_robots_value('index,follow');
@@ -38,15 +38,15 @@ final class BS_Front_Module_latest_topics extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$url = PLIB_Props::get()->url();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$url = FWS_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		
 		$forum_combo = BS_ForumUtils::get_instance()->get_recursive_forum_combo(
 			BS_URL_FID,$fid,0,false,true
@@ -61,7 +61,7 @@ final class BS_Front_Module_latest_topics extends BS_Front_Module
 		BS_Front_TopicFactory::get_instance()->add_latest_topics_full($fid);
 		
 		$tpl->add_variables(array(
-			'target_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'target_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden_fields' => $hidden_fields,
 			'forum_combo' => $forum_combo
 		));

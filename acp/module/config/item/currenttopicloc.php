@@ -18,11 +18,11 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Config_Item_CurrentTopicLoc extends PLIB_Config_Item_MultiEnum
+final class BS_ACP_Config_Item_CurrentTopicLoc extends FWS_Config_Item_MultiEnum
 {
 	public function get_value()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
 		$props = $this->_data->get_properties();
 		$vals = $input->get_var($this->_data->get_name(),'post');

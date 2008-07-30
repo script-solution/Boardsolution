@@ -44,7 +44,7 @@ function BS_Autoloader($item)
 		$nitem = str_replace('_','/',$nitem);
 		$nitem = strtolower($nitem);
 		$nitem .= '.php';
-		$path = PLIB_Path::server_app().$folder.$subfolder.$nitem;
+		$path = FWS_Path::server_app().$folder.$subfolder.$nitem;
 		
 		if(is_file($path))
 		{

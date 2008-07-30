@@ -20,30 +20,30 @@
 final class BS_Front_Module_redirect extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
-		$doc = PLIB_Props::get()->doc();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$doc = FWS_Props::get()->doc();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$loc = $input->get_var(BS_URL_LOC,'get',PLIB_Input::STRING);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$loc = $input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
 
 		switch($loc)
 		{
 			// PMs: naviate back and forward
 			case 'pm_navigate':
-				$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
+				$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 				$mode = $input->correct_var(
-					BS_URL_MODE,'get',PLIB_Input::STRING,array('back','forward'),'back'
+					BS_URL_MODE,'get',FWS_Input::STRING,array('back','forward'),'back'
 				);
 				$location = $input->correct_var(
-					BS_URL_KW,'get',PLIB_Input::STRING,array('inbox','outbox'),'inbox'
+					BS_URL_KW,'get',FWS_Input::STRING,array('inbox','outbox'),'inbox'
 				);
 				
 				if($id == null || !$user->is_loggedin())
@@ -60,7 +60,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				if($pmid === false)
 				{
 					$this->report_error(
-						PLIB_Document_Messages::ERROR,$locale->lang('pm_navigation_failed_'.$mode)
+						FWS_Document_Messages::ERROR,$locale->lang('pm_navigation_failed_'.$mode)
 					);
 					return;
 				}
@@ -72,7 +72,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 			
 			// show topic
 			case 'show_topic':
-				$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+				$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 				if($tid == null)
 				{
 					$this->report_error();
@@ -93,8 +93,8 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 			
 			// show post
 			case 'show_post':
-				$pid = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-				$hl = $input->get_var(BS_URL_HL,'get',PLIB_Input::STRING);
+				$pid = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
+				$hl = $input->get_var(BS_URL_HL,'get',FWS_Input::STRING);
 				if($pid == null)
 				{
 					$this->report_error();
@@ -111,7 +111,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				$hl_add = '';
 				if($hl !== null)
 				{
-					$hl = stripslashes(PLIB_StringHelper::htmlspecialchars_back($hl));
+					$hl = stripslashes(FWS_StringHelper::htmlspecialchars_back($hl));
 					$hl_add = '&'.BS_URL_HL.'='.$hl;
 				}
 				
@@ -140,17 +140,17 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 			// redirect to the corresponding posts-action
 			// TODO is this still used?
 			case 'posts_action':
-				$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+				$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 	
 				// check the selected posts
 				$posts = $input->get_var('selected_posts','post');
-				if(!PLIB_Array_Utils::is_integer($posts))
+				if(!FWS_Array_Utils::is_integer($posts))
 				{
 					$this->report_error();
 					return;
 				}
 	
-				$type = $input->correct_var('posts_action','post',PLIB_Input::STRING,
+				$type = $input->correct_var('posts_action','post',FWS_Input::STRING,
 					array('delete_posts','split_posts'),'delete_posts');
 				$murl = $url->get_url(
 					$type,'&'.BS_URL_FID.'='.$fid.'&'.BS_URL_TID.'='.$tid.'&'.BS_URL_ID.'='.implode(',',$posts),'&'
@@ -162,7 +162,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 			case 'topic_action':
 				// check the selected topics
 				$selected_topics = $input->get_var('selected_topics','post');
-				if(!PLIB_Array_Utils::is_integer($selected_topics))
+				if(!FWS_Array_Utils::is_integer($selected_topics))
 				{
 					$this->report_error();
 					return;
@@ -172,7 +172,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 	
 				// build the url
 				$murl = '';
-				$topic_action = $input->get_var('topic_action','post',PLIB_Input::STRING);
+				$topic_action = $input->get_var('topic_action','post',FWS_Input::STRING);
 				switch($topic_action)
 				{
 					case 'edit':
@@ -201,7 +201,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 						);
 						break;
 					case 'mark_read':
-						$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+						$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 						$action_type = BS_URL_AT.'='.BS_ACTION_CHANGE_READ_STATUS;
 						$fid_param = ($fid != null) ? '&'.BS_URL_FID.'='.$fid : '';
 						$murl = $url->get_url(
@@ -210,7 +210,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 						);
 						break;
 					case 'mark_unread':
-						$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+						$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 						$action_type = BS_URL_AT.'='.BS_ACTION_CHANGE_READ_STATUS;
 						$fid_param = ($fid != null) ? '&'.BS_URL_FID.'='.$fid : '';
 						$murl = $url->get_url(
@@ -233,17 +233,17 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 			// delete-messages in the user-profile
 			case 'pms':
 				// check ids
-				$ids = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
+				$ids = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
 				$id_array = explode(',',$ids);
-				if(!PLIB_Array_Utils::is_integer($id_array))
+				if(!FWS_Array_Utils::is_integer($id_array))
 				{
 					$this->report_error();
 					return;
 				}
 				
-				$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
-				$mode = $input->get_var(BS_URL_MODE,'get',PLIB_Input::STRING);
-				$operation = $input->get_var('operation','post',PLIB_Input::STRING);
+				$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
+				$mode = $input->get_var(BS_URL_MODE,'get',FWS_Input::STRING);
+				$operation = $input->get_var('operation','post',FWS_Input::STRING);
 				
 				// check other parameter
 				if($mode == null || $operation == null)
@@ -283,8 +283,8 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 			case 'del_subscr':
 			case 'del_avatars':
 			case 'del_cal_event':
-				$ids = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
-				$site = $input->get_var(BS_URL_SITE,'get',PLIB_Input::INTEGER);
+				$ids = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
+				$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 				$option = $input->isset_var('option_yes','post') ? 'yes' : 'no';
 				switch($loc)
 				{
@@ -320,7 +320,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 					$site_param = '';
 
 				// check parameter
-				if($ids == null || !PLIB_Array_Utils::is_integer(PLIB_Array_Utils::advanced_explode(',',$ids)))
+				if($ids == null || !FWS_Array_Utils::is_integer(FWS_Array_Utils::advanced_explode(',',$ids)))
 				{
 					$this->report_error();
 					return;
@@ -347,7 +347,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 	
 			// redirect to a module or forum
 			case 'forum_jump':
-				$forum_jump = $input->get_var('forum_jump','post',PLIB_Input::STRING);
+				$forum_jump = $input->get_var('forum_jump','post',FWS_Input::STRING);
 				$murl = '';
 				switch($forum_jump)
 				{
@@ -395,7 +395,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 						break;
 					default:
 						$parts = explode('_',$forum_jump);
-						if(count($parts) == 2 && $parts[0] == 'f' && PLIB_Helper::is_integer($parts[1]))
+						if(count($parts) == 2 && $parts[0] == 'f' && FWS_Helper::is_integer($parts[1]))
 							$murl = $url->get_topics_url($parts[1],'&');
 						break;
 				}

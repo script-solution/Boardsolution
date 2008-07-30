@@ -20,7 +20,7 @@
 final class BS_Front_Module_register extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,10 +28,10 @@ final class BS_Front_Module_register extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($cfg['enable_registrations'] && !$user->is_loggedin() && !BS_ENABLE_EXPORT);
@@ -52,15 +52,15 @@ final class BS_Front_Module_register extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
 
 		$form = $this->request_formular(false);
 
@@ -87,7 +87,7 @@ final class BS_Front_Module_register extends BS_Front_Module
 			);
 		}
 
-		$sec_code_field = PLIB_StringHelper::generate_random_key(15);
+		$sec_code_field = FWS_StringHelper::generate_random_key(15);
 		$user->set_session_data('sec_code_field',$sec_code_field);
 		
 		$email_display_mode_options = array(

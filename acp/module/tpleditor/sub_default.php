@@ -20,12 +20,12 @@
 final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		$helper = BS_ACP_Module_TplEditor_Helper::get_instance();
 		$path = $helper->get_path();
@@ -46,7 +46,7 @@ final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 			{
 				if(is_dir($def_path.'/'.$file))
 					$dirs[] = $file;
-				else if(($ext = PLIB_FileUtils::get_extension($file)) == 'htm' || $ext == 'css' || $ext == 'js'
+				else if(($ext = FWS_FileUtils::get_extension($file)) == 'htm' || $ext == 'css' || $ext == 'js'
 					|| $ext == 'jpg' || $ext == 'gif' || $ext == 'png')
 					$files[] = $file;
 			}
@@ -64,7 +64,7 @@ final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 			$is_dir = $dir_content[$i]['type'] == 'dir';
 			$item_name = $dir_content[$i]['name'];
 			$exists_in_theme = true;
-			$ext = PLIB_FileUtils::get_extension($item_name);
+			$ext = FWS_FileUtils::get_extension($item_name);
 			
 			if(is_file($path.'/'.$item_name))
 				$file_path = $path.'/'.$item_name;
@@ -93,7 +93,7 @@ final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 			}
 
 			if($time = filemtime($file_path))
-				$last_modified = PLIB_Date::get_date($time);
+				$last_modified = FWS_Date::get_date($time);
 			else
 				$last_modified = '<i>Unknown</i>';
 

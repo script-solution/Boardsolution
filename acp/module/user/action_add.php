@@ -21,17 +21,17 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$functions = PLIB_Props::get()->functions();
-		$cache = PLIB_Props::get()->cache();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$functions = FWS_Props::get()->functions();
+		$cache = FWS_Props::get()->cache();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
 
 		if(BS_ENABLE_EXPORT)
 			return 'The community is exported';
 		
 		// check username
-		$user_name = $input->get_var('user_name','post',PLIB_Input::STRING);
+		$user_name = $input->get_var('user_name','post',FWS_Input::STRING);
 		if(trim($user_name) == '' || !BS_UserUtils::get_instance()->check_username($user_name))
 			return 'usernamenotallowed';
 
@@ -41,12 +41,12 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 		if(BS_DAO::get_user()->name_exists($user_name))
 			return 'registeruservorhanden';
 
-		$user_pw = $input->get_var('user_pw','post',PLIB_Input::STRING);
-		$user_pw_conf = $input->get_var('user_pw_conf','post',PLIB_Input::STRING);
-		$user_email = $input->get_var('user_email','post',PLIB_Input::STRING);
-		$main_group = $input->get_var('main_group','post',PLIB_Input::ID);
+		$user_pw = $input->get_var('user_pw','post',FWS_Input::STRING);
+		$user_pw_conf = $input->get_var('user_pw_conf','post',FWS_Input::STRING);
+		$user_email = $input->get_var('user_email','post',FWS_Input::STRING);
+		$main_group = $input->get_var('main_group','post',FWS_Input::ID);
 		$other_groups = $input->get_var('other_groups','post');
-		$notify = $input->get_var('notify','post',PLIB_Input::INT_BOOL);
+		$notify = $input->get_var('notify','post',FWS_Input::INT_BOOL);
 
 		// check pw
 		if($user_pw == '' || $user_pw != $user_pw_conf)
@@ -54,7 +54,7 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 
 		// check email
 		$user_email = trim($user_email);
-		if(!PLIB_StringHelper::is_valid_email($user_email))
+		if(!FWS_StringHelper::is_valid_email($user_email))
 			return 'mailnotallowed';
 
 		if($functions->is_banned('mail',$user_email))

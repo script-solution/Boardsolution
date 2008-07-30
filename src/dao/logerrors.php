@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_LogErrors extends PLIB_Singleton
+class BS_DAO_LogErrors extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_LogErrors the instance of this class
@@ -36,7 +36,7 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function get_count()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(BS_TB_LOG_ERRORS,'id','');
 	}
@@ -49,7 +49,7 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function get_count_by_keyword($keyword)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$where = $this->get_keyword_where($keyword);
 		return $db->sql_num(BS_TB_LOG_ERRORS.' l','l.id',$where);
@@ -63,10 +63,10 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function get_by_ids($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_LOG_ERRORS.'
@@ -101,12 +101,12 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function get_list_by_keyword($keyword,$sort = 'id',$order = 'ASC',$start = 0,$count = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		$where = $keyword ? $this->get_keyword_where($keyword) : '';
 		return $db->sql_rows(
@@ -127,7 +127,7 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function create($fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$db->sql_insert(BS_TB_LOG_ERRORS,$fields,false);
 		return $db->get_last_insert_id();
@@ -138,7 +138,7 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function clear()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$db->sql_qry('TRUNCATE TABLE '.BS_TB_LOG_ERRORS);
 	}
@@ -151,10 +151,10 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function delete_timedout($timeout)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($timeout) || $timeout <= 0)
-			PLIB_Helper::def_error('intgt0','timeout',$timeout);
+		if(!FWS_Helper::is_integer($timeout) || $timeout <= 0)
+			FWS_Helper::def_error('intgt0','timeout',$timeout);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_LOG_ERRORS.' WHERE date < '.(time() - $timeout)
@@ -170,10 +170,10 @@ class BS_DAO_LogErrors extends PLIB_Singleton
 	 */
 	public function delete($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_LOG_ERRORS.' WHERE id IN ('.implode(',',$ids).')'

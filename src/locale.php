@@ -17,7 +17,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Locale extends PLIB_Object implements PLIB_Locale
+final class BS_Locale extends FWS_Object implements FWS_Locale
 {
 	/**
 	 * The language-entries
@@ -64,7 +64,7 @@ final class BS_Locale extends PLIB_Object implements PLIB_Locale
 	 */
 	public function get_language_entries($file,$language = null)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		if($language === null)
 			$folder = $user->get_language();
@@ -72,11 +72,11 @@ final class BS_Locale extends PLIB_Object implements PLIB_Locale
 			$folder = $language;
 		
 		$lang = array();
-		$path = PLIB_Path::server_app().'language/'.$folder.'/'.$file.'.ini';
+		$path = FWS_Path::server_app().'language/'.$folder.'/'.$file.'.ini';
 		if(is_file($path))
 		{
 			$matches = array();
-			$content = PLIB_FileUtils::read($path);
+			$content = FWS_FileUtils::read($path);
 			preg_match_all('/(\S+)\s*=\s*"([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"/is',$content,$matches);
 			
 			foreach($matches[1] as $k => $name)
@@ -110,33 +110,33 @@ final class BS_Locale extends PLIB_Object implements PLIB_Locale
 	{
 		switch($type)
 		{
-			case PLIB_Locale::FORMAT_DATE:
+			case FWS_Locale::FORMAT_DATE:
 				return $this->lang('date_format');
 			
-			case PLIB_Locale::FORMAT_DATE_SHORT:
+			case FWS_Locale::FORMAT_DATE_SHORT:
 				return $this->lang('date_short_format');
 			
-			case PLIB_Locale::FORMAT_DATE_LONG:
+			case FWS_Locale::FORMAT_DATE_LONG:
 				return $this->lang('date_long_format');
 			
-			case PLIB_Locale::FORMAT_TIME:
+			case FWS_Locale::FORMAT_TIME:
 				return $this->lang('time_format');
 			
-			case PLIB_Locale::FORMAT_TIME_SEC:
+			case FWS_Locale::FORMAT_TIME_SEC:
 				return $this->lang('time_sec_format');
 			
-			case PLIB_Locale::FORMAT_DATE_TIME_SEP:
+			case FWS_Locale::FORMAT_DATE_TIME_SEP:
 				return $this->lang('date_time_separator');
 			
 			default:
-				PLIB_Helper::error('Invalid type $type!');
+				FWS_Helper::error('Invalid type $type!');
 				return '';
 		}
 	}
 	
 	public function get_dec_separator()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		if(!method_exists($user,'get_language'))
 			return ',';
@@ -155,7 +155,7 @@ final class BS_Locale extends PLIB_Object implements PLIB_Locale
 	
 	public function get_thousands_separator()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		if(!method_exists($user,'get_language'))
 			return '.';
@@ -174,7 +174,7 @@ final class BS_Locale extends PLIB_Object implements PLIB_Locale
 	
 	public function get_date_order()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		if(!method_exists($user,'get_language'))
 			return array('d','m','Y');
@@ -193,7 +193,7 @@ final class BS_Locale extends PLIB_Object implements PLIB_Locale
 	
 	public function get_date_separator()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		if(!method_exists($user,'get_language'))
 			return '.';
@@ -212,7 +212,7 @@ final class BS_Locale extends PLIB_Object implements PLIB_Locale
 	
 	public function get_timezone()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		if(!method_exists($user,'get_profile_val'))
 			return 'Europe/Berlin';
@@ -226,7 +226,7 @@ final class BS_Locale extends PLIB_Object implements PLIB_Locale
 	
 	public function set_timezone($timezone)
 	{
-		throw new PLIB_Exceptions_UnsupportedMethod();
+		throw new FWS_Exceptions_UnsupportedMethod();
 	}
 	
 	protected function get_print_vars()

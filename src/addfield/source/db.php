@@ -17,11 +17,11 @@
  * @subpackage	src.addfield
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_AddField_Source_DB extends PLIB_Object implements PLIB_AddField_Source
+final class BS_AddField_Source_DB extends FWS_Object implements FWS_AddField_Source
 {
 	public function get_fields()
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		$fields = array();
 		foreach($cache->get_cache('user_fields') as $data)
@@ -30,7 +30,7 @@ final class BS_AddField_Source_DB extends PLIB_Object implements PLIB_AddField_S
 				$data['id'],$data['field_type'],$data['field_show_type'],$data['field_name'],
 				$data['display_name'],$data['field_sort'],$data['field_is_required'],
 				$data['field_edit_notice'],$data['field_suffix'],$data['display_always'],
-				$data['field_length'],PLIB_Array_Utils::advanced_explode("\n",$data['allowed_values']),
+				$data['field_length'],FWS_Array_Utils::advanced_explode("\n",$data['allowed_values']),
 				$data['field_validation'],$data['field_custom_display']
 			);
 		}
@@ -42,17 +42,17 @@ final class BS_AddField_Source_DB extends PLIB_Object implements PLIB_AddField_S
 		switch($data->get_type())
 		{
 			case 'int':
-				return new PLIB_AddField_Type_Int($data);
+				return new FWS_AddField_Type_Int($data);
 			case 'date':
-				return new PLIB_AddField_Type_Date($data);
+				return new FWS_AddField_Type_Date($data);
 			case 'line':
-				return new PLIB_AddField_Type_Line($data);
+				return new FWS_AddField_Type_Line($data);
 			case 'text':
-				return new PLIB_AddField_Type_Text($data);
+				return new FWS_AddField_Type_Text($data);
 			case 'enum':
-				return new PLIB_AddField_Type_Enum($data);
+				return new FWS_AddField_Type_Enum($data);
 			default:
-				PLIB_Helper::error('Unknown field-type "'.$data->get_type().'"!');
+				FWS_Helper::error('Unknown field-type "'.$data->get_type().'"!');
 				return null;
 		}
 	}

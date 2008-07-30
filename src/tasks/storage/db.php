@@ -17,7 +17,7 @@
  * @subpackage	src.tasks
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Tasks_Storage_DB extends PLIB_Object implements PLIB_Tasks_Storage
+final class BS_Tasks_Storage_DB extends FWS_Object implements FWS_Tasks_Storage
 {
 	/**
 	 * Indicates wether multiple tasks will be executed. Additionally we count
@@ -29,13 +29,13 @@ final class BS_Tasks_Storage_DB extends PLIB_Object implements PLIB_Tasks_Storag
 	
 	public function get_tasks()
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		$res = array();
 		foreach($cache->get_cache('tasks') as $task)
 		{
-			$res[] = new PLIB_Tasks_Data(
-				$task['id'],$task['task_file'],$task['task_interval'],new PLIB_Date($task['last_execution']),
+			$res[] = new FWS_Tasks_Data(
+				$task['id'],$task['task_file'],$task['task_interval'],new FWS_Date($task['last_execution']),
 				$task['enabled'],$task['task_time']
 			);
 		}
@@ -56,11 +56,11 @@ final class BS_Tasks_Storage_DB extends PLIB_Object implements PLIB_Tasks_Storag
 	/**
 	 * Should store the given task.
 	 *
-	 * @param PLIB_Tasks_Data $task the task to store
+	 * @param FWS_Tasks_Data $task the task to store
 	 */
 	public function store_task($task)
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		$tasks = $cache->get_cache('tasks');
 		$id = $task->get_id();
@@ -89,7 +89,7 @@ final class BS_Tasks_Storage_DB extends PLIB_Object implements PLIB_Tasks_Storag
 	 */
 	public function finish()
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		if($this->_multiple > 1)
 			$cache->store('tasks');

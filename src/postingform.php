@@ -25,7 +25,7 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_PostingForm extends PLIB_Object
+final class BS_PostingForm extends FWS_Object
 {
 	/**
 	 * The template-number to use
@@ -204,9 +204,9 @@ final class BS_PostingForm extends PLIB_Object
 	}
 	
 	/**
-	 * Sets the PLIB_HTML_Formular-instance for this posting-form
+	 * Sets the FWS_HTML_Formular-instance for this posting-form
 	 * 
-	 * @param PLIB_HTML_Formular $form the formular
+	 * @param FWS_HTML_Formular $form the formular
 	 */
 	public function set_formular($form)
 	{
@@ -235,8 +235,8 @@ final class BS_PostingForm extends PLIB_Object
 	 */
 	public function get_textarea($text,$use_applet)
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
 
 		$options = BS_PostingUtils::get_instance()->get_message_options($this->_type);
 		$sallowed = BS_PostingUtils::get_instance()->get_message_option('allowed_tags',$this->_type);
@@ -269,14 +269,14 @@ final class BS_PostingForm extends PLIB_Object
 	 */
 	private function _add_post_form()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$user = PLIB_Props::get()->user();
-		$locale = PLIB_Props::get()->locale();
-		$input = PLIB_Props::get()->input();
-		$cfg = PLIB_Props::get()->cfg();
-		$doc = PLIB_Props::get()->doc();
-		$functions = PLIB_Props::get()->functions();
-		$url = PLIB_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
+		$user = FWS_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$cfg = FWS_Props::get()->cfg();
+		$doc = FWS_Props::get()->doc();
+		$functions = FWS_Props::get()->functions();
+		$url = FWS_Props::get()->url();
 
 		$options = BS_PostingUtils::get_instance()->get_message_options($this->_type);
 	
@@ -335,7 +335,7 @@ final class BS_PostingForm extends PLIB_Object
 		$use_applet = $user->use_bbcode_applet();
 		if($input->isset_var('bbcode_mode_'.self::$number,'post'))
 		{
-			$mode = $input->get_var('bbcode_mode_'.self::$number,'post',PLIB_Input::STRING);
+			$mode = $input->get_var('bbcode_mode_'.self::$number,'post',FWS_Input::STRING);
 			$use_applet = $mode == 'applet';
 		}
 		
@@ -343,7 +343,7 @@ final class BS_PostingForm extends PLIB_Object
 		
 		if(!$user->is_loggedin())
 		{
-			$sec_code_field = PLIB_StringHelper::generate_random_key(15);
+			$sec_code_field = FWS_StringHelper::generate_random_key(15);
 			$user->set_session_data('sec_code_field',$sec_code_field);
 			
 			$tpl->add_variables(array(
@@ -417,11 +417,11 @@ final class BS_PostingForm extends PLIB_Object
 	 */
 	private function _add_attachment_form()
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$tpl = PLIB_Props::get()->tpl();
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$tpl = FWS_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
 
 		if($cfg['attachments_enable'] == 1 &&
 			 $auth->has_global_permission('attachments_add'))
@@ -431,7 +431,7 @@ final class BS_PostingForm extends PLIB_Object
 			$file_paths = $input->get_var('attached_file_paths','post');
 			
 			// determine hint
-			if($input->get_var(BS_URL_ACTION,'get',PLIB_Input::STRING) == 'edit_post' &&
+			if($input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING) == 'edit_post' &&
 				 $input->isset_var('attached_file_paths','post') &&
 				 ($input->isset_var('add_attachment','post') ||
 				 	$input->isset_var('remove_attachment','post')) && count($file_paths) > 0)
@@ -494,7 +494,7 @@ final class BS_PostingForm extends PLIB_Object
 	 */
 	private function _get_smileys_for_post()
 	{
-		$url = PLIB_Props::get()->url();
+		$url = FWS_Props::get()->url();
 
 		$res = array(
 			'smileys' => array()
@@ -534,10 +534,10 @@ final class BS_PostingForm extends PLIB_Object
 	 */
 	private function _get_bbcode_for_post($sallowed)
 	{
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
 
-		$allowed = PLIB_Array_Utils::advanced_explode(',',$sallowed);
+		$allowed = FWS_Array_Utils::advanced_explode(',',$sallowed);
 		
 		// once is enough :)
 		$bbcode_data = '';
@@ -567,14 +567,14 @@ final class BS_PostingForm extends PLIB_Object
 		
 		$tpl->set_template('inc_bbcode.htm');
 		
-		$hldir = PLIB_Path::server_app().'bbceditor/highlighter/';
-		PLIB_Highlighting_Languages::ensure_inited($hldir.'languages.xml');
+		$hldir = FWS_Path::server_app().'bbceditor/highlighter/';
+		FWS_Highlighting_Languages::ensure_inited($hldir.'languages.xml');
 		
 		$tpl->add_variables(array(
 			'textarea_id' => 'bbcode_area'.self::$number,
 			'number' => self::$number,
 			'bbcode' => $this,
-			'hllangs' => PLIB_Highlighting_Languages::get_languages(),
+			'hllangs' => FWS_Highlighting_Languages::get_languages(),
 			'bbcode_data' => $bbcode_data
 		));
 		$tpl->add_allowed_method('bbcode','is_allowed');
@@ -595,7 +595,7 @@ final class BS_PostingForm extends PLIB_Object
 		if($allowed === null)
 		{
 			$sallowed = BS_PostingUtils::get_instance()->get_message_option('allowed_tags',$this->_type);
-			$allowed = PLIB_Array_Utils::advanced_explode(',',$sallowed);
+			$allowed = FWS_Array_Utils::advanced_explode(',',$sallowed);
 		}
 		
 		if(func_num_args() > 1)

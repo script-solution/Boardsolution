@@ -20,7 +20,7 @@
 final class BS_Front_Module_team extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,23 +28,23 @@ final class BS_Front_Module_team extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_breadcrumb($locale->lang('the_team'),$url->get_url('team'));
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$user = PLIB_Props::get()->user();
-		$cache = PLIB_Props::get()->cache();
-		$url = PLIB_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$user = FWS_Props::get()->user();
+		$cache = FWS_Props::get()->cache();
+		$url = FWS_Props::get()->url();
 
 		$admins = array();
 		
@@ -83,7 +83,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 				continue;
 			
 			// we have to handle super-mods different
-			$user_groups = PLIB_Array_Utils::advanced_explode(',',$data['user_group']);
+			$user_groups = FWS_Array_Utils::advanced_explode(',',$data['user_group']);
 			$is_super_mod = false;
 			foreach($user_groups as $gid)
 			{
@@ -186,10 +186,10 @@ final class BS_Front_Module_team extends BS_Front_Module
 	 */
 	private function get_group_name($groups)
 	{
-		$cache = PLIB_Props::get()->cache();
+		$cache = FWS_Props::get()->cache();
 
 		$gcache = $cache->get_cache('user_groups');
-		$agroups = PLIB_Array_Utils::advanced_explode(',',$groups);
+		$agroups = FWS_Array_Utils::advanced_explode(',',$groups);
 		foreach($agroups as $gid)
 		{
 			if($gid != BS_STATUS_ADMIN && ($gdata = $gcache->get_element($gid)) !== null &&
@@ -208,10 +208,10 @@ final class BS_Front_Module_team extends BS_Front_Module
 	 */
 	private function _get_forum_list($user_id)
 	{
-		$cache = PLIB_Props::get()->cache();
-		$cfg = PLIB_Props::get()->cfg();
-		$auth = PLIB_Props::get()->auth();
-		$forums = PLIB_Props::get()->forums();
+		$cache = FWS_Props::get()->cache();
+		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
+		$forums = FWS_Props::get()->forums();
 
 		$count = 0;
 		$forum_list = '';

@@ -21,24 +21,24 @@ final class BS_ACP_Action_smileys_edit extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
 		
-		$id = $input->get_var('id','get',PLIB_Input::ID);
+		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
 			return 'Invalid id "'.$id.'"';
 
 		if(BS_DAO::get_smileys()->get_by_id($id) === false)
 			return 'No smiley found with id "'.$id.'"';
 		
-		$smiley_path = $input->get_var('smiley_path','post',PLIB_Input::STRING);
-		$primary_code = $input->get_var('primary_code','post',PLIB_Input::STRING);
-		$secondary_code = $input->get_var('secondary_code','post',PLIB_Input::STRING);
-		$is_base = $input->get_var('is_base','post',PLIB_Input::INT_BOOL);
+		$smiley_path = $input->get_var('smiley_path','post',FWS_Input::STRING);
+		$primary_code = $input->get_var('primary_code','post',FWS_Input::STRING);
+		$secondary_code = $input->get_var('secondary_code','post',FWS_Input::STRING);
+		$is_base = $input->get_var('is_base','post',FWS_Input::INT_BOOL);
 
 		if($smiley_path == '')
 			return 'smiley_path_empty';

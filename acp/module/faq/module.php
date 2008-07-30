@@ -34,7 +34,7 @@ final class BS_ACP_Module_faq extends BS_ACP_Module
 	private $_entries = array();
 
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -42,19 +42,19 @@ final class BS_ACP_Module_faq extends BS_ACP_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 		
 		$renderer = $doc->use_default_renderer();
 		$renderer->add_breadcrumb($locale->lang('acpmod_adminfaq'));
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
 
 		$locale->add_language_file('lang_admin_faq.php');
 

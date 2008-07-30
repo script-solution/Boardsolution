@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Miscellaneous_Tasks_Messages extends PLIB_Object implements PLIB_Progress_Task
+final class BS_ACP_Miscellaneous_Tasks_Messages extends FWS_Object implements FWS_Progress_Task
 {
 	/**
 	 * The number of posts
@@ -69,7 +69,7 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends PLIB_Object implements P
 	}
 	
 	/**
-	 * @see PLIB_Progress_Task::get_total_operations()
+	 * @see FWS_Progress_Task::get_total_operations()
 	 *
 	 * @return int
 	 */
@@ -79,7 +79,7 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends PLIB_Object implements P
 	}
 
 	/**
-	 * @see PLIB_Progress_Task::run()
+	 * @see FWS_Progress_Task::run()
 	 *
 	 * @param int $pos
 	 * @param int $ops

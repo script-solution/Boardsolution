@@ -17,7 +17,7 @@
  * @subpackage	front.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_OnlineUtils extends PLIB_Singleton
+final class BS_Front_OnlineUtils extends FWS_Singleton
 {
 	/**
 	 * @return BS_Front_OnlineUtils the instance of this class
@@ -35,9 +35,9 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 	 */
 	public function add_currently_online($loc = 'forums')
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
 
 		$online = $this->get_currently_online_user($loc);
 		
@@ -71,13 +71,13 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 	 */
 	public function get_currently_online_user($location = 'forums')
 	{
-		$sessions = PLIB_Props::get()->sessions();
-		$input = PLIB_Props::get()->input();
-		$auth = PLIB_Props::get()->auth();
-		$user = PLIB_Props::get()->user();
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$sessions = FWS_Props::get()->sessions();
+		$input = FWS_Props::get()->input();
+		$auth = FWS_Props::get()->auth();
+		$user = FWS_Props::get()->user();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		// user online
 		$useronline = '';
@@ -93,11 +93,11 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 				$users = $sessions->get_user_at_location($location);
 				break;
 			case 'topics':
-				$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+				$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 				$users = $sessions->get_user_at_location($location,$fid);
 				break;
 			case 'posts':
-				$tid = $input->get_var(BS_URL_TID,'get',PLIB_Input::ID);
+				$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 				$users = $sessions->get_user_at_location($location,$tid);
 				break;
 		}
@@ -131,7 +131,7 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 					$location = str_replace('"','&quot;',$location);
 				}
 	
-				$time = strip_tags(PLIB_Date::get_date($daten['date']));
+				$time = strip_tags(FWS_Date::get_date($daten['date']));
 				$murl = $url->get_url('userdetails','&amp;'.BS_URL_ID.'='.$daten['user_id']);
 				$name = $auth->get_colored_username(
 					$daten['user_id'],$daten['user_name'],$daten['user_group']
@@ -152,7 +152,7 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 		}
 		
 		if($useronline != '')
-			$user_names = PLIB_String::substr($useronline,0,PLIB_String::strlen($useronline) - 2);
+			$user_names = FWS_String::substr($useronline,0,FWS_String::strlen($useronline) - 2);
 		else
 			$user_names = '<i>'.$locale->lang('none').'</i>';
 		
@@ -187,11 +187,11 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 	 */
 	public function get_usergroup_legend()
 	{
-		$cache = PLIB_Props::get()->cache();
-		$auth = PLIB_Props::get()->auth();
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$cache = FWS_Props::get()->cache();
+		$auth = FWS_Props::get()->auth();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		$legend = '';
 		$groups = $cache->get_cache('user_groups');
@@ -221,7 +221,7 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 			$legend .= $locale->lang('moderators').'</span></a>';
 		}
 		else
-			$legend = PLIB_String::substr($legend,0,PLIB_String::strlen($legend) - 2);
+			$legend = FWS_String::substr($legend,0,FWS_String::strlen($legend) - 2);
 		
 		return $legend;
 	}
@@ -233,13 +233,13 @@ final class BS_Front_OnlineUtils extends PLIB_Singleton
 	 */
 	public function get_last_activity()
 	{
-		$sessions = PLIB_Props::get()->sessions();
-		$locale = PLIB_Props::get()->locale();
+		$sessions = FWS_Props::get()->sessions();
+		$locale = FWS_Props::get()->locale();
 
 		$last = $sessions->get_last_login();
 		if($last['id'] != '' && $last['lastlogin'] > 0)
 		{
-			$lastlogin = PLIB_Date::get_date($last['lastlogin']).' '.$locale->lang('of').' ';
+			$lastlogin = FWS_Date::get_date($last['lastlogin']).' '.$locale->lang('of').' ';
 			$lastlogin .= BS_UserUtils::get_instance()->get_link($last['id'],$last['user_name'],$last['user_group']);
 		}
 		else

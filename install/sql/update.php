@@ -19,12 +19,12 @@ class BS_InstallSQL_update extends BS_InstallSQL
 {
 	public function run()
 	{
-		$functions = PLIB_Props::get()->functions();
-		$db = PLIB_Props::get()->db();
+		$functions = FWS_Props::get()->functions();
+		$db = FWS_Props::get()->db();
 
-		include(PLIB_Path::server_app().'config/community.php');
-		include(PLIB_Path::server_app().'config/mysql.php');
-		include(PLIB_Path::server_app().'src/mysql.php');
+		include(FWS_Path::server_app().'config/community.php');
+		include(FWS_Path::server_app().'config/mysql.php');
+		include(FWS_Path::server_app().'src/mysql.php');
 		$prefix = $functions->get_session_var('table_prefix');
 		
 		// we have to init $db here because we need it later on
@@ -456,9 +456,9 @@ class BS_InstallSQL_update extends BS_InstallSQL
 		$this->add_to_log('Generating DB-Cache...');
 		
 		// now we have to create the cache-data
-		include_once(PLIB_Path::server_app().'src/cache/cache.php');
-		include_once(PLIB_Path::server_app().'src/cache/db_cache.php');
-		include_once(PLIB_Path::server_app().'src/cache/cache_container.php');
+		include_once(FWS_Path::server_app().'src/cache/cache.php');
+		include_once(FWS_Path::server_app().'src/cache/db_cache.php');
+		include_once(FWS_Path::server_app().'src/cache/cache_container.php');
 		
 		// we have to instantiate the cache-container here because the write_to_db() method needs it
 		$this->cachecon = &new BS_CacheContainer($this);
@@ -482,7 +482,7 @@ class BS_InstallSQL_update extends BS_InstallSQL
 	 */
 	public function _change_charset()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$charset = 'utf8';
 		$collate = 'utf8_general_ci';
@@ -492,7 +492,7 @@ class BS_InstallSQL_update extends BS_InstallSQL
 		$tables = array();
 		foreach($constants as $k => $v)
 		{
-			if(PLIB_String::substr($k,0,6) == 'BS_TB_')
+			if(FWS_String::substr($k,0,6) == 'BS_TB_')
 				$tables[] = $v;
 		}
 		
@@ -514,7 +514,7 @@ class BS_InstallSQL_update extends BS_InstallSQL
 				$is_text = false;
 				foreach($text_fields as $tf)
 				{
-					if(PLIB_String::strpos($data['Type'],$tf) !== false)
+					if(FWS_String::strpos($data['Type'],$tf) !== false)
 					{
 						$is_text = true;
 						break;
@@ -536,7 +536,7 @@ class BS_InstallSQL_update extends BS_InstallSQL
 			if($fields != '')
 			{
 				$db->sql_qry(
-					'ALTER TABLE '.$table.' '.PLIB_String::substr($fields,0,-1).';'
+					'ALTER TABLE '.$table.' '.FWS_String::substr($fields,0,-1).';'
 				);
 			}
 		}

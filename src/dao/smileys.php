@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_Smileys extends PLIB_Singleton
+class BS_DAO_Smileys extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_Smileys the instance of this class
@@ -36,7 +36,7 @@ class BS_DAO_Smileys extends PLIB_Singleton
 	 */
 	public function get_count()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(BS_TB_SMILEYS,'*','');
 	}
@@ -49,7 +49,7 @@ class BS_DAO_Smileys extends PLIB_Singleton
 	 */
 	public function path_exists($path)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(BS_TB_SMILEYS,'*','WHERE smiley_path = "'.$path.'"') > 0;
 	}
@@ -64,7 +64,7 @@ class BS_DAO_Smileys extends PLIB_Singleton
 	 */
 	public function code_exists($code,$id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(
 			BS_TB_SMILEYS,
@@ -96,10 +96,10 @@ class BS_DAO_Smileys extends PLIB_Singleton
 	 */
 	public function get_by_ids($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_SMILEYS.'
@@ -114,7 +114,7 @@ class BS_DAO_Smileys extends PLIB_Singleton
 	 */
 	public function get_next_sort_key()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$row = $db->sql_fetch('SELECT MAX(sort_key) FROM '.BS_TB_SMILEYS);
 		if(!$row)
@@ -132,12 +132,12 @@ class BS_DAO_Smileys extends PLIB_Singleton
 	 */
 	public function get_list($start = 0,$count = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_SMILEYS.'
@@ -154,7 +154,7 @@ class BS_DAO_Smileys extends PLIB_Singleton
 	 */
 	public function create($fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$db->sql_insert(BS_TB_SMILEYS,$fields);
 		return $db->get_last_insert_id();
@@ -169,10 +169,10 @@ class BS_DAO_Smileys extends PLIB_Singleton
 	 */
 	public function update_by_id($id,$fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_update(BS_TB_SMILEYS,'WHERE id = '.$id,$fields);
 		return $db->get_affected_rows();
@@ -187,10 +187,10 @@ class BS_DAO_Smileys extends PLIB_Singleton
 	 */
 	public function update_sort($id,$up = true)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$fields = array(
 			'sort_key' => array('sort_key '.($up ? '+' : '-').' 1')
@@ -207,10 +207,10 @@ class BS_DAO_Smileys extends PLIB_Singleton
 	 */
 	public function delete_by_ids($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_SMILEYS.' WHERE id IN ('.implode(',',$ids).')'

@@ -21,8 +21,8 @@ final class BS_ACP_Action_themes_update extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
 
 		$names = $input->get_var('names','post');
 		$folders = $input->get_var('folders','post');
@@ -32,7 +32,7 @@ final class BS_ACP_Action_themes_update extends BS_ACP_Action_Base
 		$c = 0;
 		foreach($names as $id => $value)
 		{
-			if(PLIB_Helper::is_integer($id))
+			if(FWS_Helper::is_integer($id))
 			{
 				BS_DAO::get_themes()->update_by_id($id,$value,isset($folders[$id]) ? $folders[$id] : '');
 				$c++;

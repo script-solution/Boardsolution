@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_UserBans extends PLIB_Singleton
+class BS_DAO_UserBans extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_UserBans the instance of this class
@@ -40,12 +40,12 @@ class BS_DAO_UserBans extends PLIB_Singleton
 	 */
 	public function has_baned($uid1,$uid2)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($uid1) || $uid1 <= 0)
-			PLIB_Helper::def_error('intgt0','uid1',$uid1);
-		if(!PLIB_Helper::is_integer($uid2) || $uid2 <= 0)
-			PLIB_Helper::def_error('intgt0','uid2',$uid2);
+		if(!FWS_Helper::is_integer($uid1) || $uid1 <= 0)
+			FWS_Helper::def_error('intgt0','uid1',$uid1);
+		if(!FWS_Helper::is_integer($uid2) || $uid2 <= 0)
+			FWS_Helper::def_error('intgt0','uid2',$uid2);
 		
 		return $db->sql_num(
 			BS_TB_USER_BANS,'id',' WHERE user_id = '.$uid1.' AND baned_user = '.$uid2
@@ -61,12 +61,12 @@ class BS_DAO_UserBans extends PLIB_Singleton
 	 */
 	public function get_by_user($id,$ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		return $db->sql_rows(
 			'SELECT b.*,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.user_group
@@ -85,10 +85,10 @@ class BS_DAO_UserBans extends PLIB_Singleton
 	 */
 	public function get_all_of_user($id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		return $db->sql_rows(
 			'SELECT b.*,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.user_group
@@ -108,12 +108,12 @@ class BS_DAO_UserBans extends PLIB_Singleton
 	 */
 	public function create($uid1,$uid2)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($uid1) || $uid1 <= 0)
-			PLIB_Helper::def_error('intgt0','uid1',$uid1);
-		if(!PLIB_Helper::is_integer($uid2) || $uid2 <= 0)
-			PLIB_Helper::def_error('intgt0','uid2',$uid2);
+		if(!FWS_Helper::is_integer($uid1) || $uid1 <= 0)
+			FWS_Helper::def_error('intgt0','uid1',$uid1);
+		if(!FWS_Helper::is_integer($uid2) || $uid2 <= 0)
+			FWS_Helper::def_error('intgt0','uid2',$uid2);
 		
 		$db->sql_insert(BS_TB_USER_BANS,array(
 			'user_id' => $uid1,
@@ -131,12 +131,12 @@ class BS_DAO_UserBans extends PLIB_Singleton
 	 */
 	public function delete_bans_of_user($id,$ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_USER_BANS.'
@@ -153,10 +153,10 @@ class BS_DAO_UserBans extends PLIB_Singleton
 	 */
 	public function delete_by_users($ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_USER_BANS.'

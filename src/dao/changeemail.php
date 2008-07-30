@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_ChangeEmail extends PLIB_Singleton
+class BS_DAO_ChangeEmail extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_ChangeEmail the instance of this class
@@ -40,10 +40,10 @@ class BS_DAO_ChangeEmail extends PLIB_Singleton
 	 */
 	public function get_by_user($id,$key = '')
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$row = $db->sql_fetch(
 			'SELECT * FROM '.BS_TB_CHANGE_EMAIL.'
@@ -64,10 +64,10 @@ class BS_DAO_ChangeEmail extends PLIB_Singleton
 	 */
 	public function create($id,$key,$email)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_insert(BS_TB_CHANGE_EMAIL,array(
 			'user_id' => $id,
@@ -86,10 +86,10 @@ class BS_DAO_ChangeEmail extends PLIB_Singleton
 	 */
 	public function delete_by_user($id)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($id) || $id <= 0)
-			PLIB_Helper::def_error('intgt0','id',$id);
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_CHANGE_EMAIL.'
@@ -106,10 +106,10 @@ class BS_DAO_ChangeEmail extends PLIB_Singleton
 	 */
 	public function delete_timedout($timeout)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($timeout) || $timeout <= 0)
-			PLIB_Helper::def_error('intgt0','timeout',$timeout);
+		if(!FWS_Helper::is_integer($timeout) || $timeout <= 0)
+			FWS_Helper::def_error('intgt0','timeout',$timeout);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_CHANGE_EMAIL.'

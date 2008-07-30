@@ -17,7 +17,7 @@
  * @subpackage	acp.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Pagination extends PLIB_Pagination
+final class BS_ACP_Pagination extends FWS_Pagination
 {
 	/**
 	 * Constructor
@@ -27,9 +27,9 @@ final class BS_ACP_Pagination extends PLIB_Pagination
 	 */
 	public function __construct($per_page,$num)
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
-		$page = $input->get_var('site','get',PLIB_Input::INTEGER);
+		$page = $input->get_var('site','get',FWS_Input::INTEGER);
 		parent::__construct($per_page,$num,$page);
 	}
 }

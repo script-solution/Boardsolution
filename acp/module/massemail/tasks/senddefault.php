@@ -17,32 +17,32 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_MassEmail_Tasks_SendDefault extends PLIB_Object implements PLIB_Progress_Task
+final class BS_ACP_Module_MassEmail_Tasks_SendDefault extends FWS_Object implements FWS_Progress_Task
 {
 	/**
-	 * @see PLIB_Progress_Task::get_total_operations()
+	 * @see FWS_Progress_Task::get_total_operations()
 	 *
 	 * @return int
 	 */
 	public function get_total_operations()
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		return $user->get_session_data('mail_total');
 	}
 
 	/**
-	 * @see PLIB_Progress_Task::run()
+	 * @see FWS_Progress_Task::run()
 	 *
 	 * @param int $pos
 	 * @param int $ops
 	 */
 	public function run($pos,$ops)
 	{
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$user = PLIB_Props::get()->user();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$user = FWS_Props::get()->user();
 
 		$text = $user->get_session_data('mail_text');
 		$subject = $user->get_session_data('mail_subject');

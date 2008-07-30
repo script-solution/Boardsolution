@@ -17,7 +17,7 @@
  * @subpackage	acp.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_MenuItem extends PLIB_Object
+final class BS_ACP_MenuItem extends FWS_Object
 {
 	/**
 	 * The name of the module
@@ -49,16 +49,16 @@ final class BS_ACP_MenuItem extends PLIB_Object
 	 */
 	public function __construct($module,$frame = null,$url = null)
 	{
-		$user = PLIB_Props::get()->user();
+		$user = FWS_Props::get()->user();
 
 		parent::__construct();
 		
 		if(!is_string($module))
-			PLIB_Helper::def_error('string','module',$module);
+			FWS_Helper::def_error('string','module',$module);
 		if($frame !== null && !is_string($frame))
-			PLIB_Helper::def_error('string','frame',$frame);
+			FWS_Helper::def_error('string','frame',$frame);
 		if($url !== null && !is_string($url))
-			PLIB_Helper::def_error('string','url',$url);
+			FWS_Helper::def_error('string','url',$url);
 		
 		$this->_module = $module;
 		$this->_frame = $frame;

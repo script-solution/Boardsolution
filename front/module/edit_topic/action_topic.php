@@ -21,15 +21,15 @@ final class BS_Front_Action_edit_topic_topic extends BS_Front_Action_Base
 {
 	public function perform_action()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
-		$forums = PLIB_Props::get()->forums();
-		$auth = PLIB_Props::get()->auth();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
+		$forums = FWS_Props::get()->forums();
+		$auth = FWS_Props::get()->auth();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
-		$id = $input->get_var(BS_URL_ID,'get',PLIB_Input::ID);
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
+		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 
 		// are the parameters valid?
 		if($id == null || $fid == null)
@@ -65,14 +65,14 @@ final class BS_Front_Action_edit_topic_topic extends BS_Front_Action_Base
 		if(BS_TopicUtils::get_instance()->is_locked($topic_data['locked'],BS_LOCK_TOPIC_EDIT))
 			return 'no_permission_to_edit_thread';
 
-		$topic_name = $input->get_var('topic_name','post',PLIB_Input::STRING);
+		$topic_name = $input->get_var('topic_name','post',FWS_Input::STRING);
 		if(trim($topic_name) == '')
 			return 'threadnameleer';
 		
-		$important = $input->get_var('important','post',PLIB_Input::INT_BOOL);
-		$symbol = $input->get_var('symbol','post',PLIB_Input::INTEGER);
+		$important = $input->get_var('important','post',FWS_Input::INT_BOOL);
+		$symbol = $input->get_var('symbol','post',FWS_Input::INTEGER);
 		$symbol = ($symbol < 0 || $symbol > BS_NUMBER_OF_TOPIC_ICONS) ? 0 : (int)$symbol;
-		$allow_posts = $input->get_var('allow_posts','post',PLIB_Input::INT_BOOL);
+		$allow_posts = $input->get_var('allow_posts','post',FWS_Input::INT_BOOL);
 
 		$fields = array(
 			'name' => $topic_name,

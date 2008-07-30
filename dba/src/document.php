@@ -17,7 +17,7 @@
  * @subpackage	dba.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DBA_Document extends PLIB_Document
+final class BS_DBA_Document extends FWS_Document
 {
 	/**
 	 * Constructor
@@ -30,14 +30,14 @@ final class BS_DBA_Document extends PLIB_Document
 	
 			$this->_handle_session();
 		}
-		catch(PLIB_Exceptions_Critical $e)
+		catch(FWS_Exceptions_Critical $e)
 		{
 			echo $e;
 		}
 	}
 	
 	/**
-	 * @see PLIB_Document::use_default_renderer
+	 * @see FWS_Document::use_default_renderer
 	 *
 	 * @return BS_DBA_Renderer_HTML
 	 */
@@ -53,7 +53,7 @@ final class BS_DBA_Document extends PLIB_Document
 	}
 
 	/**
-	 * @see PLIB_Document::prepare_rendering()
+	 * @see FWS_Document::prepare_rendering()
 	 */
 	protected function prepare_rendering()
 	{
@@ -68,13 +68,13 @@ final class BS_DBA_Document extends PLIB_Document
 	}
 
 	/**
-	 * @see PLIB_Document::load_module()
+	 * @see FWS_Document::load_module()
 	 *
 	 * @return BS_DBA_Module
 	 */
 	protected function load_module()
 	{
-		$this->_module_name = PLIB_Helper::get_module_name(
+		$this->_module_name = FWS_Helper::get_module_name(
 			'BS_DBA_Module_','action','index','dba/module/'
 		);
 		$class = 'BS_DBA_Module_'.$this->_module_name;
@@ -86,19 +86,19 @@ final class BS_DBA_Document extends PLIB_Document
 	 */
 	private function _handle_session()
 	{
-		$input = PLIB_Props::get()->input();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
 		
 		// we want to require a session-id via GET
-		if($input->get_var('sid','get',PLIB_Input::STRING) != $user->get_session_id())
+		if($input->get_var('sid','get',FWS_Input::STRING) != $user->get_session_id())
 			$user->logout();
 		
 		if(!$user->is_loggedin())
 		{
 			if($input->isset_var('login','post'))
 			{
-				$p_user = $input->get_var('user_login','post',PLIB_Input::STRING);
-				$p_pw = $input->get_var('pw_login','post',PLIB_Input::STRING);
+				$p_user = $input->get_var('user_login','post',FWS_Input::STRING);
+				$p_pw = $input->get_var('pw_login','post',FWS_Input::STRING);
 				$user->login($p_user,$p_pw);
 			}
 		}

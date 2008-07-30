@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_MassEmail_Helper extends PLIB_Singleton
+final class BS_ACP_Module_MassEmail_Helper extends FWS_Singleton
 {
 	/**
 	 * @return BS_ACP_Module_MassEmail_Helper the instance of this class
@@ -34,19 +34,19 @@ final class BS_ACP_Module_MassEmail_Helper extends PLIB_Singleton
 	 */
 	public function get_receiver()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
 		$recipient_groups = $input->get_var('recipient_groups','post');
 		$recipient_user = array();
 		
-		if($recipient_groups === null || !PLIB_Array_Utils::is_integer($recipient_groups))
+		if($recipient_groups === null || !FWS_Array_Utils::is_integer($recipient_groups))
 			$recipient_groups = array();
 		
-		$srecipient_user = $input->get_var('recipient_user','post',PLIB_Input::STRING);
+		$srecipient_user = $input->get_var('recipient_user','post',FWS_Input::STRING);
 		if($srecipient_user !== null)
 		{
-			$recipient_user = PLIB_Array_Utils::advanced_explode(',',$srecipient_user);
-			if(!PLIB_Array_Utils::is_integer($recipient_user))
+			$recipient_user = FWS_Array_Utils::advanced_explode(',',$srecipient_user);
+			if(!FWS_Array_Utils::is_integer($recipient_user))
 				$recipient_user = array();
 		}
 		
@@ -63,19 +63,19 @@ final class BS_ACP_Module_MassEmail_Helper extends PLIB_Singleton
 	 */
 	public function get_mail_text()
 	{
-		$input = PLIB_Props::get()->input();
+		$input = FWS_Props::get()->input();
 
-		$text = $input->get_var('text','post',PLIB_Input::STRING);
-		if($input->get_var('content_type','post',PLIB_Input::STRING) == 'html')
+		$text = $input->get_var('text','post',FWS_Input::STRING);
+		if($input->get_var('content_type','post',FWS_Input::STRING) == 'html')
 		{
 			$bbcode = new BS_BBCode_Parser($text,'posts',true,true);
-			$bbcode->set_board_path(PLIB_Path::outer());
+			$bbcode->set_board_path(FWS_Path::outer());
 			$bbcode->get_message_for_db();
 			$bbcode->stripslashes();
-			return PLIB_StringHelper::htmlspecialchars_back($bbcode->get_message_for_output());
+			return FWS_StringHelper::htmlspecialchars_back($bbcode->get_message_for_output());
 		}
 		
-		return stripslashes(PLIB_StringHelper::htmlspecialchars_back($text));
+		return stripslashes(FWS_StringHelper::htmlspecialchars_back($text));
 	}
 	
 	protected function get_print_vars()

@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_Topics extends PLIB_Singleton
+class BS_DAO_Topics extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_Topics the instance of this class
@@ -36,7 +36,7 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_count()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(BS_TB_THREADS,'id','');
 	}
@@ -47,10 +47,10 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_count_in_forum($fid)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
-			PLIB_Helper::def_error('intgt0','fid',$fid);
+		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
+			FWS_Helper::def_error('intgt0','fid',$fid);
 		
 		return $db->sql_num(BS_TB_THREADS,'id',' WHERE rubrikid = '.$fid);
 	}
@@ -64,7 +64,7 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_count_by_search($where)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_num(BS_TB_THREADS.' t','t.id',$where);
 	}
@@ -78,12 +78,12 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_list($start = 0,$count = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		return $db->sql_rows(
 			'SELECT id FROM '.BS_TB_THREADS.'
@@ -104,12 +104,12 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_list_by_search($where,$order = 't.id ASC',$start = 0,$count = 0,$keywords = null)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
-		if(!PLIB_Helper::is_integer($count) || $count < 0)
-			PLIB_Helper::def_error('intge0','count',$count);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($count) || $count < 0)
+			FWS_Helper::def_error('intge0','count',$count);
 		
 		$kw_add = '';
 		if($keywords !== null)
@@ -171,12 +171,12 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_by_ids($tids,$fid = 0)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($tids) || count($tids) == 0)
-			PLIB_Helper::def_error('intarray>0','tids',$tids);
-		if(!PLIB_Helper::is_integer($fid) || $fid < 0)
-			PLIB_Helper::def_error('intge0','fid',$fid);
+		if(!FWS_Array_Utils::is_integer($tids) || count($tids) == 0)
+			FWS_Helper::def_error('intarray>0','tids',$tids);
+		if(!FWS_Helper::is_integer($fid) || $fid < 0)
+			FWS_Helper::def_error('intge0','fid',$fid);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_THREADS.'
@@ -194,10 +194,10 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_by_forums($fids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($fids) || count($fids) == 0)
-			PLIB_Helper::def_error('intarray>0','fids',$fids);
+		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
+			FWS_Helper::def_error('intarray>0','fids',$fids);
 		
 		return $db->sql_rows(
 			'SELECT t.*,increase_experience
@@ -215,10 +215,10 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_by_moved_ids($tids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($tids) || count($tids) == 0)
-			PLIB_Helper::def_error('intarray>0','tids',$tids);
+		if(!FWS_Array_Utils::is_integer($tids) || count($tids) == 0)
+			FWS_Helper::def_error('intarray>0','tids',$tids);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_THREADS.'
@@ -235,12 +235,12 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_latest_topics($number = 0,$excl_fids = array())
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($number) || $number < 0)
-			PLIB_Helper::def_error('intge0','number',$number);
-		if(!PLIB_Array_Utils::is_integer($excl_fids))
-			PLIB_Helper::def_error('intarray','excl_fids',$excl_fids);
+		if(!FWS_Helper::is_integer($number) || $number < 0)
+			FWS_Helper::def_error('intge0','number',$number);
+		if(!FWS_Array_Utils::is_integer($excl_fids))
+			FWS_Helper::def_error('intarray','excl_fids',$excl_fids);
 		
 		return $db->sql_rows(
 			'SELECT t.*,u.`'.BS_EXPORT_USER_NAME.'` username,u2.`'.BS_EXPORT_USER_NAME.'` lp_username,
@@ -266,12 +266,12 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_topics_by_date($user_id,$start)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
-		if(!PLIB_Helper::is_integer($start) || $start < 0)
-			PLIB_Helper::def_error('intge0','start',$start);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($start) || $start < 0)
+			FWS_Helper::def_error('intge0','start',$start);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_THREADS.'
@@ -294,10 +294,10 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_topics_of_users($user_ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
-			PLIB_Helper::def_error('intarray>0','user_ids',$user_ids);
+		if(!FWS_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
+			FWS_Helper::def_error('intarray>0','user_ids',$user_ids);
 		
 		return $db->sql_rows(
 			'SELECT post_user,COUNT(t.id) topics FROM '.BS_TB_THREADS.' t
@@ -322,10 +322,10 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_topic_creation_stats($number)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($number) || $number <= 0)
-			PLIB_Helper::def_error('intgt0','number',$number);
+		if(!FWS_Helper::is_integer($number) || $number <= 0)
+			FWS_Helper::def_error('intgt0','number',$number);
 		
 		return $db->sql_rows(
 			'SELECT COUNT(*) num,t.post_user user_id,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.user_group
@@ -354,7 +354,7 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_topic_stats_grouped_by_date()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		return $db->sql_rows(
 			'SELECT post_time,COUNT(id) num,
@@ -376,12 +376,12 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_topic_for_cache($fid,$tid)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($fid) || $fid <= 0)
-			PLIB_Helper::def_error('intgt0','fid',$fid);
-		if(!PLIB_Helper::is_integer($tid) || $tid <= 0)
-			PLIB_Helper::def_error('intgt0','tid',$tid);
+		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
+			FWS_Helper::def_error('intgt0','fid',$fid);
+		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
+			FWS_Helper::def_error('intgt0','tid',$tid);
 		
 		$row = $db->sql_fetch(
 			'SELECT t.*,r.forum_name,r.forum_type,COUNT(a.id) as attachment_num
@@ -402,7 +402,7 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_last_post_time()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$data = $db->sql_fetch(
 			'SELECT lastpost_time FROM '.BS_TB_THREADS.'
@@ -419,7 +419,7 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function get_next_id()
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$info = $db->sql_fetch_assoc(
 			$db->sql_qry('SHOW TABLE STATUS LIKE "'.BS_TB_THREADS.'"')
@@ -435,7 +435,7 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function create($fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		$db->sql_insert(BS_TB_THREADS,$fields);
 		return $db->get_last_insert_id();
@@ -449,10 +449,10 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function assign_topics_to_guest($user_id,$user_name)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($user_id) || $user_id <= 0)
-			PLIB_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$db->sql_update(BS_TB_THREADS,'WHERE post_user = '.$user_id,array(
 			'post_user' => 0,
@@ -485,10 +485,10 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function update_by_ids($tids,$fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($tids) || count($tids) == 0)
-			PLIB_Helper::def_error('intarray>0','tids',$tids);
+		if(!FWS_Array_Utils::is_integer($tids) || count($tids) == 0)
+			FWS_Helper::def_error('intarray>0','tids',$tids);
 		
 		$db->sql_update(BS_TB_THREADS,'WHERE id IN ('.implode(',',$tids).')',$fields);
 		return $db->get_affected_rows();
@@ -503,10 +503,10 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function update_shadows_by_ids($tids,$fields)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($tids) || count($tids) == 0)
-			PLIB_Helper::def_error('intarray>0','tids',$tids);
+		if(!FWS_Array_Utils::is_integer($tids) || count($tids) == 0)
+			FWS_Helper::def_error('intarray>0','tids',$tids);
 		
 		$db->sql_update(BS_TB_THREADS,'WHERE moved_tid IN ('.implode(',',$tids).')',$fields);
 		return $db->get_affected_rows();
@@ -524,12 +524,12 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	public function update_properties($tid,$lastpost,$replies)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($tid) || $tid <= 0)
-			PLIB_Helper::def_error('intgt0','tid',$tid);
-		if(!PLIB_Helper::is_integer($replies) || $replies < 0)
-			PLIB_Helper::def_error('intge0','replies',$replies);
+		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
+			FWS_Helper::def_error('intgt0','tid',$tid);
+		if(!FWS_Helper::is_integer($replies) || $replies < 0)
+			FWS_Helper::def_error('intge0','replies',$replies);
 		
 		$fields = array(
 			'posts' => $replies,
@@ -588,10 +588,10 @@ class BS_DAO_Topics extends PLIB_Singleton
 	 */
 	protected function delete_by($field,$ids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($ids) || count($ids) == 0)
-			PLIB_Helper::def_error('intarray>0','ids',$ids);
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_THREADS.'

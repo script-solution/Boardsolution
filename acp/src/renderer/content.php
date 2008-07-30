@@ -17,7 +17,7 @@
  * @subpackage	acp.src.renderer
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Renderer_Content extends PLIB_Document_Renderer_HTML_Default
+final class BS_ACP_Renderer_Content extends FWS_Document_Renderer_HTML_Default
 {
 	/**
 	 * Wether the headline should be displayed
@@ -51,9 +51,9 @@ final class BS_ACP_Renderer_Content extends PLIB_Document_Renderer_HTML_Default
 	{
 		parent::__construct();
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
 		
 		// always set the location in html-pages
 		$user->set_location();
@@ -71,28 +71,28 @@ final class BS_ACP_Renderer_Content extends PLIB_Document_Renderer_HTML_Default
 	{
 		parent::before_start();
 		
-		$doc = PLIB_Props::get()->doc();
+		$doc = FWS_Props::get()->doc();
 		
 		// set the default template if not already done
 		if($this->get_template() === null)
 		{
-			$prefixlen = PLIB_String::strlen('BS_ACP_Module_');
+			$prefixlen = FWS_String::strlen('BS_ACP_Module_');
 			$classname = get_class($doc->get_module());
-			$template = PLIB_String::strtolower(PLIB_String::substr($classname,$prefixlen)).'.htm';
+			$template = FWS_String::strtolower(FWS_String::substr($classname,$prefixlen)).'.htm';
 			$this->set_template($template);
 		}
 	}
 
 	/**
-	 * @see PLIB_Page::content()
+	 * @see FWS_Page::content()
 	 */
 	protected function content()
 	{
-		$auth = PLIB_Props::get()->auth();
-		$msgs = PLIB_Props::get()->msgs();
-		$locale = PLIB_Props::get()->locale();
-		$user = PLIB_Props::get()->user();
-		$doc = PLIB_Props::get()->doc();
+		$auth = FWS_Props::get()->auth();
+		$msgs = FWS_Props::get()->msgs();
+		$locale = FWS_Props::get()->locale();
+		$user = FWS_Props::get()->user();
+		$doc = FWS_Props::get()->doc();
 		
 		if($user->is_loggedin() && !$auth->has_access_to_module($doc->get_module_name()))
 		{
@@ -112,12 +112,12 @@ final class BS_ACP_Renderer_Content extends PLIB_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see PLIB_Page::before_render()
+	 * @see FWS_Page::before_render()
 	 */
 	protected function before_render()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$doc = PLIB_Props::get()->doc();
+		$tpl = FWS_Props::get()->tpl();
+		$doc = FWS_Props::get()->doc();
 		
 		// add redirect information
 		$redirect = $doc->get_redirect();
@@ -131,7 +131,7 @@ final class BS_ACP_Renderer_Content extends PLIB_Document_Renderer_HTML_Default
 		$tpl->add_global('action_result',$action_result);
 		
 		// handle messages
-		$msgs = PLIB_Props::get()->msgs();
+		$msgs = FWS_Props::get()->msgs();
 		if($msgs->contains_msg())
 			$this->handle_msgs($msgs);
 		
@@ -141,19 +141,19 @@ final class BS_ACP_Renderer_Content extends PLIB_Document_Renderer_HTML_Default
 	/**
 	 * Handles the collected messages
 	 *
-	 * @param PLIB_Document_Messages $msgs
+	 * @param FWS_Document_Messages $msgs
 	 */
 	protected function handle_msgs($msgs)
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
 		
 		$amsgs = $msgs->get_all_messages();
 		$links = $msgs->get_links();
 		$tpl->set_template('inc_messages.htm');
-		$tpl->add_array('errors',$amsgs[PLIB_Document_Messages::ERROR]);
-		$tpl->add_array('warnings',$amsgs[PLIB_Document_Messages::WARNING]);
-		$tpl->add_array('notices',$amsgs[PLIB_Document_Messages::NOTICE]);
+		$tpl->add_array('errors',$amsgs[FWS_Document_Messages::ERROR]);
+		$tpl->add_array('warnings',$amsgs[FWS_Document_Messages::WARNING]);
+		$tpl->add_array('notices',$amsgs[FWS_Document_Messages::NOTICE]);
 		$tpl->add_array('links',$links);
 		$tpl->add_variables(array(
 			'title' => $locale->lang('information'),
@@ -163,14 +163,14 @@ final class BS_ACP_Renderer_Content extends PLIB_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see PLIB_Page::header()
+	 * @see FWS_Page::header()
 	 */
 	protected function header()
 	{
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$cfg = PLIB_Props::get()->cfg();
-		$doc = PLIB_Props::get()->doc();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
+		$doc = FWS_Props::get()->doc();
 
 		// perform actions
 		$this->perform_actions();
@@ -194,22 +194,22 @@ final class BS_ACP_Renderer_Content extends PLIB_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see PLIB_Page::footer()
+	 * @see FWS_Page::footer()
 	 */
 	protected function footer()
 	{
-		$tpl = PLIB_Props::get()->tpl();
-		$db = PLIB_Props::get()->db();
-		$profiler = PLIB_Props::get()->profiler();
+		$tpl = FWS_Props::get()->tpl();
+		$db = FWS_Props::get()->db();
+		$profiler = FWS_Props::get()->profiler();
 
 		$tpl->set_template('inc_footer.htm');
 		$tpl->add_variables(array(
 			'debug' => BS_DEBUG,
 			'render_time' => $profiler->get_time(),
 			'db_queries' => $db->get_performed_query_num(),
-			'queries' => PLIB_PrintUtils::to_string(
+			'queries' => FWS_PrintUtils::to_string(
 				array(
-					'Load properties' => array_keys(PLIB_Props::get()->get_all()),
+					'Load properties' => array_keys(FWS_Props::get()->get_all()),
 					'DB-Queries' => $db->get_performed_queries()
 				)
 			)
@@ -218,7 +218,7 @@ final class BS_ACP_Renderer_Content extends PLIB_Document_Renderer_HTML_Default
 	}
 
 	/**
-	 * @see PLIB_Document_Renderer_HTML_Default::load_action_perf()
+	 * @see FWS_Document_Renderer_HTML_Default::load_action_perf()
 	 *
 	 * @return BS_ACP_Action_Performer
 	 */

@@ -17,7 +17,7 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_Config_Storage_DB extends PLIB_Object implements PLIB_Config_Storage
+final class BS_ACP_Module_Config_Storage_DB extends FWS_Object implements FWS_Config_Storage
 {
 	/**
 	 * The groups
@@ -33,7 +33,7 @@ final class BS_ACP_Module_Config_Storage_DB extends PLIB_Object implements PLIB_
 			$this->_groups = array();
 			foreach(BS_DAO::get_cfggroups()->get_all() as $data)
 			{
-				$this->_groups[] = new PLIB_Config_Group(
+				$this->_groups[] = new FWS_Config_Group(
 					$data['id'],$data['parent_id'],$data['name'],$data['title'],$data['sort']
 				);
 			}
@@ -51,14 +51,14 @@ final class BS_ACP_Module_Config_Storage_DB extends PLIB_Object implements PLIB_
 	}
 
 	/**
-	 * @see PLIB_Config_Storage::load_items_with()
+	 * @see FWS_Config_Storage::load_items_with()
 	 *
 	 * @param string $keyword
 	 * @return array
 	 */
 	public function get_items_with($keyword)
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$result = array();
 		foreach(BS_DAO::get_config()->get_all() as $data)
@@ -91,7 +91,7 @@ final class BS_ACP_Module_Config_Storage_DB extends PLIB_Object implements PLIB_
 		if($needle == '')
 			return true;
 		
-		return PLIB_String::strpos(PLIB_String::strtolower($haystack),$needle) !== false;
+		return FWS_String::strpos(FWS_String::strtolower($haystack),$needle) !== false;
 	}
 
 	public function restore_default($id)

@@ -20,7 +20,7 @@
 final class BS_Front_Module_delete_topics extends BS_Front_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_Front_Document $doc
 	 */
@@ -28,18 +28,18 @@ final class BS_Front_Module_delete_topics extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
-		$user = PLIB_Props::get()->user();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
+		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($user->is_loggedin());
 		
 		$renderer->add_action(BS_ACTION_DELETE_TOPICS,'default');
 
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$ids = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$ids = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
 
 		$this->add_loc_forum_path($fid);
 		$renderer->add_breadcrumb(
@@ -49,22 +49,22 @@ final class BS_Front_Module_delete_topics extends BS_Front_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$auth = PLIB_Props::get()->auth();
-		$user = PLIB_Props::get()->user();
-		$forums = PLIB_Props::get()->forums();
-		$locale = PLIB_Props::get()->locale();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$auth = FWS_Props::get()->auth();
+		$user = FWS_Props::get()->user();
+		$forums = FWS_Props::get()->forums();
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		// check parameters
-		$fid = $input->get_var(BS_URL_FID,'get',PLIB_Input::ID);
-		$id_str = $input->get_var(BS_URL_ID,'get',PLIB_Input::STRING);
-		if(!($ids = PLIB_StringHelper::get_ids($id_str)))
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		$id_str = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
+		if(!($ids = FWS_StringHelper::get_ids($id_str)))
 		{
 			$this->report_error();
 			return;
@@ -99,7 +99,7 @@ final class BS_Front_Module_delete_topics extends BS_Front_Module
 		$selected_topics = BS_TopicUtils::get_instance()->get_selected_topics($selected_topic_data);
 		if(count($selected_topics) == 0)
 		{
-			$this->report_error(PLIB_Document_Messages::ERROR,$locale->lang('no_topics_chosen'));
+			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('no_topics_chosen'));
 			return;
 		}
 

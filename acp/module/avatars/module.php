@@ -20,7 +20,7 @@
 final class BS_ACP_Module_avatars extends BS_ACP_Module
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -28,8 +28,8 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 	{
 		parent::init($doc);
 		
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_DELETE_AVATARS,'delete');
@@ -38,15 +38,15 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
-		$url = PLIB_Props::get()->url();
+		$input = FWS_Props::get()->input();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$url = FWS_Props::get()->url();
 
 		$delete = $input->get_var('delete','post');
 		if($delete != null)
@@ -55,7 +55,7 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 			$names = array();
 			foreach(BS_DAO::get_avatars()->get_by_ids($ids) as $data)
 				$names[] = $data['av_pfad'];
-			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
+			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
@@ -66,7 +66,7 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 			);
 		}
 		
-		$search = $input->get_var('search','get',PLIB_Input::STRING);
+		$search = $input->get_var('search','get',FWS_Input::STRING);
 		if($search != '')
 			$num = BS_DAO::get_avatars()->get_count_for_keyword($search);
 		else
@@ -79,7 +79,7 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 		$tpl->add_variables(array(
 			'num' => $num,
 			'action_type_import' => BS_ACP_ACTION_IMPORT_AVATARS,
-			'search_url' => $input->get_var('PHP_SELF','server',PLIB_Input::STRING),
+			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));

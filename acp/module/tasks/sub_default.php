@@ -20,7 +20,7 @@
 final class BS_ACP_SubModule_tasks_default extends BS_ACP_SubModule
 {
 	/**
-	 * @see PLIB_Module::init($doc)
+	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Page $doc
 	 */
@@ -34,22 +34,22 @@ final class BS_ACP_SubModule_tasks_default extends BS_ACP_SubModule
 	}
 	
 	/**
-	 * @see PLIB_Module::run()
+	 * @see FWS_Module::run()
 	 */
 	public function run()
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
-		$functions = PLIB_Props::get()->functions();
-		$url = PLIB_Props::get()->url();
-		$tpl = PLIB_Props::get()->tpl();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$url = FWS_Props::get()->url();
+		$tpl = FWS_Props::get()->tpl();
 
 		if($input->isset_var('delete','post'))
 		{
 			$ids = $input->get_var('delete','post');
 			$names = $cache->get_cache('tasks')->get_field_vals_of_keys($ids,'task_title');
-			$namelist = PLIB_StringHelper::get_enum($names,$locale->lang('and'));
+			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
@@ -70,7 +70,7 @@ final class BS_ACP_SubModule_tasks_default extends BS_ACP_SubModule
 			$tidata = $helper->decode_interval($task['task_interval']);
 			if($task['last_execution'] > 0)
 			{
-				$date = new PLIB_Date($task['last_execution'],PLIB_Date::TZ_GMT,PLIB_Date::TZ_GMT);
+				$date = new FWS_Date($task['last_execution'],FWS_Date::TZ_GMT,FWS_Date::TZ_GMT);
 				$last_run = $date->to_date(true,false).' GMT';
 			}
 			else
@@ -90,7 +90,7 @@ final class BS_ACP_SubModule_tasks_default extends BS_ACP_SubModule
 				'id' => $task['id'],
 				'is_def' => $helper->is_default_task($task['task_file']),
 				'title' => $locale->lang('task_'.$task['task_title'],false),
-				'file' => PLIB_Path::server_app().'src/tasks/'.$task['task_file'],
+				'file' => FWS_Path::server_app().'src/tasks/'.$task['task_file'],
 				'description' => $desc,
 				'interval' => $tidata[0].' '.$options[$tidata[1]],
 				'point_of_time' => $task['task_time'] !== null ? $task['task_time'].' GMT' : '-',

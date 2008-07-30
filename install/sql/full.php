@@ -20,13 +20,13 @@ class BS_InstallSQL_full extends BS_InstallSQL
 {
 	public function run()
 	{
-		$db = PLIB_Props::get()->db();
-		$input = PLIB_Props::get()->input();
-		$functions = PLIB_Props::get()->functions();
+		$db = FWS_Props::get()->db();
+		$input = FWS_Props::get()->input();
+		$functions = FWS_Props::get()->functions();
 
-		include(PLIB_Path::server_app().'config/community.php');
-		include(PLIB_Path::server_app().'config/mysql.php');
-		include(PLIB_Path::server_app().'src/mysql.php');
+		include(FWS_Path::server_app().'config/community.php');
+		include(FWS_Path::server_app().'config/mysql.php');
+		include(FWS_Path::server_app().'src/mysql.php');
 		
 		// we have to init $db here because we need it later on
 		$db = new BS_MySQL(BS_MYSQL_HOST,BS_MYSQL_LOGIN,BS_MYSQL_PASSWORD,BS_MYSQL_DATABASE);
@@ -426,7 +426,7 @@ class BS_InstallSQL_full extends BS_InstallSQL
 			`ip_log_days` mediumint(4) unsigned NOT NULL default 0
 		) TYPE=MyISAM;");
 		
-		$selected_lang = $input->get_var('lang','get',PLIB_Input::STRING);
+		$selected_lang = $input->get_var('lang','get',FWS_Input::STRING);
 		switch($selected_lang)
 		{
 			case 'ger_du':
@@ -1364,9 +1364,9 @@ class BS_InstallSQL_full extends BS_InstallSQL
 		$this->add_to_log('Generating DB-Cache...');
 		
 		// now we have to create the cache-data
-		include_once(PLIB_Path::server_app().'src/cache/cache.php');
-		include_once(PLIB_Path::server_app().'src/cache/db_cache.php');
-		include_once(PLIB_Path::server_app().'src/cache/cache_container.php');
+		include_once(FWS_Path::server_app().'src/cache/cache.php');
+		include_once(FWS_Path::server_app().'src/cache/db_cache.php');
+		include_once(FWS_Path::server_app().'src/cache/cache_container.php');
 		
 		// we have to instantiate the cache-container here because the write_to_db() method needs it
 		$this->cachecon = &new BS_CacheContainer($this);

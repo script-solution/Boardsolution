@@ -17,7 +17,7 @@
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Search_Result_Posts extends PLIB_Object implements BS_Front_Search_Result
+final class BS_Front_Search_Result_Posts extends FWS_Object implements BS_Front_Search_Result
 {
 	public function get_name()
 	{
@@ -26,11 +26,11 @@ final class BS_Front_Search_Result_Posts extends PLIB_Object implements BS_Front
 	
 	public function display_result($search,$request)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$functions = PLIB_Props::get()->functions();
-		$tpl = PLIB_Props::get()->tpl();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$functions = FWS_Props::get()->functions();
+		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		/* @var $search BS_Front_Search_Manager */
 		/* @var $request BS_Front_Search_Request */
@@ -63,7 +63,7 @@ final class BS_Front_Search_Result_Posts extends PLIB_Object implements BS_Front
 		$sql_order = BS_Front_Search_Utils::get_sql_order($order,$ad,'posts');
 		$keywords = $request->get_highlight_keywords();
 		$postcon = new BS_Front_Post_Container(0,0,$ids,$pagination,$sql_order,'',$keywords);
-		$hl = new PLIB_KeywordHighlighter($keywords,'<span class="bs_highlight">');
+		$hl = new FWS_KeywordHighlighter($keywords,'<span class="bs_highlight">');
 		
 		// build highlight-param
 		$kws = '';
@@ -85,7 +85,7 @@ final class BS_Front_Search_Result_Posts extends PLIB_Object implements BS_Front
 				'user_name' => $post->get_username(),
 				'user_group' => $post->get_user_group(),
 				'location' => $location,
-				'date' => PLIB_Date::get_date($post->get_field('post_time'),true),
+				'date' => FWS_Date::get_date($post->get_field('post_time'),true),
 				'posts_main_class' => $post->get_css_class('main'),
 				'posts_left_class' => $post->get_css_class('left'),
 				'posts_var_class' => $post->get_css_class('bar'),
@@ -109,7 +109,7 @@ final class BS_Front_Search_Result_Posts extends PLIB_Object implements BS_Front
 	
 	public function get_noresults_message()
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		return $locale->lang('no_posts_found');
 	}

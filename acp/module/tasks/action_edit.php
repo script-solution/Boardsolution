@@ -21,9 +21,9 @@ final class BS_ACP_Action_tasks_edit extends BS_ACP_Action_Base
 {
 	public function perform_action($type = 'edit')
 	{
-		$input = PLIB_Props::get()->input();
-		$cache = PLIB_Props::get()->cache();
-		$locale = PLIB_Props::get()->locale();
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
@@ -32,7 +32,7 @@ final class BS_ACP_Action_tasks_edit extends BS_ACP_Action_Base
 		// valid id?
 		if($type == 'edit')
 		{
-			$id = $input->get_var('id','get',PLIB_Input::ID);
+			$id = $input->get_var('id','get',FWS_Input::ID);
 			if($id == null)
 				return 'Invalid id "'.$id.'"';
 			
@@ -45,20 +45,20 @@ final class BS_ACP_Action_tasks_edit extends BS_ACP_Action_Base
 		$helper = BS_ACP_Module_Tasks_Helper::get_instance();
 		
 		// grab values from post
-		$title = $input->get_var('task_title','post',PLIB_Input::STRING);
-		$file = $input->get_var('task_file','post',PLIB_Input::STRING);
-		$interval = $input->get_var('interval','post',PLIB_Input::INTEGER);
+		$title = $input->get_var('task_title','post',FWS_Input::STRING);
+		$file = $input->get_var('task_file','post',FWS_Input::STRING);
+		$interval = $input->get_var('interval','post',FWS_Input::INTEGER);
 		$interval_type = $input->correct_var(
-			'interval_type','post',PLIB_Input::STRING,array('days','hours','minutes'),'days'
+			'interval_type','post',FWS_Input::STRING,array('days','hours','minutes'),'days'
 		);
-		$time_hour = $input->get_var('time_hour','post',PLIB_Input::INTEGER);
-		$time_min = $input->get_var('time_min','post',PLIB_Input::INTEGER);
-		$time_sec = $input->get_var('time_sec','post',PLIB_Input::INTEGER);
+		$time_hour = $input->get_var('time_hour','post',FWS_Input::INTEGER);
+		$time_min = $input->get_var('time_min','post',FWS_Input::INTEGER);
+		$time_sec = $input->get_var('time_sec','post',FWS_Input::INTEGER);
 		if($time_hour !== null && $time_min !== null && $time_sec !== null)
 			$time = $time_hour.':'.$time_min.':'.$time_sec;
 		else
 			$time = null;
-		$enabled = $input->get_var('enabled','post',PLIB_Input::INT_BOOL);
+		$enabled = $input->get_var('enabled','post',FWS_Input::INT_BOOL);
 		
 		$is_default = $type != 'add' && $helper->is_default_task($task['task_file']);
 		
@@ -67,7 +67,7 @@ final class BS_ACP_Action_tasks_edit extends BS_ACP_Action_Base
 			return 'task_missing_title';
 		
 		$file = basename($file);
-		if(!$is_default && !is_file(PLIB_Path::server_app().'src/tasks/'.$file))
+		if(!$is_default && !is_file(FWS_Path::server_app().'src/tasks/'.$file))
 			return 'task_invalid_file';
 		
 		// was it no default task but would be now?

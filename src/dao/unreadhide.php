@@ -21,7 +21,7 @@
  * @subpackage	src.dao
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-class BS_DAO_UnreadHide extends PLIB_Singleton
+class BS_DAO_UnreadHide extends FWS_Singleton
 {
 	/**
 	 * @return BS_DAO_UnreadHide the instance of this class
@@ -39,10 +39,10 @@ class BS_DAO_UnreadHide extends PLIB_Singleton
 	 */
 	public function get_all_of_user($uid)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Helper::is_integer($uid) || $uid <= 0)
-			PLIB_Helper::def_error('intgt0','uid',$uid);
+		if(!FWS_Helper::is_integer($uid) || $uid <= 0)
+			FWS_Helper::def_error('intgt0','uid',$uid);
 		
 		return $db->sql_rows(
 			'SELECT * FROM '.BS_TB_UNREAD_HIDE.'
@@ -58,20 +58,20 @@ class BS_DAO_UnreadHide extends PLIB_Singleton
 	 */
 	public function create($uid,$fids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
 		if(count($fids) == 0)
 			return;
 		
-		if(!PLIB_Helper::is_integer($uid) || $uid <= 0)
-			PLIB_Helper::def_error('intgt0','uid',$uid);
-		if(!PLIB_Array_Utils::is_integer($fids))
-			PLIB_Helper::def_error('intarray','fids',$fids);
+		if(!FWS_Helper::is_integer($uid) || $uid <= 0)
+			FWS_Helper::def_error('intgt0','uid',$uid);
+		if(!FWS_Array_Utils::is_integer($fids))
+			FWS_Helper::def_error('intarray','fids',$fids);
 		
 		$sql = 'INSERT INTO '.BS_TB_UNREAD_HIDE.' (forum_id,user_id) VALUES ';
 		foreach($fids as $fid)
 			$sql .= '('.$fid.','.$uid.'),';
-		$sql = PLIB_String::substr($sql,0,-1);
+		$sql = FWS_String::substr($sql,0,-1);
 		$db->sql_qry($sql);
 	}
 	
@@ -83,10 +83,10 @@ class BS_DAO_UnreadHide extends PLIB_Singleton
 	 */
 	public function delete_by_users($uids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($uids) || count($uids) == 0)
-			PLIB_Helper::def_error('intarray>0','uids',$uids);
+		if(!FWS_Array_Utils::is_integer($uids) || count($uids) == 0)
+			FWS_Helper::def_error('intarray>0','uids',$uids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_UNREAD_HIDE.' WHERE user_id IN ('.implode(',',$uids).')'
@@ -102,10 +102,10 @@ class BS_DAO_UnreadHide extends PLIB_Singleton
 	 */
 	public function delete_by_forums($fids)
 	{
-		$db = PLIB_Props::get()->db();
+		$db = FWS_Props::get()->db();
 
-		if(!PLIB_Array_Utils::is_integer($fids) || count($fids) == 0)
-			PLIB_Helper::def_error('intarray>0','fids',$fids);
+		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
+			FWS_Helper::def_error('intarray>0','fids',$fids);
 		
 		$db->sql_qry(
 			'DELETE FROM '.BS_TB_UNREAD_HIDE.' WHERE forum_id IN ('.implode(',',$fids).')'

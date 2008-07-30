@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; {charset}" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
-<script type="text/javascript" language="javascript" src="{gjs.get_file('js/basic.js','lib')}"></script>
+<script type="text/javascript" language="javascript" src="{gjs.get_file('js/basic.js','fws')}"></script>
 {if gisloggedin == false}
 <script type="text/javascript" language="javascript">
 <!--
@@ -25,9 +25,9 @@ var selected = -1;
 function ChangeSelection(id,default_class,selected_class)
 {
 	if(selected != -1)
-		PLIB_removeClassName(document.getElementById("item_" + selected),selected_class);
+		FWS_removeClassName(document.getElementById("item_" + selected),selected_class);
 	
-	PLIB_addClassName(document.getElementById("item_" + id),selected_class);
+	FWS_addClassName(document.getElementById("item_" + id),selected_class);
 	selected = id;
 }
 //-->

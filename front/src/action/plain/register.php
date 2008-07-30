@@ -27,19 +27,19 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 	 */
 	public static function get_default()
 	{
-		$input = PLIB_Props::get()->input();
-		$cfg = PLIB_Props::get()->cfg();
+		$input = FWS_Props::get()->input();
+		$cfg = FWS_Props::get()->cfg();
 		
 		// name and email
-		$user_name = $input->get_var('user_name','post',PLIB_Input::STRING);
-		$user_email = $input->get_var('user_email','post',PLIB_Input::STRING);
-		$user_email_conf = $input->get_var('user_email_conf','post',PLIB_Input::STRING);
+		$user_name = $input->get_var('user_name','post',FWS_Input::STRING);
+		$user_email = $input->get_var('user_email','post',FWS_Input::STRING);
+		$user_email_conf = $input->get_var('user_email_conf','post',FWS_Input::STRING);
 		if($user_email != $user_email_conf)
 			return 'emails_not_equal';
 
 		// password
-		$user_pw = $input->get_var('user_pw','post',PLIB_Input::STRING);
-		$user_pw_conf = $input->get_var('user_pw_conf','post',PLIB_Input::STRING);
+		$user_pw = $input->get_var('user_pw','post',FWS_Input::STRING);
+		$user_pw_conf = $input->get_var('user_pw_conf','post',FWS_Input::STRING);
 		if($user_pw != $user_pw_conf)
 			return 'registerpwsnichtidentisch';
 
@@ -51,11 +51,11 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 
 		// some other stuff
 		$email_display_mode = $input->correct_var(
-			'email_display_mode','post',PLIB_Input::STRING,array('hide','jumble','default'),'default'
+			'email_display_mode','post',FWS_Input::STRING,array('hide','jumble','default'),'default'
 		);
-		$allow_pms = $input->get_var('enable_pms','post',PLIB_Input::INT_BOOL);
+		$allow_pms = $input->get_var('enable_pms','post',FWS_Input::INT_BOOL);
 		$active = ($cfg['account_activation'] == 'none') ? true : false;
-		$allow_board_emails = $input->get_var('allow_board_emails','post',PLIB_Input::INT_BOOL);
+		$allow_board_emails = $input->get_var('allow_board_emails','post',FWS_Input::INT_BOOL);
 		
 		// build plain-action
 		return new BS_Front_Action_Plain_Register(
@@ -163,10 +163,10 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		$additional_fields = array(),$active = true,$email_display_mode = 'default',$allow_pms = true,
 		$allow_board_emails = true)
 	{
-		if(!PLIB_Array_Utils::is_integer($user_groups) || count($user_groups) == 0)
-			PLIB_Helper::def_error('intarray>0','user_groups',$user_groups);
+		if(!FWS_Array_Utils::is_integer($user_groups) || count($user_groups) == 0)
+			FWS_Helper::def_error('intarray>0','user_groups',$user_groups);
 		if(!is_array($additional_fields))
-			PLIB_Helper::def_error('array','additional_fields',$additional_fields);
+			FWS_Helper::def_error('array','additional_fields',$additional_fields);
 		
 		$this->_user_name = (string)$user_name;
 		$this->_user_pw = (string)$user_pw;
@@ -189,9 +189,9 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 	
 	public function check_data()
 	{
-		$functions = PLIB_Props::get()->functions();
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
 
 		// this is only possible if the community has not been exported
 		if(BS_ENABLE_EXPORT)
@@ -210,7 +210,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		if($functions->is_banned('user',$this->_user_name))
 			return 'usernamenotallowed';
 
-		$len = PLIB_String::strlen($this->_user_name);
+		$len = FWS_String::strlen($this->_user_name);
 		if($len < $cfg['profile_min_user_len'] && $len > $cfg['profile_max_user_len'])
 			return sprintf($locale->lang('error_wronguserlen'),
 										 $cfg['profile_min_user_len'],
@@ -224,7 +224,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 			return 'email_empty';
 
 		$this->_user_email = trim($this->_user_email);
-		if(!PLIB_StringHelper::is_valid_email($this->_user_email))
+		if(!FWS_StringHelper::is_valid_email($this->_user_email))
 			return 'invalid_email';
 
 		// does the email already exist?
@@ -263,13 +263,13 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 	
 	public function perform_action()
 	{
-		$db = PLIB_Props::get()->db();
-		$cfg = PLIB_Props::get()->cfg();
-		$locale = PLIB_Props::get()->locale();
-		$msgs = PLIB_Props::get()->msgs();
-		$ips = PLIB_Props::get()->ips();
-		$cookies = PLIB_Props::get()->cookies();
-		$input = PLIB_Props::get()->input();
+		$db = FWS_Props::get()->db();
+		$cfg = FWS_Props::get()->cfg();
+		$locale = FWS_Props::get()->locale();
+		$msgs = FWS_Props::get()->msgs();
+		$ips = FWS_Props::get()->ips();
+		$cookies = FWS_Props::get()->cookies();
+		$input = FWS_Props::get()->input();
 
 		parent::perform_action();
 		
@@ -349,7 +349,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		$user_key = '';
 		if($cfg['account_activation'] == 'email')
 		{
-			$user_key = PLIB_StringHelper::generate_random_key();
+			$user_key = FWS_StringHelper::generate_random_key();
 			BS_DAO::get_activation()->create($this->_user_id,$user_key);
 		}
 		

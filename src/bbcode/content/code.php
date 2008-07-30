@@ -35,14 +35,14 @@ final class BS_BBCode_Content_Code extends BS_BBCode_Content_Default
 	 */
 	public function get_param($param)
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
-		$this->_old_param = PLIB_String::strtolower($param);
+		$this->_old_param = FWS_String::strtolower($param);
 		if($param && $cfg['msgs_code_highlight'])
 		{
-			$hldir = PLIB_Path::server_app().'bbceditor/highlighter/';
-			PLIB_Highlighting_Languages::ensure_inited($hldir.'languages.xml');
-			$name = PLIB_Highlighting_Languages::get_language_name($this->_old_param);
+			$hldir = FWS_Path::server_app().'bbceditor/highlighter/';
+			FWS_Highlighting_Languages::ensure_inited($hldir.'languages.xml');
+			$name = FWS_Highlighting_Languages::get_language_name($this->_old_param);
 			if($name === null)
 				return $param;
 			return $name;
@@ -53,28 +53,28 @@ final class BS_BBCode_Content_Code extends BS_BBCode_Content_Default
 
 	public function get_text($inner,$param)
 	{
-		$cfg = PLIB_Props::get()->cfg();
+		$cfg = FWS_Props::get()->cfg();
 
 		$code = $this->_get_trimmed_code($inner);
 		
 		if($cfg['msgs_code_line_numbers'])
-			$line_count = count(PLIB_Array_Utils::advanced_explode("\n",$code));
+			$line_count = count(FWS_Array_Utils::advanced_explode("\n",$code));
 							
 		// highlight code?
 		$use_highlighting = $cfg['msgs_code_highlight'] && $param;
 		if($use_highlighting)
 		{
-			$hldir = PLIB_Path::server_app().'bbceditor/highlighter/';
-			PLIB_Highlighting_Languages::ensure_inited($hldir.'languages.xml');
+			$hldir = FWS_Path::server_app().'bbceditor/highlighter/';
+			FWS_Highlighting_Languages::ensure_inited($hldir.'languages.xml');
 			
 			// does the language exist?
-			if(!PLIB_Highlighting_Languages::contains_lang($this->_old_param))
+			if(!FWS_Highlighting_Languages::contains_lang($this->_old_param))
 				$use_highlighting = false;
 			else
 			{
 				$helper = BS_BBCode_Helper::get_instance();
-				$code = PLIB_StringHelper::htmlspecialchars_back($code);
-				$code_length = PLIB_String::strlen($code);
+				$code = FWS_StringHelper::htmlspecialchars_back($code);
+				$code_length = FWS_String::strlen($code);
 				$current_length = $helper->get_variable('code_total_length');
 				// determine if we already have highlighted too much
 				if($current_length + $code_length > BS_CODE_HIGHLIGHT_LIMIT)
@@ -87,9 +87,9 @@ final class BS_BBCode_Content_Code extends BS_BBCode_Content_Default
 					// ok, highlight the code
 					$helper->set_variable('code_total_length',$current_length + $code_length);
 	
-					$lang = new PLIB_Highlighting_Language_XML($hldir.$this->_old_param.'.xml');
-					$dec = new PLIB_Highlighting_Decorator_HTML();
-					$hl = new PLIB_Highlighting_Processor($code,$lang,$dec);
+					$lang = new FWS_Highlighting_Language_XML($hldir.$this->_old_param.'.xml');
+					$dec = new FWS_Highlighting_Decorator_HTML();
+					$hl = new FWS_Highlighting_Processor($code,$lang,$dec);
 					$code = $hl->highlight();
 					$code = '<code style="white-space: nowrap;">'.$code.'</code>';
 				}
@@ -142,11 +142,11 @@ final class BS_BBCode_Content_Code extends BS_BBCode_Content_Default
 		// walk forward until we've found a non-whitespace-character
 		$pos = 0;
 		$start = 0;
-		$len = PLIB_String::strlen($code);
+		$len = FWS_String::strlen($code);
 		while($pos < $len)
 		{
-			$c = PLIB_String::substr($code,$pos,1);
-			if(!PLIB_String::is_whitespace($c))
+			$c = FWS_String::substr($code,$pos,1);
+			if(!FWS_String::is_whitespace($c))
 				break;
 			
 			// have we found a line-wrap? so we'll remove everything in front this position
@@ -159,7 +159,7 @@ final class BS_BBCode_Content_Code extends BS_BBCode_Content_Default
 		// cut the beginning, if necessary
 		if($start > 0)
 		{
-			$code = PLIB_String::substr($code,$start);
+			$code = FWS_String::substr($code,$start);
 			$len -= $start;
 		}
 
@@ -168,8 +168,8 @@ final class BS_BBCode_Content_Code extends BS_BBCode_Content_Default
 		$end = $len - 1;
 		while($pos >= 0)
 		{
-			$c = PLIB_String::substr($code,$pos,1);
-			if(!PLIB_String::is_whitespace($c))
+			$c = FWS_String::substr($code,$pos,1);
+			if(!FWS_String::is_whitespace($c))
 				break;
 			
 			if($c == "\n")
@@ -180,7 +180,7 @@ final class BS_BBCode_Content_Code extends BS_BBCode_Content_Default
 
 		// cut the end if necessary
 		if($end < $len - 1)
-			$code = PLIB_String::substr($code,0,$end);
+			$code = FWS_String::substr($code,0,$end);
 
 		return $code;
 	}

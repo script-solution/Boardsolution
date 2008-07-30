@@ -17,7 +17,7 @@
  * @subpackage	front.src.search
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Search_Result_Topics extends PLIB_Object implements BS_Front_Search_Result
+final class BS_Front_Search_Result_Topics extends FWS_Object implements BS_Front_Search_Result
 {
 	public function get_name()
 	{
@@ -26,10 +26,10 @@ final class BS_Front_Search_Result_Topics extends PLIB_Object implements BS_Fron
 	
 	public function display_result($search,$request)
 	{
-		$cfg = PLIB_Props::get()->cfg();
-		$functions = PLIB_Props::get()->functions();
-		$locale = PLIB_Props::get()->locale();
-		$url = PLIB_Props::get()->url();
+		$cfg = FWS_Props::get()->cfg();
+		$functions = FWS_Props::get()->functions();
+		$locale = FWS_Props::get()->locale();
+		$url = FWS_Props::get()->url();
 
 		/* @var $search BS_Front_Search_Manager */
 		/* @var $request BS_Front_Search_Request */
@@ -74,7 +74,7 @@ final class BS_Front_Search_Result_Topics extends PLIB_Object implements BS_Fron
 	
 	public function get_noresults_message()
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		return $locale->lang('no_topics_found');
 	}

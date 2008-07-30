@@ -33,7 +33,7 @@ header('Content-Type: text/html; charset='.BS_HTML_CHARSET);
 
 ######################## OTHER ########################
 
-$user = PLIB_Props::get()->user();
+$user = FWS_Props::get()->user();
 
 echo '<h2>Demonstration der BS-Extern-API</h2>'."\n";
 // the API logs the user in if the autologin-cookies are set (and valid)
@@ -72,15 +72,15 @@ echo '<br />'."\n";
 echo '<br />'."\n";
 // print last login; we use the function BS_API_get_date() to print it in a human-readable format
 // $stats->last_login_time is just a timestamp which contains the number of seconds since 1.1.1970, 0:00
-echo 'Der letzte Login war <u>'.PLIB_Date::get_date($stats->last_login_time).'</u>'."\n";
-echo ' und der letzte Beitrag <u>'.PLIB_Date::get_date($stats->last_post_time).'</u>.'."\n";
+echo 'Der letzte Login war <u>'.FWS_Date::get_date($stats->last_login_time).'</u>'."\n";
+echo ' und der letzte Beitrag <u>'.FWS_Date::get_date($stats->last_post_time).'</u>.'."\n";
 echo '<br />'."\n";
 echo '<br />'."\n";
 // print the newest member
 echo 'Das neueste Mitglied ist: ';
 if($stats->newest_member_id)
 {
-	$url = PLIB_Props::get()->url();
+	$url = FWS_Props::get()->url();
 	$murl = $url->get_frontend_url(
 		'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$stats->newest_member_id
 	);
@@ -97,7 +97,7 @@ echo '<br />'."\n";
 // request module "online_user" to get the currently online user in the board
 $online = BS_API_get_module('online_user');
 
-$url = PLIB_Props::get()->url();
+$url = FWS_Props::get()->url();
 
 // collect the registered user
 $i = 0;
@@ -137,7 +137,7 @@ echo '<br />'."\n";
 // request "latest_topics" module
 $topics = BS_API_get_module('latest_topics');
 
-$url = PLIB_Props::get()->url();
+$url = FWS_Props::get()->url();
 
 // print header
 echo '<hr />'."\n";
@@ -154,7 +154,7 @@ echo '	</tr>'."\n";
 foreach($topics->latest_topics as $topic)
 {
 	// the topic-creation-date (its a timestamp like nearly all dates stored by Boardsolution)
-	$creation = PLIB_Date::get_date($topic['creation_date']);
+	$creation = FWS_Date::get_date($topic['creation_date']);
 	// topic-creation by a registered user?
 	if($topic['creation_user_id'] > 0)
 	{
@@ -169,7 +169,7 @@ foreach($topics->latest_topics as $topic)
 		$creation .= '<br />Von: '.$topic['creation_user_name'];
 	
 	// last post date
-	$lastpost = PLIB_Date::get_date($topic['lastpost_date']);
+	$lastpost = FWS_Date::get_date($topic['lastpost_date']);
 	// last post by a registered user?
 	if($topic['lastpost_user_id'] > 0)
 	{
@@ -223,7 +223,7 @@ echo '<b>Ungelesene Themen / PMs:</b><br />';
 // request "unread"-module
 $unread = BS_API_get_module('unread');
 
-$url = PLIB_Props::get()->url();
+$url = FWS_Props::get()->url();
 
 echo '<ul>'."\n";
 echo '	<li>Ungelesene Foren: ';
@@ -291,7 +291,7 @@ echo '<b>Termine in den n&auml;chsten 5 Tagen:</b><br />';
 // to the module with 5 days in seconds
 $events = BS_API_get_module('events',array('event_timeout' => 3600 * 24 * 5));
 
-$url = PLIB_Props::get()->url();
+$url = FWS_Props::get()->url();
 
 // are there any events?
 if(count($events->events) > 0)
@@ -316,7 +316,7 @@ if(count($events->events) > 0)
 		}
 		
 		// print the link to the topic / event-details and append the date of the event
-		echo '<a href="'.$murl.'">'.$edata['title'].'</a> ('.PLIB_Date::get_date($edata['begin'],false).')';
+		echo '<a href="'.$murl.'">'.$edata['title'].'</a> ('.FWS_Date::get_date($edata['begin'],false).')';
 		
 		// the separator
 		if($i < count($events->events) - 1)
@@ -345,7 +345,7 @@ if(count($events->birthdays) > 0)
 		// $bdata['birthday'] has the format YYYY-MM-DD. therefore we split it at "-" to get the parts of it
 		$parts = explode('-',$bdata['add_birthday']);
 		// calculate the age of the user
-		echo ' ('.(PLIB_Date::get_formated_date('Y') - $parts[0]).')';
+		echo ' ('.(FWS_Date::get_formated_date('Y') - $parts[0]).')';
 		
 		// print separator
 		if($i < count($events->birthdays) - 1)

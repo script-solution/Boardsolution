@@ -21,7 +21,7 @@ final class BS_ACP_Action_smileys_import extends BS_ACP_Action_Base
 {
 	public function perform_action()
 	{
-		$locale = PLIB_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();
 
 		$i = BS_DAO::get_smileys()->get_next_sort_key();
 		
