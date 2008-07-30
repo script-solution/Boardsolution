@@ -123,16 +123,5 @@ final class BS_ACP_Document_Navi extends BS_ACP_Document
 		
 		$tpl->add_array('categories',$tpl_categories);
 	}
-
-	/**
-	 * @see FWS_Document::load_module()
-	 *
-	 * @return BS_Front_Module
-	 */
-	protected function load_module()
-	{
-		// no module here
-		return null;
-	}
 }
 ?>

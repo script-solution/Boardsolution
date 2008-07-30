@@ -100,16 +100,5 @@ final class BS_ACP_Document_Frameset extends BS_ACP_Document
 		$this->finish();
 		return $res;
 	}
-
-	/**
-	 * @see FWS_Document::load_module()
-	 *
-	 * @return BS_Front_Module
-	 */
-	protected function load_module()
-	{
-		// no module here
-		return null;
-	}
 }
 ?>
