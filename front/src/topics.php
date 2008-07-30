@@ -413,7 +413,7 @@ final class BS_Front_Topics extends FWS_Object
 				foreach($this->_keywords as $kw)
 					$kws .= '"'.$kw.'" ';
 				$kws = rtrim($kws);
-				$highlight_param = '&amp;'.BS_URL_HL.'='.urlencode($kws);
+				$highlight_param = '&amp;'.BS_URL_HL.'='.$kws;
 			}
 
 			$cache = array(

@@ -94,7 +94,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 		{
 			if(($s_group == null || in_array($gdata['id'],$s_group)) &&
 				 $gdata['id'] != BS_STATUS_GUEST && $gdata['is_visible'] == 1)
-				$baseurl .= BS_URL_MS_GROUP.urlencode('[]').'='.$gdata['id'].'&amp;';
+				$baseurl .= BS_URL_MS_GROUP.'[]='.$gdata['id'].'&amp;';
 		}
 
 		$baseurl .= BS_URL_MS_FROM_POSTS.'='.$s_from_posts.'&amp;';

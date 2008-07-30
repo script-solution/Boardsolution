@@ -199,7 +199,7 @@ final class BS_Auth extends FWS_Object
 			
 			if($add_links)
 			{
-				$murl = BS_URL::get_url('memberlist','&amp;'.BS_URL_MS_GROUP.urlencode('[]').'='.$gid);
+				$murl = BS_URL::get_url('memberlist','&amp;'.BS_URL_MS_GROUP.'[]='.$gid);
 				$group = '<a href="'.$murl.'" style="color: #'.$gdata['group_color'].';">';
 				$group .= $gdata['group_title'].'</a>';
 			}

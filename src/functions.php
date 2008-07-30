@@ -123,6 +123,8 @@ final class BS_Functions extends FWS_Object
 		
 		if($cfg['show_always_page_split'] == 1 || $pagination->get_page_count() > 1)
 		{
+			$repl = urlencode('{d}');
+			
 			$page = $pagination->get_page();
 			$numbers = $pagination->get_page_numbers();
 			$tnumbers = array();
@@ -131,7 +133,7 @@ final class BS_Functions extends FWS_Object
 				$number = $n;
 				$link = '';
 				if(FWS_Helper::is_integer($n))
-					$link = str_replace('{d}',$n,$url);
+					$link = str_replace($repl,$n,$url);
 				else
 					$link = '';
 				$tnumbers[] = array(
@@ -152,10 +154,10 @@ final class BS_Functions extends FWS_Object
 				'start_item' => $start_item,
 				'end_item' => $end_item,
 				'total_items' => $pagination->get_num(),
-				'prev_url' => str_replace('{d}',$page - 1,$url),
-				'next_url' => str_replace('{d}',$page + 1,$url),
-				'first_url' => str_replace('{d}',1,$url),
-				'last_url' => str_replace('{d}',$pagination->get_page_count(),$url)
+				'prev_url' => str_replace($repl,$page - 1,$url),
+				'next_url' => str_replace($repl,$page + 1,$url),
+				'first_url' => str_replace($repl,1,$url),
+				'last_url' => str_replace($repl,$pagination->get_page_count(),$url)
 			));
 			$tpl->restore_template();
 		}
@@ -173,6 +175,7 @@ final class BS_Functions extends FWS_Object
 		$res = '';
 		$page = $pagination->get_page();
 		$numbers = $pagination->get_page_numbers();
+		$repl = urlencode('{d}');
 		foreach($numbers as $n)
 		{
 			if(FWS_Helper::is_integer($n))
@@ -180,7 +183,7 @@ final class BS_Functions extends FWS_Object
 				if($n == $page)
 					$res .= $n.' ';
 				else
-					$res .= '<a href="'.str_replace('{d}',$n,$link).'">'.$n.'</a> ';
+					$res .= '<a href="'.str_replace($repl,$n,$link).'">'.$n.'</a> ';
 			}
 			else
 				$res .= ' '.$n.' ';
@@ -203,11 +206,12 @@ final class BS_Functions extends FWS_Object
 		$result = '';
 		if($total_pages > 1)
 		{
+			$repl = urlencode('{d}');
 			$result = '[ '.$locale->lang('pages').': ';
 			for($i = 1;$i <= $total_pages;$i++)
 			{
 				if($i < 5)
-					$result .= '<a href="'.str_replace('{d}',$i,$link).'">'.$i.'</a> ';
+					$result .= '<a href="'.str_replace($repl,$i,$link).'">'.$i.'</a> ';
 			}
 	
 			if($total_pages > 5)
@@ -215,7 +219,7 @@ final class BS_Functions extends FWS_Object
 	
 			if($total_pages > 4)
 			{
-				$result .= '<a href="'.str_replace('{d}',$total_pages,$link).'">';
+				$result .= '<a href="'.str_replace($repl,$total_pages,$link).'">';
 				$result .= $total_pages.'</a>';
 			}
 	

@@ -110,7 +110,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				if($hl !== null)
 				{
 					$hl = stripslashes(FWS_StringHelper::htmlspecialchars_back($hl));
-					$hl_add = '&'.BS_URL_HL.'='.$hl;
+					$hl_add = '&'.BS_URL_HL.'='.urlencode($hl);
 				}
 				
 				$post_index = 0;

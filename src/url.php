@@ -346,7 +346,9 @@ final class BS_URL extends FWS_URL
 		foreach($params as $p)
 		{
 			@list($k,$v) = explode('=',$p);
-			$url->set($k,$v);
+			// urldecode the value because we will encode it anyway and we assume that it is already
+			// encoded, if necessary. Otherwise we would get problems with splitting by &
+			$url->set($k,urldecode($v));
 		}
 	}
 	

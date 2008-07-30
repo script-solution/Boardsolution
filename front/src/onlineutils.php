@@ -200,7 +200,7 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 				{
 					$murl = BS_URL::get_url(
 						'memberlist',
-						'&amp;'.BS_URL_MS_GROUP.urlencode('[]').'='.$gdata['id']
+						'&amp;'.BS_URL_MS_GROUP.'[]='.$gdata['id']
 					);
 					$legend .= '<a href="'.$murl.'">'.$gname.'</a>, ';
 				}

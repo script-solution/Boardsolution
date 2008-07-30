@@ -195,7 +195,10 @@ final class BS_Front_Search_Utils extends FWS_UtilBase
 		{
 			if(($trimmed = trim($split[$i])) != '' &&
 					FWS_String::strlen($trimmed) >= BS_SEARCH_MIN_KEYWORD_LEN && !isset($ignore[$trimmed]))
-				$sections[] = $trimmed;
+			{
+				// we delete all &, < and > to prevent problems
+				$sections[] = str_replace(array('&','<','>'),'',$trimmed);
+			}
 		}
 	}
 }
