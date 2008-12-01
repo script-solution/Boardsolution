@@ -97,7 +97,6 @@ define('BS_EXPORT_REGISTER_LINK','');
  * Valid values are: 'enabled', 'disabled' and 'link'
  * 
  * 'enabled' could make sense if the community you export to does not have this feature.
- * Note that this 
  */
 define('BS_EXPORT_SEND_PW_TYPE','disabled');
 
