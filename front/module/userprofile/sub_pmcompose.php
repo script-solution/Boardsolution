@@ -123,7 +123,7 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		$error_msg = $this->_add_new_receiver($receiver,$new_receiver);
 
 		// display an error-message if not all receiver have been added
-		if(is_string($error_msg) && $error_msg != 'no_receivers_assigned')
+		if(is_string($error_msg))
 		{
 			$locale->add_language_file('messages');
 			$msgs->add_error($locale->lang($error_msg));
@@ -196,7 +196,10 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		{
 			// the user has to allow pms
 			if($data['allow_pms'] == 0)
+			{
+				$add_error = true;
 				continue;
+			}
 			
 			// have we reached the maximum?
 			if(count($found_user) >= BS_MAX_PM_RECEIVER)
@@ -234,7 +237,7 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 			$add_error = true;
 
 		// no user found?
-		if(count($found_user) == 0 && count($receiver) == 0)
+		if(!$add_error && count($found_user) == 0 && count($receiver) == 0)
 			return 'no_receivers_assigned';
 
 		// add the found receiver
