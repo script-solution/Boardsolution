@@ -12,7 +12,7 @@
 		</div>
 		<div style="float: right;">
 			{if enable_portal}
-			<a href="{gurl.get_portal_url()}" title="{unread_news_title}">{glocale.lang('portal')}</a>
+			<a href="{gurl.build_portal_url()}" title="{unread_news_title}">{glocale.lang('portal')}</a>
 			{if gisloggedin}
 			({if unread_news_count > 0}<span class="bs_unread">{unread_news_count}</span>{else}0{endif})
 			{endif}
@@ -36,7 +36,7 @@
 			
 			{if enable_pms}
 			<a title="{glocale.lang('privatemsgs')} ( {unread_pm_count} {glocale.lang('newmsgs')} )"
-			   href="{gurl.simple_url('userprofile','&amp;$URL_LOC=pmoverview')}">{glocale.lang('privatemsgs')}</a>
+			   href="{gurl.simple_url('userprofile','&amp;$URL_SUB=pmoverview')}">{glocale.lang('privatemsgs')}</a>
 			({if unread_pm_count > 0}<span class="bs_unread">{unread_pm_count}</span>{else}0{endif}) &middot;
 			{endif}
 			<a title="{glocale.lang('unread_threads')}"

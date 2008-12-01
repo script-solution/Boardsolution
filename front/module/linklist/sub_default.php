@@ -45,6 +45,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 		$msgs = FWS_Props::get()->msgs();
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
+		
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		
 		$num = BS_DAO::get_links()->get_count(1);
@@ -77,6 +78,9 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 				
 				$links = array();
 				$thiskat = '';
+				$durl = BS_URL::get_mod_url();
+				$rurl = BS_URL::get_standalone_url('linklist_redirect');
+				
 				foreach($linklist as $i => $data)
 				{
 					$bbcode = new BS_BBCode_Parser($data['link_desc'],'desc',$enable_bbcode,$enable_smileys);
@@ -87,7 +91,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 					else
 						$murl = $data['link_url'];
 	
-					$redirect_url = BS_URL::get_url('linklist_redirect','&amp;'.BS_URL_ID.'='.$data['id']);
+					$redirect_url = $rurl->set(BS_URL_ID,$data['id'])->to_url();
 	
 					$links[] = array(
 						'id' => $data['id'],
@@ -106,7 +110,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 						),
 						'redirect_url' => $redirect_url,
 						'link_date' => FWS_Date::get_date($data['link_date'],false),
-						'details_url' => BS_URL::get_url(0,'&amp;'.BS_URL_ID.'='.$data['id']).'#details',
+						'details_url' => $durl->set(BS_URL_ID,$data['id'])->to_url(),
 						'display' => ($id == $data['id']) ? 'block' : 'none'
 					);
 					
@@ -115,9 +119,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 
 				$tpl->add_array('links',$links,false);
 
-				$functions->add_pagination(
-					$pagination,BS_URL::get_url('linklist','&amp;'.BS_URL_SITE.'={d}')
-				);
+				$pagination->populate_tpl(BS_URL::get_mod_url('linklist'));
 			}
 			else
 				$msgs->add_notice($locale->lang('no_links_found'));
@@ -127,7 +129,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 		
 		$tpl->add_variables(array(
 			'show_add_link' => $cfg['display_denied_options'] || $auth->has_global_permission('add_new_link'),
-			'add_link_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=add')
+			'add_link_url' => BS_URL::build_sub_url(0,'add')
 		));
 	}
 }

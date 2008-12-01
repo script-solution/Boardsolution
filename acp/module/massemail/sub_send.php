@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -115,7 +115,7 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 			'title' => $locale->lang('send_emails_process'),
 			'percent' => round($this->_pm->get_percentage(),1),
 			'message' => $message,
-			'target_url' => BS_URL::get_acpmod_url(0,'&action=send','&')
+			'target_url' => BS_URL::build_acpsub_url(0,'send','&')
 		));
 	}
 

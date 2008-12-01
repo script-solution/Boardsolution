@@ -23,7 +23,6 @@ final class BS_Front_Action_change_password_default extends BS_Front_Action_Base
 	{
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$functions = FWS_Props::get()->functions();
 		$user = FWS_Props::get()->user();
 
 		// check if the user is allowed to do this
@@ -75,7 +74,7 @@ final class BS_Front_Action_change_password_default extends BS_Front_Action_Base
 		BS_Community_Manager::get_instance()->fire_user_changed($u);
 		
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('forumindex'),$functions->get_start_url());
+		$this->add_link($locale->lang('forumindex'),BS_URL::get_start_url());
 
 		return '';
 	}

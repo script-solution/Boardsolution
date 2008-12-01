@@ -207,17 +207,17 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 				else if($i == $num - 2)
 					$text .= ' '.$locale->lang('and').' ';
 			}
-
-			$yes_url = BS_URL::get_acpmod_url(
-				0,'&amp;action=editor&amp;theme='.$theme
-					.'&amp;class='.$class.'&amp;at='.BS_ACP_ACTION_THEME_EDITOR_SIMPLE_DELETE.'&ids='.$ids
-			);
-			$no_url = BS_URL::get_acpmod_url(
-				0,'&amp;action=editor&amp;theme='.$theme.'&amp;class='.$class
-			);
 			
+			$url = BS_URL::get_acpsub_url(0,'editor');
+			$url->set('theme',$theme);
+			$url->set('class','$class');
+			
+			$yurl = clone $url;
+			$yurl->set('at',BS_ACP_ACTION_THEME_EDITOR_SIMPLE_DELETE);
+			$yurl->set('ids',$ids);
+
 			$functions->add_delete_message(
-				sprintf($locale->lang('delete_message'),$text),$yes_url,$no_url
+				sprintf($locale->lang('delete_message'),$text),$yurl->to_url(),$url->to_url()
 			);
 		}
 
@@ -225,14 +225,14 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 		if($class == null)
 			$class = $input->set_var('class','get',current($classes));
 
-		$base_url = BS_URL::get_acpmod_url(
-			0,'&amp;action=editor&amp;theme='.$theme.'&amp;mode=simple'
-		);
+		$baseurl = BS_URL::get_acpsub_url(0,'editor');
+		$baseurl->set('theme',$theme);
+		$baseurl->set('mode','simple');
 
 		$tpl->set_template('themes_editor_simple.htm');
 		$tpl->add_variables(array(
 			'action_type' => BS_ACP_ACTION_THEME_EDITOR_SIMPLE_SAVE,
-			'target_url' => $base_url.'&amp;class='.$class
+			'target_url' => $baseurl->set('class',$class)->to_url()
 		));
 
 		$cats = array();
@@ -249,7 +249,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 					$menu_item = '- '.$locale->lang($iname,false);
 				else
 				{
-					$menu_item = '- <a href="'.$base_url.'&amp;class='.$iclass.'">';
+					$menu_item = '- <a href="'.$baseurl->set('class',$iclass)->to_url().'">';
 					$menu_item .= $locale->lang($iname,false).'</a>';
 				}
 
@@ -850,7 +850,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 		}
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

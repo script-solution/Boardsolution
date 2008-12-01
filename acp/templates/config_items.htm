@@ -12,7 +12,7 @@
 			<label for="keyword_field">{glocale.lang('search_in_settings')}:</label>
 			<input type="text" id="keyword_field" name="kw" value="{keyword}" size="20" maxlength="50" />
 			<input type="submit" value="{glocale.lang('search')}" />
-			<input type="reset" value="{glocale.lang('reset')}" onclick="document.location.href = '{gurl.get_acpmod_url()}';" />
+			<input type="reset" value="{glocale.lang('reset')}" onclick="document.location.href = '{gurl.simple_acp_url()}';" />
 			</td>
 		</tr>
 		<tr>
@@ -22,7 +22,7 @@
 		<tr>
 			{loop grouprow as group}
 			<td align="center" width="{groups_width}%" style="font-size: 1.0em;" class="{group:class}">
-			<a href="{gurl.get_acpmod_url(0,'&amp;action=items&amp;gid='~group:id)}"><b>{group:title}</b></a>
+			<a href="{gurl.simple_acp_url(0,'&amp;action=items&amp;gid='~group:id)}"><b>{group:title}</b></a>
 			{if group:description}
 			<div class="a_desc">{group:description}</div>
 			{endif}
@@ -64,8 +64,8 @@
 				{if item:is_default == false}
 				<a style="float: right;" href="
 				{if view == 'search'}
-				{gurl.get_acpmod_url(0,'&amp;action=search&amp;kw='~kw~'&amp;id='~item:id~'&amp;at='~at)}
-				{else}{gurl.get_acpmod_url(0,'&amp;action=items&amp;gid='~gid~'&amp;id='~item:id~'&amp;at='~at)}
+				{gurl.simple_acp_url(0,'&amp;action=search&amp;kw='~kw~'&amp;id='~item:id~'&amp;at='~at)}
+				{else}{gurl.simple_acp_url(0,'&amp;action=items&amp;gid='~gid~'&amp;id='~item:id~'&amp;at='~at)}
 				{endif}
 				"><img src="{gpath}acp/images/reset.png" alt="{glocale.lang('revert_setting')}" title="{glocale.lang('revert_setting')}" /></a>
 				{endif}

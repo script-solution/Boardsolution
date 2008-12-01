@@ -157,11 +157,11 @@ class BS_PropLoader extends FWS_PropLoader
 		$c->add_allowed_method('gjs','get_file');
 		$c->add_allowed_method('glocale','lang');
 		$c->add_allowed_method('gurl','simple_url');
-		$c->add_allowed_method('gurl','get_admin_url');
-		$c->add_allowed_method('gurl','get_forums_url');
-		$c->add_allowed_method('gurl','get_portal_url');
-		$c->add_allowed_method('gurl','get_topics_url');
-		$c->add_allowed_method('gurl','get_posts_url');
+		$c->add_allowed_method('gurl','build_admin_url');
+		$c->add_allowed_method('gurl','build_forums_url');
+		$c->add_allowed_method('gurl','build_portal_url');
+		$c->add_allowed_method('gurl','build_topics_url');
+		$c->add_allowed_method('gurl','build_posts_url');
 		$c->add_allowed_method('guser','get_theme_item_path');
 		
 		return $c;
@@ -204,36 +204,7 @@ class BS_PropLoader extends FWS_PropLoader
 	 */
 	protected function input()
 	{
-		$c = FWS_Input::get_instance();
-		
-		// predefine values
-		/*$c->set_predef(TDL_URL_ACTION,'get',FWS_Input::STRING);
-		$c->set_predef(TDL_URL_ORDER,'get',FWS_Input::STRING,
-			array('changed','type','title','project','start','fixed'));
-		$c->set_predef(TDL_URL_AD,'get',FWS_Input::STRING,array('ASC','DESC'));
-		$c->set_predef(TDL_URL_MODE,'get',FWS_Input::STRING);
-		$c->set_predef(TDL_URL_LOC,'get',FWS_Input::STRING);
-		$c->set_predef(TDL_URL_AT,'get',FWS_Input::INTEGER);
-		$c->set_predef(TDL_URL_ID,'get',FWS_Input::ID);
-		$c->set_predef(TDL_URL_IDS,'get',FWS_Input::STRING);
-		$c->set_predef(TDL_URL_SID,'get',FWS_Input::ID);
-		$c->set_predef(TDL_URL_SITE,'get',FWS_Input::INTEGER);
-		$c->set_predef(TDL_URL_LIMIT,'get',FWS_Input::INTEGER);
-		$c->set_predef(TDL_URL_S_KEYWORD,'get',FWS_Input::STRING);
-		$c->set_predef(TDL_URL_S_FROM_CHANGED_DATE,'get',FWS_Input::STRING);
-		$c->set_predef(TDL_URL_S_TO_CHANGED_DATE,'get',FWS_Input::STRING);
-		$c->set_predef(TDL_URL_S_FROM_START_DATE,'get',FWS_Input::STRING);
-		$c->set_predef(TDL_URL_S_TO_START_DATE,'get',FWS_Input::STRING);
-		$c->set_predef(TDL_URL_S_FROM_FIXED_DATE,'get',FWS_Input::STRING);
-		$c->set_predef(TDL_URL_S_TO_FIXED_DATE,'get',FWS_Input::STRING);
-		$c->set_predef(TDL_URL_S_TYPE,'get',FWS_Input::STRING,
-			array('','bug','feature','improvement','test'));
-		$c->set_predef(TDL_URL_S_PRIORITY,'get',FWS_Input::STRING,
-			array('','current','next','anytime'));
-		$c->set_predef(TDL_URL_S_STATUS,'get',FWS_Input::STRING,
-			array('','open','running','fixed','not_tested'));
-		$c->set_predef(TDL_URL_S_CATEGORY,'get',FWS_Input::ID);*/
-		return $c;
+		return FWS_Input::get_instance();
 	}
 
 	/**

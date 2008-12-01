@@ -22,7 +22,7 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -34,7 +34,7 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 		$renderer->add_action(BS_ACP_ACTION_USER_ACT_DELETE,'delete');
 		$renderer->add_action(BS_ACP_ACTION_USER_ACT_ACTIVATE,'activate');
 
-		$renderer->add_breadcrumb($locale->lang('acpmod_user_activation'),BS_URL::get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_user_activation'),BS_URL::build_acpmod_url());
 	}
 	
 	/**
@@ -77,10 +77,12 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 				$names[] = $user['user_name'];
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
+			$url = BS_URL::get_acpmod_url();
+			$url->set('at',$at);
+			$url->set('ids',$id_str);
+			
 			$functions->add_delete_message(
-				sprintf($msg,$namelist),
-				BS_URL::get_acpmod_url(0,'&amp;at='.$at.'&amp;ids='.$id_str),
-				BS_URL::get_acpmod_url()
+				sprintf($msg,$namelist),$url->to_url(),BS_URL::build_acpmod_url()
 			);
 		}
 		
@@ -107,7 +109,7 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 		));
 		$tpl->add_array('user',$user);
 
-		$functions->add_pagination($pagination,BS_URL::get_acpmod_url(0,'&amp;site={d}'));
+		$pagination->populate_tpl(BS_URL::get_acpmod_url());
 	}
 }
 ?>

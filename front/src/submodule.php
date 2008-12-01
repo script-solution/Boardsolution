@@ -57,9 +57,9 @@ abstract class BS_Front_SubModule extends BS_Front_Module
 		$this->_template = $template;
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
-		return array_merge(parent::get_print_vars(),get_object_vars($this));
+		return array_merge(parent::get_dump_vars(),get_object_vars($this));
 	}
 }
 ?>

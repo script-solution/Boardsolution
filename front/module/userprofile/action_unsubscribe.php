@@ -46,8 +46,9 @@ final class BS_Front_Action_userprofile_unsubscribe extends BS_Front_Action_Base
 
 		$this->set_action_performed(true);
 		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
-		$murl = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'='.$type.'&amp;'.BS_URL_SITE.'='.$site);
-		$this->add_link($locale->lang('back'),$murl);
+		$url = BS_URL::get_sub_url('userprofile',$type);
+		$url->set(BS_URL_SITE,$site);
+		$this->add_link($locale->lang('back'),$url);
 
 		return '';
 	}

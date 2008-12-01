@@ -33,7 +33,7 @@ final class BS_Front_SubModule_userprofile_signature extends BS_Front_SubModule
 		
 		$renderer->add_action(BS_ACTION_EDIT_SIGNATURE,'updatesig');
 
-		$renderer->add_breadcrumb($locale->lang('signature'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=signature'));
+		$renderer->add_breadcrumb($locale->lang('signature'),BS_URL::build_sub_url());
 	}
 	
 	/**
@@ -64,7 +64,7 @@ final class BS_Front_SubModule_userprofile_signature extends BS_Front_SubModule
 		
 		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_EDIT_SIGNATURE,
-			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=signature'),
+			'target_url' => BS_URL::build_sub_url(),
 			'signature_preview' => $bbcode->get_message_for_output()
 		));
 	}

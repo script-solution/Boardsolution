@@ -32,14 +32,16 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 		$sel_ts = FWS_Date::get_timestamp(array(0,0,0,$month,1,$year));
 		$mon_len = FWS_Date::get_formated_date('t',$sel_ts);
 		list($prevyear,$prevmonth) = $helper->get_relative_date($month,$year,-1);
-		$back_url = BS_URL::get_url(
-			'calendar','&amp;'.BS_URL_YEAR.'='.$prevyear.'&amp;'.BS_URL_MONTH.'='.$prevmonth
-		);
+		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_YEAR,$prevyear);
+		$url->set(BS_URL_MONTH,$prevmonth);
+		$back_url = $url->to_url();
 	
 		list($nextyear,$nextmonth) = $helper->get_relative_date($month,$year,1);
-		$forward_url = BS_URL::get_url(
-			'calendar','&amp;'.BS_URL_YEAR.'='.$nextyear.'&amp;'.BS_URL_MONTH.'='.$nextmonth
-		);
+		$url->set(BS_URL_YEAR,$nextyear);
+		$url->set(BS_URL_MONTH,$nextmonth);
+		$forward_url = $url->to_url();
 	
 		$weekdays = $helper->get_weekdays();
 		$tpl->add_array('wd_detail',$weekdays);
@@ -58,10 +60,11 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 		$week = FWS_Date::get_timestamp(
 			array(0,0,0,$month,1,$year),FWS_Date::TZ_USER,'-'.$month_offset.'days'
 		);
+		$weekurl = BS_URL::get_sub_url(0,'week');
 		for($w = 0;$w < 6;$w++)
 		{
 			$weeks[$w] = array();
-			$weeks[$w]['url'] = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_WEEK.'='.$week);
+			$weeks[$w]['url'] = $weekurl->set(BS_URL_WEEK,$week)->to_url();
 			$weeks[$w]['days'] = array();
 	
 			$end_week = ($w * 7) + 7;

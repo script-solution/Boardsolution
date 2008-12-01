@@ -39,8 +39,8 @@ final class BS_Front_Action_logout extends BS_Front_Action_Base
 		}
 		
 		$this->set_success_msg(sprintf($locale->lang('success_'.BS_ACTION_LOGOUT),$username));
-		$this->set_redirect(true,$functions->get_start_url());
-		$this->add_link($locale->lang('forumindex'),$functions->get_start_url());
+		$this->set_redirect(true,BS_URL::get_start_url());
+		$this->add_link($locale->lang('forumindex'),BS_URL::get_start_url());
 		$this->set_action_performed(true);
 		
 		return '';

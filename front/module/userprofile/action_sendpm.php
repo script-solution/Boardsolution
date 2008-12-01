@@ -61,11 +61,11 @@ final class BS_Front_Action_userprofile_sendpm extends BS_Front_Action_Base
 		));
 		$this->add_link(
 			$locale->lang('go_to_inbox'),
-			BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pminbox')
+			BS_URL::get_sub_url('userprofile','pminbox')
 		);
 		$this->add_link(
 			$locale->lang('compose_another_pm'),
-			BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pmcompose')
+			BS_URL::get_sub_url('userprofile','pmcompose')
 		);
 
 		return '';

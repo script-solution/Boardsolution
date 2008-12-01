@@ -39,31 +39,38 @@ final class BS_Front_Action_userprofile_deletepms extends BS_Front_Action_Base
 			return 'Invalid id-string got via GET';
 
 		// collect attachments
+		$me = $user->get_user_id();
+		$ownids = array();
 		foreach(BS_DAO::get_attachments()->get_by_pmids($ids) as $data)
 		{
-			// PM-attachments are used for 2 PMs: the PM of the sender and the PM of the receiver
-			// Therefore we delete the attachment-file as soon as both PMs have been deleted
-			if(BS_DAO::get_attachments()->get_attachment_count_of_path($data['attachment_path']) == 1)
-				$functions->delete_attachment($data['attachment_path']);
+			if($data['poster_id'] == $me)
+			{
+				$ownids[] = $data['id'];
+				// PM-attachments are used for 2 PMs: the PM of the sender and the PM of the receiver
+				// Therefore we delete the attachment-file as soon as both PMs have been deleted
+				if(BS_DAO::get_attachments()->get_attachment_count_of_path($data['attachment_path']) == 1)
+					$functions->delete_attachment($data['attachment_path']);
+			}
 		}
 
-		BS_DAO::get_attachments()->delete_by_pmids($ids);
+		if(count($ownids) > 0)
+			BS_DAO::get_attachments()->delete_by_pmids($ownids);
 
 		BS_DAO::get_pms()->delete_pms_of_user($ids,$user->get_user_id());
 
 		// finish
 		$this->set_action_performed(true);
-		$loc = $input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
+		$loc = $input->get_var(BS_URL_SUB,'get',FWS_Input::STRING);
 		if($loc == 'pmsearch')
 		{
 			$id = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
 			$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::ID);
-			$murl = BS_URL::get_url(
-				0,'&amp;'.BS_URL_LOC.'=pmsearch&amp;'.BS_URL_ID.'='.$id.'&amp;'.BS_URL_SITE.'='.$site
-			);
+			$murl = BS_URL::get_sub_url('userprofile','pmsearch');
+			$murl->set(BS_URL_ID,$id);
+			$murl->set(BS_URL_SITE,$site);
 		}
 		else
-			$murl = BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'='.$loc);
+			$murl = BS_URL::get_sub_url();
 		
 		$this->add_link($locale->lang('back'),$murl);
 

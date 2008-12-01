@@ -40,7 +40,7 @@ final class BS_DBA_PropLoader extends BS_PropLoader
 		$url = new BS_DBA_URL();
 		$tpl->add_global_ref('gurl',$url);
 		$tpl->remove_allowed_methods('gurl');
-		$tpl->add_allowed_method('gurl','get_url');
+		$tpl->add_allowed_method('gurl','build_url');
 		
 		return $tpl;
 	}

@@ -33,7 +33,7 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 		
 		$renderer->add_action(BS_ACTION_UNSUBSCRIBE_TOPIC,array('unsubscribe','topics'));
 
-		$renderer->add_breadcrumb($locale->lang('threads'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=topics'));
+		$renderer->add_breadcrumb($locale->lang('threads'),BS_URL::build_sub_url());
 	}
 	
 	/**
@@ -68,19 +68,22 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 			foreach($subscr as $data)
 				$names[] = $data['name'];
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
-			
-			$loc = '&amp;'.BS_URL_LOC.'='.$input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
 			$string_ids = implode(',',$delete);
-			$yes_url = BS_URL::get_url(
-				0,
-				$loc.'&amp;'.BS_URL_AT.'='.BS_ACTION_UNSUBSCRIBE_TOPIC
-					.'&amp;'.BS_URL_DEL.'='.$string_ids.'&amp;'.BS_URL_SITE.'='.$site,'&amp;',true
-			);
-			$no_url = BS_URL::get_url(0,$loc.'&amp;'.BS_URL_SITE.'='.$site);
-			$target = BS_URL::get_url(
-				'redirect','&amp;'.BS_URL_LOC.'=del_subscr&amp;'.BS_URL_ID.'='.$string_ids
-					.'&amp;'.BS_URL_SITE.'='.$site
-			);
+			
+			$url = BS_URL::get_sub_url();
+			$url->set(BS_URL_SITE,$site);
+			$no_url = $url->to_url();
+			
+			$url->set(BS_URL_AT,BS_ACTION_UNSUBSCRIBE_TOPIC);
+			$url->set(BS_URL_DEL,$string_ids);
+			$url->set_sid_policy(BS_URL::SID_FORCE);
+			$yes_url = $url->to_url();
+			
+			$url = BS_URL::get_mod_url('redirect');
+			$url->set(BS_URL_LOC,'del_subscr');
+			$url->set(BS_URL_ID,$string_ids);
+			$url->set(BS_URL_SITE,$site);
+			$target = $url->to_url();
 
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_subscr_topics'),$namelist),
@@ -92,8 +95,11 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 		$num = BS_DAO::get_subscr()->get_subscr_topics_count($user->get_user_id());
 		$pagination = new BS_Pagination($end,$num);
 		
+		$url = BS_URL::get_sub_url();
+		$url->set(BS_URL_SITE,$site);
+		
 		$tpl->add_variables(array(
-			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=topics&amp;'.BS_URL_SITE.'='.$site),
+			'target_url' => $url->to_url(),
 			'action_type' => BS_ACTION_UNSUBSCRIBE_TOPIC,
 			'num' => $num
 		));
@@ -124,16 +130,19 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 			'moved_new_dis' =>			$user->get_theme_item_path('images/thread_status/moved_new_dis.gif')
 		);
 
+		$purl = BS_URL::get_mod_url('posts');
+		
 		$topics = array();
 		$sublist = BS_DAO::get_subscr()->get_subscr_topics_of_user(
 			$user->get_user_id(),array(),$pagination->get_start(),$end
 		);
 		foreach($sublist as $data)
 		{
+			$purl->set(BS_URL_FID,$data['rubrikid']);
+			$purl->set(BS_URL_TID,$data['topic_id']);
+			
 			$info = BS_TopicUtils::get_instance()->get_displayed_name($data['name']);
-			$topic_name = '<a title="'.$info['complete'].'"';
-			$topic_name .= ' href="'.BS_URL::get_url('posts','&amp;'.BS_URL_FID.'='.$data['rubrikid']
-																										.'&amp;'.BS_URL_TID.'='.$data['topic_id']).'">';
+			$topic_name = '<a title="'.$info['complete'].'" href="'.$purl->to_url().'">';
 			$topic_name .= $info['displayed'].'</a>';
 
 			$lastpost = $data['lastpost_time'] > 0 ? FWS_Date::get_date($data['lastpost_time']) : $locale->lang('notavailable');
@@ -153,8 +162,7 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 			);
 		}
 
-		$murl = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=topics&amp;'.BS_URL_SITE.'={d}');
-		$functions->add_pagination($pagination,$murl);
+		$pagination->populate_tpl(BS_URL::get_sub_url());
 		
 		$tpl->add_array('topics',$topics);
 	}

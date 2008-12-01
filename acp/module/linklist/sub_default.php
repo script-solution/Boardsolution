@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -55,12 +55,18 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 				$names[] = $data['link_url'];
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
+			$yurl = BS_URL::get_acpsub_url();
+			$yurl->set('at',BS_ACP_ACTION_DELETE_LINKS);
+			$yurl->set('ids',implode(',',$delete));
+			$yurl->set('site',$site);
+			
+			$nurl = BS_URL::get_acpsub_url();
+			$nurl->set('site',$site);
+			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
-				BS_URL::get_acpmod_url(
-					0,'&amp;at='.BS_ACP_ACTION_DELETE_LINKS.'&amp;ids='.implode(',',$delete).'&amp;site='.$site
-				),
-				BS_URL::get_acpmod_url(0,'&amp;site='.$site)
+				$yurl->to_url(),
+				$nurl->to_url()
 			);
 		}
 		
@@ -74,24 +80,27 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 		$order = $input->correct_var(BS_URL_ORDER,'get',FWS_Input::STRING,
 			array('url','category','clicks','date','act'),'date');
 		$ad = $input->correct_var(BS_URL_AD,'get',FWS_Input::STRING,array('ASC','DESC'),'DESC');
-		$baseurl = BS_URL::get_acpmod_url(0,'&amp;search='.$search.'&amp;');
+		
+		$baseurl = BS_URL::get_acpmod_url();
+		$baseurl->set('search',$search);
 		$pagination = new BS_ACP_Pagination($end,$num);
 		
+		$orderurl = clone $baseurl;
 		$tpl->add_variables(array(
 			'col_url' => BS_ACP_Utils::get_instance()->get_order_column(
-				$locale->lang('url'),'url','ASC',$order,$baseurl
+				$locale->lang('url'),'url','ASC',$order,$orderurl
 			),
 			'col_category' => BS_ACP_Utils::get_instance()->get_order_column(
-				$locale->lang('category'),'category','ASC',$order,$baseurl
+				$locale->lang('category'),'category','ASC',$order,$orderurl
 			),
 			'col_klicks' => BS_ACP_Utils::get_instance()->get_order_column(
-				$locale->lang('clicks'),'clicks','DESC',$order,$baseurl
+				$locale->lang('clicks'),'clicks','DESC',$order,$orderurl
 			),
 			'col_added' => BS_ACP_Utils::get_instance()->get_order_column(
-				$locale->lang('added'),'date','DESC',$order,$baseurl
+				$locale->lang('added'),'date','DESC',$order,$orderurl
 			),
 			'col_activated' => BS_ACP_Utils::get_instance()->get_order_column(
-				$locale->lang('enabled'),'act','ASC',$order,$baseurl
+				$locale->lang('enabled'),'act','ASC',$order,$orderurl
 			),
 		));
 		
@@ -164,8 +173,9 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 			'search_val' => $search
 		));
 		
-		$purl = $baseurl.'order='.$order.'&amp;ad='.$ad.'&amp;site={d}';
-		$functions->add_pagination($pagination,$purl);
+		$baseurl->set('order',$order);
+		$baseurl->set('ad',$ad);
+		$pagination->populate_tpl($baseurl);
 	}
 }
 ?>

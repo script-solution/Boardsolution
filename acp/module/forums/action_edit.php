@@ -44,10 +44,12 @@ final class BS_ACP_Action_forums_edit extends BS_ACP_Action_Base
 		$forum_is_intern = $input->get_var('is_intern','post',FWS_Input::INT_BOOL);
 		$group_access = $input->get_var('group_access','post');
 		$selected_user = $input->get_var('selectedUsers','post',FWS_Input::STRING);
-		$permission_thread = $input->get_var('permission_thread','post');
-		$permission_poll = $input->get_var('permission_poll','post');
-		$permission_event = $input->get_var('permission_event','post');
-		$permission_post = $input->get_var('permission_post','post');
+		$permission = array(
+			'thread' => $input->get_var('permission_thread','post'),
+			'poll' => $input->get_var('permission_poll','post'),
+			'event' => $input->get_var('permission_event','post'),
+			'post' => $input->get_var('permission_post','post')
+		);
 		$increase_experience = $input->get_var('increase_experience','post',FWS_Input::INT_BOOL);
 		$display_subforums = $input->get_var('display_subforums','post',FWS_Input::INT_BOOL);
 		$forum_is_closed = $input->get_var('forum_is_closed','post',FWS_Input::INT_BOOL);
@@ -108,10 +110,10 @@ final class BS_ACP_Action_forums_edit extends BS_ACP_Action_Base
 		
 		// build group-ids
 		$gids = array();
-		foreach(array('thread','poll','event','post') as $ptype)
+		foreach($permission as $ptype => $perms)
 		{
 			$gids[$ptype] = array();
-			foreach(${'permission_'.$ptype} as $gid => $access)
+			foreach($perms as $gid => $access)
 			{
 				if($access)
 					$gids[$ptype][] = $gid;

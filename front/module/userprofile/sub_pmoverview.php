@@ -35,7 +35,7 @@ final class BS_Front_SubModule_userprofile_pmoverview extends BS_Front_SubModule
 		$renderer->add_action(BS_ACTION_MARK_PMS_READ,'pmmarkread');
 		$renderer->add_action(BS_ACTION_MARK_PMS_UNREAD,'pmmarkunread');
 
-		$renderer->add_breadcrumb($locale->lang('overview'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pmoverview'));
+		$renderer->add_breadcrumb($locale->lang('overview'),BS_URL::build_sub_url());
 	}
 	
 	/**

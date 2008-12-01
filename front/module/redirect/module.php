@@ -63,9 +63,9 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 					return;
 				}
 				
-				$doc->redirect(
-					BS_URL::get_url('userprofile','&'.BS_URL_LOC.'=pmdetails&'.BS_URL_ID.'='.$pmid,'&')
-				);
+				$url = BS_URL::get_sub_url('userprofile','pmdetails');
+				$url->set(BS_URL_ID,$pmid);
+				$doc->redirect($url);
 				break;
 			
 			// show topic
@@ -84,9 +84,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 					return;
 				}
 				
-				$doc->redirect(
-					BS_URL::get_url('posts','&'.BS_URL_FID.'='.$tdata['rubrikid'].'&'.BS_URL_TID.'='.$tid,'&')
-				);
+				$doc->redirect(BS_URL::get_posts_url($tdata['rubrikid'],$tid));
 				break;
 			
 			// show post
@@ -106,13 +104,6 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 					return;
 				}
 				
-				$hl_add = '';
-				if($hl !== null)
-				{
-					$hl = stripslashes(FWS_StringHelper::htmlspecialchars_back($hl));
-					$hl_add = '&'.BS_URL_HL.'='.urlencode($hl);
-				}
-				
 				$post_index = 0;
 				$page = 1;
 				$postlist = BS_DAO::get_posts()->get_all_from_topic(
@@ -122,38 +113,20 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				{
 					if($data['id'] == $pid)
 					{
-						$murl = BS_URL::get_url(
-							'posts','&'.BS_URL_FID.'='.$pdata['rubrikid']
-							.'&'.BS_URL_TID.'='.$pdata['threadid'].'&'.BS_URL_SITE.'='.$page.$hl_add,'&'
-						);
-						$doc->redirect($murl.'#b_'.$pid);
+						$url = BS_URL::get_posts_url($pdata['rubrikid'],$pdata['threadid'],$page);
+						if($hl !== null)
+						{
+							$hl = stripslashes(FWS_StringHelper::htmlspecialchars_back($hl));
+							$url->set(BS_URL_HL,$hl);
+						}
+						$url->set_anchor('b_'.$pid);
+						$doc->redirect($url);
 					}
 		
 					$post_index++;
 					if(($post_index % $cfg['posts_per_page']) == 0)
 						$page++;
 				}
-				break;
-			
-			// redirect to the corresponding posts-action
-			// TODO is this still used?
-			case 'posts_action':
-				$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
-	
-				// check the selected posts
-				$posts = $input->get_var('selected_posts','post');
-				if(!FWS_Array_Utils::is_integer($posts))
-				{
-					$this->report_error();
-					return;
-				}
-	
-				$type = $input->correct_var('posts_action','post',FWS_Input::STRING,
-					array('delete_posts','split_posts'),'delete_posts');
-				$murl = BS_URL::get_url(
-					$type,'&'.BS_URL_FID.'='.$fid.'&'.BS_URL_TID.'='.$tid.'&'.BS_URL_ID.'='.implode(',',$posts),'&'
-				);
-				$doc->redirect($murl);
 				break;
 
 			// redirect to the corresponding topic-action
@@ -169,63 +142,52 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				$ids = implode(',',$selected_topics);
 	
 				// build the url
-				$murl = '';
 				$topic_action = $input->get_var('topic_action','post',FWS_Input::STRING);
 				switch($topic_action)
 				{
-					case 'edit':
-						$murl = BS_URL::get_url(
-							'edit_topic','&'.BS_URL_FID.'='.$fid.'&'.BS_URL_ID.'='.$ids,'&'
-						);
-						break;
-					case 'open':
-						$murl = BS_URL::get_url(
-							'openclose_topics','&'.BS_URL_MODE.'=open&'.BS_URL_FID.'='.$fid.'&'.BS_URL_ID.'='.$ids,'&'
-						);
-						break;
 					case 'close':
-						$murl = BS_URL::get_url(
-							'openclose_topics','&'.BS_URL_MODE.'=close&'.BS_URL_FID.'='.$fid.'&'.BS_URL_ID.'='.$ids,'&'
-						);
+					case 'open':
+						$url = BS_URL::get_mod_url('openclose_topics');
+						$url->set(BS_URL_MODE,$topic_action);
+						$url->set(BS_URL_FID,$fid);
+						$url->set(BS_URL_ID,$ids);
 						break;
+					
+					case 'edit':
 					case 'delete':
-						$murl = BS_URL::get_url(
-							'delete_topics','&'.BS_URL_FID.'='.$fid.'&'.BS_URL_ID.'='.$ids,'&'
-						);
-						break;
 					case 'move':
-						$murl = BS_URL::get_url(
-							'move_topics','&'.BS_URL_FID.'='.$fid.'&'.BS_URL_ID.'='.$ids,'&'
-						);
+						if($topic_action == 'edit')
+							$url = BS_URL::get_mod_url('edit_topic');
+						else if($topic_action == 'delete')
+							$url = BS_URL::get_mod_url('delete_topics');
+						else
+							$url = BS_URL::get_mod_url('move_topics');
+						$url->set(BS_URL_FID,$fid);
+						$url->set(BS_URL_ID,$ids);
 						break;
+					
+					case 'mark_unread':
 					case 'mark_read':
 						$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
-						$action_type = BS_URL_AT.'='.BS_ACTION_CHANGE_READ_STATUS;
-						$fid_param = ($fid != null) ? '&'.BS_URL_FID.'='.$fid : '';
-						$murl = BS_URL::get_url(
-							0,'&'.$action_type.'&'.BS_URL_LOC.'=read&'.BS_URL_MODE.'=topics'
-							.$fid_param.'&'.BS_URL_ID.'='.$ids.'&'.BS_URL_SITE.'='.$site,'&',true
-						);
-						break;
-					case 'mark_unread':
-						$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
-						$action_type = BS_URL_AT.'='.BS_ACTION_CHANGE_READ_STATUS;
-						$fid_param = ($fid != null) ? '&'.BS_URL_FID.'='.$fid : '';
-						$murl = BS_URL::get_url(
-							0,'&'.$action_type.'&'.BS_URL_LOC.'=unread&'.BS_URL_MODE.'=topics'
-							.$fid_param.'&'.BS_URL_ID.'='.$ids.'&'.BS_URL_SITE.'='.$site,'&',true
-						);
+						$url = BS_URL::get_mod_url(-1);
+						$url->set(BS_URL_AT,BS_ACTION_CHANGE_READ_STATUS);
+						$url->set(BS_URL_LOC,$topic_action == 'mark_read' ? 'read' : 'unread');
+						$url->set(BS_URL_MODE,'topics');
+						$url->set(BS_URL_SITE,$site);
+						$url->set(BS_URL_FID,$fid);
+						$url->set(BS_URL_ID,$ids);
+						$url->set_sid_policy(BS_URL::SID_FORCE);
 						break;
 				}
 	
 				// invalid mode?
-				if($murl == '')
+				if(!isset($url))
 				{
 					$this->report_error();
 					return;
 				}
 	
-				$doc->redirect($murl);
+				$doc->redirect($url);
 				break;
 	
 			// delete-messages in the user-profile
@@ -250,18 +212,22 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 					return;
 				}
 				
+				$url = BS_URL::get_sub_url('userprofile',$mode);
+				$url->set(BS_URL_SITE,$site);
+				$url->set(BS_URL_DEL,$ids);
+				
 				switch($operation)
 				{
 					case 'mark_read':
-						$action_type = '&'.BS_URL_AT.'='.BS_ACTION_MARK_PMS_READ;
+						$url->set(BS_URL_AT,BS_ACTION_MARK_PMS_READ);
 						break;
 					
 					case 'mark_unread':
-						$action_type = '&'.BS_URL_AT.'='.BS_ACTION_MARK_PMS_UNREAD;
+						$url->set(BS_URL_AT,BS_ACTION_MARK_PMS_UNREAD);
 						break;
 					
 					case 'delete':
-						$action_type = '&'.BS_URL_MODE.'=delete';
+						$url->set(BS_URL_MODE,'delete');
 						break;
 					
 					default:
@@ -270,9 +236,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				}
 				
 				// redirect
-				$params = '&'.BS_URL_LOC.'='.$mode.'&'.BS_URL_SITE.'='.$site.$action_type.'&'.BS_URL_DEL.'='.$ids;
-				$murl = BS_URL::get_url('userprofile',$params,'&');
-				$doc->redirect($murl);
+				$doc->redirect($url);
 				break;
 	
 			// delete-messages at other locations
@@ -284,38 +248,6 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				$ids = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
 				$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 				$option = $input->isset_var('option_yes','post') ? 'yes' : 'no';
-				switch($loc)
-				{
-					case 'del_subscr':
-						$loc_param = '&'.BS_URL_LOC.'=pr_subt';
-						$action_type = BS_ACTION_UNSUBSCRIBE_TOPIC;
-						break;
-					
-					case 'del_avatars':
-						$loc_param = '&'.BS_URL_LOC.'=pr_avatars';
-						$action_type = BS_ACTION_DELETE_AVATAR;
-						break;
-					
-					case 'del_pms':
-						$loc_param = '&'.BS_URL_LOC.'=pmoverview';
-						$action_type = BS_ACTION_DELETE_PMS;
-						break;
-					
-					case 'del_pm_ban':
-						$loc_param = '&'.BS_URL_LOC.'=pm_banlist';
-						$action_type = BS_ACTION_UNBAN_USER;
-						break;
-						
-					case 'del_cal_event':
-						$loc_param = '';
-						$action_type = BS_ACTION_CAL_DEL_EVENT;
-						break;
-				}
-				
-				if($loc != 'del_pm_ban' && $loc != 'del_cal_event')
-					$site_param = '&'.BS_URL_SITE.'='.$site;
-				else
-					$site_param = '';
 
 				// check parameter
 				if($ids == null || !FWS_Array_Utils::is_integer(FWS_Array_Utils::advanced_explode(',',$ids)))
@@ -323,88 +255,111 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 					$this->report_error();
 					return;
 				}
-
+				
 				$action = ($loc != 'del_cal_event') ? 'userprofile' : 'calendar';
+				$url = BS_URL::get_mod_url($action);
+				$url->set_sid_policy(BS_URL::SID_FORCE);
+				
+				switch($loc)
+				{
+					case 'del_subscr':
+						$url->set(BS_URL_SUB,'topics');
+						$action_type = BS_ACTION_UNSUBSCRIBE_TOPIC;
+						break;
 					
-				// build url
-				if($option == 'yes')
-				{
-					$murl = BS_URL::get_url(
-						$action,$loc_param.'&'.BS_URL_AT.'='.$action_type.'&'.BS_URL_DEL.'='.$ids.$site_param,'&',true
-					);
-				}
-				else
-				{
-					$murl = BS_URL::get_url(
-						$action,$loc_param.$site_param,'&',true
-					);
+					case 'del_avatars':
+						$url->set(BS_URL_SUB,'avatars');
+						$action_type = BS_ACTION_DELETE_AVATAR;
+						break;
+					
+					case 'del_pms':
+						$url->set(BS_URL_SUB,'pmoverview');
+						$action_type = BS_ACTION_DELETE_PMS;
+						break;
+					
+					case 'del_pm_ban':
+						$url->set(BS_URL_SUB,'pmbanlist');
+						$action_type = BS_ACTION_UNBAN_USER;
+						break;
+						
+					case 'del_cal_event':
+						$action_type = BS_ACTION_CAL_DEL_EVENT;
+						break;
 				}
 				
-				$doc->redirect($murl);
+				if($option == 'yes')
+				{
+					$url->set(BS_URL_AT,$action_type);
+					$url->set(BS_URL_DEL,$ids);
+				}
+				
+				if($loc != 'del_pm_ban' && $loc != 'del_cal_event')
+					$url->set(BS_URL_SITE,$site);
+				
+				$doc->redirect($url);
 				break;
 	
 			// redirect to a module or forum
 			case 'forum_jump':
 				$forum_jump = $input->get_var('forum_jump','post',FWS_Input::STRING);
-				$murl = '';
 				switch($forum_jump)
 				{
 					case 'index':
-						$murl = BS_URL::get_url('forums','','&');
+						$url = BS_URL::get_mod_url('forums','&');
 						break;
 					case 'admin':
-						$murl = str_replace('&amp;','&',BS_URL::get_admin_url());
+						$url = BS_URL::get_admin_url('&');
 						break;
 					case 'memberlist':
-						$murl = BS_URL::get_url('memberlist','','&');
+						$url = BS_URL::get_mod_url('memberlist','&');
 						break;
 					case 'linklist':
-						$murl = BS_URL::get_url('linklist','','&');
+						$url = BS_URL::get_mod_url('linklist','&');
 						break;
 					case 'faq':
-						$murl = BS_URL::get_url('faq','','&');
+						$url = BS_URL::get_mod_url('faq','&');
 						break;
 					case 'stats':
-						$murl = BS_URL::get_url('stats','','&');
+						$url = BS_URL::get_mod_url('stats','&');
 						break;
 					case 'calendar':
-						$murl = BS_URL::get_url('calendar','','&');
+						$url = BS_URL::get_mod_url('calendar','&');
 						break;
 					case 'search':
-						$murl = BS_URL::get_url('search','','&');
+						$url = BS_URL::get_mod_url('search','&');
 						break;
 					case 'profile':
-						$murl = BS_URL::get_url('userprofile','&'.BS_URL_LOC.'=pr_infos','&');
+						$url = BS_URL::get_sub_url('userprofile','infos');
 						break;
 					case 'pms':
-						$murl = BS_URL::get_url('userprofile','&'.BS_URL_LOC.'=pmoverview','&');
+						$url = BS_URL::get_sub_url('userprofile','pmoverview');
 						break;
 					case 'register':
-						$murl = BS_URL::get_url('register','','&');
+						$url = BS_URL::get_mod_url('register','&');
 						break;
 					case 'unread':
-						$murl = BS_URL::get_url('unread','','&');
+						$url = BS_URL::get_mod_url('unread','&');
 						break;
 					case 'team':
-						$murl = BS_URL::get_url('team','','&');
+						$url = BS_URL::get_mod_url('team','&');
 						break;
 					case 'userloc':
-						$murl = BS_URL::get_url('user_locations','','&');
+						$url = BS_URL::get_mod_url('user_locations','&');
 						break;
 					default:
 						$parts = explode('_',$forum_jump);
 						if(count($parts) == 2 && $parts[0] == 'f' && FWS_Helper::is_integer($parts[1]))
-							$murl = BS_URL::get_topics_url($parts[1],'&');
+							$url = BS_URL::get_topics_url($parts[1],0,'&');
 						break;
 				}
 	
-				if($murl == '')
+				if(!isset($url))
 				{
 					$this->report_error();
 					return;
 				}
 	
-				$doc->redirect($murl);
+				$doc->redirect($url);
 				break;
 	
 			default:

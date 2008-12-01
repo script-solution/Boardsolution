@@ -49,8 +49,8 @@ final class BS_Front_Module_topics extends BS_Front_Module
 		$auth = FWS_Props::get()->auth();
 		$tpl = FWS_Props::get()->tpl();
 		$user = FWS_Props::get()->user();
-		$functions = FWS_Props::get()->functions();
 		$forums = FWS_Props::get()->forums();
+		$doc = FWS_Props::get()->doc();
 
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 
@@ -119,12 +119,13 @@ final class BS_Front_Module_topics extends BS_Front_Module
 
 		if($forums->get_forum_type($fid) == 'contains_threads')
 		{
-			$action_type = BS_URL_AT.'='.BS_ACTION_CHANGE_READ_STATUS;
-			$fid_param = BS_URL_FID.'='.$fid;
-			$forum_read_url = BS_URL::get_url(
-				0,'&amp;'.$action_type.'&amp;'.BS_URL_LOC.'=read'
-					.'&amp;'.BS_URL_MODE.'=forum&amp;'.$fid_param,'&amp;',true
-			);
+			$url = BS_URL::get_mod_url();
+			$url->set(BS_URL_LOC,'read');
+			$url->set(BS_URL_MODE,'forum');
+			$url->set(BS_URL_FID,$fid);
+			$url->set(BS_URL_AT,BS_ACTION_CHANGE_READ_STATUS);
+			$url->set_sid_policy(BS_URL::SID_FORCE);
+			$forum_read_url = $url->to_url();
 
 			$pagination = new BS_Pagination($limit,$forum_data->get_threads());
 			
@@ -141,9 +142,11 @@ final class BS_Front_Module_topics extends BS_Front_Module
 			if($cfg['enable_email_notification'] == 1 &&
 				$auth->has_global_permission('subscribe_forums'))
 			{
-				$subscribe_forum_url = BS_URL::get_url(
-					0,'&amp;'.BS_URL_AT.'='.BS_ACTION_SUBSCRIBE_FORUM.'&amp;'.$fid_param,'&amp;',true
-				);
+				$url = BS_URL::get_mod_url();
+				$url->set(BS_URL_FID,$fid);
+				$url->set(BS_URL_AT,BS_ACTION_SUBSCRIBE_FORUM);
+				$url->set_sid_policy(BS_URL::SID_FORCE);
+				$subscribe_forum_url = $url->to_url();
 				$subscr_forum = '<a style="font-size: 0.9em;" href="'.$subscribe_forum_url.'">';
 				$subscr_forum .= $locale->lang('subscribe_forum').'</a>';
 				$mark_read .= ', ';
@@ -168,21 +171,27 @@ final class BS_Front_Module_topics extends BS_Front_Module
 			if($input->isset_var(BS_URL_ORDER,'get'))
 			{
 				$ad = $input->get_var(BS_URL_AD,'get',FWS_Input::STRING);
-				$params = '&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ORDER.'='.$order;
-				$params .= '&amp;'.BS_URL_AD.'='.$ad.'&amp;'.BS_URL_LIMIT.'='.$limit;
-				$params .= '&amp;'.BS_URL_SITE.'={d}';
-				$page_url = BS_URL::get_url(0,$params);
+				$page_url = BS_URL::get_mod_url();
+				$page_url->set(BS_URL_FID,$fid);
+				$page_url->set(BS_URL_ORDER,$order);
+				$page_url->set(BS_URL_AD,$ad);
+				$page_url->set(BS_URL_LIMIT,$limit);
 			}
 			else
-				$page_url = BS_URL::get_topics_url($fid,'&amp;','{d}');
+			{
+				$page_url = BS_URL::get_mod_url();
+				$page_url->set(BS_URL_FID,$fid);
+				$page_url->set_sef(true);
+			}
 
-			$page_split = $functions->add_pagination($pagination,$page_url);
+			$page_split = $pagination->populate_tpl($page_url);
 			
+			$rurl = BS_URL::get_mod_url('redirect');
+			$rurl->set(BS_URL_LOC,'topic_action');
+			$rurl->set(BS_URL_FID,$fid);
+			$rurl->set(BS_URL_SITE,$pagination->get_page());
 			$tpl->add_variables(array(
-				'redirect_url' => BS_URL::get_url(
-					'redirect','&amp;'.BS_URL_LOC.'=topic_action&amp;'.BS_URL_FID.'='.$fid
-						.'&amp;'.BS_URL_SITE.'='.$pagination->get_page()
-				),
+				'redirect_url' => $rurl->to_url(),
 				'show_topic_action' => $show_topic_action,
 				'page_split' => $page_split
 			));
@@ -231,11 +240,12 @@ final class BS_Front_Module_topics extends BS_Front_Module
 			$auth->has_current_forum_perm(BS_MODE_START_EVENT)) &&
 			($user->is_admin() || $closed == 0) &&
 			$cfg['enable_events'] == 1 && $type == 'contains_threads';
-	
+		
+		$rurl = BS_URL::get_mod_url('redirect');
+		$rurl->set(BS_URL_LOC,'topic_action');
+		$rurl->set(BS_URL_FID,$fid);
 		$tpl->add_variables(array(
-			'url' => BS_URL::get_url(
-				'redirect','&amp;'.BS_URL_LOC.'=topic_action&amp;'.BS_URL_FID.'='.$fid
-			),
+			'url' => $rurl->to_url(),
 			'display_topic' => $display_topic,
 			'display_poll' => $display_poll,
 			'display_event' => $display_event

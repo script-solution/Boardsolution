@@ -34,11 +34,11 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
+		
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
-		$renderer->add_breadcrumb(
-			$locale->lang('event_details'),
-			BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id)
-		);
+		$url = BS_URL::get_sub_url();
+		$url->set(BS_URL_ID,$id);
+		$renderer->add_breadcrumb($locale->lang('event_details'),$url->to_url());
 	}
 	
 	public function run()
@@ -77,17 +77,21 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 			}
 			
 			$message = sprintf($locale->lang('delete_event_msg'),$event_data['event_title']);
-			$yes_url = BS_URL::get_url(
-				'calendar','&amp;'.BS_URL_AT.'='.BS_ACTION_CAL_DEL_EVENT.'&amp;'.BS_URL_DEL.'='.$id,'&amp;',true
-			);
-			$no_url = BS_URL::get_url(
-				'calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id
-			);
-			$target = BS_URL::get_url(
-				'redirect','&amp;'.BS_URL_LOC.'=del_cal_event&amp;'.BS_URL_ID.'='.$id
-			);
+			$yes_url = BS_URL::get_mod_url();
+			$yes_url->set(BS_URL_AT,BS_ACTION_CAL_DEL_EVENT);
+			$yes_url->set(BS_URL_DEL,$id);
+			$yes_url->set_sid_policy(BS_URL::SID_FORCE);
 			
-			$functions->add_delete_message($message,$yes_url,$no_url,$target);
+			$url = BS_URL::get_sub_url();
+			$url->set(BS_URL_ID,$id);
+			$no_url = $url->to_url();
+			
+			$url->set(BS_URL_ACTION,'redirect');
+			
+			$url = BS_URL::get_mod_url('redirect');
+			$target = $url->set(BS_URL_LOC,'del_cal_event')->to_url();
+			
+			$functions->add_delete_message($message,$yes_url->to_url(),$no_url,$target);
 		}
 		
 		if($event_data['event_end'] == 0)
@@ -129,16 +133,17 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 		
 		$delete_perm = $cfg['display_denied_options'] || $auth->has_global_permission('delete_cal_event');
 		$edit_perm = $cfg['display_denied_options'] || $auth->has_global_permission('edit_cal_event');
+		
+		$url = BS_URL::get_sub_url();
+		$url->set(BS_URL_ID,$id);
+		$url->set(BS_URL_MODE,'delete');
+		
 		$tpl->add_variables(array(
 			'announcements_enabled' => $event_data['max_announcements'] >= 0,
 			'display_edit_event' => $edit_perm,
 			'display_delete_event' => $delete_perm,
-			'edit_event' => BS_URL::get_url(
-				'calendar','&amp;'.BS_URL_LOC.'=editevent&amp;'.BS_URL_ID.'='.$id
-			),
-			'delete_event' => BS_URL::get_url(
-				'calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_MODE.'=delete&amp;'.BS_URL_ID.'='.$id
-			)
+			'edit_event' => BS_URL::get_sub_url(0,'editevent')->set(BS_URL_ID,$id)->to_url(),
+			'delete_event' => $url->to_url()
 		));
 	}
 }

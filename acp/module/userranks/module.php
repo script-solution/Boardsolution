@@ -22,7 +22,7 @@ final class BS_ACP_Module_userranks extends BS_ACP_Module
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -35,7 +35,7 @@ final class BS_ACP_Module_userranks extends BS_ACP_Module
 		$renderer->add_action(BS_ACP_ACTION_ADD_USERRANK,'add');
 		$renderer->add_action(BS_ACP_ACTION_DELETE_USERRANKS,'delete');
 
-		$renderer->add_breadcrumb($locale->lang('acpmod_userranks'),BS_URL::get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_userranks'),BS_URL::build_acpmod_url());
 	}
 	
 	/**
@@ -54,12 +54,12 @@ final class BS_ACP_Module_userranks extends BS_ACP_Module
 			$names = $cache->get_cache('user_ranks')->get_field_vals_of_keys($ids,'rank');
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
+			$url = BS_URL::get_acpmod_url();
+			$url->set('at',BS_ACP_ACTION_DELETE_USERRANKS);
+			$url->set('ids',implode(',',$ids));
+			
 			$functions->add_delete_message(
-				sprintf($locale->lang('delete_message'),$namelist),
-				BS_URL::get_acpmod_url(
-					0,'&amp;at='.BS_ACP_ACTION_DELETE_USERRANKS.'&amp;ids='.implode(',',$ids)
-				),
-				BS_URL::get_acpmod_url()
+				sprintf($locale->lang('delete_message'),$namelist),$url->to_url(),BS_URL::build_acpmod_url()
 			);
 		}
 		

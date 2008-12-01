@@ -90,9 +90,9 @@ final class BS_User_Data extends FWS_User_Data
 		$this->_data[$name] = $value;
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
-		return array_merge(parent::get_print_vars(),get_object_vars($this));
+		return array_merge(parent::get_dump_vars(),get_object_vars($this));
 	}
 }
 ?>

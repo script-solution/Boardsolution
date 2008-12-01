@@ -7,7 +7,7 @@
 <p class="a_block_pad">{glocale.lang('moderators_hint')}</p>
 <p class="a_block"><b>{glocale.lang('hint')}:</b> {glocale.lang('moderators_add_hint')}</p>
 
-<form method="get" action="{gurl.get_acpmod_url(0,'&amp;action=edituser')}">
+<form method="get" action="{gurl.simple_acp_url(0,'&amp;action=edituser')}">
 {loop hiddenfields as k => v}
 <input type="hidden" name="{k}" value="{v}" />
 {endloop}
@@ -57,7 +57,7 @@ function showPopup(id)
 </script>
 
 <div class="a_pad_double">
-	<form method="post" action="{gurl.get_acpmod_url()}">
+	<form method="post" action="{gurl.simple_acp_url()}">
 	<input type="hidden" name="action_type" value="{action_type}" />
 	{loop forums as row => forum}
 	<table width="100%" cellpadding="0" cellspacing="2">

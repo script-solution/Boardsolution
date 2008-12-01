@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -35,10 +35,9 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		$renderer->add_action(BS_ACP_ACTION_USER_EDIT,'edit');
 		
 		$id = $input->get_var('id','get',FWS_Input::ID);
-		$renderer->add_breadcrumb(
-			$locale->lang('edit_user'),
-			BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
-		);
+		$url = BS_URL::get_acpsub_url();
+		$url->set('id',$id);
+		$renderer->add_breadcrumb($locale->lang('edit_user'),$url->to_url());
 	}
 	
 	/**
@@ -77,11 +76,14 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		$ad = $input->correct_var('ad','get',FWS_Input::STRING,array('ASC','DESC'),'DESC');
 		$site = $input->get_var('site','get',FWS_Input::INTEGER);
 
-		$base_url = BS_URL::get_acpmod_url(0,'&amp;order='.$order.'&amp;ad='.$ad.'&amp;site='.$site);
+		$baseurl = BS_URL::get_acpsub_url();
+		$baseurl->set('order',$order);
+		$baseurl->set('ad',$ad);
+		$baseurl->set('site',$site);
 		
-		$murl = $base_url.'&amp;action=edit&amp;id='.$id;
-		$back_url = $base_url;
-
+		$murl = clone $baseurl;
+		$murl->set('id',$id);
+		
 		$form = $this->request_formular(false,false);
 
 		// group combos
@@ -124,7 +126,7 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		$tpl->add_variables(array(
 			'avatar' => $avatar,
 			'avatar_export' => BS_ENABLE_EXPORT ? $avatar : '',
-			'target_url' => $murl,
+			'target_url' => $murl->to_url(),
 			'bbcode_mode' => $data['bbcode_mode'],
 			'not_export' => !BS_ENABLE_EXPORT,
 			'user_name' => $data['user_name'],
@@ -166,7 +168,7 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		$tpl->add_variables(array(
 			'addfields' => $tplfields,
 			'signature' => $form->get_input_value('text',$data['signature_posted']),
-			'base_url' => $back_url
+			'base_url' => $baseurl->to_url()
 		));
 	}
 }

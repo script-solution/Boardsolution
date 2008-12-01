@@ -146,7 +146,7 @@ final class BS_ACP_Module_Config_View_Default extends FWS_Object implements FWS_
 			$a['description'] = $locale->lang($name.'_desc');
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

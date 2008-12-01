@@ -43,12 +43,13 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 		$mode = $input->correct_var(
 			BS_URL_MODE,'get',FWS_Input::STRING,array('open','close'),'open'
 		);
-		
 		$this->add_loc_forum_path($fid);
-		$renderer->add_breadcrumb(
-			$locale->lang($mode.'_topics'),
-			BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids.'&amp;mode='.$mode)
-		);
+		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_ID,$ids);
+		$url->set(BS_URL_MODE,$mode);
+		$renderer->add_breadcrumb($locale->lang($mode.'_topics'),$url->to_url());
 	}
 	
 	/**
@@ -141,10 +142,10 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 	
 		$this->request_formular(false,true);
 		
-		$mode_add = '&amp;'.BS_URL_MODE.'='.$mode;
-		$target_url = BS_URL::get_url(
-			0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.implode(',',$selected_topic_ids).$mode_add
-		);
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_ID,implode(',',$selected_topic_ids));
+		$url->set(BS_URL_MODE,$mode);
 	
 		if($mode == 'open')
 			$text_explain = $locale->lang('reason_for_open');
@@ -158,19 +159,16 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 		
 		if(count($selected_topic_ids) == 1)
 		{
-			$murl = BS_URL::get_url(
-				0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_MODE.'='.$mode.'&amp;'.BS_URL_ID.'='.$id_str
-					.'&amp;'.BS_URL_PID.'='
-			);
+			$murl = clone $url;
 			BS_PostingUtils::get_instance()->add_topic_review($last_data,true,$murl);
 		}
 		
 		$tpl->add_variables(array(
 			'title' => $locale->lang($mode == 'open' ? 'open_topics' : 'close_topics'),
-			'target_url' => $target_url,
+			'target_url' => $url->to_url(),
 			'action_type' => $mode == 'open' ? BS_ACTION_OPEN_TOPICS : BS_ACTION_CLOSE_TOPICS,
 			'selected_topics' => $selected_topics,
-			'back_url' => BS_URL::get_topics_url($fid),
+			'back_url' => BS_URL::build_topics_url($fid),
 			'notices' => array_values($notices)
 		));
 	}

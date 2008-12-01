@@ -42,7 +42,7 @@ final class BS_Front_Module_linklist extends BS_Front_SubModuleContainer
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($cfg['enable_linklist'] == 1 && $auth->has_global_permission('view_linklist'));
-		$renderer->add_breadcrumb($locale->lang('linklist'),BS_URL::get_url());
+		$renderer->add_breadcrumb($locale->lang('linklist'),BS_URL::build_mod_url());
 		
 		// init submodule
 		$this->_sub->init($doc);

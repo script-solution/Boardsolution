@@ -56,7 +56,8 @@ final class BS_Front_Action_posts_subscribetopic extends BS_Front_Action_Base
 
 		$this->set_action_performed(true);
 		$this->add_link($locale->lang('back'),BS_URL::get_posts_url($fid,$tid));
-		$murl = BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=topics');
+		
+		$murl = BS_URL::get_sub_url('userprofile','topics');
 		$this->add_link($locale->lang('to_profile_subscr'),$murl);
 		$this->set_success_msg(
 			sprintf($locale->lang('subscription_desc_topic'),$sub->get_topic_name())

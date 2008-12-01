@@ -6,7 +6,7 @@
 
 <div class="a_block">
 	<div class="a_menubar">
-		<a href="{gurl.get_acpmod_url(0,'&amp;action=edit')}">
+		<a href="{gurl.simple_acp_url(0,'&amp;action=edit')}">
 		<img src="{gpath}acp/images/plus.png" alt="{glocale.lang('create_new_forum')}" />
 		{glocale.lang('create_new_forum')}
 		</a>
@@ -17,7 +17,7 @@
 	</div>
 </div>
 
-<form method="post" action="{gurl.get_acpmod_url()}">
+<form method="post" action="{gurl.simple_acp_url()}">
 <input type="hidden" name="action_type" value="{at_update}" />
 <div class="a_border a_pad">
 	<h1 class="a_topic">{glocale.lang('acpmod_forums')}</h1>

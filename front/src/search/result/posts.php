@@ -27,7 +27,6 @@ final class BS_Front_Search_Result_Posts extends FWS_Object implements BS_Front_
 	public function display_result($search,$request)
 	{
 		$cfg = FWS_Props::get()->cfg();
-		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
 		/* @var $search BS_Front_Search_Manager */
@@ -42,13 +41,15 @@ final class BS_Front_Search_Result_Posts extends FWS_Object implements BS_Front_
 		
 		$end = $cfg['posts_per_page'];
 		$pagination = new BS_Pagination($end,count($ids));
-		$murl = BS_URL::get_url(
-			0,'&amp;'.BS_URL_ID.'='.$search->get_search_id().'&amp;'.BS_URL_MODE.'='.$request->get_name()
-				.'&amp;'.BS_URL_ORDER.'='.$order.'&amp;'.BS_URL_AD.'='.$ad.'&amp;'.BS_URL_SITE.'={d}'
-		);
+		$murl = BS_URL::get_mod_url();
+		$murl->set(BS_URL_ID,$search->get_search_id());
+		$murl->set(BS_URL_ORDER,$order);
+		$murl->set(BS_URL_AD,$ad);
+		$murl->set(BS_URL_MODE,$request->get_name());
 		foreach($request->get_url_params() as $name => $value)
-			$murl .= '&amp;'.$name.'='.$value;
-		$small_page_split = $functions->get_pagination_small($pagination,$murl);
+			$murl->set($name,$value);
+		
+		$small_page_split = $pagination->get_small($murl);
 
 		$tpl->set_template('search_result_posts.htm');
 		$tpl->add_variables(array(
@@ -68,17 +69,17 @@ final class BS_Front_Search_Result_Posts extends FWS_Object implements BS_Front_
 		foreach($keywords as $kw)
 			$kws .= '"'.$kw.'" ';
 		$kws = rtrim($kws);
-		$highlight_param = '&amp;'.BS_URL_HL.'='.urlencode($kws);
 		
 		foreach($postcon->get_posts() as $post)
 		{
-			$post_url = $post->get_post_url().$highlight_param;
+			/* @var $post BS_Front_Post_Data */
+			
+			$post_url = $post->get_post_url($kws);
 			$location = BS_ForumUtils::get_instance()->get_forum_path($post->get_field('rubrikid'),false);
 			$topic = $post->get_field('name');
 			$topic = $hl->highlight($topic);
 			$location .= ' &raquo; <a href="'.$post_url.'">'.$topic.'</a>';
 			
-			/* @var $post BS_Front_Post_Data */
 			$posts[] = array(
 				'user_name' => $post->get_username(),
 				'user_group' => $post->get_user_group(),
@@ -94,7 +95,7 @@ final class BS_Front_Search_Result_Posts extends FWS_Object implements BS_Front_
 			);
 		}
 		
-		$functions->add_pagination($pagination,$murl);
+		$pagination->populate_tpl($murl);
 		$tpl->add_array('posts',$posts);
 		
 		$tpl->restore_template();
@@ -112,7 +113,7 @@ final class BS_Front_Search_Result_Posts extends FWS_Object implements BS_Front_
 		return $locale->lang('no_posts_found');
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

@@ -31,10 +31,8 @@ final class BS_Front_SubModule_stats_timeline extends BS_Front_SubModule
 		$locale = FWS_Props::get()->locale();
 		$renderer = $doc->use_default_renderer();
 		
-		$renderer->add_breadcrumb(
-			$locale->lang('stats_timeline'),
-			BS_URL::get_url('stats','&amp;'.BS_URL_LOC.'=timeline')
-		);
+		$url = BS_URL::get_sub_url('stats','timeline');
+		$renderer->add_breadcrumb($locale->lang('stats_timeline'),$url->to_url());
 	}
 	
 	/**

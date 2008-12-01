@@ -43,7 +43,7 @@ final class BS_Forums_Storage_DB extends FWS_Object implements FWS_Tree_Storage
 		BS_DAO::get_forums()->delete_by_ids($ids);
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

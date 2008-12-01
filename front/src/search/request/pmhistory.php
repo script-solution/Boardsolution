@@ -140,7 +140,7 @@ final class BS_Front_Search_Request_PMHistory extends BS_Front_Search_Request_PM
 			." AND p.sender_id ".$users;
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

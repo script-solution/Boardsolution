@@ -36,7 +36,7 @@ function BS_getPostFormAJAXConstr(postFormID,fieldID,requestURL)
 function getPostForm(type)
 {
 	this.type = type;
-	var url = this.requestURL.replace(/%s%/,type);
+	var url = this.requestURL.replace(/__MODE__/,type);
 	var self = this;
 	
 	myAjax.sendGetRequest(url,function(text) {

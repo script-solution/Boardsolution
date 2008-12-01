@@ -61,7 +61,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		$user->set_location();
 		
 		// add the home-breadcrumb
-		$this->add_breadcrumb($locale->lang('home'),BS_URL::get_forums_url());
+		$this->add_breadcrumb($locale->lang('home'),BS_URL::build_forums_url());
 		
 		$this->_action_perf->set_prefix('BS_Front_Action_');
 	}
@@ -169,7 +169,6 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 	{
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
-		$user = FWS_Props::get()->user();
 		$doc = FWS_Props::get()->doc();
 		
 		// add redirect information
@@ -182,14 +181,6 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		
 		$action_result = $this->get_action_result();
 		$tpl->add_global('action_result',$action_result);
-		
-		$tpl->add_global('gisloggedin',$user->is_loggedin());
-		$tpl->add_global('gusername',$user->get_user_name());
-		$tpl->add_global('guserid',$user->get_user_id());
-		$tpl->add_global('gisadmin',$user->is_admin());
-		$tpl->add_global('glang',$user->get_language());
-		// TODO add theme
-		// TODO add current module
 		
 		// handle messages
 		$msgs = FWS_Props::get()->msgs();
@@ -261,18 +252,18 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 					$msg = nl2br(FWS_StringHelper::htmlspecialchars_back($cfg['board_disabled_text']));
 					$msg .= $locale->lang('board_deactivated_notice');
 					$msgs->add_notice($msg);
-					$this->set_error();
+					$module->set_error();
 				}
 				// user banned?
 				else if($functions->is_banned('ip',$user->get_user_ip()))
 				{
 					$msgs->add_notice($locale->lang('ip_banned'));
-					$this->set_error();
+					$module->set_error();
 				}
 				else if(!$module_access)
 				{
 					$functions->show_login_form();
-					$this->set_error();
+					$module->set_error();
 				}
 				else
 					parent::content();
@@ -319,6 +310,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		$page_title = strip_tags($page_title);
 		$this->set_title($page_title);
 
+		$feedurl = BS_URL::get_mod_url('news_feed');
+		
 		// show page header
 		$tpl->set_template('inc_header.htm');
 		$tpl->add_variables(array(
@@ -334,8 +327,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			'jsblocks' => $this->get_js_blocks(),
 			'action' => $input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING),
 			'robots_value' => $this->get_robots_value(),
-			'rss20_feed' => BS_URL::get_url('news_feed','&amp;'.BS_URL_MODE.'=rss20'),
-			'atom_feed' => BS_URL::get_url('news_feed','&amp;'.BS_URL_MODE.'=atom'),
+			'rss20_feed' => $feedurl->set(BS_URL_MODE,'rss20')->to_url(),
+			'atom_feed' => $feedurl->set(BS_URL_MODE,'atom')->to_url(),
 			'sig_max_height' => $cfg['sig_max_height'],
 			'show_headline' => $this->_show_headline
 		));
@@ -348,9 +341,9 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			$tpl->add_variables(array(
 				'location' => $breadcrumbs,
 				'action_type' => BS_ACTION_LOGIN,
-				'login_url' => BS_URL::get_url('login'),
+				'login_url' => BS_URL::build_mod_url('login'),
 				'show_deactivated_notice' => $cfg['enable_board'] == 0 && $user->is_admin(),
-				'headline_url' => BS_URL::get_forums_url()
+				'headline_url' => BS_URL::build_forums_url()
 			));
 			
 			$top_links = array();
@@ -361,7 +354,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('adminarea'),
 					'text' => $locale->lang('adminarea'),
-					'url' => BS_URL::get_admin_url()
+					'url' => BS_URL::build_admin_url()
 				);
 			}
 			if($this->_show_top_link('enable_memberlist','view_memberlist'))
@@ -369,7 +362,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('memberlist_desc'),
 					'text' => $locale->lang('memberlist'),
-					'url' => BS_URL::get_url('memberlist')
+					'url' => BS_URL::build_mod_url('memberlist')
 				);
 			}
 			if($this->_show_top_link('enable_linklist','view_linklist'))
@@ -377,7 +370,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('linklist_desc'),
 					'text' => $locale->lang('linklist'),
-					'url' => BS_URL::get_url('linklist')
+					'url' => BS_URL::build_mod_url('linklist')
 				);
 			}
 			if($this->_show_top_link('enable_stats','view_stats'))
@@ -385,7 +378,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('statistics_desc'),
 					'text' => $locale->lang('statistics'),
-					'url' => BS_URL::get_url('stats')
+					'url' => BS_URL::build_mod_url('stats')
 				);
 			}
 			if($this->_show_top_link('enable_faq'))
@@ -393,7 +386,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('faq_desc'),
 					'text' => $locale->lang('faq'),
-					'url' => BS_URL::get_url('faq')
+					'url' => BS_URL::build_mod_url('faq')
 				);
 			}
 		
@@ -404,7 +397,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 					$top_links[] = array(
 						'title' => $locale->lang('register'),
 						'text' => $locale->lang('register'),
-						'url' => !BS_ENABLE_EXPORT ? BS_URL::get_url('register') : BS_EXPORT_REGISTER_LINK
+						'url' => !BS_ENABLE_EXPORT ? BS_URL::build_mod_url('register') : BS_EXPORT_REGISTER_LINK
 					);
 				}
 			}
@@ -413,7 +406,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('yourprofile'),
 					'text' => $locale->lang('profile'),
-					'url' => BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=pr_infos')
+					'url' => BS_URL::build_sub_url('userprofile','infos')
 				);
 			}
 		
@@ -422,7 +415,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('calendar_desc'),
 					'text' => $locale->lang('calendar'),
-					'url' => BS_URL::get_url('calendar')
+					'url' => BS_URL::build_mod_url('calendar')
 				);
 			}
 		
@@ -431,7 +424,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('search_desc'),
 					'text' => $locale->lang('search'),
-					'url' => BS_URL::get_url('search')
+					'url' => BS_URL::build_mod_url('search')
 				);
 			}
 		
@@ -458,7 +451,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE != 'disabled')
 				{
 					if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE == 'enabled')
-						$sendpw_url = BS_URL::get_url('sendpw');
+						$sendpw_url = BS_URL::build_mod_url('sendpw');
 					else
 						$sendpw_url = BS_EXPORT_SEND_PW_LINK;
 				}
@@ -466,7 +459,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				if(!BS_ENABLE_EXPORT || BS_EXPORT_RESEND_ACT_TYPE == 'link')
 				{
 					if(!BS_ENABLE_EXPORT)
-						$resend_url = BS_URL::get_url('resend_activation');
+						$resend_url = BS_URL::build_mod_url('resend_activation');
 					else
 						$resend_url = BS_EXPORT_RESEND_ACT_LINK;
 				}
@@ -624,9 +617,9 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		return $display;
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
-		return array_merge(parent::get_print_vars(),get_object_vars($this));
+		return array_merge(parent::get_dump_vars(),get_object_vars($this));
 	}
 }
 ?>

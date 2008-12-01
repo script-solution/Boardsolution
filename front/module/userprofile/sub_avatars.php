@@ -36,7 +36,7 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 		$renderer->add_action(BS_ACTION_DELETE_AVATAR,'deleteavatars');
 		$renderer->add_action(BS_ACTION_REMOVE_AVATAR,'removeavatar');
 
-		$renderer->add_breadcrumb($locale->lang('avatars'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=avatars'));
+		$renderer->add_breadcrumb($locale->lang('avatars'),BS_URL::build_sub_url());
 	}
 	
 	/**
@@ -65,15 +65,18 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 		if(($delete = $input->get_var('del','post')) != null && FWS_Array_Utils::is_integer($delete))
 		{
 			$id_str = implode(',',$delete);
-			$loc = '&amp;'.BS_URL_LOC.'=avatars';
-			$site_param = '&amp;'.BS_URL_SITE.'='.$site;
-			$yes_url = BS_URL::get_url(0,$loc.'&amp;'.BS_URL_AT.'='.BS_ACTION_DELETE_AVATAR
-																.'&amp;'.BS_URL_DEL.'='.$id_str.$site_param,'&amp;',true);
-			$no_url = BS_URL::get_url(0,$loc.$site_param);
-			$target = BS_URL::get_url(
-				'redirect',
-				'&amp;'.BS_URL_LOC.'=del_avatars&amp;'.BS_URL_ID.'='.$id_str.'&amp;'.BS_URL_SITE.'='.$site
-			);
+			$url = BS_URL::get_sub_url('userprofile','avatars');
+			$url->set(BS_URL_SITE,$site);
+			$no_url = $url->to_url();
+			
+			$url->set(BS_URL_AT,BS_ACTION_DELETE_AVATAR);
+			$url->set(BS_URL_DEL,$id_str);
+			$url->set_sid_policy(BS_URL::SID_FORCE);
+			
+			$target = BS_URL::get_mod_url('redirect');
+			$target->set(BS_URL_LOC,'del_avatars');
+			$target->set(BS_URL_ID,$id_str);
+			$target->set(BS_URL_SITE,$site);
 			
 			$names = array();
 			foreach(BS_DAO::get_avatars()->get_by_ids($delete) as $data)
@@ -82,30 +85,30 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_avatars_message'),$namelist),
-				$yes_url,$no_url,$target
+				$url->to_url(),$no_url,$target->to_url()
 			);
 		}
 
 		$num = BS_DAO::get_avatars()->get_count_for_user($user->get_user_id());
 		$pagination = new BS_Pagination(BS_AVATARS_PER_PAGE,$num);
 		
+		$url = BS_URL::get_sub_url('userprofile','avatars');
+		$url->set(BS_URL_SITE,$site);
+		
 		$tpl->add_variables(array(
-			'target_url' => BS_URL::get_url(
-				'userprofile','&amp;'.BS_URL_LOC.'=avatars&amp;'.BS_URL_SITE.'='.$site
-			),
+			'target_url' => $url->to_url(),
 			'num' => $num
 		));
 
+		$url->set(BS_URL_AT,BS_ACTION_USE_AVATAR);
+		$url->set_sid_policy(BS_URL::SID_FORCE);
+		
 		$avatars = array();
 		$avlist = BS_DAO::get_avatars()->get_list_for_user(
 			$user->get_user_id(),$pagination->get_start(),BS_AVATARS_PER_PAGE
 		);
 		foreach($avlist as $index => $data)
 		{
-			$use_url = BS_URL::get_url(
-				'userprofile','&amp;'.BS_URL_LOC.'=avatars&amp;'.BS_URL_AT.'='.BS_ACTION_USE_AVATAR
-					.'&amp;'.BS_URL_ID.'='.$data['id'].'&amp;'.BS_URL_SITE.'='.$site,'&amp;',true
-			);
 			if($data['user'] == 0)
 				$delete = $locale->lang('notavailable');
 			else
@@ -119,32 +122,28 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 				'delete' => $delete,
 				'avatar_path' => FWS_Path::client_app().'images/avatars/'.$data['av_pfad'],
 				'display_path' => FWS_String::substr($data['av_pfad'],0,25).((FWS_String::strlen($data['av_pfad']) > 25) ? '...' : ''),
-				'use_url' => $use_url
+				'use_url' => $url->set(BS_URL_ID,$data['id'])->to_url()
 			);
 		}
 
 		$tpl->add_array('avatars',$avatars,false);
 
-		$murl = BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=avatars&amp;'.BS_URL_SITE.'={d}');
-		$functions->add_pagination($pagination,$murl);
+		$pagination->populate_tpl(BS_URL::get_sub_url());
 
 		$current_avatar = BS_UserUtils::get_instance()->get_profile_avatar(
 			$user->get_profile_val('avatar'),$user->get_user_id()
 		);
 		if($current_avatar != $locale->lang('nopictureavailable'))
 		{
-			$murl = BS_URL::get_url(
-				'userprofile','&amp;'.BS_URL_LOC.'=avatars&amp;'.BS_URL_AT.'='.BS_ACTION_REMOVE_AVATAR
-					.'&amp;'.BS_URL_SITE.'='.$site,'&amp;',true
-			);
-			$delete_avatar = '<br /><br /><a href="'.$murl.'">'.$locale->lang('remove_avatar').'</a>';
+			$url->set(BS_URL_AT,BS_ACTION_REMOVE_AVATAR);
+			$delete_avatar = '<br /><br /><a href="'.$url->to_url().'">'.$locale->lang('remove_avatar').'</a>';
 		}
 		else
 			$delete_avatar = '';
 
 		$tpl->add_array('CFG',$cfg,false);
 		$tpl->add_variables(array(
-			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=avatars&amp;'.BS_URL_SITE.'='.$site),
+			'target_url' => $url->remove(BS_URL_AT)->to_url(),
 			'action_type' => BS_ACTION_UPLOAD_AVATAR,
 			'current_avatar' => $current_avatar,
 			'delete_avatar' => $delete_avatar

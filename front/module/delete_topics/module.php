@@ -41,10 +41,11 @@ final class BS_Front_Module_delete_topics extends BS_Front_Module
 		$ids = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
 
 		$this->add_loc_forum_path($fid);
-		$renderer->add_breadcrumb(
-			$locale->lang('delete_topics'),
-			BS_URL::get_url('delete_topics','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids)
-		);
+		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_ID,$ids);
+		$renderer->add_breadcrumb($locale->lang('delete_topics'),$url->to_url());
 	}
 	
 	/**
@@ -103,11 +104,14 @@ final class BS_Front_Module_delete_topics extends BS_Front_Module
 		if(count($selected_topic_ids) == 1 && $last_data['moved_tid'] == 0)
 			BS_PostingUtils::get_instance()->add_topic_review($last_data,false);
 		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_ID,$id_str);
 		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_DELETE_TOPICS,
-			'target_url' => BS_URL::get_url('delete_topics','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id_str),
+			'target_url' => $url->to_url(),
 			'selected_topics' => $selected_topics,
-			'back_url' => BS_URL::get_topics_url($fid)
+			'back_url' => BS_URL::build_topics_url($fid)
 		));
 	}
 }

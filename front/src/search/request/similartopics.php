@@ -111,7 +111,7 @@ final class BS_Front_Search_Request_SimilarTopics extends BS_Front_Search_Reques
 		return array('date','DESC');
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

@@ -33,10 +33,9 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		$renderer = $doc->use_default_renderer();
 
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
-		$renderer->add_breadcrumb(
-			$locale->lang('details'),
-			BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pmdetails&amp;'.BS_URL_ID.'='.$id)
-		);
+		$url = BS_URL::get_sub_url();
+		$url->set(BS_URL_ID,$id);
+		$renderer->add_breadcrumb($locale->lang('details'),$url->to_url());
 	}
 	
 	/**
@@ -133,19 +132,19 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 				$avatar = '<img src="'.$avatar_path.'" alt="" />';
 		}
 
+		$rurl = BS_URL::get_mod_url('redirect');
+		$rurl->set(BS_URL_LOC,'pm_navigate');
+		$rurl->set(BS_URL_ID,$id);
+		$rurl->set(BS_URL_KW,$data['pm_type']);
+		
 		// show top
-		$add = '&amp;'.BS_URL_ID.'='.$id.'&amp;'.BS_URL_KW.'='.$data['pm_type'];
 		$tpl->add_variables(array(
 			'date' => FWS_Date::get_date($data['pm_date']),
 			'text' => $text,
 			'type' => $data['pm_type'],
 			'subject' => $data['pm_title'],
-			'back' => BS_URL::get_url(
-				'redirect','&amp;'.BS_URL_LOC.'=pm_navigate&amp;'.BS_URL_MODE.'=back'.$add
-			),
-			'forward' => BS_URL::get_url(
-				'redirect','&amp;'.BS_URL_LOC.'=pm_navigate&amp;'.BS_URL_MODE.'=forward'.$add
-			),
+			'back' => $rurl->set(BS_URL_MODE,'back')->to_url(),
+			'forward' => $rurl->set(BS_URL_MODE,'forward')->to_url(),
 			'user_name' => $user_name,
 			'avatar' => $avatar
 		));
@@ -154,22 +153,27 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 
 		if($data['attachment_count'] > 0)
 		{
+			$durl = BS_URL::get_standalone_url('download');
+			
+    	list($att_width,$att_height) = explode('x',$cfg['attachments_images_size']);
+			$turl = BS_URL::get_standalone_url('thumbnail');
+    	$turl->set('width',$att_width);
+    	$turl->set('height',$att_height);
+    	$turl->set('method',$cfg['attachments_images_resize_method']);
+			
 			// show attachments
 			foreach(BS_DAO::get_attachments()->get_by_pmid($data['id']) as $adata)
 			{
 				$ext = FWS_FileUtils::get_extension($adata['attachment_path']);
-				$attachment_url = BS_URL::get_url('download','&amp;'.BS_URL_ID.'='.$adata['id']);
+				$attachment_url = $durl->set(BS_URL_ID,$adata['id'])->to_url();
 	
 				$is_image = $cfg['attachments_images_show'] == 1 &&
 					($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png');
 	
 				if($is_image)
 		    {
-		    	list($att_width,$att_height) = explode('x',$cfg['attachments_images_size']);
-		    	$params = '&amp;path='.$adata['attachment_path'].'&amp;width=';
-		    	$params .= $att_width.'&amp;height='.$att_height.'&amp;method=';
-		    	$params .= $cfg['attachments_images_resize_method'];
-		    	$image_url = BS_URL::get_url('thumbnail',$params);
+    			$turl->set('path',$adata['attachment_path']);
+		    	$image_url = $turl->to_url();
 		      $image_title = sprintf(
 		      	$locale->lang('download_image'),basename($adata['attachment_path'])
 		      );
@@ -197,12 +201,15 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		$tpl->add_array('attachments',$attachments);
 
 		// show bottom
+		$url = BS_URL::get_sub_url(0,'pmbanlist');
+		$url->set(BS_URL_AT,BS_ACTION_BAN_USER);
 		$uid = ($data['pm_type'] == 'inbox') ? $data['sender_id'] : $data['receiver_id'];
-		$params = '&amp;'.BS_URL_LOC.'=pmbanlist&amp;'.BS_URL_AT.'='.BS_ACTION_BAN_USER;
-		$params .= '&amp;'.BS_URL_ID.'='.$uid;
+		$url->set(BS_URL_ID,$uid);
+		$url->set_sid_policy(BS_URL::SID_FORCE);
+		
 		$tpl->add_variables(array(
 			'id' => $data['id'],
-			'ban_user_url' => BS_URL::get_url('userprofile',$params,'&amp;',true),
+			'ban_user_url' => $url->to_url(),
 			'show_reply_btn' => $data['pm_type'] == 'inbox'
 		));
 	}

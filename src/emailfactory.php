@@ -154,14 +154,17 @@ final class BS_EmailFactory extends FWS_Singleton
 		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
+		$url = BS_URL::get_mod_url('conf_email');
+		$url->set(BS_URL_ID,$user_id);
+		$url->set(BS_URL_PID,$user_key);
+		$url->set_separator('&');
+		$url->set_sid_policy(BS_URL::SID_FORCE);
 		
 		$subject = sprintf($locale->lang('change_email_email_title'),$cfg['forum_title']);
 		$text = $tpl->parse_string(
 			$locale->lang('change_email_email_text'),
 			array(
-				'url' => BS_URL::get_url(
-					'conf_email','&'.BS_URL_ID.'='.$user_id.'&'.BS_URL_PID.'='.$user_key,'&',true
-				),
+				'url' => $url->to_url(),
 				'email' => $user_email
 			)
 		);
@@ -185,15 +188,16 @@ final class BS_EmailFactory extends FWS_Singleton
 		$functions = FWS_Props::get()->functions();
 
 		$locale->add_language_file('email');
+		
+		$url = BS_URL::get_frontend_url('change_password','&',false);
+		$url->set(BS_URL_ID,$user_id);
+		$url->set(BS_URL_KW,$user_key);
 
 		$subject = sprintf($locale->lang('pw_change_title'),$cfg['forum_title']);
 		$text = $tpl->parse_string(
 			$locale->lang('pw_change_text'),
 			array(
-				'url' => BS_URL::get_frontend_url(
-					'&'.BS_URL_ACTION.'=change_password&'.BS_URL_ID.'='.$user_id.'&'.BS_URL_KW.'='.$user_key,
-					'&',false
-				)
+				'url' => $url->to_url()
 			)
 		);
 		
@@ -219,6 +223,11 @@ final class BS_EmailFactory extends FWS_Singleton
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$locale->add_language_file('email');
+		$url = BS_URL::get_mod_url('activate');
+		$url->set(BS_URL_ID,$user_id);
+		$url->set(BS_URL_PID,$user_key);
+		$url->set_separator('&');
+		$url->set_sid_policy(BS_URL::SID_FORCE);
 
 		// send the email
 		$subject = $locale->lang('account_activation_email_title');
@@ -226,9 +235,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			$locale->lang('account_activation_email_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'url' => BS_URL::get_url(
-					'activate','&'.BS_URL_ID.'='.$user_id.'&'.BS_URL_KW.'='.$user_key,'&',true
-				)
+				'url' => $url->to_url()
 			)
 		);
 		
@@ -255,7 +262,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			$locale->lang('account_activated_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'board_url' => BS_URL::get_frontend_url('','&',false)
+				'board_url' => BS_URL::build_frontend_url(null,'&',false)
 			)
 		);
 		
@@ -282,7 +289,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			$locale->lang('account_not_activated_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'board_url' => BS_URL::get_frontend_url('','&',false)
+				'board_url' => BS_URL::build_frontend_url(null,'&',false)
 			)
 		);
 		
@@ -308,7 +315,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			$locale->lang('account_reactivated_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'board_url' => BS_URL::get_frontend_url('','&',false)
+				'board_url' => BS_URL::build_frontend_url(null,'&',false)
 			)
 		);
 		
@@ -335,7 +342,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			$locale->lang('account_deactivated_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'board_url' => BS_URL::get_frontend_url('','&',false)
+				'board_url' => BS_URL::build_frontend_url(null,'&',false)
 			)
 		);
 		
@@ -362,7 +369,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			$locale->lang('new_pm_email_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'board_url' => BS_URL::get_frontend_url('','&',false)
+				'board_url' => BS_URL::build_frontend_url(null,'&',false)
 			)
 		);
 		
@@ -389,7 +396,14 @@ final class BS_EmailFactory extends FWS_Singleton
 
 		$murl = '';
 		if($cfg['account_activation'] == 'email')
-			$murl = BS_URL::get_url('activate','&user_id='.$user_id.'&user_key='.$user_key,'&',true);
+		{
+			$url = BS_URL::get_mod_url('activate');
+			$url->set(BS_URL_ID,$user_id);
+			$url->set(BS_URL_PID,$user_key);
+			$url->set_separator('&');
+			$url->set_sid_policy(BS_URL::SID_FORCE);
+			$murl = $url->to_url();
+		}
 		
 		$subject = sprintf(
 			$locale->lang('account_registration_email_title'),$cfg['forum_title']
@@ -432,7 +446,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			$locale->lang('newaccount_email_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'board_url' => BS_URL::get_frontend_url('','&',false)
+				'board_url' => BS_URL::build_frontend_url(null,'&',false)
 			)
 		);
 		
@@ -491,7 +505,7 @@ final class BS_EmailFactory extends FWS_Singleton
 				'percent' => round(100 / ($cfg['pm_max_inbox'] / $current),1),
 				'current' => $current,
 				'max' => $cfg['pm_max_inbox'],
-				'board_url' => BS_URL::get_frontend_url('','&',false)
+				'board_url' => BS_URL::build_frontend_url(null,'&',false)
 			)
 		);
 		
@@ -521,27 +535,27 @@ final class BS_EmailFactory extends FWS_Singleton
 		$tpl = FWS_Props::get()->tpl();
 		$locale->add_language_file('email');
 		
-		$murl = BS_URL::get_frontend_url(
-			'&'.BS_URL_ACTION.'=posts&'.BS_URL_FID.'='.$fid
-				.'&'.BS_URL_TID.'='.$tid,'&',false
-		);
+		$murl = BS_URL::get_frontend_url('posts','&',false);
+		$murl->set(BS_URL_FID,$fid);
+		$murl->set(BS_URL_TID,$tid);
+		$murl->set_anchor('b_'.$pid);
+		
 		if(BS_PostingUtils::get_instance()->get_posts_order() == 'ASC')
 		{
 			$post_num = BS_DAO::get_posts()->get_count_in_topic($tid);
 			if($post_num > $cfg['posts_per_page'])
 			{
 				$pagination = new BS_Pagination($cfg['posts_per_page'],$post_num);
-				$murl .= '&'.BS_URL_SITE.'='.$pagination->get_page_count();
+				$murl->set(BS_URL_SITE,$pagination->get_page_count());
 			}
 		}
-		$murl .= '#b_'.$pid;
 		
 		$subject = sprintf($locale->lang('new_entry_title'),$cfg['forum_title']);
 		$text_def = $tpl->parse_string(
 			$locale->lang('new_entry_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'board_url' => $murl,
+				'board_url' => $murl->to_url(),
 				'text' => '',
 				'user_name' => ''
 			)

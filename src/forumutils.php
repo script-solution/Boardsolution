@@ -95,6 +95,9 @@ final class BS_ForumUtils extends FWS_Singleton
 			$nodes = array();
 			$fn = 0;
 	
+			$clapurl = BS_URL::get_mod_url('forums');
+			$clapurl->set(BS_URL_LOC,'clapforum');
+			
 			$post_order = BS_PostingUtils::get_instance()->get_posts_order();
 			$next_display_layer = -1;
 			$sub_cats = array();
@@ -159,8 +162,7 @@ final class BS_ForumUtils extends FWS_Singleton
 						}
 					}
 	
-					$fid_add = $parent_id != 0 ? '&amp;'.BS_URL_FID.'='.$parent_id : '';
-					$forum_url = BS_URL::get_topics_url($forum_id,'&amp;',1);
+					$forum_url = BS_URL::build_topics_url($forum_id,1);
 					
 					$is_unread = false;
 					if($forum_type_cats)
@@ -168,15 +170,15 @@ final class BS_ForumUtils extends FWS_Singleton
 						if(!$daten->get_display_subforums())
 							$clap_forum = false;
 						
+						$clapurl->set(BS_URL_FID,$parent_id);
+						$clapurl->set(BS_URL_ID,$forum_id);
 						$nodes[$fn] = array(
 							'contains_forums' => true,
 							'forum_id' => $forum_id,
 							'img_ins' => $img_ins,
 							'display_rubrik' => $display_rubrik,
 							'clap_forum' => $clap_forum,
-							'clap_forum_url' => BS_URL::get_url(
-								0,$fid_add.'&amp;'.BS_URL_LOC.'=clapforum&amp;'.BS_URL_ID.'='.$forum_id
-							),
+							'clap_forum_url' => $clapurl->to_url(),
 							'cookie_prefix' => BS_COOKIE_PREFIX
 						);
 					}
@@ -362,7 +364,7 @@ final class BS_ForumUtils extends FWS_Singleton
 			{
 				if($i < $len - 1 || $start_with_raquo)
 					$res .= ' &raquo; ';
-				$res .= '<a href="'.BS_URL::get_topics_url($path[$i][1]).'"';
+				$res .= '<a href="'.BS_URL::build_topics_url($path[$i][1]).'"';
 	
 				$name = FWS_StringHelper::get_limited_string($path[$i][0],BS_MAX_FORUM_TITLE_LENGTH);
 				if($name['complete'] != '')
@@ -546,7 +548,7 @@ final class BS_ForumUtils extends FWS_Singleton
 				{
 					if($node->get_layer() == 2 && $sub_forums_count <= BS_FORUM_SMALL_SUBDIR_DISPLAY)
 					{
-						$murl = BS_URL::get_topics_url($fid);
+						$murl = BS_URL::build_topics_url($fid);
 						$sub_forums .= "<a href=\"".$murl."\">".$daten->get_name()."</a>, ";
 						$sub_forums_count++;
 					}
@@ -612,9 +614,9 @@ final class BS_ForumUtils extends FWS_Singleton
 		$site = 1;
 		if($post_order == 'ASC' && $pages > 1)
 			$site = $pages;
-		$topic_url = BS_URL::get_posts_url($data['id'],$data['threadid'],'&amp;',1);
+		$topic_url = BS_URL::build_posts_url($data['id'],$data['threadid'],1);
 		if($site > 1)
-			$lastpost_url = BS_URL::get_posts_url($data['id'],$data['threadid'],'&amp;',$site);
+			$lastpost_url = BS_URL::build_posts_url($data['id'],$data['threadid'],$site);
 		else
 			$lastpost_url = $topic_url;
 	
@@ -636,8 +638,6 @@ final class BS_ForumUtils extends FWS_Singleton
 			'topic' => $topic_name['displayed'],
 			'topic_url' => $topic_url
 		);
-	
-		return $res;
 	}
 
 	/**
@@ -655,6 +655,16 @@ final class BS_ForumUtils extends FWS_Singleton
 		$locale = FWS_Props::get()->locale();
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
+		
+		static $readurl = null;
+		if($readurl === null)
+		{
+			$readurl = BS_URL::get_mod_url('forums');
+			$readurl->set(BS_URL_AT,BS_ACTION_CHANGE_READ_STATUS);
+			$readurl->set(BS_URL_LOC,'read');
+			$readurl->set(BS_URL_MODE,'forums');
+			$readurl->set_sid_policy(BS_URL::SID_FORCE);
+		}
 
 		$data = $forums->get_node_data($id);
 
@@ -668,13 +678,9 @@ final class BS_ForumUtils extends FWS_Singleton
 		if($is_unread)
 		{
 			$image = $data->get_forum_is_closed() ? 'forum_unread_closed' : 'forum_unread';
-			$action_type = '&amp;'.BS_URL_AT.'='.BS_ACTION_CHANGE_READ_STATUS;
-			$read_url = BS_URL::get_url(
-				'forums',$action_type.'&amp;'.BS_URL_LOC.'=read&amp;'.BS_URL_MODE.'=forum'
-					.'&amp;'.BS_URL_FID.'='.$id,'&amp;',true
-			);
+			$readurl->set(BS_URL_FID,$id);
 			$img = $user->get_theme_item_path('images/unread/'.$image.'.gif');
-			return '<a href="'.$read_url.'"><img src="'.$img.'"'
+			return '<a href="'.$readurl->to_url().'"><img src="'.$img.'"'
 				.' alt="'.$locale->lang('markrubrikasread').'"'
 				.' title="'.$locale->lang('markrubrikasread').'" border="0" /></a>';
 		}
@@ -695,7 +701,7 @@ final class BS_ForumUtils extends FWS_Singleton
 		 .' title="'.$locale->lang($message).'" />';
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

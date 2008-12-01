@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_themes_default extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -50,12 +50,14 @@ final class BS_ACP_SubModule_themes_default extends BS_ACP_SubModule
 			$names = $cache->get_cache('themes')->get_field_vals_of_keys($delete,'theme_name');
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
+			$url = BS_URL::get_acpsub_url();
+			$url->set('at',BS_ACP_ACTION_DELETE_THEMES);
+			$url->set('ids',implode(',',$delete));
+			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
-				BS_URL::get_acpmod_url(
-					0,'&amp;at='.BS_ACP_ACTION_DELETE_THEMES.'&amp;ids='.implode(',',$delete)
-				),
-				BS_URL::get_acpmod_url()
+				$url->to_url(),
+				BS_URL::build_acpmod_url()
 			);
 		}
 		
@@ -66,17 +68,20 @@ final class BS_ACP_SubModule_themes_default extends BS_ACP_SubModule
 			'at_update' => BS_ACP_ACTION_UPDATE_THEMES
 		));
 		
+		$eurl = BS_URL::get_acpsub_url(0,'editor');
+		
 		$themes = array();
 		foreach($cache->get_cache('themes') as $data)
 		{
 			if(!$search || stripos($data['theme_name'],$search) !== false ||
 				stripos($data['theme_folder'],$search) !== false)
 			{
+				$eurl->set('theme',$data['theme_folder']);
 				$themes[] = array(
 					'id' => $data['id'],
 					'theme_name' => $data['theme_name'],
 					'theme_folder' => $data['theme_folder'],
-					'edit_url' => BS_URL::get_acpmod_url(0,'&amp;action=editor&amp;theme='.$data['theme_folder'])
+					'edit_url' => $eurl->to_url()
 				);
 			}
 		}

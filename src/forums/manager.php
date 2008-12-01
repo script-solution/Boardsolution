@@ -25,14 +25,6 @@ final class BS_Forums_Manager extends FWS_Tree_Manager
 	 */
 	public function __construct()
 	{
-		// don't call parent constructor here, because we want to init the nodes lazy
-	}
-
-	/**
-	 * @see FWS_Tree_Manager::first_node_access()
-	 */
-	protected function first_node_access()
-	{
 		parent::__construct(new BS_Forums_Storage_DB());
 	}
 	

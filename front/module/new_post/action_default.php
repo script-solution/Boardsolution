@@ -88,20 +88,22 @@ final class BS_Front_Action_new_post_default extends BS_Front_Action_Base
 		$ips->add_entry('post');
 
 		// generate the redirect-url
-		$header_add = '';
+		$murl = BS_URL::get_mod_url('posts');
+		$murl->set(BS_URL_FID,$fid);
+		$murl->set(BS_URL_TID,$tid);
+		$murl->set_anchor('b_'.$post->get_post_id());
+		$murl->set_sef(true);
+		
 		if(BS_PostingUtils::get_instance()->get_posts_order() == 'ASC')
 		{
 			$post_num = BS_DAO::get_posts()->get_count_in_topic($tid);
 			if($post_num > $cfg['posts_per_page'])
 			{
 				$pagination = new BS_Pagination($cfg['posts_per_page'],$post_num);
-				$header_add = '&'.BS_URL_SITE.'='.$pagination->get_page_count();
+				$murl->set(BS_URL_SITE,$pagination->get_page_count());
 			}
 		}
 
-		$murl = BS_URL::get_url(
-			'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.$header_add
-		).'#b_'.$post->get_post_id();
 		$this->add_link($locale->lang('go_to_post'),$murl);
 		$this->set_action_performed(true);
 

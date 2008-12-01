@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_acpaccess_module extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -37,7 +37,7 @@ final class BS_ACP_SubModule_acpaccess_module extends BS_ACP_SubModule
 		$module = $input->get_var('module','get',FWS_Input::STRING);
 		$renderer->add_breadcrumb(
 			$locale->lang('edit_permissions_for_module'),
-			BS_URL::get_acpmod_url(0,'&amp;action=module&amp;module='.$module)
+			BS_URL::get_acpsub_url()->set('module',$module)->to_url()
 		);
 	}
 	
@@ -84,7 +84,7 @@ final class BS_ACP_SubModule_acpaccess_module extends BS_ACP_SubModule
 			'module' => $module,
 			'action_type' => BS_ACP_ACTION_ACPACCESS_MODULE,
 			'group_combo' => $groupcombo->to_html(),
-			'search_url' => BS_URL::get_acpmod_url('usersearch','&amp;comboid=user_intern'),
+			'search_url' => BS_URL::get_acpmod_url('usersearch')->set('comboid','user_intern')->to_url(),
 			'module_name' => $locale->lang($mod),
 			'user_combo' => $usercombo->to_html(),
 			'current_user_permissions' => count($user) > 0 ? implode(', ',$user) : '-',

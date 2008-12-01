@@ -4,7 +4,7 @@
 
 <script type="text/javascript" src="{gjs.get_file('acp/src/user_selection.js')}"></script>
 
-<form id="formular" method="post" action="{gurl.get_acpmod_url(0,'&amp;action=module&amp;module='~module)}">
+<form id="formular" method="post" action="{gurl.simple_acp_url(0,'&amp;action=module&amp;module='~module)}">
 <input type="hidden" name="action_type" value="{action_type}" />
 <input type="hidden" id="selectedUsers" name="selectedUsers" value="" />
 <div class="a_border">
@@ -33,7 +33,7 @@
 </div>
 <center>
 	<input type="button" value="{glocale.lang('save')}" onclick="transferSelectedUser('user_intern','selectedUsers','formular');" />
-	<input type="button" value="{glocale.lang('back')}" onClick="document.location.href = '{gurl.get_acpmod_url()}';" />
+	<input type="button" value="{glocale.lang('back')}" onClick="document.location.href = '{gurl.simple_acp_url()}';" />
 </center>
 </form>
 

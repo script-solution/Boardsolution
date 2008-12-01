@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -50,7 +50,9 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 		{
 			$manager = BS_ACP_Module_Config_Helper::get_instance()->get_manager();
 			$title = $locale->lang($manager->get_group($gid)->get_title(),false);
-			$renderer->add_breadcrumb($title,BS_URL::get_acpmod_url(0,'&amp;action=items&amp;gid='.$gid));
+			$url = BS_URL::get_acpsub_url();
+			$url->set('gid',$gid);
+			$renderer->add_breadcrumb($title,$url->to_url());
 		}
 	}
 	
@@ -78,8 +80,12 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 		$perline = 6;
 		$hidden_fields = BS_URL::get_acpmod_comps();
 		$hidden_fields['action'] = 'search';
+		
+		$url = BS_URL::get_acpsub_url();
+		$url->set('gid',$gid);
+		
 		$tpl->add_variables(array(
-			'form_target' => BS_URL::get_acpmod_url(0,'&amp;action=items&amp;gid='.$gid),
+			'form_target' => $url->to_url(),
 			'action_type' => BS_ACP_ACTION_SAVE_SETTINGS,
 			'title' => $locale->lang($manager->get_group($gid)->get_title(),false),
 			'items' => $view->get_items(),

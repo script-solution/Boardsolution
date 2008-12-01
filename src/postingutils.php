@@ -92,27 +92,34 @@ final class BS_PostingUtils extends FWS_Singleton
 	
 	/**
 	 * Builds the posts of the given topic in reverse order for the reply or post-editing
-	 *
+	 * 
 	 * @param array $topic_data a reference to the topic-data
 	 * @param boolean $show_quote do you want to show the quote-button?
-	 * @param string $quote_post_url the url to quote a post (e.g.: index.php?...&amp;BS_URL_ID=)
+	 * @param BS_URL $quote_url the url to quote a post
 	 * @param int $number the number of the bbcode-area (default 1)
 	 * @return string the html-code
 	 */
-	public function add_topic_review($topic_data,$show_quote = true,$quote_post_url = '',$number = 1)
+	public function add_topic_review($topic_data,$show_quote = true,$quote_url = null,$number = 1)
 	{
+		if($quote_url !== null && !($quote_url instanceof BS_URL))
+			FWS_Helper::def_error('instance','quote_url','BS_URL',$quote_url);
+		
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
 		$show_quote = $show_quote && BS_PostingUtils::get_instance()->get_message_option('enable_bbcode');
 	
 		$tpl->set_template('inc_message_review.htm');
 		
+		$url = BS_URL::get_standalone_url('ajax_quote');
+		$url->set('id','__ID__');
+		$url->set('type','post');
+		$url->set_separator('&');
 		$review_title = sprintf($locale->lang('topic_review_title'),BS_TOPIC_REVIEW_POST_COUNT);
 		$tpl->add_variables(array(
 			'show_quote' => $show_quote,
 			'field_id' => 'bbcode_area'.$number,
 			'number' => $number,
-			'request_url' => BS_URL::get_url('ajax_quote','&id=%d%&type=post','&'),
+			'request_url' => $url->to_url(),
 			'topic_title' => $review_title.': "'.$topic_data['name'].'"',
 			'limit_height' => false
 		));
@@ -125,10 +132,11 @@ final class BS_PostingUtils extends FWS_Singleton
 		foreach($postcon->get_posts() as $post)
 		{
 			/* @var $post BS_Front_Post_Data */
+			$pid = $post->get_field('bid');
 			$posts[] = array(
 				'subject' => '',
-				'quote_post_url' => $quote_post_url.$post->get_field('bid'),
-				'post_id' => $post->get_field('bid'),
+				'quote_post_url' => $quote_url === null ? '' : $quote_url->set(BS_URL_PID,$pid),
+				'post_id' => $pid,
 				'user_name' => $post->get_username(),
 				'date' => FWS_Date::get_date($post->get_field('post_time'),true),
 				'text' => $post->get_post_text(false,false,false)
@@ -430,12 +438,19 @@ final class BS_PostingUtils extends FWS_Singleton
 	  {
 	  	$tpl->set_template('inc_attachments_display.htm');
 	  	
+	  	$durl = BS_URL::get_standalone_url('download');
+      list($att_width,$att_height) = explode('x',$cfg['attachments_images_size']);
+      $turl = BS_URL::get_standalone_url('thumbnail');
+	  	$turl->set('width',$att_width);
+	  	$turl->set('height',$att_height);
+	  	$turl->set('method',$cfg['attachments_images_resize_method']);
+	  	
 	  	$tplatt = array();
 	  	for($i = 0;$i < count($attachments[$post_data['bid']]);$i++)
 	    {
 	      $attachment = $attachments[$post_data['bid']][$i];
 	      $ext = FWS_FileUtils::get_extension($attachment['attachment_path']);
-	      $attachment_url = BS_URL::get_url('download','&amp;'.BS_URL_ID.'='.$attachment['id']);
+	      $attachment_url = $durl->set(BS_URL_ID,$attachment['id'])->to_url();
 				$image_url = '';
 				$image_title = '';
 	
@@ -444,12 +459,8 @@ final class BS_PostingUtils extends FWS_Singleton
 	      
 	      if($is_image)
 	      {
-	      	list($att_width,$att_height) = explode('x',$cfg['attachments_images_size']);
-	      	$params = '&amp;path='.$attachment['attachment_path'].'&amp;width=';
-	      	$params .= $att_width.'&amp;height='.$att_height;
-	        $params .= '&amp;method='.$cfg['attachments_images_resize_method'];
-	        
-	      	$image_url = BS_URL::get_url('thumbnail',$params);
+	        $turl->set('path',$attachment['attachment_path']);
+	      	$image_url = $turl->to_url();
 	        $image_title = sprintf($locale->lang('download_image'),
 	        	basename($attachment['attachment_path']));
 	      }
@@ -541,11 +552,13 @@ final class BS_PostingUtils extends FWS_Singleton
 		$user_stats = '';
 		if($cfg['post_stats_type'] != 'disabled')
 		{
-			$img_url = BS_URL::get_url('user_experience','&amp;'.BS_URL_ID.'='.$user_id);
-			$faq_url = BS_URL::get_url('faq').'#f_0';
+			$img_url = BS_URL::get_standalone_url('user_experience');
+			$img_url->set(BS_URL_ID,$user_id);
+			$faq_url = BS_URL::get_mod_url('faq');
+			$faq_url->set_anchor('f_0');
 			
-			$user_stats = '<a href="'.$faq_url.'" style="cursor: help;">';
-			$user_stats .= '<img src="'.$img_url.'" alt="" /></a>';
+			$user_stats = '<a href="'.$faq_url->to_url().'" style="cursor: help;">';
+			$user_stats .= '<img src="'.$img_url->to_url().'" alt="" /></a>';
 			
 			if($cfg['post_stats_type'] == 'current_rank')
 			{
@@ -563,7 +576,7 @@ final class BS_PostingUtils extends FWS_Singleton
 		return $user_stats;
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

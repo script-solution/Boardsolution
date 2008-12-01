@@ -29,11 +29,13 @@ final class BS_ACP_Module_Themes_Editor_Advanced extends BS_ACP_Module_Themes_Ed
 		$file = $this->_theme.'/style.css';
 		$theme = $input->get_var('theme','get',FWS_Input::STRING);
 
+		$url = BS_URL::get_acpsub_url(0,'editor');
+		$url->set('theme',$theme);
+		$url->set('mode','advanced');
+		
 		$tpl->set_template('tpleditor_formular.htm');
 		$tpl->add_variables(array(
-			'target_url' => BS_URL::get_acpmod_url(
-				0,'&amp;action=editor&amp;theme='.$theme.'&amp;mode=advanced'
-			),
+			'target_url' => $url->to_url(),
 			'action_type' => BS_ACP_ACTION_THEME_EDITOR_ADVANCED_SAVE,
 			'image' => BS_ACP_Utils::get_instance()->get_file_image($file),
 			'filename' => $file,
@@ -50,7 +52,7 @@ final class BS_ACP_Module_Themes_Editor_Advanced extends BS_ACP_Module_Themes_Ed
 		return 'tpleditor_formular.htm';
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

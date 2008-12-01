@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -49,12 +49,13 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 			$rows = $cache->get_cache('user_fields')->get_field_vals_of_keys($delete,'display_name');
 			$namelist = FWS_StringHelper::get_enum($rows,$locale->lang('and'));
 			
+			$url = BS_URL::get_acpsub_url();
+			$url->set('at',BS_ACP_ACTION_DELETE_ADDFIELDS);
+			$url->set('ids',implode(',',$delete));
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
-				BS_URL::get_acpmod_url(
-					0,'&amp;at='.BS_ACP_ACTION_DELETE_ADDFIELDS.'&amp;ids='.implode(',',$delete)
-				),
-				BS_URL::get_acpmod_url()
+				$url->to_url(),
+				BS_URL::build_acpmod_url()
 			);
 		}
 		
@@ -69,6 +70,9 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 		$tpl->add_array('sort_options',$sort_options);
 		$this->request_formular();
 		
+		$url = BS_URL::get_acpsub_url();
+		$url->set('at',BS_ACP_ACTION_SWITCH_ADDFIELDS);
+		
 		$i = 0;
 		$tplfields = array();
 		$elements = array_values($fields->get_elements());
@@ -82,9 +86,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 			if($i > 0)
 			{
 				$up_ids = $elements[$i - 1]['id'].','.$data['id'];
-				$switch_up_url = BS_URL::get_acpmod_url(
-					0,'&amp;at='.BS_ACP_ACTION_SWITCH_ADDFIELDS.'&amp;ids='.$up_ids
-				);
+				$switch_up_url = $url->set('ids',$up_ids)->to_url();
 			}
 			else
 				$switch_up_url = '';
@@ -92,9 +94,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 			if($i < count($elements) - 1)
 			{
 				$down_ids = $elements[$i + 1]['id'].','.$data['id'];
-				$switch_down_url = BS_URL::get_acpmod_url(
-					0,'&amp;at='.BS_ACP_ACTION_SWITCH_ADDFIELDS.'&amp;ids='.$down_ids
-				);
+				$switch_down_url = $url->set('ids',$down_ids)->to_url();
 			}
 			else
 				$switch_down_url = '';

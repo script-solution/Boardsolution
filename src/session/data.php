@@ -206,9 +206,9 @@ final class BS_Session_Data extends FWS_Session_Data
 		return null;
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
-		return array_merge(parent::get_print_vars(),get_object_vars($this));
+		return array_merge(parent::get_dump_vars(),get_object_vars($this));
 	}
 }
 ?>

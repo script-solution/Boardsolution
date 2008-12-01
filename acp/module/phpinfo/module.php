@@ -22,7 +22,7 @@ final class BS_ACP_Module_phpinfo extends BS_ACP_Module
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -34,8 +34,7 @@ final class BS_ACP_Module_phpinfo extends BS_ACP_Module
 		// disable gzip here
 		$doc->set_gzip(false);
 		
-		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_MODULE,'module');
-		$renderer->add_breadcrumb($locale->lang('acpmod_phpinfo'),BS_URL::get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_phpinfo'),BS_URL::build_acpmod_url());
 	}
 	
 	/**

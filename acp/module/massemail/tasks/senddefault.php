@@ -87,7 +87,7 @@ final class BS_ACP_Module_MassEmail_Tasks_SendDefault extends FWS_Object impleme
 		$user->set_session_data('mail_errors',$error_msgs);
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

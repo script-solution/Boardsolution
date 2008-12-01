@@ -44,9 +44,11 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 		$this->add_loc_forum_path($fid);
 		$this->add_loc_topic();
 
-		$params = '&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_ID.'='.$id;
-		$murl = BS_URL::get_url('delete_post',$params);
-		$renderer->add_breadcrumb($locale->lang('deletepost'),$murl);
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_TID,$tid);
+		$url->set(BS_URL_ID,$id);
+		$renderer->add_breadcrumb($locale->lang('deletepost'),$url->to_url());
 	}
 	
 	/**
@@ -119,19 +121,19 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 		else
 			$username = $post_data['post_an_user'];
 		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_TID,$tid);
+		
 		$tpl->add_variables(array(
 			'title' => sprintf($locale->lang('selected_post_from_topic'),$topic_data['name']),
-			'target_url' => BS_URL::get_url(
-				0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_ID.'='.$id
-			),
+			'target_url' => $url->set(BS_URL_ID,$id)->to_url(),
+			'back_url' => $url->set(BS_URL_ACTION,'posts')->remove(BS_URL_ID)->to_url(),
 			'action_type' => BS_ACTION_DELETE_POSTS,
 			'text' => $text,
 			'user_name' => $username,
 			'date' => FWS_Date::get_date($post_data['post_time'],true,true),
-			'post_id' => $post_data['pid'],
-			'back_url' => BS_URL::get_url(
-				'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
-			)
+			'post_id' => $post_data['id']
 		));
 	}
 }

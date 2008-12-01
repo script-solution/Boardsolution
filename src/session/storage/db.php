@@ -71,7 +71,7 @@ final class BS_Session_Storage_DB extends FWS_Object implements FWS_Session_Stor
 		);
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

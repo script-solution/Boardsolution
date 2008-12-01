@@ -40,12 +40,11 @@ final class BS_Front_Module_new_event extends BS_Front_Module
 		$renderer->add_action(BS_ACTION_START_EVENT,'default');
 
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
-		
 		$this->add_loc_forum_path($fid);
-		$renderer->add_breadcrumb(
-			$locale->lang('newevent'),
-			BS_URL::get_url('new_event','&amp;'.BS_URL_FID.'='.$fid)
-		);
+		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$renderer->add_breadcrumb($locale->lang('newevent'),$url->to_url());
 	}
 	
 	/**
@@ -91,16 +90,18 @@ final class BS_Front_Module_new_event extends BS_Front_Module
 		$loggedin = $user->is_loggedin();
 		$subt_def = $loggedin ? $user->get_profile_val('default_email_notification') : 0;
 		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
 		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_START_EVENT,
 			'open_end' => $form->get_checkbox_value('open_end',false),
 			'timeout_type_begin' => $form->get_radio_value('timeout_type','begin',true),
 			'timeout_type_self' => $form->get_radio_value('timeout_type','self',false),
-			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid),
+			'target_url' => $url->to_url(),
 			'subscribe_topic_def' => $subt_def,
 			'enable_email_notification' => $cfg['enable_email_notification'] && $loggedin,
 			'important_allowed' => $auth->has_current_forum_perm(BS_MODE_MARK_TOPICS_IMPORTANT),
-			'back_url' => BS_URL::get_topics_url($fid)
+			'back_url' => BS_URL::build_topics_url($fid)
 		));
 		
 		$pform = new BS_PostingForm($locale->lang('post').':');

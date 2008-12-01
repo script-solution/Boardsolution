@@ -17,20 +17,16 @@
  * @subpackage	acp.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Pagination extends FWS_Pagination
+final class BS_ACP_Pagination extends BS_Pagination
 {
 	/**
-	 * Constructor
-	 * 
-	 * @param int $per_page the number of entries per page
-	 * @param int $num the total number of entries
+	 * @see BS_Pagination::get_page_param()
+	 *
+	 * @return string
 	 */
-	public function __construct($per_page,$num)
+	protected function get_page_param()
 	{
-		$input = FWS_Props::get()->input();
-
-		$page = $input->get_var('site','get',FWS_Input::INTEGER);
-		parent::__construct($per_page,$num,$page);
+		return 'site';
 	}
 }
 ?>

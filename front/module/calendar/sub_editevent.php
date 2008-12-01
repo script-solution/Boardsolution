@@ -34,21 +34,13 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
+		
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
+		$url = BS_URL::get_sub_url(0,'editevent');
 		if($id !== null)
-		{
-			$renderer->add_breadcrumb(
-				$locale->lang('edit_event'),
-				BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=editevent&amp;'.BS_URL_ID.'='.$id)
-			);
-		}
+			$renderer->add_breadcrumb($locale->lang('edit_event'),$url->set(BS_URL_ID,$id)->to_url());
 		else
-		{
-			$renderer->add_breadcrumb(
-				$locale->lang('add_event'),
-				BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=editevent')
-			);
-		}
+			$renderer->add_breadcrumb($locale->lang('add_event'),$url->to_url());
 	}
 	
 	public function run()
@@ -74,8 +66,11 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 		{
 			$default = BS_DAO::get_events()->get_by_id($id);
 			
-			$back_url = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id);
-			$target_url = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=editevent&amp;'.BS_URL_ID.'='.$id);
+			$url = BS_URL::get_sub_url(0,'eventdetails');
+			$url->set(BS_URL_ID,$id);
+			$back_url = $url->to_url();
+			
+			$target_url = BS_URL::get_sub_url(0,'editevent')->set(BS_URL_ID,$id)->to_url();
 		}
 		else
 		{
@@ -91,8 +86,8 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 				'event_title' => ''
 			);
 			
-			$back_url = BS_URL::get_url();
-			$target_url = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=editevent');
+			$back_url = BS_URL::build_mod_url();
+			$target_url = BS_URL::build_sub_url(0,'editevent');
 		}
 		
 		// check permission

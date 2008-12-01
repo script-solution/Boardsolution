@@ -52,10 +52,11 @@ final class BS_Front_Module_edit_topic extends BS_Front_Module
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		
 		$this->add_loc_forum_path($fid);
-		$renderer->add_breadcrumb(
-			$locale->lang('editthread'),
-			BS_URL::get_url('edit_topic','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id)
-		);
+		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_ID,$id);
+		$renderer->add_breadcrumb($locale->lang('editthread'),$url->to_url());
 		
 		// load topic-data
 		if($id != null && $fid != null)
@@ -135,10 +136,11 @@ final class BS_Front_Module_edit_topic extends BS_Front_Module
 	
 		$form = $this->request_formular(false);
 	
-		$target_url = BS_URL::get_url(
-			'edit_topic','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id
-		);
-		$back_url = BS_URL::get_topics_url($fid);
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_ID,$id);
+		$target_url = $url->to_url();
+		$back_url = BS_URL::build_topics_url($fid);
 		$forum_name = BS_ForumUtils::get_instance()->get_forum_path($this->_tdata['rubrikid'],false);
 		
 		// topic

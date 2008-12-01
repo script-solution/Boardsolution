@@ -86,7 +86,7 @@ abstract class BS_Front_Module extends FWS_Module
 		{
 			$path = $forums->get_path($id);
 			for($i = count($path) - 1;$i >= 0;$i--)
-				$renderer->add_breadcrumb($path[$i][0],BS_URL::get_topics_url($path[$i][1],'&amp;',1));
+				$renderer->add_breadcrumb($path[$i][0],BS_URL::build_topics_url($path[$i][1],1));
 		}
 	}
 	
@@ -105,7 +105,7 @@ abstract class BS_Front_Module extends FWS_Module
 		$tdata = BS_Front_TopicFactory::get_instance()->get_current_topic();
 		if($tdata !== null)
 		{
-			$murl = BS_URL::get_posts_url($tdata['rubrikid'],$tdata['id'],'&amp;',1);
+			$murl = BS_URL::build_posts_url($tdata['rubrikid'],$tdata['id'],1);
 			$renderer->add_breadcrumb($tdata['name'],$murl);
 		}
 	}

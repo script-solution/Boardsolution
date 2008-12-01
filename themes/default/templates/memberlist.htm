@@ -32,7 +32,7 @@
 			<td height="27" class="bs_main" align="center">
 			{if data:allow_pms}
 			<a style="float: none;" title="{data:send_pm_title}" class="bs_button"
-				href="{gurl.simple_url('userprofile','&amp;$URL_LOC=pmcompose&amp;$URL_ID='~data:user_id)}"
+				href="{gurl.simple_url('userprofile','&amp;$URL_SUB=pmcompose&amp;$URL_ID='~data:user_id)}"
 				>{glocale.lang('pm_short')}</a>
 			{else}
 			{glocale.lang('notavailable')}
@@ -51,7 +51,7 @@
 </div>
 
 <div class="bs_padtop">
-{include "inc_page_split.htm"}
+{include "inc_pagination.htm"}
 </div>
 
 <script type="text/javascript" src="{gjs.get_file('src/ajax_user_matches.js')}"></script>

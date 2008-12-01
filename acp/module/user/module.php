@@ -37,7 +37,7 @@ final class BS_ACP_Module_user extends BS_ACP_SubModuleContainer
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -46,7 +46,7 @@ final class BS_ACP_Module_user extends BS_ACP_SubModuleContainer
 		$locale = FWS_Props::get()->locale();
 		$renderer = $doc->use_default_renderer();
 
-		$renderer->add_breadcrumb($locale->lang('acpmod_user'),BS_URL::get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_user'),BS_URL::build_acpmod_url());
 		
 		// init submodule
 		$this->_sub->init($doc);

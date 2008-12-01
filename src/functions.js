@@ -13,7 +13,7 @@
  * performs a mod-action for some topics
  * collects the ids from the checkboxes and redirects to the given url
  *
- * @param string base_url the base_url ending with &amp;URL_ID=
+ * @param string base_url the base_url containing __ID__ as placeholder
  */
 function performModAction(base_url)
 {
@@ -31,7 +31,7 @@ function performModAction(base_url)
 	if(ids == "")
 		return;
 
-	document.location.href = base_url + ids;
+	document.location.href = base_url.replace(/__ID__/,ids);
 }
 
 /**

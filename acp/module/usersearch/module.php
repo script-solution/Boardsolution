@@ -22,7 +22,7 @@ final class BS_ACP_Module_usersearch extends BS_ACP_Module
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -85,9 +85,11 @@ final class BS_ACP_Module_usersearch extends BS_ACP_Module
 			'date' => $locale->lang('since_date')
 		);
 		
+		$url = BS_URL::get_acpmod_url('usersearch');
+		$url->set('comboid',$comboid);
 		$tpl->add_variables(array(
 			'action_param' => BS_URL_ACTION,
-			'action' => BS_URL::get_acpmod_url('usersearch','&amp;comboid='.$comboid),
+			'action' => $url->to_url(),
 			'user_name' => $user_name,
 			'user_email' => $user_email,
 			'date_types' => $date_types,
@@ -102,7 +104,7 @@ final class BS_ACP_Module_usersearch extends BS_ACP_Module
 		if($search != null)
 		{
 			$tpl->add_variables(array(
-				'action' => BS_URL::get_acpmod_url('usersearch')
+				'action' => BS_URL::build_acpmod_url('usersearch')
 			));
 		
 			$user_groups = is_array($user_groups) ? $user_groups : array();

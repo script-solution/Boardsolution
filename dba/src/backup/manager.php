@@ -164,7 +164,7 @@ final class BS_DBA_Backup_Manager extends FWS_Object
 		}
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

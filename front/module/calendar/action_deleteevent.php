@@ -51,7 +51,7 @@ final class BS_Front_Action_calendar_deleteevent extends BS_Front_Action_Base
 		// delete the event
 		BS_DAO::get_events()->delete_by_ids(array($id));
 
-		$this->add_link($locale->lang('back'),BS_URL::get_url('calendar'));
+		$this->add_link($locale->lang('back'),BS_URL::get_mod_url('calendar'));
 		$this->set_action_performed(true);
 
 		return '';

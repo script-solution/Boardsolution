@@ -336,7 +336,6 @@ final class BS_Front_Topics extends FWS_Object
 		$tpl = FWS_Props::get()->tpl();
 		$input = FWS_Props::get()->input();
 		$unread = FWS_Props::get()->unread();
-		$functions = FWS_Props::get()->functions();
 		if($this->_total_topic_num != 0)
 		{
 			// generate sorting
@@ -406,14 +405,12 @@ final class BS_Front_Topics extends FWS_Object
 				$sql_where,$sql_order,$start,$count,$this->_keywords
 			);
 			
-			$highlight_param = '';
+			$kws = '';
 			if($this->_keywords !== null)
 			{
-				$kws = '';
 				foreach($this->_keywords as $kw)
 					$kws .= '"'.$kw.'" ';
 				$kws = rtrim($kws);
-				$highlight_param = '&amp;'.BS_URL_HL.'='.$kws;
 			}
 
 			$cache = array(
@@ -501,10 +498,11 @@ final class BS_Front_Topics extends FWS_Object
 		$redirect_url = '';
 		if(isset($pagination) && $pagination !== null)
 		{
-			$redirect_url = BS_URL::get_url(
-				'redirect','&amp;'.BS_URL_LOC.'=topic_action&amp;'.BS_URL_FID.'='.$fid
-					.'&amp;'.BS_URL_SITE.'='.$pagination->get_page()
-			);
+			$url = BS_URL::get_mod_url('redirect');
+			$url->set(BS_URL_LOC,'topic_action');
+			$url->set(BS_URL_FID,$fid);
+			$url->set(BS_URL_SITE,$pagination->get_page());
+			$redirect_url = $url->to_url();
 		}
 		
 		// display header		
@@ -523,7 +521,7 @@ final class BS_Front_Topics extends FWS_Object
 			'middle_col_width' => $this->_middle_width,
 			'right_col_width' => (100 - $this->_middle_width) / 2,
 			'fid' => $fid,
-			'quick_search_target' => BS_URL::get_url('search'),
+			'quick_search_target' => BS_URL::build_mod_url('search'),
 			'redirect_url' => $redirect_url,
 		));
 		
@@ -533,6 +531,19 @@ final class BS_Front_Topics extends FWS_Object
 		{
 			if(!is_null($this->_keywords))
 				$kwhl = new FWS_KeywordHighlighter($this->_keywords,'<span class="bs_highlight">');
+			
+			$rurl = BS_URL::get_mod_url('redirect');
+			$rurl->set(BS_URL_LOC,'show_post');
+			
+			$purl = BS_URL::get_mod_url('posts');
+			$purl->set_sef(true);
+			$psurl = BS_URL::get_mod_url('posts');
+			if($kws)
+				$psurl->set(BS_URL_HL,$kws);
+			
+			$posts_url = clone $psurl;
+			$posts_url->set(BS_URL_SITE,1);
+			$posts_url->set_sef(true);
 			
 			$post_order = BS_PostingUtils::get_instance()->get_posts_order();
 			$is_important = false;
@@ -553,31 +564,20 @@ final class BS_Front_Topics extends FWS_Object
 				{
 					$fup = $unread->get_first_unread_post($data['id']);
 					if($pages > 1)
-					{
-						$first_unread_url = BS_URL::get_url(
-							'redirect','&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'='.$fup
-						);
-					}
+						$first_unread_url = $rurl->set(BS_URL_ID,$fup)->to_url();
 					else
 					{
-						$first_unread_url = BS_URL::get_url(
-							'posts','&amp;'.BS_URL_FID.'='.$data['rubrikid']
-								.'&amp;'.BS_URL_TID.'='.$data['id'].'#b_'.$fup
-						);
+						$purl->set(BS_URL_FID,$data['rubrikid']);
+						$purl->set(BS_URL_TID,$data['id']);
+						$purl->set_anchor('b_'.$fup);
+						$first_unread_url = $purl->to_url();
 					}
 				}
 
 				// generate page-split for topics with multiple pages
-				if($highlight_param)
-				{
-					$murl = BS_URL::get_url(
-						'posts','&amp;'.BS_URL_FID.'='.$data['rubrikid'].'&amp;'.BS_URL_TID.'='.$data['id']
-							.$highlight_param.'&amp;'.BS_URL_SITE.'={d}'
-					);
-				}
-				else
-					$murl = BS_URL::get_posts_url($data['rubrikid'],$data['id'],'&amp;','{d}');
-
+				$psurl->set(BS_URL_FID,$data['rubrikid']);
+				$psurl->set(BS_URL_TID,$data['id']);
+				
 				$forum_path = '';
 				if($this->_show_forum)
 					$forum_path = BS_ForumUtils::get_instance()->get_forum_path($data['rubrikid'],false);
@@ -617,12 +617,12 @@ final class BS_Front_Topics extends FWS_Object
 				}
 
 				// build url
-				if($highlight_param != '')
-					$posts_url = BS_URL::get_url('posts','&amp;'.BS_URL_FID.'='.$forum_id
-						.'&amp;'.BS_URL_TID.'='.$topic_id.$highlight_param);
-				else
-					$posts_url = BS_URL::get_posts_url($forum_id,$topic_id,'&amp;',1);
+				$posts_url->set(BS_URL_FID,$forum_id);
+				$posts_url->set(BS_URL_TID,$topic_id);
+				$sposts_url = $posts_url->to_url();
 
+				$tinypagi = new BS_Pagination($cfg['posts_per_page'],$data['posts'] + 1);
+				
 				// display template
 				$topics[] = array(
 					'is_unread' => $is_unread,
@@ -631,10 +631,10 @@ final class BS_Front_Topics extends FWS_Object
 					'is_moved' => $data['moved_tid'] != 0 && $data['moved_rid'] != 0,
 					'name_complete' => $topic_name['complete'],
 					'name' => $topic_name['displayed'],
-					'topic_url' => $posts_url,
+					'topic_url' => $sposts_url,
 					'show_forum' => $this->_show_forum,
 					'forum_path' => $forum_path,
-					'page_split' => $functions->get_page_split_tiny($pages,$murl),
+					'page_split' => $tinypagi->get_tiny($psurl),
 					'important_title' => $important_title,
 					'important_colspan' => $important_colspan,
 					'show_important' => $this->_show_important_first && $is_important != $data['important'],
@@ -649,7 +649,7 @@ final class BS_Front_Topics extends FWS_Object
 					'thread_pic' => BS_TopicUtils::get_instance()->get_symbol(
 						$cache,$data['type'],$data['symbol']
 					),
-					'posts_url' => $posts_url,
+					'posts_url' => $sposts_url,
 					'show_relevance' => $this->_show_relevance,
 					'relevance' => $relevance
 				);
@@ -703,7 +703,7 @@ final class BS_Front_Topics extends FWS_Object
 		$site = 1;
 		if($posts_order == 'ASC' && $pages > 1)
 			$site = $pages;
-		$murl = BS_URL::get_posts_url($data['rubrikid'],$data['id'],'&amp;',$site);
+		$murl = BS_URL::build_posts_url($data['rubrikid'],$data['id'],$site);
 
 		// determine username
 		if($data['lastpost_user'] != 0)
@@ -722,7 +722,7 @@ final class BS_Front_Topics extends FWS_Object
 		);
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

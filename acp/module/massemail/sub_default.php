@@ -126,12 +126,14 @@ final class BS_ACP_SubModule_massemail_default extends BS_ACP_SubModule
 		$group_combo->set_options($groups);
 		$group_combo->set_css_attribute('width','100%');
 		
+		$url = BS_URL::get_acpmod_url('usersearch');
+		$url->set('comboid','user_intern');
 		$tpl->add_variables(array(
 			'groups_combo' => $group_combo->to_html(),
 			'user_combo' => $user_combo->to_html(),
 			'content_type_options' => $content_type_options,
 			'method_options' => $method_options,
-			'search_url' => BS_URL::get_acpmod_url('usersearch','&amp;comboid=user_intern'),
+			'search_url' => $url->to_url()
 		));
 	}
 	

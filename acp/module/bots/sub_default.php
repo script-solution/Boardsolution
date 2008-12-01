@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_bots_default extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -50,12 +50,18 @@ final class BS_ACP_SubModule_bots_default extends BS_ACP_SubModule
 			$names = $cache->get_cache('bots')->get_field_vals_of_keys($ids,'bot_name');
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
+			$yurl = BS_URL::get_acpsub_url();
+			$yurl->set('at',BS_ACP_ACTION_DELETE_BOTS);
+			$yurl->set('ids',implode(',',$ids));
+			$yurl->set('site',$site);
+			
+			$nurl = BS_URL::get_acpsub_url();
+			$nurl->set('site',$site);
+			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
-				BS_URL::get_acpmod_url(
-					0,'&amp;at='.BS_ACP_ACTION_DELETE_BOTS.'&amp;ids='.implode(',',$ids).'&amp;site='.$site
-				),
-				BS_URL::get_acpmod_url(0,'&amp;site='.$site)
+				$yurl->to_url(),
+				$nurl->to_url()
 			);
 		}
 		
@@ -117,8 +123,9 @@ final class BS_ACP_SubModule_bots_default extends BS_ACP_SubModule
 			'search_val' => $search
 		));
 		
-		$murl = BS_URL::get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
-		$functions->add_pagination($pagination,$murl);
+		$murl = BS_URL::get_acpmod_url();
+		$murl->set('search',$search);
+		$pagination->populate_tpl($murl);
 	}
 }
 ?>

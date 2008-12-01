@@ -6,21 +6,21 @@
 
 <div class="a_block">
 	<div class="a_menubar">
-		<a href="{gurl.get_acpmod_url(0,'&amp;action=add')}">
+		<a href="{gurl.simple_acp_url(0,'&amp;action=add')}">
 		<img src="{gpath}acp/images/plus.png" alt="{glocale.lang('register_user')}" />
 		{glocale.lang('register_user')}
 		</a>
 		{if is_searching}
-		<a href="{gurl.get_acpmod_url(0,'&amp;action=search&amp;use_sess=1')}">
+		<a href="{gurl.simple_acp_url(0,'&amp;action=search&amp;use_sess=1')}">
 		<img src="{gpath}acp/images/edit_search.png" alt="{glocale.lang('change_search')}" />
 		{glocale.lang('change_search')}
 		</a>
-		<a href="{gurl.get_acpmod_url(0,'&amp;reset=1')}">
+		<a href="{gurl.simple_acp_url(0,'&amp;reset=1')}">
 		<img src="{gpath}acp/images/reset_search.png" alt="{glocale.lang('reset_search')}" />
 		{glocale.lang('reset_search')}
 		</a>
 		{endif}
-		<a href="{gurl.get_acpmod_url(0,'&amp;action=search')}">
+		<a href="{gurl.simple_acp_url(0,'&amp;action=search')}">
 		<img src="{gpath}acp/images/search.png" alt="{glocale.lang('start_new_search')}" />
 		{glocale.lang('start_new_search')}
 		</a>
@@ -98,7 +98,7 @@
 </form>
 
 <div class="a_pad">
-	{include "inc_page_split.htm"}
+	{include "inc_pagination.htm"}
 </div>
 
 {endif}

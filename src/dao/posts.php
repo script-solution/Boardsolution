@@ -811,7 +811,7 @@ class BS_DAO_Posts extends FWS_Singleton
 			FWS_Helper::def_error('intge0','number',$number);
 		
 		return $db->sql_rows(
-			'SELECT p.*,t.name,MAX(p.post_time) AS post_time
+			'SELECT p.*,t.name,MAX(p.id) AS id,MAX(p.post_time) AS post_time
 			 FROM '.BS_TB_POSTS.' p
 			 LEFT JOIN '.BS_TB_THREADS.' t ON p.threadid = t.id
 			 WHERE p.post_user = '.$uid.'

@@ -29,7 +29,7 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -43,20 +43,11 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 		$renderer->add_action(BS_ACP_ACTION_EDIT_FORUM,array('edit','edit'));
 
 		$id = $input->get_var('id','get',FWS_Input::ID);
+		$url = BS_URL::get_acpsub_url();
 		if($id != null)
-		{
-			$renderer->add_breadcrumb(
-				$locale->lang('edit_forum'),
-				BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
-			);
-		}
+			$renderer->add_breadcrumb($locale->lang('edit_forum'),$url->set('id',$id)->to_url());
 		else
-		{
-			$renderer->add_breadcrumb(
-				$locale->lang('create_new_forum'),
-				BS_URL::get_acpmod_url(0,'&amp;action=edit')
-			);
-		}
+			$renderer->add_breadcrumb($locale->lang('create_new_forum'),$url->to_url());
 		
 		$this->_helper = BS_ACP_Module_Forums_Helper::get_instance();
 	}
@@ -78,6 +69,8 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 		
 		$this->request_formular();
 		
+		$target_url = BS_URL::get_acpsub_url();
+		
 		// retrieve default data
 		if($type == 'add')
 		{
@@ -86,14 +79,13 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 			);
 			$forum = $data->get_attributes();
 			
-			$target_url = BS_URL::get_acpmod_url(0,'&amp;action=edit');
 			$form_title = $locale->lang('add');
 		}
 		else
 		{
 			$forum = $forums->get_forum_data($id);
 			
-			$target_url = BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id);
+			$target_url->set('id',$id);
 			$form_title = $locale->lang('edit');
 		}
 		
@@ -159,12 +151,15 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 		// populate template
 		$tpl->add_array('default',$forum);
 		$tpl->add_array('usergroups',$usergroups);
+		
+		$url = BS_URL::get_acpmod_url('usersearch');
+		$url->set('comboid','user_intern');
 		$tpl->add_variables(array(
 			'action_type' => $type == 'edit' ? BS_ACP_ACTION_EDIT_FORUM : BS_ACP_ACTION_ADD_FORUM,
-			'target_url' => $target_url,
+			'target_url' => $target_url->to_url(),
 			'form_title' => $form_title,
 			'parent_combo' => $parent_combo,
-			'search_url' => BS_URL::get_acpmod_url('usersearch','&amp;comboid=user_intern'),
+			'search_url' => $url->to_url(),
 			'user_combo' => $usercb->to_html(),
 			'forum_type_combo' => $forumtype->to_html()
 		));

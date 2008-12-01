@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_user_add extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -32,7 +32,7 @@ final class BS_ACP_SubModule_user_add extends BS_ACP_SubModule
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_USER_ADD,'add');
-		$renderer->add_breadcrumb($locale->lang('register_user'),BS_URL::get_acpmod_url(0,'&amp;action=add'));
+		$renderer->add_breadcrumb($locale->lang('register_user'),BS_URL::build_acpsub_url());
 	}
 	
 	/**

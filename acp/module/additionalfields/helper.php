@@ -135,7 +135,7 @@ final class BS_ACP_Module_AdditionalFields_Helper extends FWS_Singleton
 		return '';
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

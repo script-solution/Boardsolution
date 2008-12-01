@@ -18,7 +18,7 @@
 			<input class="a_searchbtn" type="submit" value="{glocale.lang('search')}" />
 		</div>
 		<div class="a_menubar_right">
-			<a href="{gurl.get_acpmod_url(0,'&amp;action=edit')}">
+			<a href="{gurl.simple_acp_url(0,'&amp;action=edit')}">
 			<img src="{gpath}acp/images/plus.png" alt="{glocale.lang('add_new_field')}" />
 			{glocale.lang('add_new_field')}
 			</a>
@@ -27,7 +27,7 @@
 </div>
 </form>
 
-<form method="post" action="{gurl.get_acpmod_url()}">
+<form method="post" action="{gurl.simple_acp_url()}">
 <div class="a_border a_pad">
 	<h1 class="a_topic">{glocale.lang('acpmod_addfields')}</h1>
 	<table class="a_table" cellpadding="2" cellspacing="1">
@@ -91,7 +91,7 @@
 			</table>
 			</td>
 			<td class="hlCol" align="center">
-			<a href="{gurl.get_acpmod_url(0,'&amp;action=edit&amp;id='~field:id)}">
+			<a href="{gurl.simple_acp_url(0,'&amp;action=edit&amp;id='~field:id)}">
 			<img src="{gpath}acp/images/edit.png" border="0" align="top" alt="{glocale.lang('edit')}" title="{glocale.lang('edit')}" />
 			</a>
 			</td>

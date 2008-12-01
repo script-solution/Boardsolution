@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_errorlog_sendform extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -31,7 +31,7 @@ final class BS_ACP_SubModule_errorlog_sendform extends BS_ACP_SubModule
 		$locale = FWS_Props::get()->locale();
 		$renderer = $doc->use_default_renderer();
 		$renderer->add_action(BS_ACP_ACTION_SEND_ERRORS,'send');
-		$renderer->add_breadcrumb($locale->lang('send_errors'),BS_URL::get_acpmod_url(0,'&amp;action=sendform'));
+		$renderer->add_breadcrumb($locale->lang('send_errors'),BS_URL::build_acpsub_url());
 	}
 	
 	/**

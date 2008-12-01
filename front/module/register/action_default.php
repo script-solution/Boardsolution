@@ -69,7 +69,7 @@ final class BS_Front_Action_register_default extends BS_Front_Action_Base
 		
 		// finish up
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('forumindex'),$functions->get_start_url());
+		$this->add_link($locale->lang('forumindex'),BS_URL::get_start_url());
 		$this->set_success_msg(
 			$locale->lang('success_'.BS_ACTION_REGISTER.'_'.$cfg['account_activation'])
 		);

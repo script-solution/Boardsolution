@@ -52,22 +52,6 @@ final class BS_Functions extends FWS_Object
 	}
 	
 	/**
-	 * Builds the start-url for the current user
-	 * 
-	 * @return string the start-url
-	 */
-	public function get_start_url()
-	{
-		$cfg = FWS_Props::get()->cfg();
-		$user = FWS_Props::get()->user();
-		if($cfg['enable_portal'] == 1 &&
-			($user->is_loggedin() || $user->get_profile_val('startmodule') == 'portal'))
-			return BS_URL::get_portal_url();
-		
-		return BS_URL::get_forums_url();
-	}
-	
-	/**
 	 * checks wether the entered security code is equal to the code stored in the session
 	 *
 	 * the post-field has to have the name "security_code"
@@ -101,131 +85,6 @@ final class BS_Functions extends FWS_Object
 			return false;
 
 		return true;
-	}
-
-	/**
-	 * Generates the pagination from the given object
-	 *
-	 * @param FWS_Pagination $pagination the FWS_Pagination-object
-	 * @param string $url the URL containing {d} at the position where to put the page-number
-	 * @return string the result
-	 */
-	public function add_pagination($pagination,$url)
-	{
-		$cfg = FWS_Props::get()->cfg();
-		$tpl = FWS_Props::get()->tpl();
-
-		if(!($pagination instanceof FWS_Pagination))
-			FWS_Helper::def_error('instance','pagination','FWS_Pagination',$pagination);
-		
-		if(empty($url))
-			FWS_Helper::def_error('empty','url',$url);
-		
-		if($cfg['show_always_page_split'] == 1 || $pagination->get_page_count() > 1)
-		{
-			$repl = urlencode('{d}');
-			
-			$page = $pagination->get_page();
-			$numbers = $pagination->get_page_numbers();
-			$tnumbers = array();
-			foreach($numbers as $n)
-			{
-				$number = $n;
-				$link = '';
-				if(FWS_Helper::is_integer($n))
-					$link = str_replace($repl,$n,$url);
-				else
-					$link = '';
-				$tnumbers[] = array(
-					'number' => $number,
-					'link' => $link
-				);
-			}
-			
-			$start_item = $pagination->get_start() + 1;
-			$end_item = $start_item + $pagination->get_per_page() - 1;
-			$end_item = ($end_item > $pagination->get_num()) ? $pagination->get_num() : $end_item;
-			
-			$tpl->set_template('inc_page_split.htm');
-			$tpl->add_array('numbers',$tnumbers);
-			$tpl->add_variables(array(
-				'page' => $page,
-				'total_pages' => $pagination->get_page_count(),
-				'start_item' => $start_item,
-				'end_item' => $end_item,
-				'total_items' => $pagination->get_num(),
-				'prev_url' => str_replace($repl,$page - 1,$url),
-				'next_url' => str_replace($repl,$page + 1,$url),
-				'first_url' => str_replace($repl,1,$url),
-				'last_url' => str_replace($repl,$pagination->get_page_count(),$url)
-			));
-			$tpl->restore_template();
-		}
-	}
-	
-	/**
-	 * A small version of the pagination
-	 *
-	 * @param FWS_Pagination $pagination the FWS_Pagination-object
-	 * @param string $link the URL containing {d} at the position where to put the page-number
-	 * @return string the pagination
-	 */
-	public function get_pagination_small($pagination,$link)
-	{
-		$res = '';
-		$page = $pagination->get_page();
-		$numbers = $pagination->get_page_numbers();
-		$repl = urlencode('{d}');
-		foreach($numbers as $n)
-		{
-			if(FWS_Helper::is_integer($n))
-			{
-				if($n == $page)
-					$res .= $n.' ';
-				else
-					$res .= '<a href="'.str_replace($repl,$n,$link).'">'.$n.'</a> ';
-			}
-			else
-				$res .= ' '.$n.' ';
-		}
-	
-		return $res;
-	}
-	
-	/**
-	 * a very small version of BS_get_page_split :)
-	 *
-	 * @param int $total_pages the total number of pages
-	 * @param string $link the URL containing {d} at the position where to put the page-number
-	 * @return string the page-split
-	 */
-	public function get_page_split_tiny($total_pages,$link)
-	{
-		$locale = FWS_Props::get()->locale();
-
-		$result = '';
-		if($total_pages > 1)
-		{
-			$repl = urlencode('{d}');
-			$result = '[ '.$locale->lang('pages').': ';
-			for($i = 1;$i <= $total_pages;$i++)
-			{
-				if($i < 5)
-					$result .= '<a href="'.str_replace($repl,$i,$link).'">'.$i.'</a> ';
-			}
-	
-			if($total_pages > 5)
-				$result .= ' ... ';
-	
-			if($total_pages > 4)
-			{
-				$result .= '<a href="'.str_replace($repl,$total_pages,$link).'">';
-				$result .= $total_pages.'</a>';
-			}
-	
-			$result .= ' ]';
-		}
-		return $result;
 	}
 	
 	/**
@@ -464,21 +323,21 @@ final class BS_Functions extends FWS_Object
 		if(!$user->is_loggedin())
 		{
 			if($cfg['enable_registrations'] && !BS_ENABLE_EXPORT)
-				$register_url = BS_URL::get_url('register');
+				$register_url = BS_URL::build_mod_url('register');
 			else if($cfg['enable_registrations'] && BS_EXPORT_REGISTER_TYPE == 'link')
 				$register_url = BS_EXPORT_REGISTER_LINK;
 			else
 				$register_url = '';
 	
 			if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE == 'enabled')
-				$send_pw_url = BS_URL::get_url('sendpw');
+				$send_pw_url = BS_URL::build_mod_url('sendpw');
 			else if(BS_EXPORT_SEND_PW_TYPE == 'link')
 				$send_pw_url = BS_EXPORT_SEND_PW_LINK;
 			else
 				$send_pw_url = '';
 			
 			if(!BS_ENABLE_EXPORT)
-				$resend_act_link_url = BS_URL::get_url('resend_activation');
+				$resend_act_link_url = BS_URL::build_mod_url('resend_activation');
 			else if(BS_EXPORT_RESEND_ACT_TYPE == 'link')
 				$resend_act_link_url = BS_EXPORT_RESEND_ACT_LINK;
 			else
@@ -542,7 +401,7 @@ final class BS_Functions extends FWS_Object
 			$tpl->set_template('login.htm');
 			$tpl->add_variables(array(
 				'action_type' => BS_ACTION_LOGIN,
-				'target_url' => BS_URL::get_url('login'),
+				'target_url' => BS_URL::build_mod_url('login'),
 				'show_sendpw_link' => !BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE != 'disabled',
 				'show_register_link' => $cfg['enable_registrations'] &&
 					(!BS_ENABLE_EXPORT || BS_EXPORT_REGISTER_TYPE == 'link'),
@@ -595,33 +454,37 @@ final class BS_Functions extends FWS_Object
 	}
 	
 	/**
-	 * builds the text for an "order-column"
+	 * Builds the text for an "order-column"
 	 *
 	 * @param string $title the title of the column
 	 * @param string $order_value the value of the order-parameter
 	 * @param string $def_ascdesc the default value for BS_URL_AD (ASC or DESC)
 	 * @param string $order the current value of BS_URL_ORDER
-	 * @param string $url the current URL
+	 * @param BS_URL $url the current URL
 	 * @return string the column-content
 	 */
 	public function get_order_column($title,$order_value,$def_ascdesc,$order,$url)
 	{
+		if(!($url instanceof BS_URL))
+			FWS_Helper::def_error('instance','url','BS_URL',$url);
+		
 		$user = FWS_Props::get()->user();
 
-		$preurl = $url.BS_URL_ORDER.'='.$order_value.'&amp;'.BS_URL_AD.'=';
+		$url->set(BS_URL_ORDER,$order_value);
+		
 		if($order == $order_value)
 		{
 			$asc_img = $user->get_theme_item_path('images/asc.gif');
 			$desc_img = $user->get_theme_item_path('images/desc.gif');
-			$result = $title.' <a href="'.$preurl.'ASC">';
+			$result = $title.' <a href="'.$url->set(BS_URL_AD,'ASC')->to_url().'">';
 			$result .= '<img src="'.$asc_img.'" alt="ASC" />';
 			$result .= '</a> ';
-			$result .= '<a href="'.$preurl.'DESC">';
+			$result .= '<a href="'.$url->set(BS_URL_AD,'DESC')->to_url().'">';
 			$result .= '<img src="'.$desc_img.'" alt="DESC" />';
 			$result .= '</a>';
 		}
 		else
-			$result = '<a href="'.$preurl.$def_ascdesc.'">'.$title.'</a>';
+			$result = '<a href="'.$url->set(BS_URL_AD,$def_ascdesc)->to_url().'">'.$title.'</a>';
 	
 		return $result;
 	}
@@ -637,6 +500,7 @@ final class BS_Functions extends FWS_Object
 			'cmV0dXJuICc8YSB0YXJnZXQ9Il9ibGFuayIgaHJlZj0iaHR0cDovL3d3dy5zY3JpcHQtc29sdXRpb24uZGUiPk'
 		 .'JvYXJkc29sdXRpb24gdjEuNDAgQWxwaGExPC9hPiB8ICZjb3B5OyBOaWxzIEFzbXVzc2VuIDIwMDMtMjAwNyc7'
 		);
+		// TODO remove that!
 		//$dstr = 'return \'<a target="_blank" href="http://www.script-solution.de">'.BS_VERSION.'</a> | &copy; Nils Asmussen 2003-2007\';';
 		//echo base64_encode($dstr);
 		return eval($str);
@@ -995,7 +859,7 @@ final class BS_Functions extends FWS_Object
 		return $words;
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

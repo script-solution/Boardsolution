@@ -18,7 +18,7 @@
 			<input class="a_searchbtn" type="submit" value="{glocale.lang('search')}" />
 		</div>
 		<div class="a_menubar_right">
-			<a href="{gurl.get_acpmod_url(0,'&amp;at='~action_type_add)}">
+			<a href="{gurl.simple_acp_url(0,'&amp;at='~action_type_add)}">
 			<img src="{gpath}acp/images/plus.png" alt="{glocale.lang('add_ban')}" />
 			{glocale.lang('add_ban')}
 			</a>
@@ -27,7 +27,7 @@
 </div>
 </form>
 
-<form method="post" action="{gurl.get_acpmod_url(0,'&amp;at='~action_type_update)}">
+<form method="post" action="{gurl.simple_acp_url(0,'&amp;at='~action_type_update)}">
 <div class="a_border a_pad">
 	<h1 class="a_topic">{glocale.lang('acpmod_bans')}</h1>
 	<table class="a_table" cellpadding="2" cellspacing="1">

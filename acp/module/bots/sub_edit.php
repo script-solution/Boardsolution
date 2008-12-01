@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_bots_edit extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -36,10 +36,9 @@ final class BS_ACP_SubModule_bots_edit extends BS_ACP_SubModule
 		$renderer->set_template('bots_edit.htm');
 		
 		$id = $input->get_var('id','get',FWS_Input::ID);
-		$renderer->add_breadcrumb(
-			$locale->lang('edit_bot'),
-			BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id)
-		);
+		$url = BS_URL::get_acpsub_url();
+		$url->set('id',$id);
+		$renderer->add_breadcrumb($locale->lang('edit_bot'),$url->to_url());
 	}
 	
 	/**
@@ -68,12 +67,15 @@ final class BS_ACP_SubModule_bots_edit extends BS_ACP_SubModule
 		$this->request_formular();
 		
 		$site = $input->get_var('site','get',FWS_Input::INTEGER);
+		$url = BS_URL::get_acpsub_url();
+		$url->set('id',$id);
+		$url->set('site',$site);
 		$tpl->add_variables(array(
 			'default' => $data,
 			'site' => $site,
 			'action_type' => BS_ACP_ACTION_EDIT_BOT,
 			'title' => $locale->lang('edit_bot'),
-			'form_target' => BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$id.'&amp;site='.$site)
+			'form_target' => $url->to_url()
 		));
 	}
 }

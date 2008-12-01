@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_usergroups_default extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -52,11 +52,15 @@ final class BS_ACP_SubModule_usergroups_default extends BS_ACP_SubModule
 				$names[] = $group['group_title'];
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
+			$url = BS_URL::get_acpsub_url();
+			$url->set('at',BS_ACP_ACTION_DELETE_USER_GROUPS);
+			$url->set('ids',$ids);
+			
 			$functions->add_delete_message(
 				$locale->lang('delete_group_notice').'<br /><br />'
 					.sprintf($locale->lang('delete_message'),$namelist),
-				BS_URL::get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_DELETE_USER_GROUPS.'&amp;ids='.$ids),
-				BS_URL::get_acpmod_url()
+				$url->to_url(),
+				BS_URL::build_acpmod_url()
 			);
 		}
 		

@@ -52,7 +52,7 @@ final class BS_Front_Action_sendpw_default extends BS_Front_Action_Base
 			BS_DAO::get_changepw()->create($data['id'],$key);
 
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('forumindex'),$functions->get_start_url());
+		$this->add_link($locale->lang('forumindex'),BS_URL::get_start_url());
 
 		return '';
 	}

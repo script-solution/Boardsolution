@@ -169,13 +169,22 @@ final class BS_Front_Post_Data extends FWS_Object
 	}
 	
 	/**
+	 * @param string $hl the value for BS_URL_HL (null = not set)
 	 * @return string the URL to this post
 	 */
-	public function get_post_url()
+	public function get_post_url($hl = null)
 	{
-		return BS_URL::get_url(
-			'redirect','&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'='.$this->get_field('bid')
-		);
+		static $url = null;
+		if($url === null)
+		{
+			$url = BS_URL::get_mod_url('redirect');
+			$url->set(BS_URL_LOC,'show_post');
+		}
+		
+		$url->set(BS_URL_ID,$this->get_field('bid'));
+		if($hl !== null)
+			$url->set(BS_URL_HL,$hl);
+		return $url->to_url();
 	}
 	
 	/**
@@ -449,18 +458,36 @@ final class BS_Front_Post_Data extends FWS_Object
 		static $cache = null;
 		if($cache === null)
 		{
-			$cache = array(
+			$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+			$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
+			$site = $this->_container->get_pagination()->get_page();
+			
+			$dpurl = BS_URL::get_mod_url('delete_post');
+    	$dpurl->set(BS_URL_FID,$fid);
+    	$dpurl->set(BS_URL_TID,$tid);
+    	
+    	$epurl = BS_URL::get_mod_url('edit_post');
+    	$epurl->copy_params($dpurl,array(BS_URL_FID,BS_URL_TID));
+    	$epurl->set(BS_URL_SITE,$site);
+    	
+    	$qurl = BS_URL::get_mod_url('new_post');
+    	$qurl->copy_params($epurl,array(BS_URL_FID,BS_URL_TID,BS_URL_SITE));
+	    		
+    	$cache = array(
 				'can_reply'					=> $auth->has_current_forum_perm(BS_MODE_REPLY),
 				'fclosed'						=> $forums->forum_is_closed($this->_data['rubrikid']),
-				'fid'								=> $input->get_var(BS_URL_FID,'get',FWS_Input::ID),
-				'tid'								=> $input->get_var(BS_URL_TID,'get',FWS_Input::ID),
+				'fid'								=> $fid,
+				'tid'								=> $tid,
 				'action'						=> $input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING),
-				'site'							=> $this->_container->get_pagination()->get_page(),
+				'site'							=> $site,
 				'total_pages'				=> $this->_container->get_pagination()->get_page_count(),
 				'total_posts'				=> $this->_container->get_post_count(),
 				'topic'							=> BS_Front_TopicFactory::get_instance()->get_current_topic(),
 				'posts_order'				=> BS_PostingUtils::get_instance()->get_posts_order(),
-				'is_admin'					=> $user->is_admin()
+				'is_admin'					=> $user->is_admin(),
+    		'delete_post_url'		=> $dpurl,
+    		'edit_post_url'			=> $epurl,
+    		'quote_url'					=> $qurl
 			);
 		}
 		
@@ -476,10 +503,11 @@ final class BS_Front_Post_Data extends FWS_Object
 	    	if($cfg['display_denied_options'] ||
 	    		 $auth->has_current_forum_perm(BS_MODE_DELETE_TOPICS,$this->_data['post_user']))
 	    	{
-		    	$murl = BS_URL::get_url('delete_topics','&amp;'.BS_URL_FID.'='.$cache['fid']
-		    		.'&amp;'.BS_URL_ID.'='.$cache['tid']);
+	    		$murl = BS_URL::get_mod_url('delete_topics');
+	    		$murl->set(BS_URL_FID,$cache['fid']);
+	    		$murl->set(BS_URL_ID,$cache['tid']);
 		    	$btns .= '<a class="bs_button_big" title="'.$locale->lang('delete_topic');
-					$btns .= '" href="'.$murl.'">'.$locale->lang('delete_topic').'</a>';
+					$btns .= '" href="'.$murl->to_url().'">'.$locale->lang('delete_topic').'</a>';
 	    	}
 	    }
 	    else
@@ -489,10 +517,10 @@ final class BS_Front_Post_Data extends FWS_Object
 	    		 ($auth->has_current_forum_perm(BS_MODE_DELETE_POSTS,$this->_data['post_user']) &&
 	    		  ($cache['is_admin'] || $cache['topic']['thread_closed'] == 0)))
 	    	{
-		    	$murl = BS_URL::get_url('delete_post','&amp;'.BS_URL_FID.'='.$cache['fid']
-		    		.'&amp;'.BS_URL_TID.'='.$cache['tid'].'&amp;'.BS_URL_ID.'='.$this->_data['bid']);
+	    		$murl = $cache['delete_post_url'];
+	    		$murl->set(BS_URL_ID,$this->_data['bid']);
 		    	$btns .= '<a title="'.$locale->lang('deletepost').'" class="bs_button" href="';
-		    	$btns .= $murl.'">'.$locale->lang('delete').'</a>';
+		    	$btns .= $murl->to_url().'">'.$locale->lang('delete').'</a>';
 	    	}
 	    }
 	
@@ -501,11 +529,10 @@ final class BS_Front_Post_Data extends FWS_Object
 	    	 ($auth->has_current_forum_perm(BS_MODE_EDIT_POST,$this->_data['post_user']) &&
 	    	  ($cache['is_admin'] || $cache['topic']['thread_closed'] == 0)))
 	    {
-		    $murl = BS_URL::get_url('edit_post','&amp;'.BS_URL_FID.'='.$cache['fid']
-		    	.'&amp;'.BS_URL_TID.'='.$cache['tid'].'&amp;'.BS_URL_ID.'='.$this->_data['bid']
-		    	.'&amp;'.BS_URL_SITE.'='.$cache['site']);
+	    	$murl = $cache['edit_post_url'];
+    		$murl->set(BS_URL_ID,$this->_data['bid']);
 		    $btns .= '<a class="bs_button" title="'.$locale->lang('editpost');
-				$btns .= '" href="'.$murl.'">'.$locale->lang('edit').'</a>';
+				$btns .= '" href="'.$murl->to_url().'">'.$locale->lang('edit').'</a>';
 	    }
 	
 	  	// quote button
@@ -513,16 +540,12 @@ final class BS_Front_Post_Data extends FWS_Object
 	    	$cache['topic']['comallow'] == 1 &&
 	    	($cache['is_admin'] || $cache['topic']['thread_closed'] == 0))
 	    {
-				$add_url = '&amp;'.BS_URL_PID.'='.$this->_data['bid'];
-				if($cache['site'] > 1)
-					$add_url .= '&amp;'.BS_URL_SITE.'='.$cache['site'];
-	    	$murl = BS_URL::get_url('new_post','&amp;'.BS_URL_FID.'='.$cache['fid']
-	    		.'&amp;'.BS_URL_TID.'='.$cache['tid'].$add_url);
-	    	
+	    	$murl = $cache['quote_url'];
+	    	$murl->set(BS_URL_PID,$this->_data['bid']);	
 	      $btns .= '<a id="quote_link_'.$this->_data['bid'].'" class="bs_button"';
 	      $btns .= ' title="'.$locale->lang('quotethispost').'"';
-				$btns .= ' href="'.$murl.'" onclick="toggleQuote('.$this->_data['bid'].'); return false;">';
-				$btns .= $locale->lang('quote').'+</a>';
+				$btns .= ' href="'.$murl->to_url().'" onclick="toggleQuote('.$this->_data['bid'].');';
+				$btns .= ' return false;">'.$locale->lang('quote').'+</a>';
 	    }
 	  }
 	  
@@ -547,14 +570,16 @@ final class BS_Front_Post_Data extends FWS_Object
 				'view_online'				=> $auth->has_global_permission('view_online_locations'),
 				'send_mails'				=> $auth->has_global_permission('send_mails'),
 				'is_admin'					=> $user->is_admin(),
-				'is_loggedin'				=> $user->is_loggedin()
+				'is_loggedin'				=> $user->is_loggedin(),
+				'mail_url'					=> BS_URL::get_mod_url('new_mail'),
+				'pm_url'						=> BS_URL::get_sub_url('userprofile','pmcompose'),
+				'user_loc_url'			=> BS_URL::build_mod_url('user_locations')
 			);
 		}
 		
 		$btns = '';
 	
-	  $btns .= '<a class="bs_button" style="float: left;" href="';
-	  $btns .= BS_URL::get_url('user_locations').'">';
+	  $btns .= '<a class="bs_button" style="float: left;" href="'.$cache['user_loc_url'].'">';
 	  $location = $sessions->get_user_location($this->_data['post_user']);
 		if($this->_data['post_user'] > 0 && $location != '' && ($this->_data['ghost_mode'] == 0 ||
 				$cfg['allow_ghost_mode'] == 0 || $cache['is_admin']))
@@ -578,23 +603,22 @@ final class BS_Front_Post_Data extends FWS_Object
 			 $this->_data['allow_board_emails'] == 1 &&
 			 ($cfg['display_denied_options'] || $cache['send_mails']))
 	  {
+	  	$murl = $cache['mail_url'];
+	  	$murl->set(BS_URL_ID,$this->_data['post_user']);
 	  	$btns .= '<a class="bs_button" style="float: left;" title="';
 	  	$btns .= sprintf($locale->lang('send_mail_to_user'),$this->_data['user']);
-	  	$btns .= '" href="';
-	  	$btns .= BS_URL::get_url('new_mail','&amp;'.BS_URL_ID.'='.$this->_data['post_user']);
-	  	$btns .= '">'.$locale->lang('email').'</a>';
+	  	$btns .= '" href="'.$murl->to_url().'">'.$locale->lang('email').'</a>';
 	  }
 	
 	  // pm button
 	  if($cfg['enable_pms'] == 1 && $this->_data['post_user'] != 0 &&
 	  	 $this->_data['allow_pms'] == 1 && ($cfg['display_denied_options'] || $cache['is_loggedin']))
 	  {
-	    $pm_url = BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=pmcompose'
-	    	.'&amp;'.BS_URL_ID.'='.$this->_data['post_user']);
-	    
+	  	$murl = $cache['pm_url'];
+	  	$murl->set(BS_URL_ID,$this->_data['post_user']);
 	    $btns .= '<a class="bs_button" style="float: left;" title="';
 			$btns .= sprintf($locale->lang('send_pm_to_user'),$this->_data['user']).'"';
-	    $btns .= ' href="'.$pm_url.'">'.$locale->lang('pm_short').'</a>';
+	    $btns .= ' href="'.$murl->to_url().'">'.$locale->lang('pm_short').'</a>';
 	  }
 	  
 	  return $btns;
@@ -654,7 +678,7 @@ final class BS_Front_Post_Data extends FWS_Object
 	  return $img;
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

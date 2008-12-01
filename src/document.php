@@ -20,12 +20,33 @@
 abstract class BS_Document extends FWS_Document
 {
 	/**
+	 * @see FWS_Document::finish()
+	 */
+	protected function finish()
+	{
+		parent::finish();
+		
+		$db = FWS_Props::get()->db();
+		$db->disconnect();
+	}
+
+	/**
 	 * @see FWS_Document::prepare_rendering()
 	 */
 	protected function prepare_rendering()
 	{
 		$cfg = FWS_Props::get()->cfg();
 		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$user = FWS_Props::get()->user();
+		
+		$tpl->add_global('gisloggedin',$user->is_loggedin());
+		$tpl->add_global('gusername',$user->get_user_name());
+		$tpl->add_global('guserid',$user->get_user_id());
+		$tpl->add_global('gisadmin',$user->is_admin());
+		$tpl->add_global('glang',$user->get_language());
+		// TODO add theme
+		// TODO add current module
 		
 		$this->set_charset(BS_HTML_CHARSET);
 		FWS_Path::set_outer($cfg['board_url'].'/');

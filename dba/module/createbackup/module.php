@@ -77,7 +77,7 @@ final class BS_DBA_Module_createbackup extends BS_DBA_Module
 		$form->set_condition($input->isset_var('prefix'));
 		
 		$tpl->add_variables(array(
-			'target_url' => BS_DBA_URL::get_url('createbackup','&amp;tables='.implode(';',$tables)),
+			'target_url' => BS_DBA_URL::build_url('createbackup','&amp;tables='.implode(';',$tables)),
 			'hidden_tables' => $hidden_tables,
 			'tables' => $sel_tables,
 			'lang_structure' => $locale->lang('structure'),
@@ -94,8 +94,8 @@ final class BS_DBA_Module_createbackup extends BS_DBA_Module
 		new BS_DBA_Progress(
 			$locale->lang('create_backup'),
 			$locale->lang('backup_finished'),
-			BS_DBA_URL::get_url(0,'&mode=backup','&'),
-			BS_DBA_URL::get_url('backups'),
+			BS_DBA_URL::build_url(0,'&mode=backup','&'),
+			BS_DBA_URL::build_url('backups'),
 			new BS_DBA_Module_CreateBackup_Tasks_Backup()
 		);
 	}

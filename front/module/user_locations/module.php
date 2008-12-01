@@ -48,7 +48,7 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 		
 		$renderer->set_has_access($auth->has_global_permission('view_online_locations'));
 
-		$renderer->add_breadcrumb($locale->lang('user_locations'),BS_URL::get_url('user_locations'));
+		$renderer->add_breadcrumb($locale->lang('user_locations'),BS_URL::build_mod_url());
 	}
 	
 	/**
@@ -73,24 +73,30 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 		);
 		$loc = $input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
 		
-		$baseurl = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'='.$loc.'&amp;');
+		$baseurl = BS_URL::get_mod_url();
+		$baseurl->set(BS_URL_LOC,$loc);
+		$orderurl = clone $baseurl;
+		
+		$baseurl->set(BS_URL_ORDER,$this->_order);
+		$baseurl->set(BS_URL_AD,$this->_ad);
 		
 		$view_details = $auth->has_global_permission('view_user_online_detail');
 		
 		$locations = $sessions->get_user_at_location('all',-1,$loc != 'view_duplicates');
 		usort($locations,array($this,'_location_sort_callback'));
 		
-		$url_params = '&amp;'.BS_URL_ORDER.'='.$this->_order.'&amp;'.BS_URL_AD.'='.$this->_ad;
 		if($loc == 'view_duplicates')
 		{
 			$toggle_duplicate_title = $locale->lang('hide_duplicates');
-			$toggle_duplicate_url = BS_URL::get_url(0,$url_params);
+			$baseurl->remove(BS_URL_LOC);
+			$toggle_duplicate_url = $baseurl->to_url();
 		}
 		else
 		{
 			$duplicate = $sessions->get_online_count() - count($locations);
 			$toggle_duplicate_title = $locale->lang('view_duplicates').' ('.$duplicate.')';
-			$toggle_duplicate_url = BS_URL::get_url(0,$url_params.'&amp;'.BS_URL_LOC.'=view_duplicates');
+			$baseurl->set(BS_URL_LOC,'view_duplicates');
+			$toggle_duplicate_url = $baseurl->to_url();
 		}
 		
 		$tpl->add_variables(array(
@@ -102,19 +108,19 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 			'l_width' => $view_details ? 35 : 50,
 			'd_width' => $view_details ? 15 : 25,
 			'col_username' => $functions->get_order_column(
-				$locale->lang('username'),'username','ASC',$this->_order,$baseurl
+				$locale->lang('username'),'username','ASC',$this->_order,$orderurl
 			),
 			'col_location' => $functions->get_order_column(
-				$locale->lang('location'),'location','ASC',$this->_order,$baseurl
+				$locale->lang('location'),'location','ASC',$this->_order,$orderurl
 			),
 			'col_date' => $functions->get_order_column(
-				$locale->lang('date'),'date','DESC',$this->_order,$baseurl
+				$locale->lang('date'),'date','DESC',$this->_order,$orderurl
 			),
 			'col_ip' => $functions->get_order_column(
-				$locale->lang('user_ip'),'ip','ASC',$this->_order,$baseurl
+				$locale->lang('user_ip'),'ip','ASC',$this->_order,$orderurl
 			),
 			'col_user_agent' => $functions->get_order_column(
-				$locale->lang('user_agent'),'useragent','ASC',$this->_order,$baseurl
+				$locale->lang('user_agent'),'useragent','ASC',$this->_order,$orderurl
 			)
 		));
 		
@@ -131,8 +137,8 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 			
 			if($user->is_admin() || $data['ghost_mode'] == 0 || $cfg['allow_ghost_mode'] == 0)
 			{
-				$loc = new BS_Location($data['location']);
-				$location = $loc->decode();
+				$uloc = new BS_Location($data['location']);
+				$location = $uloc->decode();
 				if($data['bot_name'] != '')
 				{
 					$user_name = $data['bot_name'];
@@ -184,8 +190,9 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 		$tpl->add_array('user_list',$user_list);
 		
 		// display page-split
-		$purl = BS_URL::get_url(0,$url_params.'&amp;'.BS_URL_LOC.'='.$loc.'&amp;'.BS_URL_SITE.'={d}');
-		$functions->add_pagination($pagination,$purl);
+		$purl = BS_URL::get_mod_url();
+		$purl->set(BS_URL_LOC,$loc);
+		$pagination->populate_tpl($purl);
 	}
 	
 	/**

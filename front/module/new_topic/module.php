@@ -34,16 +34,14 @@ final class BS_Front_Module_new_topic extends BS_Front_Module
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($auth->has_current_forum_perm(BS_MODE_START_TOPIC));
-		
 		$renderer->add_action(BS_ACTION_START_TOPIC,'default');
 
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
-		
 		$this->add_loc_forum_path($fid);
-		$renderer->add_breadcrumb(
-			$locale->lang('newthread'),
-			BS_URL::get_url('new_topic','&amp;'.BS_URL_FID.'='.$fid)
-		);
+		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$renderer->add_breadcrumb($locale->lang('newthread'),$url->to_url());
 	}
 	
 	/**
@@ -90,14 +88,16 @@ final class BS_Front_Module_new_topic extends BS_Front_Module
 		$subt_def = $loggedin ? $user->get_profile_val('default_email_notification') : 0;
 		$symbols = BS_TopicUtils::get_instance()->get_symbols($form);
 		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
 		$tpl->add_variables(array(
 			'important_allowed' => $auth->has_current_forum_perm(BS_MODE_MARK_TOPICS_IMPORTANT),
-			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid),
+			'target_url' => $url->to_url(),
 			'action_type' => BS_ACTION_START_TOPIC,
 			'symbols' => $symbols,
 			'subscribe_topic_def' => $subt_def,
 			'enable_email_notification' => $cfg['enable_email_notification'] && $loggedin,
-			'back_url' => BS_URL::get_topics_url($fid)
+			'back_url' => BS_URL::build_topics_url($fid)
 		));
 		
 		$pform = new BS_PostingForm($locale->lang('post').':');

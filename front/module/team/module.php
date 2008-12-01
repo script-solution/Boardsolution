@@ -31,7 +31,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 		$locale = FWS_Props::get()->locale();
 		$renderer = $doc->use_default_renderer();
 		
-		$renderer->add_breadcrumb($locale->lang('the_team'),BS_URL::get_url('team'));
+		$renderer->add_breadcrumb($locale->lang('the_team'),BS_URL::build_mod_url());
 	}
 	
 	/**
@@ -49,14 +49,12 @@ final class BS_Front_Module_team extends BS_Front_Module
 			'show_pm' => $cfg['display_denied_options'] || $user->is_loggedin()
 		));
 		
+		$purl = BS_URL::get_sub_url('userprofile','pmcompose');
+		
 		// collect admins
 		$admin_ids = array();
 		foreach(BS_DAO::get_profile()->get_users_by_groups(array(BS_STATUS_ADMIN)) as $data)
 		{
-			$purl = BS_URL::get_url(
-				'userprofile','&amp;'.BS_URL_LOC.'=pmcompose&amp;'.BS_URL_ID.'='.$data['id']
-			);
-			
 			// don't add admins as moderators again
 			$admin_ids[$data['id']] = true;
 			
@@ -64,7 +62,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 			$admins[] = array(
 				'user_name' => BS_UserUtils::get_instance()->get_link($data['id'],$data['user_name'],$data['user_group']),
 				'id' => $data['id'],
-				'pm_url' => $purl,
+				'pm_url' => $purl->set(BS_URL_ID,$data['id'])->to_url(),
 				'forum_count' => $count,
 				'forum_list' => $list
 			);
@@ -95,16 +93,12 @@ final class BS_Front_Module_team extends BS_Front_Module
 			// don't add mods twice
 			$admin_ids[$data['user_id']] = true;
 			
-			$purl = BS_URL::get_url(
-				'userprofile','&amp;'.BS_URL_LOC.'=pmcompose&amp;'.BS_URL_ID.'='.$data['user_id']
-			);
-			
 			list($list,$count) = $this->_get_forum_list($is_super_mod ? 0 : $data['user_id']);
 			$mods[] = array(
 				'user_name' => BS_UserUtils::get_instance()->get_link($data['user_id'],$data['user_name'],
 					$data['user_group']),
 				'id' => $data['user_id'],
-				'pm_url' => $purl,
+				'pm_url' => $purl->set(BS_URL_ID,$data['user_id'])->to_url(),
 				'forum_count' => $count,
 				'forum_list' => $list
 			);
@@ -127,15 +121,11 @@ final class BS_Front_Module_team extends BS_Front_Module
 					if(isset($admin_ids[$udata['id']]))
 						continue;
 					
-					$purl = BS_URL::get_url(
-						'userprofile','&amp;'.BS_URL_LOC.'=pmcompose&amp;'.BS_URL_ID.'='.$udata['id']
-					);
-					
 					$mods[] = array(
 						'user_name' => BS_UserUtils::get_instance()->get_link($udata['id'],$udata['user_name'],
 							$udata['user_group']),
 						'id' => $udata['id'],
-						'pm_url' => $purl,
+						'pm_url' => $purl->set(BS_URL_ID,$udata['id'])->to_url(),
 						'forum_count' => $count,
 						'forum_list' => $list
 					);
@@ -155,9 +145,6 @@ final class BS_Front_Module_team extends BS_Front_Module
 			// grab all members of the group
 			foreach(BS_DAO::get_profile()->get_users_by_groups($team_groups) as $udata)
 			{
-				$purl = BS_URL::get_url(
-					'userprofile','&amp;'.BS_URL_LOC.'=pmcompose&amp;'.BS_URL_ID.'='.$udata['id']
-				);
 				$gname = $this->get_group_name($udata['user_group']);
 				if(!isset($other[$gname]))
 					$other[$gname] = array();
@@ -166,7 +153,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 					'user_name' => BS_UserUtils::get_instance()->get_link($udata['id'],$udata['user_name'],
 						$udata['user_group']),
 					'id' => $udata['id'],
-					'pm_url' => $purl
+						'pm_url' => $purl->set(BS_URL_ID,$udata['id'])->to_url(),
 				);
 			}
 		}

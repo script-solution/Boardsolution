@@ -50,9 +50,9 @@
 				{if can_announce || can_leave}
 				<div class="bs_padtop">
 					{if can_leave}
-					<a href="{gurl.simple_url('calendar','&amp;$URL_AT=$ACTION_CAL_LEAVE_EVENT&amp;$URL_LOC=eventdetails&amp;$URL_ID='~id,'&amp;',true)}">{glocale.lang('optout')}</a>
+					<a href="{gurl.simple_url('calendar','&amp;$URL_AT=$ACTION_CAL_LEAVE_EVENT&amp;$URL_SUB=eventdetails&amp;$URL_ID='~id,'&amp;',true)}">{glocale.lang('optout')}</a>
 					{else}
-					<a href="{gurl.simple_url('calendar','&amp;$URL_AT=$ACTION_CAL_JOIN_EVENT&amp;$URL_LOC=eventdetails&amp;$URL_ID='~id,'&amp;',true)}">{glocale.lang('announce')}</a>
+					<a href="{gurl.simple_url('calendar','&amp;$URL_AT=$ACTION_CAL_JOIN_EVENT&amp;$URL_SUB=eventdetails&amp;$URL_ID='~id,'&amp;',true)}">{glocale.lang('announce')}</a>
 					{endif}
 				</div>
 				{endif}

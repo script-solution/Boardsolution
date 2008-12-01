@@ -36,7 +36,7 @@ final class BS_Front_Module_sendpw extends BS_Front_Module
 		
 		$renderer->add_action(BS_ACTION_SEND_PW,'default');
 
-		$renderer->add_breadcrumb($locale->lang('forgetpw'),BS_URL::get_url('sendpw'));
+		$renderer->add_breadcrumb($locale->lang('forgetpw'),BS_URL::build_mod_url());
 	}
 	
 	/**
@@ -70,10 +70,10 @@ final class BS_Front_Module_sendpw extends BS_Front_Module
 		$user->set_session_data('sec_code_field',$sec_code_field);
 		
 		$tpl->add_variables(array(
-			'target_url' => BS_URL::get_url('sendpw'),
+			'target_url' => BS_URL::build_mod_url(),
 			'action_type' => BS_ACTION_SEND_PW,
 			'enable_security_code' => $cfg['enable_security_code'] == 1,
-			'security_code_img' => BS_URL::get_url('security_code'),
+			'security_code_img' => BS_URL::build_standalone_url('security_code'),
 			'sec_code_field' => $sec_code_field
 		));
 	}

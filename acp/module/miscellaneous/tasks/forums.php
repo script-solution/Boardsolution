@@ -46,12 +46,12 @@ final class BS_ACP_Miscellaneous_Tasks_Forums extends FWS_Object implements FWS_
 			BS_DAO::get_forums()->update_by_id($data['id'],array(
 				'posts' => $posts,
 				'threads' => $topics,
-				'lastpost_id' => $lastpost['id']
+				'lastpost_id' => $lastpost
 			));
 		}
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

@@ -28,6 +28,7 @@ final class BS_DBA_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
+		FWS_URL::set_append_extern_vars(false);
 		
 		include_once(FWS_Path::server_app().'config/actions.php');
 		
@@ -38,7 +39,7 @@ final class BS_DBA_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		$tpl->set_cache_folder(FWS_Path::server_app().'cache/');
 		
 		// add the home-breadcrumb
-		$this->add_breadcrumb($locale->lang('dbbackup'),BS_DBA_URL::get_url('index'));
+		$this->add_breadcrumb($locale->lang('dbbackup'),BS_DBA_URL::build_url('index'));
 		
 		$this->_action_perf->set_prefix('BS_DBA_Action_');
 		$this->_action_perf->set_mod_folder('dba/module/');
@@ -147,10 +148,15 @@ final class BS_DBA_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		{
 			// collect available dbs
 			$dbs = array();
-			$qry = $db->sql_qry('SHOW DATABASES');
-			while($data = $db->sql_fetch_assoc($qry))
-				$dbs[$data['Database']] = $data['Database'];
-			$db->sql_free($qry);
+			$qry = $db->sql_qry('SHOW DATABASES',false);
+			if($qry)
+			{
+				while($data = $db->sql_fetch_assoc($qry))
+					$dbs[$data['Database']] = $data['Database'];
+				$db->sql_free($qry);
+			}
+			else
+				$dbs[BS_MYSQL_DATABASE] = BS_MYSQL_DATABASE;
 			
 			//form.get_combobox('database',databases,selected_db)
 			$dbcombo = new FWS_HTML_ComboBox('database','database',$selected_db,null);

@@ -147,8 +147,9 @@ final class BS_Location extends FWS_Object
 				
 				if($enable_links)
 				{
-					$murl = BS_URL::get_url('userdetails','&amp;'.BS_URL_ID.'='.$parts[1]);
-					$link = '<a href="'.$murl.'">'.$parts[2].'</a>';
+					$murl = BS_URL::get_mod_url('userdetails');
+					$murl->set(BS_URL_ID,$parts[1]);
+					$link = '<a href="'.$murl->to_url().'">'.$parts[2].'</a>';
 				}
 				else
 					$link = $parts[2];
@@ -196,7 +197,7 @@ final class BS_Location extends FWS_Object
 	
 				if($enable_links)
 				{
-					$topic_url = BS_URL::get_posts_url($parts[1],$parts[2]);
+					$topic_url = BS_URL::build_posts_url($parts[1],$parts[2]);
 					$topic = '<a href="'.$topic_url.'">'.$topic_title.'</a>';
 				}
 				else
@@ -212,7 +213,7 @@ final class BS_Location extends FWS_Object
 		}
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

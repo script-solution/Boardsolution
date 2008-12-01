@@ -5,13 +5,13 @@ function boardJumpRedirect(location)
 	switch(location)
 	{
 		case 'index':
-			document.location.href = '{gurl.get_forums_url('&')}';
+			document.location.href = '{gurl.build_forums_url('&')}';
 			break;
 		case 'admin':
-			document.location.href = '{gurl.get_admin_url('','&')}';
+			document.location.href = '{gurl.build_admin_url('&')}';
 			break;
 		case 'portal':
-			document.location.href = '{gurl.get_portal_url('&')}';
+			document.location.href = '{gurl.build_portal_url('&')}';
 			break;
 		case 'memberlist':
 			document.location.href = '{gurl.simple_url('memberlist','','&')}';
@@ -32,10 +32,10 @@ function boardJumpRedirect(location)
 			document.location.href = '{gurl.simple_url('search','','&')}';
 			break;
 		case 'profile':
-			document.location.href = '{gurl.simple_url('userprofile','&$URL_LOC=infos','&')}';
+			document.location.href = '{gurl.simple_url('userprofile','&$URL_SUB=infos','&')}';
 			break;
 		case 'pms':
-			document.location.href = '{gurl.simple_url('userprofile','&$URL_LOC=pmoverview','&')}';
+			document.location.href = '{gurl.simple_url('userprofile','&$URL_SUB=pmoverview','&')}';
 			break;
 		case 'register':
 			document.location.href = '{gurl.simple_url('register','','&')}';
@@ -53,8 +53,8 @@ function boardJumpRedirect(location)
 			var parts = location.split('_');
 			if(parts.length == 2 && parts[0] == 'f' && Number(parts[1]))
 			{
-				var base = '{gurl.get_topics_url('%s','&')}';
-				document.location.href = base.replace('%s',parts[1]);
+				var base = '{gurl.build_topics_url('_s_',0,'&')}';
+				document.location.href = base.replace('_s_',parts[1]);
 			}
 			break;
 	}

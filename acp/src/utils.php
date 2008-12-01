@@ -77,8 +77,9 @@ final class BS_ACP_Utils extends FWS_Singleton
 	 */
 	public function get_userlink($id,$name)
 	{
-		$furl = BS_URL::get_acpmod_url('userdetails','&amp;id='.$id);
-		$user = '<a href="javascript:FWS_openDefaultPopup(\''.$furl.'\',';
+		$furl = BS_URL::get_acpmod_url('userdetails');
+		$furl->set('id',$id);
+		$user = '<a href="javascript:FWS_openDefaultPopup(\''.$furl->to_url().'\',';
 		$user .= '\'UserDetails\',800,500);">'.$name.'</a>';
 		return $user;
 	}
@@ -90,25 +91,26 @@ final class BS_ACP_Utils extends FWS_Singleton
 	 * @param string $order_value the value of the order-parameter
 	 * @param string $def_ascdesc the default value for 'ad' (ASC or DESC)
 	 * @param string $order the current value of 'order'
-	 * @param string $url the current URL
+	 * @param BS_URL $url the current URL
 	 * @return string the column-content
 	 */
 	public function get_order_column($title,$order_value,$def_ascdesc,$order,$url)
 	{
+		if(!($url instanceof BS_URL))
+			FWS_Helper::def_error('instance','url','BS_URL',$url);
+		
+		$url->set('order',$order_value);
 		if($order == $order_value)
 		{
-			$result = $title.' <a href="'.$url.'order='.$order_value.'&amp;ad=ASC">';
+			$result = $title.' <a href="'.$url->set('ad','ASC')->to_url().'">';
 			$result .= '<img src="'.FWS_Path::client_app().'acp/images/asc.gif" alt="ASC" />';
 			$result .= '</a> ';
-			$result .= '<a href="'.$url.'order='.$order_value.'&amp;ad=DESC">';
+			$result .= '<a href="'.$url->set('ad','DESC')->to_url().'">';
 			$result .= '<img src="'.FWS_Path::client_app().'acp/images/desc.gif" alt="DESC" />';
 			$result .= '</a>';
 		}
 		else
-		{
-			$result = '<a href="'.$url.'order='.$order_value.'&amp;ad=';
-			$result .= $def_ascdesc.'">'.$title.'</a>';
-		}
+			$result = '<a href="'.$url->set('ad',$def_ascdesc)->to_url().'">'.$title.'</a>';
 	
 		return $result;
 	}
@@ -163,7 +165,7 @@ final class BS_ACP_Utils extends FWS_Singleton
 			$msgs->add_error($error);
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

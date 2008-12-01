@@ -101,9 +101,10 @@ final class BS_Front_Action_new_event_default extends BS_Front_Action_Base
 
 		$ips->add_entry('topic');
 
-		$murl = BS_URL::get_url(
-			'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$topic->get_topic_id()
-		);
+		$murl = BS_URL::get_mod_url();
+		$murl->set(BS_URL_FID,$fid);
+		$murl->set(BS_URL_TID,$topic->get_topic_id());
+		$murl->set_sef(true);
 		$this->add_link($locale->lang('go_to_created_topic'),$murl);
 		$this->set_action_performed(true);
 

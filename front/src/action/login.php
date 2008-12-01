@@ -22,7 +22,6 @@ final class BS_Front_Action_login extends BS_Front_Action_Base
 	public function perform_action()
 	{
 		$input = FWS_Props::get()->input();
-		$functions = FWS_Props::get()->functions();
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
 
@@ -42,7 +41,7 @@ final class BS_Front_Action_login extends BS_Front_Action_Base
 		{
 			$referer = $input->get_var('HTTP_REFERER','server',FWS_Input::STRING);
 			if($referer === null)
-				$goto_url = $functions->get_start_url();
+				$goto_url = BS_URL::get_start_url();
 			else
 			{
 				$goto_url = $referer;
@@ -67,7 +66,7 @@ final class BS_Front_Action_login extends BS_Front_Action_Base
 	
 							// if it is a guest-only module we don't want to redirect to that module
 							if($c->is_guest_only())
-								$goto_url = $functions->get_start_url();
+								$goto_url = BS_URL::get_start_url();
 						}
 					}
 				}
@@ -86,7 +85,10 @@ final class BS_Front_Action_login extends BS_Front_Action_Base
 		// otherwise we want to show nothing, therefore we simulate that we haven't done anything
 		$this->set_action_performed(false);
 		
-		$this->set_redirect(true,BS_URL::get_url('login','&amp;'.BS_URL_ID.'='.$error_code));
+		// TODO this is not used any more, right?
+		$url = BS_URL::get_mod_url('login');
+		$url->set(BS_URL_ID,$error_code);
+		$this->set_redirect(true,$url);
 		return $locale->lang('login_error_'.$error_code);
 	}
 }

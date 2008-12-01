@@ -1660,12 +1660,12 @@ foreach($groups as $group)
 
 // This may produce errors because the cache doesn't exist
 @include_once(BS_PATH.'extern/bs_api.php');
-@$bs = new BS_Extern_Document();
+@$cache = FWS_Props::get()->cache();
 
 // build the cache
-$bs->cache->refresh_all();
+$cache->refresh_all();
 
 echo 'The settings have been (re-)generated successfully!';
 
-$bs->finish();
+BS_finish();
 ?>

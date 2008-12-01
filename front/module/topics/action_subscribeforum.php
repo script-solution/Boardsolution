@@ -69,8 +69,9 @@ final class BS_Front_Action_topics_subscribeforum extends BS_Front_Action_Base
 		
 		$this->set_action_performed(true);
 		$this->add_link($locale->lang('back'),BS_URL::get_topics_url($fid));
-		$murl = BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=forums');
-		$this->add_link($locale->lang('to_profile_subscr'),$murl);
+		
+		$url = BS_URL::get_sub_url('userprofile','forums');
+		$this->add_link($locale->lang('to_profile_subscr'),$url);
 		$this->set_success_msg(sprintf($locale->lang('subscription_desc_forum'),$data->get_name()));
 
 		return '';

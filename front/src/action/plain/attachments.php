@@ -131,12 +131,14 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 	 * @param int $post_id the post-id
 	 * @param int $topic_id the topic-id
 	 * @param int $pm_id the pm-id
+	 * @param int $user_id the user-id
 	 */
-	public function set_target($post_id,$topic_id,$pm_id = 0)
+	public function set_target($post_id,$topic_id,$pm_id = 0,$user_id = 0)
 	{
 		$this->_post_id = $post_id;
 		$this->_topic_id = $topic_id;
 		$this->_pm_id = $pm_id;
+		$this->_user_id = $user_id;
 	}
 	
 	public function check_data()
@@ -193,6 +195,7 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 		
 		$db->start_transaction();
 	
+		$this->_count = 0;
 		for($i = 0;$i < $this->_limit;$i++)
 		{
 			// is the path-beginning valid?
@@ -228,7 +231,7 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 		$db->commit_transaction();
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_moderators_edituser extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -35,10 +35,9 @@ final class BS_ACP_SubModule_moderators_edituser extends BS_ACP_SubModule
 		$renderer->add_action(BS_ACP_ACTION_CONFIG_MOD_FORUMS,'edituser');
 		
 		$usernames = $input->get_var('usernames','get',FWS_Input::STRING);
-		$renderer->add_breadcrumb(
-			$locale->lang('config_mod_forums'),
-			BS_URL::get_acpmod_url(0,'&amp;action=edituser&amp;usernames='.$usernames)
-		);
+		$url = BS_URL::get_acpsub_url();
+		$url->set('usernames',$usernames);
+		$renderer->add_breadcrumb($locale->lang('config_mod_forums'),$url->to_url());
 	}
 	
 	/**

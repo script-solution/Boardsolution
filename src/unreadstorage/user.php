@@ -168,7 +168,7 @@ final class BS_UnreadStorage_User extends FWS_Object implements BS_UnreadStorage
 		BS_DAO::get_unread()->delete_news_of_user($user->get_user_id());
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

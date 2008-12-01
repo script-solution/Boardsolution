@@ -80,10 +80,9 @@ echo '<br />'."\n";
 echo 'Das neueste Mitglied ist: ';
 if($stats->newest_member_id)
 {
-	$murl = BS_URL::get_frontend_url(
-		'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$stats->newest_member_id
-	);
-	echo '<a href="'.$murl.'">'.$stats->newest_member_name.'</a>';
+	$murl = BS_URL::get_frontend_url('userdetails');
+	$murl->set(BS_URL_ID,$stats->newest_member_id);
+	echo '<a href="'.$murl->to_url().'">'.$stats->newest_member_name.'</a>';
 }
 else
 	echo '<i>n/a</i>';
@@ -102,10 +101,9 @@ $registered = '';
 foreach($online->online_user as $reg)
 {
 	// build url to the user-details
-	$murl = BS_URL::get_frontend_url(
-		'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$reg['id']
-	);
-	$registered .= '<a title="'.$reg['location'].'" href="'.$murl.'">'.$reg['name'].'</a>';
+	$murl = BS_URL::get_frontend_url('userdetails');
+	$murl->set(BS_URL_ID,$reg['id']);
+	$registered .= '<a title="'.$reg['location'].'" href="'.$murl->to_url().'">'.$reg['name'].'</a>';
 	if($i < count($online->online_user) - 1)
 		$registered .= ', ';
 	$i++;
@@ -154,10 +152,9 @@ foreach($topics->latest_topics as $topic)
 	if($topic['creation_user_id'] > 0)
 	{
 		// build url to the user who created the topic
-		$murl = BS_URL::get_frontend_url(
-			'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$topic['creation_user_id']
-		);
-		$creation .= '<br />Von: <a href="'.$murl.'">'.$topic['creation_user_name'].'</a>';
+		$murl = BS_URL::get_frontend_url('userdetails');
+		$murl->set(BS_URL_ID,$topic['creation_user_id']);
+		$creation .= '<br />Von: <a href="'.$murl->to_url().'">'.$topic['creation_user_name'].'</a>';
 	}
 	// or by a guest?
 	else
@@ -168,35 +165,31 @@ foreach($topics->latest_topics as $topic)
 	// last post by a registered user?
 	if($topic['lastpost_user_id'] > 0)
 	{
-		$murl = BS_URL::get_frontend_url(
-			'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$topic['lastpost_user_id']
-		);
-		$lastpost .= '<br />Von: <a href="'.$murl.'">'.$topic['lastpost_user_name'].'</a>';
+		$murl = BS_URL::get_frontend_url('userdetails');
+		$murl->set(BS_URL_ID,$topic['lastpost_user_id']);
+		$lastpost .= '<br />Von: <a href="'.$murl->to_url().'">'.$topic['lastpost_user_name'].'</a>';
 	}
 	// or by a guest
 	else
 		$lastpost .= '<br />Von: '.$topic['lastpost_user_name'];
 	
 	// add link to last post
-	$lastpost_url = BS_URL::get_frontend_url(
-		'&amp;'.BS_URL_ACTION.'=redirect&amp;'.BS_URL_LOC.'=show_post&amp;'
-			.BS_URL_ID.'='.$topic['lastpost_id']
-	);
-	$lastpost .= ' <a href="'.$lastpost_url.'">&raquo;&raquo;</a>';
+	$lpurl = BS_URL::get_frontend_url('redirect');
+	$lpurl->set(BS_URL_LOC,'show_post');
+	$lpurl->set(BS_URL_ID,$topic['lastpost_id']);
+	$lastpost .= ' <a href="'.$lpurl->to_url().'">&raquo;&raquo;</a>';
 	
 	// build url to topic
-	$turl = BS_URL::get_frontend_url(
-		'&amp;'.BS_URL_ACTION.'=posts&amp;'.BS_URL_FID.'='.$topic['forum_id']
-			.'&amp;'.BS_URL_TID.'='.$topic['id']
-	);
+	$turl = BS_URL::get_frontend_url('posts');
+	$turl->set(BS_URL_FID,$topic['forum_id']);
+	$turl->set(BS_URL_TID,$topic['id']);
 	// build url to forum
-	$furl = BS_URL::get_frontend_url(
-		'&amp;'.BS_URL_ACTION.'=topics&amp;'.BS_URL_FID.'='.$topic['forum_id']
-	);
-	$forum = '<a style="font-size: 11px;" href="'.$furl.'">'.$topic['forum_name'].'</a>';
+	$furl = BS_URL::get_frontend_url('topics');
+	$furl->set(BS_URL_FID,$topic['forum_id']);
+	$forum = '<a style="font-size: 11px;" href="'.$furl->to_url().'">'.$topic['forum_name'].'</a>';
 	echo '	<tr>'."\n";
 	// print topic-name
-	echo '		<td><a href="'.$turl.'">'.$topic['name'].'</a>';
+	echo '		<td><a href="'.$turl->to_url().'">'.$topic['name'].'</a>';
 	// print forum-name
 	echo '		<br /><span style="font-size: 11px;">Forum: '.$forum.'</span></td>'."\n";
 	// print number of replies
@@ -228,10 +221,9 @@ if(count($unread->unread_forums) > 0)
 	for($i = 0,$len = count($unread->unread_forums);$i < $len;$i++)
 	{
 		// build the url to the forum
-		$murl = BS_URL::get_frontend_url(
-			'&amp;'.BS_URL_ACTION.'=topics&amp;'.BS_URL_ID.'='.$unread->unread_forums[$i]
-		);
-		echo '<a href="'.$murl.'">'.$bs->forums->get_forum_name($unread->unread_forums[$i]).'</a>';
+		$furl = BS_URL::get_frontend_url('topics');
+		$furl->set(BS_URL_FID,$unread->unread_forums[$i]);
+		echo '<a href="'.$furl->to_url().'">'.$bs->forums->get_forum_name($unread->unread_forums[$i]).'</a>';
 		// print separator if not the last one
 		if($i < $len - 1)
 			echo ', ';
@@ -256,11 +248,10 @@ if(count($topic_ids) > 0)
 	foreach(BS_DAO::get_topics()->get_by_ids($topic_ids) as $utdata)
 	{
 		// build topic-url
-		$murl = BS_URL::get_frontend_url(
-			'&amp;'.BS_URL_ACTION.'=posts&amp;'.BS_URL_FID.'='.$utdata['fid']
-				.'&amp;'.BS_URL_TID.'='.$utdata['id']
-		);
-		echo '		<li><a href="'.$murl.'">'.$utdata['name'].'</a></li>'."\n";
+		$turl = BS_URL::get_frontend_url('posts');
+		$turl->set(BS_URL_FID,$utdata['fid']);
+		$turl->set(BS_URL_TID,$utdata['id']);
+		echo '		<li><a href="'.$turl->to_url().'">'.$utdata['name'].'</a></li>'."\n";
 	}
 	echo '	</ul>'."\n";
 }
@@ -292,22 +283,21 @@ if(count($events->events) > 0)
 		// is it an event in the calendar?
 		if($edata['topic_id'] == 0)
 		{
-			$murl = BS_URL::get_frontend_url(
-				'&amp;'.BS_URL_ACTION.'=calendar&amp;'.BS_URL_MODE.'=event_detail&amp;'
-					.BS_URL_ID.'='.$edata['id']
-			);
+			$murl = BS_URL::get_frontend_url('calendar');
+			$murl->set(BS_URL_SUB,'eventdetail');
+			$murl->set(BS_URL_ID,$edata['id']);
 		}
 		// or an event in a forum?
 		else
 		{
-			$murl = BS_URL::get_frontend_url(
-				'&amp;'.BS_URL_ACTION.'=posts&amp;'.BS_URL_FID.'='.$edata['forum_id']
-				.'&amp;'.BS_URL_TID.'='.$edata['topic_id']
-			);
+			$murl = BS_URL::get_frontend_url('posts');
+			$murl->set(BS_URL_FID,$edata['forum_id']);
+			$murl->set(BS_URL_TID,$edata['topic_id']);
 		}
 		
 		// print the link to the topic / event-details and append the date of the event
-		echo '<a href="'.$murl.'">'.$edata['title'].'</a> ('.FWS_Date::get_date($edata['begin'],false).')';
+		echo '<a href="'.$murl->to_url().'">'.$edata['title'].'</a>';
+		echo ' ('.FWS_Date::get_date($edata['begin'],false).')';
 		
 		// the separator
 		if($i < count($events->events) - 1)
@@ -327,11 +317,10 @@ if(count($events->birthdays) > 0)
 	foreach($events->birthdays as $i => $bdata)
 	{
 		// build userdetails-url
-		$murl = BS_URL::get_frontend_url(
-			'&amp;'.BS_URL_ACTION.'=userdetails&amp;'.BS_URL_ID.'='.$bdata['id']
-		);
+		$murl = BS_URL::get_frontend_url('userdetails');
+		$murl->set(BS_URL_ID,$bdata['id']);
 		// print link to user
-		echo '<a href="'.$murl.'">'.$bdata['user_name'].'</a>';
+		echo '<a href="'.$murl->to_url().'">'.$bdata['user_name'].'</a>';
 		
 		// $bdata['birthday'] has the format YYYY-MM-DD. therefore we split it at "-" to get the parts of it
 		$parts = explode('-',$bdata['add_birthday']);

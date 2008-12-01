@@ -34,7 +34,7 @@ final class BS_Front_SubModule_userprofile_forums extends BS_Front_SubModule
 		$renderer->add_action(BS_ACTION_UNSUBSCRIBE_FORUM,array('unsubscribe','forums'));
 		$renderer->add_action(BS_ACTION_SUBSCRIBE_ALL,'subscribeall');
 
-		$renderer->add_breadcrumb($locale->lang('forums'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=forums'));
+		$renderer->add_breadcrumb($locale->lang('forums'),BS_URL::build_sub_url());
 	}
 	
 	/**
@@ -74,24 +74,26 @@ final class BS_Front_SubModule_userprofile_forums extends BS_Front_SubModule
 					$names[] = $forum->get_name();
 			}
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
-			
-			$loc = '&amp;'.BS_URL_LOC.'='.$input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
 			$string_ids = implode(',',$delete);
-			$yes_url = BS_URL::get_url(
-				0,
-				$loc.'&amp;'.BS_URL_AT.'='.BS_ACTION_UNSUBSCRIBE_FORUM
-					.'&amp;'.BS_URL_DEL.'='.$string_ids.'&amp;'.BS_URL_SITE.'='.$site,'&amp;',true
-			);
-			$no_url = BS_URL::get_url(0,$loc.'&amp;'.BS_URL_SITE.'='.$site);
-			$target = BS_URL::get_url(
-				'redirect',
-				'&amp;'.BS_URL_LOC.'=del_subscr&amp;'.BS_URL_ID.'='.$string_ids
-					.'&amp;'.BS_URL_SITE.'='.$site
-			);
+			
+			$url = BS_URL::get_sub_url();
+			$url->set(BS_URL_SITE,$site);
+			
+			$no_url = $url->to_url();
+			
+			$url->set(BS_URL_AT,BS_ACTION_UNSUBSCRIBE_FORUM);
+			$url->set(BS_URL_DEL,$string_ids);
+			$url->set_sid_policy(BS_URL::SID_FORCE);
+			$yes_url = $url->to_url();
+			
+			$target = BS_URL::get_mod_url('redirect');
+			$target->set(BS_URL_LOC,'del_subscr');
+			$target->set(BS_URL_ID,$string_ids);
+			$target->set(BS_URL_SITE,$site);
 
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_subscr_forums'),$namelist),
-				$yes_url,$no_url,$target
+				$yes_url,$no_url,$target->to_url()
 			);
 		}
 
@@ -107,8 +109,11 @@ final class BS_Front_SubModule_userprofile_forums extends BS_Front_SubModule
 		$end = BS_SUBSCR_FORUMS_PER_PAGE;
 		$num = count($forum_ids);
 		$pagination = new BS_Pagination($end,$num);
+		
+		$url = BS_URL::get_sub_url();
+		$url->set(BS_URL_SITE,$site);
 		$tpl->add_variables(array(
-			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=forums&amp;'.BS_URL_SITE.'='.$site),
+			'target_url' => $url->to_url(),
 			'action_type' => BS_ACTION_UNSUBSCRIBE_FORUM,
 			'num' => $num
 		));
@@ -136,15 +141,12 @@ final class BS_Front_SubModule_userprofile_forums extends BS_Front_SubModule
 		
 		$tpl->add_array('forums',$tplforums,false);
 
-		$murl = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=forums&amp;'.BS_URL_SITE.'={d}');
-		$functions->add_pagination($pagination,$murl);
+		$pagination->populate_tpl(BS_URL::get_sub_url());
 
-		$murl = BS_URL::get_url(
-			0,'&amp;'.BS_URL_LOC.'=forums&amp;'.BS_URL_SITE.'='.$site
-				.'&amp;'.BS_URL_AT.'='.BS_ACTION_SUBSCRIBE_ALL,'&amp;',true
-		);
+		$url->set(BS_URL_AT,BS_ACTION_SUBSCRIBE_ALL);
+		$url->set_sid_policy(BS_URL::SID_FORCE);
 		$tpl->add_variables(array(
-			'subscribe_all_url' => $murl
+			'subscribe_all_url' => $url->to_url()
 		));
 	}
 }

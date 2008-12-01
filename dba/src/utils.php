@@ -51,7 +51,7 @@ final class BS_DBA_Utils extends FWS_Singleton
 		return FWS_Date::get_timestamp($date,FWS_Date::TZ_GMT);
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

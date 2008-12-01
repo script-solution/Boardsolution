@@ -48,7 +48,7 @@ final class BS_Front_Action_linklist_votelink extends BS_Front_Action_Base
 		BS_DAO::get_linkvotes()->vote($id,$user->get_user_id());
 
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('back'),BS_URL::get_url('linklist'));
+		$this->add_link($locale->lang('back'),BS_URL::get_mod_url('linklist'));
 
 		return '';
 	}

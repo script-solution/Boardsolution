@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_tasks_default extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -50,12 +50,14 @@ final class BS_ACP_SubModule_tasks_default extends BS_ACP_SubModule
 			$names = $cache->get_cache('tasks')->get_field_vals_of_keys($ids,'task_title');
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
+			$url = BS_URL::get_acpsub_url();
+			$url->set('at',BS_ACP_ACTION_DELETE_TASKS);
+			$url->set('ids',implode(',',$ids));
+			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
-				BS_URL::get_acpmod_url(
-					0,'&amp;at='.BS_ACP_ACTION_DELETE_TASKS.'&amp;ids='.implode(',',$ids)
-				),
-				BS_URL::get_acpmod_url()
+				$url->to_url(),
+				BS_URL::build_acpsub_url()
 			);
 		}
 		

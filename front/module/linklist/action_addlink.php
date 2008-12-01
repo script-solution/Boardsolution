@@ -93,7 +93,7 @@ final class BS_Front_Action_linklist_addlink extends BS_Front_Action_Base
 		}
 
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('back'),BS_URL::get_url('linklist'));
+		$this->add_link($locale->lang('back'),BS_URL::get_mod_url('linklist'));
 		if($active == 1)
 			$this->set_success_msg($locale->lang('success_'.BS_ACTION_ADD_LINK.'_activated'));
 		else

@@ -49,10 +49,11 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 		
 		$this->add_loc_forum_path($fid);
 		$this->add_loc_topic();
-		$renderer->add_breadcrumb(
-			$locale->lang('manage_posts'),
-			BS_URL::get_url('manage_posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid)
-		);
+		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_TID,$tid);
+		$renderer->add_breadcrumb($locale->lang('manage_posts'),$url->to_url());
 	}
 	
 	/**
@@ -138,15 +139,18 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 			'following' => $locale->lang('split_following')
 		);
 		
-		$params = '&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid;
 		$target_forum = $form->get_input_value('target_forum',0);
+		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_TID,$tid);
 		
 		$tpl->add_variables(array(
 			'show_delete' => $auth->has_current_forum_perm(BS_MODE_DELETE_POSTS),
 			'show_move' => $auth->has_current_forum_perm(BS_MODE_SPLIT_POSTS),
-			'delete_posts_url' => BS_URL::get_url(0,$params.'&amp;'.BS_URL_MODE.'=delete'),
-			'split_posts_url' => BS_URL::get_url(0,$params.'&amp;'.BS_URL_MODE.'=split'),
-			'merge_posts_url' => BS_URL::get_url(0,$params.'&amp;'.BS_URL_MODE.'=merge'),
+			'delete_posts_url' => $url->set(BS_URL_MODE,'delete')->to_url(),
+			'split_posts_url' => $url->set(BS_URL_MODE,'split')->to_url(),
+			'merge_posts_url' => $url->set(BS_URL_MODE,'merge')->to_url(),
 			'delete_bold' => $mode == 'delete' ? ' style="font-weight: bold;"' : '',
 			'split_bold' => $mode == 'split' ? ' style="font-weight: bold;"' : '',
 			'merge_bold' => $mode == 'merge' ? ' style="font-weight: bold;"' : '',
@@ -156,8 +160,7 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 			'forum_combo' => BS_ForumUtils::get_instance()->get_recursive_forum_combo(
 				'target_forum',$target_forum,0
 			),
-			'back_url' => BS_URL::get_url('posts',$params),
-			'target_url' => BS_URL::get_url(0,$params),
+			'target_url' => $url->remove(BS_URL_MODE)->to_url(),
 			'at_merge' => BS_ACTION_MERGE_POSTS,
 			'at_delete' => BS_ACTION_DELETE_POSTS,
 			'at_split' => BS_ACTION_SPLIT_POSTS,
@@ -165,9 +168,10 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 			'action_type' => $action_type,
 			'start_date' => $form->get_date_chooser('start_',$start,false),
 			'end_date' => $form->get_date_chooser('end_',$end,false),
-			'display_target' => BS_URL::get_url(0,$params),
+			'display_target' => $url->to_url(),
 			'keyword' => $keyword,
-			'merge_split_options' => $split_options
+			'merge_split_options' => $split_options,
+			'back_url' => BS_URL::build_posts_url($fid,$tid),
 		));
 		
 		$post_ids = $input->get_var('selected_posts','post');

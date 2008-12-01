@@ -22,7 +22,7 @@ final class BS_DBA_Module_importbackup extends BS_DBA_Module
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_DBA_Page $doc
+	 * @param BS_DBA_Document $doc
 	 */
 	public function init($doc)
 	{

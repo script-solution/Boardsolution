@@ -68,13 +68,16 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 	
 	/**
 	 * Builds similar topics based on the given title
-	 *
+	 * 
 	 * @param string $title the title of the current topic
 	 * @param int $tid the id of the current topic
-	 * @param string $current_url the current url
+	 * @param BS_URL $curl the current url
 	 */
-	public function add_similar_topics($title,$tid,$current_url)
+	public function add_similar_topics($title,$tid,$curl)
 	{
+		if(!($curl instanceof BS_URL))
+			FWS_Helper::def_error('instance','curl','BS_URL',$curl);
+		
 		$input = FWS_Props::get()->input();
 		$functions = FWS_Props::get()->functions();
 		$locale = FWS_Props::get()->locale();
@@ -104,11 +107,11 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 		$sql = ' t.id != '.$tid.' AND moved_tid = 0'.$search_string;
 	
 		// build search link
-		$murl = BS_URL::get_url(
-			'search','&amp;'.BS_URL_MODE.'=similar_topics&amp;'.BS_URL_KW.'='.implode(' ',$search_words)
-		);
+		$murl = BS_URL::get_mod_url('search');
+		$murl->set(BS_URL_MODE,'similar_topics');
+		$murl->set(BS_URL_KW,implode(' ',$search_words));
 		$topics_title = sprintf($locale->lang('similar_topics'),$title);
-		$topics_title = '<a href="'.$murl.'">'.$topics_title.'</a>';
+		$topics_title = '<a href="'.$murl->to_url().'">'.$topics_title.'</a>';
 	
 		// display the topics
 		$topics = new BS_Front_Topics(
@@ -119,9 +122,9 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 		$topics->set_show_forum(true);
 		$topics->set_middle_width(60);
 	
-		$clap_data = $functions->get_clap_data(
-			'similar_topics',$current_url.'&amp;'.BS_URL_LOC.'=clap_similar_topics'
-		);
+		$curl->set(BS_URL_LOC,'clap_similar_topics');
+		$clap_data = $functions->get_clap_data('similar_topics',$curl->to_url());
+		
 		$topics->set_tbody_content($clap_data['divparams']);
 		$topics->set_left_content($clap_data['link']);
 		$topics->add_topics();
@@ -135,7 +138,6 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 	public function add_latest_topics_full($fid = 0)
 	{
 		$cfg = FWS_Props::get()->cfg();
-		$functions = FWS_Props::get()->functions();
 		$infos = $this->_get_latest_topics_infos($fid);
 		
 		$num = $cfg['threads_per_page'];
@@ -146,10 +148,12 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 		$topics->set_middle_width(60);
 		$topics->add_topics();
 	
-		$murl = BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_SITE.'={d}');
 		$num = BS_DAO::get_topics()->get_count_by_search($topics->get_user_where_clause());
 		$pagination = new BS_Pagination($cfg['threads_per_page'],$num);
-		$functions->add_pagination($pagination,$murl);
+		
+		$murl = BS_URL::get_mod_url();
+		$murl->set(BS_URL_FID,$fid);
+		$pagination->populate_tpl($murl);
 	}
 	
 	/**
@@ -167,9 +171,10 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 		
 		$infos = $this->_get_latest_topics_infos($fid);
 		
-		$fid_param = $fid > 0 ? '&amp;'.BS_URL_FID.'='.$fid : '';
-		$murl = BS_URL::get_url('latest_topics',$fid_param);
-		$title = '<a href="'.$murl.'">'.$infos['title'].'</a>';
+		$murl = BS_URL::get_mod_url('latest_topics');
+		if($fid > 0)
+			$murl->set(BS_URL_FID,$fid);
+		$title = '<a href="'.$murl->to_url().'">'.$infos['title'].'</a>';
 		
 		// display the topics
 		$num = $cfg['current_topic_num'];
@@ -179,10 +184,12 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 		$topics->set_show_forum(true);
 		$topics->set_middle_width(60);
 		
-		$current_url = BS_URL::get_url('forums',$fid > 0 ? '&amp;'.BS_URL_FID.'='.$fid : '');
-		$clap_data = $functions->get_clap_data(
-			'current_topics',$current_url.'&amp;'.BS_URL_LOC.'=clap_current_topics'
-		);
+		$murl = BS_URL::get_mod_url('forums');
+		if($fid > 0)
+			$murl->set(BS_URL_FID,$fid);
+		$murl->set(BS_URL_LOC,'clap_current_topics');
+		$clap_data = $functions->get_clap_data('current_topics',$murl->to_url());
+		
 		$topics->set_tbody_content($clap_data['divparams']);
 		$topics->set_left_content($clap_data['link']);
 		$topics->add_topics();
@@ -222,7 +229,7 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 		);
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

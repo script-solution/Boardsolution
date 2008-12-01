@@ -59,17 +59,18 @@ final class BS_Front_Search_Result_PMs extends FWS_Object implements BS_Front_Se
 		}
 
 		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
-		$murl = BS_URL::get_url(
-			0,'&'.BS_URL_LOC.'=pmsearch&'.BS_URL_ID.'='.$search->get_search_id()
-				.'&'.BS_URL_ORDER.'='.$order.'&'.BS_URL_AD.'='.$ad
-				.'&'.BS_URL_MODE.'='.$request->get_name(),'&'
-		);
+		$murl = BS_URL::get_sub_url(0,'pmsearch');
+		$murl->set(BS_URL_ID,$search->get_search_id());
+		$murl->set(BS_URL_ORDER,$order);
+		$murl->set(BS_URL_AD,$ad);
+		$murl->set(BS_URL_MODE,$request->get_name());
 		foreach($request->get_url_params() as $name => $value)
-			$murl .= '&'.$name.'='.$value;
+			$murl->set($name,$value);
 		
+		$murl->set_separator('&');
 		$tpl->set_template('inc_userprofile_pmjs.htm');
 		$tpl->add_variables(array(
-			'pm_target_url' => $murl.'&'.BS_URL_SITE.'='.$site,
+			'pm_target_url' => $murl->set(BS_URL_SITE,$site)->to_url(),
 			'delete_add' => '&'.BS_URL_MODE.'=delete',
 			'at_mark_read' => '',
 			'at_mark_unread' => ''
@@ -78,13 +79,15 @@ final class BS_Front_Search_Result_PMs extends FWS_Object implements BS_Front_Se
 
 		$tpl->set_template('userprofile_pmsearch_result.htm');
 		
+		$murl->set_separator('&amp;');
 		$tpl->add_variables(array(
-			'target_url' => str_replace('&','&amp;',$murl).'&amp;'.BS_URL_SITE.'='.$site,
+			'target_url' => $murl->to_url(),
 			'title' => $request->get_title($search)
 		));
 
 		$keywords = $request->get_highlight_keywords();
-		$hl = '';
+		
+		$durl = BS_URL::get_sub_url('userprofile','pmdetails');
 		if(count($keywords) > 0)
 		{
 			$kwhl = new FWS_KeywordHighlighter($keywords,'<span class="bs_highlight">');
@@ -92,7 +95,7 @@ final class BS_Front_Search_Result_PMs extends FWS_Object implements BS_Front_Se
 			foreach($keywords as $kw)
 				$urlkw .= '"'.$kw.'" ';
 			$urlkw = rtrim($urlkw);
-			$hl = '&amp;'.BS_URL_HL.'='.urlencode($urlkw);
+			$durl->set(BS_URL_HL,$urlkw);
 		}
 		
 		$pms = array();
@@ -137,9 +140,7 @@ final class BS_Front_Search_Result_PMs extends FWS_Object implements BS_Front_Se
 				'pm_title' => $title,
 				'complete_title' => $complete_title,
 				'date' => FWS_Date::get_date($data['pm_date']),
-				'details_link' => BS_URL::get_url(
-					0,'&amp;'.BS_URL_LOC.'=pmdetails&amp;'.BS_URL_ID.'='.$data['id'].$hl
-				),
+				'details_link' => $durl->set(BS_URL_ID,$data['id'])->to_url(),
 				'status_title' => $status_title,
 				'status_picture' => $status_picture,
 				'sender' => $username,
@@ -151,8 +152,7 @@ final class BS_Front_Search_Result_PMs extends FWS_Object implements BS_Front_Se
 		
 		$tpl->add_array('pms',$pms);
 		
-		$purl = str_replace('&','&amp;',$murl).'&amp;'.BS_URL_SITE.'={d}';
-		$functions->add_pagination($pagination,$purl);
+		$pagination->populate_tpl($murl);
 		
 		$tpl->restore_template();
 	}
@@ -164,7 +164,7 @@ final class BS_Front_Search_Result_PMs extends FWS_Object implements BS_Front_Se
 		return $locale->lang('no_pms_found');
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

@@ -127,7 +127,7 @@ final class BS_User_Storage_DB extends FWS_Object implements FWS_User_Storage
 		$cookies->delete_cookie('pw');
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

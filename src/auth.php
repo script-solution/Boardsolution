@@ -188,6 +188,8 @@ final class BS_Auth extends FWS_Object
 	{
 		$cache = FWS_Props::get()->cache();
 
+		$murl = BS_URL::get_mod_url('memberlist');
+		
 		$user_groups = '';
 		$ugroups = FWS_Array_Utils::advanced_explode(",",$group_ids);
 		$i = 0;
@@ -199,8 +201,8 @@ final class BS_Auth extends FWS_Object
 			
 			if($add_links)
 			{
-				$murl = BS_URL::get_url('memberlist','&amp;'.BS_URL_MS_GROUP.'[]='.$gid);
-				$group = '<a href="'.$murl.'" style="color: #'.$gdata['group_color'].';">';
+				$murl->set(BS_URL_MS_GROUP,array($gid));
+				$group = '<a href="'.$murl->to_url().'" style="color: #'.$gdata['group_color'].';">';
 				$group .= $gdata['group_title'].'</a>';
 			}
 			else
@@ -799,7 +801,7 @@ final class BS_Auth extends FWS_Object
 			$output = '-';
 		else if($too_many)
 		{
-			$murl = BS_URL::get_url('team');
+			$murl = BS_URL::build_mod_url('team');
 			$output .= ', <a href="'.$murl.'">...</a>';
 		}
 
@@ -926,7 +928,7 @@ final class BS_Auth extends FWS_Object
 		}
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

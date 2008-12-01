@@ -41,10 +41,11 @@ final class BS_Front_Module_print extends BS_Front_Module
 		
 		$this->add_loc_forum_path($fid);
 		$this->add_loc_topic();
-		$renderer->add_breadcrumb(
-			$locale->lang('print_topic'),
-			BS_URL::get_url('print','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid)
-		);
+		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_TID,$tid);
+		$renderer->add_breadcrumb($locale->lang('print_topic'),$url->to_url());
 	}
 	
 	/**

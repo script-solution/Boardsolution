@@ -79,9 +79,10 @@ abstract class BS_Front_Feed_Base extends FWS_Object
 	 */
 	protected final function get_topic_url($fid,$tid)
 	{
-		return BS_URL::get_frontend_url(
-			'&amp;'.BS_URL_ACTION.'=posts'.'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid,'&amp;',false
-		);
+		$url = BS_URL::get_frontend_url('posts','&amp;',false);
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_TID,$tid);
+		return $url->to_url();
 	}
 	
 	/**
@@ -93,7 +94,7 @@ abstract class BS_Front_Feed_Base extends FWS_Object
 	 */
 	protected abstract function get_news_XML($news);
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

@@ -22,7 +22,7 @@ final class BS_ACP_Module_banlist extends BS_ACP_Module
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -35,7 +35,7 @@ final class BS_ACP_Module_banlist extends BS_ACP_Module
 		$renderer->add_action(BS_ACP_ACTION_ADD_BAN,'add');
 		$renderer->add_action(BS_ACP_ACTION_UPDATE_BANS,'update');
 
-		$renderer->add_breadcrumb($locale->lang('acpmod_bans'),BS_URL::get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_bans'),BS_URL::build_acpmod_url());
 	}
 	
 	/**
@@ -54,12 +54,14 @@ final class BS_ACP_Module_banlist extends BS_ACP_Module
 			$names = $cache->get_cache('banlist')->get_field_vals_of_keys($delete,'bann_name');
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
+			$url = BS_URL::get_acpmod_url();
+			$url->set('ids',implode(',',$delete));
+			$url->set('at',BS_ACP_ACTION_DELETE_BANS);
+			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
-				BS_URL::get_acpmod_url(
-					0,'&amp;ids='.implode(',',$delete).'&amp;at='.BS_ACP_ACTION_DELETE_BANS
-				),
-				BS_URL::get_acpmod_url()
+				$url->to_url(),
+				BS_URL::build_acpmod_url()
 			);
 		}
 		

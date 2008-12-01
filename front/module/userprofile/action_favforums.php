@@ -50,7 +50,7 @@ final class BS_Front_Action_userprofile_favforums extends BS_Front_Action_Base
 		
 		$this->set_action_performed(true);
 		$this->add_link(
-			$locale->lang('back'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=favforums')
+			$locale->lang('back'),BS_URL::get_sub_url('userprofile','favforums')
 		);
 
 		return '';

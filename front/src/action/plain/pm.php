@@ -163,7 +163,7 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 
 		// check the total number of pms
 		$outbox_num = BS_DAO::get_pms()->get_count_in_folder('outbox',$this->_user_id);
-		if($cfg['pm_max_outbox'] > 0 && $outbox_num > $cfg['pm_max_outbox'])
+		if($cfg['pm_max_outbox'] > 0 && $outbox_num >= $cfg['pm_max_outbox'])
 			return 'maxoutbox';
 		
 		// check attachments if available
@@ -190,7 +190,7 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 		{
 			// inbox full?
 			$r_inbox = BS_DAO::get_pms()->get_count_in_folder('inbox',$data['id']);
-			if($cfg['pm_max_inbox'] > 0 && $r_inbox > $cfg['pm_max_inbox'])
+			if($cfg['pm_max_inbox'] > 0 && $r_inbox >= $cfg['pm_max_inbox'])
 				continue;
 			
 			// pms disabled?
@@ -241,13 +241,16 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 		for($i = 0;$i < count($this->_receiver_ids);$i++)
 		{
 			$pmid = $this->_insert_pm($this->_receiver_ids[$i],'inbox');
-			$this->_insert_attachments($pmid);
+			$this->_insert_attachments($this->_receiver_ids[$i],$pmid);
 			
 			$pmid = $this->_insert_pm($this->_receiver_ids[$i],'outbox');
-			$this->_insert_attachments($pmid);
+			$this->_insert_attachments($this->_user_id,$pmid);
 			
 			// do we have to send the "pm-inbox-full-email"?
-			$percent = 100 / ($cfg['pm_max_inbox'] / $this->_inbox_counts[$i]);
+			if($this->_inbox_counts[$i] == 0)
+				$percent = 0;
+			else
+				$percent = 100 / ($cfg['pm_max_inbox'] / $this->_inbox_counts[$i]);
 			if($percent >= BS_PM_INBOX_FULL_EMAIL_SINCE)
 			{
 				$mail = BS_EmailFactory::get_instance()->get_pm_inbox_full_mail(
@@ -295,14 +298,15 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 	/**
 	 * Inserts the attachments for the given pm-id
 	 *
+	 * @param int $receiver_id the user-id of the receiver
 	 * @param int $pm_id the pm-id
 	 */
-	private function _insert_attachments($pm_id)
+	private function _insert_attachments($receiver_id,$pm_id)
 	{
 		// store attachments for this PM
 		if($this->_att !== null && $this->_att->attachments_set())
 		{
-			$this->_att->set_target(0,0,$pm_id);
+			$this->_att->set_target(0,0,$pm_id,$receiver_id);
 			$this->_att->perform_action();
 			$count = $this->_att->get_count();
 			if($count > 0)
@@ -310,7 +314,7 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 		}
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

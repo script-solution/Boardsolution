@@ -3,8 +3,8 @@
 {if module_error == false}
 
 <div align="right">
-	<a href="{gurl.get_acpmod_url(0,'&amp;action=editor&amp;theme='~theme~'&amp;mode=simple')}">{glocale.lang('simple_mode')}</a>
-	| <a href="{gurl.get_acpmod_url(0,'&amp;action=editor&amp;theme='~theme~'&amp;mode=advanced')}">{glocale.lang('advanced_mode')}</a>
+	<a href="{gurl.simple_acp_url(0,'&amp;action=editor&amp;theme='~theme~'&amp;mode=simple')}">{glocale.lang('simple_mode')}</a>
+	| <a href="{gurl.simple_acp_url(0,'&amp;action=editor&amp;theme='~theme~'&amp;mode=advanced')}">{glocale.lang('advanced_mode')}</a>
 </div>
 
 {include editor_tpl}

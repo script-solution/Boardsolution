@@ -39,10 +39,9 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 		$renderer->add_action(BS_ACTION_SEND_EMAIL,'default');
 
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
-		$renderer->add_breadcrumb(
-			$locale->lang('email'),
-			BS_URL::get_url('new_mail','&amp;'.BS_URL_ID.'='.$id)
-		);
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_ID,$id);
+		$renderer->add_breadcrumb($locale->lang('email'),$url->to_url());
 	}
 	
 	/**
@@ -109,8 +108,10 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 			'html' => $locale->lang('content_type_html')
 		);
 		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_ID,$id);
 		$tpl->add_variables(array(
-			'target_url' => BS_URL::get_url('new_mail','&amp;'.BS_URL_ID.'='.$id),
+			'target_url' => $url->to_url(),
 			'receiver' => BS_UserUtils::get_instance()->get_link($id,$data['user_name'],$data['user_group']),
 			'action_type' => BS_ACTION_SEND_EMAIL,
 			'content_type_options' => $content_type_options

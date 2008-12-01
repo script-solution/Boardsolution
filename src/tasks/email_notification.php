@@ -54,13 +54,12 @@ final class BS_Tasks_email_notification extends FWS_Tasks_Base
 		$post_ids = array_keys($posts_to_user);
 		if(is_array($post_ids) && count($post_ids) > 0)
 		{
+			$murl = BS_URL::get_frontend_url('posts','&',false);
+			
 			foreach(BS_DAO::get_posts()->get_posts_for_email($post_ids) as $data)
 			{
-				$murl = BS_URL::get_frontend_url(
-					'&'.BS_URL_ACTION.'=posts&'.BS_URL_FID.'='.$data['rubrikid']
-						.'&'.BS_URL_TID.'='.$data['threadid'],
-					'&',false
-				);
+				$murl->set(BS_URL_FID,$data['rubrikid']);
+				$murl->set(BS_URL_ID,$data['threadid']);
 				
 				foreach($posts_to_user[$data['id']] as $user_id)
 				{
@@ -75,7 +74,7 @@ final class BS_Tasks_email_notification extends FWS_Tasks_Base
 							$udata['topics'][] = array(
 								'include_post' => true,
 								'name' => $data['name'],
-								'url' => $murl,
+								'url' => $murl->to_url(),
 								'posts' => array()
 							);
 						}
@@ -92,7 +91,7 @@ final class BS_Tasks_email_notification extends FWS_Tasks_Base
 						// just add the topic-URL
 						$udata['topics'][] = array(
 							'include_post' => false,
-							'url' => $murl
+							'url' => $murl->to_url()
 						);
 					}
 

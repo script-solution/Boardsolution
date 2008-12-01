@@ -33,7 +33,7 @@ final class BS_Front_Module_faq extends BS_Front_Module
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_has_access($cfg['enable_faq'] == 1);
-		$renderer->add_breadcrumb($locale->lang('faq'),BS_URL::get_url('faq'));
+		$renderer->add_breadcrumb($locale->lang('faq'),BS_URL::build_mod_url('faq'));
 	}
 	
 	/**
@@ -139,17 +139,19 @@ final class BS_Front_Module_faq extends BS_Front_Module
 				case $rank_names['experience_bar']:
 					$faq_text = sprintf(
 						$locale->lang('faq_text_'.$i.'_'.$cfg['post_stats_type']),
-						BS_URL::get_url('user_experience','&amp;'.BS_URL_ID.'=0')
+						BS_URL::get_standalone_url('user_experience')->set(BS_URL_ID,0)->to_url()
 					);
 					break;
 				
 				case $rank_names['bbcode']:
+					$rurl = BS_URL::get_mod_url('redirect');
+					$durl = BS_URL::get_standalone_url('download');
 					$faq_text = sprintf(
 						$locale->lang('faq_text_'.$i),
-						BS_URL::get_url('redirect','&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'=1'),
-						BS_URL::get_url('redirect','&amp;'.BS_URL_LOC.'=show_topic&amp;'.BS_URL_TID.'=1'),
-						BS_URL::get_url('download','&amp;path=uploads/file.txt'),
-						BS_URL::get_url('download','&amp;path=image.jpg'),
+						$rurl->set(BS_URL_LOC,'show_post')->set(BS_URL_ID,1)->to_url(),
+						$rurl->set(BS_URL_LOC,'show_topic')->set(BS_URL_TID,1)->to_url(),
+						$durl->set('path','uploads/file.txt')->to_url(),
+						$durl->set('path','uploads/image.jpg')->to_url(),
 						highlight_string("<?php\necho \"test\";\n?>",1)
 					);
 					break;

@@ -35,7 +35,7 @@ function BS_quoteMessageAJAX(number,fieldID,requestURL)
 function quoteMessage(mID)
 {
 	var self = this;
-	var url = this.requestURL.replace(/%d%/,mID);
+	var url = this.requestURL.replace(/__ID__/,mID);
 	myAjax.sendGetRequest(url,function(text) {
 		var field = document.getElementById(self.bbcFieldID);
 		if(field != null)

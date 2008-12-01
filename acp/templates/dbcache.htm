@@ -6,7 +6,7 @@
 
 <p class="a_block">{glocale.lang('dbcache_notice')}</p>
 
-<form method="post" action="{gurl.get_acpmod_url()}">
+<form method="post" action="{gurl.simple_acp_url()}">
 <input type="hidden" name="action_type" value="{action_type}" />
 <div class="a_border a_pad">
 	<h1 class="a_topic">{glocale.lang('acpmod_dbcache')}</h1>
@@ -19,7 +19,7 @@
 		{loop entries as row => name}
 		<tr id="row_{row}" class="hlRow">
 			<td class="hlCol">{name}</td>
-			<td class="hlCol" align="center"><a href="{gurl.get_acpmod_url(0,'&amp;name='~name)}">{glocale.lang('show')}</a></td>
+			<td class="hlCol" align="center"><a href="{gurl.simple_acp_url(0,'&amp;name='~name)}">{glocale.lang('show')}</a></td>
 			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
 			<input id="check_{row}" type="checkbox" name="delete[]" value="{name}" />
 			</td>

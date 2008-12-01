@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -48,7 +48,11 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 		$search = $input->get_var('search','get',FWS_Input::STRING);
 		$site = $input->get_var('site','get',FWS_Input::INTEGER);
 		
-		$params = '&amp;order='.$order.'&amp;ad='.$ad.'&amp;search='.$search.'&amp;site='.$site;
+		$url = BS_URL::get_acpsub_url();
+		$url->set('order',$order);
+		$url->set('ad',$ad);
+		$url->set('search',$search);
+		$url->set('site',$site);
 		
 		if($input->isset_var('delete','post'))
 		{
@@ -58,20 +62,24 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 				$names[] = $data['message'];
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
+			$yurl = clone $url;
+			$yurl->set('at',BS_ACP_ACTION_DELETE_ERRORLOGS);
+			$yurl->set('ids',implode(',',$ids));
+			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
-				BS_URL::get_acpmod_url(
-					0,'&amp;at='.BS_ACP_ACTION_DELETE_ERRORLOGS.$params.'&amp;ids='.implode(',',$ids)
-				),
-				BS_URL::get_acpmod_url(0,$params)
+				$yurl->to_url(),
+				$url->to_url()
 			);
 		}
 		else if($input->get_var('ask','get',FWS_Input::STRING) == 'deleteall')
 		{
+			$yurl = clone $url;
+			$yurl->set('at',BS_ACP_ACTION_DELETE_ALL_ERRORLOGS);
 			$functions->add_delete_message(
 				$locale->lang('delete_all_question'),
-				BS_URL::get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_DELETE_ALL_ERRORLOGS),
-				BS_URL::get_acpmod_url(0,$params)
+				$yurl->to_url(),
+				$url->to_url()
 			);
 		}
 		
@@ -82,13 +90,18 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 		$end = 15;
 		$pagination = new BS_ACP_Pagination($end,$num);
 		
-		$baseurl = BS_URL::get_acpmod_url(0,'&amp;search='.$search.'&amp;');
+		$baseurl = clone $url;
+		$baseurl->set('search',$search);
+		
 		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);
 		unset($hidden['search']);
 		unset($hidden['at']);
+		
+		$askurl = clone $url;
+		$askurl->set('ask','deleteall');
 		$tpl->add_variables(array(
-			'form_url' => BS_URL::get_acpmod_url(0,$params),
+			'form_url' => $url->to_url(),
 			'col_error' => BS_ACP_Utils::get_instance()->get_order_column(
 				$locale->lang('error_msg'),'error','ASC',$order,$baseurl
 			),
@@ -101,7 +114,7 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search,
-			'delete_all_url' => BS_URL::get_acpmod_url(0,$params.'&amp;ask=deleteall')
+			'delete_all_url' => $askurl->to_url()
 		));
 		
 		switch($order)
@@ -157,10 +170,11 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 			'count' => count($loglist)
 		));
 		
-		$murl = BS_URL::get_acpmod_url(
-			0,'&amp;order='.$order.'&amp;ad='.$ad.'&amp;search='.$search.'&amp;site={d}'
-		);
-		$functions->add_pagination($pagination,$murl);
+		$murl = BS_URL::get_acpmod_url();
+		$murl->set('search',$search);
+		$murl->set('order',$order);
+		$murl->set('ad',$ad);
+		$pagination->populate_tpl($murl);
 	}
 }
 ?>

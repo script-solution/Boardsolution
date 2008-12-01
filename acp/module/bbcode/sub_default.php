@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_bbcode_default extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -54,12 +54,18 @@ final class BS_ACP_SubModule_bbcode_default extends BS_ACP_SubModule
 				$names[] = $row['name'];
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
+			$yurl = BS_URL::get_acpmod_url();
+			$yurl->set('ids',implode(',',$ids));
+			$yurl->set('at',BS_ACP_ACTION_DELETE_BBCODES);
+			$yurl->set('site',$site);
+			
+			$nurl = BS_URL::get_acpmod_url();
+			$nurl->set('site',$site);
+			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
-				BS_URL::get_acpmod_url(
-					0,'&amp;at='.BS_ACP_ACTION_DELETE_BBCODES.'&amp;ids='.implode(',',$ids).'&amp;site='.$site
-				),
-				BS_URL::get_acpmod_url(0,'&amp;site='.$site)
+				$yurl->to_url(),
+				$nurl->to_url()
 			);
 		}
 		
@@ -93,8 +99,9 @@ final class BS_ACP_SubModule_bbcode_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$murl = BS_URL::get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
-		$functions->add_pagination($pagination,$murl);
+		$murl = BS_URL::get_acpmod_url();
+		$murl->set('search',$search);
+		$pagination->populate_tpl($murl);
 		
 		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);

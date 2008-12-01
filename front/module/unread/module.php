@@ -31,7 +31,7 @@ final class BS_Front_Module_unread extends BS_Front_Module
 		$locale = FWS_Props::get()->locale();
 		$renderer = $doc->use_default_renderer();
 		
-		$renderer->add_breadcrumb($locale->lang('unread_threads'),BS_URL::get_url('unread'));
+		$renderer->add_breadcrumb($locale->lang('unread_threads'),BS_URL::build_mod_url());
 	}
 	
 	/**
@@ -42,7 +42,6 @@ final class BS_Front_Module_unread extends BS_Front_Module
 		$cfg = FWS_Props::get()->cfg();
 		$unread = FWS_Props::get()->unread();
 		$locale = FWS_Props::get()->locale();
-		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
 
 		$end = $cfg['threads_per_page'];
@@ -68,17 +67,20 @@ final class BS_Front_Module_unread extends BS_Front_Module
 		$topics->add_topics();
 		
 		$pagination = new BS_Pagination($end,$num);
-		$functions->add_pagination(
-			$pagination,BS_URL::get_url('unread','&amp;'.BS_URL_SITE.'={d}')
-		);
-		$action_type = '&amp;'.BS_URL_AT.'='.BS_ACTION_CHANGE_READ_STATUS;
+		$pagination->populate_tpl(BS_URL::get_mod_url());
 		
+		$rurl = BS_URL::get_mod_url('redirect');
+		$rurl->set(BS_URL_LOC,'topic_action');
+		
+		$jsurl = BS_URL::get_mod_url();
+		$jsurl->set(BS_URL_LOC,'read');
+		$jsurl->set(BS_URL_MODE,'topics');
+		$jsurl->set(BS_URL_ID,'__ID__');
+		$jsurl->set(BS_URL_AT,BS_ACTION_CHANGE_READ_STATUS);
+		$jsurl->set_sid_policy(BS_URL::SID_FORCE);
 		$tpl->add_variables(array(
-			'target_url' => BS_URL::get_url('redirect','&amp;'.BS_URL_LOC.'=topic_action'),
-			'js_url' => BS_URL::get_url(
-				0,$action_type.'&amp;'.BS_URL_LOC.'=read&amp;'.BS_URL_MODE.'=topics&amp;'.BS_URL_ID.'=',
-				'&amp;',true
-			),
+			'target_url' => $rurl->to_url(),
+			'js_url' => $jsurl->to_url(),
 		));
 	}
 }

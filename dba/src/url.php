@@ -27,7 +27,7 @@ final class BS_DBA_URL extends FWS_URL
 	 * @param string $separator the separator for the parameters.
 	 * @return string the url
 	 */
-	public static function get_url($target = 0,$additional = '',$separator = '&amp;')
+	public static function build_url($target = 0,$additional = '',$separator = '&amp;')
 	{
 		$url = new BS_DBA_URL();
 		$url->set_separator($separator);

@@ -44,7 +44,7 @@ final class BS_Front_Module_user_search extends BS_Front_Module
 		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
-		$functions = FWS_Props::get()->functions();
+		
 		// has the user the permission to view the user-search?
 		if($cfg['enable_memberlist'] == 0 || !$auth->has_global_permission('view_memberlist'))
 		{
@@ -96,9 +96,10 @@ final class BS_Front_Module_user_search extends BS_Front_Module
 		
 		$tpl->add_array('user_list',$user_list);
 		
-		$murl = BS_URL::get_url(0,'&amp;'.BS_URL_MS_NAME.'='.$name.'&amp;'
-			.BS_URL_MS_EMAIL.'='.$email.'&amp;'.BS_URL_SITE.'={d}');
-		$functions->add_pagination($pagination,$murl);
+		$murl = BS_URL::get_mod_url();
+		$murl->set(BS_URL_MS_NAME,$name);
+		$murl->set(BS_URL_MS_EMAIL,$email);
+		$pagination->populate_tpl($murl);
 	}
 }
 ?>

@@ -22,7 +22,7 @@ final class BS_ACP_Module_dbcache extends BS_ACP_Module
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -32,7 +32,7 @@ final class BS_ACP_Module_dbcache extends BS_ACP_Module
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_REGENERATE_CACHE,'regenerate');
-		$renderer->add_breadcrumb($locale->lang('acpmod_dbcache'),BS_URL::get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_dbcache'),BS_URL::build_acpmod_url());
 	}
 	
 	/**

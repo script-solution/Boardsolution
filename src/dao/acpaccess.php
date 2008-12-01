@@ -95,7 +95,7 @@ class BS_DAO_ACPAccess extends FWS_Singleton
 	 * Deletes the given type with given value
 	 *
 	 * @param string $type user or group
-	 * @param int $id the id
+	 * @param array $ids the ids
 	 * @return int the number of affected rows
 	 */
 	public function delete($type,$ids)

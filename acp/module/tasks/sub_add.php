@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_tasks_add extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -33,7 +33,7 @@ final class BS_ACP_SubModule_tasks_add extends BS_ACP_SubModule
 		
 		$renderer->add_action(BS_ACP_ACTION_ADD_TASK,array('edit','add'));
 		$renderer->set_template('tasks_edit.htm');
-		$renderer->add_breadcrumb($locale->lang('add_task'),BS_URL::get_acpmod_url(0,'&amp;action=add'));
+		$renderer->add_breadcrumb($locale->lang('add_task'),BS_URL::build_acpsub_url());
 	}
 	
 	/**
@@ -58,7 +58,7 @@ final class BS_ACP_SubModule_tasks_add extends BS_ACP_SubModule
 			'title' => $locale->lang('add_task'),
 			'is_def' => false,
 			'action_type' => BS_ACP_ACTION_ADD_TASK,
-			'form_target' => BS_URL::get_acpmod_url(0,'&amp;action=add'),
+			'form_target' => BS_URL::build_acpsub_url(),
 			'default' => $data,
 			'interval_types' => BS_ACP_Module_Tasks_Helper::get_instance()->get_interval_types()
 		));

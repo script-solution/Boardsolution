@@ -34,7 +34,7 @@ final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 		$renderer->add_action(BS_ACTION_BAN_USER,'pmbanuser');
 		$renderer->add_action(BS_ACTION_UNBAN_USER,'pmunbanuser');
 
-		$renderer->add_breadcrumb($locale->lang('banlist'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pmbanlist'));
+		$renderer->add_breadcrumb($locale->lang('banlist'),BS_URL::build_sub_url());
 	}
 	
 	/**
@@ -64,12 +64,18 @@ final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 				$names[] = $data['user_name'];
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 
-			$loc = '&amp;'.BS_URL_LOC.'=pmbanlist';
-			$yes_url = BS_URL::get_url(0,$loc.'&amp;'.BS_URL_AT.'='
-				.BS_ACTION_UNBAN_USER.'&amp;'.BS_URL_DEL.'='.$ids,'&amp;',true);
-			$no_url = BS_URL::get_url(0,$loc);
-			$target_url = BS_URL::get_url('redirect','&amp;'.BS_URL_LOC.'=del_pm_ban'
-				.'&amp;'.BS_URL_ID.'='.$ids);
+			$url = BS_URL::get_sub_url();
+			$no_url = $url->to_url();
+			
+			$url->set(BS_URL_AT,BS_ACTION_UNBAN_USER);
+			$url->set(BS_URL_DEL,$ids);
+			$url->set_sid_policy(BS_URL::SID_FORCE);
+			$yes_url = $url->to_url();
+			
+			$url = BS_URL::get_mod_url('redirect');
+			$url->set(BS_URL_LOC,'del_pm_ban');
+			$url->set(BS_URL_ID,$ids);
+			$target_url = $url->to_url();
 			
 			$functions->add_delete_message(
 				sprintf($locale->lang('banlist_delete'),$namelist),$yes_url,$no_url,$target_url
@@ -93,13 +99,11 @@ final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 		
 		$tpl->add_array('banned_user',$banned_user);
 	
+		$url = BS_URL::get_sub_url();
+		$url->set(BS_URL_AT,BS_ACTION_BAN_USER);
+		$url->set_sid_policy(BS_URL::SID_FORCE);
 		$tpl->add_variables(array(
-			'ban_user_url' => BS_URL::get_url(
-				'userprofile',
-				'&amp;'.BS_URL_LOC.'=pmbanlist'.'&amp;'.BS_URL_AT.'='.BS_ACTION_BAN_USER,
-				'&amp;',
-				true
-			)
+			'ban_user_url' => $url->to_url()
 		));
 	}
 }

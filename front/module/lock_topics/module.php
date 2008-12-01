@@ -39,12 +39,12 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 		
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$ids = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
-
 		$this->add_loc_forum_path($fid);
-		$renderer->add_breadcrumb(
-			$locale->lang('lock_topics'),
-			BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids)
-		);
+		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_ID,$ids);
+		$renderer->add_breadcrumb($locale->lang('lock_topics'),$url->to_url());
 	}
 	
 	/**
@@ -113,9 +113,14 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 		if(count($selected_topic_ids) == 1 && $last_data['moved_tid'] == 0)
 			BS_PostingUtils::get_instance()->add_topic_review($last_data,false);
 
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_ID,$id_str);
+		$url->set_sid_policy(BS_URL::SID_FORCE);
+			
 		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_LOCK_TOPICS,
-			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id_str,'&amp;',true),
+			'target_url' => $url->to_url(),
 			'selected_topics' => $selected_topics,
 			'edit_topic_def' => $edit_topic_vals['val'],
 			'openclose_topic_def' => $openclose_topic_vals['val'],
@@ -124,7 +129,7 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 			'openclose_topic_diffs' => $openclose_topic_vals['diffs'],
 			'posts_topic_diffs' => $posts_topic_vals['diffs'],
 			'show_diff_hint' => count($selected_topic_ids) > 1,
-			'back_url' => BS_URL::get_topics_url($fid)
+			'back_url' => BS_URL::build_topics_url($fid)
 		));
 	}
 	

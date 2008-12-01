@@ -401,7 +401,7 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 		$db->commit_transaction();
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

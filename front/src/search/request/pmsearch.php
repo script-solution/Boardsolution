@@ -197,7 +197,7 @@ final class BS_Front_Search_Request_PMSearch extends BS_Front_Search_Request_PMB
 		return $sql;
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -37,14 +37,15 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_USER,array('client','user'));
 
 		$type = $input->get_var('type','get',FWS_Input::STRING);
-		$murl = BS_URL::get_acpmod_url(0,'&amp;action=client&amp;type='.$type);
+		$murl = BS_URL::get_acpsub_url(0,'client');
+		$murl->set('type',$type);
 		
 		if($type == 'user')
 		{
 			$username = $this->_get_username();
 			$renderer->add_breadcrumb(
 				sprintf($locale->lang('permissions_for_user'),$username),
-				$murl.'&amp;name='.$username
+				$murl->set('name',$username)->to_url()
 			);
 		}
 		else
@@ -55,7 +56,7 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 			{
 				$renderer->add_breadcrumb(
 					sprintf($locale->lang('permissions_for_group'),$gdata['group_title']),
-					$murl.'&amp;group='.$group
+					$murl->set('group',$group)->to_url()
 				);
 			}
 		}

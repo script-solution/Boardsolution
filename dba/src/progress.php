@@ -146,7 +146,7 @@ final class BS_DBA_Progress extends FWS_Object implements FWS_Progress_Listener
 		$tpl->restore_template();
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

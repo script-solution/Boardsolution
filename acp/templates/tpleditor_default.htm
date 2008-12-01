@@ -9,7 +9,7 @@
 	{set current=''}
 	{loop position as pos}
 	{set current=current~pos~'/'}
-	<a href="{gurl.get_acpmod_url(0,'&amp;path='~current)}">{pos}</a>
+	<a href="{gurl.simple_acp_url(0,'&amp;path='~current)}">{pos}</a>
 	{if position.current != position.last}/{endif}
 	{endloop}
 </p>
@@ -26,7 +26,7 @@
 		{if not_in_root}
 		<tr>
 			<td class="a_main">
-			<a href="{gurl.get_acpmod_url(0,'&amp;path='~parent_path)}"><img src="{gpath}acp/images/up.gif" alt="Up" /></a>
+			<a href="{gurl.simple_acp_url(0,'&amp;path='~parent_path)}"><img src="{gpath}acp/images/up.gif" alt="Up" /></a>
 			</td>
 			<td align="center" class="a_main">-</td>
 			<td align="center" class="a_main">-</td>

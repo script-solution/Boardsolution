@@ -67,7 +67,6 @@ final class BS_Front_Module_activate extends BS_Front_Module
 			return;
 		}
 		
-		$murl = BS_URL::get_frontend_url();
 		if(BS_DAO::get_activation()->exists($id,$key))
 		{
 			$db->start_transaction();
@@ -84,7 +83,7 @@ final class BS_Front_Module_activate extends BS_Front_Module
 			
 			$message = sprintf(
 				$locale->lang('activate_success'),
-				'<a href="'.$murl.'">'.$locale->lang('here').'</a>'
+				'<a href="'.BS_URL::build_portal_url().'">'.$locale->lang('here').'</a>'
 			);
 			$msgs->add_notice($message);
 		}

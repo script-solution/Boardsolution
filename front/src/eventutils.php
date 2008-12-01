@@ -57,6 +57,9 @@ final class BS_Front_EventUtils extends FWS_Singleton
 		$events = array('list' => array(),'more' => $ev['more']);
 		if(is_array($ev))
 		{
+			$durl = BS_URL::get_mod_url('calendar');
+			$durl->set(BS_URL_MODE,'event_detail');
+			
 			foreach($ev['events'] as $edata)
 			{
 				if($edata['tid'] == 0)
@@ -65,8 +68,8 @@ final class BS_Front_EventUtils extends FWS_Singleton
 					if($cfg['enable_calendar'] == 0)
 						continue;
 	
-					$murl = BS_URL::get_url('calendar','&amp;'.BS_URL_MODE.'=event_detail'
-						.'&amp;'.BS_URL_ID.'='.$edata['id']);
+					$durl->set(BS_URL_ID,$edata['id']);
+					$murl = $durl->to_url();
 				}
 				else
 				{
@@ -74,7 +77,7 @@ final class BS_Front_EventUtils extends FWS_Singleton
 					if($cfg['hide_denied_forums'] == 1 && in_array($edata['rubrikid'],$denied))
 						continue;
 					
-					$murl = BS_URL::get_posts_url($edata['rubrikid'],$edata['tid']);
+					$murl = BS_URL::build_posts_url($edata['rubrikid'],$edata['tid']);
 				}
 				
 				$title = FWS_StringHelper::get_limited_string($edata['event_title'],15);
@@ -185,7 +188,7 @@ final class BS_Front_EventUtils extends FWS_Singleton
 		);
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

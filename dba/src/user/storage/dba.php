@@ -108,7 +108,7 @@ final class BS_DBA_User_Storage_DBA extends FWS_Object implements FWS_User_Stora
 		// nothing to do
 	}
 
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

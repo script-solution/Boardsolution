@@ -29,7 +29,7 @@ final class BS_Cache_Source_Config extends FWS_Object implements FWS_Cache_Sourc
 		return $rows;
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

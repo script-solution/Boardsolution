@@ -128,7 +128,7 @@ final class BS_ACP_Module_Forums_Helper extends FWS_Singleton
 			$cache->refresh('intern');
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

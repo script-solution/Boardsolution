@@ -22,7 +22,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -32,7 +32,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_DELETE_ATTACHMENTS,'delete');
-		$renderer->add_breadcrumb($locale->lang('acpmod_attachments'),BS_URL::get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_attachments'),BS_URL::build_acpmod_url());
 	}
 	
 	/**
@@ -51,13 +51,15 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 		if($delete != null)
 		{
 			$ids = $input->get_var('delete','post');
-			$paths = FWS_Array_Utils::advanced_implode('|',$ids);
+			$paths = FWS_Array_Utils::advanced_implode(', ',$ids);
+			$url = BS_URL::get_acpmod_url();
+			$url->set('ids',implode(',',$ids));
+			$url->set('at',BS_ACP_ACTION_DELETE_ATTACHMENTS);
+			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_files_question'),$paths),
-				BS_URL::get_acpmod_url(0,
-					'&amp;at='.BS_ACP_ACTION_DELETE_ATTACHMENTS.'&amp;ids='.implode(',',$ids)
-				),
-				BS_URL::get_acpmod_url()
+				$url->to_url(),
+				BS_URL::build_acpmod_url()
 			);
 		}
 
@@ -84,6 +86,9 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 		$pagination = new BS_ACP_Pagination($end,$num);
 		$site = $pagination->get_page();
 		$start = $pagination->get_start();
+		
+		$aurl = BS_URL::get_frontend_url('redirect');
+		$aurl->set(BS_URL_LOC,'show_post');
 		
 		$tplatt = array();
 		$now = time();
@@ -143,10 +148,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 
 					if($d['post_id'] != '')
 					{
-						$attachment_url = BS_URL::get_frontend_url(
-							'&amp;'.BS_URL_ACTION.'=redirect&amp;'.BS_URL_LOC.'=show_post&amp;'
-							.BS_URL_ID.'='.$d['post_id']
-						);
+						$attachment_url = $aurl->set(BS_URL_ID,$d['post_id'])->to_url();
 						$t = BS_TopicUtils::get_instance()->get_displayed_name($d['name'],25);
 						$topic = '<a title="'.$t['complete'].'" target="_blank"';
 						$topic .= ' href="'.$attachment_url.'">'.$t['displayed'].'</a>';
@@ -166,7 +168,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 
 					// give the user a short periode of time to add an attachment :)
 					if(($now - $last_mod) > BS_ATTACHMENT_TIMEOUT)
-						$failed .= $index.',';
+						$failed .= ($index - $start).',';
 				}
 
 				// make thumbnails italic
@@ -207,8 +209,9 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 			'search_val' => $search
 		));
 
-		$murl = BS_URL::get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
-		$functions->add_pagination($pagination,$murl);
+		$murl = BS_URL::get_acpmod_url();
+		$murl->set('search',$search);
+		$pagination->populate_tpl($murl);
 	}
 	
 	/**

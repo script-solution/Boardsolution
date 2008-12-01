@@ -33,7 +33,7 @@ final class BS_Front_Module_latest_topics extends BS_Front_Module
 		
 		$doc->use_default_renderer()->set_robots_value('index,follow');
 		
-		$renderer->add_breadcrumb($locale->lang('current_topics'),BS_URL::get_url(0));
+		$renderer->add_breadcrumb($locale->lang('current_topics'),BS_URL::build_mod_url());
 	}
 	
 	/**

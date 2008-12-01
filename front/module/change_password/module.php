@@ -39,10 +39,10 @@ final class BS_Front_Module_change_password extends BS_Front_Module
 
 		$user_id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$user_key = $input->get_var(BS_URL_KW,'get',FWS_Input::STRING);
-		$renderer->add_breadcrumb(
-			$locale->lang('change_password'),
-			BS_URL::get_url('change_password','&amp;'.BS_URL_ID.'='.$user_id.'&amp;'.BS_URL_KW.'='.$user_key)
-		);
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_ID,$user_id);
+		$url->set(BS_URL_KW,$user_key);
+		$renderer->add_breadcrumb($locale->lang('change_password'),$url->to_url());
 	}
 	
 	/**
@@ -86,11 +86,12 @@ final class BS_Front_Module_change_password extends BS_Front_Module
 			$this->report_error();
 			return;
 		}
-
+		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_ID,$user_id);
+		$url->set(BS_URL_KW,$user_key);
 		$tpl->add_variables(array(
-			'target_url' => BS_URL::get_url(
-				0,'&amp;'.BS_URL_ID.'='.$user_id.'&amp;'.BS_URL_KW.'='.$user_key
-			),
+			'target_url' => $url->to_url(),
 			'action_type' => BS_ACTION_CHANGE_PASSWORD,
 			'password_size' => max(10,min(50,$cfg['profile_max_pw_len'])),
 			'password_maxlength' => $cfg['profile_max_pw_len']

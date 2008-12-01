@@ -2,7 +2,7 @@
 
 {if module_error == false}
 
-<form method="post" action="{gurl.get_url()}">
+<form method="post" action="{gurl.build_url()}">
 <input type="hidden" name="action_type" value="{action_type}" />
 <div class="bs_border">
 	<h1 class="bs_topic">{glocale.lang('import_backup')}</h1>
@@ -21,7 +21,7 @@
 	</fieldset>
 </div>
 <center>
-	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.get_url('backups')}';" />
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.build_url('backups')}';" />
 	<input type="submit" name="submit" value="{glocale.lang('submit')}" />
 </center>
 </form>

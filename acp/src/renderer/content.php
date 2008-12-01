@@ -58,7 +58,7 @@ final class BS_ACP_Renderer_Content extends FWS_Document_Renderer_HTML_Default
 		$user->set_location();
 		
 		// add the home-breadcrumb
-		$this->add_breadcrumb($locale->lang('adminarea'),BS_URL::get_acpmod_url('index'));
+		$this->add_breadcrumb($locale->lang('adminarea'),BS_URL::build_acpmod_url('index'));
 		
 		$this->_action_perf->set_prefix('BS_ACP_Action_');
 	}
@@ -226,7 +226,7 @@ final class BS_ACP_Renderer_Content extends FWS_Document_Renderer_HTML_Default
 		return new BS_ACP_Action_Performer();
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

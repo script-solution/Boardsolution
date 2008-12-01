@@ -39,12 +39,12 @@ final class BS_Front_Module_move_topics extends BS_Front_Module
 		
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$ids = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
-		
 		$this->add_loc_forum_path($fid);
-		$renderer->add_breadcrumb(
-			$locale->lang('move_topics'),
-			BS_URL::get_url('move_topics','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$ids)
-		);
+		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_ID,$ids);
+		$renderer->add_breadcrumb($locale->lang('move_topics'),$url->to_url());
 	}
 	
 	/**
@@ -111,23 +111,26 @@ final class BS_Front_Module_move_topics extends BS_Front_Module
 		$pform->set_show_options(true);
 		$pform->add_form();
 		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_ID,$id_str);
+		
 		if(count($selected_topic_ids) == 1)
 		{
-			$murl = BS_URL::get_url(
-				0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id_str.'&amp;'.BS_URL_PID.'='
-			);
-			BS_PostingUtils::get_instance()->add_topic_review($last_data,true,$murl);
+			$purl = BS_URL::get_mod_url();
+			$purl->copy_params($url,array(BS_URL_FID,BS_URL_ID));
+			BS_PostingUtils::get_instance()->add_topic_review($last_data,true,$purl);
 		}
 		
 		$target_forum = $form->get_input_value('target_forum',0);
 		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_MOVE_TOPICS,
-			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_ID.'='.$id_str),
+			'target_url' => $url->to_url(),
 			'selected_topics' => $selected_topics,
 			'forum_combo' => BS_ForumUtils::get_instance()->get_recursive_forum_combo(
 				'target_forum',$target_forum,$fid
 			),
-			'back_url' => BS_URL::get_topics_url($fid)
+			'back_url' => BS_URL::build_topics_url($fid)
 		));
 	}
 }

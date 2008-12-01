@@ -25,14 +25,17 @@ final class BS_BBCode_Content_AttachmentImage extends BS_BBCode_Content_Default
 
 		$inner = trim($inner);
 		list($att_width,$att_height) = explode('x',$cfg['attachments_images_size']);
-		$murl = BS_URL::get_url('download','&amp;path='.$inner);
-		$img_url = BS_URL::get_url(
-			'thumbnail','&amp;path='.$inner.'&amp;width='
-				.$att_width.'&amp;height='.$att_height.'&amp;method='
-				.$cfg['attachments_images_resize_method']
-		);
-		$content = '<a href="'.$murl.'">';
-		$content .= '<img src="'.$img_url.'" alt="'.$inner.'" />';
+		$murl = BS_URL::get_standalone_url('download');
+		$murl->set('path',$inner);
+		
+		$img_url = BS_URL::get_standalone_url('thumbnail');
+		$img_url->set('path',$inner);
+		$img_url->set('width',$att_width);
+		$img_url->set('height',$att_height);
+		$img_url->set('method',$cfg['attachments_images_resize_method']);
+		
+		$content = '<a href="'.$murl->to_url().'">';
+		$content .= '<img src="'.$img_url->to_url().'" alt="'.$inner.'" />';
 		$content .= '</a>';
 		
 		return $content;

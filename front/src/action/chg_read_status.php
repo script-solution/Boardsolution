@@ -51,9 +51,9 @@ final class BS_Front_Action_chg_read_status extends BS_Front_Action_Base
 
 				$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 				if($fid != null)
-					$this->add_link($locale->lang('back'),BS_URL::get_topics_url($fid,'&amp;',$site));
+					$this->add_link($locale->lang('back'),BS_URL::get_topics_url($fid,$site));
 				else
-					$this->add_link($locale->lang('back'),BS_URL::get_url('unread'));
+					$this->add_link($locale->lang('back'),BS_URL::get_mod_url('unread'));
 				break;
 
 			case 'forum':
@@ -64,7 +64,7 @@ final class BS_Front_Action_chg_read_status extends BS_Front_Action_Base
 				$unread->mark_forum_read($fid);
 
 				if($input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING) == 'topics')
-					$this->add_link($locale->lang('back'),BS_URL::get_topics_url($fid,'&amp;',$site));
+					$this->add_link($locale->lang('back'),BS_URL::get_topics_url($fid,$site));
 				else
 					$this->add_link($locale->lang('back'),BS_URL::get_forums_url());
 				break;

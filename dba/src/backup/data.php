@@ -59,7 +59,7 @@ final class BS_DBA_Backup_Data extends FWS_Object
 		list($this->prefix,$this->date,$this->files,$this->size) = $parts;
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

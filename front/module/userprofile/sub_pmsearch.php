@@ -33,7 +33,7 @@ final class BS_Front_SubModule_userprofile_pmsearch extends BS_Front_SubModule
 		
 		$renderer->add_action(BS_ACTION_DELETE_PMS,'deletepms');
 
-		$renderer->add_breadcrumb($locale->lang('pm_search'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pmsearch'));
+		$renderer->add_breadcrumb($locale->lang('pm_search'),BS_URL::build_sub_url());
 	}
 	
 	/**
@@ -86,11 +86,10 @@ final class BS_Front_SubModule_userprofile_pmsearch extends BS_Front_SubModule
 					$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 					if(!$site)
 						$site = 1;
-					$site_param = '&amp;'.BS_URL_SITE.'='.$site;
-					$back_url = BS_URL::get_url(
-						0,'&amp;'.BS_URL_LOC.'=pmsearch&amp;'.BS_URL_ID.'='.$id.$site_param
-					);
-				
+					$url = BS_URL::get_sub_url(0,'pmsearch');
+					$url->set(BS_URL_ID,$id);
+					$url->set(BS_URL_SITE,$site);
+					$back_url = $url->to_url();
 					BS_Front_Module_UserProfile_Helper::get_instance()->add_pm_delete_message($back_url);
 				}
 			}
@@ -128,15 +127,15 @@ final class BS_Front_SubModule_userprofile_pmsearch extends BS_Front_SubModule
 			$keyword = stripslashes($input->get_var('keyword','post',FWS_Input::STRING));
 			$username = stripslashes($input->get_var('un','post',FWS_Input::STRING));
 
+			$faqurl = BS_URL::get_mod_url('faq');
+			$faqurl->set_anchor('f_9');
 			$tpl->add_variables(array(
 				'action_param' => BS_URL_ACTION,
 				'search_explain_keyword' => sprintf(
-					$locale->lang('search_explain_keyword'),
-					BS_URL::get_url('faq').'#f_9',
-					BS_SEARCH_MIN_KEYWORD_LEN
+					$locale->lang('search_explain_keyword'),$faqurl->to_url(),BS_SEARCH_MIN_KEYWORD_LEN
 				),
-				'search_explain_user' => sprintf($locale->lang('search_explain_user'),BS_URL::get_url('faq').'#f_9'),
-				'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pmsearch'),
+				'search_explain_user' => sprintf($locale->lang('search_explain_user'),$faqurl->to_url()),
+				'target_url' => BS_URL::build_sub_url(),
 				'keyword_mode_combo' => $form->get_radio_boxes(
 					'keyword_mode',$keyword_mode_options,$keyword_mode_value
 				),

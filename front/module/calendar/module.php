@@ -43,7 +43,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		
 		$renderer->set_has_access($cfg['enable_calendar'] == 1 && $auth->has_global_permission('view_calendar'));
 		
-		$renderer->add_breadcrumb($locale->lang('calendar'),BS_URL::get_url());
+		$renderer->add_breadcrumb($locale->lang('calendar'),BS_URL::build_mod_url());
 		$renderer->set_template('calendar.htm');
 		$renderer->add_action(BS_ACTION_CAL_DEL_EVENT,'deleteevent');
 		
@@ -88,7 +88,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 			'year_combo' => $form->get_combobox(BS_URL_YEAR,$years,$year),
 			'view_add_event' => $cfg['enable_calendar_events'] &&
 				($cfg['display_denied_options'] || $auth->has_global_permission('add_cal_event')),
-			'add_event_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=editevent'),
+			'add_event_url' => BS_URL::build_sub_url(0,'editevent'),
 			'submoduletpl' => $this->_sub->get_template()
 		));
 	
@@ -119,16 +119,19 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		$mon_len = FWS_Date::get_formated_date('t',$day_ts);
 	
 		$wd_short = $helper->get_weekdays_short();
-		$tpl->add_array('wd_short',$wd_short,false);
+		$tpl->add_array('wd_short',$wd_short);
 		
 		$months = $helper->get_months();
-		$monthdata['url'] = BS_URL::get_url('calendar','&amp;'.BS_URL_MONTH.'='.$month
-			.'&amp;'.BS_URL_YEAR.'='.$year);
+		$url = BS_URL::get_mod_url('calendar');
+		$url->set(BS_URL_MONTH,$month);
+		$url->set(BS_URL_YEAR,$year);
+		$monthdata['url'] = $url->to_url();
 		$monthdata['title'] = $months[abs($month)].' '.$year;
 		$monthdata['weeks'] = array();
 		
-		$daybaseurl = BS_URL::get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_DAY.'=');
-		$weekbaseurl = BS_URL::get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_WEEK.'=');
+		$dayurl = BS_URL::get_sub_url('calendar','week');
+		$weekurl = BS_URL::get_sub_url('calendar','week');
+		
 		$today = FWS_Date::get_formated_date('jnY');
 		$month_offset = $helper->get_month_offset(FWS_Date::get_formated_date('w',$day_ts));
 		$day = 1;
@@ -143,7 +146,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		{
 			$monthdata['weeks'][$w] = array();
 			$monthdata['weeks'][$w]['days'] = array();
-			$monthdata['weeks'][$w]['url'] = $weekbaseurl.$weektime;
+			$monthdata['weeks'][$w]['url'] = $weekurl->set(BS_URL_WEEK,$weektime)->to_url();
 			
 			$end_week = ($w * 7) + 7;
 			for($d = ($w * 7) + 1;$d <= $end_week;$d++)
@@ -155,7 +158,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 					$birth_index .= $month < 10 ? '0'.$month : $month;
 					if(isset($events[$birth_index.$year]) || isset($birthdays[$birth_index]))
 					{
-						$days = '<a href="'.$daybaseurl.$day_ts.'">';
+						$days = '<a href="'.$dayurl->set(BS_URL_DAY,$day_ts)->to_url().'">';
 						$days .= $day.'</a>';
 						$class = 'bs_calendar';
 					}

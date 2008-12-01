@@ -33,10 +33,7 @@ final class BS_Front_SubModule_userprofile_favforums extends BS_Front_SubModule
 		
 		$renderer->add_action(BS_ACTION_SAVE_FAVFORUMS,'favforums');
 
-		$renderer->add_breadcrumb(
-			$locale->lang('favorite_forums'),
-			BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=favforums')
-		);
+		$renderer->add_breadcrumb($locale->lang('favorite_forums'),BS_URL::build_sub_url());
 	}
 	
 	/**
@@ -55,7 +52,7 @@ final class BS_Front_SubModule_userprofile_favforums extends BS_Front_SubModule
 		$forum_ids = $forums->get_nodes_with_other_ids($forum_ids,false);
 
 		$tpl->add_variables(array(
-			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=favforums'),
+			'target_url' => BS_URL::build_sub_url(),
 			'action_type' => BS_ACTION_SAVE_FAVFORUMS,
 		));
 
@@ -85,7 +82,7 @@ final class BS_Front_SubModule_userprofile_favforums extends BS_Front_SubModule
 				'index' => $index,
 				'contains_forums' => $data->get_forum_type() == 'contains_cats',
 				'path_images' => $utils->get_path_images($forum,$sub_cats,$images,1),
-				'forum_url' => BS_URL::get_topics_url($id),
+				'forum_url' => BS_URL::build_topics_url($id),
 				'selected' => in_array($id,$forum_ids)
 			);
 			

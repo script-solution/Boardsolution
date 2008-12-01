@@ -150,7 +150,7 @@ final class BS_TopicUtils extends FWS_Singleton
 
 			$topic_id = ($data['moved_tid'] > 0) ? $data['moved_tid'] : $data['id'];
 			$forum_id = ($data['moved_rid'] > 0) ? $data['moved_rid'] : $data['rubrikid'];
-			$murl = BS_URL::get_posts_url($forum_id,$topic_id);
+			$murl = BS_URL::build_posts_url($forum_id,$topic_id);
 			
 			$topic_path = BS_ForumUtils::get_instance()->get_forum_path($data['rubrikid'],false);
 			$topic_path .= ' &raquo; <a href="'.$murl.'">';
@@ -313,7 +313,7 @@ final class BS_TopicUtils extends FWS_Singleton
 		return $var;
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

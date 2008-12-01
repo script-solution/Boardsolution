@@ -33,8 +33,11 @@ final class BS_ACP_SubModule_correctmsgs_default extends BS_ACP_SubModule
 		$user->delete_session_data('im_data');
 		$incorrect = $helper->get_incorrect_messages();
 		
+		$url = BS_URL::get_acpsub_url(0,'cycle');
+		$url->set('pos',0);
+		
 		$tpl->add_variables(array(
-			'target' => BS_URL::get_acpmod_url(0,'&amp;action=cycle&amp;pos=0'),
+			'target' => $url->to_url(),
 			'incorrect_messages' => sprintf($locale->lang('incorrect_messages'),count($incorrect)),
 			'incorrect_num' => count($incorrect)
 		));

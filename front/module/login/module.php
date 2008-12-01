@@ -34,7 +34,7 @@ final class BS_Front_Module_login extends BS_Front_Module
 		
 		$renderer->set_has_access(!$user->is_loggedin());
 
-		$renderer->add_breadcrumb($locale->lang('login'),BS_URL::get_url('login'));
+		$renderer->add_breadcrumb($locale->lang('login'),BS_URL::build_mod_url('login'));
 	}
 	
 	/**
@@ -68,12 +68,12 @@ final class BS_Front_Module_login extends BS_Front_Module
 			
 			$tpl->add_variables(array(
 				'max_login_tries' => true,
-				'forum_index_url' => BS_URL::get_url(0),
+				'forum_index_url' => BS_URL::build_mod_url(),
 				'action_type' => BS_ACTION_LOGIN,
 				'user' => $username,
 				'sec_code_field' => $sec_code_field,
 				'pw' => $pw,
-				'security_code_img' => BS_URL::get_url('security_code')
+				'security_code_img' => BS_URL::build_standalone_url('security_code')
 			));
 		}
 		// default login-form

@@ -35,7 +35,7 @@ final class BS_Front_Module_search extends BS_Front_Module
 		
 		$renderer->set_has_access($cfg['enable_search'] == 1 && $auth->has_global_permission('view_search'));
 		
-		$renderer->add_breadcrumb($locale->lang('search'),BS_URL::get_url('search'));
+		$renderer->add_breadcrumb($locale->lang('search'),BS_URL::build_mod_url());
 	}
 	
 	/**
@@ -143,17 +143,16 @@ final class BS_Front_Module_search extends BS_Front_Module
 				'fid[]',$selection === null ? 0 : $selection,-1,true,true
 			);
 			
+			$faq = BS_URL::get_mod_url('faq');
+			$faq->set_anchor('f_9');
+			
 			$tpl->add_variables(array(
 				'action_param' => BS_URL_ACTION,
 				'search_explain_keyword' => sprintf(
-					$locale->lang('search_explain_keyword'),
-					BS_URL::get_url('faq').'#f_9',
-					BS_SEARCH_MIN_KEYWORD_LEN
+					$locale->lang('search_explain_keyword'),$faq->to_url(),BS_SEARCH_MIN_KEYWORD_LEN
 				),
-				'search_explain_user' => sprintf(
-					$locale->lang('search_explain_user'),BS_URL::get_url('faq').'#f_9'
-				),
-				'target_url' => BS_URL::get_url(0),
+				'search_explain_user' => sprintf($locale->lang('search_explain_user'),$faq->to_url()),
+				'target_url' => BS_URL::build_mod_url(),
 				'keyword' => $keyword,
 				'keyword_mode_options' => $keyword_mode_options,
 				'keyword_mode' => 'and',

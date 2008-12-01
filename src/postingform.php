@@ -274,8 +274,6 @@ final class BS_PostingForm extends FWS_Object
 		$locale = FWS_Props::get()->locale();
 		$input = FWS_Props::get()->input();
 		$cfg = FWS_Props::get()->cfg();
-		$doc = FWS_Props::get()->doc();
-		$functions = FWS_Props::get()->functions();
 		$options = BS_PostingUtils::get_instance()->get_message_options($this->_type);
 	
 		// instantiate form-var-helper?
@@ -348,30 +346,30 @@ final class BS_PostingForm extends FWS_Object
 				'user_name_value' => $this->_form->get_input_value('user_name'),
 				'user_maxlength' => max(10,min(30,$cfg['profile_max_user_len'])),
 				'email_value' => $this->_form->get_input_value('email_adr'),
-				'security_code_img' => BS_URL::get_url('security_code'),
+				'security_code_img' => BS_URL::build_standalone_url('security_code'),
 				'enable_security_code' => $cfg['use_captcha_for_guests'],
 				'sec_code_field' => $sec_code_field
 			));
 		}
 		
+		$murl = BS_URL::get_mod_url('faq');
+		$murl->set_anchor('f_11');
 		if(defined('BS_ACP'))
-			$murl = $functions->get_board_file(true).BS_URL_ACTION.'=faq#f_11';
-		else
-			$murl = BS_URL::get_url('faq').'#f_11';
+			$murl->set_absolute(true);
 		
 		if($options['enable_bbcode'])
 		{
 			if($cfg['enable_faq'])
-				$bbc_act = sprintf($locale->lang('bbcode_activated'),$murl);
+				$bbc_act = sprintf($locale->lang('bbcode_activated'),$murl->to_url());
 			else
-				$bbc_act = sprintf($locale->lang('bbcode_activated_no_link'),$murl);
+				$bbc_act = sprintf($locale->lang('bbcode_activated_no_link'),$murl->to_url());
 		}
 		else
 		{
 			if($cfg['enable_faq'])
-				$bbc_act = sprintf($locale->lang('bbcode_not_activated'),$murl);
+				$bbc_act = sprintf($locale->lang('bbcode_not_activated'),$murl->to_url());
 			else
-				$bbc_act = sprintf($locale->lang('bbcode_not_activated_no_link'),$murl);
+				$bbc_act = sprintf($locale->lang('bbcode_not_activated_no_link'),$murl->to_url());
 		}
 		
 		if($options['enable_smileys'])
@@ -391,10 +389,14 @@ final class BS_PostingForm extends FWS_Object
 			$bbcode_mode = $cfg['msgs_default_bbcode_mode'];
 		$tpl_bbcode_mode = $this->_form->get_input_value('bbcode_mode_'.self::$number,$bbcode_mode);
 		
+		$url = BS_URL::get_standalone_url('ajax_get_postform');
+		$url->set('type',$this->_type);
+		$url->set('mode','__MODE__');
+		$url->set('height',$this->_textarea_height);
+		$url->set_separator('&');
+		
 		$tpl->add_variables(array(
-			'get_post_form_url' => BS_URL::get_url(
-				'ajax_get_postform','&type='.$this->_type.'&mode=%s%&height='.$this->_textarea_height,'&'
-			),
+			'get_post_form_url' => $url->to_url(),
 			'number' => self::$number,
 			'bbcode_activated' => $bbc_act,
 			'smileys_activated' => $smileys_act,
@@ -516,7 +518,9 @@ final class BS_PostingForm extends FWS_Object
 		
 		$total = count($smileys);
 		$res['more_smileys'] = $total > $base_num;
-		$res['smiley_popup_url'] = BS_URL::get_url('smileys','&amp;'.BS_URL_ID.'='.self::$number);
+		$url = BS_URL::get_standalone_url('smileys');
+		$url->set(BS_URL_ID,self::$number);
+		$res['smiley_popup_url'] = $url->to_url();
 		$res['smiley_popup_height'] = $total * 28 + 120;
 	
 		return $res;
@@ -607,7 +611,7 @@ final class BS_PostingForm extends FWS_Object
 		return in_array($tag,$allowed);
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -37,10 +37,10 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 		$helper = BS_ACP_Module_TplEditor_Helper::get_instance();
 		$path = $helper->get_path();
 		$file = $input->get_var('file','get',FWS_Input::STRING);
-		$renderer->add_breadcrumb(
-			$locale->lang('edit'),
-			BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;path='.$path.'&amp;file='.$file)
-		);
+		$url = BS_URL::get_acpsub_url();
+		$url->set('path',$path);
+		$url->set('file',$file);
+		$renderer->add_breadcrumb($locale->lang('edit'),$url->to_url());
 	}
 	
 	/**
@@ -66,10 +66,6 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 			return;
 		}
 		
-		$target_url = BS_URL::get_acpmod_url(
-			0,'&amp;action=edit&amp;path='.$path.'&amp;file='.$file.'&amp;at='.BS_ACP_ACTION_EDIT_TPL
-		);
-		
 		$file_content = file_get_contents($real_file);
 		$file_content = htmlspecialchars($file_content);
 		$file_content = str_replace('&#123;','{',$file_content);
@@ -80,19 +76,29 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 		foreach(FWS_Array_Utils::advanced_explode('/',$path) as $part)
 		{
 			$cpath .= $part.'/';
-			$murl = BS_URL::get_acpmod_url('tpleditor','&amp;path='.$cpath);
-			$path_links .= '<a href="'.$murl.'">'.$part.'</a>/';
+			$murl = BS_URL::get_acpmod_url('tpleditor');
+			$murl->set('path',$cpath);
+			$path_links .= '<a href="'.$murl->to_url().'">'.$part.'</a>/';
 		}
+		
+		
+		$target = BS_URL::get_acpsub_url();
+		$target->set('path',$path);
+		$target->set('file',$file);
+		$target->set('at',BS_ACP_ACTION_EDIT_TPL);
+		
+		$back = BS_URL::get_acpsub_url(0,'view');
+		$back->set('path',$path);
 		
 		$tpl->set_template('tpleditor_formular.htm');
 		$tpl->add_variables(array(
-			'target_url' => $target_url,
+			'target_url' => $target->to_url(),
 			'image' => BS_ACP_Utils::get_instance()->get_file_image($real_file),
 			'filename' => $path_links.$file,
 			'filesize' => number_format(filesize($real_file),0,',','.'),
 			'last_modification' => FWS_Date::get_date(filemtime($real_file)),
 			'file_content' => $file_content,
-			'back_url' => BS_URL::get_acpmod_url(0,'&amp;action=view&amp;path='.$path),
+			'back_url' => $back->to_url(),
 			'back_button' => true
 		));
 		$tpl->restore_template();

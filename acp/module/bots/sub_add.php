@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_bots_add extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -33,7 +33,7 @@ final class BS_ACP_SubModule_bots_add extends BS_ACP_SubModule
 		
 		$renderer->add_action(BS_ACP_ACTION_ADD_BOT,'add');
 		$renderer->set_template('bots_edit.htm');
-		$renderer->add_breadcrumb($locale->lang('add_bot'),BS_URL::get_acpmod_url(0,'&amp;action=add'));
+		$renderer->add_breadcrumb($locale->lang('add_bot'),BS_URL::build_acpsub_url());
 	}
 	
 	/**
@@ -55,12 +55,14 @@ final class BS_ACP_SubModule_bots_add extends BS_ACP_SubModule
 		$this->request_formular();
 		
 		$site = $input->get_var('site','get',FWS_Input::INTEGER);
+		$url = BS_URL::get_acpsub_url();
+		$url->set('site',$site);
 		$tpl->add_variables(array(
 			'default' => $data,
 			'site' => $site,
 			'action_type' => BS_ACP_ACTION_ADD_BOT,
 			'title' => $locale->lang('add_bot'),
-			'form_target' => BS_URL::get_acpmod_url(0,'&amp;action=add&amp;site='.$site)
+			'form_target' => $url->to_url()
 		));
 	}
 }

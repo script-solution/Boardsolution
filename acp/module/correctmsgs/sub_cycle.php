@@ -107,37 +107,34 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 		switch($type)
 		{
 			case 'post':
-				$furl = BS_URL::get_frontend_url(
-					'&amp;'.BS_URL_ACTION.'=redirect&amp;'.BS_URL_LOC.'=show_post&amp;'.BS_URL_ID.'='.$data['id']
-				);
-				$type_str = '<a target="_blank" href="'.$furl.'">';
+				$furl = BS_URL::get_frontend_url('redirect');
+				$furl->set(BS_URL_LOC,'show_post');
+				$furl->set(BS_URL_ID,$data['id']);
+				$type_str = '<a target="_blank" href="'.$furl->to_url().'">';
 				$type_str .= $locale->lang('msgs_'.$type).'</a>';
 				break;
 			
 			case 'link':
-				$furl = BS_URL::get_frontend_url(
-					'&amp;'.BS_URL_ACTION.'=linklist&amp;'.BS_URL_ID.'='.$data['id']
-				);
-				$type_str = '<a target="_blank" href="'.$furl.'">';
+				$furl = BS_URL::get_frontend_url('linklist');
+				$furl->set(BS_URL_ID,$data['id']);
+				$type_str = '<a target="_blank" href="'.$furl->to_url().'">';
 				$type_str .= $locale->lang('msgs_'.$type).'</a>';
 				break;
 			
 			case 'event':
 				if($data['tid'] > 0)
 				{
-					$furl = BS_URL::get_frontend_url(
-						'&amp;'.BS_URL_ACTION.'=redirect&amp;'.BS_URL_LOC.'=show_topic&amp;'
-							.BS_URL_TID.'='.$data['tid']
-					);
+					$furl = BS_URL::get_frontend_url('redirect');
+					$furl->set(BS_URL_LOC,'show_topic');
+					$furl->set(BS_URL_TID,$data['tid']);
 				}
 				else
 				{
-					$furl = BS_URL::get_frontend_url(
-						'&amp;'.BS_URL_ACTION.'=calendar&amp;'.BS_URL_LOC.'=eventdetails&amp;'
-							.BS_URL_ID.'='.$data['id']
-					);
+					$furl = BS_URL::get_frontend_url('calendar');
+					$furl->set(BS_URL_SUB,'eventdetails');
+					$furl->set(BS_URL_ID,$data['id']);
 				}
-				$type_str = '<a target="_blank" href="'.$furl.'">';
+				$type_str = '<a target="_blank" href="'.$furl->to_url().'">';
 				$type_str .= $locale->lang('msgs_'.$type).'</a>';
 				break;
 			
@@ -146,6 +143,8 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 				break;
 		}
 		
+		$url = BS_URL::get_acpsub_url();
+		$url->set('pos',$pos);
 		$tpl->add_variables(array(
 			'position' => $pos + 1,
 			'total' => count($msgs),
@@ -154,7 +153,7 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 			'type' => $type_str,
 			'next_disabled' => $pos >= count($msgs) - 1,
 			'prev_disabled' => $pos <= 0,
-			'target' => BS_URL::get_acpmod_url(0,'&amp;action=cycle&amp;pos='.$pos)
+			'target' => $url->to_url()
 		));
 	}
 	

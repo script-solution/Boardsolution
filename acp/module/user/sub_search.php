@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -31,11 +31,9 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 		$locale = FWS_Props::get()->locale();
 		$renderer = $doc->use_default_renderer();
 		
-		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_MODULE,'module');
-		$renderer->add_breadcrumb(
-			$locale->lang('search'),
-			BS_URL::get_acpmod_url(0,'&amp;action=search&amp;use_sess=1')
-		);
+		$url = BS_URL::get_acpsub_url();
+		$url->set('use_sess',1);
+		$renderer->add_breadcrumb($locale->lang('search'),$url->to_url());
 	}
 	
 	/**
@@ -86,7 +84,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 		
 		$tpl->add_variables(array(
 			'wait_image' => $user->get_theme_item_path('images/wait.gif'),
-			'search_target' => BS_URL::get_acpmod_url(0,'&amp;action=search'),
+			'search_target' => BS_URL::build_acpsub_url(),
 			'name_value' => stripslashes($sp['name']),
 			'action_param' => BS_URL_ACTION,
 			'email_value' => stripslashes($sp['email']),
@@ -110,7 +108,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 				$form,'from_lastlogin','to_lastlogin',$sp['from_lastlogin'],$sp['to_lastlogin']
 			),
 			'enable_post_count' => $cfg['enable_post_count'] == 1,
-			'reset_url' => BS_URL::get_acpmod_url(0,'&amp;action=search')
+			'reset_url' => BS_URL::build_acpsub_url()
 		));
 		
 		// add additional fields
@@ -310,7 +308,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 			// ok, store them to the session and redirect to the results-page
 			$user->set_session_data('user_search_params',$search_params);
 			$user->set_session_data('user_search_ids',$user_ids);
-			$doc->redirect(FWS_Path::outer().BS_URL::get_acpmod_url(0,'&action=default','&'));
+			$doc->redirect(BS_URL::get_acpsub_url(0,'default'));
 		}
 		// show the search-form again, if we have found 0 user
 		else

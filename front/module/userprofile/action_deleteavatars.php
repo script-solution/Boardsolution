@@ -55,10 +55,9 @@ final class BS_Front_Action_userprofile_deleteavatars extends BS_Front_Action_Ba
 
 		$this->set_action_performed(true);
 		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
-		$murl = BS_URL::get_url(
-			'userprofile','&amp;'.BS_URL_LOC.'=avatars&amp;'.BS_URL_SITE.'='.$site
-		);
-		$this->add_link($locale->lang('back'),$murl);
+		$url = BS_URL::get_sub_url('userprofile','avatars');
+		$url->set(BS_URL_SITE,$site);
+		$this->add_link($locale->lang('back'),$url);
 
 		return '';
 	}

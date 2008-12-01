@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_themes_editor extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -46,10 +46,11 @@ final class BS_ACP_SubModule_themes_editor extends BS_ACP_SubModule
 		);
 		$theme = $input->get_var('theme','get',FWS_Input::STRING);
 		$renderer->add_breadcrumb($theme,'');
-		$renderer->add_breadcrumb(
-			$locale->lang($mode.'_mode'),
-			BS_URL::get_acpmod_url(0,'&amp;action=editor&amp;theme='.$theme.'&amp;mode='.$mode)
-		);
+		
+		$url = BS_URL::get_acpsub_url();
+		$url->set('theme',$theme);
+		$url->set('mode',$mode);
+		$renderer->add_breadcrumb($locale->lang($mode.'_mode'),$url->to_url());
 	}
 	
 	/**

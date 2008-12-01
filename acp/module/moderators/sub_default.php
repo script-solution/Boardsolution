@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -51,8 +51,10 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 		$hiddenfields = BS_URL::get_acpmod_comps();
 		$hiddenfields['action'] = 'edituser';
 		
+		$url = BS_URL::get_acpmod_url('usersearch','&');
+		$url->set('comboid','user_');
 		$tpl->add_variables(array(
-			'search_url' => BS_URL::get_acpmod_url('usersearch','&comboid=user_','&'),
+			'search_url' => $url->to_url(),
 			'action_param' => BS_URL_ACTION,
 			'hiddenfields' => $hiddenfields
 		));
@@ -67,6 +69,9 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 				'dot' => 'acp/images/forums/path_dot.gif',
 				'middle' => 'acp/images/forums/path_middle.gif'
 			);
+			
+			$delurl = BS_URL::get_acpsub_url();
+			$delurl->set('at',BS_ACP_ACTION_REMOVE_MODERATORS);
 			
 			$forum_funcs = BS_ForumUtils::get_instance();
 			$mods = $cache->get_cache('moderators');
@@ -93,11 +98,9 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 						foreach($forum_mods as $mdata)
 						{
 							$moderators .= $mdata['user_name'];
-							$del_url = BS_URL::get_acpmod_url(
-								0,'&amp;at='.BS_ACP_ACTION_REMOVE_MODERATORS.'&amp;f='.$data->get_id()
-								 .'&amp;uid='.$mdata['user_id']
-							);
-							$moderators .= ' <a href="'.$del_url.'">';
+							$delurl->set('f',$data->get_id());
+							$delurl->set('uid',$mdata['user_id']);
+							$moderators .= ' <a href="'.$delurl->to_url().'">';
 							$moderators .= '<img src="'.FWS_Path::client_app().'acp/images/delete_small.png"';
 							$moderators .= ' alt="'.$locale->lang('remove').'"';
 							$moderators .= ' title="'.$locale->lang('remove').'" />';

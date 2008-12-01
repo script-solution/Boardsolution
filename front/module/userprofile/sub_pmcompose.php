@@ -36,12 +36,13 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		
 		$uid = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$pid = $input->get_var(BS_URL_PID,'get',FWS_Input::ID);
-		$id = ($uid != null) ? '&amp;'.BS_URL_ID.'='.$uid : '';
-		$pid = ($pid != null) ? '&amp;'.BS_URL_PID.'='.$pid : '';
-		$renderer->add_breadcrumb(
-			$locale->lang('newpm'),
-			BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pmcompose'.$id.$pid)
-		);
+		
+		$url = BS_URL::get_sub_url();
+		if($uid != null)
+			$url->set(BS_URL_ID,$uid);
+		if($pid != null)
+			$url->set(BS_URL_PID,$pid);
+		$renderer->add_breadcrumb($locale->lang('newpm'),$url->to_url());
 	}
 	
 	/**
@@ -128,8 +129,6 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 			$msgs->add_error($locale->lang($error_msg));
 		}
 
-		$target_add = $pid != null ? '&amp;'.BS_URL_PID.'='.$pid : '';
-
 		// textfield
 		$pform = new BS_PostingForm($locale->lang('text').':',$default_text,'pm');
 		$pform->set_show_attachments(true);
@@ -140,14 +139,18 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		if($pid != null)
 			$this->_add_pm_review($edaten['sender_id'],$edaten['user_name']);
 		
+		$turl = BS_URL::get_sub_url();
+		if($pid != null)
+			$turl->set(BS_URL_PID,$pid);
+		
 		$this->request_formular();
 		$tpl->add_variables(array(
 			'action_param' => BS_URL_ACTION,
 			'action_type' => BS_ACTION_SEND_PM,
-			'target_url' => BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=pmcompose'.$target_add),
+			'target_url' => $turl->to_url(),
 			'receivers' => $receiver != null ? $receiver : array(),
 			'receiver_num' => $receiver != null && is_array($receiver) && count($receiver),
-			'user_search_url' => BS_URL::get_url('user_search'),
+			'user_search_url' => BS_URL::build_standalone_url('user_search'),
 			'title_value' => $form->get_input_value('pm_title',$default_title)
 		));
 	}
@@ -279,13 +282,18 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 				'post_id' => $data['id']
 			);
 		}
-	
+		
+		$url = BS_URL::get_standalone_url('ajax_quote');
+		$url->set('id','__ID__');
+		$url->set('type','pm');
+		$url->set_separator('&');
+		
 		$tpl->add_array('messages',$messages);
 		$tpl->add_variables(array(
 			'number' => 1,
 			'show_quote' => true,
 			'field_id' => 'bbcode_area1',
-			'request_url' => BS_URL::get_url('ajax_quote','&id=%d%&type=pm','&'),
+			'request_url' => $url->to_url(),
 			'topic_title' => sprintf($locale->lang('pm_review'),BS_PM_REVIEW_MESSAGE_COUNT,$user_name),
 			'limit_height' => false
 		));

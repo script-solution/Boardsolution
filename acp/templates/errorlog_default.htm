@@ -9,7 +9,7 @@
 <div style="border: 1px solid #777777; padding: 0.4em;">
 	<p>{glocale.lang('send_to_scriptsolution')}</p>
 	<div class="a_pad">
-		<a href="{gurl.get_acpmod_url(0,'&amp;action=sendform')}"><b>{glocale.lang('send_formular')}</b></a>
+		<a href="{gurl.simple_acp_url(0,'&amp;action=sendform')}"><b>{glocale.lang('send_formular')}</b></a>
 	</div>
 </div>
 
@@ -25,7 +25,7 @@
 			<input class="a_searchbtn" type="submit" value="{glocale.lang('search')}" />
 		</div>
 		<div class="a_menubar_right">
-			<a href="{gurl.get_acpmod_url(0,'&amp;ask=deleteall')}">
+			<a href="{gurl.simple_acp_url(0,'&amp;ask=deleteall')}">
 			<img src="{gpath}acp/images/delete.png" alt="{glocale.lang('delete_all_entries')}" />
 			{glocale.lang('delete_all_entries')}
 			</a>
@@ -86,7 +86,7 @@
 </form>
 
 <div class="a_pad">
-	{include "inc_page_split.htm"}
+	{include "inc_pagination.htm"}
 </div>
 
 {endif}

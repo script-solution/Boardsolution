@@ -90,7 +90,7 @@ final class BS_ACP_Module_TplEditor_Helper extends FWS_Singleton
 		return $this->_path_in_default;
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

@@ -22,7 +22,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -33,7 +33,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 		
 		$renderer->add_action(BS_ACP_ACTION_DELETE_IPLOGS,'delete');
 		$renderer->add_action(BS_ACP_ACTION_DELETE_ALL_IPLOGS,'deleteall');
-		$renderer->add_breadcrumb($locale->lang('acpmod_iplog'),BS_URL::get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_iplog'),BS_URL::build_acpmod_url());
 	}
 	
 	/**
@@ -109,28 +109,33 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 			'adl' => $locale->lang('action_adl')
 		);
 		
-		$baseurl = BS_URL::get_acpmod_url(
-			0,'&amp;keyword='.$keyword.'&amp;ipaction='.$action.'&amp;date_from='
-				.$date_from.'&amp;date_to='.$date_to.'&amp;'
-		);
+		$baseurl = BS_URL::get_acpmod_url();
+		$baseurl->set('keyword',$keyword);
+		$baseurl->set('ipaction',$action);
+		$baseurl->set('date_from',$date_from);
+		$baseurl->set('date_to',$date_to);
 		
 		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
+		$durl = clone $baseurl;
+		$durl->set('order',$order);
+		$durl->set('ad',$ad);
+		$durl->set('site',$site);
+		
 		if($input->isset_var('delete','post'))
 		{
 			$ids = $input->get_var('delete','post');
-			$functions->add_delete_message(
-				$locale->lang('delete_ip_logs'),
-				$baseurl.'&amp;at='.BS_ACP_ACTION_DELETE_IPLOGS.'&amp;order='.$order.'&amp;ad='
-					.$ad.'&amp;ids='.implode(',',$ids).'&amp;site='.$site,
-				$baseurl.'order='.$order.'&amp;ad='.$ad.'&amp;site='.$site
-			);
+			$yurl = clone $durl;
+			$yurl->set('ids',implode(',',$ids));
+			$yurl->set('at',BS_ACP_ACTION_DELETE_IPLOGS);
+			
+			$functions->add_delete_message($locale->lang('delete_ip_logs'),$yurl->to_url(),$durl->to_url());
 		}
 		else if($input->get_var('ask','get',FWS_Input::STRING) == 'deleteall')
 		{
+			$yurl = BS_URL::get_acpmod_url();
+			$yurl->set('at',BS_ACP_ACTION_DELETE_ALL_IPLOGS);
 			$functions->add_delete_message(
-				$locale->lang('delete_all_question'),
-				BS_URL::get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_DELETE_ALL_IPLOGS),
-				$baseurl.'&amp;order='.$order.'&amp;ad='.$ad.'&amp;site='.$site
+				$locale->lang('delete_all_question'),$yurl->to_url(),$durl->to_url()
 			);
 		}
 		
@@ -140,10 +145,9 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 			'keyword' => $keyword,
 			'date_from' => $date_from,
 			'date_to' => $date_to,
-			'reset_url' => BS_URL::get_acpmod_url(0,'&amp;order='.$order.'&amp;ad='.$ad),
 			'action' => $action,
 			'actions' => $actions,
-			'form_url' => $baseurl.'order='.$order.'&amp;ad='.$ad.'&amp;site='.$site,
+			'form_url' => $durl->to_url(),
 			'col_action' => BS_ACP_Utils::get_instance()->get_order_column(
 				$locale->lang('action'),'action','ASC',$order,$baseurl
 			),
@@ -160,8 +164,8 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 				$locale->lang('date'),'date','DESC',$order,$baseurl
 			),
 			'num' => $num,
-			'delete_all_url' => $baseurl.'&amp;order='.$order.'&amp;ad='.$ad
-				.'&amp;site='.$site.'&amp;action=delete_allq'
+			'delete_all_url' => $durl->set('ask','delete_allq')->to_url(),
+			'reset_url' => $durl->remove('ask')->set('site',1)->to_url(),
 		));
 		
 		switch($order)
@@ -215,11 +219,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 		));
 		$tpl->add_array('logs',$logs);
 		
-		$murl = BS_URL::get_acpmod_url(
-			0,'&amp;order='.$order.'&amp;ad='.$ad.'&amp;keyword='.$keyword.'&amp;ipaction='
-				.$action.'&amp;date_from='.$date_from.'&amp;date_to='.$date_to.'&amp;site={d}'
-		);
-		$functions->add_pagination($pagination,$murl);
+		$pagination->populate_tpl($durl);
 	}
 }
 ?>

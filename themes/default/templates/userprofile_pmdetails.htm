@@ -7,9 +7,9 @@
 					<td width="20%" align="left"><a href="{back}">{glocale.lang('previous')}</a></td>
 					<td width="60%" align="center">
 					{if type == 'inbox'}
-					<a href="{gurl.simple_url(0,'&amp;$URL_LOC=pminbox')}">{glocale.lang('pminbox')}</a>
+					<a href="{gurl.simple_url(0,'&amp;$URL_SUB=pminbox')}">{glocale.lang('pminbox')}</a>
 					{else}
-					<a href="{gurl.simple_url(0,'&amp;$URL_LOC=pmoutbox')}">{glocale.lang('pmoutbox')}</a>
+					<a href="{gurl.simple_url(0,'&amp;$URL_SUB=pmoutbox')}">{glocale.lang('pmoutbox')}</a>
 					{endif}
 					:: {subject}
 					</td>
@@ -59,10 +59,10 @@
 <div class="bs_padtop">
 	{if show_reply_btn}
 	<a class="bs_button_big" style="float: right;" title="{glocale.lang('answer')}"
-		href="{gurl.simple_url(0,'&amp;$URL_LOC=pmcompose&amp;$URL_PID='~id)}">{glocale.lang('answer')}</a>
+		href="{gurl.simple_url(0,'&amp;$URL_SUB=pmcompose&amp;$URL_PID='~id)}">{glocale.lang('answer')}</a>
 	{endif}
 	<a class="bs_button_big" style="float: right;" title="{glocale.lang('search_for_pm_history')}"
-		href="{gurl.simple_url(0,'&amp;$URL_LOC=pmsearch&amp;$URL_MODE=history&amp;$URL_KW='~id)}">{glocale.lang('pm_history')}</a>
+		href="{gurl.simple_url(0,'&amp;$URL_SUB=pmsearch&amp;$URL_MODE=history&amp;$URL_KW='~id)}">{glocale.lang('pm_history')}</a>
 	<a class="bs_button_big" style="float: right;" title="{glocale.lang('ban_user')}"
 		href="{ban_user_url}">{glocale.lang('ban_user')}</a>
 </div>

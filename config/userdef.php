@@ -491,6 +491,7 @@ define('BS_ATTACHMENT_TIMEOUT',3600);
 
 # general
 define('BS_URL_ACTION',							'action');
+define('BS_URL_SUB',								'sub');
 define('BS_URL_AT',									'at');
 define('BS_URL_FID',								'fid');
 define('BS_URL_TID',								'tid');

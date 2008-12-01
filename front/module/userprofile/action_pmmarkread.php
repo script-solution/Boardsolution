@@ -43,9 +43,7 @@ final class BS_Front_Action_userprofile_pmmarkread extends BS_Front_Action_Base
 
 		// finish
 		$this->set_action_performed(true);
-		$loc = $input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
-		$murl = BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'='.$loc);
-		$this->add_link($locale->lang('back'),$murl);
+		$this->add_link($locale->lang('back'),BS_URL::get_sub_url('userprofile',0));
 
 		return '';
 	}

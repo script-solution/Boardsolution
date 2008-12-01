@@ -72,7 +72,7 @@ final class BS_Front_Action_userprofile_subscribeall extends BS_Front_Action_Bas
 		
 		$this->set_action_performed(true);
 		$this->add_link(
-			$locale->lang('back'),BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=forums')
+			$locale->lang('back'),BS_URL::get_sub_url('userprofile','forums')
 		);
 
 		return '';

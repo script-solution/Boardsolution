@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -44,21 +44,27 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
+		
+		$site = $input->get_var('site','get',FWS_Input::ID);
+		
 		if($input->isset_var('delete','post'))
 		{
-			$site = $input->get_var('site','get',FWS_Input::ID);
 			$ids = $input->get_var('delete','post');
 			$names = array();
 			foreach(BS_DAO::get_smileys()->get_by_ids($ids) as $smiley)
 				$names[] = $smiley['smiley_path'];
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
+			$yurl = BS_URL::get_acpsub_url();
+			$yurl->set('at',BS_ACP_ACTION_DELETE_SMILEYS);
+			$yurl->set('ids',implode(',',$ids));
+			$yurl->set('site',$site);
+			
+			$nurl = BS_URL::get_acpsub_url();
+			$nurl->set('site',$site);
+			
 			$functions->add_delete_message(
-				sprintf($locale->lang('delete_message'),$namelist),
-				BS_URL::get_acpmod_url(0,
-					'&amp;at='.BS_ACP_ACTION_DELETE_SMILEYS.'&amp;ids='.implode(',',$ids).'&amp;site='.$site
-				),
-				BS_URL::get_acpmod_url(0,'&amp;site='.$site)
+				sprintf($locale->lang('delete_message'),$namelist),$yurl->to_url(),$nurl->to_url()
 			);
 		}
 		
@@ -83,18 +89,24 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 		$pagination = new BS_ACP_Pagination($end,$num);
 		$page = $pagination->get_page();
 		
+		$url = BS_URL::get_acpsub_url();
+		
 		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);
 		unset($hidden['search']);
 		unset($hidden['at']);
 		$tpl->add_variables(array(
 			'page' => $page,
-			'import_url' => BS_URL::get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_IMPORT_SMILEYS),
-			'correct_sort_url' => BS_URL::get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_RESORT_SMILEYS),
+			'import_url' => $url->set('at',BS_ACP_ACTION_IMPORT_SMILEYS)->to_url(),
+			'correct_sort_url' => $url->set('at',BS_ACP_ACTION_RESORT_SMILEYS)->to_url(),
 			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden' => $hidden,
 			'search_val' => $search
 		));
+		
+		$switchurl = BS_URL::get_acpsub_url();
+		$switchurl->set('at',BS_ACP_ACTION_SWITCH_SMILEYS);
+		$switchurl->set('site',$site);
 		
 		$smileys = array();
 		$c = 0;
@@ -117,20 +129,14 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 					if($i > 0)
 					{
 						$prev = &$rows[$i - 1];
-						$switch_up_url = BS_URL::get_acpmod_url(
-							0,'&amp;at='.BS_ACP_ACTION_SWITCH_SMILEYS.'&amp;ids='.$data['id'].','.$prev['id']
-								.'&amp;site='.$page
-						);
+						$switch_up_url = $switchurl->set('ids',$data['id'].','.$prev['id'])->to_url();
 					}
 		
 					$switch_down_url = '';
 					if($i < $num - 1)
 					{
 						$next = &$rows[$i + 1];
-						$switch_down_url = BS_URL::get_acpmod_url(
-							0,'&amp;at='.BS_ACP_ACTION_SWITCH_SMILEYS.'&amp;ids='.$next['id'].','.$data['id']
-								.'&amp;site='.$page
-						);
+						$switch_down_url = $switchurl->set('ids',$next['id'].','.$data['id'])->to_url();
 					}
 					
 					$smileys[] = array(
@@ -152,8 +158,9 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 		$tpl->add_array('smileys',$smileys);
 		$tpl->add_variables(array('total' => $c));
 		
-		$murl = BS_URL::get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
-		$functions->add_pagination($pagination,$murl);
+		$murl = BS_URL::get_acpmod_url();
+		$murl->set('search',$search);
+		$pagination->populate_tpl($murl);
 	}
 	
 	/**

@@ -29,7 +29,7 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -57,10 +57,9 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 		$keyword = $input->get_var('kw','get',FWS_Input::STRING);
 		if($keyword != null)
 		{
-			$renderer->add_breadcrumb(
-				$locale->lang('config_search_result_title'),
-				BS_URL::get_acpmod_url(0,'&amp;action=search&amp;kw='.$keyword)
-			);
+			$url = BS_URL::get_acpsub_url();
+			$url->set('kw',$keyword);
+			$renderer->add_breadcrumb($locale->lang('config_search_result_title'),$url->to_url());
 		}
 	}
 	
@@ -98,8 +97,12 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 		$perline = 6;
 		$hidden_fields = BS_URL::get_acpmod_comps();
 		$hidden_fields['action'] = 'search';
+		
+		$url = BS_URL::get_acpsub_url();
+		$url->set('kw',$keyword);
+		
 		$tpl->add_variables(array(
-			'form_target' => BS_URL::get_acpmod_url(0,'&amp;action=search&amp;kw='.$keyword),
+			'form_target' => $url->to_url(),
 			'action_type' => BS_ACP_ACTION_SAVE_SETTINGS,
 			'title' => sprintf($locale->lang('config_search_result'),$this->_keyword),
 			'items' => $items,

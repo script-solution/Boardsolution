@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -57,24 +57,23 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 				$names[] = $node->get_name();
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
+			$url = BS_URL::get_acpsub_url();
+			$url->set('ids',$ids);
+			
 			if($action_type == 'delete')
 			{
 				$functions->add_delete_message(
 					sprintf($locale->lang('delete_forums'),$namelist),
-					BS_URL::get_acpmod_url(
-						0,'&amp;at='.BS_ACP_ACTION_DELETE_FORUMS.'&amp;ids='.$ids
-					),
-					BS_URL::get_acpmod_url()
+					$url->set('at',BS_ACP_ACTION_DELETE_FORUMS)->to_url(),
+					BS_URL::build_acpmod_url()
 				);
 			}
 			else if($action_type == 'empty')
 			{
 				$functions->add_delete_message(
 					sprintf($locale->lang('empty_forum_msg'),$namelist),
-					BS_URL::get_acpmod_url(
-						0,'&amp;at='.BS_ACP_ACTION_TRUNCATE_FORUMS.'&amp;ids='.$ids
-					),
-					BS_URL::get_acpmod_url()
+					$url->set('at',BS_ACP_ACTION_TRUNCATE_FORUMS)->to_url(),
+					BS_URL::build_acpmod_url()
 				);
 			}
 		}
@@ -102,6 +101,11 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 		);
 		
 		$forum_funcs = BS_ForumUtils::get_instance();
+		
+		$switchurl = BS_URL::get_acpsub_url();
+		$switchurl->set('at',BS_ACP_ACTION_SWITCH_FORUMS);
+		
+		$editurl = BS_URL::get_acpsub_url(0,'edit');
 		
 		$tplforums = array();
 		$last_parent = -1;
@@ -137,20 +141,12 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 			$switch_up_url = '';
 			$up_index = $this->_is_same_parent_above($nodes,$row,$data->get_parent_id());
 			if($up_index >= 0)
-			{
-				$switch_up_url = BS_URL::get_acpmod_url(
-					0,'&amp;at='.BS_ACP_ACTION_SWITCH_FORUMS.'&amp;ids='.$fid.','.$nodes[$up_index]->get_id()
-				);
-			}
+				$switch_up_url = $switchurl->set('ids',$fid.','.$nodes[$up_index]->get_id())->to_url();
 
 			$switch_down_url = '';
 			$down_index = $this->_is_same_parent_below($nodes,$row,$data->get_parent_id());
 			if($down_index > 0)
-			{
-				$switch_down_url = BS_URL::get_acpmod_url(
-					0,'&amp;at='.BS_ACP_ACTION_SWITCH_FORUMS.'&amp;ids='.$nodes[$down_index]->get_id().','.$fid
-				);
-			}
+				$switch_down_url = $switchurl->set('ids',$nodes[$down_index]->get_id().','.$fid)->to_url();
 
 			$path_images = $forum_funcs->get_path_images($node,$sub_cats,$images,1);
 			
@@ -166,7 +162,7 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 				'parent' => $parent,
 				'switch_up_url' => $switch_up_url,
 				'switch_down_url' => $switch_down_url,
-				'options_url' => BS_URL::get_acpmod_url(0,'&amp;action=edit&amp;id='.$fid),
+				'options_url' => $editurl->set('id',$fid)->to_url(),
 				'up_index' => $up_index,
 				'down_index' => $down_index,
 				'fid' => $fid
@@ -176,8 +172,11 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 		}
 		
 		$tpl->add_array('forums',$tplforums);
+		
+		$url = BS_URL::get_acpsub_url();
+		$url->set('at',BS_ACP_ACTION_RESORT_FORUMS);
 		$tpl->add_variables(array(
-			'correct_sort_url' => BS_URL::get_acpmod_url(0,'&amp;at='.BS_ACP_ACTION_RESORT_FORUMS)
+			'correct_sort_url' => $url->to_url()
 		));
 	}
 

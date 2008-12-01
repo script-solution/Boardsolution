@@ -40,15 +40,17 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
-		$site = ($s = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER)) != null ? '&amp;'.BS_URL_SITE.'='.$s : '';
-
+		
 		$this->add_loc_forum_path($fid);
 		$this->add_loc_topic();
-		$params = '&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_ID.'='.$id.$site;
-		$renderer->add_breadcrumb(
-			$locale->lang('edit_post'),
-			BS_URL::get_url('edit_post',$params)
-		);
+		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_TID,$tid);
+		$url->set(BS_URL_ID,$id);
+		if(($s = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER)) != null)
+			$url->set(BS_URL_SITE,$s);
+		$renderer->add_breadcrumb($locale->lang('edit_post'),$url->to_url());
 	}
 	
 	/**
@@ -135,7 +137,6 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 			);
 		}
 		
-		$add = '&amp;'.BS_URL_ID.'='.$id.'&amp;'.BS_URL_SITE.'='.$site;
 		$show_lock = ($auth->is_moderator_in_current_forum() || $user->is_admin()) &&
 								 ($data['locked'] & BS_LOCK_TOPIC_POSTS) == 0;
 
@@ -146,22 +147,27 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		$pform->set_show_attachments(true,$data['id'],true,!$input->isset_var('post_update','post'));
 		$pform->add_form();
 		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_TID,$tid);
+		$url->set(BS_URL_ID,$id);
+		$url->set(BS_URL_SITE,$site);
+		
+		$purl = BS_URL::get_mod_url('posts');
+		$purl->copy_params($url,array(BS_URL_FID,BS_URL_TID,BS_URL_SITE));
+		$purl->set_anchor('b_'.$id);
+		$purl->set_sef(true);
+		
 		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_EDIT_POST,
 			'user_text' => $user_text,
 			'show_lock_post' => $show_lock,
 			'lock_post' => $form->get_radio_yesno('lock_post',$data['edit_lock']),
-			'target_url' => BS_URL::get_url('edit_post','&amp;'.BS_URL_FID.'='.$fid
-				.'&amp;'.BS_URL_TID.'='.$tid.$add),
-			'back_url' => BS_URL::get_url('posts','&amp;'.BS_URL_FID.'='.$fid
-				.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_SITE.'='.$site).'#b_'.$id
+			'target_url' => $url->to_url(),
+			'back_url' => $purl->to_url()
 		));
-
-		$murl = BS_URL::get_url(
-			0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_ID.'='.$id
-				.'&amp;'.BS_URL_SITE.'='.$site.'&amp;'.BS_URL_PID.'='
-		);
-		BS_PostingUtils::get_instance()->add_topic_review($topic_data,true,$murl);
+		
+		BS_PostingUtils::get_instance()->add_topic_review($topic_data,true,$url);
 	}
 }
 ?>

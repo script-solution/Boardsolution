@@ -4,7 +4,7 @@
 {include "inc_delete_message.htm"}
 {include "inc_js_row_selector.htm"}
 
-<form method="post" action="{gurl.get_url()}">
+<form method="post" action="{gurl.build_url()}">
 <div class="bs_border">
 	<h1 class="bs_topic">{glocale.lang('show_backups')}</h1>
 	<table class="bs_table" width="100%" cellpadding="2" cellspacing="1">
@@ -43,7 +43,7 @@
 </form>
 
 <div class="bs_body" align="right">
-	<a href="{gurl.get_url('importbackup')}">{glocale.lang('import_backup')}</a>
+	<a href="{gurl.build_url('importbackup')}">{glocale.lang('import_backup')}</a>
 </div>
 
 {endif}

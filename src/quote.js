@@ -32,7 +32,7 @@ function quote(quoteLink)
 {
 	if(quotedPosts.length > 0)
 	{
-		quoteLink += quotedPosts.join(',');
+		quoteLink = quoteLink.replace(/__PID__/,quotedPosts.join(','));
 		document.location.href = quoteLink;
 		return false;
 	}

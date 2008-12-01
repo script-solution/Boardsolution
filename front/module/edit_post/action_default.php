@@ -128,10 +128,12 @@ final class BS_Front_Action_edit_post_default extends BS_Front_Action_Base
 		$cache->store('stats');
 
 		$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::ID);
-		$murl = BS_URL::get_url(
-			'posts',
-			'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_SITE.'='.$site
-		).'#b_'.$id;
+		$murl = BS_URL::get_mod_url('posts');
+		$murl->set(BS_URL_FID,$fid);
+		$murl->set(BS_URL_TID,$tid);
+		$murl->set(BS_URL_SITE,$site);
+		$murl->set_anchor('b_'.$id);
+		$murl->set_sef(true);
 		$this->add_link($locale->lang('go_to_post'),$murl);
 		$this->set_action_performed(true);
 		

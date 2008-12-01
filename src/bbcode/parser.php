@@ -898,7 +898,7 @@ final class BS_BBCode_Parser extends FWS_Object
 			$sections[$sec_len - 1]->add_sub_section(new BS_BBCode_Section($next_id++,'','',$text));
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

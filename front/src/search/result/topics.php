@@ -27,7 +27,6 @@ final class BS_Front_Search_Result_Topics extends FWS_Object implements BS_Front
 	public function display_result($search,$request)
 	{
 		$cfg = FWS_Props::get()->cfg();
-		$functions = FWS_Props::get()->functions();
 		$locale = FWS_Props::get()->locale();
 		/* @var $search BS_Front_Search_Manager */
 		/* @var $request BS_Front_Search_Request */
@@ -41,13 +40,14 @@ final class BS_Front_Search_Result_Topics extends FWS_Object implements BS_Front
 		
 		$end = $cfg['threads_per_page'];
 		$pagination = new BS_Pagination($end,count($ids));
-		$murl = BS_URL::get_url(
-			0,'&amp;'.BS_URL_ID.'='.$search->get_search_id().'&amp;'.BS_URL_MODE.'='.$request->get_name()
-			 .'&amp;'.BS_URL_ORDER.'='.$order.'&amp;'.BS_URL_AD.'='.$ad.'&amp;'.BS_URL_SITE.'={d}'
-		);
+		$murl = BS_URL::get_sub_url(0,'pmsearch');
+		$murl->set(BS_URL_ID,$search->get_search_id());
+		$murl->set(BS_URL_ORDER,$order);
+		$murl->set(BS_URL_AD,$ad);
+		$murl->set(BS_URL_MODE,$request->get_name());
 		foreach($request->get_url_params() as $name => $value)
-			$murl .= '&amp;'.$name.'='.$value;
-		$small_page_split = $functions->get_pagination_small($pagination,$murl);
+			$murl->set($name,$value);
+		$small_page_split = $pagination->get_small($murl);
 
 		$sql = ' t.id IN ('.$idstr.') AND moved_tid = 0';
 
@@ -62,7 +62,7 @@ final class BS_Front_Search_Result_Topics extends FWS_Object implements BS_Front
 		$topics->set_keywords($request->get_highlight_keywords());
 		$topics->add_topics();
 		
-		$functions->add_pagination($pagination,$murl);
+		$pagination->populate_tpl($murl);
 	}
 	
 	public function get_template()
@@ -77,7 +77,7 @@ final class BS_Front_Search_Result_Topics extends FWS_Object implements BS_Front
 		return $locale->lang('no_topics_found');
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

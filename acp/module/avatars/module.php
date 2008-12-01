@@ -22,7 +22,7 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -33,7 +33,7 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 		
 		$renderer->add_action(BS_ACP_ACTION_DELETE_AVATARS,'delete');
 		$renderer->add_action(BS_ACP_ACTION_IMPORT_AVATARS,'import');
-		$renderer->add_breadcrumb($locale->lang('acpmod_avatars'),BS_URL::get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_avatars'),BS_URL::build_acpmod_url());
 	}
 	
 	/**
@@ -54,12 +54,14 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 				$names[] = $data['av_pfad'];
 			$namelist = FWS_StringHelper::get_enum($names,$locale->lang('and'));
 			
+			$url = BS_URL::get_acpmod_url();
+			$url->set('ids',implode(',',$ids));
+			$url->set('at',BS_ACP_ACTION_DELETE_AVATARS);
+			
 			$functions->add_delete_message(
 				sprintf($locale->lang('delete_message'),$namelist),
-				BS_URL::get_acpmod_url(0,
-					'&amp;at='.BS_ACP_ACTION_DELETE_AVATARS.'&amp;ids='.implode(',',$ids)
-				),
-				BS_URL::get_acpmod_url()
+				$url->to_url(),
+				BS_URL::build_acpmod_url()
 			);
 		}
 		
@@ -100,8 +102,9 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 		}
 
 		$tpl->add_array('avatars',$avatars);
-		$murl = BS_URL::get_acpmod_url(0,'&amp;search='.$search.'&amp;site={d}');
-		$functions->add_pagination($pagination,$murl);
+		$murl = BS_URL::get_acpmod_url();
+		$murl->set('search',$search);
+		$pagination->populate_tpl($murl);
 	}
 }
 ?>

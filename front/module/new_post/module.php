@@ -45,11 +45,12 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 
 		$this->add_loc_forum_path($fid);
 		$this->add_loc_topic();
-		$renderer->add_breadcrumb(
-			$locale->lang('newentry'),
-			BS_URL::get_url('new_post','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
-				.'&amp;'.BS_URL_SITE.'='.$site)
-		);
+		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_TID,$tid);
+		$url->set(BS_URL_SITE,$site);
+		$renderer->add_breadcrumb($locale->lang('newentry'),$url->to_url());
 	}
 	
 	/**
@@ -131,19 +132,19 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 		$form->set_show_options(true);
 		$form->add_form();
 		
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_TID,$tid);
+		$url->set(BS_URL_SITE,$site);
+		
 		$tpl->add_variables(array(
-			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
-				.'&amp;'.BS_URL_SITE.'='.$site),
+			'target_url' => $url->to_url(),
 			'action_type' => BS_ACTION_REPLY,
-			'back_url' => BS_URL::get_url('posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
-				.'&amp;'.BS_URL_SITE.'='.$site)
+			'back_url' => BS_URL::build_posts_url($fid,$tid,$site)
 		));
 
-		$murl = BS_URL::get_url(
-			0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_SITE.'='.$site
-				.'&amp;'.BS_URL_PID.'='
-		);
-		BS_PostingUtils::get_instance()->add_topic_review($topicdata,true,$murl);
+		$url->set(BS_URL_ACTION,'new_post');
+		BS_PostingUtils::get_instance()->add_topic_review($topicdata,true,$url);
 	}
 }
 ?>

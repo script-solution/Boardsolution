@@ -22,7 +22,7 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -32,7 +32,7 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACP_ACTION_DELETE_SUBSCRIPTIONS,'delete');
-		$renderer->add_breadcrumb($locale->lang('acpmod_subscriptions'),BS_URL::get_acpmod_url());
+		$renderer->add_breadcrumb($locale->lang('acpmod_subscriptions'),BS_URL::build_acpmod_url());
 	}
 	
 	/**
@@ -62,31 +62,39 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		if($delete != null && FWS_Array_Utils::is_integer($delete))
 		{
 			$ids = FWS_Array_Utils::advanced_implode(',',$delete);
-			$def_params = '&amp;site='.$site.'&amp;order='.$order.'&amp;ad='.$ad;
-			$yes_url = BS_URL::get_acpmod_url(
-				0,'&amp;at='.BS_ACP_ACTION_DELETE_SUBSCRIPTIONS.'&amp;ids='.$ids.$def_params
-			);
-			$no_url = BS_URL::get_acpmod_url(0,$def_params);
+			
+			$url = BS_URL::get_acpmod_url();
+			$url->set('site',$site);
+			$url->set('order',$order);
+			$url->set('ad',$ad);
+			
+			$yurl = clone $url;
+			$yurl->set('at',BS_ACP_ACTION_DELETE_SUBSCRIPTIONS);
+			$yurl->set('ids',$ids);
+			
 			$functions->add_delete_message(
-				$locale->lang('delete_subscriptions_question'),$yes_url,$no_url,''
+				$locale->lang('delete_subscriptions_question'),$yurl->to_url(),$url->to_url(),''
 			);
 		}
 	
-		$base_url = BS_URL::get_acpmod_url(0,'&amp;search='.$search.'&amp;site='.$site.'&amp;');
+		$baseurl = BS_URL::get_acpmod_url();
+		$baseurl->set('search',$search);
+		$baseurl->set('site',$site);
+		
 		$tpl->add_variables(array(
-			'target_url' => $base_url.'order='.$order.'&amp;ad='.$ad,
+			'target_url' => $baseurl->set('order',$order)->set('ad',$ad)->to_url(),
 			'username_col' => BS_ACP_Utils::get_instance()->get_order_column(
-				$locale->lang('username'),'username','ASC',$order,$base_url
+				$locale->lang('username'),'username','ASC',$order,$baseurl
 			),
 			'date_col' => BS_ACP_Utils::get_instance()->get_order_column(
-				$locale->lang('date'),'date','DESC',$order,$base_url
+				$locale->lang('date'),'date','DESC',$order,$baseurl
 			),
 			'lastlogin_col' => BS_ACP_Utils::get_instance()->get_order_column(
-				$locale->lang('lastlogin'),'lastlogin','DESC',$order,$base_url
+				$locale->lang('lastlogin'),'lastlogin','DESC',$order,$baseurl
 			),
 			'lastpost_col' => BS_ACP_Utils::get_instance()->get_order_column(
-				$locale->lang('lastpost'),'lastpost','DESC',$order,$base_url
-			)
+				$locale->lang('lastpost'),'lastpost','DESC',$order,$baseurl
+			),
 		));
 
 		switch($order)
@@ -111,11 +119,10 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		{
 			if($data['forum_id'] > 0)
 			{
-				$furl = BS_URL::get_frontend_url(
-					'&amp;'.BS_URL_ACTION.'=topics&amp;'.BS_URL_FID.'='.$data['forum_id']
-				);
+				$furl = BS_URL::get_frontend_url('topics');
+				$furl->set(BS_URL_FID,$data['forum_id']);
 				$info = BS_TopicUtils::get_instance()->get_displayed_name($data['forum_name'],22);
-				$name = '[<b>F</b>] <a target="_blank" href="'.$furl.'"';
+				$name = '[<b>F</b>] <a target="_blank" href="'.$furl->to_url().'"';
 				$name .= ' title="'.$info['complete'].'">'.$info['displayed'].'</a>';
 				if($data['flastpost_time'] == 0)
 					$lastpost = $locale->lang('notavailable');
@@ -124,11 +131,11 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 			}
 			else
 			{
-				$furl = BS_URL::get_frontend_url(
-					'&amp;'.BS_URL_ACTION.'=redirect&amp;'.BS_URL_LOC.'=show_topic&amp;'.BS_URL_TID.'='.$data['topic_id']
-				);
+				$furl = BS_URL::get_frontend_url('redirect');
+				$furl->set(BS_URL_LOC,'show_topic');
+				$furl->set(BS_URL_TID,$data['topic_id']);
 				$info = BS_TopicUtils::get_instance()->get_displayed_name($data['name'],22);
-				$name = '[<b>T</b>] <a target="_blank" href="'.$furl.'"';
+				$name = '[<b>T</b>] <a target="_blank" href="'.$furl->to_url().'"';
 				$name .= ' title="'.$info['complete'].'">'.$info['displayed'].'</a>';
 				if($data['lastpost_time'] == 0)
 					$lastpost = $locale->lang('notavailable');
@@ -158,10 +165,11 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 			'search_val' => $search
 		));
 
-		$murl = BS_URL::get_acpmod_url(
-			0,'&amp;search='.$search.'&amp;order='.$order.'&amp;ad='.$ad.'&amp;site={d}'
-		);
-		$functions->add_pagination($pagination,$murl);
+		$murl = BS_URL::get_acpmod_url();
+		$murl->set('search',$search);
+		$murl->set('order',$order);
+		$murl->set('ad',$ad);
+		$pagination->populate_tpl($murl);
 	}
 }
 ?>

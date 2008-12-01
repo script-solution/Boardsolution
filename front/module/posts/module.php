@@ -114,9 +114,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		);
 
 		$pagination = new BS_Pagination($cfg['posts_per_page'],$topic_data['posts'] + 1);
-		$purl = BS_URL::get_url(
-			'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.'&amp;'.BS_URL_SITE.'={d}'
-		);
+		$purl = BS_URL::get_posts_url($fid,$tid,1);
 
 		switch($topic_data['type'])
 		{
@@ -135,13 +133,17 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$enable_quick_search = $cfg['enable_search'] &&
 			($cfg['display_denied_options'] || $auth->has_global_permission('view_search'));
 		
-		$spagiurl = $purl;
 		if(($hl = $input->get_var(BS_URL_HL,'get',FWS_Input::STRING)) !== null)
 		{
 			$hl = stripslashes(FWS_StringHelper::htmlspecialchars_back($hl));
-			$spagiurl .= '&amp;'.BS_URL_HL.'='.urlencode($hl);
+			$purl->set(BS_URL_HL,$hl);
 		}
 		
+		$npurl = BS_URL::get_mod_url('new_post');
+		$npurl->set(BS_URL_FID,$fid);
+		$npurl->set(BS_URL_TID,$tid);
+		$npurl->set(BS_URL_SITE,$site);
+		$npurl->set(BS_URL_PID,'__PID__');
 		$tpl->add_variables(array(
 			'tid' => $tid,
 			'fid' => $fid,
@@ -149,14 +151,11 @@ final class BS_Front_Module_posts extends BS_Front_Module
 			'enable_email_notification' => $cfg['enable_email_notification'] &&
 					!$forums->forum_is_closed($topic_data['rubrikid']),
 			'thread_type_ins' => $thread_type,
-			'sasinsert' => $functions->get_pagination_small($pagination,$spagiurl),
+			'sasinsert' => $pagination->get_small($purl),
 			'threadname_ins' => $topic_data['name'],
 			'show_poll' => $topic_data['type'] > 0,
 			'show_event' => $topic_data['type'] == -1,
-			'quoteLink' => BS_URL::get_url(
-	    	'new_post','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
-					.'&amp;'.BS_URL_SITE.'='.$site.'&amp;'.BS_URL_PID.'='
-	    )
+			'quoteLink' => $npurl->to_url()
 		));
 
 		// display poll / event info
@@ -234,11 +233,12 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$this->_add_posting_options_bottom($fid,$tid);
 
 		// show page split
-		$highlight = ($hl !== null) ? '&amp;'.BS_URL_HL.'='.urlencode($hl) : '';
-		$purl = BS_URL::get_url(
-			0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.$highlight.'&amp;'.BS_URL_SITE.'={d}'
-		);
-		$functions->add_pagination($pagination,$purl);
+		$purl = BS_URL::get_mod_url();
+		$purl->set(BS_URL_FID,$fid);
+		$purl->set(BS_URL_TID,$tid);
+		if($hl !== null)
+			$purl->set(BS_URL_HL,$hl);
+		$pagination->populate_tpl($purl);
 		
 		$show_bottom_bar = ($user->is_admin() ||
 			!$forums->forum_is_closed($topic_data['rubrikid'])) &&
@@ -289,10 +289,11 @@ final class BS_Front_Module_posts extends BS_Front_Module
 
 		if($cfg['display_similar_topics'] == 1)
 		{
-			$current_url = BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid
-				.'&amp;'.BS_URL_TID.'='.$tid.$highlight);
+			$curl = BS_URL::get_posts_url($fid,$tid);
+			if($hl !== null)
+				$curl->set(BS_URL_HL,$hl);
 			BS_Front_TopicFactory::get_instance()->add_similar_topics(
-				$topic_data['name'],$topic_data['id'],$current_url
+				$topic_data['name'],$topic_data['id'],$curl
 			);
 		}
 		
@@ -316,17 +317,20 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
 		$tpl = FWS_Props::get()->tpl();
-		$site_add = $site != null ? '&amp;'.BS_URL_SITE.'='.$site : '';
 		
 		$display_reply = $allow_posts &&
 			($user->is_admin() || !$forums->forum_is_closed($fid)) &&
 			($cfg['display_denied_options'] || $auth->has_current_forum_perm(BS_MODE_REPLY));
-	
+		
+		$url = BS_URL::get_mod_url('new_post');
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_TID,$tid);
+		if($site > 0)
+			$url->set(BS_URL_SITE,$site);
+		
 		$tpl->add_variables(array(
 			'display_reply' => $display_reply,
-			'reply_url' => BS_URL::get_url(
-				'new_post','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.$site_add
-			)
+			'reply_url' => $url->to_url()
 		));
 	}
 	
@@ -346,10 +350,13 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$display_subscribe = ($cfg['display_denied_options'] || $user->is_loggedin()) &&
 			$cfg['enable_email_notification'] && !$topic_data['thread_closed'] &&
 			!$forums->forum_is_closed($fid);
-	
+		
+		$url = BS_URL::get_standalone_url('print');
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_TID,$tid);
 		$tpl->add_variables(array(
 			'enable_email_notification' => $display_subscribe,
-			'print_url' => BS_URL::get_url('print','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid)
+			'print_url' => $url->to_url()
 		));
 	}
 	
@@ -367,10 +374,11 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
 	
 		$user_voted = BS_UserUtils::get_instance()->user_voted_for_poll($topic_data['type']);
-		$result_url = BS_URL::get_url(
-			0,'&amp;'.BS_URL_FID."=".$fid."&amp;".BS_URL_TID."=".$tid."&amp;".BS_URL_MODE."=results"
-		);
-		$vote_url = BS_URL::get_posts_url($fid,$tid);
+		
+		$url = BS_URL::get_posts_url($fid,$tid,1);
+		$url->set(BS_URL_MODE,'results');
+		$result_url = $url->to_url();
+		$vote_url = BS_URL::build_posts_url($fid,$tid);
 	
 		$show_results = !$user->is_loggedin() ||
 			$input->get_var(BS_URL_MODE,'get',FWS_Input::STRING) == 'results' || $user_voted ||
@@ -378,7 +386,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		
 		$tpl->set_template('inc_poll.htm');
 		$tpl->add_variables(array(
-			'vote_action' => BS_URL::get_url(0,'&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid),
+			'vote_action' => $vote_url,
 			'action_type' => BS_ACTION_VOTE
 		));
 		

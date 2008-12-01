@@ -435,6 +435,9 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 		list($year,) = $this->get_date();
 		if(isset($events[$date.$year]))
 		{
+			$posts_url = BS_URL::get_mod_url('posts');
+			$cal_url = BS_URL::get_sub_url('calendar','eventdetails');
+			
 			foreach($events[$date.$year] as $content)
 			{
 				if($count >= $max_events)
@@ -451,15 +454,14 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 	
 				if($content['tid'])
 				{
-					$purl = BS_URL::get_url(
-						'posts','&amp;'.BS_URL_FID.'='.$content['rid'].'&amp;'.BS_URL_TID.'='.$content['tid']
-					);
+					$posts_url->set(BS_URL_FID,$content['rid']);
+					$posts_url->set(BS_URL_TID,$content['tid']);
+					$purl = $posts_url->to_url();
 				}
 				else
 				{
-					$purl = BS_URL::get_url(
-						'calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$content['id']
-					);
+					$cal_url->set(BS_URL_ID,$content['id']);
+					$purl = $cal_url->to_url();
 				}
 				
 				$res['ev'][] = array(
@@ -479,8 +481,9 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 				FWS_String::substr($date,0,2),
 				$year
 			));
-			$curl = BS_URL::get_url('calendar','&amp;'.BS_URL_LOC.'=week&amp;'.BS_URL_DAY.'='.$loc);
-			$res['toomany'] = $curl;
+			$curl = BS_URL::get_sub_url('calendar','week');
+			$curl->set(BS_URL_DAY,$loc);
+			$res['toomany'] = $curl->to_url();
 		}
 		
 		return $res;
@@ -542,7 +545,7 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 		return $year - $birthday[0];
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

@@ -32,11 +32,7 @@ final class BS_Front_SubModule_linklist_add extends BS_Front_SubModule
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->add_action(BS_ACTION_ADD_LINK,'addlink');
-
-		$renderer->add_breadcrumb(
-			$locale->lang('addnewlink'),
-			BS_URL::get_url('linklist','&amp;'.BS_URL_LOC.'=add')
-		);
+		$renderer->add_breadcrumb($locale->lang('addnewlink'),BS_URL::build_sub_url());
 	}
 	
 	/**
@@ -70,10 +66,10 @@ final class BS_Front_SubModule_linklist_add extends BS_Front_SubModule
 		$pform->add_form();
 		
 		$tpl->add_variables(array(
-			'target_url' => BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=add'),
+			'back_url' => BS_URL::build_mod_url(),
+			'target_url' => BS_URL::build_sub_url(),
 			'category_combo' => $form->get_combobox('link_category',$categories,''),
 			'action_type' => BS_ACTION_ADD_LINK,
-			'back_url' => BS_URL::get_url(0)
 		));
 	}
 	

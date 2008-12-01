@@ -32,7 +32,6 @@ final class BS_Front_Search_Result_PMHistory extends FWS_Object implements BS_Fr
 	public function display_result($search,$request)
 	{
 		$tpl = FWS_Props::get()->tpl();
-		$functions = FWS_Props::get()->functions();
 		$user = FWS_Props::get()->user();
 		list($order,$ad) = $request->get_order();
 		$ids = $search->get_result_ids();
@@ -105,15 +104,15 @@ final class BS_Front_Search_Result_PMHistory extends FWS_Object implements BS_Fr
 			);
 		}
 
-		$murl = BS_URL::get_url(
-			0,'&amp;'.BS_URL_LOC.'=pmsearch'.'&amp;'.BS_URL_ID.'='.$search->get_search_id()
-				.'&amp;'.BS_URL_ORDER.'='.$order.'&amp;'.BS_URL_AD.'='.$ad
-				.'&amp;'.BS_URL_MODE.'='.$request->get_name().'&amp;'.BS_URL_SITE.'={d}'
-		);
+		$murl = BS_URL::get_sub_url(0,'pmsearch');
+		$murl->set(BS_URL_ID,$search->get_search_id());
+		$murl->set(BS_URL_ORDER,$order);
+		$murl->set(BS_URL_AD,$ad);
+		$murl->set(BS_URL_MODE,$request->get_name());
 		foreach($request->get_url_params() as $name => $value)
-			$murl .= '&amp;'.$name.'='.$value;
+			$murl->set($name,$value);
 		
-		$functions->add_pagination($pagination,$murl);
+		$pagination->populate_tpl($murl);
 		
 		$tpl->add_array('messages',$messages);
 		$tpl->add_variables(array(
@@ -133,7 +132,7 @@ final class BS_Front_Search_Result_PMHistory extends FWS_Object implements BS_Fr
 		return $locale->lang('no_pms_found');
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

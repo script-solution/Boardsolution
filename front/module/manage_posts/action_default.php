@@ -352,18 +352,18 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 			$deltopics->perform_action();
 		}
 
+		$murl = BS_URL::get_mod_url('posts');
+		$murl->set_sef(true);
 		if($complete_move)
 		{
-			$murl = BS_URL::get_url(
-				'posts','&amp;'.BS_URL_FID.'='.$target_fid.'&amp;'.BS_URL_TID.'='.$topic_id
-			);
+			$murl->set(BS_URL_FID,$target_fid);
+			$murl->set(BS_URL_TID,$topic_id);
 			$this->add_link($locale->lang('go_to_new_topic'),$murl);
 		}
 		else
 		{
-			$murl = BS_URL::get_url(
-				'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid
-			);
+			$murl->set(BS_URL_FID,$fid);
+			$murl->set(BS_URL_TID,$tid);
 			$this->add_link($locale->lang('go_to_topic'),$murl);
 		}
 		

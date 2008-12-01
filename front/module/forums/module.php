@@ -37,7 +37,6 @@ final class BS_Front_Module_forums extends BS_Front_Module
 	public function run()
 	{
 		$cfg = FWS_Props::get()->cfg();
-		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
 		$auth = FWS_Props::get()->auth();
 
@@ -48,10 +47,7 @@ final class BS_Front_Module_forums extends BS_Front_Module
 		$display_lt_bottom = strpos($cfg['current_topic_loc'],'bottom') !== false;
 		$display_lt = $cfg['current_topic_enable'] == 1 && ($display_lt_bottom || $display_lt_top);
 		if($display_lt)
-		{
-			$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
-			BS_Front_TopicFactory::get_instance()->add_latest_topics_small($fid);
-		}
+			BS_Front_TopicFactory::get_instance()->add_latest_topics_small();
 		
 		$tpl->add_variables(array(
 			'latest_topics_top' => $display_lt && $display_lt_top,
@@ -96,10 +92,9 @@ final class BS_Front_Module_forums extends BS_Front_Module
 		if($input->get_var(BS_URL_LOC,'get',FWS_Input::STRING) == 'clap_ministats')
 			$functions->clap_area('ministats');
 	
-		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
-		$fid_param = $fid != null ? '&amp;'.BS_URL_FID.'='.$fid : '';	
-		$murl = BS_URL::get_url(0,$fid_param.'&amp;'.BS_URL_LOC.'=clap_ministats');
-		$clap_data = $functions->get_clap_data('ministats',$murl);
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_LOC,'clap_ministats');	
+		$clap_data = $functions->get_clap_data('ministats',$url->to_url());
 		
 		$tpl->add_array('stats_data',$stats_data,false);
 		$tpl->add_variables(array(

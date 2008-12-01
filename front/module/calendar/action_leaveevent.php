@@ -54,7 +54,8 @@ final class BS_Front_Action_calendar_leaveevent extends BS_Front_Action_Base
 
 		BS_DAO::get_eventann()->leave($user->get_user_id(),$id);
 
-		$murl = BS_URL::get_url('calendar','&amp;'.BS_URL_LOC.'=eventdetails&amp;'.BS_URL_ID.'='.$id);
+		$murl = BS_URL::get_sub_url('calendar','eventdetails');
+		$murl->set(BS_URL_ID,$id);
 		$this->add_link($locale->lang('back'),$murl);
 		$this->set_action_performed(true);
 

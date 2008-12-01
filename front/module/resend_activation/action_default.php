@@ -57,7 +57,7 @@ final class BS_Front_Action_resend_activation_default extends BS_Front_Action_Ba
 			return sprintf($locale->lang('error_mail_error'),$mail->get_error_message());
 
 		$this->set_action_performed(true);
-		$this->add_link($locale->lang('back'),$functions->get_start_url());
+		$this->add_link($locale->lang('back'),BS_URL::get_start_url());
 
 		return '';
 	}

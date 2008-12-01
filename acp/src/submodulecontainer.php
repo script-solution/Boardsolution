@@ -50,9 +50,19 @@ abstract class BS_ACP_SubModuleContainer extends BS_ACP_Module
 	}
 
 	/**
+	 * @see FWS_Module::error_occurred()
+	 *
+	 * @return boolean
+	 */
+	public function error_occurred()
+	{
+		return parent::error_occurred() || $this->_sub->error_occurred();
+	}
+
+	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{

@@ -33,10 +33,7 @@ final class BS_Front_SubModule_userprofile_config extends BS_Front_SubModule
 		
 		$renderer->add_action(BS_ACTION_EDIT_PERS_CONFIG,'updateconfig');
 
-		$renderer->add_breadcrumb(
-			$locale->lang('profileconfig'),
-			BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=config')
-		);
+		$renderer->add_breadcrumb($locale->lang('profileconfig'),BS_URL::build_sub_url());
 	}
 	
 	/**
@@ -115,7 +112,7 @@ final class BS_Front_SubModule_userprofile_config extends BS_Front_SubModule
 			'enable_pms' => $cfg['enable_pms'] == 1,
 			'action_type' => BS_ACTION_EDIT_PERS_CONFIG,
 			'ghost_mode_allowed' => $cfg['allow_ghost_mode'] == 1,
-			'target_url' => BS_URL::get_url('userprofile','&amp;'.BS_URL_LOC.'=config'),
+			'target_url' => BS_URL::build_sub_url(),
 			'allow_custom_lang' => $cfg['allow_custom_lang'],
 			'allow_custom_style' => $cfg['allow_custom_style'],
 			'lang_options' => $langs,

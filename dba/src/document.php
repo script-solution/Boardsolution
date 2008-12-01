@@ -106,7 +106,7 @@ final class BS_DBA_Document extends FWS_Document
 			$user->logout();
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

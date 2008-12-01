@@ -50,11 +50,12 @@ final class BS_UserUtils extends FWS_Singleton
 		if(isset($user_cache[$id.$color.$style]))
 			return $user_cache[$id.$color.$style];
 		
-		$murl = BS_URL::get_url('userdetails','&amp;'.BS_URL_ID.'='.$id);
+		$murl = BS_URL::get_mod_url('userdetails');
+		$murl->set(BS_URL_ID,$id);
 		$link = '<a';
 		if($style != '')
 			$link .= ' style="'.$style.'"';
-		$link .= ' href="'.$murl.'">';
+		$link .= ' href="'.$murl->to_url().'">';
 		
 		if($color && $group_ids != '')
 		{

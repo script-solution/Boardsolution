@@ -208,7 +208,7 @@ final class BS_ACP_Menu extends FWS_Singleton
 					),
 					'back_to_frontend' => array(
 						'title' => 'back_to_frontend',
-						'url' => BS_URL::get_frontend_url(),
+						'url' => BS_URL::build_frontend_url(),
 						'access' => 'all',
 						'frame' => 'document',
 					),

@@ -33,7 +33,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 		
 		$renderer->set_has_access($cfg['enable_memberlist'] == 1 &&
 			$auth->has_global_permission('view_memberlist'));
-		$renderer->add_breadcrumb($locale->lang('memberlist'),BS_URL::get_url('memberlist'));
+		$renderer->add_breadcrumb($locale->lang('memberlist'),BS_URL::build_mod_url('memberlist'));
 	}
 	
 	/**
@@ -86,26 +86,30 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 		$s_mods = $input->get_var(BS_URL_MS_MODS,'get',FWS_Input::INT_BOOL);
 		
 		// build the URL
-		$baseurl = BS_URL::get_url('memberlist','&amp;');
-		$baseurl .= BS_URL_MS_NAME.'='.$s_name.'&amp;'.BS_URL_MS_EMAIL.'='.$s_email.'&amp;';
-
+		$baseurl = BS_URL::get_mod_url('memberlist');
+		$baseurl->set(BS_URL_MS_NAME,$s_name);
+		$baseurl->set(BS_URL_MS_EMAIL,$s_email);
+		$baseurl->set(BS_URL_MS_NAME,$s_name);
+		$baseurl->set(BS_URL_MS_NAME,$s_name);
+		$baseurl->set(BS_URL_MS_NAME,$s_name);
+		$gids = array();
 		$groups = $cache->get_cache('user_groups');
 		foreach($groups as $gdata)
 		{
 			if(($s_group == null || in_array($gdata['id'],$s_group)) &&
 				 $gdata['id'] != BS_STATUS_GUEST && $gdata['is_visible'] == 1)
-				$baseurl .= BS_URL_MS_GROUP.'[]='.$gdata['id'].'&amp;';
+				$gids[] = $gdata['id'];
 		}
-
-		$baseurl .= BS_URL_MS_FROM_POSTS.'='.$s_from_posts.'&amp;';
-		$baseurl .= BS_URL_MS_TO_POSTS.'='.$s_to_posts.'&amp;';
-		$baseurl .= BS_URL_MS_FROM_POINTS.'='.$s_from_points.'&amp;';
-		$baseurl .= BS_URL_MS_TO_POINTS.'='.$s_to_points.'&amp;';
-		$baseurl .= BS_URL_MS_FROM_REG.'='.$s_from_reg.'&amp;';
-		$baseurl .= BS_URL_MS_TO_REG.'='.$s_to_reg.'&amp;';
-		$baseurl .= BS_URL_MS_FROM_LASTLOGIN.'='.$s_from_lastlogin.'&amp;';
-		$baseurl .= BS_URL_MS_TO_LASTLOGIN.'='.$s_to_lastlogin.'&amp;';
-		$baseurl .= BS_URL_MS_MODS.'='.$s_mods.'&amp;';
+		$baseurl->set(BS_URL_MS_GROUP,$gids);
+		$baseurl->set(BS_URL_MS_FROM_POSTS,$s_from_posts);
+		$baseurl->set(BS_URL_MS_TO_POSTS,$s_to_posts);
+		$baseurl->set(BS_URL_MS_FROM_POINTS,$s_from_points);
+		$baseurl->set(BS_URL_MS_TO_POINTS,$s_to_points);
+		$baseurl->set(BS_URL_MS_FROM_REG,$s_from_reg);
+		$baseurl->set(BS_URL_MS_TO_REG,$s_to_reg);
+		$baseurl->set(BS_URL_MS_FROM_LASTLOGIN,$s_from_lastlogin);
+		$baseurl->set(BS_URL_MS_TO_LASTLOGIN,$s_to_lastlogin);
+		$baseurl->set(BS_URL_MS_MODS,$s_mods);
 
 		$name_col_width = ($cfg['enable_pms'] == 1) ? 20 : 25;
 
@@ -220,6 +224,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 			$userlist = BS_DAO::get_profile()->get_users_by_custom_search(
 				$where,$order_sql,$ad,$pagination->get_start(),$limit
 			);
+			$mailurl = BS_URL::get_mod_url('new_mail');
 			foreach($userlist as $data)
 			{
 				if($data['allow_board_emails'] == 1 && $cfg['enable_emails'] == 1 &&
@@ -227,7 +232,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 				{
 					$email = '<a class="bs_button" style="float: none;" title="';
 					$email .= sprintf($locale->lang('send_mail_to_user'),$data['user_name']);
-					$email .= '" href="'.BS_URL::get_url('new_mail','&amp;'.BS_URL_ID.'='.$data['id']).'">';
+					$email .= '" href="'.$mailurl->set(BS_URL_ID,$data['id'])->to_url().'">';
 					$email .= $locale->lang('email').'</a>';
 				}
 				else
@@ -275,31 +280,33 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 		
 		$tpl->add_array('user',$user,false);
 		
-		// display page-split
-		$purl = $baseurl.BS_URL_ORDER.'='.$order.'&amp;'.BS_URL_AD.'='.$ad.'&amp;'.BS_URL_SITE.'={d}';
-		$functions->add_pagination($pagination,$purl);
-		
+		$orderurl = clone $baseurl;
 		$tpl->add_variables(array(
 			'name_col' => $functions->get_order_column(
-				$locale->lang('name'),'name','ASC',$order,$baseurl
+				$locale->lang('name'),'name','ASC',$order,$orderurl
 			),
 			'posts_col' => $functions->get_order_column(
-				$locale->lang('posts'),'posts','DESC',$order,$baseurl
+				$locale->lang('posts'),'posts','DESC',$order,$orderurl
 			),
 			'lastlogin_col' => $functions->get_order_column(
-				$locale->lang('lastlogin'),'lastlogin','DESC',$order,$baseurl
+				$locale->lang('lastlogin'),'lastlogin','DESC',$order,$orderurl
 			),
 			'register_col' => $functions->get_order_column(
-				$locale->lang('Registered'),'register','DESC',$order,$baseurl
+				$locale->lang('Registered'),'register','DESC',$order,$orderurl
 			),
 			'usergroup_col' => $functions->get_order_column(
-				$locale->lang('group'),'user_group','ASC',$order,$baseurl
+				$locale->lang('group'),'user_group','ASC',$order,$orderurl
 			),
 			'name_col_width' => $name_col_width,
 			'pms_enabled' => $cfg['enable_pms'] == 1,
 			'colspan' => $colspan,
 			'enable_post_count' => $cfg['enable_post_count'] == 1
 		));
+		
+		// add page-split
+		$baseurl->set(BS_URL_ORDER,$order);
+		$baseurl->set(BS_URL_AD,$ad);
+		$pagination->populate_tpl($baseurl);
 
 		// display search-form
 		$hidden_fields = array();
@@ -322,8 +329,9 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 			}
 		}
 
-		$clap_url = BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=clapsearch');
-		$clap_data = $functions->get_clap_data('membersearch',$clap_url,'block');
+		$clap_url = BS_URL::get_mod_url();
+		$clap_url->set(BS_URL_LOC,'clapsearch');
+		$clap_data = $functions->get_clap_data('membersearch',$clap_url->to_url(),'block');
 		
 		$form = $this->request_formular(false,false);
 		$tpl->add_variables(array(
@@ -361,7 +369,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 			'user_group_combo' => $form->get_combobox(
 				BS_URL_MS_GROUP.'[]',$user_group_options,$selected_groups,true,count($user_group_options)
 			),
-			'reset_url' => BS_URL::get_url(0,'&amp;'.BS_URL_ORDER.'='.$order.'&amp;'.BS_URL_AD.'='.$ad),
+			'reset_url' => BS_URL::build_mod_url(),
 			'enable_post_count' => $cfg['enable_post_count'] == 1
 		));
 	}

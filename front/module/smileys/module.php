@@ -37,10 +37,9 @@ final class BS_Front_Module_smileys extends BS_Front_Module
 		$renderer->set_show_bottom(false);
 		
 		$number = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
-		$renderer->add_breadcrumb(
-			$locale->lang('smileys'),
-			BS_URL::get_url('smileys','&amp;'.BS_URL_ID.'='.$number)
-		);
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_ID,$number);
+		$renderer->add_breadcrumb($locale->lang('smileys'),$url->to_url());
 	}
 	
 	/**

@@ -102,12 +102,13 @@ final class BS_Front_Document extends BS_Document
 		if($cfg['force_fill_of_empty_req_fields'] == 1)
 		{
 			$action = $input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING);
-			$loc = $input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
+			$loc = $input->get_var(BS_URL_SUB,'get',FWS_Input::STRING);
 			if($user->is_loggedin() && ($action != 'userprofile' || $loc != 'infos'))
 			{
 				if(BS_AddField_Manager::get_instance()->is_any_required_field_empty())
 				{
-					$murl = BS_URL::get_url('userprofile','&'.BS_URL_LOC.'=infos&'.BS_URL_MODE.'=1','&');
+					$murl = BS_URL::get_sub_url('userprofile','infos');
+					$murl->set(BS_URL_MODE,1);
 					$this->redirect($murl);
 				}
 			}

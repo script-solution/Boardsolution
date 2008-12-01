@@ -97,7 +97,7 @@ final class BS_ACP_Module_Tasks_Helper extends FWS_Singleton
 		return array($interval / 60,'minutes');
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

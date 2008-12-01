@@ -229,7 +229,7 @@ final class BS_Locale extends FWS_Object implements FWS_Locale
 		throw new FWS_Exceptions_UnsupportedMethod();
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

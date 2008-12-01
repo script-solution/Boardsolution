@@ -53,7 +53,7 @@ final class BS_Front_Module_userprofile extends BS_Front_SubModuleContainer
 		
 		$renderer->set_template('userprofile.htm');
 
-		switch($input->get_var(BS_URL_LOC,'get',FWS_Input::STRING))
+		switch($input->get_var(BS_URL_SUB,'get',FWS_Input::STRING))
 		{
 			case 'forums':
 			case 'topics':

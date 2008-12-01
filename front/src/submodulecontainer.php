@@ -41,12 +41,22 @@ abstract class BS_Front_SubModuleContainer extends BS_Front_Module
 		if(count($submodules) == 0)
 			FWS_Helper::error('Please provide the possible submodules of this module!');
 		
-		$sub = $input->correct_var(BS_URL_LOC,'get',FWS_Input::STRING,$submodules,$default);
+		$sub = $input->correct_var(BS_URL_SUB,'get',FWS_Input::STRING,$submodules,$default);
 		
 		// include the sub-module and create it
 		include_once(FWS_Path::server_app().'front/module/'.$module.'/sub_'.$sub.'.php');
 		$classname = 'BS_Front_SubModule_'.$module.'_'.$sub;
 		$this->_sub = new $classname();
+	}
+
+	/**
+	 * @see FWS_Module::error_occurred()
+	 *
+	 * @return boolean
+	 */
+	public function error_occurred()
+	{
+		return parent::error_occurred() || $this->_sub->error_occurred();
 	}
 	
 	/**

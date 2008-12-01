@@ -100,6 +100,8 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 				break;
 		}
 		
+		$durl = BS_URL::get_mod_url('userdetails');
+		
 		// sort user by date descending
 		usort($users,array($this,'_sort_user_by_date_callback'));
 		$permission_to_view_location = $auth->has_global_permission('view_online_locations');
@@ -130,7 +132,7 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 				}
 	
 				$time = strip_tags(FWS_Date::get_date($daten['date']));
-				$murl = BS_URL::get_url('userdetails','&amp;'.BS_URL_ID.'='.$daten['user_id']);
+				$murl = $durl->set(BS_URL_ID,$daten['user_id'])->to_url();
 				$name = $auth->get_colored_username(
 					$daten['user_id'],$daten['user_name'],$daten['user_group']
 				);
@@ -191,6 +193,8 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 		$locale = FWS_Props::get()->locale();
 		$legend = '';
 		$groups = $cache->get_cache('user_groups');
+		
+		$murl = BS_URL::get_mod_url('memberlist');
 		foreach($groups as $gdata)
 		{
 			if($gdata['id'] != BS_STATUS_GUEST && $gdata['is_visible'] == 1)
@@ -198,11 +202,8 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 				$gname = $auth->get_colored_groupname($gdata['id']);
 				if($cfg['enable_memberlist'] == 1)
 				{
-					$murl = BS_URL::get_url(
-						'memberlist',
-						'&amp;'.BS_URL_MS_GROUP.'[]='.$gdata['id']
-					);
-					$legend .= '<a href="'.$murl.'">'.$gname.'</a>, ';
+					$murl->set(BS_URL_MS_GROUP,array($gdata['id']));
+					$legend .= '<a href="'.$murl->to_url().'">'.$gname.'</a>, ';
 				}
 				else
 					$legend .= $gname.', ';
@@ -212,8 +213,9 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 		// add moderator
 		if($cfg['enable_moderators'])
 		{
-			$murl = BS_URL::get_url('memberlist','&amp;'.BS_URL_MS_MODS.'=1');
-			$legend .= '<a href="'.$murl.'"><span style="color: #'.$cfg['mod_color'].';">';
+			$murl->remove(BS_URL_MS_GROUP);
+			$murl->set(BS_URL_MS_MODS,1);
+			$legend .= '<a href="'.$murl->to_url().'"><span style="color: #'.$cfg['mod_color'].';">';
 			$legend .= $locale->lang('moderators').'</span></a>';
 		}
 		else
@@ -260,7 +262,7 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 		return 0;
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

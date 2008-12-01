@@ -96,7 +96,7 @@ final class BS_Tasks_Storage_DB extends FWS_Object implements FWS_Tasks_Storage
 		$this->_multiple = 0;
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}

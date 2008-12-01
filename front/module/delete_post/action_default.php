@@ -172,21 +172,22 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 
 		BS_Front_Action_Helper::get_instance()->adjust_last_post_time($max_post_time);
 		
+		// build URL
+		$murl = BS_URL::get_mod_url('posts');
+		$murl->set(BS_URL_FID,$fid);
+		$murl->set(BS_URL_TID,$tid);
 		$lastpost = BS_DAO::get_posts()->get_lastpost_data_in_topic($tid);
-		$header_add = '';
 		if(BS_PostingUtils::get_instance()->get_posts_order() == 'ASC')
 		{
 			$post_num = BS_DAO::get_posts()->get_count_in_topic($tid);
 			if($post_num > $cfg['posts_per_page'])
 			{
 				$pagination = new BS_Pagination($cfg['posts_per_page'],$post_num);
-				$header_add = '&'.BS_URL_SITE.'='.$pagination->get_page_count();
+				$murl->set(BS_URL_SITE,$pagination->get_page_count());
 			}
 		}
+		$murl->set_anchor('b_'.$lastpost['id']);
 		
-		$murl = BS_URL::get_url(
-			'posts','&amp;'.BS_URL_FID.'='.$fid.'&amp;'.BS_URL_TID.'='.$tid.$header_add
-		).'#b_'.$lastpost['id'];
 		$this->add_link($locale->lang('go_to_topic'),$murl);
 		$this->set_action_performed(true);
 

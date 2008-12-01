@@ -22,7 +22,7 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 	/**
 	 * @see FWS_Module::init($doc)
 	 *
-	 * @param BS_ACP_Page $doc
+	 * @param BS_ACP_Document_Content $doc
 	 */
 	public function init($doc)
 	{
@@ -61,26 +61,34 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 			$site = $input->get_var('site','get',FWS_Input::INTEGER);
 			$order = $input->get_var('order','get',FWS_Input::STRING);
 			$ad = $input->get_var('ad','get',FWS_Input::STRING);
-			
 			$ids = implode(',',$delete);
-			$base_url = BS_URL::get_acpmod_url(0,'&order='.$order.'&ad='.$ad.'&site='.$site,'&');
+			
+			$url = BS_URL::get_acpsub_url();
+			$url->set('order',$order);
+			$url->set('ad',$ad);
+			$url->set('site',$site);
+			$url->set('ids',$ids);
+			
 			if($type == 'block')
 			{
-				$yes_url = $base_url.'&action=default&at='.BS_ACP_ACTION_USER_BAN.'&ids='.$ids;
+				$yes_url = $url->set('at',BS_ACP_ACTION_USER_BAN)->to_url();
 				$message = $locale->lang('block_accounts');
 			}
 			else if($type == 'unblock')
 			{
-				$yes_url = $base_url.'&action=default&at='.BS_ACP_ACTION_USER_UNBAN.'&ids='.$ids;
+				$yes_url = $url->set('at',BS_ACP_ACTION_USER_UNBAN)->to_url();
 				$message = $locale->lang('unblock_accounts');
 			}
 			else if(!BS_ENABLE_EXPORT)
 			{
-				$yes_url = $base_url.'&action=default&at='.BS_ACP_ACTION_USER_DELETE.'&ids='.$ids;
+				$yes_url = $url->set('at',BS_ACP_ACTION_USER_DELETE)->to_url();
 				$message = $locale->lang('delete_accounts');
 			}
 			
-			$no_url = $base_url.'&amp;action=results';
+			$nurl = clone $url;
+			$nurl->remove('at');
+			$nurl->set('action','results');
+			$no_url = $nurl->to_url();
 			
 			$names = array();
 			foreach(BS_DAO::get_user()->get_users_by_ids($delete,1,-1) as $data)
@@ -98,8 +106,8 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 		
 		$tpl->add_variables(array(
 			'is_searching' => $ids !== false,
-			'new_search_url' => BS_URL::get_acpmod_url(0,'&amp;action=search'),
-			'change_search_url' => BS_URL::get_acpmod_url(0,'&amp;action=search&amp;use_sess=1')
+			'new_search_url' => BS_URL::build_acpsub_url(0,'search'),
+			'change_search_url' => BS_URL::get_acpsub_url(0,'search')->set('use_sess',1)->to_url()
 		));
 		
 		// use the ids or show all?
@@ -146,11 +154,12 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 		}
 		
 		$site = $input->get_var('site','get',FWS_Input::INTEGER);
-		$baseurl = BS_URL::get_acpmod_url(0);
+		$baseurl = BS_URL::get_acpmod_url();
+		$baseurl->set('order',$order);
 		
-		$ad_images = '<a href="'.$baseurl.'&amp;order='.$order.'&amp;ad=ASC">';
+		$ad_images = '<a href="'.$baseurl->set('ad','ASC')->to_url().'">';
 		$ad_images .= '<img src="acp/images/asc.gif" alt="ASC" /></a>'."\n";
-		$ad_images .= ' <a href="'.$baseurl.'&amp;order='.$order.'&amp;ad=DESC">';
+		$ad_images .= ' <a href="'.$baseurl->set('ad','DESC')->to_url().'">';
 		$ad_images .= '<img src="acp/images/desc.gif" alt="DESC" /></a>'."\n";
 
 		$user_sort = ($order == 'user') ? $ad_images : '';
@@ -166,9 +175,12 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 				$group_options[$gdata['id']] = $gdata['group_title'];
 		}
 
+		$baseurl->set('ad',$ad);
+		$baseurl->set('site',$site);
+		
 		$tpl->add_variables(array(
-			'baseurl' => $baseurl,
-			'target_url' => $baseurl.'&amp;order='.$order.'&amp;ad='.$ad.'&amp;site='.$site,
+			'baseurl' => BS_URL::build_acpmod_url(),
+			'target_url' => $baseurl->to_url(),
 			'order' => $order,
 			'ad' => $ad,
 			'user_sort' => $user_sort,
@@ -178,6 +190,11 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 			'group_sort' => $group_sort
 		));
 
+		$eurl = BS_URL::get_acpsub_url(0,'edit');
+		$eurl->set('order',$order);
+		$eurl->set('ad',$ad);
+		$eurl->set('site',$site);
+		
 		$users = array();
 		foreach($userlist as $data)
 		{
@@ -185,15 +202,11 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 				$locale->lang('user_experience'),$data['posts'],$data['exppoints']
 			);
 			
-			$edit_url = BS_URL::get_acpmod_url(
-				0,'&amp;order='.$order.'&amp;site='.$site.'&amp;ad='.$ad.'&amp;action=edit&amp;id='.$data['id']
-			);
-			
 			$users[] = array(
 				'register_date' => FWS_Date::get_date($data['registerdate'],false),
 				'user_experience' => $user_experience,
 				'group_combo' => $auth->get_usergroup_list($data['user_group'],false,false,true),
-				'edit_url' => $edit_url,
+				'edit_url' => $eurl->set('id',$data['id'])->to_url(),
 				'id' => $data['id'],
 				'user_name' => BS_ACP_Utils::get_instance()->get_userlink($data['id'],$data['user_name']),
 				'is_blocked' => BS_ACP_Utils::get_instance()->get_yesno($data['banned'],true,false)
@@ -205,8 +218,7 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 			'not_export' => !BS_ENABLE_EXPORT
 		));
 
-		$murl = $baseurl.'&amp;order='.$order.'&amp;ad='.$ad.'&amp;site={d}';
-		$functions->add_pagination($pagination,$murl);
+		$pagination->populate_tpl($baseurl);
 	}
 }
 ?>

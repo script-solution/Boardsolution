@@ -35,7 +35,7 @@ final class BS_Front_SubModule_userprofile_pmoutbox extends BS_Front_SubModule
 		$renderer->add_action(BS_ACTION_MARK_PMS_READ,'pmmarkread');
 		$renderer->add_action(BS_ACTION_MARK_PMS_UNREAD,'pmmarkunread');
 
-		$renderer->add_breadcrumb($locale->lang('pmoutbox'),BS_URL::get_url(0,'&amp;'.BS_URL_LOC.'=pmoutbox'));
+		$renderer->add_breadcrumb($locale->lang('pmoutbox'),BS_URL::build_sub_url());
 	}
 	
 	/**

@@ -217,7 +217,7 @@ final class BS_BBCode_Section extends FWS_Object
 		return '['.$this->_name.$param.']'.$result.'[/'.$this->_name.']';
 	}
 	
-	protected function get_print_vars()
+	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
 	}
