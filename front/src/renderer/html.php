@@ -200,10 +200,12 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
+		$user = FWS_Props::get()->user();
 		
+		// TODO improve that!!
 		if($msgs->contains_no_access())
 			$functions->show_login_form();
-		else
+		if($user->is_loggedin())
 		{
 			$amsgs = $msgs->get_all_messages();
 			$links = $msgs->get_links();
