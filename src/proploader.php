@@ -137,6 +137,7 @@ class BS_PropLoader extends FWS_PropLoader
 		$user = FWS_Props::get()->user();
 
 		$c = new FWS_Template_Handler();
+		$c->set_access_to_foreign_tpls(true);
 		$c->set_cache_folder(FWS_Path::server_app().'cache/');
 		
 		// add some global variables
