@@ -135,7 +135,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			)
 		);
 		
-		return $functions->get_mailer($oldemail,$title,$text);
+		return $functions->get_mailer($newemail,$title,$text);
 	}
 	
 	/**
