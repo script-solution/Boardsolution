@@ -853,8 +853,11 @@ final class BS_Auth extends FWS_Object
 		
 		// by default the user has no permission
 		$this->_current_forum_perm = array();
-		foreach(array_keys($this->_forum_perm[$fid]) as $key)
-			$this->_current_forum_perm[$key] = false;
+		if(isset($this->_forum_perm[$fid]))
+		{
+			foreach(array_keys($this->_forum_perm[$fid]) as $key)
+				$this->_current_forum_perm[$key] = false;
+		}
 
 		// check if it is a intern forum
 		if($forums->is_intern_forum($fid) && !$this->has_access_to_intern_forum($fid))
@@ -866,14 +869,17 @@ final class BS_Auth extends FWS_Object
 			return;
 		
 		// store the permissions corresponding to the user-status and groups
-		$is_admin = $user->is_admin();
-		$ugroups = $user->get_all_user_groups();
-		foreach($this->_forum_perm[$fid] as $key => $groups)
+		if(isset($this->_forum_perm[$fid]))
 		{
-			if($is_admin || $data->get_forum_type() == 'contains_cats')
-				$this->_current_forum_perm[$key] = true;
-			else
-				$this->_current_forum_perm[$key] = count(array_intersect($ugroups,$groups)) > 0;
+			$is_admin = $user->is_admin();
+			$ugroups = $user->get_all_user_groups();
+			foreach($this->_forum_perm[$fid] as $key => $groups)
+			{
+				if($is_admin || $data->get_forum_type() == 'contains_cats')
+					$this->_current_forum_perm[$key] = true;
+				else
+					$this->_current_forum_perm[$key] = count(array_intersect($ugroups,$groups)) > 0;
+			}
 		}
 	}
 
