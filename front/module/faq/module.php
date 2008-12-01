@@ -102,7 +102,7 @@ final class BS_Front_Module_faq extends BS_Front_Module
 				case $rank_names['ranks']:
 					// add the ranks
 					$num = $cache->get_cache('user_ranks')->get_element_count();
-					$a = 1;
+					$a = 0;
 					foreach($cache->get_cache('user_ranks') as $data)
 					{
 						$ranks[] = array(
@@ -117,7 +117,7 @@ final class BS_Front_Module_faq extends BS_Front_Module
 					{
 						$ranks[] = array(
 							'points' => '-',
-							'image' => $functions->get_rank_images($num,$num,-1,-1,true),
+							'image' => $functions->get_rank_images($num,$num - 1,-1,-1,true),
 							'title' => $locale->lang('moderator')
 						);
 					}
@@ -125,7 +125,7 @@ final class BS_Front_Module_faq extends BS_Front_Module
 					// add admin
 					$ranks[] = array(
 						'points' => '-',
-						'image' => $functions->get_rank_images($num,$num,-1,BS_STATUS_ADMIN),
+						'image' => $functions->get_rank_images($num,$num - 1,-1,BS_STATUS_ADMIN),
 						'title' => $locale->lang('administrator')
 					);
 					

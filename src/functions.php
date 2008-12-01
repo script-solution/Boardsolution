@@ -593,13 +593,13 @@ final class BS_Functions extends FWS_Object
 		else
 			$title = $auth->get_groupname((int)$group_ids);
 		
-		for($i = 0;$i < $rank_pos;$i++)
+		for($i = 0;$i <= $rank_pos;$i++)
 		{
 			$result .= '<img alt="*" title="'.$title.'"';
 			$result .= ' src="'.$user->get_theme_item_path($images['filled']).'" /> ';
 		}
 	
-		for($i = 0;$i < ($ranknum - $rank_pos);$i++)
+		for($i = 0;$i < ($ranknum - $rank_pos - 1);$i++)
 		{
 			$result .= '<img alt="O" title="'.$title.'"';
 			$result .= ' src="'.$user->get_theme_item_path($images['empty']).'" /> ';
