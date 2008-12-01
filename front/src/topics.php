@@ -360,10 +360,10 @@ final class BS_Front_Topics extends FWS_Object
 					if($this->_keywords !== null)
 						$sql_order = 'relevance '.$this->_ad;
 					else
-						$sql_order = 't.lastpost_id '.$this->_ad;
+						$sql_order = 't.lastpost_time '.$this->_ad.', t.lastpost_id '.$this->_ad;
 					break;
 				default:
-					$sql_order = 't.lastpost_id '.$this->_ad;
+					$sql_order = 't.lastpost_time '.$this->_ad.', t.lastpost_id '.$this->_ad;
 					break;
 			}
 

@@ -40,9 +40,17 @@ final class BS_ACP_Miscellaneous_Tasks_Topics extends FWS_Object implements FWS_
 		foreach(BS_DAO::get_topics()->get_list($pos,$ops) as $data)
 		{
 			$posts = BS_DAO::get_posts()->get_count_in_topic($data['id']);
-			$lastpost = BS_DAO::get_posts()->get_lastpost_data_in_topic($data['id']);
+			if($data['moved_tid'] > 0)
+			{
+				$lastpost = BS_DAO::get_posts()->get_lastpost_data_in_topic($data['moved_tid']);
+				$lastpost['id'] = 0;
+				$lastpost['post_user'] = 0;
+				$lastpost['post_an_user'] = null;
+			}
+			else
+				$lastpost = BS_DAO::get_posts()->get_lastpost_data_in_topic($data['id']);
 			
-			BS_DAO::get_topics()->update_properties($data['id'],$lastpost,$posts - 1);
+			BS_DAO::get_topics()->update_properties($data['id'],$lastpost,max(0,$posts - 1));
 		}
 	}
 	

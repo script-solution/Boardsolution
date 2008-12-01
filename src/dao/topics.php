@@ -86,7 +86,7 @@ class BS_DAO_Topics extends FWS_Singleton
 			FWS_Helper::def_error('intge0','count',$count);
 		
 		return $db->sql_rows(
-			'SELECT id FROM '.BS_TB_THREADS.'
+			'SELECT * FROM '.BS_TB_THREADS.'
 			 '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
 		);
 	}

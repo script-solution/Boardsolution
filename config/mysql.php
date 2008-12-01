@@ -21,7 +21,6 @@ define('BS_TB_CHANGE_EMAIL','ssf_change_email');
 define('BS_TB_CHANGE_PW','ssf_change_pw');
 define('BS_TB_CONFIG','ssf_cfg');
 define('BS_TB_CONFIG_GROUPS','ssf_cfg_groups');
-define('BS_TB_DESIGN','ssf_config');
 define('BS_TB_EVENTS','ssf_events');
 define('BS_TB_EVENT_ANN','ssf_events_announcements');
 define('BS_TB_FORUMS','ssf_forums');

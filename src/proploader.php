@@ -74,7 +74,6 @@ class BS_PropLoader extends FWS_PropLoader
 		
 		// default ones without key
 		$defs = array(
-			'config' =>				BS_TB_DESIGN,
 			'acp_access' =>		BS_TB_ACP_ACCESS,
 		);
 		foreach($defs as $name => $table)
