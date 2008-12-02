@@ -247,7 +247,7 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 			$this->_insert_attachments($this->_user_id,$pmid);
 			
 			// do we have to send the "pm-inbox-full-email"?
-			if($this->_inbox_counts[$i] == 0)
+			if($this->_inbox_counts[$i] == 0 || $cfg['pm_max_inbox'] == 0)
 				$percent = 0;
 			else
 				$percent = 100 / ($cfg['pm_max_inbox'] / $this->_inbox_counts[$i]);
