@@ -310,7 +310,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 * @param int $id the user-id
 	 * @param string $user_name the user-name (has to be unique!) (empty = ignore)
 	 * @param string $user_email the email (empty = ignore)
-	 * @param string $user_pw the password in plain-text (empty = ignore)
+	 * @param string $user_pw the password-hash (empty = ignore)
 	 * @return int the number of affected rows
 	 */
 	public function update($id,$user_name = '',$user_pw = '',$user_email = '')
@@ -331,7 +331,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 		if(!empty($user_email))
 			$fields[BS_EXPORT_USER_EMAIL] = $user_email;
 		if(!empty($user_pw))
-			$fields[BS_EXPORT_USER_PW] = md5($user_pw);
+			$fields[BS_EXPORT_USER_PW] = $user_pw;
 		
 		$db->sql_update(BS_TB_USER,'WHERE `'.BS_EXPORT_USER_ID.'` = '.$id,$fields);
 		return $db->get_affected_rows();

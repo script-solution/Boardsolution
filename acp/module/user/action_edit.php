@@ -102,7 +102,7 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 
 		// update the database
 		if(!BS_ENABLE_EXPORT)
-			BS_DAO::get_user()->update($id,$user_name,$user_pw,$user_email);
+			BS_DAO::get_user()->update($id,$user_name,md5($user_pw),$user_email);
 
 		$groups = array();
 		if($user->get_user_id() == $id)
