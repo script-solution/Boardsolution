@@ -112,7 +112,7 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 		if(!$change_password)
 			$password = '';
 		
-		BS_DAO::get_user()->update($user->get_user_id(),$user_name,'',$password);
+		BS_DAO::get_user()->update($user->get_user_id(),$user_name,$password,'');
 
 		// if this user is a moderator, we have to change the user-name there, too.
 		$moderators = $cache->get_cache('moderators');
