@@ -247,7 +247,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 	 *
 	 * @param int $fid the forum-id
 	 * @param int $tid the topic-id
-	 * @param int $user_id the user-id
+	 * @param int $user_id the user-id (may be 0)
 	 * @return array all subscribed users
 	 */
 	public function get_subscribed_users($fid,$tid,$user_id)
@@ -258,8 +258,8 @@ class BS_DAO_Subscr extends FWS_Singleton
 			FWS_Helper::def_error('intgt0','fid',$fid);
 		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
 			FWS_Helper::def_error('intgt0','tid',$tid);
-		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
-			FWS_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id < 0)
+			FWS_Helper::def_error('intge0','user_id',$user_id);
 		
 		return $db->sql_rows(
 			'SELECT u.`'.BS_EXPORT_USER_EMAIL.'` user_email,p.emails_include_post

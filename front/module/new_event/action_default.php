@@ -101,7 +101,7 @@ final class BS_Front_Action_new_event_default extends BS_Front_Action_Base
 
 		$ips->add_entry('topic');
 
-		$murl = BS_URL::get_mod_url();
+		$murl = BS_URL::get_mod_url('posts');
 		$murl->set(BS_URL_FID,$fid);
 		$murl->set(BS_URL_TID,$topic->get_topic_id());
 		$murl->set_sef(true);

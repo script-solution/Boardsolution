@@ -205,7 +205,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		// TODO improve that!!
 		if($msgs->contains_no_access())
 			$functions->show_login_form();
-		if($user->is_loggedin())
+		else if($msgs->contains_msg())
 		{
 			$amsgs = $msgs->get_all_messages();
 			$links = $msgs->get_links();
