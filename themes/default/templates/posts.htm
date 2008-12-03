@@ -212,7 +212,7 @@ function toggleQuickReply()
 <!--
 function performModAction()
 {
-	document.location.href = getModActionURL() + {tid};
+	document.location.href = getModActionURL().replace('__ID__','{tid}');
 }
 //-->
 </script>
