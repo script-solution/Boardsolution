@@ -662,7 +662,7 @@ final class BS_ForumUtils extends FWS_Singleton
 			$readurl = BS_URL::get_mod_url('forums');
 			$readurl->set(BS_URL_AT,BS_ACTION_CHANGE_READ_STATUS);
 			$readurl->set(BS_URL_LOC,'read');
-			$readurl->set(BS_URL_MODE,'forums');
+			$readurl->set(BS_URL_MODE,'forum');
 			$readurl->set_sid_policy(BS_URL::SID_FORCE);
 		}
 
