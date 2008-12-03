@@ -146,10 +146,14 @@ final class BS_Front_Action_Plain_DeleteTopics extends BS_Front_Action_Plain
 				$shadow_reduce_forums = array();
 				foreach(BS_DAO::get_topics()->get_by_moved_ids($default_topics) as $sdata)
 				{
-					if(isset($shadow_reduce_forums[$sdata['rubrikid']]))
-						$shadow_reduce_forums[$sdata['rubrikid']]++;
-					else
-						$shadow_reduce_forums[$sdata['rubrikid']] = 1;
+					// ignore shadow-topics that are already selected to be deleted
+					if(!in_array($sdata['id'],$topics))
+					{
+						if(isset($shadow_reduce_forums[$sdata['rubrikid']]))
+							$shadow_reduce_forums[$sdata['rubrikid']]++;
+						else
+							$shadow_reduce_forums[$sdata['rubrikid']] = 1;
+					}
 				}
 	
 				if(count($shadow_reduce_forums) > 0)
@@ -160,7 +164,6 @@ final class BS_Front_Action_Plain_DeleteTopics extends BS_Front_Action_Plain
 						BS_DAO::get_forums()->update_by_id($forum_id,array(
 							'threads' => array('threads - '.$number)
 						));
-						$total_topics += $number;
 					}
 	
 					// delete the shadow-topics

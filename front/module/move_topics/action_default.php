@@ -231,7 +231,7 @@ final class BS_Front_Action_move_topics_default extends BS_Front_Action_Base
 		$this->add_link($locale->lang('back_to_forum'),BS_URL::get_topics_url($fid));
 		if($num == 1)
 		{
-			$murl = BS_URL::get_mod_url();
+			$murl = BS_URL::get_mod_url('posts');
 			$murl->set(BS_URL_FID,$target_fid);
 			$murl->set(BS_URL_TID,$moved_topic_ids[0]);
 			$murl->set_sef(true);
