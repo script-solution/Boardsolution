@@ -58,8 +58,7 @@ final class BS_Front_Action_new_topic_default extends BS_Front_Action_Base
 			if($ips->entry_exists('topic'))
 			{
 				return sprintf(
-					$locale->lang('error_threadpollipsperre'),$this
-					->ips->get_timeout('topic') / 60
+					$locale->lang('error_threadpollipsperre'),$ips->get_timeout('topic') / 60
 				);
 			}
 		}
