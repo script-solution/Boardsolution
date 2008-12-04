@@ -480,9 +480,6 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				'unread_news_title' => $unread_news_title,
 				'enable_pms' => $user->is_loggedin() && $cfg['enable_pms'] == 1 &&
 					$user->get_profile_val('allow_pms') == 1,
-				'unread_topic_count' => $unread->get_length(),
-				'unread_pm_count' => $user->is_loggedin() ? $user->get_profile_val('unread_pms') : 0,
-				'unread_news_count' => $unread->get_unread_news_num(),
 				'username' => $username,
 				'forgotpw_link' => $sendpw_url,
 				'resendact_link' => $resend_url,
@@ -507,6 +504,32 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		$tpl = FWS_Props::get()->tpl();
 		$functions = FWS_Props::get()->functions();
 		$forums = FWS_Props::get()->forums();
+		$unread = FWS_Props::get()->unread();
+		
+		if($this->_show_headline)
+		{
+			// set the first unread here to really get the next one. Because if we are currently
+			// displaying an unread topic we will mark it as read in the module. So in the header
+			// we have to old state and in the footer the new one
+			$unread_topics = $unread->get_unread_topics();
+			if(count($unread_topics) > 0)
+			{
+				list($utid,$udata) = each($unread_topics);
+				$uurl = BS_URL::get_mod_url('redirect');
+				$uurl->set(BS_URL_LOC,'show_post');
+				$uurl->set(BS_URL_ID,$udata[0]);
+				$first_unread_url = $uurl->to_url();
+			}
+			else
+				$first_unread_url = '';
+			
+			$tpl->add_variables(array(
+				'first_unread_url' => $first_unread_url,
+				'unread_news_count' => $unread->get_unread_news_num(),
+				'unread_topic_count' => $unread->get_length(),
+				'unread_pm_count' => $user->is_loggedin() ? $user->get_profile_val('unread_pms') : 0,
+			),'inc_headline.htm');
+		}
 
 		if($this->_show_bottom)
 		{

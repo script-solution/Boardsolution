@@ -74,7 +74,10 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 
 		// mark it read?
 		if($data['pm_read'] == 0)
+		{
 			BS_DAO::get_pms()->set_read_flag(array($id),$user->get_user_id(),1);
+			$user->set_profile_val('unread_pms',$user->get_profile_val('unread_pms') - 1);
+		}
 
 		if($data['pm_type'] == 'inbox' && $data['sender_name'] != '')
 		{
