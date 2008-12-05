@@ -56,13 +56,13 @@ class testsSuite extends PHPUnit_Framework_TestSuite
     $this->setName('testsSuite');
     $filter = array(
     	'BaseTest.php',
-    	'testsSuite.php',
     	'InstallTest.php'
     );
     $this->addTestSuite('InstallTest');
+    /*$this->addTestSuite('ReplyTest');*/
     foreach(FWS_FileUtils::get_dir_content('./',false,false) as $item)
     {
-    	if(!in_array($item,$filter))
+    	if(!in_array($item,$filter) && preg_match('/^.*?Test\.php$/',$item))
     	{
     		$name = FWS_FileUtils::get_name($item,false);
     		$this->addTestSuite($name);

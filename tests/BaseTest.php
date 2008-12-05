@@ -20,6 +20,17 @@ class BaseTest extends PHPUnit_Extensions_SeleniumTestCase
     $this->setBrowserUrl("http://localhost/");
   }
   
+  protected function ensureUsertest()
+  {
+  	if(!$this->isTextPresent("Willkommen, test!"))
+  	{
+  		$this->type("user_login", "test");
+	    $this->type("pw_login", "test");
+	    $this->click("//input[@value=' Login ']");
+	    $this->waitForPageToLoad("30000");
+  	}
+  }
+  
   protected function ensureAdmin()
   {
   	if(!$this->isTextPresent("Willkommen, admin!"))
