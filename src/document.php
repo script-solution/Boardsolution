@@ -26,6 +26,16 @@ abstract class BS_Document extends FWS_Document
 	{
 		parent::finish();
 		
+		// TODO temporary!
+		$msgs = FWS_Props::get()->msgs();
+		$str = '';
+		foreach($msgs->get_all_messages() as $type => $list)
+		{
+			foreach($list as $text)
+				$str .= $type.': '.$text."\n";
+		}
+		FWS_FileUtils::append('msglog.txt',$str);
+		
 		$db = FWS_Props::get()->db();
 		$db->disconnect();
 	}
