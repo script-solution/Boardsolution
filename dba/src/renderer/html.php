@@ -125,7 +125,7 @@ final class BS_DBA_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		$user = FWS_Props::get()->user();
 		$doc = FWS_Props::get()->doc();
 		
-		$this->perform_actions();
+		$this->perform_action();
 		
 		// change db?
 		if($input->isset_var('selectdb','post'))

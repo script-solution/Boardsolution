@@ -295,7 +295,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		}
 		
 		// perform actions
-		$this->perform_actions();
+		$this->perform_action();
 		
 		
 		// prepare header-templates

@@ -172,7 +172,7 @@ final class BS_ACP_Renderer_Content extends FWS_Document_Renderer_HTML_Default
 		$doc = FWS_Props::get()->doc();
 
 		// perform actions
-		$this->perform_actions();
+		$this->perform_action();
 		
 		$tpl->set_template('inc_header.htm');
 		$tpl->add_variables(array(
