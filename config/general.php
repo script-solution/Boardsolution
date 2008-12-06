@@ -48,53 +48,6 @@ define('BS_UF_LOC_REGISTRATION',							4);
 define('BS_UF_LOC_USER_PROFILE',							8);
 
 
-// The login-error codes
-/**
- * No error in the login-procedure
- */
-define('BS_LOGIN_ERROR_NO_ERROR',							-1);
-/**
- * The username or password is empty
- */
-define('BS_LOGIN_ERROR_USER_OR_PW_EMPTY',			0);
-/**
- * The username is incorrect
- */
-define('BS_LOGIN_ERROR_USER_NAME_INCORRECT',	1);
-/**
- * The password is incorrect
- */
-define('BS_LOGIN_ERROR_PW_INCORRECT',					2);
-/**
- * The user is not yet activated
- */
-define('BS_LOGIN_ERROR_NOT_ACTIVATED',				3);
-/**
- * The user is banned
- */
-define('BS_LOGIN_ERROR_BANNED',								4);
-/**
- * An admin is required but has not been entered
- */
-define('BS_LOGIN_ERROR_ADMIN_REQUIRED',				5);
-/**
- * The ip is invalid (empty for example)
- */
-define('BS_LOGIN_ERROR_INVALID_IP',						6);
-/**
- * A bot has tried to login
- */
-define('BS_LOGIN_ERROR_BOT',									7);
-/**
- * The max login tries for a user have been reached
- */
-define('BS_LOGIN_ERROR_MAX_LOGIN_TRIES',			8);
-/**
- * The user has entered an invalid security code (after the max-login-tries had been reached)
- */
-define('BS_LOGIN_ERROR_INVALID_SEC_CODE',			9);
-
-
 // The topic-lock-options
 /**
  * Prevents that the topic (name, icon, ...) can be edited

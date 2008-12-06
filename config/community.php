@@ -36,13 +36,6 @@ function BS_Ex_get_stored_password($password,$data)
 #============ MySQL settings =============
 
 /**
- * The user-table in which the following fields are
- * If the table is in another database just put the name of the database in front
- * followed by a dot.
- */
-define('BS_TB_USER','ssf_user');
-
-/**
  * The user-id field
  */
 define('BS_EXPORT_USER_ID','id');

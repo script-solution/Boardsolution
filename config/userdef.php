@@ -25,7 +25,8 @@
  * "page.php?site=forum" you have to use the value "page.php?site=forum".
  */
 // TODO changed for joomla
-define('BS_FRONTEND_FILE','index.php?option=com_joobs&Itemid=26');
+//define('BS_FRONTEND_FILE','index.php?option=com_joobs&Itemid=26');
+define('BS_FRONTEND_FILE','index.php');
 
 ############################ GENERAL ############################
 
@@ -137,27 +138,6 @@ define('BS_DB_CHARSET','utf8');
  */
 $__mysql_version = @mysql_get_server_info();
 define('BS_HTML_CHARSET',!$__mysql_version || $__mysql_version >= '4.1' ? 'UTF-8' : 'ISO-8859-1');
-
-/**
- * Hiermit wird festgelegt ob die Multibyte-String-Funktionen benutzt werden sollen.
- * D.h. mb_strlen() statt strlen(), mb_substr() statt substr() usw.
- * Dafuer muss das Modul "mbstring" installiert sein!
- * <br>
- * Standardmaessig wird es benutzt, wenn UTF-8 verwendet wird und die Funktion
- * "mb_strlen" existiert, d.h. das Modul "mbstring" installiert ist.
- * D.h. wenn jemand einen anderen Multibyte-Zeichensatz (BS_HTML_CHARSET) verwendet, muss dieser hier
- * auch angegeben werden.
- * 
- * This defines wether the multibyte-string-functions should be used.
- * That means mb_strlen() instead of strlen(), mb_substr() instead of substr() and so on.
- * This requires the module "mbstring" to be installed!
- * <br>
- * By default it will be used if the charset UTF-8 is used and the function "mb_strlen"
- * exists so that the module "mbstring" should be installed.
- * That means that if somebody uses a different multibyte-charset (BS_HTML_CHARSET) it has to be
- * entered at this place, too!
- */
-define('BS_USE_MB_FUNCTIONS',BS_HTML_CHARSET == 'UTF-8' && function_exists('mb_strlen'));
 
 ############################ ADMINAREA ############################
 

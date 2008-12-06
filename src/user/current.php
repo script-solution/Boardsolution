@@ -137,7 +137,7 @@ final class BS_User_Current extends FWS_User_Current
 	 * @param string $username the entered user-name
 	 * @param string $pw the entered password
 	 * @param boolean $hash does the password need to be hashed?
-	 * @return int the error-code; see BS_LOGIN_ERROR_*
+	 * @return int the error-code; see self::LOGIN_ERROR_*
 	 */
 	public function login($username,$pw,$hashpw = true)
 	{
