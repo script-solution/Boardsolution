@@ -1,6 +1,6 @@
 <?php
 /**
- * The file for the installation which may be called by the browser
+ * The index-page for the install-script
  * 
  * @version			$Id$
  * @package			Boardsolution
@@ -10,37 +10,36 @@
  * @link				http://www.script-solution.de
  */
 
-$bspath = '';
+define('BS_PATH','');
 
-// we need some basic files
-include_once($bspath.'config/general.php');
-include_once($bspath.'config/userdef.php');
-include_once($bspath.'config/actions.php');
-include_once($bspath.'src/general_functions.php');
-include_once($bspath.'src/base.php');
-include_once($bspath.'install/install_base.php');
+include_once(BS_PATH.'config/userdef.php');
 
-$steps = array(
-	'intro',
-	'type',
-	'config',
-	'dbcheck',
-	'process',
-	'finished'
-);
+// define fwspath for init.php
+if(!defined('FWS_PATH'))
+	define('FWS_PATH',BS_PATH.BS_FWS_PATH);
 
-$step = BS_get_input_value('get','step');
-if(!$step)
-	$step = 0;
+// init the framework
+include_once(FWS_PATH.'init.php');
 
-if(isset($steps[$step]) && is_file($bspath.'install/modules/'.$steps[$step].'.php'))
-{
-	include_once($bspath.'install/modules/'.$steps[$step].'.php');
-	$class = 'BS_Install_'.$steps[$step];
-	if(class_exists($class))
-	{
-		$c = new $class($bspath,$step);
-		$c->display();
-	}
-}
+// set the path
+FWS_Path::set_server_app(BS_PATH);
+FWS_Path::set_client_app(BS_PATH);
+// Note that we don't need the outer-path here
+
+// init boardsolution
+include_once(BS_PATH.'src/autoloader.php');
+FWS_AutoLoader::register_loader('BS_Autoloader');
+
+// include the files that we need at the very beginning
+include_once(BS_PATH.'config/general.php');
+include_once(BS_PATH.'src/props.php');
+
+// set the accessor and loader for boardsolution
+$accessor = new BS_Install_PropAccessor();
+$accessor->set_loader(new BS_Install_PropLoader());
+FWS_Props::set_accessor($accessor);
+
+// now render document
+$doc = FWS_Props::get()->doc();
+echo $doc->render();
 ?>
