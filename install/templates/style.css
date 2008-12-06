@@ -1,184 +1,388 @@
 /* ------------ BODY ------------ */
 
-body.bs_body {
-	margin: 5px 0px 5px 1px;
-	font-family: verdana, tahoma, arial, helvetica, sans-serif;
-	font-size: 11px;
-	color: #000000;
-	background-color: #FFFFFF;
+[title] {
+	cursor: help;
 }
 
-a.bs_body {
-	text-decoration: none;
-	color: #3F5E88;
-}
-
-a.bs_body:hover {
-	text-decoration: underline;
-	color: #3F5E88;
-}
-
-/* ------------ TABLE BORDER ------------ */
-
-td.bs_tbl_top_left {
-	background-color: #FFFFFF;
-	height: 1px;
-	width: 1px;
-}
-
-td.bs_tbl_top {
-	background-color: #7F90AE;
-	height: 1px;
-}
-
-td.bs_tbl_top_right {
-	background-color: #FFFFFF;
-	height: 1px;
-	width: 1px;
-}
-
-td.bs_tbl_left {
-	background-color: #7F90AE;
-	width: 1px;
-}
-
-td.bs_tbl_right {
-	background-color: #7F90AE;
-	width: 1px;
-}
-
-td.bs_tbl_bottom_left {
-	background-color: #FFFFFF;
-	height: 1px;
-	width: 1px;
-}
-
-td.bs_tbl_bottom {
-	background-color: #7F90AE;
-	height: 1px;
-}
-
-td.bs_tbl_bottom_right {
-	background-color: #FFFFFF;
-	height: 1px;
-	width: 1px;
-}
-
-/* ------------ BUTTON ------------ */
-
-button.bs_button {
-	margin: 0px;
-	padding: 0px;
-	font-size: 10px;
+div#ajax_wait_bar {
+	left: 0px;
+	text-align: center;
+	background-color: #008000;
+	color: white;
+	font-size: 14px;
 	font-weight: bold;
-	width: 80px; 
-	height: 20px; 
-	border: 0px solid #000000;
-	background: url(../../themes/default/images/button.gif);
+	padding: 4px;
+	border: 1px dotted #fff;
 }
 
-button.bs_button_big {
-	margin: 0px;
-	padding: 0px;
-	font-size: 10px;
-	font-weight: bold;
-	width: 120px; 
-	height: 20px; 
-	border: 0px solid #000000;
-	background: url(../../themes/default/images/button_big.gif);
+img {
+	border: 0;
+	vertical-align: text-top;
 }
 
-/* ------------ GENERAL ------------ */
-
-td.bs_topic {
-	font-size: 12px;
-	font-weight: bold;
-	color: #FFFFFF;
-	padding: 0px 2px 0px 2px;
-	background-image: url(../../themes/default/images/topic.gif);
-	background-repeat: repeat-x;
+img[onclick] {
+	cursor: pointer;
 }
 
-a.bs_topic {
-	text-decoration: underline;
-	color: #FFFFFF;
+code {
+	font-family: monospace;
 	font-size: 12px;
 }
-
-a.bs_topic:hover {
-	color: #000000;
-}
-
-td.bs_main {
-	padding: 4px 4px 4px 4px;
-	background-color: #EBEBEB;
-}
-
-a.bs_main {
-	text-decoration: none;
-	color: #3F5E88;
-}
-
-a.bs_main:hover {
-	text-decoration: underline;
-}
-
-td.bs_main_no_pad {
-	background-color: #EBEBEB;
-}
-
-td.bs_coldesc {
-	padding: 4px 4px 4px 4px;
-	font-size: 10px;
-	background-color: #DBDBDB;
-	font-weight: bold;
-}
-
-a.bs_coldesc {
-	text-decoration: none;
-	color: #3F5E88;
-	font-size: 10px;
-}
-
-a.bs_coldesc:hover {
-	text-decoration: underline;
-}
-
-.bs_desc {
-	padding-top: 2px;
-	font-size: 10px;
-	font-weight: normal;
-}
-
-/* ------------ OTHER ------------ */
 
 form {
-	margin: 0px;
+	margin: 0;
 }
 
 ul {
-	margin: 5px 0px 0px 0px;
-	padding: 0px 0px 0px 20px;
+	margin: 5px 0 0 0;
+	padding: 0 0 0 20px;
 }
 
 li {
-	padding: 0px 0px 5px 0px;
+	padding: 0 0 5px 0;
 }
 
 label {
 	cursor: pointer;
 }
 
-input,select,textarea {
-	padding: 2px 2px 2px 2px;
-	font-family: verdana, arial, helvetica, sans-serif;
-	font-size: 10px;
-	color: #000000;
-	background-color: #FFFFFF;
-	border: 1px solid #AAAAAA;
+body.bs_body {
+	margin: 1em 15%;
+	font-family: verdana, tahoma, arial, helvetica, sans-serif;
+	font-size: 0.7em;
+	color: #000;
+	background-color: #fff;
 }
 
-input.bs_checkbox {
-	background-color: #EBEBEB;
-	border: 0px;
+.bs_body a {
+	text-decoration: none;
+	color: #3F5E88;
+}
+.bs_body a:hover {
+	text-decoration: underline;
+	color: #3F5E88;
+}
+
+/* ------------ THE DIFFERENT CONTENT-STYLES ------------ */
+
+/* for the main content */
+.bs_main {
+	padding: 0.4em;
+	background-color: #ebebeb;
+}
+.bs_main a {
+	text-decoration: none;
+	color: #3F5E88;
+}
+.bs_main a:hover {
+	text-decoration: underline;
+}
+
+/* the description-columns and something similar */
+.bs_coldesc {
+	padding: 0.3em;
+	font-size: 0.9em;
+	background-color: #DBDBDB;
+	font-weight: bold;
+}
+.bs_coldesc a {
+	text-decoration: none;
+	color: #3F5E88;
+}
+.bs_coldesc a:hover {
+	text-decoration: underline;
+}
+
+/* the columns on the left (if 2 column-layout) */
+.bs_left {
+	padding: 0.3em;
+	font-size: 0.9em;
+	background-color: #DBDBDB;
+	font-weight: bold;
+}
+.bs_coldesc a {
+	text-decoration: none;
+	color: #3F5E88;
+}
+.bs_coldesc a:hover {
+	text-decoration: underline;
+}
+
+.bs_coldesc_sep {
+	border-top: 1px solid #fff;
+	background-color: #DBDBDB;
+	padding: 0.3em;
+	height: 3px;
+	font-size: 3px;
+	line-height: 3px;
+}
+
+/* the topics (titles of areas) */
+.bs_topic {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #fff;
+	padding: 0.4em;
+	background-color: #637591;
+	background-image: url(images/topic.gif);
+	background-repeat: repeat-x;
+	text-align: center;
+}
+td.bs_topic {
+	padding: 0.3em;
+}
+h1.bs_topic {
+	margin: 0;
+	padding: 0.3em;
+}
+.bs_topic a {
+	background-image: none;
+	text-decoration: underline;
+	color: #fff;
+}
+.bs_topic a:hover {
+	color: #000;
+}
+
+/* small text (often descriptions) */
+.bs_desc {
+	padding-top: 0.5em;
+	font-size: 0.9em;
+	font-weight: normal;
+}
+
+/* ------------ PADDING ------------ */
+
+.bs_padtop {
+	margin-top: 0.9em;
+}
+
+.bs_padtop_big {
+	margin-top: 1.5em;
+}
+
+.bs_padbottom {
+	margin-bottom: 0.9em;
+}
+
+.bs_padbottom_big {
+	margin-bottom: 1.5em;
+}
+
+/* ------------ TABLE ------------ */
+
+table.bs_table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0;
+	padding: 0;
+}
+
+table.bs_table > tbody > tr > td, table.bs_table > tbody > tr > th {
+	border: 1px solid #fff;
+}
+
+/* Fix the table-display in IE */
+*:first-child+html table.bs_table {
+	border-collapse: separate;
+}
+*:first-child+html table.bs_table > tbody > tr > td {
+	border: none;
+}
+
+/* Fix the table-display in firefox and partly in opera */
+table.bs_table > tbody > tr:last-child > td.bs_coldesc {
+	border-bottom: 1px solid #dbdbdb;
+}
+table.bs_table > tbody > tr:last-child > td.bs_left {
+	border-bottom: 1px solid #dbdbdb;
+}
+table.bs_table > tbody > tr:last-child > td.bs_main {
+	border-bottom: 1px solid #ebebeb;
+}
+table.bs_table > tbody > tr:last-child > td.bs_topic {
+	border-bottom: 1px solid #637591;
+}
+table.bs_table > tbody > tr > td.bs_coldesc:last-child {
+	border-right: 1px solid #dbdbdb;
+}
+table.bs_table > tbody > tr > td.bs_left:last-child {
+	border-right: 1px solid #dbdbdb;
+}
+table.bs_table > tbody > tr > td.bs_main:last-child {
+	border-right: 1px solid #ebebeb;
+}
+table.bs_table > tbody > tr > td.bs_topic:last-child {
+	border-right: 1px solid #637591;
+}
+
+/* Fix the table-display in opera >= 9 */
+@media all and (min-width:0px) {
+	table.bs_table > tbody > tr > td.bs_coldesc:first-child {
+		border-left: 1px solid #dbdbdb;
+	}
+	table.bs_table > tbody > tr > td.bs_left:first-child {
+		border-left: 1px solid #dbdbdb;
+	}
+	table.bs_table > tbody > tr > td.bs_main:first-child {
+		border-left: 1px solid #ebebeb;
+	}
+	table.bs_table > tbody > tr > td.bs_topic:first-child {
+		border-left: 1px solid #637591;
+	}
+	table.bs_table > tbody > tr:first-child > td.bs_topic {
+		border-top: 1px solid #637591;
+	}
+}
+
+/* Fix the table-display in konqueror >= 3.4.3 */
+html:not(:nth-child(1)) table.bs_table > tbody > tr > td:last-child {
+	border: 1px solid #fff;
+}
+html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_coldesc:first-child {
+	border-left: 1px solid #dbdbdb;
+}
+html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_left:first-child {
+	border-left: 1px solid #dbdbdb;
+}
+html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_main:first-child {
+	border-left: 1px solid #ebebeb;
+}
+html:not(:nth-child(1)) table.bs_table > tbody > tr:first-child > td.bs_topic {
+	border-top: 1px solid #637591;
+}
+html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_topic:first-child {
+	border-left: 1px solid #637591;
+}
+
+/* ------------ LISTS ------------ */
+
+ul.bs_none_list {
+	list-style: none;
+	margin: 0;
+	margin-top: 1px;
+	padding: 0;
+}
+
+li.bs_main {
+	margin: 1px 0 0 0;
+}
+
+li.bs_left, li.bs_coldesc {
+	text-align: center;
+	margin: 1px 0 0 0;
+}
+
+/* ------------ FORMULARS ------------ */
+
+fieldset.bs_form {
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+fieldset.bs_form dl {
+	padding: 0;
+	margin: 0;
+	margin-top: 1px;
+	background-color: #dbdbdb;
+}
+
+fieldset.bs_form dt {
+	display: block;
+	margin: 0;
+	float: left;
+	padding: 0.5em;
+	width: 21%;
+	font-weight: bold;
+	text-align: left;
+	vertical-align: middle;
+}
+
+fieldset.bs_form dd {
+	display: block;
+	margin: 0;
+	padding: 0.5em;
+	margin-left: 23%;
+	background-color: #ebebeb;
+	vertical-align: middle;
+}
+
+input,button,select,textarea {
+	padding: 0.2em;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 0.9em;
+	color: #000000;
+}
+
+/* ------------ TABLE BORDER ------------ */
+
+.bs_border {
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	padding: 1px;
+	border: 1px solid #7F90AE;
+}
+
+/* ------------ MESSAGES ------------ */
+
+span.bs_msg_error {
+	color: #f00;
+	font-weight: bold;
+}
+
+span.bs_msg_warning {
+	color: #f90;
+	font-weight: bold;
+}
+
+span.bs_msg_notice {
+	color: #008000;
+	font-weight: bold;
+}
+
+/* ------------ BUTTON ------------ */
+
+a.bs_button {
+	width: 80px;
+	height: 20px;
+	padding-top: 3px;
+	margin: 0px 2px 0px 2px;
+	display: block;
+	float: right;
+	background-image: url(images/button.gif);
+	background-repeat: no-repeat;
+	text-align: center;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 0.9em;
+	color: #000000;
+}
+
+a.bs_button:hover {
+	color: #3F5E88;
+	text-decoration: none;
+}
+
+a.bs_button_big {
+	width: 120px;
+	height: 20px;
+	padding-top: 3px;
+	margin: 0px 2px 0px 2px;
+	display: block;
+	float: right;
+	background-image: url(images/button_big.gif);
+	background-repeat: no-repeat;
+	text-align: center;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 0.9em;
+	color: #000000;
+}
+
+a.bs_button_big:hover {
+	color: #3F5E88;
+	text-decoration: none;
 }

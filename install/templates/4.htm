@@ -1,0 +1,34 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('step_dbcheck')}</h1>
+	<fieldset class="bs_form">
+		<div class="bs_main">{glocale.lang('step4_intro')}</div>
+		<dl style="padding-left: 1em">
+			<dt>{glocale.lang('table_praefix')}:</dt>
+			<dd>{form.get_textbox('table_prefix',prefix,10,20)}</dd>
+		</dl>
+		{loop configs as config}
+		{if config:type == 'status'}
+		<dl style="padding-left: 1em">
+			<dt>{config:title}:</dt>
+			<dd>
+			<span style="float: left;">{config:status}</span>
+			<span style="float: right;">
+				<img src="install/images/{config:image}.gif" alt="{config:image}" />
+			</span>
+			<br style="clear: both;" />
+			{if config:description != ''}<span class="bs_desc">{config:description}</span>{endif}
+			</dd>
+		</dl>
+		{endif}
+		{if config:type == 'separator'}
+		<div class="bs_main" style="margin-top:1px;">{config:desc}</div>
+		{endif}
+		{endloop}
+	</fieldset>
+</div>
+{endif}
+
+{include "inc_footer.htm"}

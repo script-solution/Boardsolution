@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; {charset}" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	{if redirect}
+	<meta http-equiv="refresh" content="{redirect:time}; url={redirect:url}" />
+	{endif}
+	<title>{title}</title>
+	<link rel="stylesheet" type="text/css" href="install/templates/style.css" />
+	<script type="text/javascript">
+	<!--
+	function changeActionAndSubmit(formID,action)
+	{
+		var form = document.getElementById(formID);
+		form.action = action;
+		form.submit();
+	}
+	//-->
+	</script>
+</head>
+<body class="bs_body">
+
+{if step < 5}
+<div class="bs_padbottom">
+	<form method="get" action="{target_url}">
+	<input type="hidden" name="action" value="{step}" />
+	<div align="center" class="bs_body">
+		Language:
+		<select name="lang">
+			<option value="">- Please choose -</option>
+			<option{sel_ger_du} value="ger_du">German (Du-Version)</option>
+			<option{sel_ger_sie} value="ger_sie">German (Sie-Version)</option>
+			<option{sel_en} value="en">English</option>
+		</select>
+		<input type="submit" value="Go!" />
+	</div>
+	</form>
+</div>
+{endif}
+
+{if step < 6}
+<form id="mainForm" method="post" action="{target_url}">
+<input type="hidden" name="step_submit" value="{step}" />
+
+<div class="bs_padbottom">
+	{include "inc_navi.htm"}
+</div>
+{endif}
+
+{include "inc_messages.htm"}

@@ -1,0 +1,32 @@
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="30%">
+		<button {if step <= 1 || step > 4}disabled="disabled" {endif}
+				class="bs_button" onclick="changeActionAndSubmit('mainForm','{back_url}'); return false;"
+				type="submit" name="back" value="back">{glocale.lang('back')}</button>
+		</td>
+		<td width="40%" align="center">
+		{if step == 2 || step == 3 || step == 4}
+		<button class="bs_button_big" type="submit" value="test">{glocale.lang('refresh')}</button>
+		{else}
+		&nbsp;
+		{endif}
+		</td>
+		<td width="30%" align="right">
+		<button class="bs_button" type="submit" name="forward" value="forward" onclick="changeActionAndSubmit('mainForm','{forward_url}'); return false;">{glocale.lang('forward')}</button>
+		</td>
+	</tr>
+</table>
+
+<script type="text/javascript">
+<!--
+if(Browser.isIE)
+{
+	for(tag : document.getElementsByTagName('button'))
+	{
+		if(tag.getAttribute('name') == 'back' || tag.getAttribute('name') == 'forward')
+			tag.setAttribute('name','');
+	}
+}
+//-->
+</script>
