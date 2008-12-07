@@ -513,6 +513,11 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
   	);
 		$this->add_to_log_success();
 		
+		// tasks
+		$this->add_to_log('Deleting Task in "'.$consts['BS_TB_TASKS'].'"...');
+		$db->sql_qry("DELETE FROM `{$consts['BS_TB_TASKS']}` WHERE task_file = 'events.php'");
+		$this->add_to_log_success();
+		
 		
 		$this->add_to_log('Generating DB-Cache...');
 		// TODO change!
