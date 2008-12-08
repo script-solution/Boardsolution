@@ -34,7 +34,6 @@ function BS_UnitTest_autoloader($item)
 	return false;
 }
 
-FWS_Error_Handler::get_instance()->set_output_handler(new FWS_Error_Output_Plain());
 FWS_AutoLoader::register_loader('BS_UnitTest_autoloader');
 
 /**
