@@ -29,10 +29,8 @@ final class BS_ACP_Action_additionalfields_edit extends BS_ACP_Action_Base
 		if($id == null)
 			return 'Invalid id "'.$id.'"';
 		
-		$helper = BS_ACP_Module_AdditionalFields_Helper::get_instance();
-		
 		$values = array();
-		$result = $helper->retrieve_valid_field_attributes($id,'edit',$values);
+		$result = BS_ACP_Module_AdditionalFields_Helper::retrieve_valid_field_attributes($id,'edit',$values);
 		if($result != '')
 			return $result;
 

@@ -20,13 +20,6 @@
 final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 {
 	/**
-	 * The forums-helper
-	 *
-	 * @var BS_ACP_Module_Forums_Helper
-	 */
-	private $_helper;
-	
-	/**
 	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Document_Content $doc
@@ -48,8 +41,6 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 			$renderer->add_breadcrumb($locale->lang('edit_forum'),$url->set('id',$id)->to_url());
 		else
 			$renderer->add_breadcrumb($locale->lang('create_new_forum'),$url->to_url());
-		
-		$this->_helper = BS_ACP_Module_Forums_Helper::get_instance();
 	}
 	
 	/**
@@ -191,7 +182,7 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 
 			if($id != $fid)
 			{
-				if($fid > 0 && !$this->_helper->is_no_sub_category($fid,$id))
+				if($fid > 0 && !BS_ACP_Module_Forums_Helper::is_no_sub_category($fid,$id))
 					$disabled = ' disabled="disabled" style="color: #AAAAAA;"';
 				else
 					$disabled = '';

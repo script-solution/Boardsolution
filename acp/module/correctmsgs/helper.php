@@ -17,29 +17,14 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_CorrectMsgs_Helper extends FWS_Singleton
+final class BS_ACP_Module_CorrectMsgs_Helper extends FWS_UtilBase
 {
-	/**
-	 * @return BS_ACP_Module_CorrectMsgs_Helper the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-	
-	/**
-	 * The config-manager
-	 *
-	 * @var FWS_Config_Manager
-	 */
-	private $_manager;
-	
 	/**
 	 * Determines all incorrect messages
 	 *
 	 * @return array an array of the form: <code>array(<type>,<id>)</code>
 	 */
-	public function get_incorrect_messages()
+	public static function get_incorrect_messages()
 	{
 		$incorrect = array();
 		
@@ -64,11 +49,6 @@ final class BS_ACP_Module_CorrectMsgs_Helper extends FWS_Singleton
 			$incorrect[] = array('event',$data['id']);
 		
 		return $incorrect;
-	}
-	
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

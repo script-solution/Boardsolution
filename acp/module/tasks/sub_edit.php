@@ -64,8 +64,7 @@ final class BS_ACP_SubModule_tasks_edit extends BS_ACP_SubModule
 			return;
 		}
 		
-		$helper = BS_ACP_Module_Tasks_Helper::get_instance();
-		$iv = $helper->decode_interval($data['task_interval']);
+		$iv = BS_ACP_Module_Tasks_Helper::decode_interval($data['task_interval']);
 		list($data['interval'],$data['interval_type']) = $iv;
 		
 		if($data['task_time'] == null)
@@ -77,11 +76,11 @@ final class BS_ACP_SubModule_tasks_edit extends BS_ACP_SubModule
 		$url->set('id',$id);
 		$tpl->add_variables(array(
 			'title' => $locale->lang('edit_task'),
-			'is_def' => $helper->is_default_task($data['task_file']),
+			'is_def' => BS_ACP_Module_Tasks_Helper::is_default_task($data['task_file']),
 			'action_type' => BS_ACP_ACTION_EDIT_TASK,
 			'form_target' => $url->to_url(),
 			'default' => $data,
-			'interval_types' => $helper->get_interval_types()
+			'interval_types' => BS_ACP_Module_Tasks_Helper::get_interval_types()
 		));
 		
 		$this->request_formular();

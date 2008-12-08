@@ -24,10 +24,8 @@ final class BS_ACP_Action_additionalfields_add extends BS_ACP_Action_Base
 		$cache = FWS_Props::get()->cache();
 		$locale = FWS_Props::get()->locale();
 
-		$helper = BS_ACP_Module_AdditionalFields_Helper::get_instance();
-		
 		$values = array();
-		$result = $helper->retrieve_valid_field_attributes(0,'add',$values);
+		$result = BS_ACP_Module_AdditionalFields_Helper::retrieve_valid_field_attributes(0,'add',$values);
 		if($result != '')
 			return $result;
 

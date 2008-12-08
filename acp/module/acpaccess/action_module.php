@@ -31,7 +31,7 @@ final class BS_ACP_Action_acpaccess_module extends BS_ACP_Action_Base
 		$user = $input->get_var('selectedUsers','post',FWS_Input::STRING);
 
 		// check if module exists
-		if(BS_ACP_Module_ACPAccess_Helper::get_instance()->get_module_name($module) === '')
+		if(BS_ACP_Module_ACPAccess_Helper::get_module_name($module) === '')
 			return 'Unknown module "'.$module.'"';
 
 		// at first we have to delete all groups and users for this module

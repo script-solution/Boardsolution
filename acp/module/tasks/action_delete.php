@@ -29,13 +29,12 @@ final class BS_ACP_Action_tasks_delete extends BS_ACP_Action_Base
 		if(!($ids = FWS_StringHelper::get_ids($id_str)))
 			return 'Got an invalid id-string via GET';
 		
-		$helper = BS_ACP_Module_Tasks_Helper::get_instance();
 		$del = array();
 		$tasks = $cache->get_cache('tasks');
 		foreach($ids as $id)
 		{
 			$task = $tasks->get_element($id);
-			if($task !== null && !$helper->is_default_task($task['task_file']))
+			if($task !== null && !BS_ACP_Module_Tasks_Helper::is_default_task($task['task_file']))
 				$del[] = $id;
 		}
 		

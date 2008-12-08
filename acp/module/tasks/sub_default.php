@@ -61,14 +61,13 @@ final class BS_ACP_SubModule_tasks_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$helper = BS_ACP_Module_Tasks_Helper::get_instance();
-		$options = $helper->get_interval_types();
+		$options = BS_ACP_Module_Tasks_Helper::get_interval_types();
 		$this->request_formular();
 		
 		$tpltasks = array();
 		foreach($cache->get_cache('tasks') as $task)
 		{
-			$tidata = $helper->decode_interval($task['task_interval']);
+			$tidata = BS_ACP_Module_Tasks_Helper::decode_interval($task['task_interval']);
 			if($task['last_execution'] > 0)
 			{
 				$date = new FWS_Date($task['last_execution'],FWS_Date::TZ_GMT,FWS_Date::TZ_GMT);
@@ -89,7 +88,7 @@ final class BS_ACP_SubModule_tasks_default extends BS_ACP_SubModule
 			
 			$tpltasks[] = array(
 				'id' => $task['id'],
-				'is_def' => $helper->is_default_task($task['task_file']),
+				'is_def' => BS_ACP_Module_Tasks_Helper::is_default_task($task['task_file']),
 				'title' => $locale->lang('task_'.$task['task_title'],false),
 				'file' => FWS_Path::server_app().'src/tasks/'.$task['task_file'],
 				'description' => $desc,

@@ -65,8 +65,7 @@ final class BS_ACP_SubModule_usergroups_default extends BS_ACP_SubModule
 		}
 		
 		$search = $input->get_var('search','get',FWS_Input::STRING);
-		$helper = BS_ACP_Module_UserGroups_Helper::get_instance();
-		$predef_groups = $helper->get_predef_groups();
+		$predef_groups = BS_ACP_Module_UserGroups_Helper::get_predef_groups();
 		
 		$groups = array();
 		foreach($cache->get_cache('user_groups') as $data)

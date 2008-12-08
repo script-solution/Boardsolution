@@ -51,13 +51,13 @@ final class BS_ACP_SubModule_acpaccess_module extends BS_ACP_SubModule
 		$locale = FWS_Props::get()->locale();
 
 		$module = $input->get_var('module','get',FWS_Input::STRING);
-		if(BS_ACP_Module_ACPAccess_Helper::get_instance()->get_module_name($module) === '')
+		if(BS_ACP_Module_ACPAccess_Helper::get_module_name($module) === '')
 		{
 			$this->report_error();
 			return;
 		}
 
-		$options = BS_ACP_Module_ACPAccess_Helper::get_instance()->get_group_options();
+		$options = BS_ACP_Module_ACPAccess_Helper::get_group_options();
 		$user = array();
 		$groups = array();
 		foreach(BS_DAO::get_acpaccess()->get_by_module($module) as $data)
@@ -76,7 +76,7 @@ final class BS_ACP_SubModule_acpaccess_module extends BS_ACP_SubModule
 		$usercombo->set_options($user);
 		$usercombo->set_css_attribute('width','100%');
 
-		$mod = BS_ACP_Module_ACPAccess_Helper::get_instance()->get_module_name($module);
+		$mod = BS_ACP_Module_ACPAccess_Helper::get_module_name($module);
 		
 		$this->request_formular(false,false);
 		

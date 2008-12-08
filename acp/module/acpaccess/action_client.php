@@ -58,7 +58,7 @@ final class BS_ACP_Action_acpaccess_client extends BS_ACP_Action_Base
 		// now enable the specified values
 		foreach($permissions as $module => $val)
 		{
-			if(BS_ACP_Module_ACPAccess_Helper::get_instance()->get_module_name($module) === '')
+			if(BS_ACP_Module_ACPAccess_Helper::get_module_name($module) === '')
 				continue;
 
 			if($val == 1)

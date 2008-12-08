@@ -17,22 +17,14 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_MassEmail_Helper extends FWS_Singleton
+final class BS_ACP_Module_MassEmail_Helper extends FWS_UtilBase
 {
-	/**
-	 * @return BS_ACP_Module_MassEmail_Helper the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-	
 	/**
 	 * Determines the receiver from POST
 	 *
 	 * @return array an array of the form: <code>array('user' => ...,'groups' => ...)</code>
 	 */
-	public function get_receiver()
+	public static function get_receiver()
 	{
 		$input = FWS_Props::get()->input();
 
@@ -61,7 +53,7 @@ final class BS_ACP_Module_MassEmail_Helper extends FWS_Singleton
 	 *
 	 * @return string the text
 	 */
-	public function get_mail_text()
+	public static function get_mail_text()
 	{
 		$input = FWS_Props::get()->input();
 
@@ -76,11 +68,6 @@ final class BS_ACP_Module_MassEmail_Helper extends FWS_Singleton
 		}
 		
 		return stripslashes(FWS_StringHelper::htmlspecialchars_back($text));
-	}
-	
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

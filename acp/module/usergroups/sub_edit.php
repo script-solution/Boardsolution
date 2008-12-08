@@ -56,7 +56,6 @@ final class BS_ACP_SubModule_usergroups_edit extends BS_ACP_SubModule
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
 
-		$helper = BS_ACP_Module_UserGroups_Helper::get_instance();
 		$id = $input->get_var('id','get',FWS_Input::ID);
 		$type = $id != null ? 'edit' : 'add';
 		
@@ -80,7 +79,7 @@ final class BS_ACP_SubModule_usergroups_edit extends BS_ACP_SubModule
 				'is_visible' => 1,
 				'is_team' => 0
 			);
-			foreach($helper->get_permissions() as $name)
+			foreach(BS_ACP_Module_UserGroups_Helper::get_permissions() as $name)
 				$data[$name] = 0;
 			
 			$form_title = $locale->lang('insert_group');
@@ -100,8 +99,8 @@ final class BS_ACP_SubModule_usergroups_edit extends BS_ACP_SubModule
 		));
 
 		$fields = array();
-		$guest_disallowed = $helper->get_guest_disallowed();
-		foreach($helper->get_permissions() as $name)
+		$guest_disallowed = BS_ACP_Module_UserGroups_Helper::get_guest_disallowed();
+		foreach(BS_ACP_Module_UserGroups_Helper::get_permissions() as $name)
 		{
 			$fields[] = array(
 				'name' => $name,

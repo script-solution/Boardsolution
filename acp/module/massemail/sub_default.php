@@ -163,7 +163,7 @@ final class BS_ACP_SubModule_massemail_default extends BS_ACP_SubModule
 			return false;
 		}
 		
-		$receiver = BS_ACP_Module_MassEmail_Helper::get_instance()->get_receiver();
+		$receiver = BS_ACP_Module_MassEmail_Helper::get_receiver();
 		if(count($receiver['user']) == 0 && count($receiver['groups']) == 0)
 		{
 			$msgs->add_error($locale->lang('mass_email_missing_receiver'));
@@ -208,12 +208,12 @@ final class BS_ACP_SubModule_massemail_default extends BS_ACP_SubModule
 		$input = FWS_Props::get()->input();
 		$functions = FWS_Props::get()->functions();
 
-		$receiver = BS_ACP_Module_MassEmail_Helper::get_instance()->get_receiver();
+		$receiver = BS_ACP_Module_MassEmail_Helper::get_receiver();
 		if(count($receiver['groups']) == 0 && count($receiver['user']) == 0)
 			return 'No receiver set';
 
 		$subject = $input->get_var('subject','post',FWS_Input::STRING);
-		$text = BS_ACP_Module_MassEmail_Helper::get_instance()->get_mail_text();
+		$text = BS_ACP_Module_MassEmail_Helper::get_mail_text();
 		$mail = $functions->get_mailer('',$subject,$text);
 
 		if($input->get_var('content_type','post',FWS_Input::STRING) == 'html')

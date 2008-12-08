@@ -60,7 +60,7 @@ final class BS_ACP_SubModule_tasks_add extends BS_ACP_SubModule
 			'action_type' => BS_ACP_ACTION_ADD_TASK,
 			'form_target' => BS_URL::build_acpsub_url(),
 			'default' => $data,
-			'interval_types' => BS_ACP_Module_Tasks_Helper::get_instance()->get_interval_types()
+			'interval_types' => BS_ACP_Module_Tasks_Helper::get_interval_types()
 		));
 		
 		$this->request_formular();

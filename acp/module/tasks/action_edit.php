@@ -42,8 +42,6 @@ final class BS_ACP_Action_tasks_edit extends BS_ACP_Action_Base
 				return 'No task found with id "'.$id.'"';
 		}
 		
-		$helper = BS_ACP_Module_Tasks_Helper::get_instance();
-		
 		// grab values from post
 		$title = $input->get_var('task_title','post',FWS_Input::STRING);
 		$file = $input->get_var('task_file','post',FWS_Input::STRING);
@@ -60,7 +58,7 @@ final class BS_ACP_Action_tasks_edit extends BS_ACP_Action_Base
 			$time = null;
 		$enabled = $input->get_var('enabled','post',FWS_Input::INT_BOOL);
 		
-		$is_default = $type != 'add' && $helper->is_default_task($task['task_file']);
+		$is_default = $type != 'add' && BS_ACP_Module_Tasks_Helper::is_default_task($task['task_file']);
 		
 		// check the values
 		if(!$is_default && trim($title) == '')
@@ -71,7 +69,7 @@ final class BS_ACP_Action_tasks_edit extends BS_ACP_Action_Base
 			return 'task_invalid_file';
 		
 		// was it no default task but would be now?
-		if(($type == 'add' || !$is_default) && $helper->is_default_task($file))
+		if(($type == 'add' || !$is_default) && BS_ACP_Module_Tasks_Helper::is_default_task($file))
 			return 'task_invalid_file';
 		
 		if($interval <= 0)
@@ -83,7 +81,7 @@ final class BS_ACP_Action_tasks_edit extends BS_ACP_Action_Base
 			$values = array(
 				'task_title' => $title,
 				'task_file' => $file,
-				'task_interval' => $helper->encode_interval($interval,$interval_type),
+				'task_interval' => BS_ACP_Module_Tasks_Helper::encode_interval($interval,$interval_type),
 				'task_time' => $time,
 				'enabled' => $enabled
 			);
@@ -91,7 +89,7 @@ final class BS_ACP_Action_tasks_edit extends BS_ACP_Action_Base
 		else
 		{
 			$values = array(
-				'task_interval' => $helper->encode_interval($interval,$interval_type),
+				'task_interval' => BS_ACP_Module_Tasks_Helper::encode_interval($interval,$interval_type),
 				'task_time' => $time,
 				'enabled' => $enabled
 			);

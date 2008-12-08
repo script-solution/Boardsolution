@@ -28,7 +28,6 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
-		$helper = BS_ACP_Module_CorrectMsgs_Helper::get_instance();
 		
 		$pos = $input->get_var('pos','get',FWS_Input::INTEGER);
 		if($pos === null)
@@ -38,7 +37,7 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 		$msgs = $user->get_session_data('im_data');
 		if($msgs === false)
 		{
-			$msgs = $helper->get_incorrect_messages();
+			$msgs = BS_ACP_Module_CorrectMsgs_Helper::get_incorrect_messages();
 			$user->set_session_data('im_data',$msgs);
 		}
 		

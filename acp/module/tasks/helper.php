@@ -17,23 +17,15 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_Tasks_Helper extends FWS_Singleton
+final class BS_ACP_Module_Tasks_Helper extends FWS_UtilBase
 {
-	/**
-	 * @return BS_ACP_Module_Tasks_Helper the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-	
 	/**
 	 * Checks wether the given filename belongs to a default-task
 	 *
 	 * @param string $name the name of the file
 	 * @return boolean true if it is a default one
 	 */
-	public function is_default_task($name)
+	public static function is_default_task($name)
 	{
 		$default = array(
 			'attachments.php','change_email_pw.php','email_notification.php',
@@ -46,7 +38,7 @@ final class BS_ACP_Module_Tasks_Helper extends FWS_Singleton
 	/**
 	 * @return array an associative array with the interval-types and the corresponding name
 	 */
-	public function get_interval_types()
+	public static function get_interval_types()
 	{
 		$locale = FWS_Props::get()->locale();
 		
@@ -64,7 +56,7 @@ final class BS_ACP_Module_Tasks_Helper extends FWS_Singleton
 	 * @param string $type the type: days, hours or minutes
 	 * @return int the number of seconds
 	 */
-	public function encode_interval($interval,$type)
+	public static function encode_interval($interval,$type)
 	{
 		switch($type)
 		{
@@ -86,7 +78,7 @@ final class BS_ACP_Module_Tasks_Helper extends FWS_Singleton
 	 * @param int $interval the interval in seconds
 	 * @return array an array of the form: <code>array(<count>,<unit>)</code>
 	 */
-	public function decode_interval($interval)
+	public static function decode_interval($interval)
 	{
 		if($interval % 86400 == 0)
 			return array($interval / 86400,'days');
@@ -95,11 +87,6 @@ final class BS_ACP_Module_Tasks_Helper extends FWS_Singleton
 			return array($interval / 3600,'hours');
 		
 		return array($interval / 60,'minutes');
-	}
-	
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

@@ -17,22 +17,14 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_ACPAccess_Helper extends FWS_Singleton
+final class BS_ACP_Module_ACPAccess_Helper extends FWS_UtilBase
 {
-	/**
-	 * @return BS_ACP_Module_ACPAccess_Helper the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-
 	/**
 	 * builds the options for the group-combobox
 	 *
 	 * @return array an associative array with the user-groups (except admins and guests)
 	 */
-	public function get_group_options()
+	public static function get_group_options()
 	{
 		$cache = FWS_Props::get()->cache();
 
@@ -51,7 +43,7 @@ final class BS_ACP_Module_ACPAccess_Helper extends FWS_Singleton
 	 * @param string $module the module
 	 * @return string the name of the module (the LANG-entry)
 	 */
-	public function get_module_name($module)
+	public static function get_module_name($module)
 	{
 		foreach(BS_ACP_Menu::get_instance()->get_menu_items() as $group)
 		{
@@ -63,11 +55,6 @@ final class BS_ACP_Module_ACPAccess_Helper extends FWS_Singleton
 		}
 
 		return '';
-	}
-	
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

@@ -55,7 +55,6 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 		$cache = FWS_Props::get()->cache();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
-		$helper = BS_ACP_Module_AdditionalFields_Helper::get_instance();
 		$id = $input->get_var('id','get',FWS_Input::ID);
 		$type = $id != null ? 'edit' : 'add';
 		
@@ -135,7 +134,7 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 			$val = $default['field_show_type'];
 
 		$locations = array();
-		foreach($helper->get_locations() as $loc)
+		foreach(BS_ACP_Module_AdditionalFields_Helper::get_locations() as $loc)
 		{
 			$locations[] = array(
 				'name' => $loc,
@@ -181,9 +180,8 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 	{
 		$input = FWS_Props::get()->input();
 
-		$helper = BS_ACP_Module_AdditionalFields_Helper::get_instance();
 		$result = 0;
-		foreach($helper->get_locations() as $loc)
+		foreach(BS_ACP_Module_AdditionalFields_Helper::get_locations() as $loc)
 		{
 			$loc_val = $input->get_var('loc_'.$loc,'post',FWS_Input::INT_BOOL);
 			if($loc_val == 1)

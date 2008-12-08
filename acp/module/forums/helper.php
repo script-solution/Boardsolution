@@ -17,16 +17,8 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_Forums_Helper extends FWS_Singleton
+final class BS_ACP_Module_Forums_Helper extends FWS_UtilBase
 {
-	/**
-	 * @return BS_ACP_Module_Forums_Helper the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-
 	/**
 	 * checks wether $target_id is a subcategory of the given parent-id
 	 *
@@ -34,7 +26,7 @@ final class BS_ACP_Module_Forums_Helper extends FWS_Singleton
 	 * @param int $target_id the id of the forum you're looking for
 	 * @return boolean true if $target_id is a subcategory (has not to be a direct one) of $parent_id
 	 */
-	public function is_no_sub_category($parent_id,$target_id)
+	public static function is_no_sub_category($parent_id,$target_id)
 	{
 		$forums = FWS_Props::get()->forums();
 		
@@ -62,7 +54,7 @@ final class BS_ACP_Module_Forums_Helper extends FWS_Singleton
 	 * 	<code>array(<group_id> => <selected>)</code>
 	 * @param boolean $is_intern is the forum intern?
 	 */
-	public function refresh_intern_access($id,$selected_user,$selected_groups,$is_intern)
+	public static function refresh_intern_access($id,$selected_user,$selected_groups,$is_intern)
 	{
 		$cache = FWS_Props::get()->cache();
 
@@ -126,11 +118,6 @@ final class BS_ACP_Module_Forums_Helper extends FWS_Singleton
 
 		if($regen)
 			$cache->refresh('intern');
-	}
-	
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

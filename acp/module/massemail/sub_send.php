@@ -127,7 +127,7 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 		$user = FWS_Props::get()->user();
 		$input = FWS_Props::get()->input();
 
-		$receiver = BS_ACP_Module_MassEmail_Helper::get_instance()->get_receiver();
+		$receiver = BS_ACP_Module_MassEmail_Helper::get_receiver();
 		if(count($receiver['groups']) == 0 && count($receiver['user']) == 0)
 			return false;
 
@@ -135,7 +135,7 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 			'mail_subject',$input->get_var('subject','post',FWS_Input::STRING)
 		);
 		$user->set_session_data(
-			'mail_text',BS_ACP_Module_MassEmail_Helper::get_instance()->get_mail_text()
+			'mail_text',BS_ACP_Module_MassEmail_Helper::get_mail_text()
 		);
 		$user->set_session_data(
 			'mail_content_type',$input->get_var('content_type','post',FWS_Input::STRING)

@@ -28,10 +28,8 @@ final class BS_ACP_SubModule_correctmsgs_default extends BS_ACP_SubModule
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
 
-		$helper = BS_ACP_Module_CorrectMsgs_Helper::get_instance();
-		
 		$user->delete_session_data('im_data');
-		$incorrect = $helper->get_incorrect_messages();
+		$incorrect = BS_ACP_Module_CorrectMsgs_Helper::get_incorrect_messages();
 		
 		$url = BS_URL::get_acpsub_url(0,'cycle');
 		$url->set('pos',0);

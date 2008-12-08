@@ -26,8 +26,6 @@ final class BS_ACP_Action_forums_edit extends BS_ACP_Action_Base
 		$msgs = FWS_Props::get()->msgs();
 		$locale = FWS_Props::get()->locale();
 
-		$helper = BS_ACP_Module_Forums_Helper::get_instance();
-		
 		if($type == 'edit')
 		{
 			$id = $input->get_var('id','get',FWS_Input::ID);
@@ -58,7 +56,7 @@ final class BS_ACP_Action_forums_edit extends BS_ACP_Action_Base
 		if(trim($category) == '')
 			return 'forum_name_missing';
 
-		if($type == 'edit' && !$helper->is_no_sub_category($id,$parent))
+		if($type == 'edit' && !BS_ACP_Module_Forums_Helper::is_no_sub_category($id,$parent))
 			return 'forum_structure_invalid';
 
 		// update parent-id and sort
@@ -132,7 +130,9 @@ final class BS_ACP_Action_forums_edit extends BS_ACP_Action_Base
 		if($forum_type != 'contains_cats' && $total == 0)
 			$msgs->add_warning($locale->lang('forums_warning_no_rights'));
 		
-		$helper->refresh_intern_access($id,$selected_user,$group_access,$forum_is_intern);
+		BS_ACP_Module_Forums_Helper::refresh_intern_access(
+			$id,$selected_user,$group_access,$forum_is_intern
+		);
 		
 		// refresh forum-cache
 		FWS_Props::get()->reload('forums');

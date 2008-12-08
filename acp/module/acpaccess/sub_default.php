@@ -28,7 +28,7 @@ final class BS_ACP_SubModule_acpaccess_default extends BS_ACP_SubModule
 		$cache = FWS_Props::get()->cache();
 		$locale = FWS_Props::get()->locale();
 
-		$options = BS_ACP_Module_ACPAccess_Helper::get_instance()->get_group_options();
+		$options = BS_ACP_Module_ACPAccess_Helper::get_group_options();
 		
 		$this->request_formular(false,false);
 		$tpl->add_variables(array(

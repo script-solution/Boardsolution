@@ -17,22 +17,14 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_UserGroups_Helper extends FWS_Singleton
+final class BS_ACP_Module_UserGroups_Helper extends FWS_UtilBase
 {
-	/**
-	 * @return BS_ACP_Module_UserGroups_Helper the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-	
 	/**
 	 * All predefined user-groups
 	 * 
 	 * @var array
 	 */
-	private $_predef_groups = array(
+	private static $_predef_groups = array(
 		BS_STATUS_ADMIN,BS_STATUS_USER,BS_STATUS_GUEST
 	);
 	
@@ -41,7 +33,7 @@ final class BS_ACP_Module_UserGroups_Helper extends FWS_Singleton
 	 *
 	 * @var array
 	 */
-	private $_permissions = array(
+	private static $_permissions = array(
 		'is_super_mod','enter_board','view_memberlist','view_linklist',
 		'view_stats','view_calendar','view_search','view_userdetails','view_useronline_list',
 		'view_online_locations','view_user_online_detail','edit_own_posts',
@@ -56,7 +48,7 @@ final class BS_ACP_Module_UserGroups_Helper extends FWS_Singleton
 	 *
 	 * @var array
 	 */
-	private $_guest_disallowed = array(
+	private static $_guest_disallowed = array(
 		'is_super_mod','edit_own_posts','delete_own_posts','edit_own_threads',
 		 'delete_own_threads','openclose_own_threads','add_new_link','attachments_add',
 		 'add_cal_event','edit_cal_event','delete_cal_event','subscribe_forums',
@@ -66,30 +58,25 @@ final class BS_ACP_Module_UserGroups_Helper extends FWS_Singleton
 	/**
 	 * @return array all predefined user-groups
 	 */
-	public function get_predef_groups()
+	public static function get_predef_groups()
 	{
-		return $this->_predef_groups;
+		return self::$_predef_groups;
 	}
 	
 	/**
 	 * @return array all permissions
 	 */
-	public function get_permissions()
+	public static function get_permissions()
 	{
-		return $this->_permissions;
+		return self::$_permissions;
 	}
 	
 	/**
 	 * @return array an array of all permissions that are not allowed for guests
 	 */
-	public function get_guest_disallowed()
+	public static function get_guest_disallowed()
 	{
-		return $this->_guest_disallowed;
-	}
-	
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
+		return self::$_guest_disallowed;
 	}
 }
 ?>

@@ -17,20 +17,12 @@
  * @subpackage	acp.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Module_AdditionalFields_Helper extends FWS_Singleton
+final class BS_ACP_Module_AdditionalFields_Helper extends FWS_UtilBase
 {
-	/**
-	 * @return BS_ACP_Module_AdditionalFields_Helper the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-	
 	/**
 	 * @return array an numeric array with all possible locations
 	 */
-	public function get_locations()
+	public static function get_locations()
 	{
 		return array(
 			BS_UF_LOC_POSTS,BS_UF_LOC_REGISTRATION,BS_UF_LOC_USER_DETAILS,BS_UF_LOC_USER_PROFILE
@@ -45,7 +37,7 @@ final class BS_ACP_Module_AdditionalFields_Helper extends FWS_Singleton
 	 * @param array $values the result-array
 	 * @return string the error-message if an error has occurred or an empty string
 	 */
-	public function retrieve_valid_field_attributes($id,$type,&$values)
+	public static function retrieve_valid_field_attributes($id,$type,&$values)
 	{
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
@@ -117,7 +109,7 @@ final class BS_ACP_Module_AdditionalFields_Helper extends FWS_Singleton
 			$values['field_length'] = 0;
 
 		$values['field_show_type'] = 0;
-		foreach($this->get_locations() as $loc)
+		foreach(self::get_locations() as $loc)
 		{
 			if($input->get_var('loc_'.$loc,'post',FWS_Input::INT_BOOL) == 1)
 				$values['field_show_type'] |= $loc;
@@ -133,11 +125,6 @@ final class BS_ACP_Module_AdditionalFields_Helper extends FWS_Singleton
 		}
 
 		return '';
-	}
-	
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

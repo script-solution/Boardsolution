@@ -187,9 +187,8 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 	 */
 	private function _get_display_locations_images($display)
 	{
-		$helper = BS_ACP_Module_AdditionalFields_Helper::get_instance();
 		$result = array();
-		foreach($helper->get_locations() as $loc)
+		foreach(BS_ACP_Module_AdditionalFields_Helper::get_locations() as $loc)
 		{
 			if(($display & $loc) != 0)
 				$result[] = '<img src="'.FWS_Path::client_app().'acp/images/ok.gif" alt="ok" />';

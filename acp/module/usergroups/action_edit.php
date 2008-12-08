@@ -64,9 +64,8 @@ final class BS_ACP_Action_usergroups_edit extends BS_ACP_Action_Base
 			$values['is_team'] = $is_team;
 		}
 
-		$helper = BS_ACP_Module_UserGroups_Helper::get_instance();
-		$guest_disallowed = $helper->get_guest_disallowed();
-		foreach($helper->get_permissions() as $name)
+		$guest_disallowed = BS_ACP_Module_UserGroups_Helper::get_guest_disallowed();
+		foreach(BS_ACP_Module_UserGroups_Helper::get_permissions() as $name)
 		{
 			if($type == 'add' || $id != BS_STATUS_GUEST || !in_array($name,$guest_disallowed))
 				$values[$name] = $input->get_var($name,'post',FWS_Input::INT_BOOL);
