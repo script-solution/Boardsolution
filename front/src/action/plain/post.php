@@ -274,7 +274,7 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 		// check guest-data
 		if($this->_user_id == 0)
 		{
-			if(!BS_UserUtils::get_instance()->check_username($this->_guest_name))
+			if(!BS_UserUtils::check_username($this->_guest_name))
 				return 'invalid_username';
 			
 			$this->_guest_email = trim($this->_guest_email);
@@ -283,7 +283,7 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 		}
 		
 		// convert and check text
-		$error = BS_PostingUtils::get_instance()->prepare_message_for_db(
+		$error = BS_PostingUtils::prepare_message_for_db(
 			$this->_text,$this->_post_text,'posts',$this->_use_smileys,$this->_use_bbcode
 		);
 		if($error != '')

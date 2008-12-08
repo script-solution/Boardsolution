@@ -94,7 +94,7 @@ final class BS_Front_Action_new_post_default extends BS_Front_Action_Base
 		$murl->set_anchor('b_'.$post->get_post_id());
 		$murl->set_sef(true);
 		
-		if(BS_PostingUtils::get_instance()->get_posts_order() == 'ASC')
+		if(BS_PostingUtils::get_posts_order() == 'ASC')
 		{
 			$post_num = BS_DAO::get_posts()->get_count_in_topic($tid);
 			if($post_num > $cfg['posts_per_page'])

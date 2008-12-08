@@ -103,18 +103,18 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 		}
 		
 		// topic-data available?
-		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		$topic_data = BS_Front_TopicFactory::get_current_topic();
 		if($topic_data === null)
 		{
 			$this->report_error();
 			return;
 		}
 		
-		$text = BS_PostingUtils::get_instance()->get_post_text($post_data);
+		$text = BS_PostingUtils::get_post_text($post_data);
 
 		if($post_data['post_user'] > 0)
 		{
-			$username = BS_UserUtils::get_instance()->get_link(
+			$username = BS_UserUtils::get_link(
 				$post_data['post_user'],$post_data['user_name'],$post_data['user_group']
 			);
 		}

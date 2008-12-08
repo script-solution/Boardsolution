@@ -47,7 +47,7 @@ abstract class BS_Front_Search_Request_TPBasic extends FWS_Object
 		$locale = FWS_Props::get()->locale();
 
 		// limit the search to the allowed forums
-		$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
+		$denied = BS_ForumUtils::get_denied_forums(false);
 		if(count($denied) > 0)
 			$search_cond .= ' AND p.rubrikid NOT IN ('.implode(',',$denied).')';
 		

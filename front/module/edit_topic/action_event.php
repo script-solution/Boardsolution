@@ -82,7 +82,7 @@ final class BS_Front_Action_edit_topic_event extends BS_Front_Action_Base
 			return 'endekbeginn';
 
 		// check if the topic is locked
-		if(BS_TopicUtils::get_instance()->is_locked($topic_data['locked'],BS_LOCK_TOPIC_EDIT))
+		if(BS_TopicUtils::is_locked($topic_data['locked'],BS_LOCK_TOPIC_EDIT))
 			return 'no_permission_to_edit_thread';
 
 		if($timeout_type == 'begin')

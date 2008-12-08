@@ -62,8 +62,8 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		$view_useronline = $auth->has_global_permission('view_useronline_list');
 		if($view_useronline)
 		{
-			$online = BS_Front_OnlineUtils::get_instance()->get_currently_online_user();
-			$legend = BS_Front_OnlineUtils::get_instance()->get_usergroup_legend();
+			$online = BS_Front_OnlineUtils::get_currently_online_user();
+			$legend = BS_Front_OnlineUtils::get_usergroup_legend();
 		
 			// user-locations
 			if($cfg['display_denied_options'] ||
@@ -104,7 +104,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 			$nodes[] = array(
 				'name' => $data->get_name(),
 				'id' => $data->get_id(),
-				'path' => BS_ForumUtils::get_instance()->get_forum_path($data->get_id(),false),
+				'path' => BS_ForumUtils::get_forum_path($data->get_id(),false),
 				'is_unread' => $forums->is_unread_forum($data->get_id())
 			);
 		}
@@ -123,9 +123,9 @@ final class BS_Front_Module_portal extends BS_Front_Module
 			'view_useronline_list' => $view_useronline,
 			'show_compose_pm' => $show_compose_pm,
 			'legend' => $legend,
-			'lastlogin' => BS_Front_OnlineUtils::get_instance()->get_last_activity(),
-			'birthdays' => BS_Front_EventUtils::get_instance()->get_todays_birthdays(),
-			'events' => BS_Front_EventUtils::get_instance()->get_current_events(),
+			'lastlogin' => BS_Front_OnlineUtils::get_last_activity(),
+			'birthdays' => BS_Front_EventUtils::get_todays_birthdays(),
+			'events' => BS_Front_EventUtils::get_current_events(),
 			'current_topics_url' => BS_URL::build_mod_url('latest_topics'),
 			'calendar_url' => BS_URL::build_mod_url('calendar'),
 			'current_topics_url' => BS_URL::build_mod_url('latest_topics'),
@@ -225,7 +225,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 			'symbol_event' =>				$user->get_theme_item_path('images/thread_type/event.gif'),
 		);
 		
-		$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
+		$denied = BS_ForumUtils::get_denied_forums(false);
 		
 		$rurl = BS_URL::get_mod_url('redirect');
 		$rurl->set(BS_URL_LOC,'show_post');
@@ -254,7 +254,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 			}
 		
 			// build topic-name
-			$topic_name = BS_TopicUtils::get_instance()->get_displayed_name($data['name']);
+			$topic_name = BS_TopicUtils::get_displayed_name($data['name']);
 			$posts_url = BS_URL::build_posts_url($data['rubrikid'],$data['id'],1);
 			
 			$topics[] = array(
@@ -264,7 +264,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 				'name_complete' => $topic_name['complete'],
 				'name' => $topic_name['displayed'],
 				'url' => $posts_url,
-				'topic_symbol' => BS_TopicUtils::get_instance()->get_symbol(
+				'topic_symbol' => BS_TopicUtils::get_symbol(
 					$cache,$data['type'],$data['symbol']
 				),
 				'lastpost' => $this->_get_lastpost($data)
@@ -297,7 +297,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		);
 		
 		// remove the denied-forums from fids
-		$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
+		$denied = BS_ForumUtils::get_denied_forums(false);
 		$denied = array_flip($denied);
 		$myfids = array();
 		foreach($fids as $fid)
@@ -324,7 +324,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 				// build username
 				if($data['post_user'] > 0)
 				{
-					$username = BS_UserUtils::get_instance()->get_link(
+					$username = BS_UserUtils::get_link(
 						$data['post_user'],$data['user_name'],$data['user_group']
 					);
 				}
@@ -332,9 +332,9 @@ final class BS_Front_Module_portal extends BS_Front_Module
 					$username = $data['post_an_user'];
 				
 				// init bbcode-engine
-				$use_bbcode = BS_PostingUtils::get_instance()->get_message_option('enable_bbcode') &&
+				$use_bbcode = BS_PostingUtils::get_message_option('enable_bbcode') &&
 					$data['use_bbcode'];
-				$use_smileys = BS_PostingUtils::get_instance()->get_message_option('enable_smileys') &&
+				$use_smileys = BS_PostingUtils::get_message_option('enable_smileys') &&
 					$data['use_smileys'];
 				$bbcode = new BS_BBCode_Parser($data['text'],'posts',$use_bbcode,$use_smileys);
 				
@@ -384,7 +384,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 					'topic_url' => BS_URL::build_posts_url($data['rubrikid'],$data['threadid']),
 					'username' => $username,
 					'date' => FWS_Date::get_date($data['post_time']),
-					'forum_path' => BS_ForumUtils::get_instance()->get_forum_path($data['rubrikid'],false),
+					'forum_path' => BS_ForumUtils::get_forum_path($data['rubrikid'],false),
 					'text' => $bbcode->get_message_for_output(),
 					'comments' => $comments,
 					'show_separator' => $i < $num - 1
@@ -410,14 +410,14 @@ final class BS_Front_Module_portal extends BS_Front_Module
 
 		// generate lastpost-URL
 		$site = 1;
-		if(BS_PostingUtils::get_instance()->get_posts_order() == 'ASC' && $pagination->get_page_count() > 1)
+		if(BS_PostingUtils::get_posts_order() == 'ASC' && $pagination->get_page_count() > 1)
 			$site = $pagination->get_page_count();
 		$murl = BS_URL::build_posts_url($data['rubrikid'],$data['id'],$site);
 
 		// determine username
 		if($data['lastpost_user'] != 0)
 		{
-			$user_name = BS_UserUtils::get_instance()->get_link(
+			$user_name = BS_UserUtils::get_link(
 				$data['lastpost_user'],$data['lp_username'],$data['user_group']
 			);
 		}
@@ -447,7 +447,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
 			return false;
 		
-		$denied = BS_ForumUtils::get_instance()->get_denied_forums(true);
+		$denied = BS_ForumUtils::get_denied_forums(true);
 		$visible = false;
 		foreach($fids as $fid)
 		{

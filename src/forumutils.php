@@ -17,23 +17,15 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ForumUtils extends FWS_Singleton
+final class BS_ForumUtils extends FWS_UtilBase
 {
-	/**
-	 * @return BS_ForumUtils the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-	
 	/**
 	 * Builds all childforums of the given parent-id (0 = all forums)
 	 *
 	 * @param int $parent_id the parent-id
 	 * @return string the html-code
 	 */
-	public function get_forum_list($parent_id)
+	public static function get_forum_list($parent_id)
 	{
 		$input = FWS_Props::get()->input();
 		$functions = FWS_Props::get()->functions();
@@ -98,7 +90,7 @@ final class BS_ForumUtils extends FWS_Singleton
 			$clapurl = BS_URL::get_mod_url('forums');
 			$clapurl->set(BS_URL_LOC,'clapforum');
 			
-			$post_order = BS_PostingUtils::get_instance()->get_posts_order();
+			$post_order = BS_PostingUtils::get_posts_order();
 			$next_display_layer = -1;
 			$sub_cats = array();
 			for($i = 0;$i < $forum_num;$i++)
@@ -153,7 +145,7 @@ final class BS_ForumUtils extends FWS_Singleton
 					$pimages = array();
 					if($node->get_layer() > 0)
 					{
-						$path_images = $this->get_path_images($node,$sub_cats,$images,$start_layer);
+						$path_images = self::get_path_images($node,$sub_cats,$images,$start_layer);
 						for($b = 0;$b < count($path_images);$b++)
 						{
 							$pimages[] = array(
@@ -199,7 +191,7 @@ final class BS_ForumUtils extends FWS_Singleton
 	
 						if(!$daten->get_display_subforums())
 						{
-							$info = $this->_get_subforum_info($daten->get_id());
+							$info = self::_get_subforum_info($daten->get_id());
 							$thread_count = $daten->get_threads() + $info['threads'];
 							$post_count = $daten->get_posts() + $info['posts'];
 							if($info['lastpost'][0] > $daten->get_lastpost_time())
@@ -234,8 +226,8 @@ final class BS_ForumUtils extends FWS_Singleton
 							'clap_forum' => $clap_forum,
 							'mods_ins' => $auth->get_forum_mods($forum_id),
 							'beschr_ins' => $beschr_ins,
-							'lastpost' => $this->_get_forum_lastpost($lp_data,$post_order),
-							'alreadyread' => $this->_get_forum_image($forum_id,$is_unread),
+							'lastpost' => self::_get_forum_lastpost($lp_data,$post_order),
+							'alreadyread' => self::_get_forum_image($forum_id,$is_unread),
 							'thread_count' => $thread_count,
 							'post_count' => $post_count,
 							'sub_forums' => $sub_forums
@@ -273,7 +265,7 @@ final class BS_ForumUtils extends FWS_Singleton
 	 * @param boolean $include_categories do you want to include categories?
 	 * @return array an numeric array with the ids of the denied forums
 	 */
-	public function get_denied_forums($include_categories = true)
+	public static function get_denied_forums($include_categories = true)
 	{
 		$user = FWS_Props::get()->user();
 		$forums = FWS_Props::get()->forums();
@@ -283,7 +275,7 @@ final class BS_ForumUtils extends FWS_Singleton
 			return array();
 		
 		$denied = array();
-		$intern_access = $this->get_intern_forum_permissions();
+		$intern_access = self::get_intern_forum_permissions();
 		foreach($forums->get_all_nodes() as $forum)
 		{
 			$data = $forum->get_data();
@@ -321,7 +313,7 @@ final class BS_ForumUtils extends FWS_Singleton
 	 * 		array(<fid> => <accessAllowed>)
 	 * 	</code>
 	 */
-	public function get_intern_forum_permissions()
+	public static function get_intern_forum_permissions()
 	{
 		$user = FWS_Props::get()->user();
 		$cache = FWS_Props::get()->cache();
@@ -350,7 +342,7 @@ final class BS_ForumUtils extends FWS_Singleton
 	 * @param int $maxlen the max length of the path
 	 * @return string the result
 	 */
-	public function get_forum_path($rid = 0,$start_with_raquo = true)
+	public static function get_forum_path($rid = 0,$start_with_raquo = true)
 	{
 		$input = FWS_Props::get()->input();
 		$forums = FWS_Props::get()->forums();
@@ -390,14 +382,14 @@ final class BS_ForumUtils extends FWS_Singleton
 	 * @param boolean $add_all_forums_option do you want to add an "all"-option?
 	 * @return string the options of the combobox
 	 */
-	public function get_recursive_forum_combo($name,$select,$disabled_forum,
+	public static function get_recursive_forum_combo($name,$select,$disabled_forum,
 		$disable_categories = true,$add_all_forums_option = false)
 	{
 		$locale = FWS_Props::get()->locale();
 		$cfg = FWS_Props::get()->cfg();
 		$forums = FWS_Props::get()->forums();
 
-		$denied = $this->get_denied_forums(false);
+		$denied = self::get_denied_forums(false);
 		$multiple = FWS_String::substr($name,-2,2) == '[]';
 		
 		if($multiple)
@@ -468,7 +460,7 @@ final class BS_ForumUtils extends FWS_Singleton
 	 * @return array an numeric array with the path-images.
 	 * 	each array-entry represents one "path-layer" beginning at the front
 	 */
-	public function get_path_images($node,$sub_cats,$images,$start_layer = 0)
+	public static function get_path_images($node,$sub_cats,$images,$start_layer = 0)
 	{
 		$forums = FWS_Props::get()->forums();
 
@@ -525,7 +517,7 @@ final class BS_ForumUtils extends FWS_Singleton
 	 *		)
 	 * 	</code>
 	 */
-	private function _get_subforum_info($parent_id)
+	private static function _get_subforum_info($parent_id)
 	{
 		$auth = FWS_Props::get()->auth();
 		$forums = FWS_Props::get()->forums();
@@ -598,7 +590,7 @@ final class BS_ForumUtils extends FWS_Singleton
 	 * @param string $post_order the post-order: ASC or DESC
 	 * @return array the lastpost-informations
 	 */
-	private function _get_forum_lastpost($data,$post_order)
+	private static function _get_forum_lastpost($data,$post_order)
 	{
 		if(!isset($data['tposts']))
 			$data['tposts'] = 0;
@@ -606,8 +598,8 @@ final class BS_ForumUtils extends FWS_Singleton
 		if($data['lastpost_id'] == 0)
 			return false;
 	
-		$pages = BS_PostingUtils::get_instance()->get_post_pages($data['tposts'] + 1);
-		$topic_name = BS_TopicUtils::get_instance()->get_displayed_name($data['threadname'],
+		$pages = BS_PostingUtils::get_post_pages($data['tposts'] + 1);
+		$topic_name = BS_TopicUtils::get_displayed_name($data['threadname'],
 			BS_MAX_TOPIC_LENGTH_LAST_POST);
 	
 		// generate url
@@ -623,7 +615,7 @@ final class BS_ForumUtils extends FWS_Singleton
 		// determine username
 		if($data['post_user'] != 0)
 		{
-			$user_name = BS_UserUtils::get_instance()->get_link(
+			$user_name = BS_UserUtils::get_link(
 				$data['post_user'],$data['username'],$data['user_group']
 			);
 		}
@@ -647,7 +639,7 @@ final class BS_ForumUtils extends FWS_Singleton
 	 * @param boolean $is_unread will be set to the corresponding status
 	 * @return string the link to with the read-status
 	 */
-	private function _get_forum_image($id,&$is_unread)
+	private static function _get_forum_image($id,&$is_unread)
 	{
 		$forums = FWS_Props::get()->forums();
 		$unread = FWS_Props::get()->unread();
@@ -699,11 +691,6 @@ final class BS_ForumUtils extends FWS_Singleton
 		$img = $user->get_theme_item_path('images/unread/'.$image.'.gif');
 		return '<img src="'.$img.'" alt="'.$locale->lang($message).'"'
 		 .' title="'.$locale->lang($message).'" />';
-	}
-	
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

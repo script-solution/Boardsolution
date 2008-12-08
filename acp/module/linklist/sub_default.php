@@ -123,8 +123,8 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 				break;
 		}
 		
-		$enable_bbcode = BS_PostingUtils::get_instance()->get_message_option('enable_bbcode','desc');
-		$enable_smileys = BS_PostingUtils::get_instance()->get_message_option('enable_smileys','desc');
+		$enable_bbcode = BS_PostingUtils::get_message_option('enable_bbcode','desc');
+		$enable_smileys = BS_PostingUtils::get_message_option('enable_smileys','desc');
 
 		if($search != '')
 		{

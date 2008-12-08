@@ -17,16 +17,8 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_UserUtils extends FWS_Singleton
+final class BS_UserUtils extends FWS_UtilBase
 {
-	/**
-	 * @return BS_UserUtils the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-	
 	/**
 	 * Builds a link to the userdetails of the given user
 	 * 
@@ -37,7 +29,7 @@ final class BS_UserUtils extends FWS_Singleton
 	 * @param string $style additional style information
 	 * @return string the link to the userdetails
 	 */
-	public function get_link($id,$name,$group_ids = '',$color = false,$style = '')
+	public static function get_link($id,$name,$group_ids = '',$color = false,$style = '')
 	{
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
@@ -83,7 +75,7 @@ final class BS_UserUtils extends FWS_Singleton
 	 * @param int $userid the id of the user (0 = current)
 	 * @return boolean true if the user has voted
 	 */
-	public function user_voted_for_poll($pollid,$userid = 0)
+	public static function user_voted_for_poll($pollid,$userid = 0)
 	{
 		$user = FWS_Props::get()->user();
 
@@ -103,7 +95,7 @@ final class BS_UserUtils extends FWS_Singleton
 	 * @param int $linkid the id of the link
 	 * @return boolean true if the current user has voted for the link
 	 */
-	public function user_voted_for_link($linkid)
+	public static function user_voted_for_link($linkid)
 	{
 		$user = FWS_Props::get()->user();
 
@@ -131,7 +123,7 @@ final class BS_UserUtils extends FWS_Singleton
 	 * @param string $use_link do you want to use a link if possible?
 	 * @return string the email to display
 	 */
-	public function get_displayed_email($email,$mode,$use_link = false)
+	public static function get_displayed_email($email,$mode,$use_link = false)
 	{
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
@@ -170,7 +162,7 @@ final class BS_UserUtils extends FWS_Singleton
 	 * 	</code>
 	 * @return string the path to the given avatar if it's valid
 	 */
-	public function get_avatar_path($data)
+	public static function get_avatar_path($data)
 	{
 		if($data['av_pfad'] != '' && ($data['aowner'] == $data['post_user'] || $data['aowner'] == 0))
 			return FWS_Path::client_app().'images/avatars/'.$data['av_pfad'];
@@ -186,7 +178,7 @@ final class BS_UserUtils extends FWS_Singleton
 	 * @param int $user_id the id of the user
 	 * @return string the result
 	 */
-	public function get_profile_avatar($avatar_id,$user_id)
+	public static function get_profile_avatar($avatar_id,$user_id)
 	{
 		$locale = FWS_Props::get()->locale();
 
@@ -211,7 +203,7 @@ final class BS_UserUtils extends FWS_Singleton
 	 * @param string $user_name the user-name
 	 * @return boolean true if it's valid
 	 */
-	public function check_username($user_name)
+	public static function check_username($user_name)
 	{
 		$cfg = FWS_Props::get()->cfg();
 

@@ -89,7 +89,7 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 		}
 		
 		// check if the topic is valid
-		$topicdata = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		$topicdata = BS_Front_TopicFactory::get_current_topic();
 		if($topicdata === null || $topicdata['comallow'] == 0 || 
 			 (!$user->is_admin() && $topicdata['thread_closed'] == 1) ||
 			 $topicdata['rubrikid'] != $fid)
@@ -103,7 +103,7 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 			$site = $input->set_var(BS_URL_SITE,'get',1);
 
 		if($input->isset_var('preview','post'))
-			BS_PostingUtils::get_instance()->add_post_preview();
+			BS_PostingUtils::add_post_preview();
 		
 		$text = '';
 		
@@ -118,7 +118,7 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 				if($auth->has_access_to_intern_forum($post['rubrikid']))
 				{
 					$username = $post['post_user'] != 0 ? $post['user_name'] : $post['post_an_user'];
-					$quote = BS_PostingUtils::get_instance()->quote_text($post['text_posted'],$username);
+					$quote = BS_PostingUtils::quote_text($post['text_posted'],$username);
 					if($user->use_bbcode_applet())
 						$text .= $quote;
 					else
@@ -144,7 +144,7 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 		));
 
 		$url->set(BS_URL_ACTION,'new_post');
-		BS_PostingUtils::get_instance()->add_topic_review($topicdata,true,$url);
+		BS_PostingUtils::add_topic_review($topicdata,true,$url);
 	}
 }
 ?>

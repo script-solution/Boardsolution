@@ -87,7 +87,7 @@ final class BS_Front_Module_user_search extends BS_Front_Module
 		{
 			$user_list[] = array(
 				'user_name' => $data['user_name'],
-				'email' => BS_UserUtils::get_instance()->get_displayed_email(
+				'email' => BS_UserUtils::get_displayed_email(
 					$data['user_email'],$data['email_display_mode']
 				),
 				'user_group' => $auth->get_usergroup_list($data['user_group'],false,false),

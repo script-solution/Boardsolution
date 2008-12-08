@@ -197,7 +197,7 @@ final class BS_Front_Post_Data extends FWS_Object
 		{
 			if($link)
 			{
-				return BS_UserUtils::get_instance()->get_link(
+				return BS_UserUtils::get_link(
 		  		$this->_data['post_user'],$this->_data['user'],$this->_data['user_group']
 		  	);
 			}
@@ -246,7 +246,7 @@ final class BS_Front_Post_Data extends FWS_Object
 		if($this->_data['post_user'] != 0 && $cfg['enable_post_count'] == 1)
 		{
 			$rank = $this->get_rank();
-			$stats .= BS_PostingUtils::get_instance()->get_experience_diagram(
+			$stats .= BS_PostingUtils::get_experience_diagram(
 				$this->_data['exppoints'],$rank,$this->_data['post_user']
 			);
 			$stats .= '<br />';
@@ -384,7 +384,7 @@ final class BS_Front_Post_Data extends FWS_Object
 		
 		$avatar = '';
 		if($cfg['enable_avatars'] == 1)
-			$avatar = BS_UserUtils::get_instance()->get_avatar_path($this->_data);
+			$avatar = BS_UserUtils::get_avatar_path($this->_data);
 		self::$_profiles[$this->_data['id']]['avatar'] = $avatar;
 		return $avatar;
 	}
@@ -438,7 +438,7 @@ final class BS_Front_Post_Data extends FWS_Object
 	{
 		$attlist = $attachments ? $this->_container->get_attachments() : array();
 		$keywords = $this->_container->get_highlight_keywords();
-		return BS_PostingUtils::get_instance()->get_post_text(
+		return BS_PostingUtils::get_post_text(
 	  	$this->_data,$keywords === false ? null : $keywords,$attachments,$signatures,$edit_notice,
 	  	$attlist,$wordwrap_codes
 	  );
@@ -482,8 +482,8 @@ final class BS_Front_Post_Data extends FWS_Object
 				'site'							=> $site,
 				'total_pages'				=> $this->_container->get_pagination()->get_page_count(),
 				'total_posts'				=> $this->_container->get_post_count(),
-				'topic'							=> BS_Front_TopicFactory::get_instance()->get_current_topic(),
-				'posts_order'				=> BS_PostingUtils::get_instance()->get_posts_order(),
+				'topic'							=> BS_Front_TopicFactory::get_current_topic(),
+				'posts_order'				=> BS_PostingUtils::get_posts_order(),
 				'is_admin'					=> $user->is_admin(),
     		'delete_post_url'		=> $dpurl,
     		'edit_post_url'			=> $epurl,

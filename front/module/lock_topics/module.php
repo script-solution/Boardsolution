@@ -97,7 +97,7 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 			$last_data = $data;
 		}
 
-		$selected_topics = BS_TopicUtils::get_instance()->get_selected_topics($selected_topic_data);
+		$selected_topics = BS_TopicUtils::get_selected_topics($selected_topic_data);
 		if(count($selected_topics) == 0)
 		{
 			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('no_topics_chosen'));
@@ -111,7 +111,7 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 		$posts_topic_vals = $this->_get_vals($selected_topic_data,BS_LOCK_TOPIC_POSTS);
 
 		if(count($selected_topic_ids) == 1 && $last_data['moved_tid'] == 0)
-			BS_PostingUtils::get_instance()->add_topic_review($last_data,false);
+			BS_PostingUtils::add_topic_review($last_data,false);
 
 		$url = BS_URL::get_mod_url();
 		$url->set(BS_URL_FID,$fid);

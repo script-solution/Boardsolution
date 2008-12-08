@@ -114,7 +114,7 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		$avatar = '';
 		$rowspan = BS_ENABLE_EXPORT ? (count($fields) + 1) : 5;
 		$avatar = '<td width="35%" align="center" class="a_main" rowspan="'.$rowspan.'">';
-		$av = BS_UserUtils::get_instance()->get_profile_avatar($data['avatar'],$data['id']);
+		$av = BS_UserUtils::get_profile_avatar($data['avatar'],$data['id']);
 		$avatar .= $av;
 		if($av != $locale->lang('nopictureavailable'))
 		{

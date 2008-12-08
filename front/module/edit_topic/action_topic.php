@@ -60,7 +60,7 @@ final class BS_Front_Action_edit_topic_topic extends BS_Front_Action_Base
 			return 'shadow_thread_deny';
 
 		// check if the topic is locked
-		if(BS_TopicUtils::get_instance()->is_locked($topic_data['locked'],BS_LOCK_TOPIC_EDIT))
+		if(BS_TopicUtils::is_locked($topic_data['locked'],BS_LOCK_TOPIC_EDIT))
 			return 'no_permission_to_edit_thread';
 
 		$topic_name = $input->get_var('topic_name','post',FWS_Input::STRING);

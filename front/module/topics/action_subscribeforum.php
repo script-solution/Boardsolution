@@ -48,7 +48,7 @@ final class BS_Front_Action_topics_subscribeforum extends BS_Front_Action_Base
 			return 'A forum with id "'.$fid.'" doesn\'t exist';
 
 		// forum not accessable or a category?
-		$denied_forums = BS_ForumUtils::get_instance()->get_denied_forums(true);
+		$denied_forums = BS_ForumUtils::get_denied_forums(true);
 		if(in_array($fid,$denied_forums))
 			return 'The forum is denied for you or a category';
 

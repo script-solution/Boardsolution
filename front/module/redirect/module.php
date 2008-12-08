@@ -107,7 +107,7 @@ final class BS_Front_Module_redirect extends BS_Front_Module
 				$post_index = 0;
 				$page = 1;
 				$postlist = BS_DAO::get_posts()->get_all_from_topic(
-					$pdata['rubrikid'],$pdata['threadid'],'id',BS_PostingUtils::get_instance()->get_posts_order()
+					$pdata['rubrikid'],$pdata['threadid'],'id',BS_PostingUtils::get_posts_order()
 				);
 				foreach($postlist as $data)
 				{

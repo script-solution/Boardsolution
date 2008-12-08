@@ -56,7 +56,7 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 			if(trim($user_name) == '')
 				return 'registeruserleer';
 
-			if(!BS_UserUtils::get_instance()->check_username($user_name))
+			if(!BS_UserUtils::check_username($user_name))
 				return 'usernamenotallowed';
 
 			if($functions->is_banned('user',$user_name))

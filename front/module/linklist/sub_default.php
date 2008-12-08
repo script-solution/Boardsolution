@@ -58,8 +58,8 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 		
 		if($num > 0)
 		{
-			$enable_smileys = BS_PostingUtils::get_instance()->get_message_option('enable_smileys','desc');
-			$enable_bbcode = BS_PostingUtils::get_instance()->get_message_option('enable_bbcode','desc');
+			$enable_smileys = BS_PostingUtils::get_message_option('enable_smileys','desc');
+			$enable_bbcode = BS_PostingUtils::get_message_option('enable_bbcode','desc');
 			
 			$linklist = BS_DAO::get_links()->get_list(1,'l.category','ASC',$pagination->get_start(),$end);
 			$qry_num = count($linklist);
@@ -96,7 +96,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 					$links[] = array(
 						'id' => $data['id'],
 						'can_vote' => $user->is_loggedin() &&
-							!BS_UserUtils::get_instance()->user_voted_for_link($data['id']),
+							!BS_UserUtils::user_voted_for_link($data['id']),
 						'vote_options' => $vote_options,
 						'show_category' => $thiskat != $data['category'],
 						'category' => $data['category'],
@@ -105,7 +105,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 						'link_url' => $murl,
 						'link_rating' => $functions->get_link_rating($data['vote_points'],$data['votes'],0),
 						'clicks' => $data['clicks'],
-						'user_name' => BS_UserUtils::get_instance()->get_link(
+						'user_name' => BS_UserUtils::get_link(
 								$data['user_id'],$data['user_name'],$data['user_group']
 						),
 						'redirect_url' => $redirect_url,

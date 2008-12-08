@@ -740,13 +740,13 @@ final class BS_Auth extends FWS_Object
 			$user[$value['id']] = true;
 			if(isset($value['user_group']))
 			{
-				$output .= BS_UserUtils::get_instance()->get_link(
+				$output .= BS_UserUtils::get_link(
 					$value['id'],$value['user_name'],$value['user_group']
 				);
 				$output .= ', ';
 			}
 			else
-				$output .= BS_UserUtils::get_instance()->get_link($value['id'],$value['user_name']).', ';
+				$output .= BS_UserUtils::get_link($value['id'],$value['user_name']).', ';
 			
 			$total++;
 		}
@@ -769,7 +769,7 @@ final class BS_Auth extends FWS_Object
 			{
 				foreach(BS_DAO::get_profile()->get_users_by_groups($nadmingroups) as $udata)
 				{
-					$groups[$udata['id']] = BS_UserUtils::get_instance()->get_link(
+					$groups[$udata['id']] = BS_UserUtils::get_link(
 						$udata['id'],$udata['user_name'],$udata['user_group']
 					);
 				}

@@ -82,7 +82,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		if($data['pm_type'] == 'inbox' && $data['sender_name'] != '')
 		{
 			$user_name = $locale->lang('From').' ';
-			$user_name .= BS_UserUtils::get_instance()->get_link(
+			$user_name .= BS_UserUtils::get_link(
 				$data['sender_id'],$data['sender_name'],$data['sender_user_group']
 			);
 		}
@@ -91,13 +91,13 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		else
 		{
 			$user_name = $locale->lang('pm_to').' ';
-			$user_name .= BS_UserUtils::get_instance()->get_link(
+			$user_name .= BS_UserUtils::get_link(
 				$data['receiver_id'],$data['receiver_name'],$data['receiver_user_group']
 			);
 		}
 
-		$enable_bbcode = BS_PostingUtils::get_instance()->get_message_option('enable_bbcode');
-		$enable_smileys = BS_PostingUtils::get_instance()->get_message_option('enable_smileys');
+		$enable_bbcode = BS_PostingUtils::get_message_option('enable_bbcode');
+		$enable_smileys = BS_PostingUtils::get_message_option('enable_smileys');
 		$bbcode = new BS_BBCode_Parser($data['pm_text'],'posts',$enable_bbcode,$enable_smileys);
 		$text = $bbcode->get_message_for_output();
 
@@ -130,7 +130,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 			}
 
 
-			$avatar_path = BS_UserUtils::get_instance()->get_avatar_path($avatar_data);
+			$avatar_path = BS_UserUtils::get_avatar_path($avatar_data);
 			if($avatar_path != '')
 				$avatar = '<img src="'.$avatar_path.'" alt="" />';
 		}

@@ -53,7 +53,7 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 			return 'You are no admin and the forum is closed';
 
 		// does the topic exist?
-		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		$topic_data = BS_Front_TopicFactory::get_current_topic();
 		if($topic_data == null)
 			return 'The topic has not been found';
 
@@ -65,7 +65,7 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 		$first_post = BS_DAO::get_posts()->get_first_postid_in_topic($fid,$tid);
 
 		$selected_posts = array();
-		$order = BS_PostingUtils::get_instance()->get_posts_order();
+		$order = BS_PostingUtils::get_posts_order();
 		foreach(BS_DAO::get_posts()->get_posts_from_topic($ids,$fid,$tid,'p.id',$order) as $data)
 		{
 			// ensure that nobody can perform an action with the first post of a topic
@@ -158,7 +158,7 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 		if($post_id_str != '')
 		{
 			// remove them from the unread
-			BS_UnreadUtils::get_instance()->remove_posts($post_ids,$tid);
+			BS_UnreadUtils::remove_posts($post_ids,$tid);
 			
 			// remove attachments
 			foreach(BS_DAO::get_attachments()->get_by_postids($post_ids) as $adata)
@@ -170,14 +170,14 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 			BS_DAO::get_posts()->delete_by_ids($post_ids);
 		}
 
-		BS_Front_Action_Helper::get_instance()->adjust_last_post_time($max_post_time);
+		BS_Front_Action_Helper::adjust_last_post_time($max_post_time);
 		
 		// build URL
 		$murl = BS_URL::get_mod_url('posts');
 		$murl->set(BS_URL_FID,$fid);
 		$murl->set(BS_URL_TID,$tid);
 		$lastpost = BS_DAO::get_posts()->get_lastpost_data_in_topic($tid);
-		if(BS_PostingUtils::get_instance()->get_posts_order() == 'ASC')
+		if(BS_PostingUtils::get_posts_order() == 'ASC')
 		{
 			$post_num = BS_DAO::get_posts()->get_count_in_topic($tid);
 			if($post_num > $cfg['posts_per_page'])

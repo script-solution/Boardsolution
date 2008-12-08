@@ -85,7 +85,7 @@ final class BS_ACP_SubModule_moderators_edituser extends BS_ACP_SubModule
 			$user[] = array(
 				'id' => $id,
 				'name' => $name,
-				'forum_combo' => BS_ForumUtils::get_instance()->get_recursive_forum_combo(
+				'forum_combo' => BS_ForumUtils::get_recursive_forum_combo(
 					'forums['.$id.'][]',isset($forums[$id]) ? $forums[$id] : array(),0,true,false
 				)
 			);

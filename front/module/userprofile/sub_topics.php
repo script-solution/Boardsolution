@@ -141,24 +141,24 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 			$purl->set(BS_URL_FID,$data['rubrikid']);
 			$purl->set(BS_URL_TID,$data['topic_id']);
 			
-			$info = BS_TopicUtils::get_instance()->get_displayed_name($data['name']);
+			$info = BS_TopicUtils::get_displayed_name($data['name']);
 			$topic_name = '<a title="'.$info['complete'].'" href="'.$purl->to_url().'">';
 			$topic_name .= $info['displayed'].'</a>';
 
 			$lastpost = $data['lastpost_time'] > 0 ? FWS_Date::get_date($data['lastpost_time']) : $locale->lang('notavailable');
 			
 			$topics[] = array(
-				'topic_status' => BS_TopicUtils::get_instance()->get_status_data(
+				'topic_status' => BS_TopicUtils::get_status_data(
 					$cache,$data,$unread->is_unread_thread($data['topic_id'])
 				),
-				'topic_symbol' => BS_TopicUtils::get_instance()->get_symbol(
+				'topic_symbol' => BS_TopicUtils::get_symbol(
 					$cache,$data['type'],$data['symbol']
 				),
 				'subscribe_date' => FWS_Date::get_date($data['sub_date']),
 				'last_post' => $lastpost,
 				'topic_name' => $topic_name,
 				'topic_id' => $data['id'],
-				'position' => BS_ForumUtils::get_instance()->get_forum_path($data['rubrikid'],false)
+				'position' => BS_ForumUtils::get_forum_path($data['rubrikid'],false)
 			);
 		}
 

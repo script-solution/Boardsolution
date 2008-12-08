@@ -43,7 +43,7 @@ final class BS_Front_Action_posts_subscribetopic extends BS_Front_Action_Base
 			return 'The forum-id or topic-id is invalid';
 
 		// forum not accessable or a category?
-		$denied_forums = BS_ForumUtils::get_instance()->get_denied_forums(true);
+		$denied_forums = BS_ForumUtils::get_denied_forums(true);
 		if(in_array($fid,$denied_forums))
 			return 'The forum is denied for you or a category';
 

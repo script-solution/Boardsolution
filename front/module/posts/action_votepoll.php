@@ -44,7 +44,7 @@ final class BS_Front_Action_posts_votepoll extends BS_Front_Action_Base
 		if(!$user->is_loggedin())
 			return 'You are a guest';
 
-		if(BS_UserUtils::get_instance()->user_voted_for_poll($topic_data['type']))
+		if(BS_UserUtils::user_voted_for_poll($topic_data['type']))
 			return 'poll_user_voted';
 
 		if($topic_data['multichoice'] == 0)

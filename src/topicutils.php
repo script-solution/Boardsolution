@@ -17,16 +17,8 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_TopicUtils extends FWS_Singleton
+final class BS_TopicUtils extends FWS_UtilBase
 {
-	/**
-	 * @return BS_TopicUtils the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-	
 	/**
 	 * Checks wether the given type is locked for the current user
 	 *
@@ -35,7 +27,7 @@ final class BS_TopicUtils extends FWS_Singleton
 	 * @param int $post_locked is the post locked?
 	 * @return boolean true if it's locked for the current user
 	 */
-	public function is_locked($locked,$type,$post_locked = 0)
+	public static function is_locked($locked,$type,$post_locked = 0)
 	{
 		$auth = FWS_Props::get()->auth();
 
@@ -77,7 +69,7 @@ final class BS_TopicUtils extends FWS_Singleton
 	 * 		)
 	 * 	</code>
 	 */
-	public function get_displayed_name($title,$length = 0)
+	public static function get_displayed_name($title,$length = 0)
 	{
 		$cfg = FWS_Props::get()->cfg();
 
@@ -93,7 +85,7 @@ final class BS_TopicUtils extends FWS_Singleton
 	 * @param boolean $is_unread is it an unread topic?
 	 * @return array an associative array with all titles and images
 	 */
-	public function get_status_data($cache,$topic_data,$is_unread)
+	public static function get_status_data($cache,$topic_data,$is_unread)
 	{
 		$cfg = FWS_Props::get()->cfg();
 		$locale = FWS_Props::get()->locale();
@@ -129,7 +121,7 @@ final class BS_TopicUtils extends FWS_Singleton
 	 * @param array $topics an array with the data of all selected topics
 	 * @return array all selected topics: <code>array(array('symbol' => ...,'topic' => ...),...)</code>
 	 */
-	public function get_selected_topics($topics)
+	public static function get_selected_topics($topics)
 	{
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
@@ -142,17 +134,17 @@ final class BS_TopicUtils extends FWS_Singleton
 		$res = array();
 		foreach($topics as $data)
 		{
-			$symbol = $this->get_symbol($cache,$data['type'],$data['symbol']);
+			$symbol = self::get_symbol($cache,$data['type'],$data['symbol']);
 			if($data['important'] == 1)
 				$symbol .= ' <b>'.$locale->lang('important').': </b>';
 
-			$topic = $this->get_displayed_name($data['name']);
+			$topic = self::get_displayed_name($data['name']);
 
 			$topic_id = ($data['moved_tid'] > 0) ? $data['moved_tid'] : $data['id'];
 			$forum_id = ($data['moved_rid'] > 0) ? $data['moved_rid'] : $data['rubrikid'];
 			$murl = BS_URL::build_posts_url($forum_id,$topic_id);
 			
-			$topic_path = BS_ForumUtils::get_instance()->get_forum_path($data['rubrikid'],false);
+			$topic_path = BS_ForumUtils::get_forum_path($data['rubrikid'],false);
 			$topic_path .= ' &raquo; <a href="'.$murl.'">';
 			$topic_path .= '<span title="'.$topic['complete'].'">';
 			if($data['moved_tid'] > 0)
@@ -175,7 +167,7 @@ final class BS_TopicUtils extends FWS_Singleton
 	 * @param int $symbol the symbol (may be 0)
 	 * @return string the image
 	 */
-	public function get_symbol($cache,$topic_type,$symbol)
+	public static function get_symbol($cache,$topic_type,$symbol)
 	{
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
@@ -209,7 +201,7 @@ final class BS_TopicUtils extends FWS_Singleton
 	 * @param int $select the symbol to select
 	 * @return string the symbols
 	 */
-	public function get_symbols($form,$select = 0)
+	public static function get_symbols($form,$select = 0)
 	{
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
@@ -244,7 +236,7 @@ final class BS_TopicUtils extends FWS_Singleton
 	 * @param boolean $is_closed is the topic closed? (just if $location == 'posts')
 	 * @return string the result
 	 */
-	public function get_action_combobox($location = 'topics',$is_closed = false)
+	public static function get_action_combobox($location = 'topics',$is_closed = false)
 	{
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
@@ -311,11 +303,6 @@ final class BS_TopicUtils extends FWS_Singleton
 		$var .= '</select>'."\n";
 	
 		return $var;
-	}
-	
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

@@ -102,7 +102,7 @@ abstract class BS_Front_Module extends FWS_Module
 		if(!($renderer instanceof BS_Front_Renderer_HTML))
 			FWS_Helper::def_error('instance','render','BS_Front_Renderer_HTML',$renderer);
 		
-		$tdata = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		$tdata = BS_Front_TopicFactory::get_current_topic();
 		if($tdata !== null)
 		{
 			$murl = BS_URL::build_posts_url($tdata['rubrikid'],$tdata['id'],1);

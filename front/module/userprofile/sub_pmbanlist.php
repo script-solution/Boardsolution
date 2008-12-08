@@ -91,7 +91,7 @@ final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 		{
 			$banned_user[] = array(
 				'number' => $i + 1,
-				'user_name' => BS_UserUtils::get_instance()->get_link($data['baned_user'],$data['user_name'],
+				'user_name' => BS_UserUtils::get_link($data['baned_user'],$data['user_name'],
 					$data['user_group']),
 				'id' => $data['id']
 			);

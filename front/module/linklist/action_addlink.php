@@ -59,7 +59,7 @@ final class BS_Front_Action_linklist_addlink extends BS_Front_Action_Base
 
 		$post_text = $input->get_var('text','post',FWS_Input::STRING);
 		$text = '';
-		$error = BS_PostingUtils::get_instance()->prepare_message_for_db($text,$post_text,'desc');
+		$error = BS_PostingUtils::prepare_message_for_db($text,$post_text,'desc');
 		if($error != '')
 			return $error;
 

@@ -48,7 +48,7 @@ final class BS_API_Module_latest_topics extends BS_API_Module
 		// denied forums?
 		$denied = array();
 		if($cfg['hide_denied_forums'] == 1)
-			$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
+			$denied = BS_ForumUtils::get_denied_forums(false);
 		
 		// ensure that the params are valid
 		if(!$params)

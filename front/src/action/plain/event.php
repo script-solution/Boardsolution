@@ -209,7 +209,7 @@ final class BS_Front_Action_Plain_Event extends BS_Front_Action_Plain
 		// convert and check text
 		if($this->_tid == 0)
 		{
-			$error = BS_PostingUtils::get_instance()->prepare_message_for_db(
+			$error = BS_PostingUtils::prepare_message_for_db(
 				$this->_description,$this->_description_posted,'desc',true,true
 			);
 			if($error != '')

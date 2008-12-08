@@ -370,7 +370,7 @@ final class BS_Unread extends FWS_Object
 		// don't add denied topics to the unread-topics
 		$excl_fids = array();
 		if($cfg['hide_denied_forums'] == 1)
-			$excl_fids = array_merge($forum_ids,BS_ForumUtils::get_instance()->get_denied_forums(false));
+			$excl_fids = array_merge($forum_ids,BS_ForumUtils::get_denied_forums(false));
 		
 		// don't add already unread threads again (we would loose the first unread post-id)
 		$excl_tids = array();

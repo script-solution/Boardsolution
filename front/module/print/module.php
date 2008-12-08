@@ -71,7 +71,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 		}
 		
 		// check if the topic exists
-		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		$topic_data = BS_Front_TopicFactory::get_current_topic();
 		if($topic_data === null)
 		{
 			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('thread_not_found'));
@@ -87,7 +87,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 		
 		// generate the location
 		$topic_name = $topic_data['name'];
-		$forum_path = BS_ForumUtils::get_instance()->get_forum_path(0,false);
+		$forum_path = BS_ForumUtils::get_forum_path(0,false);
 		$add_location = strip_tags($forum_path).' &raquo; '.$topic_name.' &raquo; ';
 		$add_location .= $locale->lang('printview_title');
 		
@@ -202,7 +202,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 		
 		$posts = array();
 		$postcon = new BS_Front_Post_Container(
-			$fid,$tid,null,null,'p.id '.BS_PostingUtils::get_instance()->get_posts_order()
+			$fid,$tid,null,null,'p.id '.BS_PostingUtils::get_posts_order()
 		);
 		foreach($postcon->get_posts() as $post)
 		{

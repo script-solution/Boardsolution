@@ -149,7 +149,7 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 					$user_name = $locale->lang('guest');
 				else
 				{
-					$user_name = BS_UserUtils::get_instance()->get_link(
+					$user_name = BS_UserUtils::get_link(
 						$data['user_id'],$data['user_name'],$data['user_group'],true
 					);
 					if($loc != 'view_duplicates' && $data['duplicates'] > 0)

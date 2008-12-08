@@ -117,7 +117,7 @@ final class BS_Front_Search_Result_PMs extends FWS_Object implements BS_Front_Se
 
 			if($data['user_name'] != '')
 			{
-				$username = BS_UserUtils::get_instance()->get_link(
+				$username = BS_UserUtils::get_link(
 					$data['sender_id'],$data['user_name'],$data['user_group']
 				);
 			}

@@ -374,7 +374,7 @@ final class BS_Front_Topics extends FWS_Object
 			$sql_where = ' WHERE 1';
 			if($cfg['hide_denied_forums'] == 1)
 			{
-				$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
+				$denied = BS_ForumUtils::get_denied_forums(false);
 				if(count($denied) > 0)
 					$sql_where .= ' AND t.rubrikid NOT IN ('.implode(',',$denied).')';
 			}
@@ -545,7 +545,7 @@ final class BS_Front_Topics extends FWS_Object
 			$posts_url->set(BS_URL_SITE,1);
 			$posts_url->set_sef(true);
 			
-			$post_order = BS_PostingUtils::get_instance()->get_posts_order();
+			$post_order = BS_PostingUtils::get_posts_order();
 			$is_important = false;
 			foreach($topiclist as $data)
 			{
@@ -557,7 +557,7 @@ final class BS_Front_Topics extends FWS_Object
 					$important_colspan = $this->_show_topic_action ? 8 : 7;
 				}
 
-				$pages = BS_PostingUtils::get_instance()->get_post_pages($data['posts'] + 1);
+				$pages = BS_PostingUtils::get_post_pages($data['posts'] + 1);
 				$is_unread = $unread->is_unread_thread($data['id']);
 				$first_unread_url = '';
 				if($is_unread)
@@ -580,7 +580,7 @@ final class BS_Front_Topics extends FWS_Object
 				
 				$forum_path = '';
 				if($this->_show_forum)
-					$forum_path = BS_ForumUtils::get_instance()->get_forum_path($data['rubrikid'],false);
+					$forum_path = BS_ForumUtils::get_forum_path($data['rubrikid'],false);
 				
 				$relevance = false;
 				if($this->_show_relevance)
@@ -598,7 +598,7 @@ final class BS_Front_Topics extends FWS_Object
 						$topic_name = array('displayed' => $data['name'],'complete' => '');
 				}
 				else
-					$topic_name = BS_TopicUtils::get_instance()->get_displayed_name($data['name']);
+					$topic_name = BS_TopicUtils::get_displayed_name($data['name']);
 				
 				// special values for shadow-topics
 				if($data['moved_tid'] != 0 && $data['moved_rid'] != 0)
@@ -643,10 +643,10 @@ final class BS_Front_Topics extends FWS_Object
 					'topicstart' => $topic_starter,
 					'posts' => $data['posts'],
 					'views' => $data['views'],
-					'topic_status' => BS_TopicUtils::get_instance()->get_status_data(
+					'topic_status' => BS_TopicUtils::get_status_data(
 						$cache,$data,$unread->is_unread_thread($data['id'])
 					),
-					'thread_pic' => BS_TopicUtils::get_instance()->get_symbol(
+					'thread_pic' => BS_TopicUtils::get_symbol(
 						$cache,$data['type'],$data['symbol']
 					),
 					'posts_url' => $sposts_url,
@@ -673,7 +673,7 @@ final class BS_Front_Topics extends FWS_Object
 	{
 		if($data['post_user'] != 0)
 		{
-			$username = BS_UserUtils::get_instance()->get_link(
+			$username = BS_UserUtils::get_link(
 				$data['post_user'],$data['username'],$data['user_group']
 			);
 		}
@@ -708,7 +708,7 @@ final class BS_Front_Topics extends FWS_Object
 		// determine username
 		if($data['lastpost_user'] != 0)
 		{
-			$user_name = BS_UserUtils::get_instance()->get_link(
+			$user_name = BS_UserUtils::get_link(
 				$data['lastpost_user'],$data['lp_username'],$data['lastpost_user_group']
 			);
 		}

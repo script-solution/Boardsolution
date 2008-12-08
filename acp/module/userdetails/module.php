@@ -69,7 +69,7 @@ final class BS_ACP_Module_userdetails extends BS_ACP_Module
 				$sub++;
 		}
 		
-		$avatar = BS_UserUtils::get_instance()->get_profile_avatar($data['avatar'],$data['id']);
+		$avatar = BS_UserUtils::get_profile_avatar($data['avatar'],$data['id']);
 		
 		$tpl->add_array('data',$data,false);
 		$tpl->add_variables(array(
@@ -105,8 +105,8 @@ final class BS_ACP_Module_userdetails extends BS_ACP_Module
 		// generate signature
 		if($data['signatur'] != '')
 		{
-			$enable_bbcode = BS_PostingUtils::get_instance()->get_message_option('enable_bbcode','sig');
-			$enable_smileys = BS_PostingUtils::get_instance()->get_message_option('enable_smileys','sig');
+			$enable_bbcode = BS_PostingUtils::get_message_option('enable_bbcode','sig');
+			$enable_smileys = BS_PostingUtils::get_message_option('enable_smileys','sig');
 			$bbcode = new BS_BBCode_Parser($data['signatur'],'sig',$enable_bbcode,$enable_smileys);
 			$signature = $bbcode->get_message_for_output();
 		}

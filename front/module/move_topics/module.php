@@ -80,7 +80,7 @@ final class BS_Front_Module_move_topics extends BS_Front_Module
 		}
 	
 		if($input->isset_var('preview','post'))
-			BS_PostingUtils::get_instance()->add_post_preview();
+			BS_PostingUtils::add_post_preview();
 	
 		$selected_topic_data = array();
 		$selected_topic_ids = array();
@@ -98,7 +98,7 @@ final class BS_Front_Module_move_topics extends BS_Front_Module
 			$last_data = $data;
 		}
 	
-		$selected_topics = BS_TopicUtils::get_instance()->get_selected_topics($selected_topic_data);
+		$selected_topics = BS_TopicUtils::get_selected_topics($selected_topic_data);
 		if(count($selected_topics) == 0)
 		{
 			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('no_topics_chosen'));
@@ -119,7 +119,7 @@ final class BS_Front_Module_move_topics extends BS_Front_Module
 		{
 			$purl = BS_URL::get_mod_url();
 			$purl->copy_params($url,array(BS_URL_FID,BS_URL_ID));
-			BS_PostingUtils::get_instance()->add_topic_review($last_data,true,$purl);
+			BS_PostingUtils::add_topic_review($last_data,true,$purl);
 		}
 		
 		$target_forum = $form->get_input_value('target_forum',0);
@@ -127,7 +127,7 @@ final class BS_Front_Module_move_topics extends BS_Front_Module
 			'action_type' => BS_ACTION_MOVE_TOPICS,
 			'target_url' => $url->to_url(),
 			'selected_topics' => $selected_topics,
-			'forum_combo' => BS_ForumUtils::get_instance()->get_recursive_forum_combo(
+			'forum_combo' => BS_ForumUtils::get_recursive_forum_combo(
 				'target_forum',$target_forum,$fid
 			),
 			'back_url' => BS_URL::build_topics_url($fid)

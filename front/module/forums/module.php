@@ -47,7 +47,7 @@ final class BS_Front_Module_forums extends BS_Front_Module
 		$display_lt_bottom = strpos($cfg['current_topic_loc'],'bottom') !== false;
 		$display_lt = $cfg['current_topic_enable'] == 1 && ($display_lt_bottom || $display_lt_top);
 		if($display_lt)
-			BS_Front_TopicFactory::get_instance()->add_latest_topics_small();
+			BS_Front_TopicFactory::add_latest_topics_small();
 		
 		$tpl->add_variables(array(
 			'latest_topics_top' => $display_lt && $display_lt_top,
@@ -58,7 +58,7 @@ final class BS_Front_Module_forums extends BS_Front_Module
 		// show bottom
 		$view_useronline = $auth->has_global_permission('view_useronline_list');
 		if($view_useronline)
-			BS_Front_OnlineUtils::get_instance()->add_currently_online('forums');
+			BS_Front_OnlineUtils::add_currently_online('forums');
 		
 		$tpl->add_variables(array(
 			'view_useronline_list' => $view_useronline,
@@ -79,8 +79,8 @@ final class BS_Front_Module_forums extends BS_Front_Module
 		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
-		$birthdays = BS_Front_EventUtils::get_instance()->get_todays_birthdays();
-		$events = BS_Front_EventUtils::get_instance()->get_current_events();
+		$birthdays = BS_Front_EventUtils::get_todays_birthdays();
+		$events = BS_Front_EventUtils::get_current_events();
 		
 		$stats_data = $functions->get_stats(false);
 		
@@ -107,7 +107,7 @@ final class BS_Front_Module_forums extends BS_Front_Module
 			'statistics_ins' => $total,
 			'events' => $events,
 			'birthdays' => $birthdays,
-			'lastlogin' => BS_Front_OnlineUtils::get_instance()->get_last_activity(),
+			'lastlogin' => BS_Front_OnlineUtils::get_last_activity(),
 			'newest_member' => $functions->get_newest_member()
 		));
 	}

@@ -83,7 +83,7 @@ final class BS_Front_Action_calendar_editevent extends BS_Front_Action_Base
 			$max_announcements = ($max_announcements < 0) ? 0 : $max_announcements;
 
 		$description = '';
-		$error = BS_PostingUtils::get_instance()->prepare_message_for_db(
+		$error = BS_PostingUtils::prepare_message_for_db(
 			$description,$description_posted,'desc',true,true
 		);
 		if($error != '')

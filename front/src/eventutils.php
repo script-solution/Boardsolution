@@ -17,16 +17,8 @@
  * @subpackage	front.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_EventUtils extends FWS_Singleton
+final class BS_Front_EventUtils extends FWS_UtilBase
 {
-	/**
-	 * @return BS_Front_EventUtils the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-	
 	/**
 	 * Builds the current-event listing
 	 * 
@@ -46,12 +38,12 @@ final class BS_Front_EventUtils extends FWS_Singleton
 	 * 		)
 	 * 	</code>
 	 */
-	public function get_current_events()
+	public static function get_current_events()
 	{
 		$cfg = FWS_Props::get()->cfg();
-		$ev = $this->_get_events();
+		$ev = self::_get_events();
 		
-		$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
+		$denied = BS_ForumUtils::get_denied_forums(false);
 		
 		// events
 		$events = array('list' => array(),'more' => $ev['more']);
@@ -102,7 +94,7 @@ final class BS_Front_EventUtils extends FWS_Singleton
 	 * 		'events' => array() // the events
 	 * 	)</code>
 	 */
-	private function _get_events()
+	private static function _get_events()
 	{
 		$res = array();
 		
@@ -138,9 +130,9 @@ final class BS_Front_EventUtils extends FWS_Singleton
 	 * 		)
 	 * 	</code>
 	 */
-	public function get_todays_birthdays()
+	public static function get_todays_birthdays()
 	{
-		$ev = $this->_get_birthdays();
+		$ev = self::_get_birthdays();
 		
 		// birthdays
 		$bds = array('list' => array(),'more' => $ev['more']);
@@ -151,7 +143,7 @@ final class BS_Front_EventUtils extends FWS_Singleton
 			{
 				$split = explode('-',$edata['add_birthday']);
 				$bds['list'][] = array(
-					'username' => BS_UserUtils::get_instance()->get_link($edata['id'],$edata['user_name']),
+					'username' => BS_UserUtils::get_link($edata['id'],$edata['user_name']),
 					'age' => ($current_year - $split[0])
 				);
 			}
@@ -169,7 +161,7 @@ final class BS_Front_EventUtils extends FWS_Singleton
 	 * 		'birthdays' => array() // the birthdays
 	 * 	)</code>
 	 */
-	private function _get_birthdays()
+	private static function _get_birthdays()
 	{
 		$more = false;
 		$month = FWS_Date::get_formated_date('m');
@@ -186,11 +178,6 @@ final class BS_Front_EventUtils extends FWS_Singleton
 			'more' => $more,
 			'birthdays' => $userlist
 		);
-	}
-	
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

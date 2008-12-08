@@ -107,7 +107,7 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		}
 
 		// no access because a user with higher status locked the post?
-		if(BS_TopicUtils::get_instance()->is_locked($data['locked'],BS_LOCK_TOPIC_POSTS,$data['edit_lock']))
+		if(BS_TopicUtils::is_locked($data['locked'],BS_LOCK_TOPIC_POSTS,$data['edit_lock']))
 		{
 			$this->report_error(
 				FWS_Document_Messages::ERROR,$locale->lang('no_permission_to_edit_post')
@@ -116,7 +116,7 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		}
 		
 		// topic-data available?
-		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		$topic_data = BS_Front_TopicFactory::get_current_topic();
 		if($topic_data === null)
 		{
 			$this->report_error();
@@ -126,13 +126,13 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		$form = $this->request_formular(true,true);
 
 		if($input->isset_var('preview','post'))
-			BS_PostingUtils::get_instance()->add_post_preview();
+			BS_PostingUtils::add_post_preview();
 
 		if($data['post_user'] == 0)
 			$user_text = $data['post_an_user'];
 		else
 		{
-			$user_text = BS_UserUtils::get_instance()->get_link(
+			$user_text = BS_UserUtils::get_link(
 				$data['post_user'],$data['user_name'],$data['user_group']
 			);
 		}
@@ -167,7 +167,7 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 			'back_url' => $purl->to_url()
 		));
 		
-		BS_PostingUtils::get_instance()->add_topic_review($topic_data,true,$url);
+		BS_PostingUtils::add_topic_review($topic_data,true,$url);
 	}
 }
 ?>

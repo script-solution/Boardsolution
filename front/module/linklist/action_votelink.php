@@ -37,7 +37,7 @@ final class BS_Front_Action_linklist_votelink extends BS_Front_Action_Base
 			return 'The id or your rating is invalid or you\'re a guest';
 
 		// has the user already voted?
-		if(BS_UserUtils::get_instance()->user_voted_for_link($id))
+		if(BS_UserUtils::user_voted_for_link($id))
 			return 'already_voted';
 
 		// check if the vote is valid

@@ -17,29 +17,21 @@
  * @subpackage	front.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_OnlineUtils extends FWS_Singleton
+final class BS_Front_OnlineUtils extends FWS_UtilBase
 {
-	/**
-	 * @return BS_Front_OnlineUtils the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-	
 	/**
 	 * Adds a block with the currently online users
 	 * 
 	 * @param string $loc the location: forums, topics, posts
 	 * @return string the html-code
 	 */
-	public function add_currently_online($loc = 'forums')
+	public static function add_currently_online($loc = 'forums')
 	{
 		$tpl = FWS_Props::get()->tpl();
 		$auth = FWS_Props::get()->auth();
 		$locale = FWS_Props::get()->locale();
 
-		$online = $this->get_currently_online_user($loc);
+		$online = self::get_currently_online_user($loc);
 		
 		$tpl->set_template('inc_online_user.htm');
 		$tpl->add_variables(array(
@@ -47,7 +39,7 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 			'conclusion_list' => $online['conclusion'],
 			'title' => $locale->lang('currently_online_'.$loc),
 			'user_list' => $online['online_reg'],
-			'legend' => $this->get_usergroup_legend()
+			'legend' => self::get_usergroup_legend()
 		));
 		$tpl->restore_template();
 	}
@@ -69,7 +61,7 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 	 * 		);
 	 * 	</code>
 	 */
-	public function get_currently_online_user($location = 'forums')
+	public static function get_currently_online_user($location = 'forums')
 	{
 		$sessions = FWS_Props::get()->sessions();
 		$input = FWS_Props::get()->input();
@@ -103,7 +95,7 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 		$durl = BS_URL::get_mod_url('userdetails');
 		
 		// sort user by date descending
-		usort($users,array($this,'_sort_user_by_date_callback'));
+		usort($users,create_function('$a,$b','return $b[\'date\'] - $a[\'date\'];'));
 		$permission_to_view_location = $auth->has_global_permission('view_online_locations');
 		foreach($users as $daten)
 		{
@@ -185,7 +177,7 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 	 *
 	 * @return string the legend
 	 */
-	public function get_usergroup_legend()
+	public static function get_usergroup_legend()
 	{
 		$cache = FWS_Props::get()->cache();
 		$auth = FWS_Props::get()->auth();
@@ -229,7 +221,7 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 	 *
 	 * @return string the string
 	 */
-	public function get_last_activity()
+	public static function get_last_activity()
 	{
 		$sessions = FWS_Props::get()->sessions();
 		$locale = FWS_Props::get()->locale();
@@ -238,33 +230,12 @@ final class BS_Front_OnlineUtils extends FWS_Singleton
 		if($last['id'] != '' && $last['lastlogin'] > 0)
 		{
 			$lastlogin = FWS_Date::get_date($last['lastlogin']).' '.$locale->lang('of').' ';
-			$lastlogin .= BS_UserUtils::get_instance()->get_link($last['id'],$last['user_name'],$last['user_group']);
+			$lastlogin .= BS_UserUtils::get_link($last['id'],$last['user_name'],$last['user_group']);
 		}
 		else
 			$lastlogin = '';
 		
 		return $lastlogin;
-	}
-	
-	/**
-	 * The callback-function to sort the user-list by date descending
-	 * 
-	 * @param array $a the first user
-	 * @param array $b the second user
-	 * @return int -1 if $a is greater, 1 if $b is greater, 0 if equal
-	 */
-	private function _sort_user_by_date_callback($a,$b)
-	{
-		if($a['date'] > $b['date'])
-			return -1;
-		if($a['date'] < $b['date'])
-			return 1;
-		return 0;
-	}
-	
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

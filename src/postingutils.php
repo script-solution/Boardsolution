@@ -17,23 +17,15 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_PostingUtils extends FWS_Singleton
+final class BS_PostingUtils extends FWS_UtilBase
 {
-	/**
-	 * @return BS_PostingUtils the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-	
 	/**
 	 * Calculates the number of pages for the given number of posts
 	 *
 	 * @param int $num the total number of entries
 	 * @return int the number of pages
 	 */
-	public function get_post_pages($num)
+	public static function get_post_pages($num)
 	{
 		$cfg = FWS_Props::get()->cfg();
 
@@ -48,7 +40,7 @@ final class BS_PostingUtils extends FWS_Singleton
 	 *
 	 * @return string the order: ASC, DESC
 	 */
-	public function get_posts_order()
+	public static function get_posts_order()
 	{
 		$user = FWS_Props::get()->user();
 		$cfg = FWS_Props::get()->cfg();
@@ -66,9 +58,9 @@ final class BS_PostingUtils extends FWS_Singleton
 	 * @param string $username the username
 	 * @return string the quote-tag
 	 */
-	public function quote_text($input,$username)
+	public static function quote_text($input,$username)
 	{
-		if($this->get_message_option('enable_bbcode'))
+		if(self::get_message_option('enable_bbcode'))
 		{
 			// we have to replace the brackets to prevent problems in the bbcode-engine
 			$username = str_replace('[','(',$username);
@@ -99,14 +91,14 @@ final class BS_PostingUtils extends FWS_Singleton
 	 * @param int $number the number of the bbcode-area (default 1)
 	 * @return string the html-code
 	 */
-	public function add_topic_review($topic_data,$show_quote = true,$quote_url = null,$number = 1)
+	public static function add_topic_review($topic_data,$show_quote = true,$quote_url = null,$number = 1)
 	{
 		if($quote_url !== null && !($quote_url instanceof BS_URL))
 			FWS_Helper::def_error('instance','quote_url','BS_URL',$quote_url);
 		
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
-		$show_quote = $show_quote && BS_PostingUtils::get_instance()->get_message_option('enable_bbcode');
+		$show_quote = $show_quote && BS_PostingUtils::get_message_option('enable_bbcode');
 	
 		$tpl->set_template('inc_message_review.htm');
 		
@@ -155,14 +147,14 @@ final class BS_PostingUtils extends FWS_Singleton
 	 * @param int $use_bbcode -1 = grab from POST, if $location = 'posts', otherwise the value
 	 * @return array <code>array('text' => ...,'error' => ...)</code>
 	 */
-	public function get_post_preview_text($location = 'posts',$use_smileys = -1,$use_bbcode = -1)
+	public static function get_post_preview_text($location = 'posts',$use_smileys = -1,$use_bbcode = -1)
 	{
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
 
 		$post_text = $input->get_var('text','post',FWS_Input::STRING);
 		$text = '';
-		$error = $this->prepare_message_for_db($text,$post_text,$location,$use_smileys,$use_bbcode);
+		$error = self::prepare_message_for_db($text,$post_text,$location,$use_smileys,$use_bbcode);
 		
 		// any error? so break here
 		if($error != '')
@@ -178,7 +170,7 @@ final class BS_PostingUtils extends FWS_Singleton
 			);
 		}
 		
-		$options = $this->get_message_options($location);
+		$options = self::get_message_options($location);
 		if($location == 'posts')
 		{
 			if($use_bbcode === -1)
@@ -211,12 +203,12 @@ final class BS_PostingUtils extends FWS_Singleton
 	 * @param int $use_smileys -1 = grab from POST, if $location = 'posts', otherwise the value
 	 * @param int $use_bbcode -1 = grab from POST, if $location = 'posts', otherwise the value
 	 */
-	public function add_post_preview($location = 'posts',$use_smileys = -1,$use_bbcode = -1)
+	public static function add_post_preview($location = 'posts',$use_smileys = -1,$use_bbcode = -1)
 	{
 		$msgs = FWS_Props::get()->msgs();
 		$tpl = FWS_Props::get()->tpl();
 
-		$res = $this->get_post_preview_text($location,$use_smileys,$use_bbcode);
+		$res = self::get_post_preview_text($location,$use_smileys,$use_bbcode);
 		
 		if($res['error'])
 		{
@@ -239,7 +231,7 @@ final class BS_PostingUtils extends FWS_Singleton
 	 * @param string $location your location: posts, desc, sig
 	 * @return mixed the value
 	 */
-	public function get_message_option($name,$location = 'posts')
+	public static function get_message_option($name,$location = 'posts')
 	{
 		$cfg = FWS_Props::get()->cfg();
 
@@ -266,7 +258,7 @@ final class BS_PostingUtils extends FWS_Singleton
 	 * @param string $location your location: posts, desc, sig
 	 * @return array all options with the corresponding values
 	 */
-	public function get_message_options($location = 'posts')
+	public static function get_message_options($location = 'posts')
 	{
 		$cfg = FWS_Props::get()->cfg();
 
@@ -310,13 +302,13 @@ final class BS_PostingUtils extends FWS_Singleton
 	 * @param boolean $use_bbcode -1 = grab from POST, if $location = 'posts', otherwise the value
 	 * @return string the error-message, if any, or an empty string
 	 */
-	public function prepare_message_for_db(&$text,$text_posted,$location = 'posts',$use_smileys = -1,
-		$use_bbcode = -1)
+	public static function prepare_message_for_db(&$text,$text_posted,$location = 'posts',
+		$use_smileys = -1,$use_bbcode = -1)
 	{
 		$locale = FWS_Props::get()->locale();
 		$input = FWS_Props::get()->input();
 
-		$options = $this->get_message_options($location);
+		$options = self::get_message_options($location);
 		$locale->add_language_file('messages');
 		
 		// check if the text is empty
@@ -394,7 +386,7 @@ final class BS_PostingUtils extends FWS_Singleton
 	 * @param boolean $wordwrap_codes do you want to perform a wordwrap in code-sections?
 	 * @return string the text
 	 */
-	public function get_post_text(&$post_data,$highlight_keywords = null,
+	public static function get_post_text(&$post_data,$highlight_keywords = null,
 		$show_attachments = false,$show_signature = false,$show_edited_notice = false,
 		$attachments = array(),$wordwrap_codes = false)
 	{
@@ -406,9 +398,9 @@ final class BS_PostingUtils extends FWS_Singleton
 		$tpl->set_template('inc_post_text.htm');
 		
 		// get post-text
-		$enable_bbcode = $this->get_message_option('enable_bbcode') &&
+		$enable_bbcode = self::get_message_option('enable_bbcode') &&
 			$post_data['use_bbcode'] == 1;
-		$enable_smileys = $this->get_message_option('enable_smileys') &&
+		$enable_smileys = self::get_message_option('enable_smileys') &&
 			$post_data['use_smileys'] == 1;
 		$bbcode = new BS_BBCode_Parser(
 			$post_data['text'],'posts',$enable_bbcode,$enable_smileys
@@ -416,7 +408,7 @@ final class BS_PostingUtils extends FWS_Singleton
 		$text = $bbcode->get_message_for_output($wordwrap_codes);
 	
 		// add the default font of the user
-		$this->add_default_font($text,$post_data['default_font']);
+		self::add_default_font($text,$post_data['default_font']);
 	
 		// highlight keywords?
 	  if($highlight_keywords !== null)
@@ -485,14 +477,14 @@ final class BS_PostingUtils extends FWS_Singleton
 	  if($show_signature && $cfg['enable_signatures'] == 1 &&
 			 $post_data['attach_signature'] == 1 && $post_data['bsignatur'] != '')
 	  {
-	    $enable_smileys = $this->get_message_option('enable_smileys','sig');
-			$enable_bbcode = $this->get_message_option('enable_bbcode','sig');
+	    $enable_smileys = self::get_message_option('enable_smileys','sig');
+			$enable_bbcode = self::get_message_option('enable_bbcode','sig');
 	    $bbcode = new BS_BBCode_Parser(
 	    	$post_data['bsignatur'],'sig',$enable_bbcode,$enable_smileys
 	    );
 	    $signature = $bbcode->get_message_for_output();
 	
-	    $this->add_default_font($signature,$post_data['default_font']);
+	    self::add_default_font($signature,$post_data['default_font']);
 	    
 	    $tpl->add_variables(array(
 	    	'signature' => $signature
@@ -502,7 +494,7 @@ final class BS_PostingUtils extends FWS_Singleton
 		// show the edited-information if the post has been edited
 	  if($show_edited_notice && $post_data['edited_times'] > 0)
 	  {
-	  	$user = BS_UserUtils::get_instance()->get_link(
+	  	$user = BS_UserUtils::get_link(
 	  		$post_data['edited_user'],$post_data['edited_user_name'],$post_data['edited_user_group'],
 	  		false
 	  	);
@@ -524,7 +516,7 @@ final class BS_PostingUtils extends FWS_Singleton
 	 * @param string $input a reference to the input-text
 	 * @param string $default_font the font you want to use
 	 */
-	public function add_default_font(&$input,$default_font)
+	public static function add_default_font(&$input,$default_font)
 	{
 		$cfg = FWS_Props::get()->cfg();
 
@@ -546,7 +538,7 @@ final class BS_PostingUtils extends FWS_Singleton
 	 * @param int $user_id the id of the user
 	 * @return string the experience-diagram
 	 */
-	public function get_experience_diagram($exppoints,$rank_data,$user_id)
+	public static function get_experience_diagram($exppoints,$rank_data,$user_id)
 	{
 		$cfg = FWS_Props::get()->cfg();
 		$user_stats = '';
@@ -574,11 +566,6 @@ final class BS_PostingUtils extends FWS_Singleton
 		}
 	
 		return $user_stats;
-	}
-	
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

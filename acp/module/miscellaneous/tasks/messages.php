@@ -92,7 +92,7 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends FWS_Object implements FW
 			foreach(BS_DAO::get_links()->get_list(-1,'id','ASC',$pos,$ops) as $data)
 			{
 				$text = '';
-				BS_PostingUtils::get_instance()->prepare_message_for_db(
+				BS_PostingUtils::prepare_message_for_db(
 					$text,addslashes($data['link_desc_posted']),'desc'
 				);
 				
@@ -106,7 +106,7 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends FWS_Object implements FW
 			foreach(BS_DAO::get_events()->get_list($pos,$ops) as $data)
 			{
 				$text = '';
-				BS_PostingUtils::get_instance()->prepare_message_for_db(
+				BS_PostingUtils::prepare_message_for_db(
 					$text,addslashes($data['description_posted']),'desc'
 				);
 				
@@ -122,7 +122,7 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends FWS_Object implements FW
 			foreach(BS_DAO::get_posts()->get_list('id','ASC',$pos,$ops) as $data)
 			{
 				$text = '';
-				BS_PostingUtils::get_instance()->prepare_message_for_db(
+				BS_PostingUtils::prepare_message_for_db(
 					$text,addslashes($data['text_posted']),'posts',$data['use_smileys'],$data['use_bbcode']
 				);
 				
@@ -136,7 +136,7 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends FWS_Object implements FW
 			foreach(BS_DAO::get_pms()->get_list('id','ASC',$pos,$ops) as $data)
 			{
 				$text = '';
-				BS_PostingUtils::get_instance()->prepare_message_for_db(
+				BS_PostingUtils::prepare_message_for_db(
 					$text,addslashes($data['pm_text_posted']),'posts',1,1
 				);
 				
@@ -149,7 +149,7 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends FWS_Object implements FW
 			foreach(BS_DAO::get_profile()->get_users('p.id','ASC',$pos,$ops,-1,-1) as $data)
 			{
 				$text = '';
-				BS_PostingUtils::get_instance()->prepare_message_for_db(
+				BS_PostingUtils::prepare_message_for_db(
 					$text,addslashes($data['signature_posted']),'sig'
 				);
 				

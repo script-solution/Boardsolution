@@ -96,7 +96,7 @@ final class BS_ACP_Action_forums_delete extends BS_ACP_Action_Base
 		
 		// remove from unread
 		if($type == 'delete')
-			BS_UnreadUtils::get_instance()->remove_forums($ids);
+			BS_UnreadUtils::remove_forums($ids);
 
 		if($type == 'delete')
 			BS_DAO::get_mods()->delete_by_forums($ids);

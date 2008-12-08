@@ -208,7 +208,7 @@ final class BS_Front_Action_Plain_DeleteTopics extends BS_Front_Action_Plain
 			}
 			
 			// we have to do this here because the topics have to exist!
-			BS_UnreadUtils::get_instance()->remove_topics($default_topics);
+			BS_UnreadUtils::remove_topics($default_topics);
 	
 			// delete topics and posts
 			if($total_default_topics > 0)
@@ -216,7 +216,7 @@ final class BS_Front_Action_Plain_DeleteTopics extends BS_Front_Action_Plain
 	
 			BS_DAO::get_topics()->delete_by_ids($topics);
 	
-			BS_Front_Action_Helper::get_instance()->adjust_last_post_time($max_post_time);
+			BS_Front_Action_Helper::adjust_last_post_time($max_post_time);
 	
 			// update the forum
 			if($this->_adjust_forum_attr)

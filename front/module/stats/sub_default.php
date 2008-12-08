@@ -239,7 +239,7 @@ final class BS_Front_SubModule_stats_default extends BS_Front_SubModule
 		$user = FWS_Props::get()->user();
 		
 		$x_var = $row + 1;
-		$username = BS_UserUtils::get_instance()->get_link($user_id,$username,$user_groups);
+		$username = BS_UserUtils::get_link($user_id,$username,$user_groups);
 		$img_percent = round($percent,0);
 
 		$stats = array(

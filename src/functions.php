@@ -514,7 +514,7 @@ final class BS_Functions extends FWS_Object
 	public function get_newest_member()
 	{
 		$nm = BS_DAO::get_profile()->get_newest_user();
-		return BS_UserUtils::get_instance()->get_link($nm['id'],$nm['user_name'],$nm['user_group']);
+		return BS_UserUtils::get_link($nm['id'],$nm['user_name'],$nm['user_group']);
 	}
 	
 	####################################################################

@@ -204,7 +204,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		if(trim($this->_user_name) == '')
 			return 'registeruserleer';
 
-		if(!BS_UserUtils::get_instance()->check_username($this->_user_name))
+		if(!BS_UserUtils::check_username($this->_user_name))
 			return 'usernamenotallowed';
 
 		if($functions->is_banned('user',$this->_user_name))

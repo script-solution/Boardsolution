@@ -40,7 +40,7 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 		{
 			$user_name = $input->get_var('user_name','post',FWS_Input::STRING);
 			// check username
-			if(!BS_UserUtils::get_instance()->check_username($user_name))
+			if(!BS_UserUtils::check_username($user_name))
 				return 'usernamenotallowed';
 
 			if($functions->is_banned('user',$user_name))
@@ -76,7 +76,7 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 		$remove_avatar = $input->get_var('remove_avatar','post',FWS_Input::INT_BOOL);
 
 		$text = '';
-		$error = BS_PostingUtils::get_instance()->prepare_message_for_db($text,$post_text,'sig');
+		$error = BS_PostingUtils::prepare_message_for_db($text,$post_text,'sig');
 		if($error != '')
 			return $error;
 		

@@ -218,7 +218,7 @@ final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 
 			if($data['user_name'] != '')
 			{
-				$sender = BS_UserUtils::get_instance()->get_link(
+				$sender = BS_UserUtils::get_link(
 					$data[$other_uid_field],$data['user_name'],$data['user_group']
 				);
 

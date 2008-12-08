@@ -238,8 +238,8 @@ final class BS_PostingForm extends FWS_Object
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
 
-		$options = BS_PostingUtils::get_instance()->get_message_options($this->_type);
-		$sallowed = BS_PostingUtils::get_instance()->get_message_option('allowed_tags',$this->_type);
+		$options = BS_PostingUtils::get_message_options($this->_type);
+		$sallowed = BS_PostingUtils::get_message_option('allowed_tags',$this->_type);
 		
 		$bbcode_buttons = '';
 		if(!$use_applet && $options['enable_bbcode'])
@@ -274,7 +274,7 @@ final class BS_PostingForm extends FWS_Object
 		$locale = FWS_Props::get()->locale();
 		$input = FWS_Props::get()->input();
 		$cfg = FWS_Props::get()->cfg();
-		$options = BS_PostingUtils::get_instance()->get_message_options($this->_type);
+		$options = BS_PostingUtils::get_message_options($this->_type);
 	
 		// instantiate form-var-helper?
 		if($this->_form === null)
@@ -594,7 +594,7 @@ final class BS_PostingForm extends FWS_Object
 		static $allowed = null;
 		if($allowed === null)
 		{
-			$sallowed = BS_PostingUtils::get_instance()->get_message_option('allowed_tags',$this->_type);
+			$sallowed = BS_PostingUtils::get_message_option('allowed_tags',$this->_type);
 			$allowed = FWS_Array_Utils::advanced_explode(',',$sallowed);
 		}
 		

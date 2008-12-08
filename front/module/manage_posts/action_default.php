@@ -50,7 +50,7 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 			return 'You are no admin and the forum is closed';
 		
 		// does the topic exist?
-		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		$topic_data = BS_Front_TopicFactory::get_current_topic();
 		if($topic_data == null)
 			return 'The topic doesn\'t exist';
 

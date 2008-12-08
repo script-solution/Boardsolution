@@ -40,7 +40,7 @@ final class BS_ACP_Action_linklist_edit extends BS_ACP_Action_Base
 		if($url != '')
 		{
 			$text = '';
-			$error = BS_PostingUtils::get_instance()->prepare_message_for_db($text,$description,'desc');
+			$error = BS_PostingUtils::prepare_message_for_db($text,$description,'desc');
 			if($error != '')
 				return $error;
 			

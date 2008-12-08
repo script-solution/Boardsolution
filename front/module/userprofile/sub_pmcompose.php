@@ -63,7 +63,7 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		}
 		
 		if($input->isset_var('preview','post'))
-			BS_PostingUtils::get_instance()->add_post_preview('posts',1,1);
+			BS_PostingUtils::add_post_preview('posts',1,1);
 
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$pid = $input->get_var(BS_URL_PID,'get',FWS_Input::ID);
@@ -101,7 +101,7 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 
 		if($pid != null && $edaten['pm_text_posted'] != '')
 		{
-			$default_text = BS_PostingUtils::get_instance()->quote_text(
+			$default_text = BS_PostingUtils::quote_text(
 				$edaten['pm_text_posted'],$edaten['user_name']
 			);
 			$default_text .= "\n";
@@ -261,8 +261,8 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 
 		$tpl->set_template('inc_message_review.htm');
 	
-		$enable_bbcode = BS_PostingUtils::get_instance()->get_message_option('enable_bbcode');
-		$enable_smileys = BS_PostingUtils::get_instance()->get_message_option('enable_smileys');
+		$enable_bbcode = BS_PostingUtils::get_message_option('enable_bbcode');
+		$enable_smileys = BS_PostingUtils::get_message_option('enable_smileys');
 		
 		$messages = array();
 		$pmlist = BS_DAO::get_pms()->get_last_pms_with_user(
@@ -273,7 +273,7 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 			$bbcode = new BS_BBCode_Parser($data['pm_text'],'posts',$enable_bbcode,$enable_smileys);
 			$text = $bbcode->get_message_for_output();
 	
-			$username = BS_UserUtils::get_instance()->get_link(
+			$username = BS_UserUtils::get_link(
 				$data['sender_id'],$data['sender_name'],$data['user_group']
 			);
 	

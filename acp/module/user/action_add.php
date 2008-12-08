@@ -32,7 +32,7 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 		
 		// check username
 		$user_name = $input->get_var('user_name','post',FWS_Input::STRING);
-		if(trim($user_name) == '' || !BS_UserUtils::get_instance()->check_username($user_name))
+		if(trim($user_name) == '' || !BS_UserUtils::check_username($user_name))
 			return 'usernamenotallowed';
 
 		if($functions->is_banned('user',$user_name))

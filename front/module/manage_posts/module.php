@@ -86,7 +86,7 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 		}
 		
 		// does the topic exist?
-		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		$topic_data = BS_Front_TopicFactory::get_current_topic();
 		if($topic_data == null)
 		{
 			$this->report_error();
@@ -156,8 +156,8 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 			'merge_bold' => $mode == 'merge' ? ' style="font-weight: bold;"' : '',
 			'display_merge' => $mode == 'merge' ? 'block' : 'none',
 			'display_split' => $mode == 'split' ? 'block' : 'none',
-			'symbols' => BS_TopicUtils::get_instance()->get_symbols($form),
-			'forum_combo' => BS_ForumUtils::get_instance()->get_recursive_forum_combo(
+			'symbols' => BS_TopicUtils::get_symbols($form),
+			'forum_combo' => BS_ForumUtils::get_recursive_forum_combo(
 				'target_forum',$target_forum,0
 			),
 			'target_url' => $url->remove(BS_URL_MODE)->to_url(),

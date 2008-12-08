@@ -219,7 +219,7 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 			return 'pmtitelleer';
 
 		$this->_text = '';
-		$error = BS_PostingUtils::get_instance()->prepare_message_for_db(
+		$error = BS_PostingUtils::prepare_message_for_db(
 			$this->_text,$this->_post_text,'posts',1,1
 		);
 		if($error != '')

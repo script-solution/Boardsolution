@@ -93,7 +93,7 @@ final class BS_Event extends FWS_Object
 			{
 				if($use_links)
 				{
-					$list .= BS_UserUtils::get_instance()->get_link(
+					$list .= BS_UserUtils::get_link(
 						$user['user_id'],$user['user_name'],$user['user_group']
 					);
 				}
@@ -134,7 +134,7 @@ final class BS_Event extends FWS_Object
 		
 		if($this->_event['tid'] > 0)
 		{
-			$tdata = BS_Front_TopicFactory::get_instance()->get_current_topic();
+			$tdata = BS_Front_TopicFactory::get_current_topic();
 			if($tdata === null || $tdata['thread_closed'] == 1)
 				return false;
 		}

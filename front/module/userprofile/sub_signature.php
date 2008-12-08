@@ -56,7 +56,7 @@ final class BS_Front_SubModule_userprofile_signature extends BS_Front_SubModule
 		$form->set_textarea_height('100px');
 		$form->add_form();
 		
-		$options = BS_PostingUtils::get_instance()->get_message_options('sig');
+		$options = BS_PostingUtils::get_message_options('sig');
 		$bbcode = new BS_BBCode_Parser(
 			$user->get_profile_val('signatur'),'sig',
 			$options['enable_bbcode'],$options['enable_smileys']

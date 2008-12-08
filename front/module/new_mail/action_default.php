@@ -52,7 +52,7 @@ final class BS_Front_Action_new_mail_default extends BS_Front_Action_Base
 		if(!$user->is_loggedin())
 		{
 			$user_name = $input->get_var('user_name','post',FWS_Input::STRING);
-			if(!BS_UserUtils::get_instance()->check_username($user_name))
+			if(!BS_UserUtils::check_username($user_name))
 				return 'invalid_username';
 	
 			$user_email = $input->get_var('email_adr','post',FWS_Input::STRING);

@@ -81,7 +81,7 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 		}
 	
 		if($input->isset_var('preview','post'))
-			BS_PostingUtils::get_instance()->add_post_preview();
+			BS_PostingUtils::add_post_preview();
 		
 		$selected_topic_data = array();
 		$selected_topic_ids = array();
@@ -107,7 +107,7 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 				continue;
 	
 			// check wether a user has locked this topic
-			if(BS_TopicUtils::get_instance()->is_locked($data['locked'],BS_LOCK_TOPIC_OPENCLOSE))
+			if(BS_TopicUtils::is_locked($data['locked'],BS_LOCK_TOPIC_OPENCLOSE))
 				continue;
 	
 			$selected_topic_data[] = $data;
@@ -131,7 +131,7 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 			$last_data = $data;
 		}
 	
-		$selected_topics = BS_TopicUtils::get_instance()->get_selected_topics($selected_topic_data);
+		$selected_topics = BS_TopicUtils::get_selected_topics($selected_topic_data);
 		if(count($selected_topics) == 0)
 		{
 			$this->report_error(
@@ -160,7 +160,7 @@ final class BS_Front_Module_openclose_topics extends BS_Front_Module
 		if(count($selected_topic_ids) == 1)
 		{
 			$murl = clone $url;
-			BS_PostingUtils::get_instance()->add_topic_review($last_data,true,$murl);
+			BS_PostingUtils::add_topic_review($last_data,true,$murl);
 		}
 		
 		$tpl->add_variables(array(

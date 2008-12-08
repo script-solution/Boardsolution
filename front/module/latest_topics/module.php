@@ -46,7 +46,7 @@ final class BS_Front_Module_latest_topics extends BS_Front_Module
 
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		
-		$forum_combo = BS_ForumUtils::get_instance()->get_recursive_forum_combo(
+		$forum_combo = BS_ForumUtils::get_recursive_forum_combo(
 			BS_URL_FID,$fid,0,false,true
 		);
 		
@@ -57,7 +57,7 @@ final class BS_Front_Module_latest_topics extends BS_Front_Module
 		$url = new BS_URL();
 		$hidden_fields = array_merge($hidden_fields,$url->get_extern_vars());
 		
-		BS_Front_TopicFactory::get_instance()->add_latest_topics_full($fid);
+		BS_Front_TopicFactory::add_latest_topics_full($fid);
 		
 		$tpl->add_variables(array(
 			'target_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),

@@ -18,22 +18,14 @@
  * @subpackage	front.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_TopicFactory extends FWS_Singleton
+final class BS_Front_TopicFactory extends FWS_UtilBase
 {
-	/**
-	 * @return BS_Front_TopicFactory the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-	
 	/**
 	 * The topic-data (to grab it just once from the db)
 	 *
 	 * @var array
 	 */
-	private $_topic = false;
+	private static $_topic = false;
 	
 	/**
 	 * Grabs the data of the current topic (uses the topic- and forum-id got via GET), just once,
@@ -41,26 +33,26 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 	 *
 	 * @return array the topic-data or null if the parameters are not available
 	 */
-	public function get_current_topic()
+	public static function get_current_topic()
 	{
 		$input = FWS_Props::get()->input();
 
-		if($this->_topic !== false)
-			return $this->_topic;
+		if(self::$_topic !== false)
+			return self::$_topic;
 		
-		$this->_topic = null;
+		self::$_topic = null;
 		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 	
 		if($tid != null && $fid != null)
 		{
-			$this->_topic = BS_DAO::get_topics()->get_topic_for_cache($fid,$tid);
-			if($this->_topic === false)
+			self::$_topic = BS_DAO::get_topics()->get_topic_for_cache($fid,$tid);
+			if(self::$_topic === false)
 			{
-				$this->_topic = null;
+				self::$_topic = null;
 				return null;
 			}
-			return $this->_topic;
+			return self::$_topic;
 		}
 		
 		return null;
@@ -73,7 +65,7 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 	 * @param int $tid the id of the current topic
 	 * @param BS_URL $curl the current url
 	 */
-	public function add_similar_topics($title,$tid,$curl)
+	public static function add_similar_topics($title,$tid,$curl)
 	{
 		if(!($curl instanceof BS_URL))
 			FWS_Helper::def_error('instance','curl','BS_URL',$curl);
@@ -135,10 +127,10 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 	 *
 	 * @param int $fid the forum-id from which you want to display the latest topics
 	 */
-	public function add_latest_topics_full($fid = 0)
+	public static function add_latest_topics_full($fid = 0)
 	{
 		$cfg = FWS_Props::get()->cfg();
-		$infos = $this->_get_latest_topics_infos($fid);
+		$infos = self::_get_latest_topics_infos($fid);
 		
 		$num = $cfg['threads_per_page'];
 		$topics = new BS_Front_Topics($infos['title'],$infos['sql'],'lastpost','DESC',$num);
@@ -161,7 +153,7 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 	 *
 	 * @param int $fid the forum-id from which you want to display the latest topics
 	 */
-	public function add_latest_topics_small($fid = 0)
+	public static function add_latest_topics_small($fid = 0)
 	{
 		$input = FWS_Props::get()->input();
 		$functions = FWS_Props::get()->functions();
@@ -169,7 +161,7 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 		if($input->get_var(BS_URL_LOC,'get',FWS_Input::STRING) == 'clap_current_topics')
 			$functions->clap_area('current_topics');
 		
-		$infos = $this->_get_latest_topics_infos($fid);
+		$infos = self::_get_latest_topics_infos($fid);
 		
 		$murl = BS_URL::get_mod_url('latest_topics');
 		if($fid > 0)
@@ -201,7 +193,7 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 	 * @param int $fid the forum-id
 	 * @return array an array of the form: <code>array('sql' => ...,'title' => ...)</code>
 	 */
-	private function _get_latest_topics_infos($fid)
+	private static function _get_latest_topics_infos($fid)
 	{
 		$forums = FWS_Props::get()->forums();
 		$locale = FWS_Props::get()->locale();
@@ -227,11 +219,6 @@ final class BS_Front_TopicFactory extends FWS_Singleton
 			'sql' => $sql,
 			'title' => $title
 		);
-	}
-	
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

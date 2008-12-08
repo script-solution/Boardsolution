@@ -17,22 +17,14 @@
  * @subpackage	src.action
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Action_Helper extends FWS_Singleton
+final class BS_Front_Action_Helper extends FWS_UtilBase
 {
-	/**
-	 * @return BS_Front_Action_Helper the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-	
 	/**
 	 * Adjusts the last-post-time if necessary
 	 *
 	 * @param int $max_post_time the maximum post time of the posts which are deleted
 	 */
-	public function adjust_last_post_time($max_post_time)
+	public static function adjust_last_post_time($max_post_time)
 	{
 		$cache = FWS_Props::get()->cache();
 
@@ -47,11 +39,6 @@ final class BS_Front_Action_Helper extends FWS_Singleton
 			);
 			$cache->store('stats');
 		}
-	}
-	
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

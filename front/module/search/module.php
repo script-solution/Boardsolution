@@ -139,7 +139,7 @@ final class BS_Front_Module_search extends BS_Front_Module
 			$username = stripslashes($input->get_var('un','post',FWS_Input::STRING));
 			
 			$selection = $input->get_var('fid','post');
-			$forum_combo = BS_ForumUtils::get_instance()->get_recursive_forum_combo(
+			$forum_combo = BS_ForumUtils::get_recursive_forum_combo(
 				'fid[]',$selection === null ? 0 : $selection,-1,true,true
 			);
 			

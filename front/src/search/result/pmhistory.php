@@ -59,8 +59,8 @@ final class BS_Front_Search_Result_PMHistory extends FWS_Object implements BS_Fr
 
 		$tpl->set_template('inc_message_review.htm');
 		
-		$enable_bbcode = BS_PostingUtils::get_instance()->get_message_option('enable_bbcode');
-		$enable_smileys = BS_PostingUtils::get_instance()->get_message_option('enable_smileys');
+		$enable_bbcode = BS_PostingUtils::get_message_option('enable_bbcode');
+		$enable_smileys = BS_PostingUtils::get_message_option('enable_smileys');
 		
 		$keywords = $request->get_highlight_keywords();
 		$messages = array();
@@ -86,7 +86,7 @@ final class BS_Front_Search_Result_PMHistory extends FWS_Object implements BS_Fr
 
 			if($data['user_name'] != '')
 			{
-				$username = BS_UserUtils::get_instance()->get_link(
+				$username = BS_UserUtils::get_link(
 					$data['sender_id'],$data['user_name'],$data['user_group']
 				);
 			}

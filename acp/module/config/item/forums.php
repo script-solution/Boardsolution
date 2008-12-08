@@ -22,7 +22,7 @@ final class BS_ACP_Config_Item_Forums extends FWS_Config_Item_Default
 {
 	public function get_control($form)
 	{
-		$str = BS_ForumUtils::get_instance()->get_recursive_forum_combo(
+		$str = BS_ForumUtils::get_recursive_forum_combo(
 			$this->_data->get_name().'[]',explode(',',$this->_data->get_value()),0,false,false
 		);
 		$str .= $this->get_suffix();

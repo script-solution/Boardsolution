@@ -60,7 +60,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 			
 			list($list,$count) = $this->_get_forum_list($data['id']);
 			$admins[] = array(
-				'user_name' => BS_UserUtils::get_instance()->get_link($data['id'],$data['user_name'],$data['user_group']),
+				'user_name' => BS_UserUtils::get_link($data['id'],$data['user_name'],$data['user_group']),
 				'id' => $data['id'],
 				'pm_url' => $purl->set(BS_URL_ID,$data['id'])->to_url(),
 				'forum_count' => $count,
@@ -95,7 +95,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 			
 			list($list,$count) = $this->_get_forum_list($is_super_mod ? 0 : $data['user_id']);
 			$mods[] = array(
-				'user_name' => BS_UserUtils::get_instance()->get_link($data['user_id'],$data['user_name'],
+				'user_name' => BS_UserUtils::get_link($data['user_id'],$data['user_name'],
 					$data['user_group']),
 				'id' => $data['user_id'],
 				'pm_url' => $purl->set(BS_URL_ID,$data['user_id'])->to_url(),
@@ -122,7 +122,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 						continue;
 					
 					$mods[] = array(
-						'user_name' => BS_UserUtils::get_instance()->get_link($udata['id'],$udata['user_name'],
+						'user_name' => BS_UserUtils::get_link($udata['id'],$udata['user_name'],
 							$udata['user_group']),
 						'id' => $udata['id'],
 						'pm_url' => $purl->set(BS_URL_ID,$udata['id'])->to_url(),
@@ -150,7 +150,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 					$other[$gname] = array();
 				
 				$other[$gname] = array(
-					'user_name' => BS_UserUtils::get_instance()->get_link($udata['id'],$udata['user_name'],
+					'user_name' => BS_UserUtils::get_link($udata['id'],$udata['user_name'],
 						$udata['user_group']),
 					'id' => $udata['id'],
 						'pm_url' => $purl->set(BS_URL_ID,$udata['id'])->to_url(),
@@ -231,7 +231,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 		$len = count($visible_forums);
 		foreach($visible_forums as $forum)
 		{
-			$forum_list .= BS_ForumUtils::get_instance()->get_forum_path($forum['rid'],false);
+			$forum_list .= BS_ForumUtils::get_forum_path($forum['rid'],false);
 			$count++;
 			if($i++ < $len - 1)
 				$forum_list .= '<br />';

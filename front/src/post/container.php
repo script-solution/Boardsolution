@@ -88,7 +88,7 @@ final class BS_Front_Post_Container extends FWS_Object
 		
 		// build where-condition
 		$where = '';
-		$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
+		$denied = BS_ForumUtils::get_denied_forums(false);
 		if(count($denied) > 0)
 			$where .= 'p.rubrikid NOT IN ('.implode(',',$denied).') AND ';
 		if($ids)
@@ -198,7 +198,7 @@ final class BS_Front_Post_Container extends FWS_Object
 	private function _load_attachments()
 	{
 		$this->_attachments = array();
-		$topic = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		$topic = BS_Front_TopicFactory::get_current_topic();
 		if($topic !== null && $topic['attachment_num'] > 0)
 		{
 			foreach(BS_DAO::get_attachments()->get_by_postids($this->_get_post_ids()) as $adata)

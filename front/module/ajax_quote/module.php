@@ -69,7 +69,7 @@ final class BS_Front_Module_ajax_quote extends BS_Front_Module
 			}
 			
 			$username = $post_data['post_user'] != 0 ? $post_data['user_name'] : $post_data['post_an_user'];
-			$text = BS_PostingUtils::get_instance()->quote_text($post_data['text_posted'],$username);
+			$text = BS_PostingUtils::quote_text($post_data['text_posted'],$username);
 			$res = FWS_StringHelper::htmlspecialchars_back($text);
 		}
 		// logged in is required
@@ -84,7 +84,7 @@ final class BS_Front_Module_ajax_quote extends BS_Front_Module
 				return;
 			}
 			
-			$text = BS_PostingUtils::get_instance()->quote_text(
+			$text = BS_PostingUtils::quote_text(
 				$qdata['pm_text_posted'],$qdata['sender_name']
 			);
 			$res = FWS_StringHelper::htmlspecialchars_back($text);

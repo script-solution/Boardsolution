@@ -47,7 +47,7 @@ final class BS_ACP_SubModule_massemail_default extends BS_ACP_SubModule
 		if($show_preview)
 		{
 			$content_type = $input->get_var('content_type','post',FWS_Input::STRING);
-			$res = BS_PostingUtils::get_instance()->get_post_preview_text(
+			$res = BS_PostingUtils::get_post_preview_text(
 				'posts',$content_type == 'html',$content_type == 'html'
 			);
 			if($res['error'])

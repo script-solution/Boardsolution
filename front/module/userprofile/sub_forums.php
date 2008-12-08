@@ -134,7 +134,7 @@ final class BS_Front_SubModule_userprofile_forums extends BS_Front_SubModule
 					'subscribe_date' => FWS_Date::get_date($sub_data[$data->get_id()]['sub_date']),
 					'last_post' => $lastpost,
 					'id' => $sub_data[$data->get_id()]['id'],
-					'position' => BS_ForumUtils::get_instance()->get_forum_path($data->get_id(),false)
+					'position' => BS_ForumUtils::get_forum_path($data->get_id(),false)
 				);
 			}
 		}

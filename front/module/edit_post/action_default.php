@@ -61,7 +61,7 @@ final class BS_Front_Action_edit_post_default extends BS_Front_Action_Base
 			return 'You are no admin and the topic is closed';
 
 		// has the post been locked?
-		$locked = BS_TopicUtils::get_instance()->is_locked(
+		$locked = BS_TopicUtils::is_locked(
 			$post_data['locked'],BS_LOCK_TOPIC_POSTS,$post_data['edit_lock']
 		);
 		if($locked)
@@ -70,7 +70,7 @@ final class BS_Front_Action_edit_post_default extends BS_Front_Action_Base
 		$post_text = $input->get_var('text','post',FWS_Input::STRING);
 
 		$text = '';
-		$error = BS_PostingUtils::get_instance()->prepare_message_for_db($text,$post_text);
+		$error = BS_PostingUtils::prepare_message_for_db($text,$post_text);
 		if($error != '')
 			return $error;
 

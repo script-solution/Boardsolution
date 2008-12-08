@@ -92,7 +92,7 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 		if($input->isset_var('preview','post'))
 		{
 			$content_type_val = $form->get_input_value('content_type','plain');
-			BS_PostingUtils::get_instance()->add_post_preview(
+			BS_PostingUtils::add_post_preview(
 				'posts',$content_type_val == 'html',$content_type_val == 'html'
 			);
 		}
@@ -112,7 +112,7 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 		$url->set(BS_URL_ID,$id);
 		$tpl->add_variables(array(
 			'target_url' => $url->to_url(),
-			'receiver' => BS_UserUtils::get_instance()->get_link($id,$data['user_name'],$data['user_group']),
+			'receiver' => BS_UserUtils::get_link($id,$data['user_name'],$data['user_group']),
 			'action_type' => BS_ACTION_SEND_EMAIL,
 			'content_type_options' => $content_type_options
 		));

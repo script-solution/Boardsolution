@@ -64,7 +64,7 @@ final class BS_Front_Action_openclose_topics_default extends BS_Front_Action_Bas
 				continue;
 
 			// is the topic locked for the current user?
-			if(BS_TopicUtils::get_instance()->is_locked($data['locked'],BS_LOCK_TOPIC_OPENCLOSE))
+			if(BS_TopicUtils::is_locked($data['locked'],BS_LOCK_TOPIC_OPENCLOSE))
 				continue;
 
 			// post the reason, if required

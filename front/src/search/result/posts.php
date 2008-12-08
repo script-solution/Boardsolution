@@ -75,7 +75,7 @@ final class BS_Front_Search_Result_Posts extends FWS_Object implements BS_Front_
 			/* @var $post BS_Front_Post_Data */
 			
 			$post_url = $post->get_post_url($kws);
-			$location = BS_ForumUtils::get_instance()->get_forum_path($post->get_field('rubrikid'),false);
+			$location = BS_ForumUtils::get_forum_path($post->get_field('rubrikid'),false);
 			$topic = $post->get_field('name');
 			$topic = $hl->highlight($topic);
 			$location .= ' &raquo; <a href="'.$post_url.'">'.$topic.'</a>';

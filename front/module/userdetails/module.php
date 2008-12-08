@@ -114,7 +114,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 			$tpl->add_variables(array(
 				'rowspan' => 2 + $num_displayed_fields,
 				'enable_avatars' => true,
-				'avatar' => BS_UserUtils::get_instance()->get_profile_avatar(
+				'avatar' => BS_UserUtils::get_profile_avatar(
 					$user_data['avatar'],$user_data['id']
 				)
 			));
@@ -130,7 +130,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 			));
 		}
 	
-		$email = BS_UserUtils::get_instance()->get_displayed_email(
+		$email = BS_UserUtils::get_displayed_email(
 			$user_data['user_email'],$user_data['email_display_mode'],true
 		);
 	
@@ -143,12 +143,12 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 		// determine signature
 		if($user_data['signatur'] != '')
 		{
-			$enable_bbcode = BS_PostingUtils::get_instance()->get_message_option('enable_bbcode','sig');
-			$enable_smileys = BS_PostingUtils::get_instance()->get_message_option('enable_smileys','sig');
+			$enable_bbcode = BS_PostingUtils::get_message_option('enable_bbcode','sig');
+			$enable_smileys = BS_PostingUtils::get_message_option('enable_smileys','sig');
 			$bbcode = new BS_BBCode_Parser($user_data['signatur'],'sig',$enable_bbcode,
 				$enable_smileys);
 			$signature = $bbcode->get_message_for_output();
-			BS_PostingUtils::get_instance()->add_default_font($signature,$user_data['default_font']);
+			BS_PostingUtils::add_default_font($signature,$user_data['default_font']);
 		}
 		else
 			$signature = $locale->lang('notavailable');
@@ -166,7 +166,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 		// grab the last posts from the database
 		$denied = array();
 		if($cfg['hide_denied_forums'] == 1)
-			$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
+			$denied = BS_ForumUtils::get_denied_forums(false);
 		
 		$last_posts = false;
 		if(BS_USER_DETAILS_TOPIC_COUNT > 0)
@@ -181,7 +181,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 			{
 				$last_posts[] = array(
 					'date' => FWS_Date::get_date($data['post_time']),
-					'forum_path' => BS_ForumUtils::get_instance()->get_forum_path($data['rubrikid'],false),
+					'forum_path' => BS_ForumUtils::get_forum_path($data['rubrikid'],false),
 					'topic_url' => $rurl->set(BS_URL_ID,$data['id'])->to_url(),
 					'topic_name' => $data['name']
 				);
@@ -239,7 +239,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 		$user_stats = '';
 		if($cfg['post_stats_type'] != 'disabled')
 		{
-			$user_stats = BS_PostingUtils::get_instance()->get_experience_diagram(
+			$user_stats = BS_PostingUtils::get_experience_diagram(
 				$user_data['exppoints'],$rank_data,$user_data['id']
 			);
 		}

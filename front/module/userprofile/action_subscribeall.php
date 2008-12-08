@@ -39,7 +39,7 @@ final class BS_Front_Action_userprofile_subscribeall extends BS_Front_Action_Bas
 		foreach(BS_DAO::get_subscr()->get_subscr_forums_of_user($user->get_user_id()) as $data)
 			$ex_fids[$data['forum_id']] = true;
 
-		$denied_forums = BS_ForumUtils::get_instance()->get_denied_forums(true);
+		$denied_forums = BS_ForumUtils::get_denied_forums(true);
 
 		// get all missing forum-ids
 		$fids = array();

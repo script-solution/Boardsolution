@@ -108,7 +108,7 @@ final class BS_Front_Module_topics extends BS_Front_Module
 		if($forums->has_childs($fid))
 		{
 			if($forums->get_forum_type($fid) == 'contains_cats' && $display_lt)
-				BS_Front_TopicFactory::get_instance()->add_latest_topics_small($fid);
+				BS_Front_TopicFactory::add_latest_topics_small($fid);
 
 			$futils->get_forum_list($fid);
 			
@@ -201,7 +201,7 @@ final class BS_Front_Module_topics extends BS_Front_Module
 		
 		$view_useronline = $auth->has_global_permission('view_useronline_list');
 		if($view_useronline)
-			BS_Front_OnlineUtils::get_instance()->add_currently_online('topics');
+			BS_Front_OnlineUtils::add_currently_online('topics');
 		
 		$type = $forums->get_forum_type($fid);
 		$tpl->add_variables(array(
@@ -263,7 +263,7 @@ final class BS_Front_Module_topics extends BS_Front_Module
 
 		$tpl->add_variables(array(
 			'display_topic_actions' => $cfg['display_denied_options'] || $user->is_loggedin(),
-			'topic_action_combo' => BS_TopicUtils::get_instance()->get_action_combobox()
+			'topic_action_combo' => BS_TopicUtils::get_action_combobox()
 		));
 	}
 

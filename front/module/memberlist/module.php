@@ -237,7 +237,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 				}
 				else
 				{
-					$user_email = BS_UserUtils::get_instance()->get_displayed_email(
+					$user_email = BS_UserUtils::get_displayed_email(
 						$data['user_email'],$data['email_display_mode'],true
 					);
 					
@@ -265,7 +265,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 					'user_id' => $data['id'],
 					'allow_pms' => $data['allow_pms'],
 					'name_col_width' => $name_col_width,
-					'user_name' => BS_UserUtils::get_instance()->get_link(
+					'user_name' => BS_UserUtils::get_link(
 						$data['id'],$data['user_name'],$data['user_group']
 					),
 					'email' => $email,

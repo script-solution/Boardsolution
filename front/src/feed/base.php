@@ -32,7 +32,7 @@ abstract class BS_Front_Feed_Base extends FWS_Object
 		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
 			return '';
 		
-		$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
+		$denied = BS_ForumUtils::get_denied_forums(false);
 		$denied = array_flip($denied);
 		$myfids = array();
 		foreach($fids as $fid)
@@ -61,9 +61,9 @@ abstract class BS_Front_Feed_Base extends FWS_Object
 	protected final function get_formated_text($data)
 	{
 		// build text
-		$use_bbcode = BS_PostingUtils::get_instance()->get_message_option('enable_bbcode') &&
+		$use_bbcode = BS_PostingUtils::get_message_option('enable_bbcode') &&
 			$data['use_bbcode'];
-		$use_smileys = BS_PostingUtils::get_instance()->get_message_option('enable_smileys') &&
+		$use_smileys = BS_PostingUtils::get_message_option('enable_smileys') &&
 			$data['use_smileys'];
 		$bbcode = new BS_BBCode_Parser($data['text'],'posts',$use_bbcode,$use_smileys);
 		$bbcode->set_board_path(FWS_Path::outer());

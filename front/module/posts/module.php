@@ -92,7 +92,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		}
 
 		// check if the topic exists
-		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		$topic_data = BS_Front_TopicFactory::get_current_topic();
 		if($topic_data === null)
 		{
 			// send 404 for search-engines and such
@@ -191,7 +191,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$posts = array();
 		$keywords = $functions->get_search_keywords();
 		$postcon = new BS_Front_Post_Container(
-			$fid,$tid,null,$pagination,'p.id '.BS_PostingUtils::get_instance()->get_posts_order(),'',$keywords
+			$fid,$tid,null,$pagination,'p.id '.BS_PostingUtils::get_posts_order(),'',$keywords
 		);
 		
 		foreach($postcon->get_posts() as $post)
@@ -246,7 +246,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		
 		$view_useronline = $auth->has_global_permission('view_useronline_list');
 		if($view_useronline)
-			BS_Front_OnlineUtils::get_instance()->add_currently_online('posts');
+			BS_Front_OnlineUtils::add_currently_online('posts');
 		
 		$tpl->add_variables(array(
 			'show_bottom_bar' => $show_bottom_bar,
@@ -281,7 +281,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 				'display_topic_actions' => $cfg['display_denied_options'] || $tactions_perm,
 				'display_post_actions' => $cfg['display_denied_options'] || $pactions_perm,
 				'manage_posts_title' => $manage_posts_title,
-				'topic_action_combo' => BS_TopicUtils::get_instance()->get_action_combobox(
+				'topic_action_combo' => BS_TopicUtils::get_action_combobox(
 					'posts',$topic_data['thread_closed']
 				),
 			));
@@ -292,7 +292,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 			$curl = BS_URL::get_posts_url($fid,$tid);
 			if($hl !== null)
 				$curl->set(BS_URL_HL,$hl);
-			BS_Front_TopicFactory::get_instance()->add_similar_topics(
+			BS_Front_TopicFactory::add_similar_topics(
 				$topic_data['name'],$topic_data['id'],$curl
 			);
 		}
@@ -346,7 +346,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$user = FWS_Props::get()->user();
 		$forums = FWS_Props::get()->forums();
 		$tpl = FWS_Props::get()->tpl();
-		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		$topic_data = BS_Front_TopicFactory::get_current_topic();
 		$display_subscribe = ($cfg['display_denied_options'] || $user->is_loggedin()) &&
 			$cfg['enable_email_notification'] && !$topic_data['thread_closed'] &&
 			!$forums->forum_is_closed($fid);
@@ -371,9 +371,9 @@ final class BS_Front_Module_posts extends BS_Front_Module
 
 		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
-		$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
+		$topic_data = BS_Front_TopicFactory::get_current_topic();
 	
-		$user_voted = BS_UserUtils::get_instance()->user_voted_for_poll($topic_data['type']);
+		$user_voted = BS_UserUtils::user_voted_for_poll($topic_data['type']);
 		
 		$url = BS_URL::get_posts_url($fid,$tid,1);
 		$url->set(BS_URL_MODE,'results');

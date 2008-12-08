@@ -71,7 +71,7 @@ final class BS_Location extends FWS_Object
 				$location = $action.':'.$fid;
 			else if($fid != null && $tid != null)
 			{
-				$topic_data = BS_Front_TopicFactory::get_instance()->get_current_topic();
+				$topic_data = BS_Front_TopicFactory::get_current_topic();
 				if($topic_data !== null)
 					$location = $action.':'.$fid.':'.$tid.':'.$topic_data['name'];
 				else
@@ -172,9 +172,9 @@ final class BS_Location extends FWS_Object
 					return $locale->lang('loc_hidden');
 	
 				if($enable_links)
-					$forum = BS_ForumUtils::get_instance()->get_forum_path($parts[1],false);
+					$forum = BS_ForumUtils::get_forum_path($parts[1],false);
 				else
-					$forum = strip_tags(BS_ForumUtils::get_instance()->get_forum_path($parts[1],false));
+					$forum = strip_tags(BS_ForumUtils::get_forum_path($parts[1],false));
 	
 				return sprintf($locale->lang('loc_'.$parts[0]),$forum);
 	

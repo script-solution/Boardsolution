@@ -438,7 +438,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			$unread_news_title = '';
 			if($user->is_loggedin())
 			{
-				$username = BS_UserUtils::get_instance()->get_link(
+				$username = BS_UserUtils::get_link(
 					$user->get_user_id(),$user->get_profile_val('user_name'),
 					$user->get_profile_val('user_group')
 		  	);

@@ -17,16 +17,8 @@
  * @subpackage	src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_UnreadUtils extends FWS_Singleton
+final class BS_UnreadUtils extends FWS_UtilBase
 {
-	/**
-	 * @return BS_UnreadUtils the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-	
 	/**
 	 * Removes all unread-information for the given forums from the unread-table.
 	 * Note that this method requires that the forums exist!
@@ -34,12 +26,12 @@ final class BS_UnreadUtils extends FWS_Singleton
 	 * @param array $fids all forums that should be deleted (note that subforums are not included
 	 * 	automatically!)
 	 */
-	public function remove_forums($fids)
+	public static function remove_forums($fids)
 	{
 		if(!is_array($fids))
 			FWS_Helper::def_error('array','fids',$fids);
 		
-		$this->_remove($fids,'rubrikid');
+		self::_remove($fids,'rubrikid');
 	}
 	
 	/**
@@ -48,12 +40,12 @@ final class BS_UnreadUtils extends FWS_Singleton
 	 *
 	 * @param array $tids all topics that should be deleted
 	 */
-	public function remove_topics($tids)
+	public static function remove_topics($tids)
 	{
 		if(!is_array($tids))
 			FWS_Helper::def_error('array','tids',$tids);
 		
-		$this->_remove($tids,'threadid');
+		self::_remove($tids,'threadid');
 	}
 	
 	/**
@@ -62,7 +54,7 @@ final class BS_UnreadUtils extends FWS_Singleton
 	 * @param array $ids the ids
 	 * @param string $field the name of the field that should be used for the ids in the posts-table
 	 */
-	private function _remove($ids,$field)
+	private static function _remove($ids,$field)
 	{
 		// nothing to do?
 		if(count($ids) == 0)
@@ -87,7 +79,7 @@ final class BS_UnreadUtils extends FWS_Singleton
 	 * @param array $pids all posts that should be deleted
 	 * @param int $tid the topic-id from which the posts are
 	 */
-	public function remove_posts($pids,$tid)
+	public static function remove_posts($pids,$tid)
 	{
 		if(!is_array($pids))
 			FWS_Helper::def_error('array','pids',$pids);

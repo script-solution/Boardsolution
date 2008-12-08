@@ -130,7 +130,7 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 
 		$pagination->populate_tpl(BS_URL::get_sub_url());
 
-		$current_avatar = BS_UserUtils::get_instance()->get_profile_avatar(
+		$current_avatar = BS_UserUtils::get_profile_avatar(
 			$user->get_profile_val('avatar'),$user->get_user_id()
 		);
 		if($current_avatar != $locale->lang('nopictureavailable'))

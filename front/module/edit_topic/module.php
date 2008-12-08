@@ -128,7 +128,7 @@ final class BS_Front_Module_edit_topic extends BS_Front_Module
 		}
 	
 		// no access because a user with higher status locked the post?
-		if(BS_TopicUtils::get_instance()->is_locked($this->_tdata['locked'],BS_LOCK_TOPIC_EDIT))
+		if(BS_TopicUtils::is_locked($this->_tdata['locked'],BS_LOCK_TOPIC_EDIT))
 		{
 			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('no_permission_locked'));
 			return;
@@ -141,7 +141,7 @@ final class BS_Front_Module_edit_topic extends BS_Front_Module
 		$url->set(BS_URL_ID,$id);
 		$target_url = $url->to_url();
 		$back_url = BS_URL::build_topics_url($fid);
-		$forum_name = BS_ForumUtils::get_instance()->get_forum_path($this->_tdata['rubrikid'],false);
+		$forum_name = BS_ForumUtils::get_forum_path($this->_tdata['rubrikid'],false);
 		
 		// topic
 		if($this->_tdata['type'] == 0)
@@ -153,7 +153,7 @@ final class BS_Front_Module_edit_topic extends BS_Front_Module
 				'action_type' => BS_ACTION_EDIT_TOPIC,
 				'view_important' => $auth->has_current_forum_perm(BS_MODE_MARK_TOPICS_IMPORTANT),
 				'important_def' => $this->_tdata['important'],
-				'symbols' => BS_TopicUtils::get_instance()->get_symbols(
+				'symbols' => BS_TopicUtils::get_symbols(
 					$form,$this->_tdata['symbol']
 				),
 				'allow_posts_def' => $this->_tdata['comallow'],

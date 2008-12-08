@@ -113,7 +113,7 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 		}
 
 		if($input->isset_var('preview','post'))
-			BS_PostingUtils::get_instance()->add_post_preview('desc',1,1);
+			BS_PostingUtils::add_post_preview('desc',1,1);
 		
 		$form = $this->request_formular(false,true);
 

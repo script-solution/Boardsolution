@@ -149,7 +149,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 					if($d['post_id'] != '')
 					{
 						$attachment_url = $aurl->set(BS_URL_ID,$d['post_id'])->to_url();
-						$t = BS_TopicUtils::get_instance()->get_displayed_name($d['name'],25);
+						$t = BS_TopicUtils::get_displayed_name($d['name'],25);
 						$topic = '<a title="'.$t['complete'].'" target="_blank"';
 						$topic .= ' href="'.$attachment_url.'">'.$t['displayed'].'</a>';
 					}

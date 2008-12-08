@@ -85,7 +85,7 @@ final class BS_Front_Module_new_event extends BS_Front_Module
 		$form = $this->request_formular(true,true);
 	
 		if($input->isset_var('preview','post'))
-			BS_PostingUtils::get_instance()->add_post_preview();
+			BS_PostingUtils::add_post_preview();
 		
 		$loggedin = $user->is_loggedin();
 		$subt_def = $loggedin ? $user->get_profile_val('default_email_notification') : 0;

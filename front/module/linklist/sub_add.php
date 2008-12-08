@@ -54,7 +54,7 @@ final class BS_Front_SubModule_linklist_add extends BS_Front_SubModule
 	
 		// show the preview
 		if($input->isset_var('preview','post'))
-			BS_PostingUtils::get_instance()->add_post_preview('desc');
+			BS_PostingUtils::add_post_preview('desc');
 	
 		// collect the categories
 		$categories = array();

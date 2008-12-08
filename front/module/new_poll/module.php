@@ -93,7 +93,7 @@ final class BS_Front_Module_new_poll extends BS_Front_Module
 		}
 	
 		if($input->isset_var('preview','post'))
-			BS_PostingUtils::get_instance()->add_post_preview();
+			BS_PostingUtils::add_post_preview();
 		
 		$this->request_formular(true,true);
 		

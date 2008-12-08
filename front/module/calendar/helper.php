@@ -302,7 +302,7 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 		{
 			$denied = array();
 			if($cfg['hide_denied_forums'] == 1)
-				$denied = BS_ForumUtils::get_instance()->get_denied_forums(false);
+				$denied = BS_ForumUtils::get_denied_forums(false);
 			
 			list($year,$month) = $this->get_date();
 			
@@ -419,7 +419,7 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 					$title = '';
 				}
 				
-				$user_link = BS_UserUtils::get_instance()->get_link(
+				$user_link = BS_UserUtils::get_link(
 					$content['user_id'],$username,$content['user_group'],false,
 					'font-size: 7pt;'.$title
 				);
