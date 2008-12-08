@@ -87,19 +87,19 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 		
 		$orderurl = clone $baseurl;
 		$tpl->add_variables(array(
-			'col_url' => BS_ACP_Utils::get_instance()->get_order_column(
+			'col_url' => BS_ACP_Utils::get_order_column(
 				$locale->lang('url'),'url','ASC',$order,$orderurl
 			),
-			'col_category' => BS_ACP_Utils::get_instance()->get_order_column(
+			'col_category' => BS_ACP_Utils::get_order_column(
 				$locale->lang('category'),'category','ASC',$order,$orderurl
 			),
-			'col_klicks' => BS_ACP_Utils::get_instance()->get_order_column(
+			'col_klicks' => BS_ACP_Utils::get_order_column(
 				$locale->lang('clicks'),'clicks','DESC',$order,$orderurl
 			),
-			'col_added' => BS_ACP_Utils::get_instance()->get_order_column(
+			'col_added' => BS_ACP_Utils::get_order_column(
 				$locale->lang('added'),'date','DESC',$order,$orderurl
 			),
-			'col_activated' => BS_ACP_Utils::get_instance()->get_order_column(
+			'col_activated' => BS_ACP_Utils::get_order_column(
 				$locale->lang('enabled'),'act','ASC',$order,$orderurl
 			),
 		));
@@ -144,7 +144,7 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 			$bbcode = new BS_BBCode_Parser($data['link_desc'],'desc',$enable_bbcode,$enable_smileys);
 			
 			$link_url = FWS_StringHelper::get_limited_string($data['link_url'],25);
-			$user = BS_ACP_Utils::get_instance()->get_userlink($data['user_id'],$data['user_name']);
+			$user = BS_ACP_Utils::get_userlink($data['user_id'],$data['user_name']);
 			
 			$links[] = array(
 				'id' => $data['id'],
@@ -155,7 +155,7 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 				'details_image' => FWS_Path::client_app().'acp/images/crossclosed.gif',
 				'rating' => $link_rating,
 				'date' => $link_date.', '.$user,
-				'activated' => BS_ACP_Utils::get_instance()->get_yesno($data['active'],true),
+				'activated' => BS_ACP_Utils::get_yesno($data['active'],true),
 				'description' => $bbcode->get_message_for_output()
 			);
 		}

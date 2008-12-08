@@ -17,23 +17,15 @@
  * @subpackage	acp.src
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Utils extends FWS_Singleton
+final class BS_ACP_Utils extends FWS_UtilBase
 {
-	/**
-	 * @return BS_ACP_Utils the instance of this class
-	 */
-	public static function get_instance()
-	{
-		return parent::_get_instance(get_class());
-	}
-
 	/**
 	 * Determines the image-filename for the given file by the extension
 	 *
 	 * @param string $file the filename
 	 * @return string the name of the image-file
 	 */
-	public function get_file_image($file)
+	public static function get_file_image($file)
 	{
 		switch(FWS_FileUtils::get_extension($file))
 		{
@@ -75,7 +67,7 @@ final class BS_ACP_Utils extends FWS_Singleton
 	 * @param int $id the user-id
 	 * @param string $name the username
 	 */
-	public function get_userlink($id,$name)
+	public static function get_userlink($id,$name)
 	{
 		$furl = BS_URL::get_acpmod_url('userdetails');
 		$furl->set('id',$id);
@@ -94,7 +86,7 @@ final class BS_ACP_Utils extends FWS_Singleton
 	 * @param BS_URL $url the current URL
 	 * @return string the column-content
 	 */
-	public function get_order_column($title,$order_value,$def_ascdesc,$order,$url)
+	public static function get_order_column($title,$order_value,$def_ascdesc,$order,$url)
 	{
 		if(!($url instanceof BS_URL))
 			FWS_Helper::def_error('instance','url','BS_URL',$url);
@@ -123,7 +115,7 @@ final class BS_ACP_Utils extends FWS_Singleton
 	 * @param boolean $yesisgreen if colored: should green be used for 'yes'?
 	 * @return string yes or no
 	 */
-	public function get_yesno($bool,$colored = false,$yesisgreen = true)
+	public static function get_yesno($bool,$colored = false,$yesisgreen = true)
 	{
 		$locale = FWS_Props::get()->locale();
 
@@ -145,7 +137,7 @@ final class BS_ACP_Utils extends FWS_Singleton
 	 * @param FWS_Email_Base $mail the email-instance
 	 * @param array $user_ids all user-ids
 	 */
-	public function send_email_to_user($mail,$user_ids)
+	public static function send_email_to_user($mail,$user_ids)
 	{
 		$msgs = FWS_Props::get()->msgs();
 
@@ -163,11 +155,6 @@ final class BS_ACP_Utils extends FWS_Singleton
 		
 		foreach(array_keys($error_msgs) as $error)
 			$msgs->add_error($error);
-	}
-	
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

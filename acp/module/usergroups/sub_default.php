@@ -76,8 +76,8 @@ final class BS_ACP_SubModule_usergroups_default extends BS_ACP_SubModule
 				$groups[] = array(
 					'id' => $data['id'],
 					'group_name' => $auth->get_colored_groupname($data['id']),
-					'is_visible' => BS_ACP_Utils::get_instance()->get_yesno($data['is_visible']),
-					'is_super_mod' => BS_ACP_Utils::get_instance()->get_yesno($data['is_super_mod']),
+					'is_visible' => BS_ACP_Utils::get_yesno($data['is_visible']),
+					'is_super_mod' => BS_ACP_Utils::get_yesno($data['is_super_mod']),
 					'is_no_predefined_group' => !in_array($data['id'],$predef_groups)
 				);
 			}

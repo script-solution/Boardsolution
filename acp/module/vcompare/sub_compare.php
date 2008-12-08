@@ -320,7 +320,7 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 					'layer' => $layer,
 					'name' => basename($path),
 					'isfile' => true,
-					'image' => BS_ACP_Utils::get_instance()->get_file_image($path),
+					'image' => BS_ACP_Utils::get_file_image($path),
 					'id' => str_replace('/','_',$path),
 					'layerend' => false,
 					'color' => $this->_get_color($item),

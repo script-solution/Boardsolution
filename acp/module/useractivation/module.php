@@ -98,7 +98,7 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 		{
 			$user[] = array(
 				'id' => $data['id'],
-				'user_name' => BS_ACP_Utils::get_instance()->get_userlink($data['id'],$data['user_name']),
+				'user_name' => BS_ACP_Utils::get_userlink($data['id'],$data['user_name']),
 				'user_email' => $data['user_email'],
 				'register_date' => FWS_Date::get_date($data["registerdate"],true)
 			);

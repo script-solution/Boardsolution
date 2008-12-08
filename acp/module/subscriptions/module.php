@@ -83,16 +83,16 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		
 		$tpl->add_variables(array(
 			'target_url' => $baseurl->set('order',$order)->set('ad',$ad)->to_url(),
-			'username_col' => BS_ACP_Utils::get_instance()->get_order_column(
+			'username_col' => BS_ACP_Utils::get_order_column(
 				$locale->lang('username'),'username','ASC',$order,$baseurl
 			),
-			'date_col' => BS_ACP_Utils::get_instance()->get_order_column(
+			'date_col' => BS_ACP_Utils::get_order_column(
 				$locale->lang('date'),'date','DESC',$order,$baseurl
 			),
-			'lastlogin_col' => BS_ACP_Utils::get_instance()->get_order_column(
+			'lastlogin_col' => BS_ACP_Utils::get_order_column(
 				$locale->lang('lastlogin'),'lastlogin','DESC',$order,$baseurl
 			),
-			'lastpost_col' => BS_ACP_Utils::get_instance()->get_order_column(
+			'lastpost_col' => BS_ACP_Utils::get_order_column(
 				$locale->lang('lastpost'),'lastpost','DESC',$order,$baseurl
 			),
 		));
@@ -146,7 +146,7 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 			$subscriptions[] = array(
 				'id' => $data['id'],
 				'name' => $name,
-				'username' => BS_ACP_Utils::get_instance()->get_userlink($data['user_id'],$data['user_name']),
+				'username' => BS_ACP_Utils::get_userlink($data['user_id'],$data['user_name']),
 				'subscription_date' => FWS_Date::get_date($data['sub_date']),
 				'lastlogin' => FWS_Date::get_date($data['lastlogin']),
 				'lastpost' => $lastpost

@@ -148,19 +148,19 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 			'action' => $action,
 			'actions' => $actions,
 			'form_url' => $durl->to_url(),
-			'col_action' => BS_ACP_Utils::get_instance()->get_order_column(
+			'col_action' => BS_ACP_Utils::get_order_column(
 				$locale->lang('action'),'action','ASC',$order,$baseurl
 			),
-			'col_user_name' => BS_ACP_Utils::get_instance()->get_order_column(
+			'col_user_name' => BS_ACP_Utils::get_order_column(
 				$locale->lang('username'),'user','ASC',$order,$baseurl
 			),
-			'col_user_ip' => BS_ACP_Utils::get_instance()->get_order_column(
+			'col_user_ip' => BS_ACP_Utils::get_order_column(
 				$locale->lang('user_ip'),'ip','ASC',$order,$baseurl
 			),
-			'col_user_agent' => BS_ACP_Utils::get_instance()->get_order_column(
+			'col_user_agent' => BS_ACP_Utils::get_order_column(
 				$locale->lang('user_agent'),'agent','ASC',$order,$baseurl
 			),
-			'col_date' => BS_ACP_Utils::get_instance()->get_order_column(
+			'col_date' => BS_ACP_Utils::get_order_column(
 				$locale->lang('date'),'date','DESC',$order,$baseurl
 			),
 			'num' => $num,
@@ -194,7 +194,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 		foreach($loglist as $data)
 		{
 			if($data['user_id'] > 0)
-				$user = BS_ACP_Utils::get_instance()->get_userlink($data['user_id'],$data['user_name']);
+				$user = BS_ACP_Utils::get_userlink($data['user_id'],$data['user_name']);
 			else
 				$user = '<i>'.$locale->lang('guest').'</i>';
 			

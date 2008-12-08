@@ -189,7 +189,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 					'attachment_url' => $attachment_url,
 					'filesize' => $filesize,
 					'topic' => $topic,
-					'owner_name' => BS_ACP_Utils::get_instance()->get_userlink($data['poster_id'],$owner_name)
+					'owner_name' => BS_ACP_Utils::get_userlink($data['poster_id'],$owner_name)
 				);
 			}
 			$index++;

@@ -37,7 +37,7 @@ final class BS_ACP_Module_Themes_Editor_Advanced extends BS_ACP_Module_Themes_Ed
 		$tpl->add_variables(array(
 			'target_url' => $url->to_url(),
 			'action_type' => BS_ACP_ACTION_THEME_EDITOR_ADVANCED_SAVE,
-			'image' => BS_ACP_Utils::get_instance()->get_file_image($file),
+			'image' => BS_ACP_Utils::get_file_image($file),
 			'filename' => $file,
 			'filesize' => number_format(filesize($file),0,',','.'),
 			'last_modification' => FWS_Date::get_date(filemtime($file)),

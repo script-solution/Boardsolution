@@ -39,7 +39,7 @@ final class BS_ACP_Action_useractivation_delete extends BS_ACP_Action_Base
 		BS_DAO::get_activation()->delete_by_users($ids);
 		
 		// send email
-		BS_ACP_Utils::get_instance()->send_email_to_user(
+		BS_ACP_Utils::send_email_to_user(
 			BS_EmailFactory::get_instance()->get_account_not_activated_mail(),
 			$ids
 		);

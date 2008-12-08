@@ -110,7 +110,7 @@ final class BS_ACP_SubModule_user_ugroups extends BS_ACP_SubModule
 			$users[] = array(
 				'id' => $data['id'],
 				'is_own_user' => $data['id'] == $user->get_user_id(),
-				'user_name' => BS_ACP_Utils::get_instance()->get_userlink($data['id'],$data['user_name']),
+				'user_name' => BS_ACP_Utils::get_userlink($data['id'],$data['user_name']),
 				'current' => $current,
 				'main_group' => $gdata['id'],
 				'other_groups' => $sel_groups

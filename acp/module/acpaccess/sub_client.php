@@ -165,10 +165,10 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 						}
 					}
 
-					$has_access = BS_ACP_Utils::get_instance()->get_yesno($access);
+					$has_access = BS_ACP_Utils::get_yesno($access);
 				}
 				else
-					$has_access = BS_ACP_Utils::get_instance()->get_yesno($has_direct_access);
+					$has_access = BS_ACP_Utils::get_yesno($has_direct_access);
 
 				$categories[count($categories) - 1]['mods'][] = array(
 					'name' => $locale->lang($data['title']),

@@ -156,7 +156,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 				{
 					$ucolor = $auth->get_user_color($data['user_id'],$data['user_group']);
 					$name = '<span style="color: #'.$ucolor.'">'.$data['user_name'].'</span>';
-					$user_name = BS_ACP_Utils::get_instance()->get_userlink($data['user_id'],$name);
+					$user_name = BS_ACP_Utils::get_userlink($data['user_id'],$name);
 					if($data['duplicates'] > 0)
 						$user_name .= ' ('.($data['duplicates'] + 1).'x)';
 				}
@@ -222,7 +222,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 	 */
 	private function _get_php_flag($flag)
 	{
-		return BS_ACP_Utils::get_instance()->get_yesno(FWS_PHPConfig::is_enabled($flag));
+		return BS_ACP_Utils::get_yesno(FWS_PHPConfig::is_enabled($flag));
 	}
 
 	/**

@@ -45,7 +45,7 @@ final class BS_ACP_Action_useractivation_activate extends BS_ACP_Action_Base
 		}
 
 		// send emails
-		BS_ACP_Utils::get_instance()->send_email_to_user(
+		BS_ACP_Utils::send_email_to_user(
 			BS_EmailFactory::get_instance()->get_account_activated_mail(),
 			$ids
 		);

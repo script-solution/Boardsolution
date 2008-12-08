@@ -93,7 +93,7 @@ final class BS_ACP_SubModule_tpleditor_edit extends BS_ACP_SubModule
 		$tpl->set_template('tpleditor_formular.htm');
 		$tpl->add_variables(array(
 			'target_url' => $target->to_url(),
-			'image' => BS_ACP_Utils::get_instance()->get_file_image($real_file),
+			'image' => BS_ACP_Utils::get_file_image($real_file),
 			'filename' => $path_links.$file,
 			'filesize' => number_format(filesize($real_file),0,',','.'),
 			'last_modification' => FWS_Date::get_date(filemtime($real_file)),

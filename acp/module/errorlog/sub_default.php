@@ -102,13 +102,13 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 		$askurl->set('ask','deleteall');
 		$tpl->add_variables(array(
 			'form_url' => $url->to_url(),
-			'col_error' => BS_ACP_Utils::get_instance()->get_order_column(
+			'col_error' => BS_ACP_Utils::get_order_column(
 				$locale->lang('error_msg'),'error','ASC',$order,$baseurl
 			),
-			'col_date' => BS_ACP_Utils::get_instance()->get_order_column(
+			'col_date' => BS_ACP_Utils::get_order_column(
 				$locale->lang('date'),'date','DESC',$order,$baseurl
 			),
-			'col_user' => BS_ACP_Utils::get_instance()->get_order_column(
+			'col_user' => BS_ACP_Utils::get_order_column(
 				$locale->lang('username'),'user','ASC',$order,$baseurl
 			),
 			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
@@ -143,7 +143,7 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 		foreach($loglist as $data)
 		{
 			if($data['user_id'] > 0)
-				$user = BS_ACP_Utils::get_instance()->get_userlink($data['user_id'],$data['user_name']);
+				$user = BS_ACP_Utils::get_userlink($data['user_id'],$data['user_name']);
 			else
 				$user = '<i>'.$locale->lang('guest').'</i>';
 			

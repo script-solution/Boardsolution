@@ -103,7 +103,7 @@ final class BS_ACP_SubModule_bots_default extends BS_ACP_SubModule
 					'name' => $data['bot_name'],
 					'match' => $data['bot_match'],
 					'ip_range' => $ip_range,
-					'access' => BS_ACP_Utils::get_instance()->get_yesno($data['bot_access'])
+					'access' => BS_ACP_Utils::get_yesno($data['bot_access'])
 				);
 			}
 

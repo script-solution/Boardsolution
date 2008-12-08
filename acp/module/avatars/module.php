@@ -97,7 +97,7 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 			if($data['user'] == 0)
 				$data['owner'] = $locale->lang('administrator');
 			else
-				$data['owner'] = BS_ACP_Utils::get_instance()->get_userlink($data['user'],$data['user_name']);
+				$data['owner'] = BS_ACP_Utils::get_userlink($data['user'],$data['user_name']);
 			$avatars[] = $data;
 		}
 

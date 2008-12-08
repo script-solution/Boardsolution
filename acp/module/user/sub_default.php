@@ -208,8 +208,8 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 				'group_combo' => $auth->get_usergroup_list($data['user_group'],false,false,true),
 				'edit_url' => $eurl->set('id',$data['id'])->to_url(),
 				'id' => $data['id'],
-				'user_name' => BS_ACP_Utils::get_instance()->get_userlink($data['id'],$data['user_name']),
-				'is_blocked' => BS_ACP_Utils::get_instance()->get_yesno($data['banned'],true,false)
+				'user_name' => BS_ACP_Utils::get_userlink($data['id'],$data['user_name']),
+				'is_blocked' => BS_ACP_Utils::get_yesno($data['banned'],true,false)
 			);
 		}
 

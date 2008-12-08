@@ -145,7 +145,7 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 						'secondary_code' => $data['secondary_code'],
 						'smiley_path' => $data['smiley_path'],
 						'sort_key' => $data['sort_key'],
-						'is_base' => BS_ACP_Utils::get_instance()->get_yesno($data['is_base']),
+						'is_base' => BS_ACP_Utils::get_yesno($data['is_base']),
 						'switch_up_url' => $switch_up_url,
 						'switch_down_url' => $switch_down_url,
 						'show_up' => $i > 0,

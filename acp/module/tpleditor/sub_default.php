@@ -84,7 +84,7 @@ final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 			}
 			else
 			{
-				$image = BS_ACP_Utils::get_instance()->get_file_image($file_path);
+				$image = BS_ACP_Utils::get_file_image($file_path);
 				$filesize = number_format(filesize($file_path),0,',','.');
 				$vurl = '';
 				$url = BS_URL::get_acpsub_url(0,'edit');
