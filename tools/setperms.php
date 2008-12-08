@@ -32,13 +32,7 @@ define('BS_PATH','../');
 include(BS_PATH.'extern/bs_api.php');
 
 // CLI or webserver?
-if(PHP_SAPI == 'cli')
-{
-	FWS_Error_Handler::get_instance()->set_output_handler(new FWS_Error_Output_Plain());
-	define('LINE_WRAP',"\n");
-}
-else
-	define('LINE_WRAP','<br />');
+define('LINE_WRAP',PHP_SAPI == 'cli' ? "\n" : '<br />');
 
 $folders = array(
 	'cache',
