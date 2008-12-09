@@ -121,7 +121,7 @@ final class BS_ACP_Renderer_Content extends FWS_Document_Renderer_HTML_Default
 		// add redirect information
 		$redirect = $doc->get_redirect();
 		if($redirect)
-			$tpl->add_array('redirect',$redirect,'inc_header.htm');
+			$tpl->add_variable_ref('redirect',$redirect,'inc_header.htm');
 		
 		// notify the template if an error has occurred
 		$tpl->add_global('module_error',$doc->get_module()->error_occurred());
@@ -150,10 +150,10 @@ final class BS_ACP_Renderer_Content extends FWS_Document_Renderer_HTML_Default
 		$amsgs = $msgs->get_all_messages();
 		$links = $msgs->get_links();
 		$tpl->set_template('inc_messages.htm');
-		$tpl->add_array('errors',$amsgs[FWS_Document_Messages::ERROR]);
-		$tpl->add_array('warnings',$amsgs[FWS_Document_Messages::WARNING]);
-		$tpl->add_array('notices',$amsgs[FWS_Document_Messages::NOTICE]);
-		$tpl->add_array('links',$links);
+		$tpl->add_variable_ref('errors',$amsgs[FWS_Document_Messages::ERROR]);
+		$tpl->add_variable_ref('warnings',$amsgs[FWS_Document_Messages::WARNING]);
+		$tpl->add_variable_ref('notices',$amsgs[FWS_Document_Messages::NOTICE]);
+		$tpl->add_variable_ref('links',$links);
 		$tpl->add_variables(array(
 			'title' => $locale->lang('information'),
 			'messages' => $msgs->contains_error() || $msgs->contains_notice() || $msgs->contains_warning()

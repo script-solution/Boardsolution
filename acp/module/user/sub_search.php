@@ -186,7 +186,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 			);
 		}
 		
-		$tpl->add_array('addfields',$tplfields);
+		$tpl->add_variable_ref('addfields',$tplfields);
 	}
 	
 	/**

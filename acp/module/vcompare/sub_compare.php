@@ -198,7 +198,7 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		// now build the array for the templates
 		$items = array();
 		$this->_build_items($items,$structure,'');
-		$tpl->add_array('items',$items);
+		$tpl->add_variable_ref('items',$items);
 		$tpl->add_variables(array(
 			'current_version' => BS_VERSION,
 			'compare_version' => $this->_compare_version,

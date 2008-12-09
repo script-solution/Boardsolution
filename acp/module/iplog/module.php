@@ -217,7 +217,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 		$tpl->add_variables(array(
 			'count' => count($logs)
 		));
-		$tpl->add_array('logs',$logs);
+		$tpl->add_variable_ref('logs',$logs);
 		
 		$pagination->populate_tpl($durl);
 	}

@@ -97,7 +97,7 @@ final class BS_ACP_SubModule_acpaccess_default extends BS_ACP_SubModule
 			}
 		}
 		
-		$tpl->add_array('categories',$categories);
+		$tpl->add_variable_ref('categories',$categories);
 	}
 }
 ?>

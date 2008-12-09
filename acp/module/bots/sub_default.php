@@ -110,7 +110,7 @@ final class BS_ACP_SubModule_bots_default extends BS_ACP_SubModule
 			$row++;
 		}
 		
-		$tpl->add_array('bots',$tplbots);
+		$tpl->add_variable_ref('bots',$tplbots);
 		
 		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);

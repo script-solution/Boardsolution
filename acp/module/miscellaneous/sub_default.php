@@ -32,7 +32,7 @@ final class BS_ACP_SubModule_miscellaneous_default extends BS_ACP_SubModule
 		$storage->clear();
 		
 		$tasks = BS_ACP_Module_miscellaneous::get_tasks();
-		$tpl->add_array('tasks',$tasks);
+		$tpl->add_variable_ref('tasks',$tasks);
 	}
 }
 ?>

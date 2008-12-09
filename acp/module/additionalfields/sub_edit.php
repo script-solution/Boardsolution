@@ -118,7 +118,7 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 		foreach(array_keys($types) as $type)
 			$type_sel[$type] = $form->get_radio_value('field_type',$type,$default['field_type'] == $type);
 		
-		$tpl->add_array('default',$default);
+		$tpl->add_variable_ref('default',$default);
 		$tpl->add_variables(array(
 			'target_url' => $murl,
 			'form_title' => $form_title,
@@ -143,7 +143,7 @@ final class BS_ACP_SubModule_additionalfields_edit extends BS_ACP_SubModule
 			);
 		}
 		
-		$tpl->add_array('locations',$locations);
+		$tpl->add_variable_ref('locations',$locations);
 	}
 
 	/**

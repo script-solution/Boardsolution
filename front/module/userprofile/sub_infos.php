@@ -81,7 +81,7 @@ final class BS_Front_SubModule_userprofile_infos extends BS_Front_SubModule
 			);
 		}
 		
-		$tpl->add_array('additional_fields',$additional_fields);
+		$tpl->add_variable_ref('additional_fields',$additional_fields);
 	}
 }
 ?>

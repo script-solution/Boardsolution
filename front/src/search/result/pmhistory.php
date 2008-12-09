@@ -114,7 +114,7 @@ final class BS_Front_Search_Result_PMHistory extends FWS_Object implements BS_Fr
 		
 		$pagination->populate_tpl($murl);
 		
-		$tpl->add_array('messages',$messages);
+		$tpl->add_variable_ref('messages',$messages);
 		$tpl->add_variables(array(
 			'page_split' => true,
 			'linewrap' => false,

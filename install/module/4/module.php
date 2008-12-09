@@ -72,7 +72,7 @@ final class BS_Install_Module_4 extends BS_Install_Module
 			);
 		}
 		
-		$tpl->add_array('configs',$configs);
+		$tpl->add_variable_ref('configs',$configs);
 		$tpl->add_variables(array(
 			'prefix' => $prefix,
 			'show_table_prefix' => true,

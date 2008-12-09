@@ -201,7 +201,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 			}
 		}
 
-		$tpl->add_array('attachments',$attachments);
+		$tpl->add_variable_ref('attachments',$attachments);
 
 		// show bottom
 		$url = BS_URL::get_sub_url(0,'pmbanlist');

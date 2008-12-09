@@ -46,7 +46,7 @@ final class BS_Front_SubModule_stats_timeline extends BS_Front_SubModule
 		$max = $this->get_timeline_max($time_stats);
 		$time_stats = $this->finalize_timeline($time_stats,$max);
 		
-		$tpl->add_array('timeline',$time_stats);
+		$tpl->add_variable_ref('timeline',$time_stats);
 	}
 	
 	/**

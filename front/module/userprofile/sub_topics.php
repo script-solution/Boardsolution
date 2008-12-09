@@ -164,7 +164,7 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 
 		$pagination->populate_tpl(BS_URL::get_sub_url());
 		
-		$tpl->add_array('topics',$topics);
+		$tpl->add_variable_ref('topics',$topics);
 	}
 }
 ?>

@@ -261,7 +261,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 			$cats[] = $cat;
 		}
 		
-		$tpl->add_array('cats',$cats);
+		$tpl->add_variable_ref('cats',$cats);
 
 		if($class != null)
 		{
@@ -309,7 +309,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 			}
 		}
 		
-		$tpl->add_array('groups',$tplgroups);
+		$tpl->add_variable_ref('groups',$tplgroups);
 		$tpl->restore_template();
 	}
 	

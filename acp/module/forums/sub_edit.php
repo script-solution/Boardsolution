@@ -140,8 +140,8 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 		$forumtype->set_custom_attribute('onchange','toggleForumType()');
 		
 		// populate template
-		$tpl->add_array('default',$forum);
-		$tpl->add_array('usergroups',$usergroups);
+		$tpl->add_variable_ref('default',$forum);
+		$tpl->add_variable_ref('usergroups',$usergroups);
 		
 		$url = BS_URL::get_acpmod_url('usersearch');
 		$url->set('comboid','user_intern');
@@ -225,7 +225,7 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 				'value' => in_array($data['id'],$permissions)
 			);
 		}
-		$tpl->add_array($type,$radios);
+		$tpl->add_variable_ref($type,$radios);
 	}
 }
 ?>

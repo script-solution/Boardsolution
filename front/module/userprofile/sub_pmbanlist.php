@@ -97,7 +97,7 @@ final class BS_Front_SubModule_userprofile_pmbanlist extends BS_Front_SubModule
 			);
 		}
 		
-		$tpl->add_array('banned_user',$banned_user);
+		$tpl->add_variable_ref('banned_user',$banned_user);
 	
 		$url = BS_URL::get_sub_url();
 		$url->set(BS_URL_AT,BS_ACTION_BAN_USER);

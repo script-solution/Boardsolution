@@ -67,7 +67,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 		for($i = 1;$i <= $num;$i++)
 			$sort_options[$i] = $i;
 		
-		$tpl->add_array('sort_options',$sort_options);
+		$tpl->add_variable_ref('sort_options',$sort_options);
 		$this->request_formular();
 		
 		$url = BS_URL::get_acpsub_url();
@@ -118,7 +118,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 		unset($hidden['site']);
 		unset($hidden['search']);
 		unset($hidden['at']);
-		$tpl->add_array('fields',$tplfields);
+		$tpl->add_variable_ref('fields',$tplfields);
 		$tpl->add_variables(array(
 			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden' => $hidden,

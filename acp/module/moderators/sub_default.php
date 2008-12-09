@@ -131,7 +131,7 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 			));
 		}
 		
-		$tpl->add_array('forums',$tplforums);
+		$tpl->add_variable_ref('forums',$tplforums);
 	}
 }
 ?>

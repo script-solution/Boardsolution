@@ -247,7 +247,7 @@ final class BS_ForumUtils extends FWS_UtilBase
 					$open_div = true;
 			}
 			
-			$tpl->add_array('forums',$nodes);
+			$tpl->add_variable_ref('forums',$nodes);
 			$tpl->add_variables(array(
 				'clap_forum_bottom' => $open_div,
 				'forum_cookie' => $input->get_var(

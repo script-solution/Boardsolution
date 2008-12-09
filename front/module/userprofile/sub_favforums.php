@@ -89,7 +89,7 @@ final class BS_Front_SubModule_userprofile_favforums extends BS_Front_SubModule
 				$index++;
 		}
 		
-		$tpl->add_array('forums',$tplforums);
+		$tpl->add_variable_ref('forums',$tplforums);
 	}
 }
 ?>

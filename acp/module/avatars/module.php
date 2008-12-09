@@ -101,7 +101,7 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 			$avatars[] = $data;
 		}
 
-		$tpl->add_array('avatars',$avatars);
+		$tpl->add_variable_ref('avatars',$avatars);
 		$murl = BS_URL::get_acpmod_url();
 		$murl->set('search',$search);
 		$pagination->populate_tpl($murl);

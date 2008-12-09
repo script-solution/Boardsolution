@@ -98,7 +98,7 @@ final class BS_ACP_Module_faq extends BS_ACP_Module
 			$locale->lang('faq_q_bbceditor_extra_tags'),$locale->lang('faq_a_bbceditor_extra_tags')
 		);
 		
-		$tpl->add_array('questions',$this->_entries);
+		$tpl->add_variable_ref('questions',$this->_entries);
 	}
 
 	/**

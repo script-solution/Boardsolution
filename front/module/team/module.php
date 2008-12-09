@@ -68,7 +68,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 			);
 		}
 		
-		$tpl->add_array('admins',$admins);
+		$tpl->add_variable_ref('admins',$admins);
 		
 		// determine moderators
 		$mods = array();
@@ -158,8 +158,8 @@ final class BS_Front_Module_team extends BS_Front_Module
 			}
 		}
 		
-		$tpl->add_array('mods',$mods);
-		$tpl->add_array('other',$other);
+		$tpl->add_variable_ref('mods',$mods);
+		$tpl->add_variable_ref('other',$other);
 	}
 	
 	/**

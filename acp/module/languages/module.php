@@ -86,7 +86,7 @@ final class BS_ACP_Module_languages extends BS_ACP_Module
 					stripos($lang['lang_folder'],$search) !== false)
 				$languages[] = $lang;
 		}
-		$tpl->add_array('languages',$languages);
+		$tpl->add_variable_ref('languages',$languages);
 	}
 }
 ?>

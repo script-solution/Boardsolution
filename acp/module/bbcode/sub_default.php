@@ -107,7 +107,7 @@ final class BS_ACP_SubModule_bbcode_default extends BS_ACP_SubModule
 		unset($hidden['site']);
 		unset($hidden['search']);
 		unset($hidden['at']);
-		$tpl->add_array('tags',$tags);
+		$tpl->add_variable_ref('tags',$tags);
 		$tpl->add_variables(array(
 			'site' => $site,
 			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),

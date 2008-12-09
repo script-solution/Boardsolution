@@ -135,7 +135,7 @@ final class BS_PostingUtils extends FWS_UtilBase
 			);
 		}
 
-		$tpl->add_array('messages',$posts);
+		$tpl->add_variable_ref('messages',$posts);
 		$tpl->restore_template();
 	}
 	
@@ -469,7 +469,7 @@ final class BS_PostingUtils extends FWS_UtilBase
 				);
 	    }
 	    
-	    $tpl->add_array('attachments',$tplatt);
+	    $tpl->add_variable_ref('attachments',$tplatt);
 	    $tpl->restore_template();
 	  }
 	

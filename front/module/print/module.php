@@ -146,7 +146,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 				);
 			}
 			
-			$tpl->add_array('poll_options',$tploptions);
+			$tpl->add_variable_ref('poll_options',$tploptions);
 		}
 		// display the event-data
 		else if($topic_data['type'] == -1)
@@ -214,7 +214,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 			);
 		}
 		
-		$tpl->add_array('posts',$posts);
+		$tpl->add_variable_ref('posts',$posts);
 	}
 }
 ?>

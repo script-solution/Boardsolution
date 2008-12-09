@@ -123,7 +123,7 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 		$pform->set_textarea_height('100px');
 		$pform->add_form();
 		
-		$tpl->add_array('default',$default);
+		$tpl->add_variable_ref('default',$default);
 		$tpl->add_variables(array(
 			'title' => $locale->lang($type.'_event'),
 			'target_url' => $target_url,

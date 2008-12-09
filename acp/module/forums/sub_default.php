@@ -169,7 +169,7 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 			$last_parent = $data->get_parent_id();
 		}
 		
-		$tpl->add_array('forums',$tplforums);
+		$tpl->add_variable_ref('forums',$tplforums);
 		
 		$url = BS_URL::get_acpsub_url();
 		$url->set('at',BS_ACP_ACTION_RESORT_FORUMS);

@@ -117,7 +117,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 					$thiskat = $data['category'];
 				}
 
-				$tpl->add_array('links',$links);
+				$tpl->add_variable_ref('links',$links);
 
 				$pagination->populate_tpl(BS_URL::get_mod_url('linklist'));
 			}

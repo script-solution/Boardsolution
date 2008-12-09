@@ -83,7 +83,7 @@ class BS_Pagination extends FWS_Pagination
 			$end_item = ($end_item > $this->get_num()) ? $this->get_num() : $end_item;
 			
 			$tpl->set_template('inc_pagination.htm');
-			$tpl->add_array('numbers',$tnumbers);
+			$tpl->add_variable_ref('numbers',$tnumbers);
 			$tpl->add_variables(array(
 				'page' => $page,
 				'total_pages' => $this->get_page_count(),

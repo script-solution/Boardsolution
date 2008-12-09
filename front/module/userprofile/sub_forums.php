@@ -139,7 +139,7 @@ final class BS_Front_SubModule_userprofile_forums extends BS_Front_SubModule
 			}
 		}
 		
-		$tpl->add_array('forums',$tplforums);
+		$tpl->add_variable_ref('forums',$tplforums);
 
 		$pagination->populate_tpl(BS_URL::get_sub_url());
 

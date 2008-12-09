@@ -94,7 +94,7 @@ final class BS_Front_Module_register extends BS_Front_Module
 			'default' => $locale->lang('email_display_mode_default')
 		);
 
-		$tpl->add_array('add_fields',$tplfields);
+		$tpl->add_variable_ref('add_fields',$tplfields);
 		$tpl->add_variables(array(
 			'email_display_mode_options' => $email_display_mode_options,
 			'enable_security_code' => $cfg['enable_security_code'] == 1,

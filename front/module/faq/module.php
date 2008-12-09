@@ -86,7 +86,7 @@ final class BS_Front_Module_faq extends BS_Front_Module
 			);
 		}
 		
-		$tpl->add_array('faq_titles',$faq_titles);
+		$tpl->add_variable_ref('faq_titles',$faq_titles);
 		
 		$faqs = array();
 		for($i = 1;$i <= $count;$i++)
@@ -170,7 +170,7 @@ final class BS_Front_Module_faq extends BS_Front_Module
 			);
 		}
 		
-		$tpl->add_array('faqs',$faqs);
+		$tpl->add_variable_ref('faqs',$faqs);
 	}
 
 	/**

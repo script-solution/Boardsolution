@@ -260,7 +260,7 @@ final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 			);
 		}
 
-		$tpl->add_array('pms',$pms);
+		$tpl->add_variable_ref('pms',$pms);
 		
 		if($mode != 'overview')
 		{

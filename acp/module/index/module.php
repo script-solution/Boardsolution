@@ -128,7 +128,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 			);
 		}
 		
-		$tpl->add_array('tasks',$tasks);
+		$tpl->add_variable_ref('tasks',$tasks);
 		
 		// online user
 		$online_user = array();
@@ -180,7 +180,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 			);
 		}
 		
-		$tpl->add_array('online_user',$online_user);
+		$tpl->add_variable_ref('online_user',$online_user);
 
 		// statistics
 		$stats = $functions->get_stats();

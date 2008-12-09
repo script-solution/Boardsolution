@@ -278,7 +278,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 			}
 		}
 		
-		$tpl->add_array('user',$user);
+		$tpl->add_variable_ref('user',$user);
 		
 		$orderurl = clone $baseurl;
 		$tpl->add_variables(array(

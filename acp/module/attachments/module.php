@@ -195,7 +195,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 			$index++;
 		}
 		
-		$tpl->add_array('attachments',$tplatt);
+		$tpl->add_variable_ref('attachments',$tplatt);
 		
 		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);

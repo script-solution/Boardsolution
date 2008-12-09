@@ -481,7 +481,7 @@ final class BS_PostingForm extends FWS_Object
 				'show_attachments' => count($attachments) > 0,
 				'hint' => $hint
 			));
-			$tpl->add_array('attachments',$attachments);
+			$tpl->add_variable_ref('attachments',$attachments);
 			
 			$tpl->restore_template();
 		}

@@ -110,7 +110,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		}
 		
 		$newsfeedurl = BS_URL::get_mod_url('news_feed');
-		$tpl->add_array('online',$online);
+		$tpl->add_variable_ref('online',$online);
 		$tpl->add_variables(array(
 			'show_news' => $enable_news,
 			'forums_url' => BS_URL::build_forums_url(),
@@ -271,7 +271,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 			);
 		}
 		
-		$tpl->add_array('topics',$topics);
+		$tpl->add_variable_ref('topics',$topics);
 	}
 	
 	/**
@@ -392,7 +392,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 			}
 		}
 		
-		$tpl->add_array('news_list',$news);
+		$tpl->add_variable_ref('news_list',$news);
 	}
 
 	/**

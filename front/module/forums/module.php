@@ -94,7 +94,7 @@ final class BS_Front_Module_forums extends BS_Front_Module
 		$url->set(BS_URL_LOC,'clap_ministats');	
 		$clap_data = $functions->get_clap_data('ministats',$url->to_url());
 		
-		$tpl->add_array('stats_data',$stats_data);
+		$tpl->add_variable_ref('stats_data',$stats_data);
 		$tpl->add_variables(array(
 			'show_current_topics_link' => !$cfg['current_topic_enable'] ||
 				strpos($cfg['current_topic_loc'],'portal') !== false,

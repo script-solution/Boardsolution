@@ -94,7 +94,7 @@ final class BS_Front_Module_user_search extends BS_Front_Module
 			);
 		}
 		
-		$tpl->add_array('user_list',$user_list);
+		$tpl->add_variable_ref('user_list',$user_list);
 		
 		$murl = BS_URL::get_mod_url();
 		$murl->set(BS_URL_MS_NAME,$name);

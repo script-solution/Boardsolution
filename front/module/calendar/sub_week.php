@@ -84,7 +84,7 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 			}
 		}
 		
-		$tpl->add_array('rows',$rows);
+		$tpl->add_variable_ref('rows',$rows);
 	}
 }
 ?>

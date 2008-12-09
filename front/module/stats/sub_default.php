@@ -50,7 +50,7 @@ final class BS_Front_SubModule_stats_default extends BS_Front_SubModule
 		########################## general ##########################
 
 		$stats_data = $functions->get_stats();
-		$tpl->add_array('general',$stats_data);
+		$tpl->add_variable_ref('general',$stats_data);
 		
 		$stats = array();
 		
@@ -221,7 +221,7 @@ final class BS_Front_SubModule_stats_default extends BS_Front_SubModule
 			'own_stats_image' => $surl
 		));
 		
-		$tpl->add_array('stats',$stats);
+		$tpl->add_variable_ref('stats',$stats);
 	}
 
 	/**

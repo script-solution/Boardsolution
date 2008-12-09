@@ -107,7 +107,7 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 			}
 		}
 		
-		$tpl->add_array('tables',$tables);
+		$tpl->add_variable_ref('tables',$tables);
 		$this->request_formular();
 		
 		$actions = array(

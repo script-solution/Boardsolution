@@ -125,7 +125,7 @@ final class BS_ACP_Module_usersearch extends BS_ACP_Module
 			}
 		}
 		
-		$tpl->add_array('users',$users);
+		$tpl->add_variable_ref('users',$users);
 	}
 }
 ?>

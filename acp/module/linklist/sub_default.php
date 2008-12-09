@@ -164,7 +164,7 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 		unset($hidden['site']);
 		unset($hidden['search']);
 		unset($hidden['at']);
-		$tpl->add_array('links',$links);
+		$tpl->add_variable_ref('links',$links);
 		$tpl->add_variables(array(
 			'at_activate' => BS_ACP_ACTION_ACTIVATE_LINKS,
 			'at_deactivate' => BS_ACP_ACTION_DEACTIVATE_LINKS,

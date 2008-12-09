@@ -155,7 +155,7 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 			}
 		}
 
-		$tpl->add_array('smileys',$smileys);
+		$tpl->add_variable_ref('smileys',$smileys);
 		$tpl->add_variables(array('total' => $c));
 		
 		$murl = BS_URL::get_acpmod_url();

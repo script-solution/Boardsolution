@@ -44,7 +44,7 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 		$forward_url = $url->to_url();
 	
 		$weekdays = $helper->get_weekdays();
-		$tpl->add_array('wd_detail',$weekdays);
+		$tpl->add_variable_ref('wd_detail',$weekdays);
 		
 		$months = $helper->get_months();
 		$tpl->add_variables(array(
@@ -104,7 +104,7 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 			$week += 86400 * 7;
 		}
 	
-		$tpl->add_array('weeks',$weeks);
+		$tpl->add_variable_ref('weeks',$weeks);
 	}
 }
 ?>

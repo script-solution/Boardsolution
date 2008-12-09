@@ -89,7 +89,7 @@ final class BS_ACP_SubModule_usergroups_edit extends BS_ACP_SubModule
 		$this->request_formular();
 		$is_guest_group = $id == BS_STATUS_GUEST;
 
-		$tpl->add_array('default',$data);
+		$tpl->add_variable_ref('default',$data);
 		$tpl->add_variables(array(
 			'form_target' => $formurl->to_url(),
 			'action_type' => $action_type,
@@ -110,7 +110,7 @@ final class BS_ACP_SubModule_usergroups_edit extends BS_ACP_SubModule
 			);
 		}
 
-		$tpl->add_array('fields',$fields);
+		$tpl->add_variable_ref('fields',$fields);
 	}
 }
 ?>

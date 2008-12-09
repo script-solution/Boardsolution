@@ -107,7 +107,7 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 		$tpl->add_variables(array(
 			'not_exported' => !BS_ENABLE_EXPORT
 		));
-		$tpl->add_array('user',$user);
+		$tpl->add_variable_ref('user',$user);
 
 		$pagination->populate_tpl(BS_URL::get_acpmod_url());
 	}

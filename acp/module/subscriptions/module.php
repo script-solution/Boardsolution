@@ -153,7 +153,7 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 			);
 		}
 
-		$tpl->add_array('subscriptions',$subscriptions);
+		$tpl->add_variable_ref('subscriptions',$subscriptions);
 		
 		$hidden = $input->get_vars_from_method('get');
 		unset($hidden['site']);

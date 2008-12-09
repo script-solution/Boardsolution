@@ -63,7 +63,7 @@ final class BS_Front_Module_smileys extends BS_Front_Module
 			);
 		}
 		
-		$tpl->add_array('smileys',$smileys);
+		$tpl->add_variable_ref('smileys',$smileys);
 		$tpl->add_variables(array(
 			'number' => $number
 		));

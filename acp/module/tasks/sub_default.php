@@ -99,7 +99,7 @@ final class BS_ACP_SubModule_tasks_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$tpl->add_array('tasks',$tpltasks);
+		$tpl->add_variable_ref('tasks',$tpltasks);
 		$tpl->add_variables(array(
 			'at_run' => BS_ACP_ACTION_RUN_TASK
 		));

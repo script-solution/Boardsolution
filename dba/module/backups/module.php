@@ -85,7 +85,7 @@ final class BS_DBA_Module_backups extends BS_DBA_Module
 			);
 		}
 		
-		$tpl->add_array('backups',$tpl_backups);
+		$tpl->add_variable_ref('backups',$tpl_backups);
 	}
 }
 ?>

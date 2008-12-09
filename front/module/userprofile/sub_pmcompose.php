@@ -291,7 +291,7 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		$url->set('type','pm');
 		$url->set_separator('&');
 		
-		$tpl->add_array('messages',$messages);
+		$tpl->add_variable_ref('messages',$messages);
 		$tpl->add_variables(array(
 			'number' => 1,
 			'show_quote' => true,

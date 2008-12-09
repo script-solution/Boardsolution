@@ -112,7 +112,7 @@ final class BS_ACP_SubModule_tpleditor_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$tpl->add_array('items',$items);
+		$tpl->add_variable_ref('items',$items);
 	}
 
 	/**

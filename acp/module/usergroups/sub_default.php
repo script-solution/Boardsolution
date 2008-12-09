@@ -86,7 +86,7 @@ final class BS_ACP_SubModule_usergroups_default extends BS_ACP_SubModule
 		unset($hidden['site']);
 		unset($hidden['search']);
 		unset($hidden['at']);
-		$tpl->add_array('groups',$groups);
+		$tpl->add_variable_ref('groups',$groups);
 		$tpl->add_variables(array(
 			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
 			'hidden' => $hidden,

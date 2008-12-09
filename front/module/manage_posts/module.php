@@ -203,7 +203,7 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 		$tpl->add_variables(array(
 			'is_first_post' => count($posts) > 0 && $posts[0]['post_id'] == $first_post ? '1' : '0'
 		)); 
-		$tpl->add_array('posts',$posts);
+		$tpl->add_variable_ref('posts',$posts);
 	}
 }
 ?>

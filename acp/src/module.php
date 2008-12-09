@@ -29,7 +29,7 @@ abstract class BS_ACP_Module extends FWS_Module
 		$tpl = FWS_Props::get()->tpl();
 
 		$form = new BS_HTML_Formular(false,false);
-		$tpl->add_array('form',$form);
+		$tpl->add_variable_ref('form',$form);
 		$tpl->add_allowed_method('form','*');
 		return $form;
 	}

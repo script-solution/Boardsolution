@@ -137,7 +137,7 @@ final class BS_Install_Module_3 extends BS_Install_Module
 			'show_table_prefix' => false,
 			'title' => $locale->lang('step_config')
 		));
-		$tpl->add_array('configs',$configs);
+		$tpl->add_variable_ref('configs',$configs);
 	}
 }
 ?>

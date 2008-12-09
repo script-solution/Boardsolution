@@ -96,7 +96,7 @@ final class BS_Front_Search_Result_Posts extends FWS_Object implements BS_Front_
 		}
 		
 		$pagination->populate_tpl($murl);
-		$tpl->add_array('posts',$posts);
+		$tpl->add_variable_ref('posts',$posts);
 		
 		$tpl->restore_template();
 	}

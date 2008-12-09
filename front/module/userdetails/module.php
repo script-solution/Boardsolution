@@ -105,7 +105,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 	
 		$rank_data = $functions->get_rank_data($user_data['exppoints']);
 		
-		$tpl->add_array('add_fields',$field_list);
+		$tpl->add_variable_ref('add_fields',$field_list);
 	
 		if($cfg['enable_avatars'] == 1)
 		{
@@ -274,7 +274,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 			'enable_post_count' => $cfg['enable_post_count'],
 			'enable_signatures' => $cfg['enable_signatures']
 		));
-		$tpl->add_array('user_data',$user_data);
+		$tpl->add_variable_ref('user_data',$user_data);
 	}
 }
 ?>

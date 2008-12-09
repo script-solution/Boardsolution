@@ -165,7 +165,7 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 			);
 		}
 		
-		$tpl->add_array('logs',$logs);
+		$tpl->add_variable_ref('logs',$logs);
 		$tpl->add_variables(array(
 			'count' => count($loglist)
 		));

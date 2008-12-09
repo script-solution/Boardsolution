@@ -126,7 +126,7 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 			);
 		}
 
-		$tpl->add_array('avatars',$avatars);
+		$tpl->add_variable_ref('avatars',$avatars);
 
 		$pagination->populate_tpl(BS_URL::get_sub_url());
 
@@ -141,7 +141,7 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 		else
 			$delete_avatar = '';
 
-		$tpl->add_array('CFG',$cfg);
+		$tpl->add_variable_ref('CFG',$cfg);
 		$tpl->add_variables(array(
 			'target_url' => $url->remove(BS_URL_AT)->to_url(),
 			'action_type' => BS_ACTION_UPLOAD_AVATAR,

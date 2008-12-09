@@ -64,7 +64,7 @@ final class BS_ACP_SubModule_smileys_edit extends BS_ACP_SubModule
 
 		$this->request_formular();
 		
-		$tpl->add_array('smiley',$data);
+		$tpl->add_variable_ref('smiley',$data);
 		$tpl->add_variables(array(
 			'action_type' => BS_ACP_ACTION_EDIT_SMILEY,
 			'site' => $input->get_var('site','get',FWS_Input::INTEGER),

@@ -121,7 +121,7 @@ final class BS_ACP_Document_Navi extends BS_ACP_Document
 				$c++;
 		}
 		
-		$tpl->add_array('categories',$tpl_categories);
+		$tpl->add_variable_ref('categories',$tpl_categories);
 	}
 }
 ?>

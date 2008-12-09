@@ -54,7 +54,7 @@ final class BS_ACP_Module_dbcache extends BS_ACP_Module
 			if($content instanceof FWS_Cache_Content)
 				$entries[] = $name;
 		}
-		$tpl->add_array('entries',$entries);
+		$tpl->add_variable_ref('entries',$entries);
 		
 		// show details?
 		if($input->isset_var('name','get'))

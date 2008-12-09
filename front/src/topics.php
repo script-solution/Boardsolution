@@ -658,7 +658,7 @@ final class BS_Front_Topics extends FWS_Object
 			}
 		}
 
-		$tpl->add_array('topics',$topics);
+		$tpl->add_variable_ref('topics',$topics);
 		
 		$tpl->restore_template();
 	}

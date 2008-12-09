@@ -150,7 +150,7 @@ final class BS_Front_Search_Result_PMs extends FWS_Object implements BS_Front_Se
 			);
 		}
 		
-		$tpl->add_array('pms',$pms);
+		$tpl->add_variable_ref('pms',$pms);
 		
 		$pagination->populate_tpl($murl);
 		

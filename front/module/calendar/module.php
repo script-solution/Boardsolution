@@ -99,7 +99,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 			$months_small[] = $this->_get_month_small($syear,$smonth);
 		}
 	
-		$tpl->add_array('months',$months_small);
+		$tpl->add_variable_ref('months',$months_small);
 	}
 	
 	/**
@@ -119,7 +119,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		$mon_len = FWS_Date::get_formated_date('t',$day_ts);
 	
 		$wd_short = $helper->get_weekdays_short();
-		$tpl->add_array('wd_short',$wd_short);
+		$tpl->add_variable_ref('wd_short',$wd_short);
 		
 		$months = $helper->get_months();
 		$url = BS_URL::get_mod_url('calendar');
