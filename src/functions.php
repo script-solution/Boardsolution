@@ -161,7 +161,7 @@ final class BS_Functions extends FWS_Object
 	/**
 	 * claps a area with the given name
 	 *
-	 * @param string name the name (without BS_COOKIE_PREFIX)
+	 * @param string $name the name (without BS_COOKIE_PREFIX)
 	 */
 	public function clap_area($name)
 	{
@@ -220,6 +220,7 @@ final class BS_Functions extends FWS_Object
 	public function clap_forum($id)
 	{
 		$input = FWS_Props::get()->input();
+		$cookies = FWS_Props::get()->cookies();
 
 		$hidden_forums = $input->get_var(
 			BS_COOKIE_PREFIX.'hidden_forums','cookie',FWS_Input::STRING
@@ -239,7 +240,7 @@ final class BS_Functions extends FWS_Object
 			$ids[] = $id;
 	
 		$hidden_forums = implode(',',$ids).',';
-		$this->set_cookie('hidden_forums',$hidden_forums,86400 * 30);
+		$cookies->set_cookie('hidden_forums',$hidden_forums,86400 * 30);
 	}
 	
 	/**

@@ -36,9 +36,9 @@ final class BS_Front_Action_Plain_Topic extends BS_Front_Action_Plain
 		$allow_posts = $input->get_var('allow_posts','post',FWS_Input::INT_BOOL);
 		if($auth->has_current_forum_perm(BS_MODE_MARK_TOPICS_IMPORTANT) &&
 			 $input->get_var('important','post',FWS_Input::INT_BOOL) == 1)
-			$important = 1;
+			$important = true;
 		else
-			$important = 0;
+			$important = false;
 		$symbol = $input->get_var('symbol','post',FWS_Input::INTEGER);
 		$symbol = ($symbol > BS_NUMBER_OF_TOPIC_ICONS || $symbol < 0) ? 0 : (int)$symbol;
 		

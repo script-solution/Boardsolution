@@ -40,8 +40,6 @@ final class BS_Front_Module_forums extends BS_Front_Module
 		$tpl = FWS_Props::get()->tpl();
 		$auth = FWS_Props::get()->auth();
 
-		$forums = BS_ForumUtils::get_instance();
-		
 		// display latest topics at the top?
 		$display_lt_top = strpos($cfg['current_topic_loc'],'top') !== false;
 		$display_lt_bottom = strpos($cfg['current_topic_loc'],'bottom') !== false;
@@ -52,7 +50,7 @@ final class BS_Front_Module_forums extends BS_Front_Module
 		$tpl->add_variables(array(
 			'latest_topics_top' => $display_lt && $display_lt_top,
 			'latest_topics_bottom' => $display_lt && $display_lt_bottom,
-			'forum_list' => $forums->get_forum_list(0)
+			'forum_list' => BS_ForumUtils::get_forum_list(0)
 		));
 
 		// show bottom
@@ -96,7 +94,7 @@ final class BS_Front_Module_forums extends BS_Front_Module
 		$url->set(BS_URL_LOC,'clap_ministats');	
 		$clap_data = $functions->get_clap_data('ministats',$url->to_url());
 		
-		$tpl->add_array('stats_data',$stats_data,false);
+		$tpl->add_array('stats_data',$stats_data);
 		$tpl->add_variables(array(
 			'show_current_topics_link' => !$cfg['current_topic_enable'] ||
 				strpos($cfg['current_topic_loc'],'portal') !== false,

@@ -46,7 +46,7 @@ final class BS_DBA_Module_createbackup extends BS_DBA_Module
 		
 		if(!is_array($tables) || count($tables) == 0)
 		{
-			$this->report_error($locale->lang('no_tables_selected'));
+			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('no_tables_selected'));
 			return;
 		}
 		

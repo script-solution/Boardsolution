@@ -136,7 +136,7 @@ final class BS_User_Current extends FWS_User_Current
 	 *
 	 * @param string $username the entered user-name
 	 * @param string $pw the entered password
-	 * @param boolean $hash does the password need to be hashed?
+	 * @param boolean $hashpw does the password need to be hashed?
 	 * @return int the error-code; see self::LOGIN_ERROR_*
 	 */
 	public function login($username,$pw,$hashpw = true)
@@ -316,7 +316,7 @@ final class BS_User_Current extends FWS_User_Current
 	 * Sets the value of the profile-table-field with given name to given value
 	 *
 	 * @param string $name the field-name
-	 * @param string $value the new value
+	 * @param int|bool|float|string $value the new value
 	 */
 	public function set_profile_val($name,$value)
 	{
@@ -332,6 +332,14 @@ final class BS_User_Current extends FWS_User_Current
 	public function is_bot()
 	{
 		return $this->_user->is_bot();
+	}
+	
+	/**
+	 * @return string the name of the bot. null if the user is no bot
+	 */
+	public function get_bot_name()
+	{
+		return $this->_user->get_bot_name();
 	}
 
 	/**

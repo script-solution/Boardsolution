@@ -48,6 +48,7 @@ define('BS_TB_THREADS','ssf_topics');
 define('BS_TB_UNREAD','ssf_unread');
 define('BS_TB_UNREAD_HIDE','ssf_unread_hide');
 define('BS_TB_UNSENT_POSTS','ssf_unsent_posts');
+define('BS_TB_USER','ssf_user');
 define('BS_TB_USER_BANS','ssf_user_bans');
 define('BS_TB_USER_FIELDS','ssf_user_fields');
 define('BS_TB_USER_GROUPS','ssf_user_groups');

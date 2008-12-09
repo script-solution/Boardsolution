@@ -139,7 +139,7 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 		foreach($list as $data)
 		{
 			$link_date = FWS_Date::get_date($data['link_date'],false);
-			$link_rating = $functions->get_link_rating($data['vote_points'],$data['votes'],0,1,'');
+			$link_rating = $functions->get_link_rating($data['vote_points'],$data['votes'],0,1);
 		
 			$bbcode = new BS_BBCode_Parser($data['link_desc'],'desc',$enable_bbcode,$enable_smileys);
 			

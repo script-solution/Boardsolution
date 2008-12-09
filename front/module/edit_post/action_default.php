@@ -28,7 +28,7 @@ final class BS_Front_Action_edit_post_default extends BS_Front_Action_Base
 		$cache = FWS_Props::get()->cache();
 		$locale = FWS_Props::get()->locale();
 		// nothing to do?
-		if(!$input->isset_var('submit','post',FWS_Input::STRING))
+		if(!$input->isset_var('submit','post'))
 			return '';
 
 		// the user has to be logged in

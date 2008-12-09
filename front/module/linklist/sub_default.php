@@ -103,7 +103,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 						'index' => $i,
 						'description' => $description,
 						'link_url' => $murl,
-						'link_rating' => $functions->get_link_rating($data['vote_points'],$data['votes'],0),
+						'link_rating' => $functions->get_link_rating($data['vote_points'],$data['votes'],false),
 						'clicks' => $data['clicks'],
 						'user_name' => BS_UserUtils::get_link(
 								$data['user_id'],$data['user_name'],$data['user_group']
@@ -117,7 +117,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 					$thiskat = $data['category'];
 				}
 
-				$tpl->add_array('links',$links,false);
+				$tpl->add_array('links',$links);
 
 				$pagination->populate_tpl(BS_URL::get_mod_url('linklist'));
 			}

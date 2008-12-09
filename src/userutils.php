@@ -120,7 +120,7 @@ final class BS_UserUtils extends FWS_UtilBase
 	 *
 	 * @param string $email the email-address
 	 * @param string $mode the display-mode (hide,default,jumble)
-	 * @param string $use_link do you want to use a link if possible?
+	 * @param boolean $use_link do you want to use a link if possible?
 	 * @return string the email to display
 	 */
 	public static function get_displayed_email($email,$mode,$use_link = false)

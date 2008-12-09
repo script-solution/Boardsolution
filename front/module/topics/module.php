@@ -104,13 +104,12 @@ final class BS_Front_Module_topics extends BS_Front_Module
 		$display_lt_bottom = strpos($cfg['current_topic_loc'],'bottom') !== false;
 		$display_lt = $cfg['current_topic_enable'] == 1 && ($display_lt_bottom || $display_lt_top);
 		
-		$futils = BS_ForumUtils::get_instance();
 		if($forums->has_childs($fid))
 		{
 			if($forums->get_forum_type($fid) == 'contains_cats' && $display_lt)
 				BS_Front_TopicFactory::add_latest_topics_small($fid);
 
-			$futils->get_forum_list($fid);
+			BS_ForumUtils::get_forum_list($fid);
 			
 			$tpl->add_variables(array(
 				'sub_forums' => true

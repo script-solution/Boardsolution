@@ -129,9 +129,9 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 		}
 		else
 		{
-			$start = $form->get_date_chooser_timestamp('start_',false,false);
+			$start = $form->get_date_chooser_timestamp('start_',false);
 			// we want an inclusive end, so we add the time to get 23:59:59 on the selected day.
-			$end = $form->get_date_chooser_timestamp('end_',false,false) + (3600 * 24) - 1;
+			$end = $form->get_date_chooser_timestamp('end_',false) + (3600 * 24) - 1;
 		}
 		
 		$split_options = array(

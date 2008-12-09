@@ -46,7 +46,7 @@ final class BS_Front_Module_news_feed extends BS_Front_Module
 			return;
 		}
 		
-		$mode = $input->get_var(BS_URL_MODE,'get',FWS_Input::STRING,array('rss20','atom'),'rss20');
+		$mode = $input->correct_var(BS_URL_MODE,'get',FWS_Input::STRING,array('rss20','atom'),'rss20');
 		
 		// load feed-generator
 		if($mode == 'rss20')

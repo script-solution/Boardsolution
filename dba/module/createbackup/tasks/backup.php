@@ -17,8 +17,7 @@
  * @subpackage	dba.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_DBA_Module_CreateBackup_Tasks_Backup extends FWS_Object
-	implements FWS_Progress_Task
+final class BS_DBA_Module_CreateBackup_Tasks_Backup extends FWS_Object implements FWS_Progress_Task
 {
 	/**
 	 * Constructor
@@ -39,7 +38,10 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends FWS_Object
 			
 			if(!$data && !$tables)
 			{
-				$this->report_error();
+				$msgs = FWS_Props::get()->msgs();
+				$doc = FWS_Props::get()->doc();
+				$msgs->add_error($locale->lang('no_tables_selected'));
+				$doc->get_module()->set_error();
 				return;
 			}
 			

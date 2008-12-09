@@ -126,12 +126,12 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 			);
 		}
 
-		$tpl->add_array('avatars',$avatars,false);
+		$tpl->add_array('avatars',$avatars);
 
 		$pagination->populate_tpl(BS_URL::get_sub_url());
 
 		$current_avatar = BS_UserUtils::get_profile_avatar(
-			$user->get_profile_val('avatar'),$user->get_user_id()
+			(int)$user->get_profile_val('avatar'),$user->get_user_id()
 		);
 		if($current_avatar != $locale->lang('nopictureavailable'))
 		{
@@ -141,7 +141,7 @@ final class BS_Front_SubModule_userprofile_avatars extends BS_Front_SubModule
 		else
 			$delete_avatar = '';
 
-		$tpl->add_array('CFG',$cfg,false);
+		$tpl->add_array('CFG',$cfg);
 		$tpl->add_variables(array(
 			'target_url' => $url->remove(BS_URL_AT)->to_url(),
 			'action_type' => BS_ACTION_UPLOAD_AVATAR,

@@ -137,7 +137,7 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends FWS_Object implements FW
 			{
 				$text = '';
 				BS_PostingUtils::prepare_message_for_db(
-					$text,addslashes($data['pm_text_posted']),'posts',1,1
+					$text,addslashes($data['pm_text_posted']),'posts',true,true
 				);
 				
 				BS_DAO::get_pms()->update_text($data['id'],$text,$data['pm_text_posted']);

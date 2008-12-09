@@ -166,7 +166,9 @@ final class BS_Front_EventUtils extends FWS_UtilBase
 		$more = false;
 		$month = FWS_Date::get_formated_date('m');
 		$day = FWS_Date::get_formated_date('d');
-		$userlist = BS_DAO::get_profile()->get_birthday_users($month,$day,(BS_MINISTATS_MAX_EVENTS + 1));
+		$userlist = BS_DAO::get_profile()->get_birthday_users(
+			(int)$month,(int)$day,(BS_MINISTATS_MAX_EVENTS + 1)
+		);
 		
 		if(count($userlist) == BS_MINISTATS_MAX_EVENTS)
 		{

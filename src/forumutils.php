@@ -337,9 +337,8 @@ final class BS_ForumUtils extends FWS_UtilBase
 	/**
 	 * generates the path to a forum and returns it
 	 *
-	 * @param int $fid the id of the forum
+	 * @param int $rid the id of the forum
 	 * @param boolean $start_with_raquo if you enable this the path will start with &amp;raquo;
-	 * @param int $maxlen the max length of the path
 	 * @return string the result
 	 */
 	public static function get_forum_path($rid = 0,$start_with_raquo = true)

@@ -70,7 +70,7 @@ final class BS_API_Module_events extends BS_API_Module
 		// grab birthdays from db
 		$month = FWS_Date::get_formated_date('m');
 		$day = FWS_Date::get_formated_date('d');
-		foreach(BS_DAO::get_profile()->get_birthday_users($month,$day) as $data)
+		foreach(BS_DAO::get_profile()->get_birthday_users((int)$month,(int)$day) as $data)
 			$this->birthdays[] = $data;
 	}
 }

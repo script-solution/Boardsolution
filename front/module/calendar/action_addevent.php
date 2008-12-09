@@ -26,7 +26,7 @@ final class BS_Front_Action_calendar_addevent extends BS_Front_Action_Base
 		$auth = FWS_Props::get()->auth();
 		$locale = FWS_Props::get()->locale();
 		// nothing to do?
-		if(!$input->isset_var('submit','post',FWS_Input::STRING))
+		if(!$input->isset_var('submit','post'))
 			return '';
 		
 		// has the user permission to start an event?

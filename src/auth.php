@@ -436,7 +436,7 @@ final class BS_Auth extends FWS_Object
 	/**
 	 * Returns all permissions for the given forum and action
 	 *
-	 * @param string $action the action to perform (BS_MODE_REPLY, BS_MODE_START_TOPIC, ...)
+	 * @param int $action the action to perform (BS_MODE_REPLY, BS_MODE_START_TOPIC, ...)
 	 * @param int $fid the id of the forum
 	 * @return array all groups that have access
 	 */
@@ -453,7 +453,7 @@ final class BS_Auth extends FWS_Object
 	/**
 	 * checks if this user has the given permission for the forum with given id
 	 *
-	 * @param string $action the action to perform (BS_MODE_REPLY, BS_MODE_START_TOPIC, ...)
+	 * @param int $action the action to perform (BS_MODE_REPLY, BS_MODE_START_TOPIC, ...)
 	 * @param int $fid the id of the forum
 	 * @return true if the user has permission
 	 */
@@ -528,7 +528,7 @@ final class BS_Auth extends FWS_Object
 			return false;
 		else if($user->is_bot())
 		{
-			$bot = $user->get_bot_data();
+			$bot = $user->get_bot_name();
 			if($bot !== null && !$bot['bot_access'])
 				return false;
 		}

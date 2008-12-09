@@ -68,8 +68,6 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 				$functions->add_delete_message($message,$yes_url,$no_url,'');
 			}
 		}
-		else if($mode == 'optimize')
-			$this->_optimize_tables();
 		
 		// retrieve tables in the database
 		$selected_db = BS_DBA_Utils::get_instance()->get_selected_database();

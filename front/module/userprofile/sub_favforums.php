@@ -61,7 +61,6 @@ final class BS_Front_SubModule_userprofile_favforums extends BS_Front_SubModule
 			'dot' => $user->get_theme_item_path('images/forums/path_dot.gif'),
 			'middle' => $user->get_theme_item_path('images/forums/path_middle.gif')
 		);
-		$utils = BS_ForumUtils::get_instance();
 		
 		$tplforums = array();
 		$index = 0;
@@ -81,7 +80,7 @@ final class BS_Front_SubModule_userprofile_favforums extends BS_Front_SubModule
 				'id' => $id,
 				'index' => $index,
 				'contains_forums' => $data->get_forum_type() == 'contains_cats',
-				'path_images' => $utils->get_path_images($forum,$sub_cats,$images,1),
+				'path_images' => BS_ForumUtils::get_path_images($forum,$sub_cats,$images,1),
 				'forum_url' => BS_URL::build_topics_url($id),
 				'selected' => in_array($id,$forum_ids)
 			);
@@ -90,7 +89,7 @@ final class BS_Front_SubModule_userprofile_favforums extends BS_Front_SubModule
 				$index++;
 		}
 		
-		$tpl->add_array('forums',$tplforums,false);
+		$tpl->add_array('forums',$tplforums);
 	}
 }
 ?>

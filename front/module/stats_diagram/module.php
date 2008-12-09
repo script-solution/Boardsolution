@@ -144,7 +144,7 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 		
 		$dnow = new FWS_Date();
 		$now = FWS_Date::get_timestamp(
-			array(12,0,0,$dnow->get_month(),$dnow->get_day(),$dnow->get_year()),false
+			array(12,0,0,$dnow->get_month(),$dnow->get_day(),$dnow->get_year())
 		);
 		$start = $now - (86400 * (BS_NUMBER_OF_DAYS - 1));
 		

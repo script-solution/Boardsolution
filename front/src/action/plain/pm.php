@@ -220,7 +220,7 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 
 		$this->_text = '';
 		$error = BS_PostingUtils::prepare_message_for_db(
-			$this->_text,$this->_post_text,'posts',1,1
+			$this->_text,$this->_post_text,'posts',true,true
 		);
 		if($error != '')
 			return $error;

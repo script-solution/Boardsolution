@@ -133,7 +133,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		$weekurl = BS_URL::get_sub_url('calendar','week');
 		
 		$today = FWS_Date::get_formated_date('jnY');
-		$month_offset = $helper->get_month_offset(FWS_Date::get_formated_date('w',$day_ts));
+		$month_offset = $helper->get_month_offset((int)FWS_Date::get_formated_date('w',$day_ts));
 		$day = 1;
 		$weektime = FWS_Date::get_timestamp(
 			array(0,0,0,$month,1,$year),FWS_Date::TZ_USER,'-'.$month_offset.'days'

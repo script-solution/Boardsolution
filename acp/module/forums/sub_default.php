@@ -100,8 +100,6 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 			'middle' => 'acp/images/forums/path_middle.gif'
 		);
 		
-		$forum_funcs = BS_ForumUtils::get_instance();
-		
 		$switchurl = BS_URL::get_acpsub_url();
 		$switchurl->set('at',BS_ACP_ACTION_SWITCH_FORUMS);
 		
@@ -148,7 +146,7 @@ final class BS_ACP_SubModule_forums_default extends BS_ACP_SubModule
 			if($down_index > 0)
 				$switch_down_url = $switchurl->set('ids',$nodes[$down_index]->get_id().','.$fid)->to_url();
 
-			$path_images = $forum_funcs->get_path_images($node,$sub_cats,$images,1);
+			$path_images = BS_ForumUtils::get_path_images($node,$sub_cats,$images,1);
 			
 			$tplforums[] = array(
 				'show_separator' => $last_parent >= 0 && $last_parent != $data->get_parent_id(),

@@ -73,7 +73,6 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 			$delurl = BS_URL::get_acpsub_url();
 			$delurl->set('at',BS_ACP_ACTION_REMOVE_MODERATORS);
 			
-			$forum_funcs = BS_ForumUtils::get_instance();
 			$mods = $cache->get_cache('moderators');
 			foreach($nodes as $node)
 			{
@@ -115,7 +114,7 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 				}
 				
 				$tplforums[] = array(
-					'path' => $forum_funcs->get_path_images($node,$sub_cats,$images,1),
+					'path' => BS_ForumUtils::get_path_images($node,$sub_cats,$images,1),
 					'name' => $data->get_name(),
 					'fid' => $data->get_id(),
 					'type' => $data->get_forum_type(),

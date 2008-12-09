@@ -64,6 +64,10 @@ foreach(FWS_FileUtils::get_dir_content(BS_PATH.'themes') as $theme)
 
 BS_finish();
 
+/**
+ * @param string $file the file
+ * @param int $val the permission to set
+ */
 function setPerms($file,$val)
 {
 	if(@chmod($file,$val))

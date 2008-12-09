@@ -210,6 +210,7 @@ echo '<b>Ungelesene Themen / PMs:</b><br />';
 
 // request "unread"-module
 $unread = BS_API_get_module('unread');
+$forums = FWS_Props::get()->forums();
 
 echo '<ul>'."\n";
 echo '	<li>Ungelesene Foren: ';
@@ -223,7 +224,7 @@ if(count($unread->unread_forums) > 0)
 		// build the url to the forum
 		$furl = BS_URL::get_frontend_url('topics');
 		$furl->set(BS_URL_FID,$unread->unread_forums[$i]);
-		echo '<a href="'.$furl->to_url().'">'.$bs->forums->get_forum_name($unread->unread_forums[$i]).'</a>';
+		echo '<a href="'.$furl->to_url().'">'.$forums->get_forum_name($unread->unread_forums[$i]).'</a>';
 		// print separator if not the last one
 		if($i < $len - 1)
 			echo ', ';

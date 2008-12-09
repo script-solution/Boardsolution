@@ -55,7 +55,7 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 		
 		$weeks = array();
 		$today = FWS_Date::get_formated_date('date');
-		$month_offset = $helper->get_month_offset(FWS_Date::get_formated_date('w',$sel_ts));
+		$month_offset = $helper->get_month_offset((int)FWS_Date::get_formated_date('w',$sel_ts));
 		$day = 1;
 		$week = FWS_Date::get_timestamp(
 			array(0,0,0,$month,1,$year),FWS_Date::TZ_USER,'-'.$month_offset.'days'

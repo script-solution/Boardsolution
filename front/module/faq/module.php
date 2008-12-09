@@ -86,7 +86,7 @@ final class BS_Front_Module_faq extends BS_Front_Module
 			);
 		}
 		
-		$tpl->add_array('faq_titles',$faq_titles,false);
+		$tpl->add_array('faq_titles',$faq_titles);
 		
 		$faqs = array();
 		for($i = 1;$i <= $count;$i++)
@@ -107,7 +107,7 @@ final class BS_Front_Module_faq extends BS_Front_Module
 					{
 						$ranks[] = array(
 							'points' => $data['post_from'].' - '.$data['post_to']." ".$locale->lang('points'),
-							'image' => $functions->get_rank_images($num,$a,-1,BS_STATUS_USER),
+							'image' => $functions->get_rank_images($num,$a,-1,(string)BS_STATUS_USER),
 							'title' => $data['rank']
 						);
 						$a++;
@@ -117,7 +117,7 @@ final class BS_Front_Module_faq extends BS_Front_Module
 					{
 						$ranks[] = array(
 							'points' => '-',
-							'image' => $functions->get_rank_images($num,$num - 1,-1,-1,true),
+							'image' => $functions->get_rank_images($num,$num - 1,-1,'',true),
 							'title' => $locale->lang('moderator')
 						);
 					}
@@ -125,7 +125,7 @@ final class BS_Front_Module_faq extends BS_Front_Module
 					// add admin
 					$ranks[] = array(
 						'points' => '-',
-						'image' => $functions->get_rank_images($num,$num - 1,-1,BS_STATUS_ADMIN),
+						'image' => $functions->get_rank_images($num,$num - 1,-1,(string)BS_STATUS_ADMIN),
 						'title' => $locale->lang('administrator')
 					);
 					
@@ -170,7 +170,7 @@ final class BS_Front_Module_faq extends BS_Front_Module
 			);
 		}
 		
-		$tpl->add_array('faqs',$faqs,false);
+		$tpl->add_array('faqs',$faqs);
 	}
 
 	/**
