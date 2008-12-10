@@ -22,7 +22,7 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 	/**
 	 * The entered keywords
 	 *
-	 * @var string
+	 * @var array
 	 */
 	private $_keywords;
 	

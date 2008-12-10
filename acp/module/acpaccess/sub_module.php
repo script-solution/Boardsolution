@@ -78,7 +78,7 @@ final class BS_ACP_SubModule_acpaccess_module extends BS_ACP_SubModule
 
 		$mod = BS_ACP_Module_ACPAccess_Helper::get_module_name($module);
 		
-		$this->request_formular(false,false);
+		$this->request_formular();
 		
 		$tpl->add_variables(array(
 			'module' => $module,

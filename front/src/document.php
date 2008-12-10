@@ -78,7 +78,7 @@ final class BS_Front_Document extends BS_Document
 
 		// determine start-module
 		if($cfg['enable_portal'] == 1 &&
-			($user->is_loggedin() || $user->get_profile_val('startmodule' == 'portal')))
+			($user->is_loggedin() || $user->get_profile_val('startmodule') == 'portal'))
 			$default = 'portal';
 		else
 			$default = 'forums';

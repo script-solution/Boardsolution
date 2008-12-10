@@ -185,11 +185,19 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 				$where = FWS_String::substr($where,0,-6);
 		}
 		
-		$where .= FWS_StringHelper::build_int_range_sql('p.posts',$s_from_posts,$s_to_posts);
-		$where .= FWS_StringHelper::build_int_range_sql('p.exppoints',$s_from_points,$s_to_points);
+		$where .= FWS_StringHelper::build_int_range_sql(
+			'p.posts',(int)$s_from_posts,(int)$s_to_posts
+		);
+		$where .= FWS_StringHelper::build_int_range_sql(
+			'p.exppoints',(int)$s_from_points,(int)$s_to_points
+		);
 
-		$where .= FWS_StringHelper::build_date_range_sql('p.registerdate',$s_from_reg,$s_to_reg);
-		$where .= FWS_StringHelper::build_date_range_sql('p.lastlogin',$s_from_lastlogin,$s_to_lastlogin);
+		$where .= FWS_StringHelper::build_date_range_sql(
+			'p.registerdate',(int)$s_from_reg,(int)$s_to_reg
+		);
+		$where .= FWS_StringHelper::build_date_range_sql(
+			'p.lastlogin',(int)$s_from_lastlogin,(int)$s_to_lastlogin
+		);
 
 		// check how many entries exist
 		$num = BS_DAO::get_user()->get_custom_search_user_count($where);

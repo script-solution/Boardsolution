@@ -686,7 +686,7 @@ final class BS_BBCode_Parser extends FWS_Object
 	 * checks wether the given sub-tag is currently allowed
 	 *
 	 * @param array $sub_tags the sub-tags array
-	 * @param int the number of items in $sub_tags
+	 * @param int $sub_count the number of items in $sub_tags
 	 * @param string $tag_type the type of the tag to check
 	 * @return int -1 = allowed, 0 = error, 1 = treat as plain-text
 	 */
@@ -711,7 +711,7 @@ final class BS_BBCode_Parser extends FWS_Object
 	 * builds the recursivly nested sections
 	 *
 	 * @param array $tags the preg_match_all() result with the found tags
-	 * @return object the root-section
+	 * @return BS_BBCode_Section the root-section
 	 */
 	private function _build_sections($tags)
 	{

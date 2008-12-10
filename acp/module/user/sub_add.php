@@ -43,7 +43,7 @@ final class BS_ACP_SubModule_user_add extends BS_ACP_SubModule
 		$cache = FWS_Props::get()->cache();
 		$tpl = FWS_Props::get()->tpl();
 
-		$this->request_formular(false,false);
+		$this->request_formular();
 
 		// group combos
 		$groups = array();

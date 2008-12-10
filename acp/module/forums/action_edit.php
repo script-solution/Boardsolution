@@ -83,7 +83,7 @@ final class BS_ACP_Action_forums_edit extends BS_ACP_Action_Base
 		if($forum_type == 'contains_cats')
 		{
 			$description = '';
-			$forum_is_intern = 0;
+			$forum_is_intern = false;
 		}
 		else
 			$description = FWS_StringHelper::htmlspecialchars_back($description);

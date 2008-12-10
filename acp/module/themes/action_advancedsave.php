@@ -31,7 +31,7 @@ final class BS_ACP_Action_themes_advancedsave extends BS_ACP_Action_Base
 		$file = FWS_Path::server_app().'themes/'.$theme.'/style.css';
 		
 		$content = $input->get_var('file_content','post',FWS_Input::STRING);
-		$content = FWS_StringHelper::htmlspecialchars_back(stripslashes(trim($content)),ENT_QUOTES);
+		$content = FWS_StringHelper::htmlspecialchars_back(stripslashes(trim($content)));
 		
 		if(!FWS_FileUtils::write($file,$content))
 			return sprintf($locale->lang('file_not_saved'),$file);

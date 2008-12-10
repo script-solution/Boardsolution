@@ -100,7 +100,7 @@ class BS_DAO_Polls extends FWS_Singleton
 	 *
 	 * @param int $id the poll-id
 	 * @param string $option the option-name
-	 * @param int $multichoice wether multichoice is enabled
+	 * @param bool $multichoice wether multichoice is enabled
 	 * @return int the used id
 	 */
 	public function create($id,$option,$multichoice)

@@ -375,7 +375,7 @@ final class BS_ForumUtils extends FWS_UtilBase
 	 * Note that the combobox will be multiple if the name ends with "[]"
 	 *
 	 * @param string $name the name of the combobox.
-	 * @param int $select the id of the selected forum
+	 * @param int|array $select the id of the selected forum
 	 * @param int $disabled_forum the id of the forum to disable
 	 * @param boolean $disable_categories do you want to disable categories?
 	 * @param boolean $add_all_forums_option do you want to add an "all"-option?

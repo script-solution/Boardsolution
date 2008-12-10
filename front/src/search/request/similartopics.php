@@ -23,7 +23,7 @@ final class BS_Front_Search_Request_SimilarTopics extends BS_Front_Search_Reques
 	/**
 	 * The entered keywords
 	 *
-	 * @var string
+	 * @var array
 	 */
 	private $_keywords;
 	

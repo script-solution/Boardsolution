@@ -143,8 +143,8 @@ final class BS_PostingUtils extends FWS_UtilBase
 	 * returns the post-preview-text
 	 *
 	 * @param string $location the location: posts, sig, desc
-	 * @param int $use_smileys -1 = grab from POST, if $location = 'posts', otherwise the value
-	 * @param int $use_bbcode -1 = grab from POST, if $location = 'posts', otherwise the value
+	 * @param bool|int $use_smileys -1 = grab from POST, if $location = 'posts', otherwise the value
+	 * @param bool|int $use_bbcode -1 = grab from POST, if $location = 'posts', otherwise the value
 	 * @return array <code>array('text' => ...,'error' => ...)</code>
 	 */
 	public static function get_post_preview_text($location = 'posts',$use_smileys = -1,$use_bbcode = -1)
@@ -154,7 +154,9 @@ final class BS_PostingUtils extends FWS_UtilBase
 
 		$post_text = $input->get_var('text','post',FWS_Input::STRING);
 		$text = '';
-		$error = self::prepare_message_for_db($text,$post_text,$location,$use_smileys,$use_bbcode);
+		$error = self::prepare_message_for_db(
+			$text,$post_text,$location,(bool)$use_smileys,(bool)$use_bbcode
+		);
 		
 		// any error? so break here
 		if($error != '')
@@ -200,8 +202,8 @@ final class BS_PostingUtils extends FWS_UtilBase
 	 * Adds the preview of a post
 	 *
 	 * @param string $location the location: posts, sig, desc
-	 * @param int $use_smileys -1 = grab from POST, if $location = 'posts', otherwise the value
-	 * @param int $use_bbcode -1 = grab from POST, if $location = 'posts', otherwise the value
+	 * @param bool|int $use_smileys -1 = grab from POST, if $location = 'posts', otherwise the value
+	 * @param bool|int $use_bbcode -1 = grab from POST, if $location = 'posts', otherwise the value
 	 */
 	public static function add_post_preview($location = 'posts',$use_smileys = -1,$use_bbcode = -1)
 	{
@@ -298,8 +300,8 @@ final class BS_PostingUtils extends FWS_UtilBase
 	 * @param string $text will contain the text for the DB
 	 * @param string $text_posted the posted text
 	 * @param string $location the location: posts, sig, desc
-	 * @param boolean $use_smileys -1 = grab from POST, if $location = 'posts', otherwise the value
-	 * @param boolean $use_bbcode -1 = grab from POST, if $location = 'posts', otherwise the value
+	 * @param bool|int $use_smileys -1 = grab from POST, if $location = 'posts', otherwise the value
+	 * @param bool|int $use_bbcode -1 = grab from POST, if $location = 'posts', otherwise the value
 	 * @return string the error-message, if any, or an empty string
 	 */
 	public static function prepare_message_for_db(&$text,$text_posted,$location = 'posts',

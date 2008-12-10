@@ -185,7 +185,7 @@ final class BS_ACP_SubModule_correctmsgs_cycle extends BS_ACP_SubModule
 		}
 		
 		$text = '';
-		$error = BS_PostingUtils::prepare_message_for_db($text,$post_text,$loc,1,1);
+		$error = BS_PostingUtils::prepare_message_for_db($text,$post_text,$loc,true,true);
 		if($error != '')
 			return $error;
 		

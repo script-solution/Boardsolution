@@ -410,12 +410,12 @@ class BS_DAO_Posts extends FWS_Singleton
 	}
 	
 	/**
-	 * Returns all post with given ids from the given topic. You'll get all fields from the posts-table,
-	 * the user-name, the user-group, the default font, wether the topic is closed and wether it is
-	 * locked.
+	 * Returns all posts with given ids from the given topic. You'll get all fields from the
+	 * posts-table, the user-name, the user-group, the default font, wether the topic is closed
+	 * and wether it is locked.
 	 * Additionally you can sort the result
 	 *
-	 * @param int $id the post-id
+	 * @param array $ids the post-ids
 	 * @param int $fid the forum-id
 	 * @param int $tid the topic-id
 	 * @param string $sort the column to sort by
@@ -970,7 +970,7 @@ class BS_DAO_Posts extends FWS_Singleton
 	/**
 	 * Deletes all posts with given forum-ids
 	 *
-	 * @param array $ids all forum-ids to delete
+	 * @param array $fids all forum-ids to delete
 	 * @return int the number of affected rows
 	 */
 	public function delete_by_forums($fids)

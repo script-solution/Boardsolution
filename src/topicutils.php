@@ -209,7 +209,7 @@ final class BS_TopicUtils extends FWS_UtilBase
 		$symbols = '';
 		for($i = 0;$i <= BS_NUMBER_OF_TOPIC_ICONS;$i++)
 		{
-			$selected = $form->get_radio_value('symbol',$i,$select == $i);
+			$selected = $form->get_radio_value('symbol',(string)$i,$select == $i);
 			$symbols .= '<input id="t'.$i.'" '.$selected.' type="radio" name="symbol"';
 			$symbols .= ' value="'.$i.'" />'."\n".'<label for="t'.$i.'">';
 	

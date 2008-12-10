@@ -61,7 +61,7 @@ final class BS_ACP_SubModule_massemail_default extends BS_ACP_SubModule
 			}
 		}
 		
-		$form = $this->request_formular(false,false);
+		$form = $this->request_formular();
 		if(!$form->get_condition())
 			$form->set_condition($error || $show_preview);
 		

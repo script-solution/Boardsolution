@@ -377,9 +377,9 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 	/**
 	 * builds the explanation-table
 	 *
-	 * @param string $title_top the top-text
+	 * @param array $title_top the top-text
 	 * @param string $image_name the name of the image
-	 * @param string $title_the bottom-text
+	 * @param array $title_bottom the bottom-text
 	 * @return string the table
 	 */
 	private function _get_explanation_table($title_top,$image_name,$title_bottom)

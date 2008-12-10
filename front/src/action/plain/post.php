@@ -34,8 +34,8 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 		$user = FWS_Props::get()->user();
 		
 		$post_text = $input->get_var('text','post',FWS_Input::STRING);
-		$use_bbcode = $input->isset_var('use_bbcode','post') ? 1 : 0;
-		$use_smileys = $input->isset_var('use_smileys','post') ? 1 : 0;
+		$use_bbcode = $input->isset_var('use_bbcode','post') ? true : false;
+		$use_smileys = $input->isset_var('use_smileys','post') ? true : false;
 		
 		$post = new BS_Front_Action_Plain_Post(
 			$fid,$tid,$user->get_user_id(),$user->get_user_ip(),$post_text,

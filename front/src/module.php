@@ -39,28 +39,20 @@ abstract class BS_Front_Module extends FWS_Module
 	/**
 	 * @see FWS_Module::request_formular()
 	 *
+	 * @param boolean $check_attachments sets wether the attachment-form-vars should be checked
+	 * @param boolean $check_preview sets wether the preview-var should be checked
 	 * @return BS_HTML_Formular
 	 */
-	protected final function request_formular()
+	protected final function request_formular($check_attachments = null,$check_preview = null)
 	{
 		$tpl = FWS_Props::get()->tpl();
 
-		$args = func_get_args();
-		switch(count($args))
-		{
-			case 0:
-				$form = new BS_HTML_Formular();
-				break;
-			case 1:
-				$form = new BS_HTML_Formular($args[0]);
-				break;
-			case 2:
-				$form = new BS_HTML_Formular($args[0],$args[1]);
-				break;
-			default:
-				FWS_Helper::error('Invalid number of arguments ('.count($args).')!');
-				break;
-		}
+		if($check_attachments !== null && $check_preview !== null)
+			$form = new BS_HTML_Formular($check_attachments,$check_preview);
+		else if($check_attachments !== null)
+			$form = new BS_HTML_Formular($check_attachments);
+		else
+			$form = new BS_HTML_Formular();
 		
 		$tpl->add_variables(array('form' => $form));
 		$tpl->add_allowed_method('form','*');

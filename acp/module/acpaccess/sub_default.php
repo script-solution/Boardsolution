@@ -30,7 +30,7 @@ final class BS_ACP_SubModule_acpaccess_default extends BS_ACP_SubModule
 
 		$options = BS_ACP_Module_ACPAccess_Helper::get_group_options();
 		
-		$this->request_formular(false,false);
+		$this->request_formular();
 		$tpl->add_variables(array(
 			'groups' => $options,
 			'action_param' => BS_URL_ACTION

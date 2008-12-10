@@ -33,7 +33,7 @@ final class BS_ACP_Action_tpleditor_edit extends BS_ACP_Action_Base
 		if($fp = @fopen($path.'/'.$file,'w'))
 		{
 			flock($fp,LOCK_EX);
-			$content = FWS_StringHelper::htmlspecialchars_back(stripslashes(trim($content)),ENT_QUOTES);
+			$content = FWS_StringHelper::htmlspecialchars_back(stripslashes(trim($content)));
 			fwrite($fp,$content);
 			flock($fp,LOCK_UN);
 			fclose($fp);

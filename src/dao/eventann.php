@@ -136,7 +136,7 @@ class BS_DAO_EventAnn extends FWS_Singleton
 	/**
 	 * Deletes all entries for the given events
 	 *
-	 * @param int $ids the event-ids
+	 * @param array $ids the event-ids
 	 * @return int the number of affected rows
 	 */
 	public function delete_by_events($ids)

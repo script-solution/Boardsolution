@@ -690,7 +690,7 @@ final class BS_Front_Topics extends FWS_Object
 	 * generates the lastpost-data
 	 *
 	 * @param array $data the topic-data
-	 * @param string $post_order the post-order: ASC or DESC
+	 * @param string $posts_order the post-order: ASC or DESC
 	 * @param int $pages the number of pages
 	 * @return string the result-string
 	 */

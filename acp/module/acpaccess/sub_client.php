@@ -119,7 +119,7 @@ final class BS_ACP_SubModule_acpaccess_client extends BS_ACP_SubModule
 			'current_permission_col_title' => $col_title
 		));
 		
-		$this->request_formular(false,false);
+		$this->request_formular();
 		$acpaccess = $cache->get_cache('acp_access');
 
 		// display modules

@@ -184,7 +184,7 @@ final class BS_Front_Search_Utils extends FWS_UtilBase
 	 * splits the given string by ' ' and adds all parts to the existing sections-array
 	 *
 	 * @param array $sections the sections-array
-	 * @param array words to ignore
+	 * @param array $ignore words to ignore
 	 * @param string $string the string to parse
 	 */
 	private static function _add_words(&$sections,$ignore,$string)

@@ -71,7 +71,7 @@ final class BS_ACP_Module_userdetails extends BS_ACP_Module
 		
 		$avatar = BS_UserUtils::get_profile_avatar($data['avatar'],$data['id']);
 		
-		$tpl->add_variable_ref('data',$data,false);
+		$tpl->add_variable_ref('data',$data);
 		$tpl->add_variables(array(
 			'user_groups' => $auth->get_usergroup_list($data['user_group'],false,true,true),
 			'avatar_rowspan' => count($fields) + 3 - $sub,
@@ -115,7 +115,7 @@ final class BS_ACP_Module_userdetails extends BS_ACP_Module
 		
 		$rank_data = $functions->get_rank_data($data['exppoints']);
 		
-		$tpl->add_variable_ref('data',$data,false);
+		$tpl->add_variable_ref('data',$data);
 		$tpl->add_variables(array(
 			'signature' => $signature,
 			'rank' => $rank_data['rank']

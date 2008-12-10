@@ -84,7 +84,7 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		$murl = clone $baseurl;
 		$murl->set('id',$id);
 		
-		$form = $this->request_formular(false,false);
+		$form = $this->request_formular();
 
 		// group combos
 		$groups = array();

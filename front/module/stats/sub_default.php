@@ -228,7 +228,7 @@ final class BS_Front_SubModule_stats_default extends BS_Front_SubModule
 	 * Builds the necessary data for one row
 	 *
 	 * @param int $row the row-number
-	 * @param float $percent the percent-value
+	 * @param int|float $percent the percent-value
 	 * @param int $user_id the id of the user
 	 * @param string $username the name of the user
 	 * @param string $user_groups the usergroups of the user
