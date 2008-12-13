@@ -83,7 +83,7 @@ final class BS_Front_Document extends BS_Document
 		else
 			$default = 'forums';
 		
-		$this->_module_name = FWS_Helper::get_module_name(
+		$this->_module_name = FWS_Document::load_module_def(
 			'BS_Front_Module_',BS_URL_ACTION,$default,'front/module/'
 		);
 		$class = 'BS_Front_Module_'.$this->_module_name;

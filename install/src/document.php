@@ -56,7 +56,7 @@ final class BS_Install_Document extends FWS_Document
 	 */
 	protected function load_module()
 	{
-		$this->_module_name = FWS_Helper::get_module_name(
+		$this->_module_name = FWS_Document::load_module_def(
 			'BS_Install_Module_','action','1','install/module/'
 		);
 		$class = 'BS_Install_Module_'.$this->_module_name;

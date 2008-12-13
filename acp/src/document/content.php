@@ -54,7 +54,7 @@ final class BS_ACP_Document_Content extends BS_ACP_Document
 	 */
 	protected function load_module()
 	{
-		$this->_module_name = FWS_Helper::get_module_name(
+		$this->_module_name = FWS_Document::load_module_def(
 			'BS_ACP_Module_','loc','index','acp/module/'
 		);
 		$class = 'BS_ACP_Module_'.$this->_module_name;
