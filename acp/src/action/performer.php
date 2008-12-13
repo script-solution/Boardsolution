@@ -1,8 +1,8 @@
 <?php
 /**
- * Contains the acp-action-listener
+ * Contains the action-performer
  *
- * @version			$Id$
+ * @version			$Id: performer.php 95 2008-12-13 16:12:18Z nasmussen $
  * @package			Boardsolution
  * @subpackage	acp.src.action
  * @author			Nils Asmussen <nils@script-solution.de>
@@ -11,14 +11,40 @@
  */
 
 /**
- * The action-listener for the ACP
+ * The action-performer. We overwrite it to provide a custom get_action_id()
+ * method.
  *
  * @package			Boardsolution
  * @subpackage	acp.src.action
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_ACP_Action_Listener extends FWS_Object implements FWS_Action_Listener
+final class BS_ACP_Action_Performer extends FWS_Action_Performer implements FWS_Action_Listener
 {
+	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		$this->set_mod_folder('acp/module/');
+		$this->set_prefix('BS_ACP_Action_');
+		$this->set_listener($this);
+	}
+	
+	/**
+	 * @see FWS_Action_Performer::get_action_id()
+	 *
+	 * @return int
+	 */
+	protected function get_action_id()
+	{
+		$input = FWS_Props::get()->input();
+
+		$action_type = $input->get_var('action_type','post',FWS_Input::INTEGER);
+		if($action_type === null)
+			$action_type = $input->get_var('at','get',FWS_Input::INTEGER);
+
+		return $action_type;
+	}
 	/**
 	 * @see FWS_Action_Listener::before_action_performed()
 	 *
@@ -42,16 +68,6 @@ final class BS_ACP_Action_Listener extends FWS_Object implements FWS_Action_List
 	public function after_action_performed($id,$action,&$message)
 	{
 		// do nothing
-	}
-	
-	/**
-	 * @see FWS_Object::get_dump_vars()
-	 *
-	 * @return array
-	 */
-	protected function get_dump_vars()
-	{
-		return get_object_vars($this);
 	}
 }
 ?>

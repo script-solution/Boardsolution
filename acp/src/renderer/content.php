@@ -51,9 +51,7 @@ final class BS_ACP_Renderer_Content extends FWS_Document_Renderer_HTML_Default
 	{
 		parent::__construct();
 		
-		$ap = $this->get_action_performer();
-		$ap->set_mod_folder('acp/module/');
-		$ap->set_listener(new BS_ACP_Action_Listener());
+		$this->set_action_performer(new BS_ACP_Action_Performer());
 		
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
@@ -63,8 +61,6 @@ final class BS_ACP_Renderer_Content extends FWS_Document_Renderer_HTML_Default
 		
 		// add the home-breadcrumb
 		$this->add_breadcrumb($locale->lang('adminarea'),BS_URL::build_acpmod_url('index'));
-		
-		$this->_action_perf->set_prefix('BS_ACP_Action_');
 	}
 	
 	/**
