@@ -54,6 +54,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 	{
 		parent::__construct();
 		
+		$this->set_action_performer(new BS_Front_Action_Performer());
+		
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
 		
@@ -130,16 +132,6 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 	public function set_robots_value($robots)
 	{
 		$this->_robots_value = (string)$robots;
-	}
-
-	/**
-	 * @see FWS_Document_Renderer_HTML_Default::load_action_perf()
-	 *
-	 * @return FWS_Actions_Performer
-	 */
-	protected function load_action_perf()
-	{
-		return new BS_Front_Action_Performer();
 	}
 	
 	/**

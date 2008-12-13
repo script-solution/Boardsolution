@@ -11,14 +11,14 @@
  */
 
 /**
- * The action-performer. We overwrite it to provide a custom get_action_type()
+ * The action-performer. We overwrite it to provide a custom get_action_id()
  * method.
  *
  * @package			Boardsolution
  * @subpackage	src.action
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-final class BS_Front_Action_Performer extends FWS_Actions_Performer
+final class BS_Front_Action_Performer extends FWS_Action_Performer implements FWS_Action_Listener
 {
 	/**
 	 * Constructor
@@ -26,9 +26,15 @@ final class BS_Front_Action_Performer extends FWS_Actions_Performer
 	public function __construct()
 	{
 		$this->set_mod_folder('front/module/');
+		$this->set_listener($this);
 	}
 	
-	public function get_action_type()
+	/**
+	 * @see FWS_Action_Performer::get_action_id()
+	 *
+	 * @return int
+	 */
+	protected function get_action_id()
 	{
 		$input = FWS_Props::get()->input();
 
@@ -39,13 +45,17 @@ final class BS_Front_Action_Performer extends FWS_Actions_Performer
 		return $action_type;
 	}
 	
-	protected function before_action_performed($id,$action)
+	/**
+	 * @see FWS_Action_Listener::before_action_performed()
+	 *
+	 * @param int $id
+	 * @param FWS_Action_Base $action
+	 */
+	public function before_action_performed($id,$action)
 	{
 		$db = FWS_Props::get()->db();
 		$locale = FWS_Props::get()->locale();
 
-		parent::before_action_performed($id,$action);
-		
 		// start a transaction for all actions
 		$db->start_transaction();
 		
@@ -53,15 +63,20 @@ final class BS_Front_Action_Performer extends FWS_Actions_Performer
 		$locale->add_language_file('messages');
 	}
 	
-	protected function after_action_performed($id,$action,&$message)
+	/**
+	 * @see FWS_Action_Listener::after_action_performed()
+	 *
+	 * @param int $id
+	 * @param FWS_Action_Base $action
+	 * @param string $message
+	 */
+	public function after_action_performed($id,$action,&$message)
 	{
 		$db = FWS_Props::get()->db();
 		$input = FWS_Props::get()->input();
 		$msgs = FWS_Props::get()->msgs();
 		$locale = FWS_Props::get()->locale();
 
-		parent::after_action_performed($id,$action,$message);
-		
 		// commit the transaction
 		// note that we do this always because we assume that all actions check all the data
 		// BEFORE they do any db-actions

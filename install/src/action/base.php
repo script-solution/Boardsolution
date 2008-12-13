@@ -17,7 +17,7 @@
  * @subpackage	install.src.action
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_Install_Action_Base extends FWS_Actions_Base
+abstract class BS_Install_Action_Base extends FWS_Action_Base
 {
 	/**
 	 * Constructor

@@ -51,6 +51,10 @@ final class BS_ACP_Renderer_Content extends FWS_Document_Renderer_HTML_Default
 	{
 		parent::__construct();
 		
+		$ap = $this->get_action_performer();
+		$ap->set_mod_folder('acp/module/');
+		$ap->set_listener(new BS_ACP_Action_Listener());
+		
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
 		
@@ -214,16 +218,6 @@ final class BS_ACP_Renderer_Content extends FWS_Document_Renderer_HTML_Default
 			)
 		));
 		$tpl->restore_template();
-	}
-
-	/**
-	 * @see FWS_Document_Renderer_HTML_Default::load_action_perf()
-	 *
-	 * @return BS_ACP_Action_Performer
-	 */
-	protected function load_action_perf()
-	{
-		return new BS_ACP_Action_Performer();
 	}
 	
 	protected function get_dump_vars()

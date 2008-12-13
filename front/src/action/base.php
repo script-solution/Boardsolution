@@ -17,7 +17,7 @@
  * @subpackage	front.src.action
  * @author			Nils Asmussen <nils@script-solution.de>
  */
-abstract class BS_Front_Action_Base extends FWS_Actions_Base
+abstract class BS_Front_Action_Base extends FWS_Action_Base
 {
 	/**
 	 * An array for all actions that defines for which action a status-page should be displayed

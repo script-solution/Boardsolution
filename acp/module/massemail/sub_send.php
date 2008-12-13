@@ -20,6 +20,13 @@
 final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements FWS_Progress_Listener
 {
 	/**
+	 * The process manager
+	 *
+	 * @var FWS_Progress_Manager
+	 */
+	private $_pm;
+	
+	/**
 	 * @see FWS_Module::init($doc)
 	 *
 	 * @param BS_ACP_Document_Content $doc
