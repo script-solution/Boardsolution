@@ -583,7 +583,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			if(BS_DEBUG > 0)
 			{
 				$profiler = FWS_Props::get()->profiler();
-				$qry_num = $db->get_performed_query_num();
+				$qry_num = $db->get_query_count();
 				$debug = $profiler->get_time().' '.$locale->lang('sec').', '
 					.$qry_num.' '.$locale->lang('qrys').', '
 					.FWS_StringHelper::get_formated_data_size($profiler->get_memory_usage());
@@ -603,7 +603,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		// show footer
 		$tpl->set_template('inc_footer.htm');
 		$tpl->add_variables(array(
-			'queries' => BS_DEBUG == 2 ? FWS_PrintUtils::to_string($db->get_performed_queries()) : '',
+			'queries' => BS_DEBUG == 2 ? FWS_PrintUtils::to_string($db->get_queries()) : '',
 			'show_bottom' => $this->_show_bottom
 		));
 		$tpl->restore_template();

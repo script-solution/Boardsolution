@@ -593,9 +593,9 @@ final class BS_Front_Topics extends FWS_Object
 					$ls = new FWS_HTML_LimitedString($data['name'],$cfg['thread_max_title_len']);
 					$res = $ls->get();
 					if($ls->has_cut())
-						$topic_name = array('displayed' => $res,'complete' => strip_tags($data['name']));
+						$topic_name = array($res,strip_tags($data['name']));
 					else
-						$topic_name = array('displayed' => $data['name'],'complete' => '');
+						$topic_name = array($data['name'],'');
 				}
 				else
 					$topic_name = BS_TopicUtils::get_displayed_name($data['name']);
@@ -629,8 +629,8 @@ final class BS_Front_Topics extends FWS_Object
 					'first_unread_url' => $first_unread_url,
 					'is_important' => $data['important'] == 1,
 					'is_moved' => $data['moved_tid'] != 0 && $data['moved_rid'] != 0,
-					'name_complete' => $topic_name['complete'],
-					'name' => $topic_name['displayed'],
+					'name_complete' => $topic_name[1],
+					'name' => $topic_name[0],
 					'topic_url' => $sposts_url,
 					'show_forum' => $this->_show_forum,
 					'forum_path' => $forum_path,

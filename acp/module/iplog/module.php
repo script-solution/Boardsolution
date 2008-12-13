@@ -202,14 +202,14 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 				FWS_String::substr($data['action'],0,7) == 'linkre_')
 				$data['action'] = strtok($data['action'],'_');
 			
-			$user_agent = FWS_StringHelper::get_limited_string($data['user_agent'],25);
+			list($ua_d,$ua_c) = FWS_StringHelper::get_limited_string($data['user_agent'],25);
 			
 			$logs[] = array(
 				'id' => $data['id'],
 				'action' => $locale->lang('action_'.$data['action']),
 				'user_name' => $user,
 				'user_ip' => $data['user_ip'],
-				'user_agent' => '<span title="'.$user_agent['complete'].'">'.$user_agent['displayed'].'</span>',
+				'user_agent' => '<span title="'.$ua_c.'">'.$ua_d.'</span>',
 				'date' => FWS_Date::get_date($data['date'])
 			);
 		}

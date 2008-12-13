@@ -295,7 +295,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 		
 		$where = 'WHERE p.active = 1 AND p.banned = 0 AND p.add_birthday != "0000-00-00" AND (';
 		foreach($months as $month)
-			$where .= 'SUBSTRING(p.add_birthday,6,2) = "'.FWS_StringHelper::ensure_2_chars($month).'" OR ';
+			$where .= 'SUBSTRING(p.add_birthday,6,2) = "'.sprintf('%02d',$month).'" OR ';
 		$where = FWS_String::substr($where,0,-4).')';
 		
 		return $db->sql_rows(
@@ -326,8 +326,8 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 		if(!FWS_Helper::is_integer($number) || $number < 0)
 			FWS_Helper::def_error('intge0','number',$number);
 		
-		$month = FWS_StringHelper::ensure_2_chars($month);
-		$day = FWS_StringHelper::ensure_2_chars($day);
+		$month = sprintf('%02d',$month);
+		$day = sprintf('%02d',$day);
 		$where = 'WHERE p.add_birthday != \'0000-00-00\' AND p.active = 1 AND p.banned = 0';
 		$where .= ' AND SUBSTRING(p.add_birthday,6,2) = '.$month;
 		if($day != 0)

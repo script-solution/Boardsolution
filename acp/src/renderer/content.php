@@ -205,11 +205,11 @@ final class BS_ACP_Renderer_Content extends FWS_Document_Renderer_HTML_Default
 		$tpl->add_variables(array(
 			'debug' => BS_DEBUG,
 			'render_time' => $profiler->get_time(),
-			'db_queries' => $db->get_performed_query_num(),
+			'db_queries' => $db->get_query_count(),
 			'queries' => FWS_PrintUtils::to_string(
 				array(
 					'Load properties' => array_keys(FWS_Props::get()->get_all()),
-					'DB-Queries' => $db->get_performed_queries()
+					'DB-Queries' => $db->get_queries()
 				)
 			)
 		));

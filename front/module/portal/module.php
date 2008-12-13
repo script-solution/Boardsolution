@@ -254,15 +254,15 @@ final class BS_Front_Module_portal extends BS_Front_Module
 			}
 		
 			// build topic-name
-			$topic_name = BS_TopicUtils::get_displayed_name($data['name']);
+			list($tnamed,$tnamec) = BS_TopicUtils::get_displayed_name($data['name']);
 			$posts_url = BS_URL::build_posts_url($data['rubrikid'],$data['id'],1);
 			
 			$topics[] = array(
 				'is_important' => $data['important'] == 1,
 				'is_unread' => $is_unread,
 				'first_unread_url' => $first_unread_url,
-				'name_complete' => $topic_name['complete'],
-				'name' => $topic_name['displayed'],
+				'name_complete' => $tnamec,
+				'name' => $tnamed,
 				'url' => $posts_url,
 				'topic_symbol' => BS_TopicUtils::get_symbol(
 					$cache,$data['type'],$data['symbol']

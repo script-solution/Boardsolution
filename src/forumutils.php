@@ -357,11 +357,13 @@ final class BS_ForumUtils extends FWS_UtilBase
 					$res .= ' &raquo; ';
 				$res .= '<a href="'.BS_URL::build_topics_url($path[$i][1]).'"';
 	
-				$name = FWS_StringHelper::get_limited_string($path[$i][0],BS_MAX_FORUM_TITLE_LENGTH);
-				if($name['complete'] != '')
-					$res .= ' title="'.$name['complete'].'">'.$name['displayed'];
+				list($named,$namec) = FWS_StringHelper::get_limited_string(
+					$path[$i][0],BS_MAX_FORUM_TITLE_LENGTH
+				);
+				if($namec != '')
+					$res .= ' title="'.$namec.'">'.$named;
 				else
-					$res .= '>'.$name['displayed'];
+					$res .= '>'.$named;
 	
 				$res .= '</a>';
 			}
@@ -598,7 +600,7 @@ final class BS_ForumUtils extends FWS_UtilBase
 			return false;
 	
 		$pages = BS_PostingUtils::get_post_pages($data['tposts'] + 1);
-		$topic_name = BS_TopicUtils::get_displayed_name($data['threadname'],
+		list($tnamed,$tnamec) = BS_TopicUtils::get_displayed_name($data['threadname'],
 			BS_MAX_TOPIC_LENGTH_LAST_POST);
 	
 		// generate url
@@ -625,8 +627,8 @@ final class BS_ForumUtils extends FWS_UtilBase
 			'date' => FWS_Date::get_date($data['post_time']),
 			'username' => $user_name,
 			'lastpost_url' => $lastpost_url.'#b_'.$data['lastpost_id'],
-			'topic_complete' => $topic_name['complete'],
-			'topic' => $topic_name['displayed'],
+			'topic_complete' => $tnamec,
+			'topic' => $tnamed,
 			'topic_url' => $topic_url
 		);
 	}

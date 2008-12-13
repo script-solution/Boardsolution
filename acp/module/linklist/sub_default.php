@@ -143,13 +143,13 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 		
 			$bbcode = new BS_BBCode_Parser($data['link_desc'],'desc',$enable_bbcode,$enable_smileys);
 			
-			$link_url = FWS_StringHelper::get_limited_string($data['link_url'],25);
+			list($lurl_d,$lurl_c) = FWS_StringHelper::get_limited_string($data['link_url'],25);
 			$user = BS_ACP_Utils::get_userlink($data['user_id'],$data['user_name']);
 			
 			$links[] = array(
 				'id' => $data['id'],
-				'url' => $link_url['displayed'],
-				'url_complete' => $link_url['complete'],
+				'url' => $lurl_d,
+				'url_complete' => $lurl_c,
 				'category' => $data['category'],
 				'clicks' => $data['clicks'],
 				'details_image' => FWS_Path::client_app().'acp/images/crossclosed.gif',

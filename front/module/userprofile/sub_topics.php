@@ -141,11 +141,11 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 			$purl->set(BS_URL_FID,$data['rubrikid']);
 			$purl->set(BS_URL_TID,$data['topic_id']);
 			
-			$info = BS_TopicUtils::get_displayed_name($data['name']);
-			$topic_name = '<a title="'.$info['complete'].'" href="'.$purl->to_url().'">';
-			$topic_name .= $info['displayed'].'</a>';
+			list($infod,$infoc) = BS_TopicUtils::get_displayed_name($data['name']);
+			$topic_name = '<a title="'.$infoc.'" href="'.$purl->to_url().'">'.$infod.'</a>';
 
-			$lastpost = $data['lastpost_time'] > 0 ? FWS_Date::get_date($data['lastpost_time']) : $locale->lang('notavailable');
+			$lastpost = $data['lastpost_time'] > 0 ?
+				FWS_Date::get_date($data['lastpost_time']) : $locale->lang('notavailable');
 			
 			$topics[] = array(
 				'topic_status' => BS_TopicUtils::get_status_data(

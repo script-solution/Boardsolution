@@ -72,11 +72,11 @@ final class BS_Front_EventUtils extends FWS_UtilBase
 					$murl = BS_URL::build_posts_url($edata['rubrikid'],$edata['tid']);
 				}
 				
-				$title = FWS_StringHelper::get_limited_string($edata['event_title'],15);
+				list($titled,$titlec) = FWS_StringHelper::get_limited_string($edata['event_title'],15);
 				$events['list'][] = array(
 					'url' => $murl,
-					'title_complete' => $title['complete'],
-					'title' => $title['displayed'],
+					'title_complete' => $titlec,
+					'title' => $titled,
 					'date' => FWS_Date::get_date($edata['event_begin'],false)
 				);
 			}

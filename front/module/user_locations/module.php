@@ -165,14 +165,11 @@ final class BS_Front_Module_user_locations extends BS_Front_Module
 			$user_agent = '';
 			if($view_details)
 			{
-				$a_user_agent = FWS_StringHelper::get_limited_string($data['user_agent'],35);
-				if($a_user_agent['complete'] != '')
-				{
-					$user_agent = '<span title="'.$a_user_agent['complete'].'">';
-					$user_agent .= $a_user_agent['displayed'].'</span>';
-				}
+				list($ua_d,$ua_c) = FWS_StringHelper::get_limited_string($data['user_agent'],35);
+				if($ua_c != '')
+					$user_agent = '<span title="'.$ua_c.'">'.$ua_d.'</span>';
 				else
-					$user_agent = $a_user_agent['displayed'];
+					$user_agent = $ua_d;
 			}
 			
 			$user_list[] = array(

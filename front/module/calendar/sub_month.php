@@ -79,8 +79,8 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 				if(!$isempty)
 				{
 					$days_ts = FWS_Date::get_timestamp(array(0,0,0,$month,$day,$year));
-					$sday = FWS_StringHelper::ensure_2_chars($day);
-					$smonth = FWS_StringHelper::ensure_2_chars($month);
+					$sday = sprintf('%02d',$day);
+					$smonth = sprintf('%02d',$month);
 					$birthday_index = $sday.$smonth;
 					$days = FWS_Date::get_formated_date('date',$days_ts);
 					$day++;

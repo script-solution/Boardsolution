@@ -121,9 +121,9 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 			{
 				$furl = BS_URL::get_frontend_url('topics');
 				$furl->set(BS_URL_FID,$data['forum_id']);
-				$info = BS_TopicUtils::get_displayed_name($data['forum_name'],22);
+				list($infod,$infoc) = BS_TopicUtils::get_displayed_name($data['forum_name'],22);
 				$name = '[<b>F</b>] <a target="_blank" href="'.$furl->to_url().'"';
-				$name .= ' title="'.$info['complete'].'">'.$info['displayed'].'</a>';
+				$name .= ' title="'.$infoc.'">'.$infod.'</a>';
 				if($data['flastpost_time'] == 0)
 					$lastpost = $locale->lang('notavailable');
 				else
@@ -134,9 +134,9 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 				$furl = BS_URL::get_frontend_url('redirect');
 				$furl->set(BS_URL_LOC,'show_topic');
 				$furl->set(BS_URL_TID,$data['topic_id']);
-				$info = BS_TopicUtils::get_displayed_name($data['name'],22);
+				list($infod,$infoc) = BS_TopicUtils::get_displayed_name($data['name'],22);
 				$name = '[<b>T</b>] <a target="_blank" href="'.$furl->to_url().'"';
-				$name .= ' title="'.$info['complete'].'">'.$info['displayed'].'</a>';
+				$name .= ' title="'.$infoc.'">'.$infod.'</a>';
 				if($data['lastpost_time'] == 0)
 					$lastpost = $locale->lang('notavailable');
 				else

@@ -61,13 +61,7 @@ final class BS_TopicUtils extends FWS_UtilBase
 	 * @param string $title the title of the topic
 	 * @param int $length the max. length of the topic.
 	 * 	<code>(0 = FWS_Props::get()->cfg()['thread_max_title_len'])</code>
-	 * @return array an array of the form:
-	 * 	<code>
-	 * 		array(
-	 * 			'displayed' => <displayedURL>,
-	 * 			'complete' => <competeURL> // will be empty if it is short enough
-	 * 		)
-	 * 	</code>
+	 * @return array an array of the form: <code>array(<displayedURL>,<competeURL>)</code>
 	 */
 	public static function get_displayed_name($title,$length = 0)
 	{
@@ -146,11 +140,11 @@ final class BS_TopicUtils extends FWS_UtilBase
 			
 			$topic_path = BS_ForumUtils::get_forum_path($data['rubrikid'],false);
 			$topic_path .= ' &raquo; <a href="'.$murl.'">';
-			$topic_path .= '<span title="'.$topic['complete'].'">';
+			$topic_path .= '<span title="'.$topic[1].'">';
 			if($data['moved_tid'] > 0)
-				$topic_path .= '<i>'.$topic['displayed'].'</i>';
+				$topic_path .= '<i>'.$topic[0].'</i>';
 			else
-				$topic_path .= $topic['displayed'];
+				$topic_path .= $topic[0];
 			$topic_path .= '</span></a>';
 
 			$res[] = array('symbol' => $symbol,'topic' => $topic_path);
