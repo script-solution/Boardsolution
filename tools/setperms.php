@@ -49,12 +49,12 @@ foreach($folders as $folder)
 	setPerms(BS_PATH.$folder,0777);
 
 // theme-files
-foreach(FWS_FileUtils::get_dir_content(BS_PATH.'themes') as $theme)
+foreach(FWS_FileUtils::get_list(BS_PATH.'themes') as $theme)
 {
 	if(is_dir(BS_PATH.'themes/'.$theme) && $theme[0] != '.')
 	{
 		setPerms(BS_PATH.'themes/'.$theme.'/basic.css',0666);
-		foreach(FWS_FileUtils::get_dir_content(BS_PATH.'themes/'.$theme.'/templates') as $tpl)
+		foreach(FWS_FileUtils::get_list(BS_PATH.'themes/'.$theme.'/templates') as $tpl)
 		{
 			if(FWS_String::ends_with($tpl,'.htm'))
 				setPerms(BS_PATH.'themes/'.$theme.'/templates/'.$tpl,0666);

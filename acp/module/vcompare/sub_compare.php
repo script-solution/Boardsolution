@@ -370,7 +370,7 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		// read the folder-content and sort it
 		$structure = array();
 		$changed = self::EQUAL;
-		$items = FWS_FileUtils::get_dir_content($dir,false,true);
+		$items = FWS_FileUtils::get_list($dir,false,true);
 		usort($items,array($this,'_sort_paths'));
 		
 		foreach($items as $item)

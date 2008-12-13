@@ -136,7 +136,7 @@ final class BS_Install_Module_3_Helper extends FWS_UtilBase
 	private static function _check_chmod_themes()
 	{
 		// check all themes
-		foreach(FWS_FileUtils::get_dir_content('themes',false,false) as $theme)
+		foreach(FWS_FileUtils::get_list('themes',false,false) as $theme)
 		{
 			if(is_dir('themes/'.$theme) && $theme[0] != '.')
 			{
@@ -145,7 +145,7 @@ final class BS_Install_Module_3_Helper extends FWS_UtilBase
 					return 1;
 				
 				// check templates
-				foreach(FWS_FileUtils::get_dir_content('themes/'.$theme.'/templates',false,false) as $tpl)
+				foreach(FWS_FileUtils::get_list('themes/'.$theme.'/templates',false,false) as $tpl)
 				{
 					if(preg_match('/\.htm$/',$tpl) && $tpl != 'index.htm' &&
 							!FWS_FileUtils::is_writable('themes/'.$theme.'/templates/'.$tpl))

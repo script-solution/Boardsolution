@@ -61,7 +61,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 			$tplfolder = 'themes/'.$theme['theme_folder'].'/templates';
 			if(is_dir($tplfolder))
 			{
-				$tpls = FWS_FileUtils::get_dir_content($tplfolder);
+				$tpls = FWS_FileUtils::get_list($tplfolder);
 				foreach($tpls as $template)
 				{
 					if(is_file($tplfolder.'/'.$template))

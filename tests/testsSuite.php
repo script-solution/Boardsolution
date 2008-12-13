@@ -59,7 +59,7 @@ class testsSuite extends PHPUnit_Framework_TestSuite
     );
     $this->addTestSuite('InstallTest');
     /*$this->addTestSuite('ReplyTest');*/
-    foreach(FWS_FileUtils::get_dir_content('./',false,false) as $item)
+    foreach(FWS_FileUtils::get_list('./',false,false) as $item)
     {
     	if(!in_array($item,$filter) && preg_match('/^.*?Test\.php$/',$item))
     	{
