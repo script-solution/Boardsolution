@@ -61,7 +61,7 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 					$locale->lang('delete_tables_question'),'"'.implode('", "',$tables).'"'
 				);
 				$yes_url = BS_DBA_URL::build_url(
-					0,'&amp;at='.BS_DBA_ACTION_DELETE_TABLES.'&amp;tables='.implode(';',$tables)
+					0,'&amp;aid='.BS_DBA_ACTION_DELETE_TABLES.'&amp;tables='.implode(';',$tables)
 				);
 				$no_url = BS_DBA_URL::build_url(0);
 				

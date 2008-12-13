@@ -132,7 +132,7 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends FWS_Object implement
 				if($lines >= $ops)
 					break;
 				
-				$start = ($pos + $lines) - $cpos;
+				$start = max(0,($pos + $lines) - $cpos);
 				$length = $ops - $lines;
 				
 				if($start == 0)
@@ -195,6 +195,8 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends FWS_Object implement
 			$data['file']++;
 		}
 		
+		$user->set_session_data('BS_backup',$data);
+		
 		// are we finished?
 		if(!$data['data'] || $data['file'] >= $step_count)
 		{
@@ -230,8 +232,9 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends FWS_Object implement
 		{
 			if(in_array($row['Name'],$data['tables']))
 			{
-				$num[$row['Name']] = $row['Rows'];
-				$total += $row['Rows'];
+				// $row['Rows'] may be approximated with InnoDB
+				$num[$row['Name']] = $db->sql_num($row['Name'],'*','');
+				$total += $num[$row['Name']];
 			}
 		}
 		$db->sql_free($qry);

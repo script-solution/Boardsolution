@@ -24,7 +24,7 @@ final class BS_DBA_Progress extends FWS_Object implements FWS_Progress_Listener
 	 */
 	public static function clear_progress()
 	{
-		$storage = new FWS_Progress_Storage_PHPSession('dba_');
+		$storage = new FWS_Progress_Storage_Session('dba_');
 		$storage->clear();
 	}
 	
@@ -86,7 +86,7 @@ final class BS_DBA_Progress extends FWS_Object implements FWS_Progress_Listener
 		$this->_next_url = $next_url;
 		$this->_back_url = $back_url;
 		
-		$storage = new FWS_Progress_Storage_PHPSession('dba_');
+		$storage = new FWS_Progress_Storage_Session('dba_');
 		$this->_pm = new FWS_Progress_Manager($storage);
 		$this->_pm->set_ops_per_cycle($ops);
 		$this->_pm->add_listener($this);

@@ -54,7 +54,7 @@ final class BS_DBA_Module_backups extends BS_DBA_Module
 		{
 			$message = sprintf($locale->lang('delete_backups'),'"'.implode('","',$delete).'"');
 			$yes_url = BS_DBA_URL::build_url(
-				0,'&amp;at='.BS_DBA_ACTION_DELETE_BACKUPS.'&amp;backups='.implode(',',$delete)
+				0,'&amp;aid='.BS_DBA_ACTION_DELETE_BACKUPS.'&amp;backups='.implode(',',$delete)
 			);
 			$no_url = BS_DBA_URL::build_url(0);
 			
