@@ -66,7 +66,7 @@ final class BS_ACP_Module_dbcache extends BS_ACP_Module
 				$tpl->add_variables(array(
 					'show_cache' => true,
 					'details_name' => $name,
-					'cache_content' => FWS_PrintUtils::to_string($content->get_elements())
+					'cache_content' => FWS_Printer::to_string($content->get_elements())
 				));
 			}
 		}

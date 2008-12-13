@@ -210,7 +210,7 @@ final class BS_DBA_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			'time' => $profiler->get_time(),
 			'query_count' => $db->get_query_count(),
 			'memory' => $mem,
-			'queries' => FWS_PrintUtils::to_string($db->get_queries())
+			'queries' => FWS_Printer::to_string($db->get_queries())
 		));
 		$tpl->restore_template();
 	}

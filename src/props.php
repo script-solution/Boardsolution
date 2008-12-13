@@ -39,7 +39,7 @@ final class FWS_Props extends FWS_UtilBase
 	 */
 	public static function print_all()
 	{
-		echo '<pre>'.FWS_PrintUtils::to_string(self::$_accessor->get_all()).'</pre>';
+		echo '<pre>'.FWS_Printer::to_string(self::$_accessor->get_all()).'</pre>';
 	}
 	
 	/**

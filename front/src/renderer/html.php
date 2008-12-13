@@ -603,7 +603,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		// show footer
 		$tpl->set_template('inc_footer.htm');
 		$tpl->add_variables(array(
-			'queries' => BS_DEBUG == 2 ? FWS_PrintUtils::to_string($db->get_queries()) : '',
+			'queries' => BS_DEBUG == 2 ? FWS_Printer::to_string($db->get_queries()) : '',
 			'show_bottom' => $this->_show_bottom
 		));
 		$tpl->restore_template();
