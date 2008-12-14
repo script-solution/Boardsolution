@@ -61,9 +61,6 @@ abstract class BS_Document extends FWS_Document
 		$this->set_charset(BS_HTML_CHARSET);
 		FWS_Path::set_outer($cfg['board_url'].'/');
 		
-		// set our error-logger
-		FWS_Error_Handler::get_instance()->set_logger(new BS_Error_Logger());
-		
 		// load language
 		$locale->add_language_file('index');
 		

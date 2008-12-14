@@ -27,6 +27,11 @@ FWS_Props::set_accessor($accessor);
 
 BS_Front_Action_Base::load_actions();
 
+// set our error-logger and allowed-files-listener
+$e = FWS_Error_Handler::get_instance();
+$e->add_allowedfiles_listener(new BS_Error_AllowedFiles());
+$e->set_logger(new BS_Error_Logger());
+
 // start profiler
 $profiler = FWS_Props::get()->profiler();
 $profiler->start();
