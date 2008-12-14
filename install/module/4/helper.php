@@ -226,12 +226,12 @@ final class BS_Install_Module_4_Helper extends FWS_UtilBase
 		{
 			try
 			{
-				$db->sql_qry(
+				$db->execute(
 					"SELECT ".implode(',',$tblfields)." FROM `".$prefix.$table."` LIMIT 1"
 				);
 				$res[$prefix.$table] = true;
 			}
-			catch(FWS_Exceptions_DatabaseQuery $ex)
+			catch(FWS_DB_Exception_QueryFailed $ex)
 			{
 				$res[$prefix.$table] = '<b>'.$prefix.$table.'</b>: '.$ex->get_mysql_error();
 			}
@@ -260,10 +260,10 @@ final class BS_Install_Module_4_Helper extends FWS_UtilBase
 		{
 			try
 			{
-				$db->sql_qry("SELECT * FROM `".$name."` LIMIT 1");
+				$db->execute("SELECT * FROM `".$name."` LIMIT 1");
 				$res[$name] = sprintf($locale->lang('error_table_exists'),$name);
 			}
-			catch(FWS_Exceptions_DatabaseQuery $ex)
+			catch(FWS_DB_Exception_QueryFailed $ex)
 			{
 				$res[$name] = true;
 			}

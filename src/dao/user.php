@@ -45,7 +45,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_PROFILES.' p','p.id',$this->get_activenbanned($active,$banned)
 		);
 	}
@@ -63,7 +63,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		return $db->sql_num(BS_TB_PROFILES,'id',' WHERE id = '.$user_id) > 0;
+		return $db->get_row_count(BS_TB_PROFILES,'id',' WHERE id = '.$user_id) > 0;
 	}
 	
 	/**
@@ -77,7 +77,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_USER,
 			'id',
 			' WHERE `'.BS_EXPORT_USER_NAME."` = '".$user_name."' AND
@@ -96,7 +96,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_USER,
 			'id',
 			' WHERE `'.BS_EXPORT_USER_EMAIL."` = '".$user_email."' AND
@@ -139,7 +139,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 			return array();
 		
 		$where = $this->get_activenbanned($active,$banned);
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
@@ -196,7 +196,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
@@ -219,7 +219,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 		$db = FWS_Props::get()->db();
 
 		$where = $this->get_user_by_groups_where($group_ids,$user_ids);
-		return $db->sql_num(BS_TB_PROFILES,'id',$where);
+		return $db->get_row_count(BS_TB_PROFILES,'id',$where);
 	}
 	
 	/**
@@ -253,7 +253,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 		$db = FWS_Props::get()->db();
 
 		$where = $this->get_search_where_clause($user_name,$user_email,$register_date,$user_groups);
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_PROFILES.' p',
 			'p.id',
 			' LEFT JOIN '.BS_TB_USER.' u ON p.id = u.`'.BS_EXPORT_USER_ID.'` '.$where
@@ -270,7 +270,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_PROFILES.' p',
 			'p.id',
 			' LEFT JOIN '.BS_TB_USER.' AS u ON p.id = u.`'.BS_EXPORT_USER_ID.'` '.$where
@@ -296,12 +296,11 @@ class BS_DAO_User extends BS_DAO_UserBase
 		if(empty($user_pw))
 			FWS_Helper::def_error('notempty','user_pw',$user_pw);
 		
-		$db->sql_insert(BS_TB_USER,array(
+		return $db->insert(BS_TB_USER,array(
 			BS_EXPORT_USER_NAME => $user_name,
 			BS_EXPORT_USER_EMAIL => $user_email,
 			BS_EXPORT_USER_PW => md5($user_pw)
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -333,8 +332,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 		if(!empty($user_pw))
 			$fields[BS_EXPORT_USER_PW] = $user_pw;
 		
-		$db->sql_update(BS_TB_USER,'WHERE `'.BS_EXPORT_USER_ID.'` = '.$id,$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_USER,'WHERE `'.BS_EXPORT_USER_ID.'` = '.$id,$fields);
 	}
 	
 	/**
@@ -350,7 +348,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_USER.' WHERE `'.BS_EXPORT_USER_ID.'` IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

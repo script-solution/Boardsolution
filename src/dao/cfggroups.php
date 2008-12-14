@@ -38,7 +38,7 @@ class BS_DAO_CFGGroups extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_CONFIG_GROUPS.' ORDER BY sort ASC'
 		);
 	}

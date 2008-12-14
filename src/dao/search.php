@@ -41,7 +41,7 @@ class BS_DAO_Search extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$row = $db->sql_fetch(
+		$row = $db->get_row(
 			'SELECT * FROM '.BS_TB_SEARCH.' WHERE id = "'.$id.'"'
 		);
 		if(!$row)
@@ -59,8 +59,7 @@ class BS_DAO_Search extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_insert(BS_TB_SEARCH,$fields);
-		return $db->get_last_insert_id();
+		return $db->insert(BS_TB_SEARCH,$fields);
 	}
 	
 	/**
@@ -76,7 +75,7 @@ class BS_DAO_Search extends FWS_Singleton
 		if(!FWS_Helper::is_integer($timeout) || $timeout <= 0)
 			FWS_Helper::def_error('intgt0','timeout',$timeout);
 		
-		$db->sql_qry('DELETE FROM '.BS_TB_SEARCH.' WHERE search_date < '.(time() - $timeout));
+		$db->execute('DELETE FROM '.BS_TB_SEARCH.' WHERE search_date < '.(time() - $timeout));
 		return $db->get_affected_rows();
 	}
 }

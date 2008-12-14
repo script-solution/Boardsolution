@@ -44,7 +44,7 @@ class BS_DAO_UnreadHide extends FWS_Singleton
 		if(!FWS_Helper::is_integer($uid) || $uid <= 0)
 			FWS_Helper::def_error('intgt0','uid',$uid);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_UNREAD_HIDE.'
 			 WHERE user_id = '.$uid
 		);
@@ -72,7 +72,7 @@ class BS_DAO_UnreadHide extends FWS_Singleton
 		foreach($fids as $fid)
 			$sql .= '('.$fid.','.$uid.'),';
 		$sql = FWS_String::substr($sql,0,-1);
-		$db->sql_qry($sql);
+		$db->execute($sql);
 	}
 	
 	/**
@@ -88,7 +88,7 @@ class BS_DAO_UnreadHide extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($uids) || count($uids) == 0)
 			FWS_Helper::def_error('intarray>0','uids',$uids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_UNREAD_HIDE.' WHERE user_id IN ('.implode(',',$uids).')'
 		);
 		return $db->get_affected_rows();
@@ -107,7 +107,7 @@ class BS_DAO_UnreadHide extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
 			FWS_Helper::def_error('intarray>0','fids',$fids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_UNREAD_HIDE.' WHERE forum_id IN ('.implode(',',$fids).')'
 		);
 		return $db->get_affected_rows();

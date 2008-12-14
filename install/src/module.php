@@ -53,9 +53,14 @@ abstract class BS_Install_Module extends FWS_Module
 		$dbname = $user->get_session_data('database','');
 		try
 		{
-			$db->connect($host,$login,$pw,$dbname);
+			$db->connect($host,$login,$pw);
+			$db->select_database($dbname);
 		}
-		catch(FWS_Exceptions_DatabaseConnection $ex)
+		catch(FWS_DB_Exception_DBSelectFailed $ex)
+		{
+			$this->_to_step2();
+		}
+		catch(FWS_DB_Exception_ConnectionFailed $ex)
 		{
 			$this->_to_step2();
 		}

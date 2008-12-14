@@ -38,7 +38,7 @@ class BS_DAO_Avatars extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_AVATARS,'id','');
+		return $db->get_row_count(BS_TB_AVATARS,'id','');
 	}
 	
 	/**
@@ -49,7 +49,7 @@ class BS_DAO_Avatars extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_AVATARS.' a','a.id','LEFT JOIN '.BS_TB_USER.' u ON a.user = u.`'.BS_EXPORT_USER_ID.'`
 				WHERE u.`'.BS_EXPORT_USER_NAME.'` LIKE "%'.$keyword.'%" OR av_pfad LIKE "%'.$keyword.'%"'
 		);
@@ -66,7 +66,7 @@ class BS_DAO_Avatars extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		return $db->sql_num(BS_TB_AVATARS,'id',' WHERE user = '.$user_id);
+		return $db->get_row_count(BS_TB_AVATARS,'id',' WHERE user = '.$user_id);
 	}
 	
 	/**
@@ -81,7 +81,7 @@ class BS_DAO_Avatars extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		return $db->sql_num(BS_TB_AVATARS,'id',' WHERE user = '.$user_id.' OR user = 0');
+		return $db->get_row_count(BS_TB_AVATARS,'id',' WHERE user = '.$user_id.' OR user = 0');
 	}
 	
 	/**
@@ -91,7 +91,7 @@ class BS_DAO_Avatars extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows('SELECT * FROM '.BS_TB_AVATARS);
+		return $db->get_rows('SELECT * FROM '.BS_TB_AVATARS);
 	}
 	
 	/**
@@ -167,7 +167,7 @@ class BS_DAO_Avatars extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_AVATARS.' WHERE id IN ('.implode(',',$ids).')'
 		);
 	}
@@ -188,7 +188,7 @@ class BS_DAO_Avatars extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_AVATARS.'
 			 WHERE id IN ('.implode(',',$ids).') AND user = '.$user_id
 		);
@@ -210,11 +210,10 @@ class BS_DAO_Avatars extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$db->sql_insert(BS_TB_AVATARS,array(
+		return $db->insert(BS_TB_AVATARS,array(
 			'av_pfad' => $path,
 			'user' => $user_id
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -230,7 +229,7 @@ class BS_DAO_Avatars extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_AVATARS.' WHERE id IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();
@@ -252,7 +251,7 @@ class BS_DAO_Avatars extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_AVATARS.' WHERE id IN ('.implode(',',$ids).') AND user = '.$user_id
 		);
 		return $db->get_affected_rows();
@@ -271,7 +270,7 @@ class BS_DAO_Avatars extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
 			FWS_Helper::def_error('intarray>0','user_ids',$user_ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_AVATARS.' WHERE user IN ('.implode(',',$user_ids).')'
 		);
 		return $db->get_affected_rows();
@@ -294,7 +293,7 @@ class BS_DAO_Avatars extends FWS_Singleton
 		if(!FWS_Helper::is_integer($count) || $count < 0)
 			FWS_Helper::def_error('intge0','count',$count);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT a.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_AVATARS.' a
 			 LEFT JOIN '.BS_TB_USER.' u ON a.user = u.`'.BS_EXPORT_USER_ID.'`

@@ -68,7 +68,7 @@ class BS_DAO_Links extends FWS_Singleton
 			$where .= ' OR category LIKE "%'.$keyword.'%" OR link_url LIKE "%'.$keyword.'%"';
 			$where .= ' OR link_desc_posted LIKE "%'.$keyword.'%")';
 		}
-		return $db->sql_num(BS_TB_LINKS.' l','l.id',$where);
+		return $db->get_row_count(BS_TB_LINKS.' l','l.id',$where);
 	}
 	
 	/**
@@ -81,7 +81,7 @@ class BS_DAO_Links extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_LINKS,'id',' WHERE link_url = "'.$url.'"') > 0;
+		return $db->get_row_count(BS_TB_LINKS,'id',' WHERE link_url = "'.$url.'"') > 0;
 	}
 	
 	/**
@@ -91,7 +91,7 @@ class BS_DAO_Links extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$rows = $db->sql_rows(
+		$rows = $db->get_rows(
 			'SELECT category FROM '.BS_TB_LINKS.'
 			 WHERE active = 1
 			 GROUP BY category
@@ -131,7 +131,7 @@ class BS_DAO_Links extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_LINKS.' WHERE id IN ('.implode(',',$ids).')'
 		);
 	}
@@ -184,7 +184,7 @@ class BS_DAO_Links extends FWS_Singleton
 			$where .= ' AND (user_name LIKE "%'.$keyword.'%" OR category LIKE "%'.$keyword.'%"';
 			$where .= ' OR link_url LIKE "%'.$keyword.'%" OR link_desc_posted LIKE "%'.$keyword.'%")';
 		}
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT l.*,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.user_group
 			 FROM '.BS_TB_LINKS.' l
 			 LEFT JOIN '.BS_TB_USER.' u ON l.user_id = u.`'.BS_EXPORT_USER_ID.'`
@@ -202,7 +202,7 @@ class BS_DAO_Links extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT id FROM '.BS_TB_LINKS.' WHERE link_desc = "" AND link_desc_posted != ""'
 		);
 	}
@@ -217,8 +217,7 @@ class BS_DAO_Links extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_insert(BS_TB_LINKS,$fields);
-		return $db->get_last_insert_id();
+		return $db->insert(BS_TB_LINKS,$fields);
 	}
 	
 	/**
@@ -237,10 +236,9 @@ class BS_DAO_Links extends FWS_Singleton
 		if($active !== 1 && $active !== 2)
 			FWS_Helper::error('Active should be 0 or 1');
 		
-		$db->sql_update(BS_TB_LINKS,'WHERE id = IN ('.implode(',',$ids).')',array(
+		return $db->update(BS_TB_LINKS,'WHERE id = IN ('.implode(',',$ids).')',array(
 			'active' => $active
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -256,10 +254,9 @@ class BS_DAO_Links extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_LINKS,'WHERE id = '.$id,array(
+		return $db->update(BS_TB_LINKS,'WHERE id = '.$id,array(
 			'clicks' => array('clicks + 1')
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -278,11 +275,10 @@ class BS_DAO_Links extends FWS_Singleton
 		if(!FWS_Helper::is_integer($vote) || $vote < 1 || $vote > 6)
 			FWS_Helper::def_error('numbetween','vote',1,6,$vote);
 		
-		$db->sql_update(BS_TB_LINKS,'WHERE id = '.$id,array(
+		return $db->update(BS_TB_LINKS,'WHERE id = '.$id,array(
 			'votes' => array('votes + 1'),
 			'vote_points' => array('vote_points + '.$vote)
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -300,11 +296,10 @@ class BS_DAO_Links extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_LINKS,'WHERE id = '.$id,array(
+		return $db->update(BS_TB_LINKS,'WHERE id = '.$id,array(
 			'link_desc' => $text,
 			'link_desc_posted' => $text_posted
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -321,8 +316,7 @@ class BS_DAO_Links extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_LINKS,'WHERE id = '.$id,$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_LINKS,'WHERE id = '.$id,$fields);
 	}
 	
 	/**
@@ -361,7 +355,7 @@ class BS_DAO_Links extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_LINKS.' WHERE '.$field.' IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

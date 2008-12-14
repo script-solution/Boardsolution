@@ -46,7 +46,7 @@ class BS_DAO_Sessions extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_SESSIONS,
 			'user_id',
 			' WHERE user_id = '.$user_id." AND MD5(CONCAT(session_id,user_ip)) = '".$key."'"
@@ -62,7 +62,7 @@ class BS_DAO_Sessions extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT s.*,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.ghost_mode,p.user_group
 			 FROM '.BS_TB_SESSIONS.' s
 			 LEFT JOIN '.BS_TB_USER.' u ON s.user_id = u.`'.BS_EXPORT_USER_ID.'`
@@ -81,8 +81,7 @@ class BS_DAO_Sessions extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_insert(BS_TB_SESSIONS,$fields);
-		return $db->get_last_insert_id();
+		return $db->insert(BS_TB_SESSIONS,$fields);
 	}
 	
 	/**
@@ -96,8 +95,7 @@ class BS_DAO_Sessions extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_update(BS_TB_SESSIONS,'WHERE session_id = "'.$sid.'"',$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_SESSIONS,'WHERE session_id = "'.$sid.'"',$fields);
 	}
 	
 	/**
@@ -113,7 +111,7 @@ class BS_DAO_Sessions extends FWS_Singleton
 		if(!is_array($sids) || count($sids) == 0)
 			FWS_Helper::def_error('array>0','sids',$sids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_SESSIONS.' WHERE session_id IN ("'.implode('","',$sids).'")'
 		);
 		return $db->get_affected_rows();
@@ -132,7 +130,7 @@ class BS_DAO_Sessions extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_SESSIONS.' WHERE user_id IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

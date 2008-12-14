@@ -33,7 +33,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		// change default charset and collation of the db
 		if($db->get_server_version() >= '4.1')
 		{
-			$db->sql_qry(
+			$db->execute(
 				'ALTER DATABASE `'.$dbname.'` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
 			);
 		}
@@ -42,7 +42,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		
 		// bbcodes
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_BBCODES'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_BBCODES']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_BBCODES']}` (
 		  `id` int(11) unsigned NOT NULL auto_increment,
 		  `name` varchar(30) NOT NULL,
 		  `type` varchar(15) NOT NULL default 'inline',
@@ -58,7 +58,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		  PRIMARY KEY  (`id`)
 		) TYPE=MyISAM;");
 		
-		$db->sql_qry("INSERT INTO `{$consts['BS_TB_BBCODES']}`
+		$db->execute("INSERT INTO `{$consts['BS_TB_BBCODES']}`
 			(`id`, `name`, `type`, `content`, `replacement`, `replacement_param`, `param`, `param_type`, `allow_nesting`, `ignore_whitespace`, `ignore_unknown_tags`, `allowed_content`)
 			VALUES
 			(1, 'b', 'inline', 'text', '<b>{TEXT}</b>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
@@ -87,8 +87,8 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		
 		// cache
 		$this->add_to_log('Changing Table "'.$consts['BS_TB_CACHE'].'"...');
-		$db->sql_qry("DELETE FROM `{$consts['BS_TB_CACHE']}` WHERE table_name = 'smileys'");
-		$db->sql_qry(
+		$db->execute("DELETE FROM `{$consts['BS_TB_CACHE']}` WHERE table_name = 'smileys'");
+		$db->execute(
 			"ALTER TABLE `{$consts['BS_TB_CACHE']}`
 			 CHANGE `table_name` `table_name` enum('banlist','intern','languages','moderators','themes',
 			 																			 'user_groups','user_ranks','config','user_fields',
@@ -98,7 +98,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		
  		// config
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_CONFIG'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_CONFIG']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_CONFIG']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `name` varchar(255) NOT NULL,
 		  `custom_title` varchar(255) NOT NULL,
@@ -116,7 +116,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 
 		// config-groups
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_CONFIG_GROUPS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_CONFIG_GROUPS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_CONFIG_GROUPS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `parent_id` int(10) unsigned NOT NULL,
 		  `name` varchar(100) NOT NULL,
@@ -128,7 +128,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
  		
 		BS_Install_Module_5_Helper::generate_settings();
 		
-		$cfg = $db->sql_fetch("SELECT* FROM `".$prefix."config`");
+		$cfg = $db->get_row("SELECT* FROM `".$prefix."config`");
 		$cfgconv = array(
 			'account_activation' => 'account_activation',
 			'allow_custom_lang' => 'allow_custom_lang',
@@ -268,24 +268,24 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		);
 		foreach($cfgconv as $cfgold => $cfgnew)
 		{
-			$db->sql_qry(
+			$db->execute(
 				'UPDATE '.$consts['BS_TB_CONFIG'].'
 				 SET value = "'.$cfg[$cfgold].'"
 				 WHERE name = "'.$cfgnew.'"'
 			);
 		}
 		// some special cases
-		$db->sql_qry(
+		$db->execute(
 			'UPDATE '.$consts['BS_TB_CONFIG'].'
 			 SET value = "'.$cfg['attachments_images_width'].'x'.$cfg['attachments_images_height'].'"
 			 WHERE name = "attachments_images_size"'
 		);
-		$db->sql_qry(
+		$db->execute(
 			'UPDATE '.$consts['BS_TB_CONFIG'].'
 			 SET value = "'.$cfg['profile_max_img_width'].'x'.$cfg['profile_max_img_height'].'"
 			 WHERE name = "profile_max_img_size"'
 		);
-		$db->sql_qry(
+		$db->execute(
 			'UPDATE '.$consts['BS_TB_CONFIG'].'
 			 SET value = "'.$cfg['badwords'].'"
 			 WHERE name = "badwords_definitions"'
@@ -296,7 +296,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		);
 		foreach($cfgspam as $name)
 		{
-			$db->sql_qry(
+			$db->execute(
 				'UPDATE '.$consts['BS_TB_CONFIG'].'
 				 SET value = "'.($cfg[$name.'_on'] == 1 ? $cfg[$name.'_time'] : 0).'"
 				 WHERE name = "'.$name.'"'
@@ -305,12 +305,12 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
  		
  		// config
 		$this->add_to_log('Deleting Table "'.$prefix.'config"...');
-		$db->sql_qry("DROP TABLE `".$prefix."config`");
+		$db->execute("DROP TABLE `".$prefix."config`");
  		$this->add_to_log_success();
 		
  		// events-announcements
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_EVENT_ANN'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_EVENT_ANN']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_EVENT_ANN']}` (
 		  `event_id` int(10) unsigned NOT NULL,
 		  `user_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`event_id`,`user_id`)
@@ -319,23 +319,22 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		
 		// events
 		$this->add_to_log('Changing Table "'.$consts['BS_TB_EVENTS'].'"...');
-		$qry = $db->sql_qry(
+		$rows = $db->get_rows(
 			"SELECT id,announced_user FROM `{$consts['BS_TB_EVENTS']}`
 			 WHERE announced_user != '0' AND announced_user != ''"
 		);
-		while($row = $db->sql_fetch_assoc($qry))
+		foreach($rows as $row)
 		{
 			$user = FWS_Array_Utils::advanced_explode(',',$row['announced_user']);
 			foreach($user as $uid)
 			{
-				$db->sql_qry(
+				$db->execute(
 					"INSERT INTO `{$consts['BS_TB_EVENT_ANN']}` (event_id,user_id)
 					 VALUES (".$row['id'].",".$uid.");"
 				);
 			}
 		}
-		$db->sql_free($qry);
-		$db->sql_qry(
+		$db->execute(
 			"ALTER TABLE `{$consts['BS_TB_EVENTS']}`
 			 ADD `description_posted` text NOT NULL,
 			 DROP `announced_user`"
@@ -344,7 +343,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		
  		// forum-perms
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_FORUMS_PERM'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_FORUMS_PERM']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_FORUMS_PERM']}` (
 		  `forum_id` int(10) unsigned NOT NULL,
 		  `group_id` int(10) unsigned NOT NULL,
 		  `type` enum('reply','topic','poll','event') NOT NULL,
@@ -354,32 +353,31 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		
 		// forums
 		$this->add_to_log('Changing Table "'.$consts['BS_TB_FORUMS'].'"...');
-		$qry = $db->sql_qry(
-			"SELECT id,`permission_thread`,`permission_poll`,`permission_event`,`permission_post`
-			 FROM `{$consts['BS_TB_FORUMS']}`"
-		);
 		$types = array(
 			'permission_thread' => 'topic',
 			'permission_poll' => 'poll',
 			'permission_event' => 'event',
 			'permission_post' => 'reply'
 		);
-		while($row = $db->sql_fetch_assoc($qry))
+		$rows = $db->get_rows(
+			"SELECT id,`permission_thread`,`permission_poll`,`permission_event`,`permission_post`
+			 FROM `{$consts['BS_TB_FORUMS']}`"
+		);
+		foreach($rows as $row)
 		{
 			foreach(array_keys($types) as $type)
 			{
 				$ids = FWS_Array_Utils::advanced_explode(',',$row[$type]);
 				foreach($ids as $gid)
 				{
-					$db->sql_qry(
+					$db->execute(
 						"INSERT INTO `{$consts['BS_TB_FORUMS_PERM']}` (forum_id,group_id,type)
 						 VALUES (".$row['id'].",".$gid.",'".$types[$type]."');"
 					);
 				}
 			}
 		}
-		$db->sql_free($qry);
-		$db->sql_qry(
+		$db->execute(
 			"ALTER TABLE `{$consts['BS_TB_FORUMS']}`
 			 DROP `permission_thread`,
 			 DROP `permission_poll`,
@@ -390,7 +388,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		
  		// link-votes
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_LINK_VOTES'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_LINK_VOTES']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_LINK_VOTES']}` (
 		  `user_id` int(10) unsigned NOT NULL,
 		  `link_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`user_id`,`link_id`)
@@ -399,7 +397,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		
 		// pms
 		$this->add_to_log('Changing Table "'.$consts['BS_TB_PMS'].'"...');
-		$db->sql_qry(
+		$db->execute(
 			"ALTER TABLE `{$consts['BS_TB_PMS']}`
 			 ADD `attachment_count` tinyint(3) unsigned NOT NULL default '0'"
  		);
@@ -407,7 +405,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		
  		// unread
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_UNREAD'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_UNREAD']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_UNREAD']}` (
 		  `user_id` int(10) unsigned NOT NULL,
 		  `post_id` int(10) unsigned NOT NULL,
 		  `is_news` tinyint(1) unsigned NOT NULL,
@@ -417,7 +415,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		
 		// unsent posts
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_UNSENT_POSTS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_UNSENT_POSTS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_UNSENT_POSTS']}` (
 		  `user_id` int(10) unsigned NOT NULL,
 		  `post_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`user_id`,`post_id`)
@@ -426,55 +424,52 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		
  		// profile
 		$this->add_to_log('Changing Table "'.$consts['BS_TB_PROFILES'].'"...');
-		$qry = $db->sql_qry(
+		$rows = $db->get_rows(
 			"SELECT id,linkvotes FROM `{$consts['BS_TB_PROFILES']}` WHERE linkvotes != ''"
 		);
-		while($row = $db->sql_fetch_assoc($qry))
+		foreach($rows as $row)
 		{
 			$user = FWS_Array_Utils::advanced_explode(',',$row['linkvotes']);
 			foreach($user as $lid)
 			{
-				$db->sql_qry(
+				$db->execute(
 					"INSERT INTO `{$consts['BS_TB_LINK_VOTES']}` (user_id,link_id)
 					 VALUES (".$row['id'].",".$lid.");"
 				);
 			}
 		}
-		$db->sql_free($qry);
-		$qry = $db->sql_qry(
+		$rows = $db->get_rows(
 			"SELECT id,unread_topics FROM `{$consts['BS_TB_PROFILES']}` WHERE unread_topics != ''"
 		);
-		while($row = $db->sql_fetch_assoc($qry))
+		foreach($rows as $row)
 		{
 			$unread = unserialize($row['unread_topics']);
 			if(isset($unread['t']))
 			{
 				foreach($unread['t'] as $tid => $tunread)
 				{
-					$db->sql_qry(
+					$db->execute(
 						"INSERT INTO `{$consts['BS_TB_UNREAD']}` (user_id,post_id,is_news)
 						 VALUES (".$row['id'].",".$tunread[0].",".(isset($unread['n'][$tid]) ? 1 : 0).");"
 					);
 				}
 			}
 		}
-		$db->sql_free($qry);
-		$qry = $db->sql_qry(
+		$rows = $db->get_rows(
 			"SELECT id,unsent_posts FROM `{$consts['BS_TB_PROFILES']}` WHERE unsent_posts != ''"
 		);
-		while($row = $db->sql_fetch_assoc($qry))
+		foreach($rows as $row)
 		{
 			$pids = FWS_Array_Utils::advanced_explode(',',$row['unsent_posts']);
 			foreach($pids as $pid)
 			{
-				$db->sql_qry(
+				$db->execute(
 					"INSERT INTO `{$consts['BS_TB_UNSENT_POSTS']}` (user_id,post_id)
 					 VALUES (".$row['id'].",".$pid.");"
 				);
 			}
 		}
-		$db->sql_free($qry);
-		$db->sql_qry(
+		$db->execute(
 			"ALTER TABLE `{$consts['BS_TB_PROFILES']}`
 			 DROP `linkvotes`,
 			 DROP `unread_topics`,
@@ -482,22 +477,22 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 			 CHANGE `timezone` `timezone` varchar(100) NOT NULL default 'Europe/Berlin',
 			 ADD `startmodule` enum('portal','forums') NOT NULL default 'portal'"
  		);
- 		$db->sql_qry(
+ 		$db->execute(
  			"UPDATE `{$consts['BS_TB_PROFILES']}` SET timezone = 'Europe/Berlin'"
  		);
  		$this->add_to_log_success();
  		
  		// themes
 		$this->add_to_log('Adding new themes into "'.$consts['BS_TB_THEMES'].'"...');
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_THEMES']."` (`theme_folder`, `theme_name`)
+		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`theme_folder`, `theme_name`)
 									VALUES ('simple', 'Simple');");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_THEMES']."` (`theme_folder`, `theme_name`)
+		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`theme_folder`, `theme_name`)
 									VALUES ('bots', 'Bots');");
  		$this->add_to_log_success();
 		
  		// unread hide
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_UNREAD_HIDE'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_UNREAD_HIDE']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_UNREAD_HIDE']}` (
 		  `user_id` int(10) unsigned NOT NULL,
 		  `forum_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`user_id`,`forum_id`)
@@ -506,7 +501,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		
 		// user-groups
 		$this->add_to_log('Changing Table "'.$consts['BS_TB_USER_GROUPS'].'"...');
-		$db->sql_qry(
+		$db->execute(
 			"ALTER TABLE `{$consts['BS_TB_USER_GROUPS']}`
 			ADD `view_useronline_list` tinyint(1) unsigned NOT NULL default '0',
   		ADD `is_team` tinyint(1) unsigned NOT NULL default '0'"
@@ -515,7 +510,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		
 		// tasks
 		$this->add_to_log('Deleting Task in "'.$consts['BS_TB_TASKS'].'"...');
-		$db->sql_qry("DELETE FROM `{$consts['BS_TB_TASKS']}` WHERE task_file = 'events.php'");
+		$db->execute("DELETE FROM `{$consts['BS_TB_TASKS']}` WHERE task_file = 'events.php'");
 		$this->add_to_log_success();
 		
 		

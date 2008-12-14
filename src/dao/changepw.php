@@ -45,7 +45,7 @@ class BS_DAO_ChangePW extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_CHANGE_PW,'user_id',' WHERE user_id = '.$id.($key ? ' AND user_key = "'.$key.'"' : '')
 		) > 0;
 	}
@@ -64,12 +64,11 @@ class BS_DAO_ChangePW extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$db->sql_insert(BS_TB_CHANGE_PW,array(
+		return $db->insert(BS_TB_CHANGE_PW,array(
 			'user_id' => $user_id,
 			'user_key' => $key,
 			'email_date' => time()
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -86,11 +85,10 @@ class BS_DAO_ChangePW extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$db->sql_update(BS_TB_CHANGE_PW,'WHERE user_id = '.$user_id,array(
+		return $db->update(BS_TB_CHANGE_PW,'WHERE user_id = '.$user_id,array(
 			'user_key' => $key,
 			'email_date' => time()
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -106,7 +104,7 @@ class BS_DAO_ChangePW extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_qry('DELETE FROM '.BS_TB_CHANGE_PW.' WHERE user_id = '.$id);
+		$db->execute('DELETE FROM '.BS_TB_CHANGE_PW.' WHERE user_id = '.$id);
 		return $db->get_affected_rows();
 	}
 	
@@ -123,7 +121,7 @@ class BS_DAO_ChangePW extends FWS_Singleton
 		if(!FWS_Helper::is_integer($timeout) || $timeout <= 0)
 			FWS_Helper::def_error('intgt0','timeout',$timeout);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_CHANGE_PW.'
 			 WHERE email_date < '.(time() - $timeout)
 		);

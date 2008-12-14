@@ -28,7 +28,7 @@ final class BS_DBA_Action_index_delete extends BS_DBA_Action_Base
 		$stables = $input->get_var('tables','get',FWS_Input::STRING);
 		$tables = FWS_Array_Utils::advanced_explode(';',$stables);
 		if(count($tables) > 0)
-			$db->sql_qry('DROP TABLE `'.implode('`, `',$tables).'`');
+			$db->execute('DROP TABLE `'.implode('`, `',$tables).'`');
 		
 		$this->set_success_msg(
 			sprintf($locale->lang('delete_tables_success'),'"'.implode('", "',$tables).'"')

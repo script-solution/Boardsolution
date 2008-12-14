@@ -121,7 +121,7 @@ class BS_PropAccessor extends FWS_PropAccessor
 	}
 	
 	/**
-	 * @return FWS_MySQL the db-property
+	 * @return FWS_DB_MySQL_Connection the db-property
 	 */
 	public function db()
 	{

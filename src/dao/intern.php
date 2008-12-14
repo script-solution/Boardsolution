@@ -44,7 +44,7 @@ class BS_DAO_Intern extends FWS_Singleton
 		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
 			FWS_Helper::def_error('intgt0','fid',$fid);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT i.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_INTERN.' i
 			 LEFT JOIN '.BS_TB_USER.' u ON i.access_value = u.`'.BS_EXPORT_USER_ID.'`
@@ -71,12 +71,11 @@ class BS_DAO_Intern extends FWS_Singleton
 		if(!FWS_Helper::is_integer($value) || $value <= 0)
 			FWS_Helper::def_error('intgt0','value',$value);
 		
-		$db->sql_insert(BS_TB_INTERN,array(
+		return $db->insert(BS_TB_INTERN,array(
 			'fid' => $fid,
 			'access_type' => $type,
 			'access_value' => $value
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -137,7 +136,7 @@ class BS_DAO_Intern extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_INTERN.'
 			 WHERE access_type = "'.$type.'" AND access_value IN ('.implode(',',$ids).')'
 		);
@@ -158,7 +157,7 @@ class BS_DAO_Intern extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_INTERN.' WHERE '.$field.' IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

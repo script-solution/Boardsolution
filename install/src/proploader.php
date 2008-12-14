@@ -68,11 +68,11 @@ final class BS_Install_PropLoader extends BS_PropLoader
 	/**
 	 * @see BS_PropLoader::db()
 	 *
-	 * @return FWS_MySQL
+	 * @return FWS_DB_MySQL_Connection
 	 */
 	protected function db()
 	{
-		return FWS_MySQL::get_instance();
+		return new FWS_DB_MySQL_Connection();
 	}
 }
 ?>

@@ -55,20 +55,14 @@ final class BS_Cache_Source_CustomDB extends FWS_Object implements FWS_Cache_Sou
 	public function get_content()
 	{
 		$db = FWS_Props::get()->db();
-
-		// perform query
-		$res = $db->sql_qry($this->_sql);
-		
-		// collect rows
 		$rows = array();
-		while($row = $db->sql_fetch_assoc($res))
+		foreach($db->execute($this->_sql) as $row)
 		{
 			if($this->_key !== null)
 				$rows[$row[$this->_key]] = $row;
 			else
 				$rows[] = $row;
 		}
-		
 		return $rows;
 	}
 	

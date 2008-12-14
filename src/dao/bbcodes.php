@@ -38,7 +38,7 @@ class BS_DAO_BBCodes extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_BBCODES,'*','');
+		return $db->get_row_count(BS_TB_BBCODES,'*','');
 	}
 	
 	/**
@@ -49,7 +49,7 @@ class BS_DAO_BBCodes extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_BBCODES,'*',
+		return $db->get_row_count(BS_TB_BBCODES,'*',
 			' WHERE name LIKE "%'.$keyword.'%" OR type LIKE "%'.$keyword.'%" OR
 			 		content LIKE "%'.$keyword.'%" OR replacement LIKE "%'.$keyword.'%" OR
 			 		replacement_param LIKE "%'.$keyword.'%" OR param LIKE "%'.$keyword.'%" OR
@@ -70,7 +70,7 @@ class BS_DAO_BBCodes extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id < 0)
 			FWS_Helper::def_error('intge0','id',$id);
 		
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_BBCODES,'*','WHERE name = "'.$name.'"'.($id > 0 ? ' AND id != '.$id : '')
 		) > 0;
 	}
@@ -101,7 +101,7 @@ class BS_DAO_BBCodes extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_BBCODES.'
 			 WHERE id IN ('.implode(',',$ids).')'
 		);
@@ -123,7 +123,7 @@ class BS_DAO_BBCodes extends FWS_Singleton
 		if(!FWS_Helper::is_integer($count) || $count < 0)
 			FWS_Helper::def_error('intge0','count',$count);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_BBCODES.'
 		  '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
 		);
@@ -146,7 +146,7 @@ class BS_DAO_BBCodes extends FWS_Singleton
 		if(!FWS_Helper::is_integer($count) || $count < 0)
 			FWS_Helper::def_error('intge0','count',$count);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_BBCODES.'
 			 WHERE
 			 	name LIKE "%'.$keyword.'%" OR type LIKE "%'.$keyword.'%" OR
@@ -164,7 +164,7 @@ class BS_DAO_BBCodes extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$rows = $db->sql_rows(
+		$rows = $db->get_rows(
 			'SELECT DISTINCT content FROM '.BS_TB_BBCODES.' ORDER BY content ASC'
 		);
 		$types = array();
@@ -180,7 +180,7 @@ class BS_DAO_BBCodes extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$rows = $db->sql_rows(
+		$rows = $db->get_rows(
 			'SELECT DISTINCT type FROM '.BS_TB_BBCODES.' ORDER BY type ASC'
 		);
 		$types = array();
@@ -199,8 +199,7 @@ class BS_DAO_BBCodes extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_insert(BS_TB_BBCODES,$fields);
-		return $db->get_last_insert_id();
+		return $db->insert(BS_TB_BBCODES,$fields);
 	}
 	
 	/**
@@ -217,8 +216,7 @@ class BS_DAO_BBCodes extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_BBCODES,'WHERE id = '.$id,$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_BBCODES,'WHERE id = '.$id,$fields);
 	}
 	
 	/**
@@ -234,7 +232,7 @@ class BS_DAO_BBCodes extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_BBCODES.' WHERE id IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

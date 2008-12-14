@@ -244,19 +244,20 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 
 		if(preg_match("/^(3\\.23|4\\.|5\\.)/",$version))
 		{
-			$qry = $db->sql_qry('SHOW TABLE STATUS FROM `'.BS_MYSQL_DATABASE.'`');
-			if($qry !== false)
+			try
 			{
-				while($data = $db->sql_fetch_assoc($qry))
+				$rows = $db->get_rows('SHOW TABLE STATUS FROM `'.BS_MYSQL_DATABASE.'`');
+				foreach($rows as $data)
 				{
 					$engine = isset($data['Engine']) ? $data['Engine'] : $data['Type'];
 					if($engine != 'MRG_MyISAM' && isset($tables[$data['Name']]))
 						$dbsize += $data['Data_length'] + $data['Index_length'];
 				}
-				$db->sql_free($qry);
 			}
-			else
+			catch(FWS_DB_Exception_QueryFailed $ex)
+			{
 				$dbsize = -1;
+			}
 		}
 
 		return $dbsize;

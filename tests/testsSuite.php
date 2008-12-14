@@ -72,11 +72,11 @@ class testsSuite extends PHPUnit_Framework_TestSuite
 	protected function tearDown()
 	{
 		$db = FWS_Props::get()->db();
-		$qry = $db->sql_qry('SELECT * FROM '.BS_TB_LOG_ERRORS);
-		if($db->sql_num_rows($qry))
+		$rows = $db->get_rows('SELECT * FROM '.BS_TB_LOG_ERRORS);
+		if(count($rows) > 0)
 		{
 			echo "\n*** Errors occurred: ***\n";
-			while($row = $db->sql_fetch_assoc($qry))
+			foreach($rows as $row)
 			{
 				echo '"'.$row['message'].'" @ '.$row['query'].':'."\n";
 				foreach(explode("\n",$row['backtrace']) as $bt)
@@ -84,7 +84,6 @@ class testsSuite extends PHPUnit_Framework_TestSuite
 				echo "\n";
 			}
 		}
-		$db->sql_free($qry);
 	}
 	
 	/**

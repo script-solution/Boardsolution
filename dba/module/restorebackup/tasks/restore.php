@@ -74,7 +74,7 @@ final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends FWS_Object
 		{
 			$statements = FWS_SQLParser::get_statements_from_file('backups/'.$filename);
 			foreach($statements as $sql)
-				$db->sql_qry($sql);
+				$db->execute($sql);
 		}
 		
 		// are we finished?

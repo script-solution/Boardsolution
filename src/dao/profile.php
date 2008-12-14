@@ -56,7 +56,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 		$where = $this->get_activenbanned($active,$banned);
 		$sort = $this->get_sort($sort,$order);
 		$limit = $this->get_limit($start,$count);
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_PROFILES.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON p.id = u.`'.BS_EXPORT_USER_ID.'`
@@ -109,7 +109,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 			return array();
 		
 		$sort = $this->get_sort($sort,$order);
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
@@ -211,7 +211,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
@@ -232,7 +232,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
@@ -249,7 +249,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_fetch(
+		return $db->get_row(
 			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_PROFILES.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON p.id = u.`'.BS_EXPORT_USER_ID.'`
@@ -270,7 +270,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 		$db = FWS_Props::get()->db();
 
 		$ghost_mode = ($user->is_admin() || $cfg['allow_ghost_mode'] == 0 ? '1' : '0');
-		return $db->sql_fetch(
+		return $db->get_row(
 			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_PROFILES.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON p.id = u.`'.BS_EXPORT_USER_ID.'`
@@ -298,7 +298,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 			$where .= 'SUBSTRING(p.add_birthday,6,2) = "'.sprintf('%02d',$month).'" OR ';
 		$where = FWS_String::substr($where,0,-4).')';
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_PROFILES.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON p.id = u.`'.BS_EXPORT_USER_ID.'`
@@ -333,7 +333,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 		if($day != 0)
 			$where .= ' AND SUBSTRING(p.add_birthday,9,2) = '.$day;
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT '.$this->get_fields().'
 			 FROM '.BS_TB_PROFILES.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON p.id = u.`'.BS_EXPORT_USER_ID.'`
@@ -349,7 +349,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	{
 		$db = FWS_Props::get()->db();
 
-		$res = $db->sql_fetch(
+		$res = $db->get_row(
 			'SELECT SUM(logins) as total FROM '.BS_TB_PROFILES.'
 			 WHERE active = 1 AND banned = 0'
 		);
@@ -363,7 +363,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	{
 		$db = FWS_Props::get()->db();
 
-		$res = $db->sql_fetch(
+		$res = $db->get_row(
 			'SELECT lastlogin FROM '.BS_TB_PROFILES.'
 			 WHERE active = 1 AND banned = 0
 			 ORDER BY lastlogin DESC'
@@ -378,7 +378,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT id FROM '.BS_TB_PROFILES.' WHERE signature_posted != "" AND signatur = ""'
 		);
 	}
@@ -406,7 +406,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 		if(!FWS_Helper::is_integer($number) || $number <= 0)
 			FWS_Helper::def_error('intgt0','number',$number);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT p.id,p.posts,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.registerdate,
 			 				p.posts / (('.time().' - p.registerdate) / 86400) per_day,p.user_group
 			 FROM '.BS_TB_PROFILES.' p
@@ -433,7 +433,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT registerdate,COUNT(id) num,
 							CONCAT(YEAR(FROM_UNIXTIME(registerdate)),MONTH(FROM_UNIXTIME(registerdate))) date
 			 FROM '.BS_TB_PROFILES.'
@@ -445,21 +445,20 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	/**
 	 * Updates the given fields for all users
 	 * 
-	 * @param array $fields the fields to update. See {@link FWS_MySQL::sql_update} for details
+	 * @param array $fields the fields to update. See {@link FWS_DB_Connection::update} for details
 	 * @return int the number of affected rows
 	 */
 	public function update_all($fields)
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_update(BS_TB_PROFILES,'',$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_PROFILES,'',$fields);
 	}
 	
 	/**
 	 * Updates the given fields for the user with the given id
 	 * 
-	 * @param array $fields the fields to update. See {@link FWS_MySQL::sql_update} for details
+	 * @param array $fields the fields to update. See {@link FWS_DB_Connection::update} for details
 	 * @param int $id the user-id
 	 * @return int the number of affected rows
 	 */
@@ -471,7 +470,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	/**
 	 * Updates the given fields for all users with the given ids
 	 * 
-	 * @param array $fields the fields to update. See {@link FWS_MySQL::sql_update} for details
+	 * @param array $fields the fields to update. See {@link FWS_DB_Connection::update} for details
 	 * @param array $ids an array with all user-ids
 	 * @return int the number of affected rows
 	 */
@@ -482,8 +481,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_update(BS_TB_PROFILES,' WHERE id IN ('.implode(',',$ids).')',$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_PROFILES,' WHERE id IN ('.implode(',',$ids).')',$fields);
 	}
 	
 	/**
@@ -501,10 +499,9 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 			FWS_Helper::def_error('intarray>0','theme_ids',$theme_ids);
 		
 		$fields = array('forum_style' => 0);
-		$db->sql_update(
+		return $db->update(
 			BS_TB_PROFILES,'WHERE forum_style IN ('.implode(',',$theme_ids).')',$fields
 		);
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -522,7 +519,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 		if(empty($name))
 			FWS_Helper::def_error('notempty','name',$name);
 		
-		$db->sql_qry(
+		$db->execute(
 			'ALTER TABLE '.BS_TB_PROFILES.'
 			 ADD `add_'.$name.'`
 			 '.$this->get_field_sql_syntax($type,$length)
@@ -543,7 +540,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 		if(empty($name))
 			FWS_Helper::def_error('notempty','name',$name);
 		
-		$db->sql_qry(
+		$db->execute(
 			'ALTER TABLE '.BS_TB_PROFILES.'
 			 CHANGE `add_'.$name.'` `add_'.$name.'`
 			 '.$this->get_field_sql_syntax($type,$length)
@@ -562,7 +559,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 		if(empty($name))
 			FWS_Helper::def_error('notempty','name',$name);
 		
-		$db->sql_qry(
+		$db->execute(
 			'ALTER TABLE '.BS_TB_PROFILES.'
 			 DROP `add_'.$name.'`'
 		);
@@ -611,8 +608,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_insert(BS_TB_PROFILES,$fields);
-		return $db->get_last_insert_id();
+		return $db->insert(BS_TB_PROFILES,$fields);
 	}
 	
 	/**
@@ -628,7 +624,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM  '.BS_TB_PROFILES.' WHERE id IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

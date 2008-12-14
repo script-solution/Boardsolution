@@ -47,7 +47,7 @@ class BS_DAO_PollVotes extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_POLL_VOTES,'user_id',' WHERE poll_id = '.$poll_id.' AND user_id = '.$user_id
 		) > 0;
 	}
@@ -68,11 +68,10 @@ class BS_DAO_PollVotes extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$db->sql_insert(BS_TB_POLL_VOTES,array(
+		return $db->insert(BS_TB_POLL_VOTES,array(
 			'poll_id' => $poll_id,
 			'user_id' => $user_id
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -88,7 +87,7 @@ class BS_DAO_PollVotes extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_POLL_VOTES.' WHERE poll_id IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

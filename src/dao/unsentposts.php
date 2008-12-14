@@ -43,7 +43,7 @@ class BS_DAO_UnsentPosts extends FWS_Singleton
 		$db = FWS_Props::get()->db();
 
 		$time = time();
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT p.id,up.post_id,u.`'.BS_EXPORT_USER_EMAIL.'` user_email,
 							u.`'.BS_EXPORT_USER_NAME.'` user_name,p.emails_include_post,p.forum_lang
 			 FROM '.BS_TB_PROFILES.' p
@@ -74,12 +74,11 @@ class BS_DAO_UnsentPosts extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
 			FWS_Helper::def_error('intarray>0','user_ids',$user_ids);
 		
-		// TODO free the result
 		$sql = 'INSERT INTO '.BS_TB_UNSENT_POSTS.' (post_id,user_id) VALUES ';
 		foreach($user_ids as $uid)
 			$sql .= '('.$post_id.','.$uid.'),';
 		$sql = FWS_String::substr($sql,0,-1);
-		$db->sql_qry($sql);
+		$db->execute($sql);
 	}
 	
 	/**
@@ -95,7 +94,7 @@ class BS_DAO_UnsentPosts extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_UNSENT_POSTS.' WHERE user_id IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

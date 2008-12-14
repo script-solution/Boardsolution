@@ -187,15 +187,26 @@ class BS_PropLoader extends FWS_PropLoader
 	}
 	
 	/**
-	 * @return FWS_MySQL the property
+	 * @return FWS_DB_MySQL_Connection the property
 	 */
 	protected function db()
 	{
-		$c = FWS_MySQL::get_instance();
-		$c->connect(BS_MYSQL_HOST,BS_MYSQL_LOGIN,BS_MYSQL_PASSWORD,BS_MYSQL_DATABASE);
+		$c = new FWS_DB_MySQL_Connection();
+		$c->connect(BS_MYSQL_HOST,BS_MYSQL_LOGIN,BS_MYSQL_PASSWORD);
+		$c->select_database(BS_MYSQL_DATABASE);
 		$c->set_use_transactions(BS_USE_TRANSACTIONS);
-		$c->init(BS_DB_CHARSET);
-		$c->set_debugging_enabled(BS_DEBUG > 1);
+		$c->set_save_queries(BS_DEBUG > 1);
+		// we don't want to escape them because we use the input-class to do so.
+		// before query-execution would be better but it is too dangerous to change that now :/
+		$c->set_escape_values(false);
+		
+		$version = $c->get_server_version();
+		if($version >= '4.1')
+		{
+			$c->execute('SET CHARACTER SET '.BS_DB_CHARSET.';');
+			// we don't want to have any sql-modes
+			$c->execute('SET SESSION sql_mode="";');
+		}
 		return $c;
 	}
 	

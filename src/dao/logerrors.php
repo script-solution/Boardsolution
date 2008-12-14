@@ -38,7 +38,7 @@ class BS_DAO_LogErrors extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_LOG_ERRORS,'id','');
+		return $db->get_row_count(BS_TB_LOG_ERRORS,'id','');
 	}
 	
 	/**
@@ -52,7 +52,7 @@ class BS_DAO_LogErrors extends FWS_Singleton
 		$db = FWS_Props::get()->db();
 
 		$where = $this->get_keyword_where($keyword);
-		return $db->sql_num(BS_TB_LOG_ERRORS.' l','l.id',$where);
+		return $db->get_row_count(BS_TB_LOG_ERRORS.' l','l.id',$where);
 	}
 	
 	/**
@@ -68,7 +68,7 @@ class BS_DAO_LogErrors extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_LOG_ERRORS.'
 			 WHERE id IN ('.implode(',',$ids).')'
 		);
@@ -109,7 +109,7 @@ class BS_DAO_LogErrors extends FWS_Singleton
 			FWS_Helper::def_error('intge0','count',$count);
 		
 		$where = $keyword ? $this->get_keyword_where($keyword) : '';
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT l.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_LOG_ERRORS.' l
 			 LEFT JOIN '.BS_TB_USER.' u ON u.`'.BS_EXPORT_USER_ID.'` = l.user_id
@@ -123,14 +123,20 @@ class BS_DAO_LogErrors extends FWS_Singleton
 	 * Creates a new log-entry with the given fields
 	 *
 	 * @param array $fields the fields to set
-	 * @return int the used id
+	 * @return int the used id or false if failed
 	 */
 	public function create($fields)
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_insert(BS_TB_LOG_ERRORS,$fields,false);
-		return $db->get_last_insert_id();
+		try
+		{
+			return $db->insert(BS_TB_LOG_ERRORS,$fields);
+		}
+		catch(FWS_DB_Exception_QueryFailed $ex)
+		{
+			return false;
+		}
 	}
 	
 	/**
@@ -140,7 +146,7 @@ class BS_DAO_LogErrors extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_qry('TRUNCATE TABLE '.BS_TB_LOG_ERRORS);
+		$db->execute('TRUNCATE TABLE '.BS_TB_LOG_ERRORS);
 	}
 	
 	/**
@@ -156,7 +162,7 @@ class BS_DAO_LogErrors extends FWS_Singleton
 		if(!FWS_Helper::is_integer($timeout) || $timeout <= 0)
 			FWS_Helper::def_error('intgt0','timeout',$timeout);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_LOG_ERRORS.' WHERE date < '.(time() - $timeout)
 		);
 		return $db->get_affected_rows();
@@ -175,7 +181,7 @@ class BS_DAO_LogErrors extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_LOG_ERRORS.' WHERE id IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

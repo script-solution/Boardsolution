@@ -38,7 +38,7 @@ class BS_DAO_Posts extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_POSTS,'id','');
+		return $db->get_row_count(BS_TB_POSTS,'id','');
 	}
 	
 	/**
@@ -52,7 +52,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		return $db->sql_num(BS_TB_POSTS,'id',' WHERE rubrikid = '.$id);
+		return $db->get_row_count(BS_TB_POSTS,'id',' WHERE rubrikid = '.$id);
 	}
 	
 	/**
@@ -66,7 +66,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		return $db->sql_num(BS_TB_POSTS,'id',' WHERE threadid = '.$id);
+		return $db->get_row_count(BS_TB_POSTS,'id',' WHERE threadid = '.$id);
 	}
 	
 	/**
@@ -81,7 +81,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		$d = $now->get_day();
 		$m = $now->get_month();
 		$today_start = FWS_Date::get_timestamp(array(0,0,0,$m,$d,$y));
-		return $db->sql_num(BS_TB_POSTS,'id',' WHERE post_time >= '.$today_start);
+		return $db->get_row_count(BS_TB_POSTS,'id',' WHERE post_time >= '.$today_start);
 	}
 	
 	/**
@@ -97,7 +97,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		$m = $now->get_month();
 		$yesterday_start = FWS_Date::get_timestamp(array(0,0,0,$m,$d - 1,$y));
 		$yesterday_end = FWS_Date::get_timestamp(array(23,59,59,$m,$d - 1,$y));
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_POSTS,'id',' WHERE post_time >= '.$yesterday_start.' AND post_time <= '.$yesterday_end
 		);
 	}
@@ -118,7 +118,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
 			FWS_Helper::def_error('intgt0','tid',$tid);
 		
-		$data = $db->sql_fetch(
+		$data = $db->get_row(
 			'SELECT MIN(id) FROM '.BS_TB_POSTS.'
 			 WHERE threadid = '.$tid.' AND rubrikid = '.$fid
 		);
@@ -137,7 +137,7 @@ class BS_DAO_Posts extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$data = $db->sql_fetch(
+		$data = $db->get_row(
 			'SELECT MAX(post_time) FROM '.BS_TB_POSTS
 		);
 		if(!$data)
@@ -155,7 +155,7 @@ class BS_DAO_Posts extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$data = $db->sql_fetch(
+		$data = $db->get_row(
 			'SELECT MAX(edited_date) FROM '.BS_TB_POSTS
 		);
 		if(!$data)
@@ -183,7 +183,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Helper::is_integer($count) || $count < 0)
 			FWS_Helper::def_error('intge0','count',$count);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_POSTS.'
 			 ORDER BY '.$sort.' '.$order.'
 			 '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
@@ -208,7 +208,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
 			FWS_Helper::def_error('intgt0','tid',$tid);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_POSTS.'
 			 WHERE threadid = '.$tid.' AND rubrikid = '.$fid.'
 			 ORDER BY '.$sort.' '.$order
@@ -257,7 +257,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if($tid > 0)
 			$where .= ' AND threadid = '.$tid;
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT p.*,u.`'.BS_EXPORT_USER_NAME.'` user_name FROM '.BS_TB_POSTS.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON p.post_user = u.`'.BS_EXPORT_USER_ID.'`
 			 '.$where
@@ -277,7 +277,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($tids) || count($tids) == 0)
 			FWS_Helper::def_error('intarray>0','tids',$tids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_POSTS.'
 			 WHERE threadid IN ('.implode(',',$tids).')'
 		);
@@ -322,7 +322,7 @@ class BS_DAO_Posts extends FWS_Singleton
 			$kw_add .= ') AS relevance';
 		}
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT
 			   p.id,p.threadid'.$kw_add.'
 			 FROM '.BS_TB_POSTS.' p
@@ -372,7 +372,7 @@ class BS_DAO_Posts extends FWS_Singleton
 			$kw_add .= ') AS relevance';
 		}
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT p.*,u.`'.BS_EXPORT_USER_NAME.'` AS user,u.`'.BS_EXPORT_USER_EMAIL.'` email,
 						  pr.*,p.id AS bid,pr.signatur bsignatur,a.av_pfad,a.user AS aowner,
 						  u2.`'.BS_EXPORT_USER_NAME.'` edited_user_name,p2.user_group edited_user_group,
@@ -433,7 +433,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
 			FWS_Helper::def_error('intgt0','tid',$tid);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT
 				p.*,u.`'.BS_EXPORT_USER_NAME.'` user_name,pr.user_group,pr.default_font,
 				t.thread_closed,t.locked
@@ -463,7 +463,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Helper::is_integer($mindate) || $mindate < 0)
 			FWS_Helper::def_error('intge0','mindate',$mindate);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_POSTS.'
 			 WHERE post_time >= '.$mindate.' AND post_user = '.$user_id
 		);
@@ -483,7 +483,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT p.*,t.name,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_POSTS.' p
 			 LEFT JOIN '.BS_TB_THREADS.' t ON p.threadid = t.id
@@ -515,7 +515,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($tids) || count($tids) == 0)
 			FWS_Helper::def_error('intarray>0','tids',$tids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT t.id,p.rubrikid,p.threadid,moved_tid,MIN(p.id) first_post,posts
 			 FROM '.BS_TB_POSTS.' p
 			 LEFT JOIN '.BS_TB_THREADS.' t ON p.threadid = t.id
@@ -541,7 +541,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
 			FWS_Helper::def_error('intgt0','tid',$tid);
 		
-		$row = $db->sql_fetch(
+		$row = $db->get_row(
 			'SELECT id FROM '.BS_TB_POSTS.'
 			 WHERE id > '.$id.' AND threadid = '.$tid.'
 			 ORDER BY id ASC'
@@ -571,7 +571,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
 			FWS_Helper::def_error('intgt0','tid',$tid);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_POSTS.'
 			 WHERE id >= '.$id.' AND rubrikid = '.$fid.' AND threadid = '.$tid
 		);
@@ -597,7 +597,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Helper::is_integer($number) || $number < 0)
 			FWS_Helper::def_error('intge0','number',$number);
 		
-		$qry = $db->sql_qry(
+		$rows = $db->get_rows(
 			'SELECT MIN(b.id) first_post_id
 			 FROM '.BS_TB_POSTS.' b
 			 WHERE b.rubrikid IN ('.implode(',',$fids).')
@@ -606,13 +606,12 @@ class BS_DAO_Posts extends FWS_Singleton
 			 '.($number > 0 ? 'LIMIT '.$number : '')
 		);
 		$post_ids = array();
-		while($data = $db->sql_fetch_assoc($qry))
+		foreach($rows as $data)
 			$post_ids[] = $data['first_post_id'];
-		$db->sql_free($qry);
 		
 		if(count($post_ids) > 0)
 		{
-			return $db->sql_rows(
+			return $db->get_rows(
 				'SELECT
 					b.*,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.user_group,t.name,t.posts,t.comallow
 				 FROM '.BS_TB_POSTS.' b
@@ -653,7 +652,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Helper::is_integer($limit) || $limit < 0)
 			FWS_Helper::def_error('intge0','limit',$limit);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT MIN(id) AS first_unread_post,threadid,rubrikid FROM '.BS_TB_POSTS.'
 			 WHERE ((post_time > '.$since.($user_id > 0 ? ' AND post_user != '.$user_id : '').') OR
 			 			 (edited_date > '.$since.($user_id > 0 ? ' AND edited_user != '.$user_id : '').'))
@@ -686,7 +685,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT COUNT(p.id) num,post_user,increase_experience
 			 FROM '.BS_TB_POSTS.' p
 			 LEFT JOIN '.BS_TB_FORUMS.' f ON p.rubrikid = f.id
@@ -716,7 +715,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
 			FWS_Helper::def_error('intarray>0','fids',$fids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT COUNT(*) num,post_user,f.increase_experience
 			 FROM '.BS_TB_POSTS.' p
 			 LEFT JOIN '.BS_TB_FORUMS.' f ON p.rubrikid = f.id
@@ -743,7 +742,7 @@ class BS_DAO_Posts extends FWS_Singleton
 			FWS_Helper::def_error('intarray','post_ids',$post_ids);
 		
 		$exclude = count($post_ids) > 0 ? ' AND id NOT IN ('.implode(',',$post_ids).')' : '';
-		$data = $db->sql_fetch(
+		$data = $db->get_row(
 			'SELECT MAX(id) FROM '.BS_TB_POSTS.'
 			 WHERE rubrikid = '.$fid.$exclude
 		);
@@ -779,7 +778,7 @@ class BS_DAO_Posts extends FWS_Singleton
 			FWS_Helper::def_error('intarray','post_ids',$post_ids);
 		
 		$exclude = count($post_ids) > 0 ? ' AND id NOT IN ('.implode(',',$post_ids).')' : '';
-		$data = $db->sql_fetch(
+		$data = $db->get_row(
 			'SELECT id,post_user,post_an_user,post_time
 			 FROM '.BS_TB_POSTS.'
 			 WHERE threadid = '.$id.$exclude.'
@@ -810,7 +809,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Helper::is_integer($number) || $number < 0)
 			FWS_Helper::def_error('intge0','number',$number);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT p.*,t.name,MAX(p.id) AS id,MAX(p.post_time) AS post_time
 			 FROM '.BS_TB_POSTS.' p
 			 LEFT JOIN '.BS_TB_THREADS.' t ON p.threadid = t.id
@@ -831,7 +830,7 @@ class BS_DAO_Posts extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT id FROM '.BS_TB_POSTS.' WHERE text = "" AND text_posted != ""'
 		);
 	}
@@ -853,7 +852,7 @@ class BS_DAO_Posts extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT post_time,COUNT(id) num,
 							CONCAT(YEAR(FROM_UNIXTIME(post_time)),MONTH(FROM_UNIXTIME(post_time))) date
 			 FROM '.BS_TB_POSTS.'
@@ -872,8 +871,7 @@ class BS_DAO_Posts extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_insert(BS_TB_POSTS,$fields);
-		return $db->get_last_insert_id();
+		return $db->insert(BS_TB_POSTS,$fields);
 	}
 	
 	/**
@@ -902,8 +900,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_update(BS_TB_POSTS,'WHERE id IN ('.implode(',',$ids).')',$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_POSTS,'WHERE id IN ('.implode(',',$ids).')',$fields);
 	}
 	
 	/**
@@ -920,8 +917,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($tids) || count($tids) == 0)
 			FWS_Helper::def_error('intarray>0','tids',$tids);
 		
-		$db->sql_update(BS_TB_POSTS,'WHERE threadid IN ('.implode(',',$tids).')',$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_POSTS,'WHERE threadid IN ('.implode(',',$tids).')',$fields);
 	}
 	
 	/**
@@ -938,11 +934,10 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_POSTS,'WHERE post_user = '.$id,array(
+		return $db->update(BS_TB_POSTS,'WHERE post_user = '.$id,array(
 			'post_user' => 0,
 			'post_an_user' => $user_name
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -992,7 +987,7 @@ class BS_DAO_Posts extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_POSTS.' WHERE '.$field.' IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

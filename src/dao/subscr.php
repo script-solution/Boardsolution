@@ -38,7 +38,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_SUBSCR,'id','');
+		return $db->get_row_count(BS_TB_SUBSCR,'id','');
 	}
 	
 	/**
@@ -49,7 +49,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_SUBSCR.' s','s.id','LEFT JOIN '.BS_TB_FORUMS.' f ON f.id = s.forum_id
 			 LEFT JOIN '.BS_TB_THREADS.' t ON t.id = s.topic_id
 			 LEFT JOIN '.BS_TB_USER.' u ON u.`'.BS_EXPORT_USER_ID.'` = s.user_id
@@ -71,7 +71,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		return $db->sql_num(BS_TB_SUBSCR,'id',' WHERE topic_id != 0 AND user_id = '.$user_id);
+		return $db->get_row_count(BS_TB_SUBSCR,'id',' WHERE topic_id != 0 AND user_id = '.$user_id);
 	}
 	
 	/**
@@ -87,7 +87,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		return $db->sql_num(BS_TB_SUBSCR,'id',' WHERE forum_id != 0 AND user_id = '.$user_id);
+		return $db->get_row_count(BS_TB_SUBSCR,'id',' WHERE forum_id != 0 AND user_id = '.$user_id);
 	}
 	
 	/**
@@ -106,7 +106,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
 			FWS_Helper::def_error('intgt0','tid',$tid);
 		
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_SUBSCR,'id',' WHERE topic_id = '.$tid.' AND user_id = '.$user_id
 		) > 0;
 	}
@@ -127,7 +127,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
 			FWS_Helper::def_error('intgt0','fid',$fid);
 		
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_SUBSCR,'id',' WHERE forum_id = '.$fid.' AND user_id = '.$user_id
 		) > 0;
 	}
@@ -161,7 +161,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 		if(!FWS_Helper::is_integer($count) || $count < 0)
 			FWS_Helper::def_error('intge0','count',$count);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT
 				s.*,f.forum_name,t.name,t.lastpost_time,u.`'.BS_EXPORT_USER_NAME.'` user_name,
 				p.lastlogin,po.post_time flastpost_time
@@ -201,7 +201,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 		if(!FWS_Helper::is_integer($count) || $count < 0)
 			FWS_Helper::def_error('intge0','count',$count);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT s.*,t.*
 			 FROM '.BS_TB_SUBSCR.' s
 			 LEFT JOIN '.BS_TB_THREADS.' t ON s.topic_id = t.id
@@ -228,7 +228,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids))
 			FWS_Helper::def_error('intarray','ids',$ids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_SUBSCR.'
 			 WHERE user_id = '.$user_id.' AND forum_id != 0
 			 '.(count($ids) > 0 ? ' AND forum_id IN ('.implode(',',$ids).')' : '')
@@ -261,7 +261,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id < 0)
 			FWS_Helper::def_error('intge0','user_id',$user_id);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT u.`'.BS_EXPORT_USER_EMAIL.'` user_email,p.emails_include_post
 			 FROM '.BS_TB_SUBSCR.' s
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON s.user_id = p.id
@@ -285,7 +285,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 		if(!FWS_Helper::is_integer($timeout) || $timeout <= 0)
 			FWS_Helper::def_error('intgt0','timeout',$timeout);
 		
-		$rows = $db->sql_rows(
+		$rows = $db->get_rows(
 			'SELECT s.id
 			 FROM '.BS_TB_SUBSCR.' s
 			 LEFT JOIN '.BS_TB_THREADS.' t ON t.id = s.topic_id
@@ -314,12 +314,11 @@ class BS_DAO_Subscr extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$db->sql_insert(BS_TB_SUBSCR,array(
+		return $db->insert(BS_TB_SUBSCR,array(
 			'forum_id' => $fid,
 			'user_id' => $user_id,
 			'sub_date' => time()
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -338,12 +337,11 @@ class BS_DAO_Subscr extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$db->sql_insert(BS_TB_SUBSCR,array(
+		return $db->insert(BS_TB_SUBSCR,array(
 			'topic_id' => $tid,
 			'user_id' => $user_id,
 			'sub_date' => time()
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -362,7 +360,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_SUBSCR.'
 			 WHERE id IN ('.implode(',',$ids).') AND user_id = '.$user_id
 		);
@@ -416,7 +414,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_SUBSCR.' WHERE '.$field.' IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

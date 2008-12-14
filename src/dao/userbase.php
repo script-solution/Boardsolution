@@ -73,7 +73,7 @@ abstract class BS_DAO_UserBase extends FWS_Singleton
 
 		$where = $this->get_user_by_groups_where($group_ids,$user_ids);
 		$limit = $this->get_limit($start,$count);
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT '.$fields.'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
@@ -126,7 +126,7 @@ abstract class BS_DAO_UserBase extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_fetch(
+		return $db->get_row(
 			'SELECT '.$fields.'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
@@ -153,7 +153,7 @@ abstract class BS_DAO_UserBase extends FWS_Singleton
 		if(count($names) == 0)
 			return array();
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT '.$fields.'
 			 FROM '.BS_TB_USER.' u
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id

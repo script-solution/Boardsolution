@@ -38,7 +38,7 @@ class BS_DAO_Attachments extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_ATTACHMENTS,'id','');
+		return $db->get_row_count(BS_TB_ATTACHMENTS,'id','');
 	}
 	
 	/**
@@ -52,7 +52,7 @@ class BS_DAO_Attachments extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		return $db->sql_num(BS_TB_ATTACHMENTS,'id',' WHERE poster_id = '.$id);
+		return $db->get_row_count(BS_TB_ATTACHMENTS,'id',' WHERE poster_id = '.$id);
 	}
 	
 	/**
@@ -65,7 +65,7 @@ class BS_DAO_Attachments extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_ATTACHMENTS,'id',' WHERE attachment_path = "'.$path.'"'
 		);
 	}
@@ -77,7 +77,7 @@ class BS_DAO_Attachments extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_ATTACHMENTS
 		);
 	}
@@ -91,7 +91,7 @@ class BS_DAO_Attachments extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT a.*,t.name,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_ATTACHMENTS.' a
 			 LEFT JOIN '.BS_TB_USER.' u ON a.poster_id = u.`'.BS_EXPORT_USER_ID.'`
@@ -112,7 +112,7 @@ class BS_DAO_Attachments extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$res = $db->sql_fetch(
+		$res = $db->get_row(
 			'SELECT *
 			 FROM '.BS_TB_ATTACHMENTS.'
 			 WHERE id = '.$id
@@ -137,7 +137,7 @@ class BS_DAO_Attachments extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id < 0)
 			FWS_Helper::def_error('intge0','user_id',$user_id);
 		
-		$res = $db->sql_fetch(
+		$res = $db->get_row(
 			'SELECT *
 			 FROM '.BS_TB_ATTACHMENTS.'
 			 WHERE attachment_path = "'.$path.'" AND IF(pm_id > 0,poster_id = '.$user_id.',1)'
@@ -160,7 +160,7 @@ class BS_DAO_Attachments extends FWS_Singleton
 		if(!is_array($paths) || count($paths) == 0)
 			FWS_Helper::def_error('array>0','paths',$paths);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT *
 			 FROM '.BS_TB_ATTACHMENTS.'
 			 WHERE attachment_path IN ("'.implode('","',$paths).'")'
@@ -250,7 +250,7 @@ class BS_DAO_Attachments extends FWS_Singleton
 		if(empty($path))
 			FWS_Helper::def_error('notempty','path',$path);
 		
-		$db->sql_insert(BS_TB_ATTACHMENTS,array(
+		return $db->insert(BS_TB_ATTACHMENTS,array(
 			'post_id' => $post_id,
 			'thread_id' => $topic_id,
 			'pm_id' => $pm_id,
@@ -258,7 +258,6 @@ class BS_DAO_Attachments extends FWS_Singleton
 			'attachment_size' => $size,
 			'attachment_path' => $path
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -274,10 +273,9 @@ class BS_DAO_Attachments extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_ATTACHMENTS,'WHERE id = '.$id,array(
+		return $db->update(BS_TB_ATTACHMENTS,'WHERE id = '.$id,array(
 			'downloads' => array('downloads + 1')
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -296,10 +294,9 @@ class BS_DAO_Attachments extends FWS_Singleton
 		if(!FWS_Helper::is_integer($topic_id) || $topic_id <= 0)
 			FWS_Helper::def_error('intgt0','topic_id',$topic_id);
 		
-		$db->sql_update(BS_TB_ATTACHMENTS,'WHERE post_id IN ('.implode(',',$post_ids).')',array(
+		return $db->update(BS_TB_ATTACHMENTS,'WHERE post_id IN ('.implode(',',$post_ids).')',array(
 			'thread_id' => $topic_id
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -359,7 +356,7 @@ class BS_DAO_Attachments extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_ATTACHMENTS.'
 			 WHERE poster_id IN ('.implode(',',$ids).') AND pm_id > 0'
 		);
@@ -380,7 +377,7 @@ class BS_DAO_Attachments extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT *
 			 FROM '.BS_TB_ATTACHMENTS.'
 			 WHERE '.$field.' IN ('.implode(',',$ids).')'
@@ -401,7 +398,7 @@ class BS_DAO_Attachments extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_ATTACHMENTS.' WHERE '.$field.' IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

@@ -51,7 +51,7 @@ class BS_DAO_Polls extends FWS_Singleton
 		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
 			FWS_Helper::def_error('intgt0','tid',$tid);
 		
-		$row = $db->sql_fetch(
+		$row = $db->get_row(
 			'SELECT type,multichoice,thread_closed FROM '.BS_TB_THREADS.' t
 			 LEFT JOIN '.BS_TB_POLL.' p ON t.type = p.pid
 			 WHERE t.id = '.$tid
@@ -77,7 +77,7 @@ class BS_DAO_Polls extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_POLL.'
 			 WHERE pid = '.$id.'
 			 ORDER BY '.$sort.' '.$order
@@ -91,7 +91,7 @@ class BS_DAO_Polls extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$res = $db->sql_fetch('SELECT MAX(pid) FROM '.BS_TB_POLL);
+		$res = $db->get_row('SELECT MAX(pid) FROM '.BS_TB_POLL);
 		return $res[0] + 1;
 	}
 	
@@ -110,12 +110,11 @@ class BS_DAO_Polls extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_insert(BS_TB_POLL,array(
+		return $db->insert(BS_TB_POLL,array(
 			'pid' => $id,
 			'option_name' => $option,
 			'multichoice' => $multichoice ? 1 : 0
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -131,10 +130,9 @@ class BS_DAO_Polls extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_POLL,'WHERE id = '.$id,array(
+		return $db->update(BS_TB_POLL,'WHERE id = '.$id,array(
 			'option_value' => array('option_value + 1')
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -151,10 +149,9 @@ class BS_DAO_Polls extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_POLL,'WHERE pid = '.$id,array(
+		return $db->update(BS_TB_POLL,'WHERE pid = '.$id,array(
 			'multichoice' => $multichoice ? 1 : 0
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -170,7 +167,7 @@ class BS_DAO_Polls extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_POLL.' WHERE pid IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

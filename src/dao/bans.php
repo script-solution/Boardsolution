@@ -40,11 +40,10 @@ class BS_DAO_Bans extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_insert(BS_TB_BANS,array(
+		return $db->insert(BS_TB_BANS,array(
 			'bann_name' => '',
 			'bann_type' => ''
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -62,11 +61,10 @@ class BS_DAO_Bans extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_BANS,'WHERE id = '.$id,array(
+		return $db->update(BS_TB_BANS,'WHERE id = '.$id,array(
 			'bann_name' => $name,
 			'bann_type' => $type
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -82,7 +80,7 @@ class BS_DAO_Bans extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_BANS.' WHERE id IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

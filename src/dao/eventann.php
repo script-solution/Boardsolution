@@ -44,7 +44,7 @@ class BS_DAO_EventAnn extends FWS_Singleton
 		if(!FWS_Helper::is_integer($event_id) || $event_id <= 0)
 			FWS_Helper::def_error('intgt0','event_id',$event_id);
 		
-		return $db->sql_num(BS_TB_EVENT_ANN,'*','WHERE event_id = '.$event_id);
+		return $db->get_row_count(BS_TB_EVENT_ANN,'*','WHERE event_id = '.$event_id);
 	}
 	
 	/**
@@ -63,7 +63,7 @@ class BS_DAO_EventAnn extends FWS_Singleton
 		if(!FWS_Helper::is_integer($event_id) || $event_id <= 0)
 			FWS_Helper::def_error('intgt0','event_id',$event_id);
 		
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_EVENT_ANN,'*','WHERE user_id = '.$user_id.' AND event_id = '.$event_id
 		) > 0;
 	}
@@ -81,7 +81,7 @@ class BS_DAO_EventAnn extends FWS_Singleton
 		if(!FWS_Helper::is_integer($event_id) || $event_id <= 0)
 			FWS_Helper::def_error('intgt0','event_id',$event_id);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT e.user_id,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.user_group
 			 FROM '.BS_TB_EVENT_ANN.' e
 			 LEFT JOIN '.BS_TB_USER.' u ON e.user_id = u.`'.BS_EXPORT_USER_ID.'`
@@ -105,7 +105,7 @@ class BS_DAO_EventAnn extends FWS_Singleton
 		if(!FWS_Helper::is_integer($event_id) || $event_id <= 0)
 			FWS_Helper::def_error('intgt0','event_id',$event_id);
 		
-		$db->sql_insert(BS_TB_EVENT_ANN,array(
+		$db->insert(BS_TB_EVENT_ANN,array(
 			'user_id' => $user_id,
 			'event_id' => $event_id
 		));
@@ -127,7 +127,7 @@ class BS_DAO_EventAnn extends FWS_Singleton
 		if(!FWS_Helper::is_integer($event_id) || $event_id <= 0)
 			FWS_Helper::def_error('intgt0','event_id',$event_id);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_EVENT_ANN.' WHERE user_id = '.$user_id.' AND event_id = '.$event_id
 		);
 		return $db->get_affected_rows();
@@ -146,7 +146,7 @@ class BS_DAO_EventAnn extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_EVENT_ANN.' WHERE event_id IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();
@@ -165,7 +165,7 @@ class BS_DAO_EventAnn extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_EVENT_ANN.' WHERE user_id IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

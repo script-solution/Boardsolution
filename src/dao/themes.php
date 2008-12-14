@@ -41,7 +41,7 @@ class BS_DAO_Themes extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_THEMES,'id',' WHERE theme_folder = "'.$folder.'"') > 0;
+		return $db->get_row_count(BS_TB_THEMES,'id',' WHERE theme_folder = "'.$folder.'"') > 0;
 	}
 	
 	/**
@@ -60,11 +60,10 @@ class BS_DAO_Themes extends FWS_Singleton
 		if(empty($folder))
 			FWS_Helper::def_error('notempty','folder',$folder);
 		
-		$db->sql_insert(BS_TB_THEMES,array(
+		return $db->insert(BS_TB_THEMES,array(
 			'theme_name' => $name,
 			'theme_folder' => $folder
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -89,8 +88,7 @@ class BS_DAO_Themes extends FWS_Singleton
 		);
 		if($folder)
 			$fields['theme_folder'] = $folder;
-		$db->sql_update(BS_TB_THEMES,'WHERE id = '.$id,$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_THEMES,'WHERE id = '.$id,$fields);
 	}
 	
 	/**
@@ -106,7 +104,7 @@ class BS_DAO_Themes extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_THEMES.' WHERE id IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

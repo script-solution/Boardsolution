@@ -38,7 +38,7 @@ class BS_DAO_PMs extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_PMS,'id','');
+		return $db->get_row_count(BS_TB_PMS,'id','');
 	}
 	
 	/**
@@ -56,7 +56,7 @@ class BS_DAO_PMs extends FWS_Singleton
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
 		$user_field = $folder == 'inbox' ? 'receiver_id' : 'sender_id';
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_PMS,'id',' WHERE '.$user_field.' = '.$user_id.' AND pm_type = "'.$folder.'"'
 		);
 	}
@@ -74,7 +74,7 @@ class BS_DAO_PMs extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_PMS,'id',' WHERE receiver_id = '.$user_id." AND pm_type = 'inbox' AND pm_read = 0"
 		);
 	}
@@ -92,7 +92,7 @@ class BS_DAO_PMs extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$row = $db->sql_fetch(
+		$row = $db->get_row(
 			'SELECT * FROM '.BS_TB_PMS.' WHERE id = '.$id
 		);
 		if(!$row)
@@ -118,7 +118,7 @@ class BS_DAO_PMs extends FWS_Singleton
 		if(!FWS_Helper::is_integer($userid) || $userid <= 0)
 			FWS_Helper::def_error('intgt0','userid',$userid);
 		
-		$row = $db->sql_fetch(
+		$row = $db->get_row(
 			'SELECT p.*,u.`'.BS_EXPORT_USER_NAME.'` sender_name,
 					 		u2.`'.BS_EXPORT_USER_NAME.'` receiver_name,a.av_pfad sender_avatar,
 							a.user sender_av_owner,a2.av_pfad receiver_avatar,
@@ -159,7 +159,7 @@ class BS_DAO_PMs extends FWS_Singleton
 		if(!FWS_Helper::is_integer($count) || $count < 0)
 			FWS_Helper::def_error('intge0','count',$count);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_PMS.'
 			 ORDER BY '.$sort.' '.$order.'
 			 '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
@@ -185,7 +185,7 @@ class BS_DAO_PMs extends FWS_Singleton
 		
 		$user_field = $folder == 'inbox' ? 'receiver_id' : 'sender_id';
 		$other_user_field = $folder == 'inbox' ? 'sender_id' : 'receiver_id';
-		$row = $db->sql_fetch(
+		$row = $db->get_row(
 			'SELECT p.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_PMS.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON p.'.$other_user_field.' = u.`'.BS_EXPORT_USER_ID.'`
@@ -220,7 +220,7 @@ class BS_DAO_PMs extends FWS_Singleton
 		
 		$uid_field = $folder == 'inbox' ? 'receiver_id' : 'sender_id';
 		$other_uid_field = $folder == 'inbox' ? 'sender_id' : 'receiver_id';
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT p.*,u.`'.BS_EXPORT_USER_NAME.'` user_name,pr.user_group
 			 FROM '.BS_TB_PMS.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON p.'.$other_uid_field.' = u.`'.BS_EXPORT_USER_ID."`
@@ -257,7 +257,7 @@ class BS_DAO_PMs extends FWS_Singleton
 		if(!FWS_Helper::is_integer($count) || $count < 0)
 			FWS_Helper::def_error('intge0','count',$count);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT p.*,u.`'.BS_EXPORT_USER_NAME.'` user_name,pr.user_group
 			 FROM '.BS_TB_PMS.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON p.sender_id = u.`'.BS_EXPORT_USER_ID.'`
@@ -284,7 +284,7 @@ class BS_DAO_PMs extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$rows = $db->sql_rows(
+		$rows = $db->get_rows(
 			'SELECT p.id
 			 FROM '.BS_TB_PMS.' p
 			 LEFT JOIN '.BS_TB_USER.' u1 ON p.receiver_id = u1.`'.BS_EXPORT_USER_ID.'`
@@ -319,7 +319,7 @@ class BS_DAO_PMs extends FWS_Singleton
 		if(!FWS_Helper::is_integer($number) || $number < 0)
 			FWS_Helper::def_error('intge0','number',$number);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT p.*,u.`'.BS_EXPORT_USER_NAME.'` sender_name,pr.user_group
 			 FROM '.BS_TB_PMS.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON p.sender_id = u.`'.BS_EXPORT_USER_ID.'`
@@ -366,7 +366,7 @@ class BS_DAO_PMs extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT id FROM '.BS_TB_PMS.' WHERE pm_text = "" AND pm_text_posted != ""'
 		);
 	}
@@ -381,8 +381,7 @@ class BS_DAO_PMs extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_insert(BS_TB_PMS,$fields);
-		return $db->get_last_insert_id();
+		return $db->insert(BS_TB_PMS,$fields);
 	}
 	
 	/**
@@ -401,8 +400,7 @@ class BS_DAO_PMs extends FWS_Singleton
 		if(!FWS_Helper::is_integer($count) || $count < 0)
 			FWS_Helper::def_error('intge0','count',$count);
 		
-		$db->sql_update(BS_TB_PMS,'WHERE id = '.$id,array('attachment_count' => $count));
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_PMS,'WHERE id = '.$id,array('attachment_count' => $count));
 	}
 	
 	/**
@@ -422,12 +420,11 @@ class BS_DAO_PMs extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$db->sql_update(
+		return $db->update(
 			BS_TB_PMS,
 			'WHERE id IN ('.implode(',',$ids).') AND receiver_id = '.$user_id.' AND pm_type = "inbox"',
 			array('pm_read' => $flag ? 1 : 0)
 		);
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -445,11 +442,10 @@ class BS_DAO_PMs extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_PMS,'WHERE id = '.$id,array(
+		return $db->update(BS_TB_PMS,'WHERE id = '.$id,array(
 			'pm_text' => $text,
 			'pm_text_posted' => $text_posted
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -468,7 +464,7 @@ class BS_DAO_PMs extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_PMS.' WHERE id IN ('.implode(',',$ids).') AND
 			 ((receiver_id = '.$user_id.' AND pm_type = "inbox") OR
 			  (sender_id = '.$user_id.' AND pm_type = "outbox"))'
@@ -489,7 +485,7 @@ class BS_DAO_PMs extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_PMS.'
 			 WHERE (receiver_id IN ('.implode(',',$ids).') AND pm_type = "inbox") OR
 						 (sender_id IN ('.implode(',',$ids).') AND pm_type = "outbox")'
@@ -520,7 +516,7 @@ class BS_DAO_PMs extends FWS_Singleton
 		else
 			$where = 'sender_id = '.$user_id.' AND pm_type = "outbox"';
 		
-		$row = $db->sql_fetch(
+		$row = $db->get_row(
 			'SELECT id FROM '.BS_TB_PMS.'
 			 WHERE id '.$op.' '.$pm_id.' AND '.$where.'
 			 ORDER BY id '.($op == '>' ? 'ASC' : 'DESC')

@@ -38,7 +38,7 @@ class BS_DAO_Topics extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_THREADS,'id','');
+		return $db->get_row_count(BS_TB_THREADS,'id','');
 	}
 	
 	/**
@@ -52,7 +52,7 @@ class BS_DAO_Topics extends FWS_Singleton
 		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
 			FWS_Helper::def_error('intgt0','fid',$fid);
 		
-		return $db->sql_num(BS_TB_THREADS,'id',' WHERE rubrikid = '.$fid);
+		return $db->get_row_count(BS_TB_THREADS,'id',' WHERE rubrikid = '.$fid);
 	}
 	
 	/**
@@ -66,7 +66,7 @@ class BS_DAO_Topics extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_THREADS.' t','t.id',$where);
+		return $db->get_row_count(BS_TB_THREADS.' t','t.id',$where);
 	}
 	
 	/**
@@ -85,7 +85,7 @@ class BS_DAO_Topics extends FWS_Singleton
 		if(!FWS_Helper::is_integer($count) || $count < 0)
 			FWS_Helper::def_error('intge0','count',$count);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_THREADS.'
 			 '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
 		);
@@ -131,7 +131,7 @@ class BS_DAO_Topics extends FWS_Singleton
 			$kw_add .= ') AS relevance';
 		}
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT t.*,u.`'.BS_EXPORT_USER_NAME.'` username,
 							u2.`'.BS_EXPORT_USER_NAME.'` lp_username,rt.forum_name rubrikname,
 							p.user_group,p2.user_group lastpost_user_group'.$kw_add.'
@@ -178,7 +178,7 @@ class BS_DAO_Topics extends FWS_Singleton
 		if(!FWS_Helper::is_integer($fid) || $fid < 0)
 			FWS_Helper::def_error('intge0','fid',$fid);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_THREADS.'
 			 WHERE id IN ('.implode(',',$tids).')
 			 '.($fid > 0 ? ' AND rubrikid = '.$fid : '')
@@ -199,7 +199,7 @@ class BS_DAO_Topics extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
 			FWS_Helper::def_error('intarray>0','fids',$fids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT t.*,increase_experience
 			 FROM '.BS_TB_THREADS.' t
 			 LEFT JOIN '.BS_TB_FORUMS.' f ON t.rubrikid = f.id
@@ -220,7 +220,7 @@ class BS_DAO_Topics extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($tids) || count($tids) == 0)
 			FWS_Helper::def_error('intarray>0','tids',$tids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_THREADS.'
 			 WHERE moved_tid IN ('.implode(',',$tids).')'
 		);
@@ -242,7 +242,7 @@ class BS_DAO_Topics extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($excl_fids))
 			FWS_Helper::def_error('intarray','excl_fids',$excl_fids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT t.*,u.`'.BS_EXPORT_USER_NAME.'` username,u2.`'.BS_EXPORT_USER_NAME.'` lp_username,
 							f.forum_name rubrikname,p.user_group
 			 FROM '.BS_TB_THREADS.' t
@@ -273,7 +273,7 @@ class BS_DAO_Topics extends FWS_Singleton
 		if(!FWS_Helper::is_integer($start) || $start < 0)
 			FWS_Helper::def_error('intge0','start',$start);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_THREADS.'
 			 WHERE post_time >= '.$start.' AND post_user = '.$user_id
 		);
@@ -299,7 +299,7 @@ class BS_DAO_Topics extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
 			FWS_Helper::def_error('intarray>0','user_ids',$user_ids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT post_user,COUNT(t.id) topics FROM '.BS_TB_THREADS.' t
 			 LEFT JOIN '.BS_TB_FORUMS.' f ON t.rubrikid = f.id
 			 WHERE post_user IN ('.implode(',',$user_ids).') AND f.increase_experience = 1
@@ -327,7 +327,7 @@ class BS_DAO_Topics extends FWS_Singleton
 		if(!FWS_Helper::is_integer($number) || $number <= 0)
 			FWS_Helper::def_error('intgt0','number',$number);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT COUNT(*) num,t.post_user user_id,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.user_group
 			 FROM '.BS_TB_THREADS.' t
 			 LEFT JOIN '.BS_TB_USER.' u ON t.post_user = u.`'.BS_EXPORT_USER_ID.'`
@@ -356,7 +356,7 @@ class BS_DAO_Topics extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT post_time,COUNT(id) num,
 							CONCAT(YEAR(FROM_UNIXTIME(post_time)),MONTH(FROM_UNIXTIME(post_time))) date
 			 FROM '.BS_TB_THREADS.'
@@ -383,7 +383,7 @@ class BS_DAO_Topics extends FWS_Singleton
 		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
 			FWS_Helper::def_error('intgt0','tid',$tid);
 		
-		$row = $db->sql_fetch(
+		$row = $db->get_row(
 			'SELECT t.*,r.forum_name,r.forum_type,COUNT(a.id) as attachment_num
 			 FROM '.BS_TB_THREADS." AS t
 			 LEFT JOIN ".BS_TB_FORUMS." AS r ON ( t.rubrikid = r.id )
@@ -404,7 +404,7 @@ class BS_DAO_Topics extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$data = $db->sql_fetch(
+		$data = $db->get_row(
 			'SELECT lastpost_time FROM '.BS_TB_THREADS.'
 			 ORDER BY lastpost_id DESC'
 		);
@@ -421,9 +421,7 @@ class BS_DAO_Topics extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$info = $db->sql_fetch_assoc(
-			$db->sql_qry('SHOW TABLE STATUS LIKE "'.BS_TB_THREADS.'"')
-		);
+		$info = $db->get_row('SHOW TABLE STATUS LIKE "'.BS_TB_THREADS.'"');
 		return $info['Auto_increment'];
 	}
 	
@@ -437,8 +435,7 @@ class BS_DAO_Topics extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_insert(BS_TB_THREADS,$fields);
-		return $db->get_last_insert_id();
+		return $db->insert(BS_TB_THREADS,$fields);
 	}
 	
 	/**
@@ -454,11 +451,11 @@ class BS_DAO_Topics extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$db->sql_update(BS_TB_THREADS,'WHERE post_user = '.$user_id,array(
+		$db->update(BS_TB_THREADS,'WHERE post_user = '.$user_id,array(
 			'post_user' => 0,
 			'post_an_user' => $user_name
 		));
-		$db->sql_update(BS_TB_THREADS,'WHERE lastpost_user = '.$user_id,array(
+		$db->update(BS_TB_THREADS,'WHERE lastpost_user = '.$user_id,array(
 			'lastpost_user' => 0,
 			'lastpost_an_user' => $user_name
 		));
@@ -490,8 +487,7 @@ class BS_DAO_Topics extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($tids) || count($tids) == 0)
 			FWS_Helper::def_error('intarray>0','tids',$tids);
 		
-		$db->sql_update(BS_TB_THREADS,'WHERE id IN ('.implode(',',$tids).')',$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_THREADS,'WHERE id IN ('.implode(',',$tids).')',$fields);
 	}
 	
 	/**
@@ -508,8 +504,7 @@ class BS_DAO_Topics extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($tids) || count($tids) == 0)
 			FWS_Helper::def_error('intarray>0','tids',$tids);
 		
-		$db->sql_update(BS_TB_THREADS,'WHERE moved_tid IN ('.implode(',',$tids).')',$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_THREADS,'WHERE moved_tid IN ('.implode(',',$tids).')',$fields);
 	}
 	
 	/**
@@ -542,8 +537,7 @@ class BS_DAO_Topics extends FWS_Singleton
 		else
 			$fields['lastpost_an_user'] = $lastpost['post_an_user'];
 		
-		$db->sql_update(BS_TB_THREADS,'WHERE id = '.$tid,$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_THREADS,'WHERE id = '.$tid,$fields);
 	}
 	
 	/**
@@ -593,7 +587,7 @@ class BS_DAO_Topics extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_THREADS.'
 			 WHERE '.$field.' IN ('.implode(',',$ids).')'
 		);

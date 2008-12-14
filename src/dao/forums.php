@@ -38,7 +38,7 @@ class BS_DAO_Forums extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_FORUMS,'id','');
+		return $db->get_row_count(BS_TB_FORUMS,'id','');
 	}
 	
 	/**
@@ -59,7 +59,7 @@ class BS_DAO_Forums extends FWS_Singleton
 		if(!FWS_Helper::is_integer($count) || $count < 0)
 			FWS_Helper::def_error('intge0','count',$count);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_FORUMS.'
 			 ORDER BY '.$sort.' '.$order.'
 			 '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
@@ -76,7 +76,7 @@ class BS_DAO_Forums extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT f.*,b.post_user lastpost_userid,b.post_time lastpost_time,
 							b.post_an_user lastpost_an_user,b.threadid lastpost_topicid,
 							u.`'.BS_EXPORT_USER_NAME.'` lastpost_username,t.posts lastpost_topicposts,
@@ -100,8 +100,7 @@ class BS_DAO_Forums extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_insert(BS_TB_FORUMS,$fields);
-		return $db->get_last_insert_id();
+		return $db->insert(BS_TB_FORUMS,$fields);
 	}
 	
 	/**
@@ -142,8 +141,7 @@ class BS_DAO_Forums extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_update(BS_TB_FORUMS,'WHERE id IN ('.implode(',',$ids).')',$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_FORUMS,'WHERE id IN ('.implode(',',$ids).')',$fields);
 	}
 	
 	/**
@@ -159,12 +157,11 @@ class BS_DAO_Forums extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_update(BS_TB_FORUMS,'WHERE id IN ('.implode(',',$ids).')',array(
+		return $db->update(BS_TB_FORUMS,'WHERE id IN ('.implode(',',$ids).')',array(
 			'threads' => 0,
 			'posts' => 0,
 			'lastpost_id' => 0
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -180,7 +177,7 @@ class BS_DAO_Forums extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry('DELETE FROM '.BS_TB_FORUMS.' WHERE id IN ('.implode(',',$ids).')');
+		$db->execute('DELETE FROM '.BS_TB_FORUMS.' WHERE id IN ('.implode(',',$ids).')');
 		return $db->get_affected_rows();
 	}
 }

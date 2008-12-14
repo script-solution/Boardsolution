@@ -38,7 +38,7 @@ class BS_DAO_Smileys extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_SMILEYS,'*','');
+		return $db->get_row_count(BS_TB_SMILEYS,'*','');
 	}
 	
 	/**
@@ -51,7 +51,7 @@ class BS_DAO_Smileys extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_SMILEYS,'*','WHERE smiley_path = "'.$path.'"') > 0;
+		return $db->get_row_count(BS_TB_SMILEYS,'*','WHERE smiley_path = "'.$path.'"') > 0;
 	}
 	
 	/**
@@ -66,7 +66,7 @@ class BS_DAO_Smileys extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_SMILEYS,
 			'*',
 			'WHERE (primary_code = "'.$code.'" OR secondary_code = "'.$code.'") AND id != '.$id
@@ -101,7 +101,7 @@ class BS_DAO_Smileys extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_SMILEYS.'
 			 WHERE id IN ('.implode(',',$ids).')'
 		);
@@ -116,7 +116,7 @@ class BS_DAO_Smileys extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$row = $db->sql_fetch('SELECT MAX(sort_key) FROM '.BS_TB_SMILEYS);
+		$row = $db->get_row('SELECT MAX(sort_key) FROM '.BS_TB_SMILEYS);
 		if(!$row)
 			return 1;
 		
@@ -139,7 +139,7 @@ class BS_DAO_Smileys extends FWS_Singleton
 		if(!FWS_Helper::is_integer($count) || $count < 0)
 			FWS_Helper::def_error('intge0','count',$count);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_SMILEYS.'
 			 ORDER BY sort_key ASC
 			 '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
@@ -156,8 +156,7 @@ class BS_DAO_Smileys extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_insert(BS_TB_SMILEYS,$fields);
-		return $db->get_last_insert_id();
+		return $db->insert(BS_TB_SMILEYS,$fields);
 	}
 	
 	/**
@@ -174,8 +173,7 @@ class BS_DAO_Smileys extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_SMILEYS,'WHERE id = '.$id,$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_SMILEYS,'WHERE id = '.$id,$fields);
 	}
 	
 	/**
@@ -195,8 +193,7 @@ class BS_DAO_Smileys extends FWS_Singleton
 		$fields = array(
 			'sort_key' => array('sort_key '.($up ? '+' : '-').' 1')
 		);
-		$db->sql_update(BS_TB_SMILEYS,'WHERE id = '.$id,$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_SMILEYS,'WHERE id = '.$id,$fields);
 	}
 	
 	/**
@@ -212,7 +209,7 @@ class BS_DAO_Smileys extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_SMILEYS.' WHERE id IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

@@ -133,8 +133,15 @@ final class BS_DBA_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			$dbname = $input->get_var('database','post',FWS_Input::STRING);
 			if($dbname !== null)
 			{
-				if($db->sql_fetch_assoc($db->sql_qry('SHOW DATABASES LIKE "'.$dbname.'"')))
+				try
+				{
+					$db->get_row('SHOW DATABASES LIKE "'.$dbname.'"');
 					$user->set_session_data('database',$dbname);
+				}
+				catch(FWS_DB_Exception_QueryFailed $ex)
+				{
+					// ignore
+				}
 			}
 		}
 		
@@ -148,12 +155,11 @@ final class BS_DBA_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		{
 			// collect available dbs
 			$dbs = array();
-			$qry = $db->sql_qry('SHOW DATABASES',false);
-			if($qry)
+			$rows = $db->get_rows('SHOW DATABASES',false);
+			if($rows !== false)
 			{
-				while($data = $db->sql_fetch_assoc($qry))
+				foreach($rows as $data)
 					$dbs[$data['Database']] = $data['Database'];
-				$db->sql_free($qry);
 			}
 			else
 				$dbs[BS_MYSQL_DATABASE] = BS_MYSQL_DATABASE;

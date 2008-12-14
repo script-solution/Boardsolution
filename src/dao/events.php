@@ -38,7 +38,7 @@ class BS_DAO_Events extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(BS_TB_EVENTS,'*','');
+		return $db->get_row_count(BS_TB_EVENTS,'*','');
 	}
 	
 	/**
@@ -54,7 +54,7 @@ class BS_DAO_Events extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$row = $db->sql_fetch('SELECT * FROM '.BS_TB_EVENTS.' WHERE id = '.$id);
+		$row = $db->get_row('SELECT * FROM '.BS_TB_EVENTS.' WHERE id = '.$id);
 		if(!$row)
 			return false;
 		
@@ -74,7 +74,7 @@ class BS_DAO_Events extends FWS_Singleton
 		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
 			FWS_Helper::def_error('intgt0','tid',$tid);
 		
-		$row = $db->sql_fetch('SELECT * FROM '.BS_TB_EVENTS.' WHERE tid = '.$tid);
+		$row = $db->get_row('SELECT * FROM '.BS_TB_EVENTS.' WHERE tid = '.$tid);
 		if(!$row)
 			return false;
 		
@@ -97,7 +97,7 @@ class BS_DAO_Events extends FWS_Singleton
 		if(!FWS_Helper::is_integer($count) || $count < 0)
 			FWS_Helper::def_error('intge0','count',$count);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_EVENTS.'
 			'.($count > 0 ? 'LIMIT '.$start.','.$count : '')
 		);
@@ -120,7 +120,7 @@ class BS_DAO_Events extends FWS_Singleton
 		if(!FWS_Helper::is_integer($max_date) || $max_date < 0)
 			FWS_Helper::def_error('intge0','max_date',$max_date);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT e.*,t.rubrikid
 			 FROM '.BS_TB_EVENTS.' e
 			 LEFT JOIN '.BS_TB_THREADS.' t ON e.tid = t.id AND t.type = -1
@@ -147,7 +147,7 @@ class BS_DAO_Events extends FWS_Singleton
 			FWS_Helper::def_error('intge0','number',$number);
 		
 		$timeout = time() + $seconds;
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT e.*,t.rubrikid
 			 FROM '.BS_TB_EVENTS.' e
 			 LEFT JOIN '.BS_TB_THREADS.' t ON e.tid = t.id
@@ -167,7 +167,7 @@ class BS_DAO_Events extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT id FROM '.BS_TB_EVENTS.' WHERE description = "" AND description_posted != ""'
 		);
 	}
@@ -182,8 +182,7 @@ class BS_DAO_Events extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_insert(BS_TB_EVENTS,$fields);
-		return $db->get_last_insert_id();
+		return $db->insert(BS_TB_EVENTS,$fields);
 	}
 	
 	/**
@@ -200,8 +199,7 @@ class BS_DAO_Events extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_EVENTS,'WHERE id = '.$id,$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_EVENTS,'WHERE id = '.$id,$fields);
 	}
 	
 	/**
@@ -218,8 +216,7 @@ class BS_DAO_Events extends FWS_Singleton
 		if(!FWS_Helper::is_integer($tid) || $tid <= 0)
 			FWS_Helper::def_error('intgt0','tid',$tid);
 		
-		$db->sql_update(BS_TB_EVENTS,'WHERE tid = '.$tid,$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_EVENTS,'WHERE tid = '.$tid,$fields);
 	}
 	
 	/**
@@ -258,7 +255,7 @@ class BS_DAO_Events extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_EVENTS.' WHERE '.$field.' IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

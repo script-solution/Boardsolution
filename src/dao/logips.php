@@ -41,7 +41,7 @@ class BS_DAO_LogIPs extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_LOG_IPS.' l','l.id',
 			' LEFT JOIN '.BS_TB_USER.' u ON l.user_id = u.`'.BS_EXPORT_USER_ID.'`
 			'.$where
@@ -63,7 +63,7 @@ class BS_DAO_LogIPs extends FWS_Singleton
 		if(!FWS_Helper::is_integer($timeout) || $timeout < 0)
 			FWS_Helper::def_error('intge0','timeout',$timeout);
 		
-		$data = $db->sql_fetch(
+		$data = $db->get_row(
 			'SELECT * FROM '.BS_TB_LOG_IPS.'
 			 WHERE action = "'.$action.'" AND user_ip = "'.$ip.'"
 			 '.($timeout > 0 ? 'AND date > '.(time() - $timeout) : '')
@@ -92,7 +92,7 @@ class BS_DAO_LogIPs extends FWS_Singleton
 		if(!FWS_Helper::is_integer($count) || $count < 0)
 			FWS_Helper::def_error('intge0','count',$count);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT l.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_LOG_IPS.' l
 			 LEFT JOIN '.BS_TB_USER.' u ON l.user_id = u.`'.BS_EXPORT_USER_ID.'`
@@ -113,14 +113,13 @@ class BS_DAO_LogIPs extends FWS_Singleton
 		$db = FWS_Props::get()->db();
 		$user = FWS_Props::get()->user();
 
-		$db->sql_insert(BS_TB_LOG_IPS,array(
+		return $db->insert(BS_TB_LOG_IPS,array(
 			'user_ip' => $user->get_user_ip(),
 			'user_id' => $user->get_user_id(),
 			'user_agent' => $user->get_user_agent(),
 			'date' => time(),
 			'action' => $action
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -130,7 +129,7 @@ class BS_DAO_LogIPs extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_qry('TRUNCATE TABLE '.BS_TB_LOG_IPS);
+		$db->execute('TRUNCATE TABLE '.BS_TB_LOG_IPS);
 	}
 	
 	/**
@@ -146,7 +145,7 @@ class BS_DAO_LogIPs extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_LOG_IPS.' WHERE id IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();
@@ -165,7 +164,7 @@ class BS_DAO_LogIPs extends FWS_Singleton
 		if(!FWS_Helper::is_integer($timeout) || $timeout <= 0)
 			FWS_Helper::def_error('intgt0','timeout',$timeout);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_LOG_ERRORS.' WHERE date < '.(time() - $timeout)
 		);
 		return $db->get_affected_rows();

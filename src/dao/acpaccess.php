@@ -41,7 +41,7 @@ class BS_DAO_ACPAccess extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT a.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_ACP_ACCESS.' a
 			 LEFT JOIN '.BS_TB_USER.' u ON u.`'.BS_EXPORT_USER_ID.'` = a.access_value'
@@ -58,7 +58,7 @@ class BS_DAO_ACPAccess extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT a.*,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_ACP_ACCESS.' a
 			 LEFT JOIN '.BS_TB_USER.' u ON u.`'.BS_EXPORT_USER_ID.'` = a.access_value
@@ -83,12 +83,11 @@ class BS_DAO_ACPAccess extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_insert(BS_TB_ACP_ACCESS,array(
+		return $db->insert(BS_TB_ACP_ACCESS,array(
 			'module' => $module,
 			'access_type' => $type,
 			'access_value' => $id
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -107,7 +106,7 @@ class BS_DAO_ACPAccess extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_ACP_ACCESS.'
 			 WHERE access_type = "'.$type.'" AND access_value IN ('.implode(',',$ids).')'
 		);
@@ -124,7 +123,7 @@ class BS_DAO_ACPAccess extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_ACP_ACCESS.' WHERE module = "'.$module.'"'
 		);
 		return $db->get_affected_rows();

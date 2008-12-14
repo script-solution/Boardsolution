@@ -34,7 +34,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		// change default charset and collation of the db
 		if($db->get_server_version() >= '4.1')
 		{
-			$db->sql_qry(
+			$db->execute(
 				'ALTER DATABASE `'.$dbname.'` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
 			);
 		}
@@ -42,7 +42,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$consts = BS_Install_Module_5_Helper::get_tables();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_ACP_ACCESS'].'"...');
-		$db->sql_qry("CREATE TABLE `".$consts['BS_TB_ACP_ACCESS']."` (
+		$db->execute("CREATE TABLE `".$consts['BS_TB_ACP_ACCESS']."` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `module` varchar(200) NOT NULL,
 		  `access_type` enum('user','group') NOT NULL,
@@ -52,7 +52,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_ACTIVATION'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_ACTIVATION']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_ACTIVATION']}` (
 		  `user_id` int(10) unsigned NOT NULL default '0',
 		  `user_key` varchar(32) NOT NULL,
 		  PRIMARY KEY  (`user_id`)
@@ -60,7 +60,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_ATTACHMENTS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_ATTACHMENTS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_ATTACHMENTS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `pm_id` int(10) unsigned NOT NULL default '0',
 		  `thread_id` int(10) unsigned NOT NULL default '0',
@@ -78,7 +78,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_AVATARS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_AVATARS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_AVATARS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `av_pfad` varchar(255) NOT NULL,
 		  `user` int(10) unsigned NOT NULL default '0',
@@ -88,7 +88,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_BANS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_BANS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_BANS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `bann_name` varchar(255) NOT NULL,
 		  `bann_type` varchar(5) NOT NULL,
@@ -97,7 +97,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_BBCODES'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_BBCODES']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_BBCODES']}` (
 		  `id` int(11) unsigned NOT NULL auto_increment,
 		  `name` varchar(30) NOT NULL,
 		  `type` varchar(15) NOT NULL default 'inline',
@@ -113,7 +113,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  PRIMARY KEY  (`id`)
 		) TYPE=MyISAM;");
 		
-		$db->sql_qry("INSERT INTO `{$consts['BS_TB_BBCODES']}`
+		$db->execute("INSERT INTO `{$consts['BS_TB_BBCODES']}`
 			(`id`, `name`, `type`, `content`, `replacement`, `replacement_param`, `param`, `param_type`, `allow_nesting`, `ignore_whitespace`, `ignore_unknown_tags`, `allowed_content`)
 			VALUES
 			(1, 'b', 'inline', 'text', '<b>{TEXT}</b>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
@@ -141,7 +141,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_BOTS'].'"...');
-		$db->sql_qry(
+		$db->execute(
 			"CREATE TABLE `{$consts['BS_TB_BOTS']}` (
 			  `id` int(10) unsigned NOT NULL auto_increment,
 			  `bot_name` varchar(255) NOT NULL,
@@ -153,82 +153,82 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 			) TYPE=MyISAM"
 		);
 		
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('Googlebot', 'Googlebot/', '', '', 1);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('YahooBot', 'Yahoo! Slurp;', '', '', 1);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('MSNBot', 'msnbot/', '', '', 1);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('ZyBorg', 'ZyBorg/', '', '', 1);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('SeekBot', 'Seekbot/', '', '', 1);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('Exabot', 'Exabot/', '', '', 1);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('Gigabot', 'Gigabot/', '', '', 1);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('iCCrawler', 'iCCrawler', '', '', 1);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('Mediapartners-Google', 'Mediapartners-Google/', '', '', 1);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('MJ12bot', 'MJ12bot/', '', '', 1);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('W3C-Validator', 'W3C_Validator/', '', '', 1);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('Accoona', 'Accoona-AI-Agent/', '', '', 1);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('MSN-Media-Bot', 'msnbot-media/1.0', '', '', 1);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('Twiceler-Bot', 'Twiceler-0.9', '', '', 1);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('RedBot', 'RedBot/redbot-1.0', '', '', 1);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_BOTS']."`
 			 (`bot_name`, `bot_match`, `bot_ip_start`, `bot_ip_end`, `bot_access`)
 			 VALUES ('Ask.com', 'Ask Jeeves/Teoma;', '', '', 1);"
@@ -236,7 +236,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_CACHE'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_CACHE']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_CACHE']}` (
 		  `table_name` enum('banlist','intern','languages','moderators','themes','user_groups',
 		  									'user_ranks','config','user_fields','stats','tasks','acp_access',
 		  									'bots') NOT NULL,
@@ -244,23 +244,23 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  PRIMARY KEY  (`table_name`)
 		) TYPE=MyISAM;");
 		
-		$db->sql_qry("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('banlist');");
-		$db->sql_qry("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('intern');");
-		$db->sql_qry("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('languages');");
-		$db->sql_qry("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('moderators');");
-		$db->sql_qry("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('themes');");
-		$db->sql_qry("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('user_groups');");
-		$db->sql_qry("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('user_ranks');");
-		$db->sql_qry("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('config');");
-		$db->sql_qry("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('user_fields');");
-		$db->sql_qry("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('stats');");
-		$db->sql_qry("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('tasks');");
-		$db->sql_qry("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('acp_access');");
-		$db->sql_qry("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('bots');");
+		$db->execute("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('banlist');");
+		$db->execute("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('intern');");
+		$db->execute("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('languages');");
+		$db->execute("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('moderators');");
+		$db->execute("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('themes');");
+		$db->execute("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('user_groups');");
+		$db->execute("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('user_ranks');");
+		$db->execute("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('config');");
+		$db->execute("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('user_fields');");
+		$db->execute("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('stats');");
+		$db->execute("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('tasks');");
+		$db->execute("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('acp_access');");
+		$db->execute("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('bots');");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_CONFIG'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_CONFIG']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_CONFIG']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `name` varchar(255) NOT NULL,
 		  `custom_title` varchar(255) NOT NULL,
@@ -277,7 +277,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_CONFIG_GROUPS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_CONFIG_GROUPS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_CONFIG_GROUPS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `parent_id` int(10) unsigned NOT NULL,
 		  `name` varchar(100) NOT NULL,
@@ -288,7 +288,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_CHANGE_EMAIL'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_CHANGE_EMAIL']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_CHANGE_EMAIL']}` (
 		  `user_id` int(10) unsigned NOT NULL default '0',
 		  `user_key` varchar(32) NOT NULL,
 		  `email_address` varchar(255) NOT NULL,
@@ -298,7 +298,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_CHANGE_PW'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_CHANGE_PW']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_CHANGE_PW']}` (
 		  `user_id` int(10) unsigned NOT NULL default '0',
 		  `user_key` varchar(32) NOT NULL,
 		  `email_date` int(10) unsigned NOT NULL default '0',
@@ -307,7 +307,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_EVENTS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_EVENTS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_EVENTS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `tid` int(10) unsigned NOT NULL default '0',
 		  `user_id` int(10) unsigned NOT NULL default '0',
@@ -325,7 +325,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_EVENT_ANN'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_EVENT_ANN']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_EVENT_ANN']}` (
 		  `event_id` int(10) unsigned NOT NULL,
 		  `user_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`event_id`,`user_id`)
@@ -333,7 +333,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_FORUMS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_FORUMS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_FORUMS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `parent_id` int(10) unsigned NOT NULL default '0',
 		  `sortierung` int(10) unsigned NOT NULL default '0',
@@ -353,7 +353,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_FORUMS_PERM'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_FORUMS_PERM']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_FORUMS_PERM']}` (
 		  `forum_id` int(10) unsigned NOT NULL,
 		  `group_id` int(10) unsigned NOT NULL,
 		  `type` enum('reply','topic','poll','event') NOT NULL,
@@ -362,7 +362,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_INTERN'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_INTERN']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_INTERN']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `fid` int(10) unsigned NOT NULL default '0',
 		  `access_type` enum('group','user') NOT NULL,
@@ -373,33 +373,33 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_LANGS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_LANGS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_LANGS']}` (
 		  `id` smallint(3) unsigned NOT NULL auto_increment,
 		  `lang_folder` varchar(20) NOT NULL,
 		  `lang_name` varchar(50) NOT NULL,
 		  PRIMARY KEY  (`id`)
 		) TYPE=MyISAM;");
 		
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_LANGS']."` (`id`, `lang_folder`, `lang_name`) VALUES
 			 (1, 'ger_sie', 'Deutsch (Sie-Version)');"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_LANGS']."` (`id`, `lang_folder`, `lang_name`) VALUES
 			 (2, 'en', 'English');"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_LANGS']."` (`id`, `lang_folder`, `lang_name`) VALUES
 			 (3, 'ger_du', 'Deutsch (Du-Version)');"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_LANGS']."` (`id`, `lang_folder`, `lang_name`) VALUES
 			 (4, 'dk', 'Dansk');"
 		);
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_LINKS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_LINKS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_LINKS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `category` varchar(100) NOT NULL,
 		  `link_url` varchar(255) NOT NULL,
@@ -417,7 +417,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_LINK_VOTES'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_LINK_VOTES']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_LINK_VOTES']}` (
 		  `user_id` int(10) unsigned NOT NULL,
 		  `link_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`user_id`,`link_id`)
@@ -425,7 +425,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_LOG_ERRORS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_LOG_ERRORS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_LOG_ERRORS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `query` text NOT NULL,
 		  `user_id` int(10) unsigned NOT NULL,
@@ -437,7 +437,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_LOG_IPS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_LOG_IPS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_LOG_IPS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `user_ip` varchar(15) NOT NULL,
 		  `user_id` int(10) unsigned NOT NULL,
@@ -449,7 +449,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_MODS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_MODS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_MODS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `user_id` int(10) unsigned NOT NULL default '0',
 		  `rid` int(10) unsigned NOT NULL default '0',
@@ -460,7 +460,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_PMS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_PMS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_PMS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `receiver_id` int(10) unsigned NOT NULL default '0',
 		  `sender_id` int(10) unsigned NOT NULL default '0',
@@ -478,7 +478,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_POLL'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_POLL']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_POLL']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `pid` int(10) unsigned NOT NULL default '0',
 		  `option_name` varchar(100) NOT NULL,
@@ -490,7 +490,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_POLL_VOTES'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_POLL_VOTES']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_POLL_VOTES']}` (
 		  `poll_id` int(10) unsigned NOT NULL default '0',
 		  `user_id` int(10) unsigned NOT NULL default '0',
 		  PRIMARY KEY  (`poll_id`,`user_id`)
@@ -498,7 +498,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_POSTS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_POSTS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_POSTS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `rubrikid` int(10) unsigned NOT NULL default '0',
 		  `threadid` int(10) unsigned NOT NULL default '0',
@@ -524,7 +524,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_PROFILES'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_PROFILES']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_PROFILES']}` (
 		  `id` int(10) unsigned NOT NULL default '0',
 		  `add_hp` varchar(255) NOT NULL,
 		  `add_icq` int(15) default NULL,
@@ -571,7 +571,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  KEY `avatar` (`avatar`)
 		) TYPE=MyISAM;");
 		
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_PROFILES']."` SET
+		$db->execute("INSERT INTO `".$consts['BS_TB_PROFILES']."` SET
 			`id` = 1,
 			`registerdate` = ".time().",
 			`active` = 1,
@@ -588,7 +588,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_SEARCH'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_SEARCH']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_SEARCH']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `session_id` varchar(32) NOT NULL,
 		  `search_date` int(10) unsigned NOT NULL default '0',
@@ -601,7 +601,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_SESSIONS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_SESSIONS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_SESSIONS']}` (
 		  `session_id` varchar(32) NOT NULL,
 		  `user_id` int(10) unsigned NOT NULL default '0',
 		  `user_ip` varchar(15) NOT NULL,
@@ -615,7 +615,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_SMILEYS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_SMILEYS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_SMILEYS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `smiley_path` varchar(255) NOT NULL,
 		  `primary_code` varchar(15) NOT NULL,
@@ -626,61 +626,61 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		) TYPE=MyISAM;");
 		
 		$i = 0;
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (10, 'smile.png', ':-)', ':)', 1, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (12, 'wink.png', ';-)', ';)', 1, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (1, 'happy.png', '=)', '', 1, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (2, 'frown.png', ':-(', ':(', 1, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (14, 'bigsmile.png', ':D', '', 1, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (11, 'tongue.png', ':-P', ':P', 1, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (17, 'unsure.png', ':-/', ':/', 1, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (5, 'crying.png', ':cry:', '', 0, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (6, 'cool.png', '8-)', '8)', 1, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (9, 'rolleyes.png', ':roll:', '', 1, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (7, 'confused.png', ':confused:', ':??:', 1, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (13, 'shock.png', ':shock:', '', 1, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (15, 'holy.png', 'O:-)', 'O:)', 0, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (16, 'oops.png', ':ops:', '', 0, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (4, 'eek.png', ':o', '', 0, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (3, 'evil.png', ':evil:', '', 0, ".(++$i).");");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
+		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
 									(`id`, `smiley_path`, `primary_code`, `secondary_code`, `is_base`, `sort_key`)
 									VALUES (8, 'biggrin.png', ':-O', '', 1, ".(++$i).");");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_SUBSCR'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_SUBSCR']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_SUBSCR']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `forum_id` int(10) unsigned NOT NULL default '0',
 		  `topic_id` int(10) unsigned NOT NULL default '0',
@@ -694,7 +694,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_TASKS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_TASKS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_TASKS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `task_title` varchar(100) NOT NULL,
 		  `task_file` varchar(100) NOT NULL,
@@ -705,37 +705,37 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  PRIMARY KEY  (`id`)
 		) TYPE=MyISAM;");
 		
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `{$consts['BS_TB_TASKS']}`
 			(`id`, `task_title`, `task_file`, `task_interval`, `last_execution`, `enabled`, `task_time`)
 			VALUES (1, 'attachments', 'attachments.php', 259200, 0, 1, '00:00:00');"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `{$consts['BS_TB_TASKS']}`
 			(`id`, `task_title`, `task_file`, `task_interval`, `last_execution`, `enabled`, `task_time`)
 			VALUES (2, 'registrations', 'registrations.php', 604800, 0, 1, '00:00:00');"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `{$consts['BS_TB_TASKS']}`
 			(`id`, `task_title`, `task_file`, `task_interval`, `last_execution`, `enabled`, `task_time`)
 			VALUES (3, 'change_email_pw', 'change_email_pw.php', 604800, 0, 1, '00:00:00');"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `{$consts['BS_TB_TASKS']}`
 			(`id`, `task_title`, `task_file`, `task_interval`, `last_execution`, `enabled`, `task_time`)
 			VALUES (4, 'logged_ips', 'logged_ips.php', 604800, 0, 1, '00:00:00');"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `{$consts['BS_TB_TASKS']}`
 			(`id`, `task_title`, `task_file`, `task_interval`, `last_execution`, `enabled`, `task_time`)
 			VALUES (5, 'subscriptions', 'subscriptions.php', 604800, 0, 1, '00:00:00');"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `{$consts['BS_TB_TASKS']}`
 			(`id`, `task_title`, `task_file`, `task_interval`, `last_execution`, `enabled`, `task_time`)
 			VALUES (6, 'email_notification', 'email_notification.php', 86400, 0, 1, '00:00:00');"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `{$consts['BS_TB_TASKS']}`
 			(`id`, `task_title`, `task_file`, `task_interval`, `last_execution`, `enabled`, `task_time`)
 			VALUES (7, 'error_log', 'error_log.php', 259200, 0, 1, '00:00:00');"
@@ -743,27 +743,27 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_THEMES'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_THEMES']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_THEMES']}` (
 		  `id` smallint(3) unsigned NOT NULL auto_increment,
 		  `theme_folder` varchar(20) NOT NULL,
 		  `theme_name` varchar(50) NOT NULL,
 		  PRIMARY KEY  (`id`)
 		) TYPE=MyISAM;");
 		
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
+		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
 									VALUES (1, 'default', 'Script-solution');");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
+		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
 									VALUES (2, 'green_gray', 'Green-Gray');");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
+		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
 									VALUES (3, 'black_red', 'Black-Red');");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
+		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
 									VALUES (4, 'simple', 'Simple');");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
+		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
 									VALUES (5, 'bots', 'Bots');");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_THREADS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_THREADS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_THREADS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `rubrikid` int(10) unsigned NOT NULL default '0',
 		  `name` varchar(255) NOT NULL,
@@ -795,7 +795,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_UNREAD'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_UNREAD']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_UNREAD']}` (
 		  `user_id` int(10) unsigned NOT NULL,
 		  `post_id` int(10) unsigned NOT NULL,
 		  `is_news` tinyint(1) unsigned NOT NULL,
@@ -804,7 +804,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_UNREAD_HIDE'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_UNREAD_HIDE']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_UNREAD_HIDE']}` (
 		  `user_id` int(10) unsigned NOT NULL,
 		  `forum_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`user_id`,`forum_id`)
@@ -812,7 +812,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_UNSENT_POSTS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_UNSENT_POSTS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_UNSENT_POSTS']}` (
 		  `user_id` int(10) unsigned NOT NULL,
 		  `post_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`user_id`,`post_id`)
@@ -820,7 +820,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_USER'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_USER']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_USER']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `user_name` varchar(50) NOT NULL,
 		  `user_pw` varchar(32) NOT NULL,
@@ -831,7 +831,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$admin_login = addslashes($user->get_session_data('admin_login'));
 		$admin_pw = $user->get_session_data('admin_pw');
 		$admin_email = addslashes($user->get_session_data('admin_email'));
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_USER']."`
 			 (`id`, `user_name`, `user_pw`, `user_email`)
 			 VALUES
@@ -840,7 +840,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_USER_BANS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_USER_BANS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_USER_BANS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `user_id` int(10) unsigned NOT NULL default '0',
 		  `baned_user` int(10) unsigned NOT NULL default '0',
@@ -851,7 +851,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_USER_FIELDS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_USER_FIELDS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_USER_FIELDS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `field_name` varchar(30) NOT NULL,
 		  `field_type` enum('int','line','text','enum','date') NOT NULL,
@@ -869,7 +869,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  PRIMARY KEY  (`id`)
 		) TYPE=MyISAM;");
 		
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_USER_FIELDS']."` SET `id` = 1,
 			`field_name` = 'hp',
 			`field_type` = 'line',
@@ -885,7 +885,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 			`field_edit_notice` = '',
 			`display_always` = 0;"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_USER_FIELDS']."` SET `id` = 2,
 			`field_name` = 'icq',
 			`field_type` = 'int',
@@ -901,7 +901,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 			`field_edit_notice` = '',
 			`display_always` = 1;"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_USER_FIELDS']."` SET `id` = 3,
 			`field_name` = 'irc',
 			`field_type` = 'line',
@@ -917,7 +917,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 			`field_edit_notice` = '',
 			`display_always` = 1;"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_USER_FIELDS']."` SET `id` = 4,
 			`field_name` = 'birthday',
 			`field_type` = 'date',
@@ -936,7 +936,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_USER_GROUPS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_USER_GROUPS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_USER_GROUPS']}` (
 		  `id` tinyint(2) unsigned NOT NULL auto_increment,
 		  `group_title` varchar(50) NOT NULL,
 		  `group_color` varchar(6) NOT NULL,
@@ -975,7 +975,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  PRIMARY KEY  (`id`)
 		) TYPE=MyISAM;");
 		
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_USER_GROUPS']."` SET
+		$db->execute("INSERT INTO `".$consts['BS_TB_USER_GROUPS']."` SET
 									`id` = ".BS_STATUS_ADMIN.",
 									`group_title` = 'Administratoren',
 									`group_color` = '990000',
@@ -1011,7 +1011,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 									`always_edit_poll_options` = 1,
 									`view_useronline_list` = 1,
 									`is_team` = 0;");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_USER_GROUPS']."` SET
+		$db->execute("INSERT INTO `".$consts['BS_TB_USER_GROUPS']."` SET
 									`id` = ".BS_STATUS_USER.",
 									`group_title` = 'User',
 									`group_color` = '3F5E88',
@@ -1047,7 +1047,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 									`always_edit_poll_options` = 0,
 									`view_useronline_list` = 1,
 									`is_team` = 0;");
-		$db->sql_qry("INSERT INTO `".$consts['BS_TB_USER_GROUPS']."` SET
+		$db->execute("INSERT INTO `".$consts['BS_TB_USER_GROUPS']."` SET
 									`id` = ".BS_STATUS_GUEST.",
 									`group_title` = 'Gäste',
 									`group_color` = '',
@@ -1086,7 +1086,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_RANKS'].'"...');
-		$db->sql_qry("CREATE TABLE `{$consts['BS_TB_RANKS']}` (
+		$db->execute("CREATE TABLE `{$consts['BS_TB_RANKS']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `rank` varchar(80) NOT NULL,
 		  `post_to` smallint(5) unsigned NOT NULL default '0',
@@ -1094,31 +1094,31 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  PRIMARY KEY  (`id`)
 		) TYPE=MyISAM;");
 		
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_RANKS']."` (`id`, `rank`, `post_to`, `post_from`)
 			 VALUES (1, 'Neuling', 10, 0);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_RANKS']."` (`id`, `rank`, `post_to`, `post_from`)
 			 VALUES (2, 'Dauergast', 500, 301);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_RANKS']."` (`id`, `rank`, `post_to`, `post_from`)
 			 VALUES (3, 'Erfahren', 300, 151);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_RANKS']."` (`id`, `rank`, `post_to`, `post_from`)
 			 VALUES (4, 'Fortgeschritten', 150, 51);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_RANKS']."` (`id`, `rank`, `post_to`, `post_from`)
 			 VALUES (5, 'Flaschengeist', 50, 11);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_RANKS']."` (`id`, `rank`, `post_to`, `post_from`)
 			 VALUES (6, 'Forum-Beherrscher', 800, 501);"
 		);
-		$db->sql_qry(
+		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_RANKS']."` (`id`, `rank`, `post_to`, `post_from`)
 			 VALUES (7, 'Forum-Gott', 2000, 801);"
 		);

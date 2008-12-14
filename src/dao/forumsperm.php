@@ -38,7 +38,7 @@ class BS_DAO_ForumsPerm extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_FORUMS_PERM
 		);
 	}
@@ -69,7 +69,7 @@ class BS_DAO_ForumsPerm extends FWS_Singleton
 		foreach($groups as $gid)
 			$sql .= '('.$fid.',"'.$type.'",'.$gid.'),';
 		$sql = FWS_String::substr($sql,0,-1);
-		$db->sql_qry($sql);
+		$db->execute($sql);
 		return $db->get_affected_rows();
 	}
 	
@@ -86,7 +86,7 @@ class BS_DAO_ForumsPerm extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
 			FWS_Helper::def_error('intarray>0','fids',$fids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_FORUMS_PERM.' WHERE forum_id IN ('.implode(',',$fids).')'
 		);
 		return $db->get_affected_rows();
@@ -105,7 +105,7 @@ class BS_DAO_ForumsPerm extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($gids) || count($gids) == 0)
 			FWS_Helper::def_error('intarray>0','gids',$gids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_FORUMS_PERM.' WHERE group_id IN ('.implode(',',$gids).')'
 		);
 		return $db->get_affected_rows();

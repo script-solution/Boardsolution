@@ -1607,8 +1607,7 @@ final class BS_Install_Module_5_Helper extends FWS_UtilBase
 			$values['parent_id'] = 0;
 			
 			// do we have to create the group?
-			$db->sql_insert($consts['BS_TB_CONFIG_GROUPS'],$values);
-			$gid = $db->get_last_insert_id();
+			$gid = $db->insert($consts['BS_TB_CONFIG_GROUPS'],$values);
 			
 			if(isset($group['subgroups']))
 			{
@@ -1621,8 +1620,7 @@ final class BS_Install_Module_5_Helper extends FWS_UtilBase
 					$values['parent_id'] = $gid;
 					
 					// create sub-group
-					$db->sql_insert($consts['BS_TB_CONFIG_GROUPS'],$values);
-					$subgid = $db->get_last_insert_id();
+					$subgid = $db->insert($consts['BS_TB_CONFIG_GROUPS'],$values);
 					
 					$x = 1;
 					foreach($sub['items'] as $item)
@@ -1635,7 +1633,7 @@ final class BS_Install_Module_5_Helper extends FWS_UtilBase
 						if(!isset($item['custom_title']))
 							$item['custom_title'] = '';
 						
-						$db->sql_insert($consts['BS_TB_CONFIG'],$item);
+						$db->insert($consts['BS_TB_CONFIG'],$item);
 					}
 				}
 			}

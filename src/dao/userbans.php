@@ -47,7 +47,7 @@ class BS_DAO_UserBans extends FWS_Singleton
 		if(!FWS_Helper::is_integer($uid2) || $uid2 <= 0)
 			FWS_Helper::def_error('intgt0','uid2',$uid2);
 		
-		return $db->sql_num(
+		return $db->get_row_count(
 			BS_TB_USER_BANS,'id',' WHERE user_id = '.$uid1.' AND baned_user = '.$uid2
 		) > 0;
 	}
@@ -68,7 +68,7 @@ class BS_DAO_UserBans extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT b.*,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.user_group
 			 FROM '.BS_TB_USER_BANS.' b
 			 LEFT JOIN '.BS_TB_USER.' u ON b.baned_user = u.`'.BS_EXPORT_USER_ID.'`
@@ -90,7 +90,7 @@ class BS_DAO_UserBans extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT b.*,u.`'.BS_EXPORT_USER_NAME.'` user_name,p.user_group
 			 FROM '.BS_TB_USER_BANS.' b
 			 LEFT JOIN '.BS_TB_USER.' u ON b.baned_user = u.`'.BS_EXPORT_USER_ID.'`
@@ -115,11 +115,10 @@ class BS_DAO_UserBans extends FWS_Singleton
 		if(!FWS_Helper::is_integer($uid2) || $uid2 <= 0)
 			FWS_Helper::def_error('intgt0','uid2',$uid2);
 		
-		$db->sql_insert(BS_TB_USER_BANS,array(
+		return $db->insert(BS_TB_USER_BANS,array(
 			'user_id' => $uid1,
 			'baned_user' => $uid2
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -138,7 +137,7 @@ class BS_DAO_UserBans extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_USER_BANS.'
 			 WHERE user_id = '.$id.' AND id IN ('.implode(',',$ids).')'
 		);
@@ -158,7 +157,7 @@ class BS_DAO_UserBans extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_USER_BANS.'
 			 WHERE user_id IN ('.implode(',',$ids).') OR baned_user IN ('.implode(',',$ids).')'
 		);

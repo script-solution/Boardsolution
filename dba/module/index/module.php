@@ -71,19 +71,28 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 		
 		// retrieve tables in the database
 		$selected_db = BS_DBA_Utils::get_instance()->get_selected_database();
-		$qry = $db->sql_qry('SHOW TABLE STATUS FROM `'.$selected_db.'`',false);
+		$errmsg = '';
+		try
+		{
+			$rows = $db->get_rows('SHOW TABLE STATUS FROM `'.$selected_db.'`');
+		}
+		catch(FWS_DB_Exception_QueryFailed $ex)
+		{
+			$errmsg = $ex->get_mysql_error();
+			$rows = array();
+		}
 		
 		$tpl->add_variables(array(
-			'error_msg' => $qry ? '' : $db->last_error()
+			'error_msg' => $errmsg
 		));
 		
 		$total_overhead = 0;
 		$total_size = 0;
 		$total_rows = 0;
 		$tables = array();
-		if($qry)
+		if($rows !== false)
 		{
-			while($data = $db->sql_fetch_assoc($qry))
+			foreach($rows as $data)
 			{
 				$size = $data['Data_length'] + $data['Index_length'] + $data['Data_free'];
 				$total_size += $size;

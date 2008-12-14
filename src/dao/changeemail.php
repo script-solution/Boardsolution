@@ -45,7 +45,7 @@ class BS_DAO_ChangeEmail extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$row = $db->sql_fetch(
+		$row = $db->get_row(
 			'SELECT * FROM '.BS_TB_CHANGE_EMAIL.'
 			 WHERE user_id = '.$id.($key ? ' AND user_key = "'.$key.'"' : '')
 		);
@@ -69,13 +69,12 @@ class BS_DAO_ChangeEmail extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_insert(BS_TB_CHANGE_EMAIL,array(
+		return $db->insert(BS_TB_CHANGE_EMAIL,array(
 			'user_id' => $id,
 			'user_key' => $key,
 			'email_address' => $email,
 			'email_date' => time()
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -91,7 +90,7 @@ class BS_DAO_ChangeEmail extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_CHANGE_EMAIL.'
 			 WHERE user_id = '.$id
 		);
@@ -111,7 +110,7 @@ class BS_DAO_ChangeEmail extends FWS_Singleton
 		if(!FWS_Helper::is_integer($timeout) || $timeout <= 0)
 			FWS_Helper::def_error('intgt0','timeout',$timeout);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_CHANGE_EMAIL.'
 			 WHERE email_date < '.(time() - $timeout)
 		);

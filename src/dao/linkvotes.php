@@ -44,7 +44,7 @@ class BS_DAO_LinkVotes extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$rows = $db->sql_rows(
+		$rows = $db->get_rows(
 			'SELECT link_id FROM '.BS_TB_LINK_VOTES.' WHERE user_id = '.$user_id
 		);
 		$lids = array();
@@ -68,7 +68,7 @@ class BS_DAO_LinkVotes extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$db->sql_insert(BS_TB_LINK_VOTES,array(
+		$db->insert(BS_TB_LINK_VOTES,array(
 			'link_id' => $link_id,
 			'user_id' => $user_id
 		));
@@ -87,7 +87,7 @@ class BS_DAO_LinkVotes extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_LINK_VOTES.' WHERE link_id IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

@@ -44,7 +44,7 @@ class BS_DAO_AddFields extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$row = $db->sql_fetch(
+		$row = $db->get_row(
 			'SELECT * FROM '.BS_TB_USER_FIELDS.' WHERE id = '.$id
 		);
 		if(!$row)
@@ -63,8 +63,7 @@ class BS_DAO_AddFields extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_insert(BS_TB_USER_FIELDS,$fields);
-		return $db->get_last_insert_id();
+		return $db->insert(BS_TB_USER_FIELDS,$fields);
 	}
 	
 	/**
@@ -81,8 +80,7 @@ class BS_DAO_AddFields extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_USER_FIELDS,'WHERE id = '.$id,$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_USER_FIELDS,'WHERE id = '.$id,$fields);
 	}
 	
 	/**
@@ -95,10 +93,9 @@ class BS_DAO_AddFields extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_update(BS_TB_USER_FIELDS,'WHERE field_sort > '.$lower,array(
+		return $db->update(BS_TB_USER_FIELDS,'WHERE field_sort > '.$lower,array(
 			'field_sort' => array('field_sort - 1')
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -112,10 +109,9 @@ class BS_DAO_AddFields extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_update(BS_TB_USER_FIELDS,'WHERE id = '.$id,array(
+		return $db->update(BS_TB_USER_FIELDS,'WHERE id = '.$id,array(
 			'field_sort' => $sort
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -131,7 +127,7 @@ class BS_DAO_AddFields extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_USER_FIELDS.' WHERE id = '.$id
 		);
 		return $db->get_affected_rows();

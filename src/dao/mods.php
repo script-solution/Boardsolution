@@ -47,7 +47,7 @@ class BS_DAO_Mods extends FWS_Singleton
 		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
 			FWS_Helper::def_error('intgt0','fid',$fid);
 		
-		return $db->sql_num(BS_TB_MODS,'id',' WHERE rid = '.$fid.' AND user_id = '.$user_id) > 0;
+		return $db->get_row_count(BS_TB_MODS,'id',' WHERE rid = '.$fid.' AND user_id = '.$user_id) > 0;
 	}
 	
 	/**
@@ -63,7 +63,7 @@ class BS_DAO_Mods extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($user_ids) || count($user_ids) == 0)
 			FWS_Helper::def_error('intarray>0','user_ids',$user_ids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_MODS.'
 			 WHERE user_id IN ('.implode(',',$user_ids).')'
 		);
@@ -79,7 +79,7 @@ class BS_DAO_Mods extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT m.*,p.user_group,u.`'.BS_EXPORT_USER_NAME.'` user_name
 			 FROM '.BS_TB_MODS.' m
 			 LEFT JOIN '.BS_TB_USER.' u ON m.user_id = u.`'.BS_EXPORT_USER_ID.'`
@@ -104,11 +104,10 @@ class BS_DAO_Mods extends FWS_Singleton
 		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
 			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		$db->sql_insert(BS_TB_MODS,array(
+		return $db->insert(BS_TB_MODS,array(
 			'rid' => $fid,
 			'user_id' => $user_id
 		));
-		return $db->get_last_insert_id();
 	}
 	
 	/**
@@ -130,7 +129,7 @@ class BS_DAO_Mods extends FWS_Singleton
 		foreach($fids as $fid)
 			$sql .= '('.$user_id.','.$fid.'),';
 		$sql = FWS_String::substr($sql,0,-1);
-		$db->sql_qry($sql);
+		$db->execute($sql);
 	}
 	
 	/**
@@ -149,7 +148,7 @@ class BS_DAO_Mods extends FWS_Singleton
 		if(!FWS_Helper::is_integer($fid) || $fid <= 0)
 			FWS_Helper::def_error('intgt0','fid',$fid);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_MODS.' WHERE rid = '.$fid.' AND user_id = '.$user_id
 		);
 		return $db->get_affected_rows();
@@ -191,7 +190,7 @@ class BS_DAO_Mods extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_MODS.' WHERE '.$field.' IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

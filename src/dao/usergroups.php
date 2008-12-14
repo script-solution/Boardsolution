@@ -58,7 +58,7 @@ class BS_DAO_UserGroups extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_USER_GROUPS.' WHERE id IN ('.implode(',',$ids).')'
 		);
 	}
@@ -73,8 +73,7 @@ class BS_DAO_UserGroups extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$db->sql_insert(BS_TB_USER_GROUPS,$fields);
-		return $db->get_last_insert_id();
+		return $db->insert(BS_TB_USER_GROUPS,$fields);
 	}
 	
 	/**
@@ -91,8 +90,7 @@ class BS_DAO_UserGroups extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_USER_GROUPS,'WHERE id = '.$id,$fields);
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_USER_GROUPS,'WHERE id = '.$id,$fields);
 	}
 	
 	/**
@@ -108,7 +106,7 @@ class BS_DAO_UserGroups extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_USER_GROUPS.' WHERE id IN ('.implode(',',$ids).')'
 		);
 		return $db->get_affected_rows();

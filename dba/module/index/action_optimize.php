@@ -28,7 +28,7 @@ final class BS_DBA_Action_index_optimize extends BS_DBA_Action_Base
 		$stables = $input->get_var('tables','get',FWS_Input::STRING);
 		$tables = FWS_Array_Utils::advanced_explode(';',$stables);
 		if(count($tables) > 0)
-			$db->sql_qry('OPTIMIZE TABLE `'.implode('`, `',$tables).'`');
+			$db->execute('OPTIMIZE TABLE `'.implode('`, `',$tables).'`');
 		
 		$this->set_success_msg(
 			sprintf($locale->lang('optimize_tables_success'),'"'.implode('", "',$tables).'"')

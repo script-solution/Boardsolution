@@ -38,7 +38,7 @@ class BS_DAO_Config extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_CONFIG.' ORDER BY group_id ASC,sort ASC'
 		);
 	}
@@ -56,7 +56,7 @@ class BS_DAO_Config extends FWS_Singleton
 		if(!FWS_Helper::is_integer($group_id) || $group_id <= 0)
 			FWS_Helper::def_error('intgt0','group_id',$group_id);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT c.*
 			 FROM '.BS_TB_CONFIG.' c
 			 LEFT JOIN '.BS_TB_CONFIG_GROUPS.' g ON c.group_id = g.id
@@ -79,10 +79,9 @@ class BS_DAO_Config extends FWS_Singleton
 		if(empty($name))
 			FWS_Helper::def_error('notempty','name',$name);
 		
-		$db->sql_update(BS_TB_CONFIG,'WHERE name = "'.$name.'"',array(
+		return $db->update(BS_TB_CONFIG,'WHERE name = "'.$name.'"',array(
 			'value' => $value
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -99,10 +98,9 @@ class BS_DAO_Config extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_CONFIG,'WHERE id = '.$id,array(
+		return $db->update(BS_TB_CONFIG,'WHERE id = '.$id,array(
 			'value' => $value
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -118,8 +116,7 @@ class BS_DAO_Config extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_update(BS_TB_CONFIG,'WHERE id = '.$id,array('value' => array('`default`')));
-		return $db->get_affected_rows();
+		return $db->update(BS_TB_CONFIG,'WHERE id = '.$id,array('value' => array('`default`')));
 	}
 }
 ?>

@@ -83,10 +83,8 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends FWS_Object implement
 				$content .= " ------------------".BS_DBA_LINE_WRAP;
 				$content .= 'DROP TABLE IF EXISTS '.$data['tables'][$x].";".BS_DBA_LINE_WRAP;
 				
-				$res = $db->sql_fetch_array($db->sql_qry(
-					'SHOW CREATE TABLE '.$data['tables'][$x]
-				));
-				$create_syntax = $res[1];
+				$res = $db->get_row('SHOW CREATE TABLE '.$data['tables'][$x]);
+				$create_syntax = $res['Create Table'];
 				$create_syntax = str_replace("\r\n",BS_DBA_LINE_WRAP,$create_syntax);
 				$create_syntax = str_replace("\n",BS_DBA_LINE_WRAP,$create_syntax);
 				$create_syntax = str_replace("\r",BS_DBA_LINE_WRAP,$create_syntax);
@@ -142,23 +140,22 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends FWS_Object implement
 				}
 				
 				$order = ' ORDER BY ';
-				$fqry = mysql_list_fields($dbname,$data['tables'][$x]);
-				$field_num = $db->sql_num_fields($fqry);
-				for($i = 0;$i < $field_num;$i++)
-					$order .= '`'.$db->sql_field_name($fqry,$i).'` ASC,';
+				$set = $db->execute('SHOW COLUMNS FROM '.$data['tables'][$x]);
+				foreach($set as $row)
+					$order .= '`'.$row['Field'].'` ASC,';
 				$order = FWS_String::substr($order,0,FWS_String::strlen($order) - 1);
 				
-				$query = $db->sql_qry(
+				$set = $db->execute(
 					'SELECT * FROM '.$data['tables'][$x].' '.$order.'
 					 LIMIT '.$start.','.$length
 				);
-				while($row = $db->sql_fetch_assoc($query))
+				foreach($set as $row)
 				{
 					$fields_tmp = '';
 					$values_tmp = '';
-					for($i = 0;$i < $field_num;$i++)
+					for($i = 0;$i < $set->get_field_count();$i++)
 					{
-						$field_name = $db->sql_field_name($query,$i);
+						$field_name = $set->get_field_name($i);
 						$fields_tmp .= '`'.$field_name.'`,';
 						$value = addslashes($row[$field_name]);
 						$value = str_replace("\r\n","\\r\\n",$value);
@@ -174,7 +171,6 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends FWS_Object implement
 					$content .= ' ('.$fields.') VALUES ('.$values.");".BS_DBA_LINE_WRAP;
 					$lines++;
 				}
-				$db->sql_free($query);
 				
 				$cpos += $num[$data['tables'][$x]];
 				
@@ -227,17 +223,15 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends FWS_Object implement
 		$total = 0;
 		$num = array();
 		$dbname = BS_DBA_Utils::get_instance()->get_selected_database();
-		$qry = $db->sql_qry('SHOW TABLE STATUS FROM `'.$dbname.'`');
-		while($row = $db->sql_fetch_assoc($qry))
+		foreach($db->get_rows('SHOW TABLE STATUS FROM `'.$dbname.'`') as $row)
 		{
 			if(in_array($row['Name'],$data['tables']))
 			{
 				// $row['Rows'] may be approximated with InnoDB
-				$num[$row['Name']] = $db->sql_num($row['Name'],'*','');
+				$num[$row['Name']] = $db->get_row_count($row['Name'],'*','');
 				$total += $num[$row['Name']];
 			}
 		}
-		$db->sql_free($qry);
 		return array($total,$num);
 	}
 	

@@ -47,7 +47,7 @@ class BS_DAO_Unread extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT u.* FROM '.BS_TB_UNREAD.' u
 			 LEFT JOIN '.BS_TB_POSTS.' p ON u.post_id = p.id
 			 WHERE p.'.$type.' IN ('.implode(',',$ids).')'
@@ -67,7 +67,7 @@ class BS_DAO_Unread extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		return $db->sql_rows(
+		return $db->get_rows(
 			'SELECT u.*,p.rubrikid,p.threadid FROM '.BS_TB_UNREAD.' u
 			 LEFT JOIN '.BS_TB_POSTS.' p ON u.post_id = p.id
 			 WHERE u.user_id = '.$id
@@ -99,7 +99,7 @@ class BS_DAO_Unread extends FWS_Singleton
 			if($i++ < $len - 1)
 				$sql .= ',';
 		}
-		$db->sql_qry($sql);
+		$db->execute($sql);
 	}
 	
 	/**
@@ -118,10 +118,9 @@ class BS_DAO_Unread extends FWS_Singleton
 		if(!FWS_Helper::is_integer($new_post_id) || $new_post_id <= 0)
 			FWS_Helper::def_error('intgt0','new_post_id',$new_post_id);
 		
-		$db->sql_update(BS_TB_UNREAD,'WHERE post_id = '.$post_id,array(
+		return $db->update(BS_TB_UNREAD,'WHERE post_id = '.$post_id,array(
 			'post_id' => $new_post_id
 		));
-		return $db->get_affected_rows();
 	}
 	
 	/**
@@ -137,7 +136,7 @@ class BS_DAO_Unread extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_UNREAD.' WHERE user_id = '.$id
 		);
 		return $db->get_affected_rows();
@@ -156,7 +155,7 @@ class BS_DAO_Unread extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($post_ids) || count($post_ids) == 0)
 			FWS_Helper::def_error('intarray>0','post_ids',$post_ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_UNREAD.' WHERE post_id IN ('.implode(',',$post_ids).')'
 		);
 		return $db->get_affected_rows();
@@ -178,7 +177,7 @@ class BS_DAO_Unread extends FWS_Singleton
 		if(!FWS_Array_Utils::is_integer($post_ids) || count($post_ids) == 0)
 			FWS_Helper::def_error('intarray>0','post_ids',$post_ids);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_UNREAD.'
 			 WHERE user_id = '.$id.' AND post_id IN ('.implode(',',$post_ids).')'
 		);
@@ -198,7 +197,7 @@ class BS_DAO_Unread extends FWS_Singleton
 		if(!FWS_Helper::is_integer($id) || $id <= 0)
 			FWS_Helper::def_error('intgt0','id',$id);
 		
-		$db->sql_qry(
+		$db->execute(
 			'DELETE FROM '.BS_TB_UNREAD.'
 			 WHERE user_id = '.$id.' AND is_news = 1'
 		);
