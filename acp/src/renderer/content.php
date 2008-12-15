@@ -199,12 +199,12 @@ final class BS_ACP_Renderer_Content extends FWS_Document_Renderer_HTML_Default
 	{
 		$tpl = FWS_Props::get()->tpl();
 		$db = FWS_Props::get()->db();
-		$profiler = FWS_Props::get()->profiler();
+		$doc = FWS_Props::get()->doc();
 
 		$tpl->set_template('inc_footer.htm');
 		$tpl->add_variables(array(
 			'debug' => BS_DEBUG,
-			'render_time' => $profiler->get_time(),
+			'render_time' => $doc->get_profiler()->get_time(),
 			'db_queries' => $db->get_query_count(),
 			'queries' => FWS_Printer::to_string(
 				array(
