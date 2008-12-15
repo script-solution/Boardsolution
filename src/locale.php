@@ -226,7 +226,7 @@ final class BS_Locale extends FWS_Object implements FWS_Locale
 	
 	public function set_timezone($timezone)
 	{
-		throw new FWS_Exceptions_UnsupportedMethod();
+		throw new FWS_Exception_UnsupportedMethod();
 	}
 	
 	protected function get_dump_vars()

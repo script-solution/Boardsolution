@@ -32,10 +32,6 @@ $e = FWS_Error_Handler::get_instance();
 $e->add_allowedfiles_listener(new BS_Error_AllowedFiles());
 $e->set_logger(new BS_Error_Logger());
 
-// start profiler
-$profiler = FWS_Props::get()->profiler();
-$profiler->start();
-
 // init the session-stuff
 $sessions = FWS_Props::get()->sessions();
 $user = FWS_Props::get()->user();

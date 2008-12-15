@@ -203,8 +203,9 @@ final class BS_DBA_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
 		$db = FWS_Props::get()->db();
-		$profiler = FWS_Props::get()->profiler();
-
+		$doc = FWS_Props::get()->doc();
+		$profiler = $doc->get_profiler();
+		
 		$mem = FWS_StringHelper::get_formated_data_size(
 			$profiler->get_memory_usage(),$locale->get_thousands_separator(),
 			$locale->get_dec_separator()

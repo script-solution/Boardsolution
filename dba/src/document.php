@@ -30,7 +30,7 @@ final class BS_DBA_Document extends FWS_Document
 	
 			$this->_handle_session();
 		}
-		catch(FWS_Exceptions_Critical $e)
+		catch(FWS_Exception_Critical $e)
 		{
 			echo $e;
 		}

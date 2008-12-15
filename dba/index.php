@@ -43,10 +43,6 @@ FWS_Props::set_accessor($accessor);
 
 BS_Front_Action_Base::load_actions();
 
-// start profiler
-$profiler = FWS_Props::get()->profiler();
-$profiler->start();
-
 // init the session-stuff
 $sessions = FWS_Props::get()->sessions();
 $user = FWS_Props::get()->user();

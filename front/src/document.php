@@ -32,7 +32,7 @@ final class BS_Front_Document extends BS_Document
 			
 			$this->_check_addfields();
 		}
-		catch(FWS_Exceptions_Critical $e)
+		catch(FWS_Exception_Critical $e)
 		{
 			echo $e;
 		}

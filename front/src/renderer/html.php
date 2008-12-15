@@ -582,7 +582,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			$debug = '&nbsp;';
 			if(BS_DEBUG > 0)
 			{
-				$profiler = FWS_Props::get()->profiler();
+				$doc = FWS_Props::get()->doc();
+				$profiler = $doc->get_profiler();
 				$qry_num = $db->get_query_count();
 				$debug = $profiler->get_time().' '.$locale->lang('sec').', '
 					.$qry_num.' '.$locale->lang('qrys').', '
