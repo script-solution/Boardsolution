@@ -92,7 +92,7 @@ final class BS_Front_Search_Request_SimilarTopics extends BS_Front_Search_Reques
 			$this->_keywords,array('p.text_posted','t.name'),'OR'
 		);
 		
-		return $this->get_result_ids_impl('topics',$sql,250);
+		return $this->get_result_ids_impl('topics',$sql,250,$this->_keywords);
 	}
 	
 	public function get_title($search)
@@ -108,7 +108,7 @@ final class BS_Front_Search_Request_SimilarTopics extends BS_Front_Search_Reques
 	
 	public function get_order()
 	{
-		return array('date','DESC');
+		return array('relevance','DESC');
 	}
 	
 	protected function get_dump_vars()

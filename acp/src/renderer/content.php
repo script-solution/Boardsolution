@@ -206,12 +206,7 @@ final class BS_ACP_Renderer_Content extends FWS_Document_Renderer_HTML_Default
 			'debug' => BS_DEBUG,
 			'render_time' => $doc->get_profiler()->get_time(),
 			'db_queries' => $db->get_query_count(),
-			'queries' => FWS_Printer::to_string(
-				array(
-					'Load properties' => array_keys(FWS_Props::get()->get_all()),
-					'DB-Queries' => $db->get_queries()
-				)
-			)
+			'queries' => FWS_Printer::to_string($db->get_queries())
 		));
 		$tpl->restore_template();
 	}

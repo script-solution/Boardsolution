@@ -128,7 +128,7 @@ final class BS_ACP_SubModule_miscellaneous_operation extends BS_ACP_SubModule
 		$locale = FWS_Props::get()->locale();
 		$tasks = BS_ACP_Module_miscellaneous::get_tasks();
 		
-		$url = BS_URL::get_acpmod_url(0,'&');
+		$url = BS_URL::get_acpsub_url(0,0,'&');
 		$url->set('name',$this->_name);
 		
 		$tpl->add_variables(array(

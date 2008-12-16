@@ -562,7 +562,7 @@ final class BS_BBCode_Parser extends FWS_Object
 					{
 						$ktagname = FWS_String::strtolower($tags[3][$k][0]);
 						// if it is an opening-tag we stop here
-						if($ktagname[0] != '/')
+						if(!isset($ktagname[0]) || $ktagname[0] != '/')
 							break;
 						
 						// have we found the tag?

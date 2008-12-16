@@ -117,7 +117,7 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 	
 	public function get_order()
 	{
-		return array('date','DESC');
+		return array('relevance','DESC');
 	}
 	
 	protected function get_dump_vars()
