@@ -17,6 +17,7 @@ define('BS_FRONTEND',true);
 // file that includes the index.php to the folder of Boardsolution.
 // By default (no include, the index.php is directly called in the browser) the path should be 
 // empty ('').
+// NOTE: it has to end with a '/' if it is not empty
 define('BS_PATH','');
 
 // check if the calculated path is correct
