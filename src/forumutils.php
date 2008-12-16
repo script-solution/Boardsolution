@@ -60,7 +60,6 @@ final class BS_ForumUtils extends FWS_UtilBase
 				$real_num--;
 		}
 	
-		$open_div = false;
 		$clap_forum = false;
 	
 		// are forums available?
@@ -83,13 +82,14 @@ final class BS_ForumUtils extends FWS_UtilBase
 				'dot' => $user->get_theme_item_path('images/forums/path_dot.gif'),
 				'middle' => $user->get_theme_item_path('images/forums/path_middle.gif')
 			);
-	
+			
 			$nodes = array();
 			$fn = 0;
 	
 			$clapurl = BS_URL::get_mod_url('forums');
 			$clapurl->set(BS_URL_LOC,'clapforum');
 			
+			$catinfo = array(-1,-1);
 			$post_order = BS_PostingUtils::get_posts_order();
 			$next_display_layer = -1;
 			$sub_cats = array();
@@ -102,7 +102,6 @@ final class BS_ForumUtils extends FWS_UtilBase
 				$forum_id = $daten->get_id();
 				$forum_type_cats = $daten->get_forum_type() == 'contains_cats';
 				$clap_forum = $forum_type_cats && $node->get_layer() - $start_layer == -1;
-	
 				if($node->get_layer() <= $next_display_layer)
 					$next_display_layer = -1;
 	
@@ -133,14 +132,15 @@ final class BS_ForumUtils extends FWS_UtilBase
 						$display_rubrik = 'block';
 						$img_ins = $user->get_theme_item_path('images/crossopen.gif');
 					}
-	
+					
 					$close_clap_forum = false;
-					if($clap_forum && $num > 0)
+					if((!$clap_forum || $catinfo[1] != $node->get_id()) && $node->get_layer() == $catinfo[0])
 					{
 						$close_clap_forum = true;
-						$open_div = false;
+						if(!$clap_forum)
+							$catinfo = array(-1,-1);
 					}
-	
+					
 					// build the "forum-path"
 					$pimages = array();
 					if($node->get_layer() > 0)
@@ -240,16 +240,15 @@ final class BS_ForumUtils extends FWS_UtilBase
 					$nodes[$fn]['forum_url'] = $forum_url;
 					$nodes[$fn]['path_images'] = $pimages;
 					
+					if($clap_forum)
+						$catinfo = array($node->get_layer(),$node->get_id());
 					$fn++;
 				}
-	
-				if($clap_forum)
-					$open_div = true;
 			}
 			
 			$tpl->add_variable_ref('forums',$nodes);
 			$tpl->add_variables(array(
-				'clap_forum_bottom' => $open_div,
+				'clap_forum_bottom' => $catinfo[0] != -1,
 				'forum_cookie' => $input->get_var(
 					BS_COOKIE_PREFIX.'hidden_forums','cookie',FWS_Input::STRING
 				)

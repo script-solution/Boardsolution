@@ -185,7 +185,7 @@ final class BS_Front_Action_Plain_Event extends BS_Front_Action_Plain
 			return 'Invalid topic-id "'.$this->_tid.'"';
 		
 		// is the topic or the location empty?
-		if(trim($this->_name) == '' || trim($this->_location) == '')
+		if(trim($this->_name) == '')
 			return 'terminleer';
 		
 		// check the user-id if it is not the current one and no guest

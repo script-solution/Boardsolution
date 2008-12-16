@@ -70,7 +70,7 @@ final class BS_Front_Action_edit_topic_event extends BS_Front_Action_Base
 		$enable_announcements = $input->get_var('enable_announcements','post',FWS_Input::INT_BOOL);
 
 		// topic-name or location empty?
-		if(trim($topic_name) == '' || trim($location) == '')
+		if(trim($topic_name) == '')
 			return 'terminleer';
 
 		$form = new BS_HTML_Formular(false,false);

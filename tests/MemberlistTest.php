@@ -63,7 +63,7 @@ class MemberlistTest extends BaseTest
     } catch (PHPUnit_Framework_AssertionFailedError $e) {
         array_push($this->verificationErrors, $e->toString());
     }
-    $this->removeSelection("msg", "label=Administratoren");
+    $this->removeSelection("msg__", "label=Administratoren");
     $this->click("//input[@value='Suchen']");
     $this->waitForPageToLoad("30000");
     try {

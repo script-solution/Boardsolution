@@ -24,7 +24,7 @@ body.bs_body {
 
 .bs_main {
 	padding: 0.4em;
-	background-color: #ebebeb;
+	background-color: #e9ebe2;
 }
 
 .bs_main a {
@@ -41,7 +41,7 @@ body.bs_body {
 .bs_coldesc {
 	padding: 0.3em;
 	font-size: 0.9em;
-	background-color: #DBDBDB;
+	background-color: #c8c9c1;
 	font-weight: bold;
 }
 
@@ -56,7 +56,7 @@ body.bs_body {
 
 .bs_coldesc_sep {
 	border-top: 1px solid #fff;
-	background-color: #DBDBDB;
+	background-color: #c8c9c1;
 	padding: 0.3em;
 	height: 3px;
 	font-size: 3px;
@@ -66,7 +66,7 @@ body.bs_body {
 .bs_left {
 	padding: 0.3em;
 	font-size: 0.9em;
-	background-color: #DBDBDB;
+	background-color: #c8c9c1;
 	font-weight: bold;
 }
 
@@ -77,7 +77,7 @@ body.bs_body {
 	font-weight: bold;
 	color: #fff;
 	padding: 0.4em;
-	background-color: #637591;
+	background-color: #8eabba;
 	background-image: url(images/topic.gif);
 	background-repeat: repeat-x;
 	text-align: center;
@@ -125,8 +125,8 @@ h1.bs_topic {
 
 div.bs_headline {
 	cursor: pointer;
-	background-color: #DBDBDB;
-	background-image: url(images/headline_small.jpg);
+	background-color: #e9ebe2;
+	background-image: url(images/headline.jpg);
 	background-repeat: no-repeat;
 	background-position: left;
 	height: 81px;
@@ -163,7 +163,7 @@ li.bs_welcome_right {
 /* {{bottom}} */
 
 div.bs_bottom {
-	background-color: #ebebeb;
+	background-color: #e9ebe2;
 }
 
 li.bs_bottom {
@@ -173,7 +173,7 @@ li.bs_bottom {
 /* {{form}} */
 
 fieldset.bs_form dl {
-	background-color: #dbdbdb;
+	background-color: #c8c9c1;
 }
 
 fieldset.bs_form dt {
@@ -187,12 +187,12 @@ fieldset.bs_form dt {
 fieldset.bs_form dd {
 	padding: 0.5em;
 	margin-left: 23%;
-	background-color: #ebebeb;
+	background-color: #e9ebe2;
 	vertical-align: middle;
 }
 
 fieldset.bs_subform dl {
-	background-color: #ebebeb;
+	background-color: #e9ebe2;
 }
 
 fieldset.bs_subform dt {
@@ -210,7 +210,7 @@ fieldset.bs_subform dd {
 
 td.bs_forums {
 	padding: 0.4em;
-	background-color: #EBEBEB;
+	background-color: #e9ebe2;
 }
 
 .bs_forums a {
@@ -227,7 +227,7 @@ td.bs_forums {
 
 td.bs_forums_small {
 	padding: 0.4em;
-	background-color: #EBEBEB;
+	background-color: #e9ebe2;
 }
 
 .bs_forums_small a {
@@ -245,7 +245,7 @@ td.bs_forums_small {
 
 td.bs_categories {
 	padding: 0.4em;
-	background-color: #DBDBDB;
+	background-color: #c8c9c1;
 }
 
 .bs_categories a {
@@ -290,7 +290,7 @@ td.bs_categories {
 
 .bs_posts_bar_1 {
 	padding: 0.4em;
-	background-color: #DBDBDB;
+	background-color: #c8c9c1;
 }
 
 .bs_posts_bar_1 a {
@@ -304,7 +304,7 @@ td.bs_categories {
 
 .bs_posts_bar_2 {
 	padding: 0.4em;
-	background-color: #DBDBDB;
+	background-color: #c8c9c1;
 }
 
 .bs_posts_bar_2 a {
@@ -317,7 +317,7 @@ td.bs_categories {
 }
 
 .bs_posts_left_1 {
-	background-color: #E5E5E5;
+	background-color: #e9ebe2;
 }
 
 .bs_posts_left_1 a {
@@ -330,7 +330,7 @@ td.bs_categories {
 }
 
 td.bs_posts_left_2 {
-	background-color: #E5E5E5;
+	background-color: #e9ebe2;
 }
 
 .bs_posts_left_2 a {
@@ -345,7 +345,7 @@ td.bs_posts_left_2 {
 .bs_posts_main_1 {
 	font-size: 1.05em;
 	line-height: 140%;
-	background-color: #EBEBEB;
+	background-color: #e9ebe2;
 }
 
 .bs_posts_main_1 a {
@@ -360,7 +360,7 @@ td.bs_posts_left_2 {
 .bs_posts_main_2 {
 	font-size: 1.05em;
 	line-height: 140%;
-	background-color: #EBEBEB;
+	background-color: #e9ebe2;
 }
 
 .bs_posts_main_2 a {

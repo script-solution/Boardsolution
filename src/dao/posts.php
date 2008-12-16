@@ -119,13 +119,13 @@ class BS_DAO_Posts extends FWS_Singleton
 			FWS_Helper::def_error('intgt0','tid',$tid);
 		
 		$data = $db->get_row(
-			'SELECT MIN(id) FROM '.BS_TB_POSTS.'
+			'SELECT MIN(id) AS min FROM '.BS_TB_POSTS.'
 			 WHERE threadid = '.$tid.' AND rubrikid = '.$fid
 		);
 		if(!$data)
 			return 0;
 		
-		return $data[0];
+		return $data['min'];
 	}
 	
 	/**
@@ -138,12 +138,12 @@ class BS_DAO_Posts extends FWS_Singleton
 		$db = FWS_Props::get()->db();
 
 		$data = $db->get_row(
-			'SELECT MAX(post_time) FROM '.BS_TB_POSTS
+			'SELECT MAX(post_time) AS t FROM '.BS_TB_POSTS
 		);
 		if(!$data)
 			return 0;
 		
-		return $data[0];
+		return $data['t'];
 	}
 	
 	/**
@@ -156,12 +156,12 @@ class BS_DAO_Posts extends FWS_Singleton
 		$db = FWS_Props::get()->db();
 
 		$data = $db->get_row(
-			'SELECT MAX(edited_date) FROM '.BS_TB_POSTS
+			'SELECT MAX(edited_date) AS t FROM '.BS_TB_POSTS
 		);
 		if(!$data)
 			return 0;
 		
-		return $data[0];
+		return $data['t'];
 	}
 	
 	/**
@@ -743,13 +743,13 @@ class BS_DAO_Posts extends FWS_Singleton
 		
 		$exclude = count($post_ids) > 0 ? ' AND id NOT IN ('.implode(',',$post_ids).')' : '';
 		$data = $db->get_row(
-			'SELECT MAX(id) FROM '.BS_TB_POSTS.'
+			'SELECT MAX(id) AS max FROM '.BS_TB_POSTS.'
 			 WHERE rubrikid = '.$fid.$exclude
 		);
 		if(!$data)
 			return 0;
 		
-		return $data[0];
+		return $data['max'];
 	}
 	
 	/**

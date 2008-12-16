@@ -91,8 +91,8 @@ class BS_DAO_Polls extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$res = $db->get_row('SELECT MAX(pid) FROM '.BS_TB_POLL);
-		return $res[0] + 1;
+		$res = $db->get_row('SELECT MAX(pid) AS pid FROM '.BS_TB_POLL);
+		return $res['pid'] + 1;
 	}
 	
 	/**

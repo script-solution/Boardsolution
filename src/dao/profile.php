@@ -350,7 +350,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 		$db = FWS_Props::get()->db();
 
 		$res = $db->get_row(
-			'SELECT SUM(logins) as total FROM '.BS_TB_PROFILES.'
+			'SELECT SUM(logins) AS total FROM '.BS_TB_PROFILES.'
 			 WHERE active = 1 AND banned = 0'
 		);
 		return $res['total'];

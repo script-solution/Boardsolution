@@ -116,11 +116,11 @@ class BS_DAO_Smileys extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		$row = $db->get_row('SELECT MAX(sort_key) FROM '.BS_TB_SMILEYS);
+		$row = $db->get_row('SELECT MAX(sort_key) AS k FROM '.BS_TB_SMILEYS);
 		if(!$row)
 			return 1;
 		
-		return $row[0] + 1;
+		return $row['k'] + 1;
 	}
 	
 	/**

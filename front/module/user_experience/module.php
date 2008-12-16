@@ -197,7 +197,7 @@ final class BS_Front_Module_user_experience extends BS_Front_Module
 		$colors = array($cbar_start->get_comps(false),$cbar_end->get_comps(false));
 		
 		// determine the color at the end-position and replace it in the colors
-		if($rect->get_size()->get_width() > 0)
+		if((int)$rect->get_size()->get_width() > 0)
 		{
 			$cf = new FWS_GD_ColorFade($bar_length,$bar_length,$colors);
 			$filled_length = $filled_end - BS_HALF_HEIGHT;

@@ -164,7 +164,8 @@ final class BS_Front_Module_print extends BS_Front_Module
 			
 			$tpl->set_template('inc_event.htm');
 			$tpl->add_variables(array(
-				'location' => $edata['event_location'],
+				'location' => $edata['event_location'] ?
+					$edata['event_location'] : $locale->lang('notavailable'),
 				'event_begin' => FWS_Date::get_date($edata['event_begin'],true,false),
 				'event_end' => $event_end,
 				'description' => nl2br($edata['description']),

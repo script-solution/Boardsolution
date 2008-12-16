@@ -489,6 +489,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	{
 		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
 
 		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
@@ -501,7 +502,8 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		
 		$tpl->set_template('inc_event.htm');
 		$tpl->add_variables(array(
-			'location' => $event_data['event_location'],
+			'location' => $event_data['event_location'] ?
+				$event_data['event_location'] : $locale->lang('notavailable'),
 			'event_begin' => FWS_Date::get_date($event_data['event_begin']),
 			'event_end' => $event_end,
 			'description' => nl2br($event_data['description']),

@@ -313,6 +313,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			'cookie_domain' => $cfg['cookie_domain'],
 			'theme' => $user->get_theme(),
 			'title' => $this->get_title(),
+			'forum_title' => $cfg['forum_title'],
 			'charset' => 'charset='.$doc->get_charset(),
 			'mimetype' => $doc->get_mimetype(),
 			'cssfiles' => $this->get_css_files(),

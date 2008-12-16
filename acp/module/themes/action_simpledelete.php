@@ -28,8 +28,8 @@ final class BS_ACP_Action_themes_simpledelete extends BS_ACP_Action_Base
 		if($theme == null)
 			return 'Invalid theme "'.$theme.'"';
 		
-		$file = FWS_Path::server_app().'themes/'.$theme.'/style.css';
-		$css = new FWS_CSS_SimpleParser($file,$file);
+		$file = FWS_Path::server_app().'themes/'.$theme.'/basic.css';
+		$css = new FWS_CSS_StyleSheet(FWS_FileUtils::read($file));
 		
 		$split = explode(',',$input->get_var('ids','get',FWS_Input::STRING));
 		for($i = 0;$i < count($split);$i++)
@@ -37,11 +37,13 @@ final class BS_ACP_Action_themes_simpledelete extends BS_ACP_Action_Base
 			if($split[$i] != '')
 			{
 				$explode = explode('|',$split[$i]);
-				$css->remove_class_attribute($explode[0],$explode[1]);
+				$block = $css->get_block($explode[0]);
+				if($block !== null && $block->get_type() == FWS_CSS_Block::RULESET)
+					$block->remove_property($explode[1]);
 			}
 		}
 
-		if(!$css->write())
+		if(!FWS_FileUtils::write($file,(string)$css))
 			return sprintf($locale->lang('file_not_saved'),$file);
 		
 		$this->set_success_msg($locale->lang('file_saved'));

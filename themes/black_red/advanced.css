@@ -68,7 +68,7 @@ table.bs_table {
 }
 
 table.bs_table > tbody > tr > td, table.bs_table > tbody > tr > th {
-	border: 1px solid #fff;
+	border: 1px solid #b9b9b9;
 }
 
 /* Fix the table-display in IE */
@@ -81,46 +81,46 @@ table.bs_table > tbody > tr > td, table.bs_table > tbody > tr > th {
 
 /* Fix the table-display in firefox and partly in opera */
 table.bs_table > tbody > tr:last-child > td.bs_coldesc {
-	border-bottom: 1px solid #dbdbdb;
+	border-bottom: 1px solid #4A4A4A;
 }
 table.bs_table > tbody > tr:last-child > td.bs_left {
-	border-bottom: 1px solid #dbdbdb;
+	border-bottom: 1px solid #4A4A4A;
 }
 table.bs_table > tbody > tr:last-child > td.bs_main {
-	border-bottom: 1px solid #ebebeb;
+	border-bottom: 1px solid #C7C7C7;
 }
 table.bs_table > tbody > tr:last-child > td.bs_topic {
-	border-bottom: 1px solid #637591;
+	border-bottom: 1px solid #aa1011;
 }
 table.bs_table > tbody > tr > td.bs_coldesc:last-child {
-	border-right: 1px solid #dbdbdb;
+	border-right: 1px solid #4A4A4A;
 }
 table.bs_table > tbody > tr > td.bs_left:last-child {
-	border-right: 1px solid #dbdbdb;
+	border-right: 1px solid #4A4A4A;
 }
 table.bs_table > tbody > tr > td.bs_main:last-child {
-	border-right: 1px solid #ebebeb;
+	border-right: 1px solid #C7C7C7;
 }
 table.bs_table > tbody > tr > td.bs_topic:last-child {
-	border-right: 1px solid #637591;
+	border-right: 1px solid #aa1011;
 }
 
 /* Fix the table-display in opera >= 9 */
 @media all and (min-width:0px) {
 	table.bs_table > tbody > tr > td.bs_coldesc:first-child {
-		border-left: 1px solid #dbdbdb;
+		border-left: 1px solid #4A4A4A;
 	}
 	table.bs_table > tbody > tr > td.bs_left:first-child {
-		border-left: 1px solid #dbdbdb;
+		border-left: 1px solid #4A4A4A;
 	}
 	table.bs_table > tbody > tr > td.bs_main:first-child {
-		border-left: 1px solid #ebebeb;
+		border-left: 1px solid #C7C7C7;
 	}
 	table.bs_table > tbody > tr > td.bs_topic:first-child {
-		border-left: 1px solid #637591;
+		border-left: 1px solid #aa1011;
 	}
 	table.bs_table > tbody > tr:first-child > td.bs_topic {
-		border-top: 1px solid #637591;
+		border-top: 1px solid #aa1011;
 	}
 }
 
@@ -129,19 +129,19 @@ html:not(:nth-child(1)) table.bs_table > tbody > tr > td:last-child {
 	border: 1px solid #fff;
 }
 html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_coldesc:first-child {
-	border-left: 1px solid #dbdbdb;
+	border-left: 1px solid #4A4A4A;
 }
 html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_left:first-child {
-	border-left: 1px solid #dbdbdb;
+	border-left: 1px solid #4A4A4A;
 }
 html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_main:first-child {
-	border-left: 1px solid #ebebeb;
+	border-left: 1px solid #C7C7C7;
 }
 html:not(:nth-child(1)) table.bs_table > tbody > tr:first-child > td.bs_topic {
-	border-top: 1px solid #637591;
+	border-top: 1px solid #aa1011;
 }
 html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_topic:first-child {
-	border-left: 1px solid #637591;
+	border-left: 1px solid #aa1011;
 }
 /* ------------ PORTAL ------------ */
 
@@ -414,7 +414,7 @@ label {
 
 input.bs_bbcode_notice {
 	border: none;
-	background-color: #EBEBEB;
+	background-color: #C7C7C7;
 }
 
 /* ------------ MESSAGES ------------ */

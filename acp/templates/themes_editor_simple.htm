@@ -55,12 +55,12 @@ function RestoreColors()
 				{endif}
 				{loop groups as group}
 				<tr>
-					<td class="a_main" colspan="2"><b> {group:tag_name}</b></td>
+					<td class="a_main" colspan="2"><b>{group:tag_name}</b></td>
 				</tr>
 				{loop group:attributes as attribute}
 				<tr>
 					<td class="a_main" width="35%">
-					<input id="{attribute:id}" type="checkbox" class="a_box" name="del[]" value="{attribute:id}" />
+					<input id="{attribute:id}" type="checkbox" class="a_box" name="del[]" value="{attribute:cbname}" />
 					<label for="{attribute:id}">{attribute:name}:</label>
 					</td>
 					<td class="a_main" width="65%">{attribute:form_element}</td>
@@ -74,7 +74,7 @@ function RestoreColors()
 					<img src="{gpath}acp/images/design_delete.gif" alt="{glocale.lang('delete')}" />
 					<input type="submit" name="delete" value="{glocale.lang('delete')}" /> | {glocale.lang('attribute')}:
 					{group:add_attribute_combo}
-					<input type="submit" name="add[{group:class_name}]" value="{glocale.lang('add')}" />
+					<input type="submit" name="add[{group:name}]" value="{glocale.lang('add')}" />
 					</td>
 				</tr>
 				<tr>

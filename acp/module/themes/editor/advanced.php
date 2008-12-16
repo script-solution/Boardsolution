@@ -26,22 +26,26 @@ final class BS_ACP_Module_Themes_Editor_Advanced extends BS_ACP_Module_Themes_Ed
 	{
 		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
-		$file = $this->_theme.'/style.css';
+		$file = $input->get_var('file','get',FWS_Input::STRING);
+		if(!preg_match('/^[a-zA-Z0-9_]+\.css$/',$file))
+			$file = 'basic.css';
+		$path = $this->_theme.'/'.$file;
 		$theme = $input->get_var('theme','get',FWS_Input::STRING);
 
 		$url = BS_URL::get_acpsub_url(0,'editor');
 		$url->set('theme',$theme);
 		$url->set('mode','advanced');
+		$url->set('file',$file);
 		
 		$tpl->set_template('tpleditor_formular.htm');
 		$tpl->add_variables(array(
 			'target_url' => $url->to_url(),
 			'action_type' => BS_ACP_ACTION_THEME_EDITOR_ADVANCED_SAVE,
 			'image' => BS_ACP_Utils::get_file_image($file),
-			'filename' => $file,
-			'filesize' => number_format(filesize($file),0,',','.'),
-			'last_modification' => FWS_Date::get_date(filemtime($file)),
-			'file_content' => trim(file_get_contents($file)),
+			'filename' => $path,
+			'filesize' => number_format(filesize($path),0,',','.'),
+			'last_modification' => FWS_Date::get_date(filemtime($path)),
+			'file_content' => trim(file_get_contents($path)),
 			'back_button' => false
 		));
 		$tpl->restore_template();

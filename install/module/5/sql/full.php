@@ -753,11 +753,11 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
 									VALUES (1, 'default', 'Script-solution');");
 		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
-									VALUES (2, 'green_gray', 'Green-Gray');");
+									VALUES (2, 'desert', 'Desert');");
 		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
 									VALUES (3, 'black_red', 'Black-Red');");
 		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
-									VALUES (4, 'simple', 'Simple');");
+									VALUES (4, 'minimal', 'Minimal');");
 		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
 									VALUES (5, 'bots', 'Bots');");
 		$this->add_to_log_success();

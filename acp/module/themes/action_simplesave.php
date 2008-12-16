@@ -28,29 +28,27 @@ final class BS_ACP_Action_themes_simplesave extends BS_ACP_Action_Base
 		if($theme == null)
 			return 'Invalid theme "'.$theme.'"';
 		
-		$file = FWS_Path::server_app().'themes/'.$theme.'/style.css';
-		$css = new FWS_CSS_SimpleParser($file,$file);
+		$file = FWS_Path::server_app().'themes/'.$theme.'/basic.css';
+		$css = new FWS_CSS_StyleSheet(FWS_FileUtils::read($file));
 		foreach($input->get_vars_from_method('post') as $key => $value)
 		{
 			if(FWS_String::strpos($key,'|') !== false)
 			{
 				$split = explode('|',$key);
+				list(,$blockno) = explode('_',$split[0]);
 				if(isset($split[2]))
 				{
 					$val = $input->get_var($split[0].'|'.$split[1].'|val','post');
 					$type = $input->get_var($split[0].'|'.$split[1].'|type','post');
 					$value = $val.$type;
 				}
-				
-				$css->set_class_attribute(str_replace('%','.',$split[0]),$split[1],stripslashes($value));
+				$block = $css->get_block($blockno);
+				if($block->get_type() == FWS_CSS_Block::RULESET)
+					$block->set_property($split[1],stripslashes($value));
 			}
 		}
 		
-		// nothing to do?
-		if(!$css->has_changed())
-			return '';
-
-		if(!$css->write())
+		if(!FWS_FileUtils::write($file,(string)$css))
 			return sprintf($locale->lang('file_not_saved'),$file);
 		
 		$this->set_action_performed(true);

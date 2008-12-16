@@ -13,22 +13,15 @@ class InstallTest extends PHPUnit_Extensions_SeleniumTestCase
 
   function testMyTestCase()
   {
-    $this->open("/scriptsolution/Boardsolution/quickinstall.php?drop=1");
+    $this->open("/scriptsolution/Boardsolution/scripts/quickinstall.php?drop=1");
     try {
-        $this->assertTrue($this->isTextPresent("Please call this script to generate the settings."));
+        $this->assertTrue($this->isTextPresent("Boardsolution has been installed successfully! :-)"));
     } catch (PHPUnit_Framework_AssertionFailedError $e) {
         array_push($this->verificationErrors, $e->toString());
     }
-    $this->click("link=this script");
+    $this->open("/scriptsolution/Boardsolution/scripts/myisam2inno.php");
     $this->waitForPageToLoad("30000");
-    try {
-        $this->assertTrue($this->isTextPresent("The settings have been (re-)generated successfully!"));
-    } catch (PHPUnit_Framework_AssertionFailedError $e) {
-        array_push($this->verificationErrors, $e->toString());
-    }
-    $this->open("/scriptsolution/Boardsolution/myisam2inno.php");
-    $this->waitForPageToLoad("30000");
-    $this->open("/scriptsolution/Boardsolution/inserttestdata.php");
+    $this->open("/scriptsolution/Boardsolution/scripts/inserttestdata.php");
     $this->waitForPageToLoad("30000");
     try {
         $this->assertTrue($this->isTextPresent("Test-Data inserted!"));

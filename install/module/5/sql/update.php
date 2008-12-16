@@ -128,7 +128,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
  		
 		BS_Install_Module_5_Helper::generate_settings();
 		
-		$cfg = $db->get_row("SELECT* FROM `".$prefix."config`");
+		$cfg = $db->get_row("SELECT * FROM `".$prefix."config`");
 		$cfgconv = array(
 			'account_activation' => 'account_activation',
 			'allow_custom_lang' => 'allow_custom_lang',
@@ -485,9 +485,14 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
  		// themes
 		$this->add_to_log('Adding new themes into "'.$consts['BS_TB_THEMES'].'"...');
 		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`theme_folder`, `theme_name`)
-									VALUES ('simple', 'Simple');");
+									VALUES ('minimal', 'Minimal');");
 		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`theme_folder`, `theme_name`)
 									VALUES ('bots', 'Bots');");
+		$db->execute(
+			'UPDATE `'.$consts['BS_TB_THEMES'].'` SET
+			 theme_folder = "desert", theme_name = "Desert"
+			 WHERE theme_folder = "green_gray"'
+		);
  		$this->add_to_log_success();
 		
  		// unread hide

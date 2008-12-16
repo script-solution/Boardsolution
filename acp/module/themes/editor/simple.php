@@ -70,80 +70,6 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 		'height' => 'attr_height',
 		'cursor' => 'attr_cursor'
 	);
-	
-	/**
-	 * The categories:
-	 * <code>
-	 * 	array(
-	 * 		<category> => array(
-	 * 			<class> => <name>,
-	 * 			...
-	 * 		)
-	 * 		,...
-	 * 	)
-	 * </code>
-	 *
-	 * @var array
-	 */
-	private $_categories = array(
-		'group_main' => array(
-			'class_body' => 'bs_body',
-			'class_body' => 'bs_body',
-			'class_main' => 'bs_main',
-			'class_main_no_pad' => 'bs_main_no_pad',
-			'class_topic' => 'bs_topic',
-			'class_coldesc' => 'bs_coldesc',
-			'class_desc' => 'bs_desc',
-			'class_categories' => 'bs_categories',
-			'class_forums' => 'bs_forums',
-			'class_forums_small' => 'bs_forums_small',
-			'class_top_menu' => 'bs_top_menu',
-			'class_head_line' => 'bs_headline',
-		),
-		'group_posts' => array(
-			'class_post_seperator' => 'bs_post_separator',
-			'class_posts_bar_1' => 'bs_posts_bar_1',
-			'class_posts_bar_2' => 'bs_posts_bar_2',
-			'class_posts_left_1' => 'bs_posts_left_1',
-			'class_posts_left_2' => 'bs_posts_left_2',
-			'class_posts_main_1' => 'bs_posts_main_1',
-			'class_posts_main_2' => 'bs_posts_main_2'
-		),
-		'group_border' => array(
-			'class_table_top_left' => 'bs_tbl_top_left',
-			'class_table_top' => 'bs_tbl_top',
-			'class_table_top_right' => 'bs_tbl_top_right',
-			'class_table_left' => 'bs_tbl_left',
-			'class_table_right' => 'bs_tbl_right',
-			'class_table_bottom_left' => 'bs_tbl_bottom_left',
-			'class_table_bottom' => 'bs_tbl_bottom',
-			'class_table_bottom_right' => 'bs_tbl_bottom_right',
-		),
-		'group_calendar' => array(
-			'class_calendar' => 'bs_calendar',
-			'class_calendar_today' => 'bs_calendar_today',
-			'class_calendar_empty' => 'bs_calendar_empty',
-			'class_calendar_empty_today' => 'bs_calendar_empty_today',
-			'class_calendar_border' => 'bs_calendar_border',
-			'class_calendar_border_today' => 'bs_calendar_border_today',
-		),
-		'group_other' => array(
-			'class_buttons' => 'bs_button',
-			'class_buttons_big' => 'bs_button_big',
-			'class_pm_unread' => 'bs_unread',
-			'class_quote_section' => 'bs_quote_section',
-			'class_quote_section_top' => 'bs_quote_section_top',
-			'class_quote_section_main' => 'bs_quote_section_main',
-			'class_explain' => 'bs_bbcode_notice',
-			'class_search_keywords' => 'bs_search_keywords',
-			'class_form' => 'form',
-			'class_forms' => 'input,select,textarea',
-			'class_checkbox' => 'bs_checkbox',
-			'class_list' => 'ul',
-			'class_list_item' => 'li',
-			'class_label' => 'label',
-		)
-	);
 
 	/**
 	 * Constructor
@@ -152,22 +78,29 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 	{
 		parent::__construct();
 
-		$this->_css = new FWS_CSS_SimpleParser($this->_theme.'/style.css',$this->_theme.'/style.css');
-	
-		// add unknown classes to its own group
-		$used_classes = array();
-		foreach($this->_categories as $items)
+		$this->_css = new FWS_CSS_StyleSheet(FWS_FileUtils::read($this->_theme.'/basic.css'));
+		$this->_categories = array();
+		$cat = '';
+		$group = '';
+		foreach($this->_css->get_blocks() as $k => $block)
 		{
-			foreach($items as $class)
-				$used_classes[] = $class;
-		}
-		
-		$classes = $this->_css->get_classes($used_classes);
-		if(count($classes) > 0)
-		{
-			$this->_categories['group_unknown'] = array();
-			foreach($classes as $name)
-				$this->_categories['group_unknown'][$name] = $name;
+			if($block->get_type() == FWS_CSS_Block::COMMENT)
+			{
+				if(preg_match('/\/\*\s*\{\{(.*?)\}\}\s*\*\//',$block->get_content(),$matches) && $cat)
+				{
+					$group = $matches[1];
+					$this->_categories[$cat][$group] = array();
+				}
+				else if(preg_match('/\/\*\s*\[\[(.*?)\]\]\s*\*\//',$block->get_content(),$matches))
+				{
+					$cat = $matches[1];
+					$this->_categories[$cat] = array();
+				}
+			}
+			else if($block->get_type() == FWS_CSS_Block::RULESET && $cat && $group)
+			{
+				$this->_categories[$cat][$group][] = array($k,$block);
+			}
 		}
 	}
 	
@@ -186,7 +119,15 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
 
-		$class = $input->get_var('class','get',FWS_Input::STRING);
+		$groupa = explode('::',$input->get_var('group','get',FWS_Input::STRING));
+		if(count($groupa) == 2)
+			list($cat,$group) = $groupa;
+		else
+		{
+			$cat = key($this->_categories);
+			$group = key($this->_categories[$cat]);
+		}
+		
 		$theme = $input->get_var('theme','get',FWS_Input::STRING);
 
 		$del = $input->get_var('del','post');
@@ -197,15 +138,19 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 			$num = count($del);
 			for($i = 0;$i < $num;$i++)
 			{
-				$ids .= $del[$i].',';
 				$split = explode('|',$del[$i]);
-				$text .= $locale->lang('theattribute').' "'.$split[1].'" ';
-				$text .= $locale->lang('of').' "';
-				$text .= $this->_get_attribute_name(str_replace('.'.$class,'',$split[0])).'"';
-				if($i < $num - 2)
-					$text .= ', ';
-				else if($i == $num - 2)
-					$text .= ' '.$locale->lang('and').' ';
+				$block = $this->_css->get_block($split[0]);
+				if($block !== null && $block->get_type() == FWS_CSS_Block::RULESET)
+				{
+					$ids .= $del[$i].',';
+					$text .= $locale->lang('theattribute').' "'.$this->_get_attribute_name($split[1]).'" ';
+					$text .= $locale->lang('of').' "';
+					$text .= $block->get_name().'"';
+					if($i < $num - 2)
+						$text .= ', ';
+					else if($i == $num - 2)
+						$text .= ' '.$locale->lang('and').' ';
+				}
 			}
 			
 			$url = BS_URL::get_acpsub_url(0,'editor');
@@ -221,10 +166,6 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 			);
 		}
 
-		$classes = $this->_css->get_classes();
-		if($class == null)
-			$class = $input->set_var('class','get',current($classes));
-
 		$baseurl = BS_URL::get_acpsub_url(0,'editor');
 		$baseurl->set('theme',$theme);
 		$baseurl->set('mode','simple');
@@ -232,41 +173,42 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 		$tpl->set_template('themes_editor_simple.htm');
 		$tpl->add_variables(array(
 			'action_type' => BS_ACP_ACTION_THEME_EDITOR_SIMPLE_SAVE,
-			'target_url' => $baseurl->set('class',$class)->to_url()
+			'target_url' => $baseurl->set('group',$cat.'::'.$group)->to_url()
 		));
-
+		
 		$cats = array();
-		foreach($this->_categories as $name => $items)
+		foreach($this->_categories as $catname => $groups)
 		{
-			$cat = array(
-				'name' => $locale->lang($name),
+			$tplcat = array(
+				'name' => $locale->lang('cat_'.$catname,false),
 				'items' => array(),
 			);
 
-			foreach($items as $iname => $iclass)
+			foreach(array_keys($groups) as $gname)
 			{
-				if($class == $iclass)
-					$menu_item = '- '.$locale->lang($iname,false);
+				if($group == $gname)
+					$menu_item = '- '.$locale->lang('group_'.$gname,false);
 				else
 				{
-					$menu_item = '- <a href="'.$baseurl->set('class',$iclass)->to_url().'">';
-					$menu_item .= $locale->lang($iname,false).'</a>';
+					$menu_item = '- <a href="'.$baseurl->set('group',$catname.'::'.$gname)->to_url().'">';
+					$menu_item .= $locale->lang('group_'.$gname,false).'</a>';
 				}
 
-				$cat['items'][] = array(
+				$tplcat['items'][] = array(
 					'menu_item' => $menu_item
 				);
 			}
 			
-			$cats[] = $cat;
+			$cats[] = $tplcat;
 		}
 		
 		$tpl->add_variable_ref('cats',$cats);
 
-		if($class != null)
+		$tplgroups = array();
+		if($group !== null && $cat !== null)
 		{
 			$tpl->add_variables(array(
-				'explanation_picture' => $this->_get_picture_exlain($class)
+				'explanation_picture' => $this->_get_picture_exlain($group)
 			));
 
 			$all_attributes = array();
@@ -274,37 +216,34 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 				$all_attributes[$k] = $locale->lang($v);
 			
 			$form = new BS_HTML_Formular(false,false);
-			$tplgroups = array();
-			$groups = $this->_css->get_group_classes($class);
-			if(is_array($groups))
+			$rulesets = $this->_categories[$cat][$group];
+			if(is_array($rulesets))
 			{
-				foreach($groups as $class_name => $attributes)
+				foreach($rulesets as $info)
 				{
-					if(is_array($attributes))
+					list($key,$ruleset) = $info;
+					/* @var $ruleset FWS_CSS_Block_Ruleset */
+					$name = $ruleset->get_name();
+					$group = array(
+						'tag_name' => $name,
+						'add_attribute_combo' => $form->get_combobox(
+							'attribute['.$key.']',$all_attributes,''
+						),
+						'name' => $key,
+						'attributes' => array()
+					);
+
+					foreach($ruleset->get_properties() as $aname => $avalue)
 					{
-						$real_class_name = str_replace(".".$class,"",$class_name);
-
-						$group = array(
-							'tag_name' => $this->_get_tag_name($real_class_name),
-							'add_attribute_combo' => $form->get_combobox(
-								'attribute['.$class_name.']',$all_attributes,''
-							),
-							'class_name' => $class_name,
-							'attributes' => array()
+						$group['attributes'][] = array(
+							'id' => 'cb_'.$key.'_'.preg_replace('/[^a-z0-9_]/i','_',$aname),
+							'cbname' => $key.'|'.$aname,
+							'name' => $this->_get_attribute_name($aname),
+							'form_element' => $this->_get_form_element('attrval_'.$key,$aname,$avalue)
 						);
-
-						foreach($attributes as $name => $value)
-						{
-							$cname = str_replace(".","%",$class_name);
-							$group['attributes'][] = array(
-								'id' => $class_name.'|'.$name,
-								'name' => $this->_get_attribute_name($name),
-								'form_element' => $this->_get_form_element($cname,$name,$value)
-							);
-						}
-						
-						$tplgroups[] = $group;
 					}
+					
+					$tplgroups[] = $group;
 				}
 			}
 		}
@@ -326,52 +265,6 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 		if($locale->contains_lang('attr_'.$attr))
 			return $locale->lang('attr_'.$attr);
 		return $attr;
-	}
-
-	/**
-	 * grabs the tag-name of the given attribute from the language-variable
-	 *
-	 * @param string $tag the name of the tag
-	 * @return string the tag-name
-	 */
-	private function _get_tag_name($tag)
-	{
-		$locale = FWS_Props::get()->locale();
-
-		switch($tag)
-		{
-			case '':
-				return $locale->lang('tag_all_tags');
-
-			case 'a':
-			case 'td':
-			case 'table':
-			case 'body':
-			case 'div':
-			case 'span':
-			case 'input':
-			case 'select':
-			case 'textarea':
-			case 'ul':
-			case 'li':
-			case 'label':
-				return $locale->lang('tag_'.$tag);
-
-			case 'a:hover':
-				return $locale->lang('tag_ahover');
-
-			case 'td:hover':
-				return $locale->lang('tag_tdhover');
-
-			case 'div_small':
-				return $locale->lang('tag_small');
-
-			case 'input,select,textarea':
-				return $locale->lang('tag_form_elements');
-
-			default:
-				return $tag;
-		}
 	}
 
 	/**
@@ -437,10 +330,9 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 	private function _get_picture_exlain($class)
 	{
 		$locale = FWS_Props::get()->locale();
-
 		switch($class)
 		{
-			case 'bs_body':
+			case 'body':
 				return $this->_get_explanation_table(
 					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"',''),
 					'body.gif',
@@ -448,8 +340,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 								'"'.$locale->lang('tag_td').'", "'.$locale->lang('tag_div').'"')
 				);
 			
-			case 'bs_main_no_pad':
-			case 'bs_main':
+			case 'main':
 				$res = $this->_get_explanation_table(
 					array('"'.$locale->lang('tag_td').'"',''),
 					'main1.gif',
@@ -463,42 +354,62 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 				);
 				return $res;
 			
-			case 'bs_coldesc':
+			case 'coldesc':
 				return $this->_get_explanation_table(
 					array('"'.$locale->lang('tag_td').'"',''),
 					'coldesc.gif',
 					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"','')
 				);
 			
-			case 'bs_topic':
+			case 'topic':
 				return $this->_get_explanation_table(
 					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"',''),
 					'topic.gif',
 					array('"'.$locale->lang('tag_td').'"','')
 				);
 			
-			case 'bs_desc':
+			case 'desc':
 				return $this->_get_explanation_table(
 					array('"'.$locale->lang('tag_div').'"',''),
 					'desc.gif',
 					array('','')
 				);
 			
-			case 'bs_forums':
+			case 'border':
+				return $this->_get_explanation_table(
+					array('"'.$locale->lang('tag_td').'"',''),
+					'tbl_border.gif',
+					array('','')
+				);
+			
+			case 'headline':
+				return $this->_get_explanation_table(
+					array('"'.$locale->lang('tag_div').'"',''),
+					'headline.gif',
+					array('','')
+				);
+			
+			case 'border':
+				return '';
+			
+			case 'form':
+				return '';
+			
+			case 'forums':
 				return $this->_get_explanation_table(
 					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"',''),
 					'forums.gif',
 					array('"'.$locale->lang('tag_td').'"','')
 				);
 			
-			case 'bs_forums_small':
+			case 'forums_small':
 				return $this->_get_explanation_table(
 					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"',''),
 					'forums_small.gif',
 					array('','')
 				);
 			
-			case 'bs_categories':
+			case 'categories':
 				return $this->_get_explanation_table(
 					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'", "'
 						.$locale->lang('tag_td').'"',''),
@@ -506,161 +417,70 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 					array('','')
 				);
 			
-			case 'bs_top_menu':
-				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'",
-					"'.$locale->lang('tag_td').'", "'.$locale->lang('tag_tdhover').'"',''),
-					'top_menu.gif',
-					array('','')
-				);
+			case 'topics_small':
+				return '';
 			
-			case 'bs_headline':
-				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_div').'"',''),
-					'headline.gif',
-					array('','')
-				);
-			
-			case 'bs_post_separator':
-				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_div').'"',''),
-					'post_separator.gif',
-					array('','')
-				);
-			
-			case 'bs_posts_bar_1':
-			case 'bs_posts_bar_2':
+			case 'post':
 				return $this->_get_explanation_table(
 					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"',''),
 					'post_bar.gif',
 					array('"'.$locale->lang('tag_td').'"','')
 				);
 			
-			case 'bs_posts_left_1':
-			case 'bs_posts_left_2':
-				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_td').'"',''),
-					'post_left.gif',
-					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"','')
-				);
+			case 'bbcode':
+				return '';
 			
-			case 'bs_posts_main_1':
-			case 'bs_posts_main_2':
-				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_td').'"',''),
-					'post_main.gif',
-					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"','')
-				);
+			case 'bbcode_popup':
+				return '';
 			
-			case 'bs_tbl_top':
-			case 'bs_tbl_top_left':
-			case 'bs_tbl_top_right':
-			case 'bs_tbl_left':
-			case 'bs_tbl_right':
-			case 'bs_tbl_bottom':
-			case 'bs_tbl_bottom_left':
-			case 'bs_tbl_bottom_right':
-				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_td').'"',''),
-					'tbl_border.gif',
-					array('','')
-				);
+			case 'quote':
+				return '';
 			
-			case 'bs_button':
-				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"',''),
-					'button.gif',
-					array('','')
-				);
+			case 'code':
+				return '';
 			
-			case 'bs_button_big':
-				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"',''),
-					'button_big.gif',
-					array('','')
-				);
-			
-			case 'bs_calendar':
+			case 'calendar':
 				return $this->_get_explanation_table(
 					array('"'.$locale->lang('tag_td').'"',''),
 					'calendar.gif',
 					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"','')
 				);
 			
-			case 'bs_calendar_today':
-				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_td').'"',''),
-					'calendar_today.gif',
-					array('','','')
-				);
-			
-			case 'bs_calendar_empty':
+			case 'calendar_empty':
 				return $this->_get_explanation_table(
 					array('"'.$locale->lang('tag_td').'"',''),
 					'calendar_empty.gif',
 					array('','','')
 				);
 			
-			case 'bs_calendar_empty_today':
-				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_td').'"',''),
-					'calendar_empty_today.gif',
-					array('','','')
-				);
-			
-			case 'bs_calendar_border':
+			case 'calendar_border':
 				return $this->_get_explanation_table(
 					array('"'.$locale->lang('tag_td').'"',''),
 					'calendar_border.gif',
 					array('','','')
 				);
 			
-			case 'bs_calendar_border_today':
-				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_td').'"',''),
-					'calendar_border_today.gif',
-					array('','','')
-				);
-			
-			case 'bs_unread':
+			case 'unread':
 				return $this->_get_explanation_table(
 					array('"'.$locale->lang('tag_div').'"',''),
 					'unread_pms.gif',
 					array('','')
 				);
 			
-			case 'bs_quote_section':
-				return $this->_get_explanation_table(
-					array('',''),
-					'quote_section.gif',
-					array('"'.$locale->lang('tag_all_tags').'"','')
-				);
-			
-			case 'bs_quote_section_top':
-				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_all_tags').'"',''),
-					'quote_section.gif',
-					array('','')
-				);
-			
-			case 'bs_quote_section_main':
-				return $this->_get_explanation_table(
-					array('',''),
-					'quote_section.gif',
-					array('','"'.$locale->lang('tag_all_tags').'"')
-				);
-			
-			case 'bs_bbcode_notice':
-				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_input').'"',''),
-					'bbcode_notice.gif',
-					array('','')
-				);
-			
-			case 'bs_search_keywords':
+			case 'highlight':
 				return $this->_get_explanation_table(
 					array('"'.$locale->lang('tag_div').'"',''),
 					'search_keywords.gif',
+					array('','')
+				);
+			
+			case 'formelements':
+				return '';
+			
+			case 'button':
+				return $this->_get_explanation_table(
+					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"',''),
+					'button.gif',
 					array('','')
 				);
 			
@@ -672,36 +492,35 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 	/**
 	 * builds the color-form for the given attribute
 	 *
-	 * @param string $class the name of the class
+	 * @param string $name the name of the class
 	 * @param string $attribute_name the attribute
 	 * @param string $value the value of the attribute
 	 * @return string the color-form
 	 */
-	private function _get_color_form($class,$attribute_name,$value)
+	private function _get_color_form($name,$attribute_name,$value)
 	{
 		$locale = FWS_Props::get()->locale();
-
-		$id = $class.'|'.$attribute_name;
+		
+		$id = $name.$attribute_name;
 		$clearid = preg_replace('/[^a-z0-9_]/i','_',$id);
 		$res = '<script type="text/javascript">'."\n";
 		$res .= '<!--'."\n";
-		$res .= 'var cp_'.$clearid.' = new FWS_ColorPicker("'.FWS_Path::client_fw().'","'.$id.'",';
+		$res .= 'var cp_'.$clearid.' = new FWS_ColorPicker("'.FWS_Path::client_fw().'",null,';
 		$res .= 'function(color) {'."\n";
-		$res .= '	FWS_getElement(\''.$id.'|preview\').style.backgroundColor = "#"+color;'."\n";
+		$res .= '	FWS_getElement(\''.$clearid.'___preview\').style.backgroundColor = "#"+color;'."\n";
+		$res .= '	FWS_getElement(\''.$clearid.'\').value = "#"+color;'."\n";
 		$res .= '});'."\n";
 		$res .= '//-->'."\n";
 		$res .= '</script>'."\n";
 		
-		$res .= '<table align="left" bgcolor="#000000" width="16" cellpadding="0" cellspacing="1">'."\n";
-		$res .= '	<tr>'."\n";
-		$res .= '		<td onclick="cp_'.$clearid.'.toggle(this.id);"';
-		$res .= ' title="'.$locale->lang('color_picker_hint').'" height="16"';
-		$res .= ' bgcolor="'.$value.'" id="'.$id.'|preview"></td>'."\n";
-		$res .= '	</tr>'."\n";
-		$res .= '</table>'."\n";
+		$res .= '<div style="float:left; width: 20px; height: 20px;';
+		$res .= ' background-color: '.$value.'; border: 1px solid #000;"';
+		$res .= ' onclick="cp_'.$clearid.'.toggle(this.id);"';
+		$res .= ' title="'.$locale->lang('color_picker_hint').'"';
+		$res .= ' id="'.$clearid.'___preview">&nbsp;</div>'."\n";
 
-		$res .= '&nbsp;&nbsp;<input type="text" name="'.$id.'" id="'.$id.'" size="8" value="'.$value.'"';
-		$res .= ' maxlength="7" />'."\n";
+		$res .= '&nbsp;&nbsp;<input type="text" name="'.$name.'|'.$attribute_name;
+		$res .= '" id="'.$clearid.'" size="8" value="'.$value.'" maxlength="7" />'."\n";
 		
 		$res .= '<img id="cp_img_'.$clearid.'" src="acp/images/color_picker.gif"';
 		$res .= ' title="'.$locale->lang('color_picker_hint').'"';
@@ -709,8 +528,8 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 		$res .= ' onmouseover="this.style.cursor = \'pointer\';"';
 		$res .= ' onmouseout="this.style.cursor = \'default\';"';
 		$res .= ' onclick="cp_'.$clearid.'.toggle(this.id,\'rt\');';
-		$res .= ' FWS_getElement(\''.$id.'|preview\').style.backgroundColor =';
-		$res .= ' FWS_getElement(\''.$id.'\').value;" />';
+		$res .= ' FWS_getElement(\''.$clearid.'___preview\').style.backgroundColor =';
+		$res .= ' FWS_getElement(\''.$clearid.'\').value;" />';
 		
 		return $res;
 	}
@@ -718,12 +537,12 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 	/**
 	 * Returns the form-element of the given attribute
 	 *
-	 * @param string $class the name of the class
+	 * @param string $name the name of the class
 	 * @param string $attribute the attribute
 	 * @param string $value the value of the attribute
 	 * @return string the form-element
 	 */
-	private function _get_form_element($class,$attribute,$value)
+	private function _get_form_element($name,$attribute,$value)
 	{
 		$locale = FWS_Props::get()->locale();
 
@@ -737,10 +556,15 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 			case 'padding-left':
 			case 'padding-right':
 			case 'font-size':
+			case 'line-height':
+			case 'margin-left':
+			case 'margin-right':
+			case 'margin-top':
+			case 'margin-bottom':
 				$match = array();
-				if(preg_match('/^(\d+)(pt|pc|in|mm|cm|px|em|ex|%)$/',$value,$match))
+				if(preg_match('/^([\.\d]+)(pt|pc|in|mm|cm|px|em|ex|%)$/',$value,$match))
 				{
-					$res = $form->get_textbox($class.'|'.$attribute.'|val',$match[1],4,255).' ';
+					$res = $form->get_textbox($name.'|'.$attribute.'|val',$match[1],4,255).' ';
 					$type = array(
 						'pt' => $locale->lang('type_pt'),
 						'pc' => $locale->lang('type_pc'),
@@ -752,10 +576,10 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 						'ex' => $locale->lang('type_ex'),
 						'%' => $locale->lang('type_percent')
 					);
-					$res .= $form->get_combobox($class.'|'.$attribute.'|type',$type,$match[2]);
+					$res .= $form->get_combobox($name.'|'.$attribute.'|type',$type,$match[2]);
 				}
 				else
-					$res = $form->get_textbox($class.'|'.$attribute,$value,6,255);
+					$res = $form->get_textbox($name.'|'.$attribute,$value,6,255);
 				
 				return $res;
 
@@ -767,7 +591,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 					'blink' => $locale->lang('value_blink'),
 					'none' => $locale->lang('value_none')
 				);
-				return $form->get_combobox($class.'|'.$attribute,$options,$value);
+				return $form->get_combobox($name.'|'.$attribute,$options,$value);
 
 			case 'font-weight':
 				$array = array(
@@ -779,7 +603,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 				for($i = 100;$i < 1000;$i += 100)
 					$array[$i] = $i;
 
-				return $form->get_combobox($class.'|'.$attribute,$array,$value);
+				return $form->get_combobox($name.'|'.$attribute,$array,$value);
 
 			case 'font-style':
 				$array = array(
@@ -787,18 +611,18 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 					'oblique' => $locale->lang('value_oblique'),
 					'normal' => $locale->lang('value_normal')
 				);
-				return $form->get_combobox($class.'|'.$attribute,$array,$value);
+				return $form->get_combobox($name.'|'.$attribute,$array,$value);
 
 			case 'background-color':
 			case 'color':
-				return $this->_get_color_form($class,$attribute,$value);
+				return $this->_get_color_form($name,$attribute,$value);
 
 			case 'cursor':
 				$array = array(
 					'default' => $locale->lang('value_default'),
 					'pointer' => $locale->lang('value_pointer')
 				);
-				return $form->get_combobox($class.'|'.$attribute,$array,$value);
+				return $form->get_combobox($name.'|'.$attribute,$array,$value);
 
 			case 'border-style':
 				$array = array(
@@ -813,8 +637,30 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 					'inset' => $locale->lang('value_inset'),
 					'outset' => $locale->lang('value_outset')
 				);
-				return $form->get_combobox($class.'|'.$attribute,$array,$value);
+				return $form->get_combobox($name.'|'.$attribute,$array,$value);
 
+			case 'vertical-align':
+				$array = array(
+					'left' => $locale->lang('value_left'),
+					'middle' => $locale->lang('value_center'),
+					'right' => $locale->lang('value_right'),
+					'baseline' => $locale->lang('value_baseline'),
+					'sub' => $locale->lang('value_sub'),
+					'super' => $locale->lang('value_super'),
+					'text-top' => $locale->lang('value_text-top'),
+					'text-bottom' => $locale->lang('value_text-bottom')
+				);
+				return $form->get_combobox($name.'|'.$attribute,$array,$value);
+			
+			case 'text-align':
+				$array = array(
+					'left' => $locale->lang('value_left'),
+					'center' => $locale->lang('value_center'),
+					'right' => $locale->lang('value_right'),
+					'justify' => $locale->lang('value_justify')
+				);
+				return $form->get_combobox($name.'|'.$attribute,$array,$value);
+			
 			case 'background-position':
 				$array = array(
 					'top' => $locale->lang('value_top'),
@@ -824,17 +670,17 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 					'left' => $locale->lang('value_left'),
 					'right' => $locale->lang('value_right')
 				);
-				return $form->get_combobox($class.'|'.$attribute,$array,$value);
+				return $form->get_combobox($name.'|'.$attribute,$array,$value);
 
 			case 'background-image':
-				return $form->get_textbox($class.'|'.$attribute,$value,35,255);
+				return $form->get_textbox($name.'|'.$attribute,$value,35,255);
 
 			case 'background-attachment':
 				$array = array(
 					'fixed' => $locale->lang('value_fixed'),
 					'scroll' => $locale->lang('value_scroll')
 				);
-				return $form->get_combobox($class.'|'.$attribute,$array,$value);
+				return $form->get_combobox($name.'|'.$attribute,$array,$value);
 
 			case 'background-repeat':
 				$array = array(
@@ -843,10 +689,10 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 					'repeat-x' => $locale->lang('value_x-repeat'),
 					'repeat-y' => $locale->lang('value_y-repeat')
 				);
-				return $form->get_combobox($class.'|'.$attribute,$array,$value);
+				return $form->get_combobox($name.'|'.$attribute,$array,$value);
 
 			default:
-				return $form->get_textbox($class.'|'.$attribute,$value,35,255);
+				return $form->get_textbox($name.'|'.$attribute,$value,35,255);
 		}
 	}
 	

@@ -25,6 +25,9 @@ $accessor = new BS_PropAccessor();
 $accessor->set_loader(new BS_PropLoader());
 FWS_Props::set_accessor($accessor);
 
+// take care of other charsets
+FWS_String::set_use_mb_functions(function_exists('mb_strlen'),BS_HTML_CHARSET);
+
 BS_Front_Action_Base::load_actions();
 
 // set our error-logger and allowed-files-listener

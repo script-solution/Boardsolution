@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>{forum_title} {page_title}</title>
+<title>{title}</title>
 <meta name="robots" content="{robots_value}" />
 <meta http-equiv="Content-Type" content="text/html; {charset}" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
@@ -9,11 +9,16 @@
 {if redirect}
 <meta http-equiv="refresh" content="{redirect:time}; url={redirect:url}" />
 {endif}
+{loop jsfiles as file}
+<script type="{file:type}" src="{file:src}"></script>
+{endloop}
 <script type="text/javascript" src="{gjs.get_file('js/basic.js','fws')}"></script>
 <script type="text/javascript" src="{gjs.get_file('js/ajax.js','fws')}"></script>
 <script type="text/javascript" src="{gjs.get_file('src/functions.js')}"></script>
 <script type="text/javascript" src="{gjs.get_file('js/imgviewer.js','fws')}"></script>
-
+{loop cssfiles as file}
+<link rel="stylesheet" type="{file:type}" href="{file:src}" />
+{endloop}
 <link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('advanced.css')}" />
 <link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('basic.css')}" />
 <link rel="alternate" type="application/rss+xml" title="RSS 2.0 Newsfeed" href="{rss20_feed}" />
@@ -27,6 +32,11 @@ div.bs_signature {
 	{endif}
 }
 </style>
+{loop cssblocks as block}
+<style type="{block:type}">
+{block:code}
+</style>
+{endloop}
 <script type="text/javascript">
 <!--
 var myAjax = new FWS_Ajax();
@@ -51,12 +61,17 @@ function setCookie(name,value,lifetime)
 }
 //-->
 </script>
+{loop jsblocks as block}
+<script type="{block:type}">
+<!--
+{block:code}
+//-->
+</script>
+{endloop}
 </head>
 <body class="bs_body">
 
 <a id="top"></a>
-
-<h1>{forum_title}</h1>
 
 {include "inc_headline.htm"}
 {include "inc_messages.htm"}

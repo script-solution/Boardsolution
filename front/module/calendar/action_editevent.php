@@ -50,7 +50,7 @@ final class BS_Front_Action_calendar_editevent extends BS_Front_Action_Base
 		// is the topic or the location empty?
 		$topic_name = $input->get_var('topic_name','post',FWS_Input::STRING);
 		$location = $input->get_var('location','post',FWS_Input::STRING);
-		if(trim($topic_name) == '' || trim($location) == '')
+		if(trim($topic_name) == '')
 			return 'terminleer';
 
 		// get form variables

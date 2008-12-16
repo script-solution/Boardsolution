@@ -1,125 +1,136 @@
-#content {
-	width: 100%;
-	font-size: 0.85em;
-}
-.bs_body {
-	margin-bottom: 5px;
-}
+/* [[main]] */
 
-.bs_body code {
-	border: none;
-	padding: 0px;
-	margin: 0px;
-	background-color: #f5f5f5;
-}
-
-a {
-	color: #851B1B;
-	border-bottom: 1px dotted #851B1B;
-	line-height: 150%;
-	text-decoration: none;
-	font-weight: normal;
-}
-
-a:hover {
-	color: #851B1B;
-	border-bottom: 1px solid #851B1B;
-}
-
-/* ------------ BODY ------------ */
+/* {{body}} */
 
 body.bs_body {
 	margin: 10px 20px;
 	font-family: verdana, tahoma, arial, helvetica, sans-serif;
 	font-size: 0.7em;
-	color: #000;
-	background-color: #fff;
+	color: #fff;
+	background-color: #353635;
 }
 
 .bs_body a {
-	border-bottom: 0px;
+	text-decoration: none;
+	color: #7A7A7A;
 }
+
 .bs_body a:hover {
 	text-decoration: underline;
+	color: #7A7A7A;
 }
 
-/* ------------ THE DIFFERENT CONTENT-STYLES ------------ */
+/* {{main}} */
 
-/* for the main content */
 .bs_main {
 	padding: 0.4em;
-	background-color: #e9ebe2;
+	color: #000;
+	background-color: #C7C7C7;
 }
 
-/* the description-columns and something similar */
+.bs_main a {
+	text-decoration: none;
+	color: #AB1111;
+}
+
+.bs_main a:hover {
+	text-decoration: underline;
+	color: #AB1111;
+}
+
+/* {{coldesc}} */
+
 .bs_coldesc {
 	padding: 0.3em;
 	font-size: 0.9em;
-	background-color: #c8c9c1;
+	color: #fff;
+	background-color: #4A4A4A;
 	font-weight: bold;
 }
 
-/* the columns on the left (if 2 column-layout) */
-.bs_left {
-	padding: 0.3em;
-	font-size: 0.9em;
-	background-color: #c8c9c1;
-	font-weight: bold;
+.bs_coldesc a {
+	text-decoration: none;
+	color: #7A7A7A;
+}
+
+.bs_coldesc a:hover {
+	text-decoration: underline;
+	color: #7A7A7A;
 }
 
 .bs_coldesc_sep {
-	border-top: 1px solid #fff;
-	background-color: #c8c9c1;
+	border-top: 1px solid #353635;
+	background-color: #4A4A4A;
 	padding: 0.3em;
 	height: 3px;
 	font-size: 3px;
 	line-height: 3px;
 }
 
-/* the topics (titles of areas) */
+.bs_left {
+	padding: 0.3em;
+	font-size: 0.9em;
+	background-color: #4A4A4A;
+	font-weight: bold;
+}
+
+/* {{topic}} */
+
 .bs_topic {
 	font-size: 1.1em;
 	font-weight: bold;
 	color: #fff;
 	padding: 0.4em;
-	background-color: #777;
+	background-color: #aa1011;
 	background-image: url(images/topic.gif);
 	background-repeat: repeat-x;
 	text-align: center;
 }
+
 td.bs_topic {
 	padding: 0.3em;
 }
+
 h1.bs_topic {
 	margin: 0;
 	padding: 0.3em;
 }
+
 .bs_topic a {
 	background-image: none;
-	text-decoration: none;
+	text-decoration: underline;
 	color: #fff;
-	font-weight: bold;
-	border-bottom: 1px dotted #fff;
-}
-.bs_topic a:hover {
-	color: #fff;
-	text-decoration: none;
-	border-bottom: 1px solid #fff;
 }
 
-/* small text (often descriptions) */
+.bs_topic a:hover {
+	color: #000;
+}
+
+/* {{desc}} */
+
 .bs_desc {
 	padding-top: 0.5em;
 	font-size: 0.9em;
 	font-weight: normal;
 }
 
-/* ------------ HEADLINE ------------ */
+/* {{border}} */
+
+.bs_border {
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-khtml-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	padding: 1px;
+	border: 1px solid #b9b9b9;
+}
+
+/* {{headline}} */
 
 div.bs_headline {
 	cursor: pointer;
-	background-color: #DBDBDB;
-	background-image: url(images/headline_small.jpg);
+	background-color: #C7C7C7;
+	background-image: url(images/headline.jpg);
 	background-repeat: no-repeat;
 	background-position: left;
 	height: 81px;
@@ -128,40 +139,46 @@ div.bs_headline {
 .bs_menu_wrapper {
 	background-image: url(images/topic.gif);
 	background-repeat: repeat-x;
-	background-color: #777;
+	background-color: #3F5E88;
 }
+
 .bs_menu a {
 	color: #fff;
 	font-weight: bold;
-	border-bottom: 0px;
 }
+
 .bs_menu a:hover {
 	color: #fff;
 	text-decoration: underline;
-	border-bottom: 0px;
+}
+
+.bs_welcome {
+	color: #000;
 }
 
 li.bs_welcome_left {
 	padding: 0.25em;
 }
+
 li.bs_welcome_right {
 	padding: 0.25em;
 }
 
-/* ------------ BOTTOM ------------ */
+/* {{bottom}} */
 
 div.bs_bottom {
-	background-color: #ebebeb;
+	color: #000;
+	background-color: #C7C7C7;
 }
 
 li.bs_bottom {
 	padding: 2px;
 }
 
-/* ------------ FORMULARS ------------ */
+/* {{form}} */
 
 fieldset.bs_form dl {
-	background-color: #c8c9c1;
+	background-color: #4A4A4A;
 }
 
 fieldset.bs_form dt {
@@ -175,24 +192,211 @@ fieldset.bs_form dt {
 fieldset.bs_form dd {
 	padding: 0.5em;
 	margin-left: 23%;
-	background-color: #e9ebe2;
+	color: #000;
+	background-color: #C7C7C7;
 	vertical-align: middle;
 }
 
 fieldset.bs_subform dl {
-	background-color: #e9ebe2;
+	background-color: #C7C7C7;
 }
 
 fieldset.bs_subform dt {
 	font-weight: normal;
-	width: 25%;
+	width: 20%;
 }
 
 fieldset.bs_subform dd {
-	margin-left: 25%;
+	margin-left: 20%;
 }
 
-/* ------------ BBCODE BUTTONS ------------ */
+/* [[content]] */
+
+/* {{forums}} */
+
+td.bs_forums {
+	padding: 0.4em;
+	color: #000;
+	background-color: #C7C7C7;
+}
+
+.bs_forums a {
+	text-decoration: none;
+	color: #AB1111;
+	font-size: 1.1em;
+}
+
+.bs_forums a:hover {
+	text-decoration: underline;
+	color: #AB1111;
+}
+
+/* {{forums_small}} */
+
+td.bs_forums_small {
+	padding: 0.4em;
+	color: #000;
+	background-color: #C7C7C7;
+}
+
+.bs_forums_small a {
+	color: #AB1111;
+	text-decoration: none;
+	font-size: 0.87em;
+}
+
+.bs_forums_small a:hover {
+	color: #AB1111;
+	text-decoration: underline;
+}
+
+/* {{categories}} */
+
+td.bs_categories {
+	padding: 0.4em;
+	background-color: #4A4A4A;
+}
+
+.bs_categories a {
+	text-decoration: none;
+	color: #FFFFFF;
+	font-size: 1.2em;
+}
+
+.bs_categories a:hover {
+	color: #FFFFFF;
+	text-decoration: underline;
+}
+
+/* {{topics_small}} */
+
+.bs_topics_small a {
+	font-size: 0.9em;
+	color: #808080;
+	text-decoration: none;
+}
+
+.bs_topics_small a:hover {
+	color: #000000;
+	text-decoration: underline;
+}
+
+/* {{post}} */
+
+.bs_post_separator {
+	background-color: #353635;
+	height: 4px;
+	line-height: 4px;
+	font-size: 4px;
+	padding: 0;
+	margin: 0;
+}
+
+.bs_signature_sep {
+	color: #888;
+	height: 1px;
+	width: 50%;
+}
+
+.bs_posts_bar_1 {
+	padding: 0.4em;
+	color: #000;
+	background-color: #B5B5B5;
+}
+
+.bs_posts_bar_1 a {
+	text-decoration: none;
+	color: #AB1111;
+}
+
+.bs_posts_bar_1 a:hover {
+	text-decoration: underline;
+	color: #AB1111;
+}
+
+.bs_posts_bar_2 {
+	padding: 0.4em;
+	color: #000;
+	background-color: #B5B5B5;
+}
+
+.bs_posts_bar_2 a {
+	text-decoration: none;
+	color: #AB1111;
+}
+
+.bs_posts_bar_2 a:hover {
+	text-decoration: underline;
+	color: #AB1111;
+}
+
+.bs_posts_left_1 {
+	color: #000;
+	background-color: #C1C1C1;
+}
+
+.bs_posts_left_1 a {
+	text-decoration: none;
+	color: #AB1111;
+}
+
+.bs_posts_left_1 a:hover {
+	text-decoration: underline;
+	color: #AB1111;
+}
+
+td.bs_posts_left_2 {
+	color: #000;
+	background-color: #C1C1C1;
+}
+
+.bs_posts_left_2 a {
+	text-decoration: none;
+	color: #AB1111;
+}
+
+.bs_posts_left_2 a:hover {
+	text-decoration: underline;
+	color: #AB1111;
+}
+
+.bs_posts_main_1 {
+	font-size: 1.05em;
+	line-height: 140%;
+	color: #000;
+	background-color: #C7C7C7;
+}
+
+.bs_posts_main_1 a {
+	text-decoration: none;
+	color: #AB1111;
+}
+
+.bs_posts_main_1 a:hover {
+	text-decoration: underline;
+	color: #AB1111;
+}
+
+.bs_posts_main_2 {
+	font-size: 1.05em;
+	line-height: 140%;
+	color: #000;
+	background-color: #C7C7C7;
+}
+
+.bs_posts_main_2 a {
+	text-decoration: none;
+	color: #AB1111;
+}
+
+.bs_posts_main_2 a:hover {
+	text-decoration: underline;
+	color: #AB1111;
+}
+
+/* [[formating]] */
+
+/* {{bbcode}} */
 
 input.bs_bbcode {
 	height: 26px;
@@ -211,218 +415,148 @@ select.bs_bbcode {
 	padding: 1px;
 }
 
+/* {{bbcode_popup}} */
+
 .bs_bbcode_popup {
 	background-color: #fff;
 	border: 1px solid #aaa;
 	border-bottom: none;
 }
+
 .bs_bbcode_popup li {
 	border-bottom: 1px solid #aaa;
 }
+
 .bs_bbcode_popup li a {
 	color: #000;
 	padding: 0.2em;
-	border-bottom: 0px;
 }
+
 .bs_bbcode_popup li a:hover {
 	color: #000;
 	background-color: #f0f0f0;
 	text-decoration: none;
 }
 
-/* ------------ TABLE BORDER ------------ */
-
-.bs_border {
-	border-radius: 2px;
-	-moz-border-radius: 2px;
-	-khtml-border-radius: 2px;
-	-webkit-border-radius: 2px;
-	padding: 1px;
-	border: 1px solid #ccc;
-}
-
-/* ------------ TOPICS ------------ */
-
-.bs_topics_small a {
-	font-size: 0.9em;
-	color: #808080;
-	text-decoration: none;
-	border-bottom: 0px;
-}
-
-.bs_topics_small a:hover {
-	color: #000000;
-	text-decoration: underline;
-	border-bottom: 0px;
-}
-
-/* ------------ FORUMS ------------ */
-
-td.bs_forums {
-	padding: 0.4em;
-	background-color: #e9ebe2;
-}
-
-.bs_forums a {
-	font-size: 1.3em;
-	line-height: 200%;
-}
-
-td.bs_forums_small {
-	padding: 0.4em;
-	background-color: #e9ebe2;
-}
-
-.bs_forums_small a {
-	font-size: 0.95em;
-	border-bottom: 0px;
-	color: #555;
-}
-.bs_forums_small a:hover {
-	color: #000;
-}
-
-td.bs_categories {
-	padding: 0.4em;
-	background-color: #c8c9c1;
-}
-
-.bs_categories a {
-	font-size: 1.3em;
-}
-
-/* ------------ POSTS ------------ */
-
-.bs_post_separator {
-	background-color: #555;
-	height: 4px;
-	line-height: 4px;
-	font-size: 4px;
-	padding: 0;
-	margin: 0;
-}
-
-.bs_signature_sep {
-	color: #888;
-	height: 1px;
-	width: 50%;
-}
+/* {{quote}} */
 
 .bs_quote_section {
-	border: 1px solid #ccc;
-	background-color: #555;
+	border: 1px solid #999999;
+	background-color: #7283A0;
 	margin: 0.5em 0.8em;
 }
 
 .bs_quote_section_top {
 	padding: 0.4em;
-	background-color: #555;
+	background-color: #AB1111;
 	font-size: 1.05em;
 	color: #FFFFFF;
 }
 
 .bs_quote_section_main {
 	padding: 0.4em;
-	background-color: #f5f5f5;
+	background-color: #FFFFFF;
 }
+
+/* {{code}} */
 
 .bs_lcode {
 	width: 20px;
 	border-right: 1px solid #ccc;
 	padding-right: 0.2em;
 }
+
 .bs_rcode {
 	padding-left: 0.2em;
 	font-family: "courier new", monospace;
 	font-size: 1.2em;
 }
 
-.bs_posts_bar_1 {
-	padding: 0.4em;
-	background-color: #c8c9c1;
-}
+/* [[calendar]] */
 
-.bs_posts_bar_2 {
-	padding: 0.4em;
-	background-color: #c8c9c1;
-}
-
-.bs_posts_left_1 {
-	background-color: #e9ebe2;
-}
-
-td.bs_posts_left_2 {
-	background-color: #e9ebe2;
-}
-
-.bs_posts_main_1 {
-	font-size: 1.05em;
-	line-height: 140%;
-	background-color: #e9ebe2;
-}
-
-.bs_posts_main_2 {
-	font-size: 1.05em;
-	line-height: 140%;
-	background-color: #e9ebe2;
-}
-
-/* ------------ CALENDAR ------------ */
+/* {{calendar}} */
 
 td.bs_calendar {
+	font-size: 0.9em;
 	font-weight: normal;
 	background-color: #FFFFFF;
 }
 
 td.bs_calendar_today {
+	font-size: 0.9em;
 	background-color: #FFFFFF;
 	border: 2px solid #7F90AE;
 }
 
+.bs_calendar a {
+	text-decoration: none;
+	color: #AB1111;
+}
+
+.bs_calendar a:hover {
+	text-decoration: underline;
+	color: #AB1111;
+}
+
+/* {{calendar_empty}} */
+
 td.bs_calendar_empty {
 	padding: 0.4em;
+	font-size: 0.9em;
 	background-color: #EBEBEB;
 }
 
 td.bs_calendar_empty_today {
 	padding: 0.4em;
+	font-size: 0.9em;
 	background-color: #EBEBEB;
 	border: 2px solid #7F90AE;
 }
 
+/* {{calendar_border}} */
+
 td.bs_calendar_border {
 	padding: 0.4em;
+	font-size: 0.9em;
 	background-color: #DBDBDB;
 }
 
 td.bs_calendar_border_today {
 	padding: 0.4em;
+	font-size: 0.9em;
 	background-color: #DBDBDB;
 	border: 2px solid #7F90AE;
 }
 
-/* ------------ OTHER ------------ */
+/* [[other]] */
+
+/* {{unread}} */
 
 span.bs_unread {
 	color: #FF0000;
 	font-weight: bold;
 }
 
+/* {{highlight}} */
+
 span.bs_highlight {
 	background-color: #FFFF00;
 	color: #000;
 }
 
-input,select,textarea {
+/* {{formelements}} */
+
+input, select, textarea {
 	padding: 0.2em;
 	font-family: verdana, arial, helvetica, sans-serif;
-	font-size: 1.0em;
+	font-size: 0.9em;
 	color: #000000;
 }
 
-/* ------------ PAGINATION ------------ */
+/* {{pagination}} */
 
 .bs_pageno {
+	color: #000;
 	background-color: #f0f0f0;
 	border: 1px solid #ccc;
 }
@@ -434,16 +568,15 @@ input,select,textarea {
 
 .bs_pageno a {
 	padding: 1px 4px;
-	border-bottom: 0px;
 }
 
 .bs_pageno a:hover {
-	background-color: #851B1B;
+	background-color: #3F5E88;
 	color: #fff;
 	text-decoration: none;
 }
 
-/* ------------ BUTTON ------------ */
+/* {{button}} */
 
 a.bs_button {
 	background-image: url(images/button.gif);
@@ -451,15 +584,13 @@ a.bs_button {
 	text-align: center;
 	text-decoration: none;
 	font-weight: bold;
-	font-size: 1.0em;
+	font-size: 0.9em;
 	color: #000000;
-	border-bottom: 0px;
 }
 
 a.bs_button:hover {
-	color: #851B1B;
+	color: #981A1A;
 	text-decoration: none;
-	border-bottom: 0px;
 }
 
 a.bs_button_big {
@@ -468,15 +599,13 @@ a.bs_button_big {
 	text-align: center;
 	text-decoration: none;
 	font-weight: bold;
-	font-size: 1.0em;
+	font-size: 0.9em;
 	color: #000000;
-	border-bottom: 0px;
 }
 
 a.bs_button_big:hover {
-	color: #851B1B;
+	color: #981A1A;
 	text-decoration: none;
-	border-bottom: 0px;
 }
 
 a.bs_button_selected {
@@ -485,13 +614,11 @@ a.bs_button_selected {
 	text-align: center;
 	text-decoration: none;
 	font-weight: bold;
-	font-size: 1.0em;
+	font-size: 0.9em;
 	color: #000000;
-	border-bottom: 0px;
 }
 
 a.bs_button_selected:hover {
-	color: #d75858;
+	color: #cd940a;
 	text-decoration: none;
-	border-bottom: 0px;
 }

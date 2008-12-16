@@ -111,7 +111,8 @@ final class BS_Front_SubModule_calendar_eventdetails extends BS_Front_SubModule
 		
 		$tpl->add_variables(array(
 			'event_title' => $event_data['event_title'],
-			'location' => $event_data['event_location'],
+			'location' => $event_data['event_location'] ?
+				$event_data['event_location'] : $locale->lang('notavailable'),
 			'event_begin' => FWS_Date::get_date($event_data['event_begin']),
 			'event_end' => $event_end,
 			'description' => $text

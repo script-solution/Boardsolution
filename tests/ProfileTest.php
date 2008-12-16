@@ -397,7 +397,7 @@ class ProfileTest extends BaseTest
 
   function testTopicSubscr()
   {
-    $this->open("/scriptsolution/Boardsolution/index.php?action=userprofile&sub=topics");
+  	$this->open("/scriptsolution/Boardsolution/index.php?action=userprofile&sub=topics");
    	$this->waitForPageToLoad("30000");
     $this->ensureAdmin();
     $this->click("link=Home");

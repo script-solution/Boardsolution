@@ -66,26 +66,39 @@ final class BS_ACP_SubModule_themes_editor extends BS_ACP_SubModule
 			'mode','get',FWS_Input::STRING,array('simple','advanced'),'simple'
 		);
 		$theme = $input->get_var('theme','get',FWS_Input::STRING);
+		$path = FWS_Path::server_app().'themes/'.$theme.'/';
 		
-		$stylefile = FWS_Path::server_app().'themes/'.$theme.'/style.css';
-		if(!is_file($stylefile))
-		{
-			$this->report_error(
-				FWS_Document_Messages::ERROR,
-				sprintf($locale->lang('file_not_exists'),$stylefile)
-			);
-			return;
-		}
-		
+		$cssfiles = array();
 		if($mode == 'simple')
+		{
+			$stylefile = $path.'basic.css';
+			if(!is_file($stylefile))
+			{
+				$this->report_error(
+					FWS_Document_Messages::ERROR,
+					sprintf($locale->lang('file_not_exists'),$stylefile)
+				);
+				return;
+			}
+		
 			$editor = new BS_ACP_Module_Themes_Editor_Simple();
+		}
 		else
+		{
 			$editor = new BS_ACP_Module_Themes_Editor_Advanced();
+			foreach(FWS_FileUtils::get_list($path,false,false) as $item)
+			{
+				if(FWS_String::ends_with($item,'.css'))
+					$cssfiles[] = $item;
+			}
+		}
 		
 		$editor->display();
 		
 		$tpl->add_variables(array(
 			'theme' => $theme,
+			'mode' => $mode,
+			'cssfiles' => $cssfiles,
 			'editor_tpl' => $editor->get_template()
 		));
 	}
