@@ -89,7 +89,6 @@ final class BS_ACP_SubModule_config_items extends BS_ACP_SubModule
 			'action_type' => BS_ACP_ACTION_SAVE_SETTINGS,
 			'title' => $locale->lang($manager->get_group($gid)->get_title(),false),
 			'items' => $view->get_items(),
-			'form_target' => $input->get_var('SERVER_PHPSELF','server',FWS_Input::STRING),
 			'hidden_fields' => $hidden_fields,
 			'groups_per_line' => $perline,
 			'group_rows' => $helper->get_groups($gid,$perline),

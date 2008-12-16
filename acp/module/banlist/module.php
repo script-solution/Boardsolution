@@ -91,7 +91,7 @@ final class BS_ACP_Module_banlist extends BS_ACP_Module
 			'entries' => $entries,
 			'action_type_update' => BS_ACP_ACTION_UPDATE_BANS,
 			'action_type_add' => BS_ACP_ACTION_ADD_BAN,
-			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
+			'search_url' => 'admin.php',
 			'hidden' => $hidden,
 			'search_val' => $search
 		));

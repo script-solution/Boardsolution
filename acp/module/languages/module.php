@@ -74,7 +74,7 @@ final class BS_ACP_Module_languages extends BS_ACP_Module
 		$tpl->add_variables(array(
 			'action_type' => BS_ACP_ACTION_UPDATE_LANGUAGES,
 			'action_type_add' => BS_ACP_ACTION_ADD_LANGUAGE,
-			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
+			'search_url' => 'admin.php',
 			'hidden' => $hidden,
 			'search_val' => $search
 		));

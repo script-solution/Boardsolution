@@ -60,7 +60,7 @@ final class BS_Front_Module_latest_topics extends BS_Front_Module
 		BS_Front_TopicFactory::add_latest_topics_full($fid);
 		
 		$tpl->add_variables(array(
-			'target_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
+			'target_url' => strtok(BS_FRONTEND_FILE,'?'),
 			'hidden_fields' => $hidden_fields,
 			'forum_combo' => $forum_combo
 		));

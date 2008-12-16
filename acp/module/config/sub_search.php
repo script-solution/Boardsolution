@@ -106,7 +106,6 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 			'action_type' => BS_ACP_ACTION_SAVE_SETTINGS,
 			'title' => sprintf($locale->lang('config_search_result'),$this->_keyword),
 			'items' => $items,
-			'form_target' => $input->get_var('SERVER_PHPSELF','server',FWS_Input::STRING),
 			'hidden_fields' => $hidden_fields,
 			'groups_per_line' => $perline,
 			'group_rows' => $helper->get_groups(0,$perline),

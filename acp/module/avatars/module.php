@@ -78,7 +78,7 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 		$tpl->add_variables(array(
 			'num' => $num,
 			'action_type_import' => BS_ACP_ACTION_IMPORT_AVATARS,
-			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
+			'search_url' => 'admin.php',
 			'hidden' => $hidden,
 			'search_val' => $search
 		));

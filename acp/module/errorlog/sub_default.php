@@ -111,7 +111,7 @@ final class BS_ACP_SubModule_errorlog_default extends BS_ACP_SubModule
 			'col_user' => BS_ACP_Utils::get_order_column(
 				$locale->lang('username'),'user','ASC',$order,$baseurl
 			),
-			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
+			'search_url' => 'admin.php',
 			'hidden' => $hidden,
 			'search_val' => $search,
 			'delete_all_url' => $askurl->to_url()

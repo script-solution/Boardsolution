@@ -140,7 +140,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 		}
 		
 		$tpl->add_variables(array(
-			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
+			'search_url' => 'admin.php',
 			'hidden_fields' => $hidden_fields,
 			'keyword' => $keyword,
 			'date_from' => $date_from,

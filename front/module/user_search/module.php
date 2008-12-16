@@ -69,7 +69,7 @@ final class BS_Front_Module_user_search extends BS_Front_Module
 			'num' => $num,
 			'charset' => BS_HTML_CHARSET,
 			'result_title' => sprintf($locale->lang('user_search_result'),$num),
-			'search_target' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
+			'search_target' => strtok(BS_FRONTEND_FILE,'?'),
 			'hidden_fields' => $hidden_fields,
 			'action_param' => BS_URL_ACTION,
 			'action_value' => $input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING),

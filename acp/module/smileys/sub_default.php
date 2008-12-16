@@ -99,7 +99,7 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 			'page' => $page,
 			'import_url' => $url->set('at',BS_ACP_ACTION_IMPORT_SMILEYS)->to_url(),
 			'correct_sort_url' => $url->set('at',BS_ACP_ACTION_RESORT_SMILEYS)->to_url(),
-			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
+			'search_url' => 'admin.php',
 			'hidden' => $hidden,
 			'search_val' => $search
 		));

@@ -347,7 +347,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 			'clap_image' => $clap_data['link'],
 			'search_row_params' => $clap_data['divparams'],
 			'hidden_fields' => $hidden_fields,
-			'search_target' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
+			'search_target' => strtok(BS_FRONTEND_FILE,'?'),
 			'name_param' => BS_URL_MS_NAME,
 			'email_param' => BS_URL_MS_EMAIL,
 			'group_param' => BS_URL_MS_GROUP,

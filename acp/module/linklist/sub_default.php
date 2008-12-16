@@ -168,7 +168,7 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 		$tpl->add_variables(array(
 			'at_activate' => BS_ACP_ACTION_ACTIVATE_LINKS,
 			'at_deactivate' => BS_ACP_ACTION_DEACTIVATE_LINKS,
-			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
+			'search_url' => 'admin.php',
 			'hidden' => $hidden,
 			'search_val' => $search
 		));

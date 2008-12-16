@@ -160,7 +160,7 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		unset($hidden['search']);
 		unset($hidden['at']);
 		$tpl->add_variables(array(
-			'search_url' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
+			'search_url' => 'admin.php',
 			'hidden' => $hidden,
 			'search_val' => $search
 		));

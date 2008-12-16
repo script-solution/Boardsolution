@@ -378,7 +378,7 @@ final class BS_Front_Module_topics extends BS_Front_Module
 			'hide_options' => ($clap_cookie === null || $clap_cookie == 1) ? '' : ' style="display: none;"',
 			'cookie_prefix' => BS_COOKIE_PREFIX,
 			'options' => $options,
-			'php_self' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
+			'php_self' => strtok(BS_FRONTEND_FILE,'?'),
 			'action_param' => BS_URL_ACTION,
 			'fid_param' => BS_URL_FID,
 			'fid' => $input->get_var(BS_URL_FID,'get',FWS_Input::ID),

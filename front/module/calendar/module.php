@@ -82,7 +82,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		
 		$form = $this->request_formular(false,false);
 		$tpl->add_variables(array(
-			'target' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
+			'target' => strtok(BS_FRONTEND_FILE,'?'),
 			'hidden_fields' => $hidden_fields,
 			'month_combo' => $form->get_combobox(BS_URL_MONTH,$helper->get_months(),$month),
 			'year_combo' => $form->get_combobox(BS_URL_YEAR,$years,$year),

@@ -89,7 +89,7 @@ final class BS_ACP_Document_Frameset extends BS_ACP_Document
 		{
 		  $tpl->set_template('login.htm');
 		  $tpl->add_variables(array(
-		  	'login_target' => $input->get_var('PHP_SELF','server',FWS_Input::STRING),
+		  	'login_target' => 'admin.php',
 		  	'error_msg' => $this->_error_msg,
 				'charset' => 'charset='.BS_HTML_CHARSET,
 		  	'page_title' => sprintf($locale->lang('page_title'),BS_VERSION)
