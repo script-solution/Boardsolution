@@ -89,6 +89,7 @@ final class BS_ACP_Action_forums_edit extends BS_ACP_Action_Base
 			$description = FWS_StringHelper::htmlspecialchars_back($description);
 		
 		$values = array(
+			'parent_id' => $parent,
 			'forum_name' => $category,
 			'description' => $description,
 			'forum_type' => $forum_type,
