@@ -120,7 +120,7 @@ final class BS_BBCode_Section extends FWS_Object
 	/**
 	 * Builds the content (recursively)
 	 *
-	 * @return string the html-code
+	 * @return string the html-code or null if something went wrong
 	 */
 	public function get_content()
 	{
@@ -131,7 +131,12 @@ final class BS_BBCode_Section extends FWS_Object
 		// collect the content from the sub-sections
 		$result = '';
 		foreach($this->_sub_sections as $section)
-			$result .= $section->get_content();
+		{
+			$c = $section->get_content();
+			if($c === null)
+				return null;
+			$result .= $c;
+		}
 
 		// if this tag has no name return the content of the sub-sections
 		if($this->_name == '')
@@ -209,6 +214,12 @@ final class BS_BBCode_Section extends FWS_Object
 		
 					return $result;
 				}
+			}
+			else
+			{
+				throw new BS_BBCode_Exception_InvalidParam(
+					$this->_name,$this->_param,$tag_config['param_type']
+				);
 			}
 		}
 

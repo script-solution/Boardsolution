@@ -102,17 +102,13 @@ final class BS_Front_Action_new_mail_default extends BS_Front_Action_Base
 		{
 			// convert to html-code
 			$bbcode = new BS_BBCode_Parser($text,'posts',true,true);
-			$bbcode->get_message_for_db();
-
-			// bbcode-error?
-			if($bbcode->get_error_code() !== true)
+			try
 			{
-				list($pos,$err) = $bbcode->get_error_code();
-				return sprintf(
-					$locale->lang('error_bbcode_'.$err),
-					FWS_StringHelper::get_text_part($text,$pos,20),
-					$pos
-				);
+				$bbcode->get_message_for_db();
+			}
+			catch(BS_BBCode_Exception $ex)
+			{
+				return $ex->getMessage();
 			}
 
 			// build text for email

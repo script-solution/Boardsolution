@@ -62,7 +62,14 @@ final class BS_ACP_Module_MassEmail_Helper extends FWS_UtilBase
 		{
 			$bbcode = new BS_BBCode_Parser($text,'posts',true,true);
 			$bbcode->set_board_path(FWS_Path::outer());
-			$bbcode->get_message_for_db();
+			try
+			{
+				$bbcode->get_message_for_db();
+			}
+			catch(BS_BBCode_Exception $ex)
+			{
+				// ignore
+			}
 			$bbcode->stripslashes();
 			return FWS_StringHelper::htmlspecialchars_back($bbcode->get_message_for_output());
 		}

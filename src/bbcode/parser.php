@@ -98,13 +98,6 @@ final class BS_BBCode_Parser extends FWS_Object
 	private $_board_path = '';
 
 	/**
-	 * Will contain the error-code after the call of get_message_for_db()
-	 *
-	 * @var mixed
-	 */
-	private $_error_code = true;
-
-	/**
 	 * constructor
 	 * 
 	 * @param string $text the text to format
@@ -154,17 +147,6 @@ final class BS_BBCode_Parser extends FWS_Object
 	{
 		return BS_BBCode_Helper::get_instance()->get_image_count();
 	}
-
-	/**
-	 * NOTE: will only be counted if you call the get_message_for_db()-method
-	 * 
-	 * @return array the error-code of the format <code>array(<pos>,<code>)</code> or true if
-	 * 	everything is ok. The error-code will be any self::ERR_* value
-	 */
-	public function get_error_code()
-	{
-		return $this->_error_code;
-	}
 	
 	/**
 	 * Calls stripslashes($this->_text).
@@ -183,6 +165,7 @@ final class BS_BBCode_Parser extends FWS_Object
 	 * and addslashes(&lt;text&gt;) at the end
 	 *
 	 * @return string the string to store in the database
+	 * @throws BS_BBCode_Exception if anything goes wrong
 	 */
 	public function get_message_for_db()
 	{
@@ -203,10 +186,8 @@ final class BS_BBCode_Parser extends FWS_Object
 		);
 		
 		// correct the tags
-		$this->_error_code = $this->_correct_tags($tags);
-		if($this->_error_code !== true)
-			return '';
-
+		$this->_correct_tags($tags);
+		
 		// build the sections
 		$root = $this->_build_sections($tags);
 
@@ -502,7 +483,11 @@ final class BS_BBCode_Parser extends FWS_Object
 
 				// error?
 				if($allowed == 0)
-					return array($info[1] - 1,self::ERR_DISALLOWED_OPEN_TAGS);
+				{
+					throw new BS_BBCode_Exception_Syntax(
+						$this->_text,$info[1] - 1,self::ERR_DISALLOWED_OPEN_TAGS
+					);
+				}
 
 				// treat as plain-text?
 				if($allowed == 1)
@@ -512,11 +497,19 @@ final class BS_BBCode_Parser extends FWS_Object
 				if(in_array($tag,$open_tags))
 				{
 					if(!$bbctags[$tag_name]['allow_nesting'])
-						return array($info[1] - 1,self::ERR_NESTED_TAG);
+					{
+						throw new BS_BBCode_Exception_Syntax(
+							$this->_text,$info[1] - 1,self::ERR_NESTED_TAG
+						);
+					}
 
 					// limit the number of nested tags
 					if($this->_get_nested_tag_num($open_tags,$open_count,$tag) > BS_BBCODE_MAX_NESTED_LEVEL)
-						return array($info[1] - 1,self::ERR_MAX_NESTED_LEVEL);
+					{
+						throw new BS_BBCode_Exception_Syntax(
+							$this->_text,$info[1] - 1,self::ERR_MAX_NESTED_LEVEL
+						);
+					}
 				}
 
 				// change allowed sub-tags
@@ -549,7 +542,11 @@ final class BS_BBCode_Parser extends FWS_Object
 
 				// if there are no tags open anymore (we are about to close a tag) break here
 				if($open_count == 0)
-					return array($info[1] - 1,self::ERR_MISSING_OPENING_TAG);
+				{
+					throw new BS_BBCode_Exception_Syntax(
+						$this->_text,$info[1] - 1,self::ERR_MISSING_OPENING_TAG
+					);
+				}
 
 				// ensure that the order of opening/closing tags is correct
 				if($open_tags[$open_count - 1] != $tag_name)
@@ -605,14 +602,22 @@ final class BS_BBCode_Parser extends FWS_Object
 					}
 					// otherwise report missing closing tag
 					else
-						return array($info[1] - 1,self::ERR_MISSING_CLOSING_TAG);
+					{
+						throw new BS_BBCode_Exception_Syntax(
+							$this->_text,$info[1] - 1,self::ERR_MISSING_CLOSING_TAG
+						);
+					}
 				}
 
 				if($list_open > 0 && $open_tags[$open_count - 1] != 'list')
 				{
 					// if there is a list-point in a tag in a list, report an error
 					if(FWS_String::strpos($tags[1][$key][0],'[*]') !== false)
-						return array($tags[1][$key][1],self::ERR_INVALID_LIST_POINT_POSITION);
+					{
+						throw new BS_BBCode_Exception_Syntax(
+							$this->_text,$tags[1][$key][1],self::ERR_INVALID_LIST_POINT_POSITION
+						);
+					}
 				}
 
 				// restore last allowed sub-tags

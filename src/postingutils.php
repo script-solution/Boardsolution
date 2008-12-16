@@ -342,17 +342,13 @@ final class BS_PostingUtils extends FWS_UtilBase
 	
 		// format message before inserting
 		$bbcode = new BS_BBCode_Parser($text_posted,$location,$enable_bbcode,$enable_smileys);
-		$temp = $bbcode->get_message_for_db();
-		
-		// bbcode-error?
-		if($bbcode->get_error_code() !== true)
+		try
 		{
-			list($pos,$err) = $bbcode->get_error_code();
-			return sprintf(
-				$locale->lang('error_bbcode_'.$err),
-				FWS_StringHelper::get_text_part($text_posted,$pos,20),
-				$pos
-			);
+			$temp = $bbcode->get_message_for_db();
+		}
+		catch(BS_BBCode_Exception $ex)
+		{
+			return $ex->getMessage();
 		}
 	
 		// not too many smileys and pictures?
