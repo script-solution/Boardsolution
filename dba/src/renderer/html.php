@@ -145,7 +145,7 @@ final class BS_DBA_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			}
 		}
 		
-		$breadcrumbs = $this->get_breadcrumbs();
+		$breadcrumbs = $this->get_breadcrumb_links();
 		$class = FWS_String::strtolower(get_class($doc->get_module()));
 		$selected_db = BS_DBA_Utils::get_instance()->get_selected_database();
 		$show_db_combo = $user->is_loggedin() &&

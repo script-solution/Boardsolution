@@ -177,7 +177,7 @@ final class BS_ACP_Renderer_Content extends FWS_Document_Renderer_HTML_Default
 		$tpl->set_template('inc_header.htm');
 		$tpl->add_variables(array(
 			'charset' => 'charset='.BS_HTML_CHARSET,
-			'position' => $this->_show_headline ? $this->get_breadcrumbs() : '',
+			'position' => $this->_show_headline ? $this->get_breadcrumb_links() : '',
 			'cookie_path' => $cfg['cookie_path'],
 			'cookie_domain' => $cfg['cookie_domain'],
 			'title' => sprintf($locale->lang('page_title'),BS_VERSION),

@@ -204,7 +204,7 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 				continue;
 	
 			// the file has to exist
-			if(!is_file($this->_file_paths[$i]))
+			if(!is_file(FWS_Path::server_app().$this->_file_paths[$i]))
 				continue;
 	
 			// does db-entry exist? (do not check for PMs since there are 2 for one attachment)
@@ -216,7 +216,7 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 			}
 	
 			// is the size valid?
-			$filesize = @filesize($this->_file_paths[$i]);
+			$filesize = @filesize(FWS_Path::server_app().$this->_file_paths[$i]);
 			if($cfg['attachments_max_filesize'] > 0 &&
 				($filesize / 1024) > $cfg['attachments_max_filesize'])
 				continue;

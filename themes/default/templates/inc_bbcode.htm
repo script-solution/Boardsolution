@@ -14,7 +14,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="insertBBCode({number},'{textarea_id}','[{tag}]','{tag}',this)"
-			src="{guser.get_theme_item_path('images/bbcode/bold.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/bold.png',bspath)}"
 			width="20" height="20"
 			alt=" [{tag}] " />
 		{endif}
@@ -24,7 +24,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="insertBBCode({number},'{textarea_id}','[{tag}]','{tag}',this)"
-			src="{guser.get_theme_item_path('images/bbcode/italic.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/italic.png',bspath)}"
 			width="20" height="20"
 			alt=" [{tag}] " />
 		{endif}
@@ -34,7 +34,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="insertBBCode({number},'{textarea_id}','[{tag}]','{tag}',this)"
-			src="{guser.get_theme_item_path('images/bbcode/underline.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/underline.png',bspath)}"
 			width="20" height="20"
 			alt=" [{tag}] " />
 		{endif}
@@ -44,7 +44,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="insertBBCode({number},'{textarea_id}','[{tag}]','{tag}',this)"
-			src="{guser.get_theme_item_path('images/bbcode/strike.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/strike.png',bspath)}"
 			width="20" height="20"
 			alt=" [{tag}] " />
 		{endif}
@@ -59,7 +59,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="insertBBCode({number},'{textarea_id}','[{tag}]','{tag}',this)"
-			src="{guser.get_theme_item_path('images/bbcode/subscript.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/subscript.png',bspath)}"
 			width="20" height="20"
 			alt=" [{tag}] " />
 		{endif}
@@ -69,7 +69,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="insertBBCode({number},'{textarea_id}','[{tag}]','{tag}',this)"
-			src="{guser.get_theme_item_path('images/bbcode/supscript.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/supscript.png',bspath)}"
 			width="20" height="20"
 			alt=" [{tag}] " />
 		{endif}
@@ -84,7 +84,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="insertBBCode({number},'{textarea_id}','[{tag}]','{tag}',this)"
-			src="{guser.get_theme_item_path('images/bbcode/left.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/left.png',bspath)}"
 			width="20" height="20"
 			alt=" [{tag}] " />
 		{endif}
@@ -94,7 +94,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="insertBBCode({number},'{textarea_id}','[{tag}]','{tag}',this)"
-			src="{guser.get_theme_item_path('images/bbcode/center.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/center.png',bspath)}"
 			width="20" height="20"
 			alt=" [{tag}] " />
 		{endif}
@@ -104,7 +104,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="insertBBCode({number},'{textarea_id}','[{tag}]','{tag}',this)"
-			src="{guser.get_theme_item_path('images/bbcode/right.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/right.png',bspath)}"
 			width="20" height="20"
 			alt=" [{tag}] " />
 		{endif}
@@ -119,7 +119,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="showPopup({number},'{tag}');"
-			src="{guser.get_theme_item_path('images/bbcode/font.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/font.png',bspath)}"
 			width="31" height="20"
 			alt=" [{tag}] " />
 		<div class="bs_bbcode_popup" id="tag_{tag}_{number}_popup">
@@ -153,7 +153,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="showPopup({number},'{tag}');"
-			src="{guser.get_theme_item_path('images/bbcode/color.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/color.png',bspath)}"
 			width="31" height="20"
 			alt=" [{tag}] " />
 		{endif}
@@ -164,7 +164,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="showPopup({number},'{tag}');"
-			src="{guser.get_theme_item_path('images/bbcode/size.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/size.png',bspath)}"
 			width="31" height="20"
 			alt=" [{tag}] " />
 		<div class="bs_bbcode_popup" id="tag_{tag}_{number}_popup">
@@ -185,7 +185,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="insertBBCode({number},'{textarea_id}','[{tag}]','{tag}',this)"
-			src="{guser.get_theme_item_path('images/bbcode/quote.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/quote.png',bspath)}"
 			width="20" height="20"
 			alt=" [{tag}] " />
 		{endif}
@@ -195,7 +195,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="showPopup({number},'{tag}');"
-			src="{guser.get_theme_item_path('images/bbcode/code2.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/code2.png',bspath)}"
 			width="31" height="20"
 			alt=" [{tag}] " />
 		<div class="bs_bbcode_popup" id="tag_{tag}_{number}_popup">
@@ -213,7 +213,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="showPopup({number},'{tag}');"
-			src="{guser.get_theme_item_path('images/bbcode/list.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/list.png',bspath)}"
 			width="31" height="20"
 			alt=" [{tag}] " />
 		<div class="bs_bbcode_popup" id="tag_{tag}_{number}_popup">
@@ -241,7 +241,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="insertBBCode({number},'{textarea_id}','[{tag}]','{tag}',this)"
-			src="{guser.get_theme_item_path('images/bbcode/link.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/link.png',bspath)}"
 			width="20" height="20"
 			alt=" [{tag}] " />
 		{endif}
@@ -251,7 +251,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="insertBBCode({number},'{textarea_id}','[{tag}]','{tag}',this)"
-			src="{guser.get_theme_item_path('images/bbcode/mail.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/mail.png',bspath)}"
 			width="20" height="20"
 			alt=" [{tag}] " />
 		{endif}
@@ -261,7 +261,7 @@
 			onmouseover="hoverItem({number},'tag_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 			onmouseout="unhoverItem({number},'tag_{tag}_{number}');"
 			onclick="insertBBCode({number},'{textarea_id}','[{tag}]','{tag}',this)"
-			src="{guser.get_theme_item_path('images/bbcode/image.png')}"
+			src="{guser.get_theme_item_path('images/bbcode/image.png',bspath)}"
 			width="20" height="20"
 			alt=" [{tag}] " />
 		{endif}

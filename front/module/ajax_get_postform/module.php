@@ -46,12 +46,13 @@ final class BS_Front_Module_ajax_get_postform extends BS_Front_Module
 			'mode','get',FWS_Input::STRING,array('simple','advanced','applet'),'simple'
 		);
 		$height = $input->get_var('height','get',FWS_Input::STRING);
+		$path = $input->get_var('bspath','post',FWS_Input::STRING);
 		
 		$form = new BS_PostingForm('','',$type);
 		$form->set_textarea_height($height);
 		
 		$renderer = $doc->use_raw_renderer();
-		$renderer->set_content($form->get_textarea('',$mode == 'applet'));
+		$renderer->set_content($form->get_textarea('',$mode == 'applet',$path));
 	}
 }
 ?>

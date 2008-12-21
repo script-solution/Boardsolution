@@ -1,5 +1,5 @@
 div.calendar {
-	background-color: #ebebeb;
+	background-color: #e9ebe2;
 	border: 1px solid #7F90AE;
 	font-size: 0.9em;
 }
@@ -12,16 +12,16 @@ div.calendar table {
 div.calendar td.cal_button_disabled {
 	border: 1px solid #ccc;
 	color: #aaa;
-	background-color: #738cae;
+	background-color: #777;
 }
 div.calendar td.cal_button {
 	border: 1px solid #ccc;
 	color: white;
-	background-color: #738cae;
+	background-color: #777;
 }
 div.calendar td.cal_button_hover {
 	border: 1px solid #ccc;
-	background-color: #3F5E88;
+	background-color: #666;
 	color: white;
 	cursor: pointer;
 }
@@ -39,7 +39,7 @@ div.calendar tbody td {
 }
 
 div.calendar td.cal_month {
-	background-color: #DBDBDB;
+	background-color: #c8c9c1;
 	font-weight: bold;
 }
 
@@ -48,7 +48,7 @@ div.calendar td.cal_wkno {
 }
 
 div.calendar td.cal_wkcorner {
-	background-color: #DBDBDB;
+	background-color: #c8c9c1;
 }
 
 div.calendar td.cal_wkday {
@@ -60,7 +60,7 @@ div.calendar tbody td.cal_today {
 }
 
 div.calendar tbody td.cal_selected {
-	background-color: #3F5E88;
+	background-color: #777;
 	color: white;
 }
 
@@ -79,6 +79,16 @@ div.calendar thead td {
 }
 
 div.calendar tfoot td {
-	background-color: #DBDBDB;
+	background-color: #c8c9c1;
 	text-align: center;	
+}
+
+div.calendar a {
+	color: #851B1B;
+	border-bottom: 1px dotted #851B1B;
+	text-decoration: none;
+}
+div.calendar a:hover {
+	color: #851B1B;
+	border-bottom: 1px solid #851B1B;
 }

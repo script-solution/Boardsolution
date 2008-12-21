@@ -1,9 +1,9 @@
 {if applet}
 <input id="hiddenText{number}" type="hidden" name="text{name_suffix}" value="" />
 <applet id="bbcode_area{number}" code="bbcodeeditor.gui.WysiwygBBCodeEditor.class"
-	alt="{glocale.lang('bbceditor_no_java')}" archive="{gpath}bbceditor/bbcapplet.jar"
+	alt="{glocale.lang('bbceditor_no_java')}" archive="{bspath}bbceditor/bbcapplet.jar"
 	width="100%" height="{textarea_height + 150}">
-	<param name="path" value="{gpath}bbceditor/" />
+	<param name="path" value="{bspath}bbceditor/" />
 	<param name="bgColor" value="#EBEBEB" />
 	<param name="lookAndFeel" value="system" />
 	<param name="lang" value="{glang}" />
@@ -13,9 +13,9 @@
 	{if enable_smileys}
 	<param name="smileyCount" value="{smileys.length}" />
 	{loop smileys as index => smiley}
-	<param name="smileyPrimCode{index}" value="{smiley:primary_code}" />
-	<param name="smileySecCode{index}" value="{smiley:secondary_code}" />
-	<param name="smileyPath{index}" value="../images/smileys/{smiley:smiley_path}" />
+	<param name="smileyPrimCode{index+1}" value="{smiley:primary_code}" />
+	<param name="smileySecCode{index+1}" value="{smiley:secondary_code}" />
+	<param name="smileyPath{index+1}" value="../images/smileys/{smiley:smiley_path}" />
 	{endloop}
 	{else}
 	<param name="smileyCount" value="0" />
@@ -38,7 +38,7 @@
 {loop smileys as smiley}
 {if smiley:is_base}
 <a href="javascript:insertSmiley('bbcode_area{number}','{smiley:prim_code_insert}');">
-<img alt="{smiley:primary_code}" src="{gpath}images/smileys/{smiley:smiley_path}" />
+<img alt="{smiley:primary_code}" src="{bspath}images/smileys/{smiley:smiley_path}" />
 </a>
 {endif}
 {endloop}

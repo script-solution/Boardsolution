@@ -54,7 +54,9 @@
 					
 					<a title="{glocale.lang('unread_threads')}"
 					   href="{gurl.simple_url('unread')}">{glocale.lang('unread_threads')}</a>
-					({if unread_topic_count > 0}<span class="bs_unread">{unread_topic_count}</span>{else}0{endif}) &middot;
+					({if unread_topic_count > 0}<span class="bs_unread">{unread_topic_count}</span>
+					<a href="{first_unread_url}"><img src="{guser.get_theme_item_path('images/unread/first_unread_post.gif')}"
+						alt="" /></a>{else}0{endif}) &middot;
 					
 					{if gisloggedin == false}
 					
@@ -79,4 +81,6 @@
 </form>
 {endif}
 
-<div class="bs_padtop" style="clear: both;"></div>
+<div class="bs_body bs_padtop bs_padbottom" style="clear: both;">
+	<b>{glocale.lang('position')}:</b> {location}
+</div>

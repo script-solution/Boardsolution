@@ -231,24 +231,27 @@ final class BS_PostingForm extends FWS_Object
 	 * 
 	 * @param string $text the text
 	 * @param boolean $use_applet do you want to use the applet?
+	 * @param string $path the path to Boardsolution (by default FWS_Path::client_app())
 	 * @return string the textarea
 	 */
-	public function get_textarea($text,$use_applet)
+	public function get_textarea($text,$use_applet,$path = null)
 	{
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
 
 		$options = BS_PostingUtils::get_message_options($this->_type);
 		$sallowed = BS_PostingUtils::get_message_option('allowed_tags',$this->_type);
+		$path = $path === null ? FWS_Path::client_app() : $path;
 		
 		$bbcode_buttons = '';
 		if(!$use_applet && $options['enable_bbcode'])
-			$bbcode_buttons = $this->_get_bbcode_for_post($sallowed);
+			$bbcode_buttons = $this->_get_bbcode_for_post($sallowed,$path);
 		
 		$tpl->set_template('inc_textarea.htm');
 		$tpl->add_variables(array(
 			'applet' => $use_applet,
 			'number' => self::$number,
+			'bspath' => $path,
 			'name_suffix' => $this->_name_suffix,
 			'enable_smileys' => $options['enable_smileys'],
 			'bbcode_buttons' => $bbcode_buttons,
@@ -530,9 +533,10 @@ final class BS_PostingForm extends FWS_Object
 	 * generates the bbcode-area for posts etc.
 	 *
 	 * @param string $sallowed the string with the allowed tags
+	 * @param string $bspath the path to bs
 	 * @return string the html-code
 	 */
-	private function _get_bbcode_for_post($sallowed)
+	private function _get_bbcode_for_post($sallowed,$bspath)
 	{
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
@@ -573,6 +577,7 @@ final class BS_PostingForm extends FWS_Object
 		$tpl->add_variables(array(
 			'textarea_id' => 'bbcode_area'.self::$number,
 			'number' => self::$number,
+			'bspath' => $bspath,
 			'bbcode' => $this,
 			'hllangs' => FWS_Highlighting_Languages::get_languages(),
 			'bbcode_data' => $bbcode_data

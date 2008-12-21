@@ -14,14 +14,16 @@
  *
  * @param string postFormID the id of the post-form
  * @param string fieldID the id of the textarea
+ * @param string path the path to Boardsolution
  * @param string requestURL the url of the PHP-script
  */
-function BS_getPostFormAJAXConstr(postFormID,fieldID,requestURL)
+function BS_getPostFormAJAXConstr(postFormID,fieldID,path,requestURL)
 {
 	// fields
 	this.postFormID = postFormID;
 	this.bbcFieldID = fieldID;
 	this.requestURL = requestURL;
+	this.path = path;
 	this.type = '';
 	
 	// methods
@@ -39,7 +41,7 @@ function getPostForm(type)
 	var url = this.requestURL.replace(/__MODE__/,type);
 	var self = this;
 	
-	myAjax.sendGetRequest(url,function(text) {
+	myAjax.sendPostRequest(url,"bspath=" + this.path,function(text) {
 		var form = document.getElementById(self.postFormID);
 		var field = document.getElementById(self.bbcFieldID);
 		if(field != null && form != null)

@@ -105,6 +105,7 @@ final class BS_URL extends FWS_URL
 	public static function get_standalone_url($mod = 0,$separator = '&amp;')
 	{
 		$url = self::get_mod_url($mod,$separator);
+		$url->set_path(BS_PATH);
 		$url->set_file('standalone.php');
 		return $url;
 	}

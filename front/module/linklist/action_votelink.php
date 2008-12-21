@@ -25,8 +25,8 @@ final class BS_Front_Action_linklist_votelink extends BS_Front_Action_Base
 		$functions = FWS_Props::get()->functions();
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
-		$vote = $input->get_var('link_rating','post',FWS_Input::INTEGER);
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
+		$vote = $input->get_var('link_rating_'.$id,'post',FWS_Input::INTEGER);
 
 		// check if the session-id is valid
 		if(!$functions->has_valid_get_sid())

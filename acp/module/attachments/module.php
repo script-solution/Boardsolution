@@ -53,7 +53,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 			$ids = $input->get_var('delete','post');
 			$paths = FWS_Array_Utils::advanced_implode(', ',$ids);
 			$url = BS_URL::get_acpmod_url();
-			$url->set('ids',implode(',',$ids));
+			$url->set('ids',$ids);
 			$url->set('at',BS_ACP_ACTION_DELETE_ATTACHMENTS);
 			
 			$functions->add_delete_message(

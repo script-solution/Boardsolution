@@ -197,7 +197,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		// TODO improve that!!
 		if($msgs->contains_no_access())
 			$functions->show_login_form();
-		else if($msgs->contains_msg())
+		if($msgs->contains_msg())
 		{
 			$amsgs = $msgs->get_all_messages();
 			$links = $msgs->get_links();
@@ -299,7 +299,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		$auth = FWS_Props::get()->auth();
 		$unread = FWS_Props::get()->unread();
 
-		$breadcrumbs = $this->get_breadcrumbs();
+		$breadcrumbs = $this->get_breadcrumb_links();
 		$page_title = str_replace($locale->lang('home'),$cfg['forum_title'],$breadcrumbs);
 		$page_title = strip_tags($page_title);
 		$this->set_title($page_title);

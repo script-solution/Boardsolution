@@ -21,6 +21,8 @@ if(!defined('FWS_PATH'))
 
 // init the framework
 include_once(FWS_PATH.'init.php');
+// TODO remove!!
+error_reporting(0);
 
 // set the path
 FWS_Path::set_server_app(BS_PATH);

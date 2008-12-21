@@ -23,6 +23,7 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 	{
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
+		$cfg = FWS_Props::get()->cfg();
 
 		$helper = BS_Front_Module_Calendar_Helper::get_instance();
 		$week_start = $helper->get_week_timestamp();
@@ -40,7 +41,9 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 		$tpl->add_variables(array(
 			'title' => sprintf($locale->lang('week_in_year'),$weekname,$year),
 			'back' => $back_url,
-			'forward' => $forward_url
+			'forward' => $forward_url,
+			'view_add_event' => $cfg['enable_calendar_events'] &&
+				($cfg['display_denied_options'] || $auth->has_global_permission('add_cal_event'))
 		));
 		
 		$rows = array();

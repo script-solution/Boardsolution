@@ -25,8 +25,8 @@
  * "page.php?site=forum" you have to use the value "page.php?site=forum".
  */
 // TODO changed for joomla
-//define('BS_FRONTEND_FILE','index.php?option=com_joobs&Itemid=26');
-define('BS_FRONTEND_FILE','index.php');
+define('BS_FRONTEND_FILE','index.php?option=com_joobs&Itemid=26');
+//define('BS_FRONTEND_FILE','index.php');
 
 ############################ GENERAL ############################
 
@@ -50,7 +50,7 @@ define('BS_FWS_PATH','../PHPLib/');
  * 
  * TODO set to 1 by default
  */
-define('BS_DEBUG',2);
+define('BS_DEBUG',1);
 
 /**
  * Falls Sie nicht MyISAM sondern z.B. InnoDB als MySQL-Storage-Engine benutzen, d.h. eine Storage-

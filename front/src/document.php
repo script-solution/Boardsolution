@@ -75,7 +75,7 @@ final class BS_Front_Document extends BS_Document
 	{
 		$cfg = FWS_Props::get()->cfg();
 		$user = FWS_Props::get()->user();
-
+		
 		// determine start-module
 		if($cfg['enable_portal'] == 1 &&
 			($user->is_loggedin() || $user->get_profile_val('startmodule') == 'portal'))

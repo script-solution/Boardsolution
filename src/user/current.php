@@ -287,15 +287,16 @@ final class BS_User_Current extends FWS_User_Current
 		return $this->_language;
 	}
 	
-	public function get_theme_item_path($item)
+	public function get_theme_item_path($item,$bspath = null)
 	{
+		$bspath = $bspath === null ? FWS_Path::client_app() : $bspath;
 		// at first we look in the selected theme
 		$path = 'themes/'.$this->_theme.'/'.$item;
 		if(is_file(FWS_Path::server_app().$path))
-			return FWS_Path::client_app().$path;
+			return $bspath.$path;
 		
 		// if the file does not exist, we use the default theme
-		return FWS_Path::client_app().'themes/default/'.$item;
+		return $bspath.'themes/default/'.$item;
 	}
 	
 	/**

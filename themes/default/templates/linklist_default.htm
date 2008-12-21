@@ -44,7 +44,7 @@
 						<td width="48%" valign="top">
 						{if data:can_vote}
 						<form method="post" action="{gurl.simple_url('linklist','&amp;$URL_ID='~data:id~'&amp;$URL_AT=$ACTION_VOTE_LINK','&amp;',true)}">
-						{glocale.lang('yourvote')}: {form.get_combobox('link_rating',data:vote_options,0)}
+						{glocale.lang('yourvote')}: {form.get_combobox('link_rating_'~data:id,data:vote_options,0)}
 						<input type="submit" value="{glocale.lang('vote')}" />
 						</form>
 						{else}

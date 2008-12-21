@@ -24,9 +24,8 @@ final class BS_ACP_Action_attachments_delete extends BS_ACP_Action_Base
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
 
-		$path_str = $input->get_var('ids','get',FWS_Input::STRING);
-		$paths = FWS_Array_Utils::advanced_explode('|',$path_str);
-		if(count($paths) == 0)
+		$paths = $input->get_var('ids','get');
+		if(!is_array($paths) || count($paths) == 0)
 			return 'Got no paths via GET ("ids")';
 		
 		// ensure that the paths are correct

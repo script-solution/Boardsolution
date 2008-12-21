@@ -13,12 +13,15 @@
 // we are in the frontend
 define('BS_FRONTEND',true);
 
-// Please define the path to Boardsolution here. It should be a relative one starting from the
-// file that includes the index.php to the folder of Boardsolution.
-// By default (no include, the index.php is directly called in the browser) the path should be 
-// empty ('').
-// NOTE: it has to end with a '/' if it is not empty
-define('BS_PATH','');
+if(!defined('BS_PATH'))
+{
+	// Please define the path to Boardsolution here. It should be a relative one starting from the
+	// file that includes the index.php to the folder of Boardsolution.
+	// By default (no include, the index.php is directly called in the browser) the path should be 
+	// empty ('').
+	// NOTE: it has to end with a '/' if it is not empty
+	define('BS_PATH','');
+}
 
 // check if the calculated path is correct
 if(!is_file(BS_PATH.'config/general.php'))
@@ -59,14 +62,7 @@ include_once(FWS_PATH.'init.php');
 
 // set the path
 FWS_Path::set_server_app(BS_PATH);
-// TODO change!
-if(defined('_JEXEC'))
-{
-	FWS_Path::set_client_app(JURI::base(true).'/bs/');
-	FWS_Path::set_client_fw(JURI::base(true).'/bs/fws/');
-}
-else
-	FWS_Path::set_client_app(BS_PATH);
+FWS_Path::set_client_app(BS_PATH);
 
 // init boardsolution
 include_once(BS_PATH.'src/init.php');
@@ -74,7 +70,7 @@ include_once(BS_PATH.'src/init.php');
 // TODO remove!
 if(defined('_JEXEC'))
 {
-	jimport('scso.community');
+	include_once(JPATH_COMPONENT_SITE.'/community.php');
 	BS_Community_Manager::get_instance()->register_export(new BS_ComExport());
 }
 
@@ -82,5 +78,4 @@ if(defined('_JEXEC'))
 $doc = new BS_Front_Document();
 FWS_Props::get()->set_doc($doc);
 echo $doc->render();
-return $doc;
 ?>

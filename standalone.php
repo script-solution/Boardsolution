@@ -13,5 +13,6 @@
 // We can simply include the index.php since we just want to ensure that boardsolution
 // will be shown exclusivly. That means if somebody includes the index.php this will not affect
 // standalone-modules.
+define('BS_PATH','');
 include('index.php');
 ?>

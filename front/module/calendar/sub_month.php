@@ -25,6 +25,7 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 	public function run()
 	{
 		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
 
 		$helper = BS_Front_Module_Calendar_Helper::get_instance();
 		list($year,$month) = $helper->get_date();
@@ -50,7 +51,9 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 		$tpl->add_variables(array(
 			'title' => $months[abs($month)].' '.$year,
 			'back' => $back_url,
-			'forward' => $forward_url
+			'forward' => $forward_url,
+			'view_add_event' => $cfg['enable_calendar_events'] &&
+				($cfg['display_denied_options'] || $auth->has_global_permission('add_cal_event'))
 		));
 		
 		$weeks = array();

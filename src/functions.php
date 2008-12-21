@@ -147,6 +147,7 @@ final class BS_Functions extends FWS_Object
 	public function get_board_file($append_sep = false)
 	{
 		$board_path = BS_FRONTEND_FILE;
+		$board_path = str_replace('&','&amp;',$board_path);
 		if($append_sep)
 		{
 			if(FWS_String::strpos(BS_FRONTEND_FILE,'?') !== false)

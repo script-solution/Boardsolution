@@ -70,10 +70,10 @@ body.bs_body {
 .bs_coldesc_sep {
 	border-top: 1px solid #fff;
 	background-color: #c8c9c1;
-	padding: 0.3em;
-	height: 3px;
-	font-size: 3px;
-	line-height: 3px;
+	padding: 0.2em;
+	height: 2px;
+	font-size: 2px;
+	line-height: 2px;
 }
 
 /* the topics (titles of areas) */
