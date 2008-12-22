@@ -101,7 +101,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		$bbcode = new BS_BBCode_Parser($data['pm_text'],'posts',$enable_bbcode,$enable_smileys);
 		$text = $bbcode->get_message_for_output();
 
-		$keywords = $functions->get_search_keywords();
+		$keywords = BS_Front_Search_Utils::get_keywords();
 		if($keywords != null)
 		{
 			$kwhl = new FWS_KeywordHighlighter($keywords,'<span class="bs_highlight">');

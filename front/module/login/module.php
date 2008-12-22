@@ -57,6 +57,8 @@ final class BS_Front_Module_login extends BS_Front_Module
 		$functions = FWS_Props::get()->functions();
 		$user = FWS_Props::get()->user();
 
+		$tpl->add_variables(array('loginform' => !$user->is_loggedin()));
+		
 		// max login-tries reached?
 		if($input->isset_var('login','post') && $user->has_reached_max_login_tries())
 		{
@@ -73,12 +75,13 @@ final class BS_Front_Module_login extends BS_Front_Module
 				'user' => $username,
 				'sec_code_field' => $sec_code_field,
 				'pw' => $pw,
-				'security_code_img' => BS_URL::build_standalone_url('security_code')
+				'security_code_img' => BS_URL::build_standalone_url('security_code'),
+				'loginform' => false
 			));
 		}
 		// default login-form
 		else if(!$user->is_loggedin())
-			$functions->show_login_form(false);
+			$functions->build_login_form(false);
 	}
 }
 ?>

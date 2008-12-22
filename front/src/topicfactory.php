@@ -81,7 +81,7 @@ final class BS_Front_TopicFactory extends FWS_UtilBase
 		$search_string = '';
 		$search_words = array();
 		$words = FWS_StringHelper::get_words($title);
-		$ignore = $functions->get_search_ignore_words();
+		$ignore = BS_Front_Search_Utils::get_ignore_words();
 		foreach(array_keys($words) as $k)
 		{
 			if(isset($ignore[$k]))

@@ -1,0 +1,50 @@
+<form method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<input type="hidden" name="login" value="1" />
+<div class="bs_border">
+	<h1 class="bs_topic">{title}</h1>
+	{if denied_msg != ''}
+	<div class="bs_main">
+		<b>{glocale.lang('login_several_reasons')}:</b><br />
+		{denied_msg}
+	</div>
+	{endif}
+	<div class="bs_main">{login_msg}</div>
+	<fieldset class="bs_form">
+		<table class="bs_table" cellpadding="2" cellspacing="1">
+			<tr>
+				<td width="40%" align="right" class="bs_main"><b>{glocale.lang('login')}:</b></td>
+				<td width="20%" align="center" class="bs_main">
+				<input type="text" tabindex="1" name="user_login" style="width: 90%;" maxlength="100" />
+				</td>
+				<td width="40%" align="right" class="bs_main">
+				{if show_register_link}
+				<a href="{register_url}">{glocale.lang('register')}</a>
+				{else}
+				&nbsp;
+				{endif}
+				</td>
+			</tr>
+			<tr>
+				<td class="bs_main" align="right"><b>{glocale.lang('password')}:</b></td>
+				<td align="center" class="bs_main">
+				<input type="password" tabindex="2" name="pw_login" style="width: 90%;" maxlength="100" />
+				</td>
+				<td align="right" class="bs_main">
+				{if show_sendpw_link}
+				<a href="{send_pw_url}">{glocale.lang('forgetpw')}</a>
+				{else}
+				&nbsp;
+				{endif}
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" class="bs_main" align="center">
+				<input type="submit" value="{glocale.lang('login')}" />
+				<input type="button" value="{glocale.lang('back')}" onclick="history.go(-1);" />
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+</div>
+</form>

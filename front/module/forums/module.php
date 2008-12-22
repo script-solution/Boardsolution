@@ -94,6 +94,7 @@ final class BS_Front_Module_forums extends BS_Front_Module
 		$url->set(BS_URL_LOC,'clap_ministats');	
 		$clap_data = $functions->get_clap_data('ministats',$url->to_url());
 		
+		$nm = BS_DAO::get_profile()->get_newest_user();
 		$tpl->add_variable_ref('stats_data',$stats_data);
 		$tpl->add_variables(array(
 			'show_current_topics_link' => !$cfg['current_topic_enable'] ||
@@ -106,7 +107,7 @@ final class BS_Front_Module_forums extends BS_Front_Module
 			'events' => $events,
 			'birthdays' => $birthdays,
 			'lastlogin' => BS_Front_OnlineUtils::get_last_activity(),
-			'newest_member' => $functions->get_newest_member()
+			'newest_member' => BS_UserUtils::get_link($nm['id'],$nm['user_name'],$nm['user_group'])
 		));
 	}
 }

@@ -540,6 +540,16 @@ final class BS_URL extends FWS_URL
 	private $_sef = false;
 	
 	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+		// by default we use the frontend-file
+		$this->set_file(strtok(BS_FRONTEND_FILE,'?'));
+	}
+	
+	/**
 	 * @return boolean wether a SEF (search-engine-friendly) URL will be build
 	 */
 	public function is_sef()

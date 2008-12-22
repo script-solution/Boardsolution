@@ -189,7 +189,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		));
 		
 		$posts = array();
-		$keywords = $functions->get_search_keywords();
+		$keywords = BS_Front_Search_Utils::get_keywords();
 		$postcon = new BS_Front_Post_Container(
 			$fid,$tid,null,$pagination,'p.id '.BS_PostingUtils::get_posts_order(),'',$keywords
 		);

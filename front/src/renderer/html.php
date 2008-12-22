@@ -176,7 +176,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		
 		// handle messages
 		$msgs = FWS_Props::get()->msgs();
-		if($msgs->contains_msg())
+		if($msgs->contains_msg() || $doc->get_module()->error_occurred())
 			$this->_handle_msgs($msgs);
 		
 		$doc->set_gzip($cfg['enable_gzip']);
@@ -193,11 +193,21 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
 		$user = FWS_Props::get()->user();
+		$doc = FWS_Props::get()->doc();
 		
-		// TODO improve that!!
-		if($msgs->contains_no_access())
-			$functions->show_login_form();
-		if($msgs->contains_msg())
+		$loginform = false;
+		if($msgs->contains_no_access() || $doc->get_module()->error_occurred())
+		{
+			if($user->is_loggedin())
+				$msgs->add_error($locale->lang('permission_denied'));
+			else
+			{
+				$functions->build_login_form();
+				$loginform = true;
+			}
+		}
+		
+		if($msgs->contains_msg() || $loginform)
 		{
 			$amsgs = $msgs->get_all_messages();
 			$links = $msgs->get_links();
@@ -208,7 +218,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			$tpl->add_variable_ref('links',$links);
 			$tpl->add_variables(array(
 				'title' => $locale->lang('information'),
-				'messages' => $msgs->contains_error() || $msgs->contains_notice() || $msgs->contains_warning()
+				'messages' => $msgs->contains_error() || $msgs->contains_notice() || $msgs->contains_warning(),
+				'loginform' => $loginform
 			));
 			$tpl->restore_template();
 		}
@@ -256,7 +267,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				}
 				else if(!$module_access)
 				{
-					$functions->show_login_form();
+					$functions->build_login_form();
 					$module->set_error();
 				}
 				else

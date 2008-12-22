@@ -109,6 +109,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 			);
 		}
 		
+		$nm = BS_DAO::get_profile()->get_newest_user();
 		$newsfeedurl = BS_URL::get_mod_url('news_feed');
 		$tpl->add_variable_ref('online',$online);
 		$tpl->add_variables(array(
@@ -133,7 +134,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 			'show_latest_topics_full' => !$enable_news &&
 				strpos($cfg['current_topic_loc'],'portal') !== false && $cfg['current_topic_enable'],
 			'team_url' => BS_URL::build_mod_url('team'),
-			'newest_member' => $functions->get_newest_member(),
+			'newest_member' => BS_UserUtils::get_link($nm['id'],$nm['user_name'],$nm['user_group']),
 			'forums' => $nodes
 		));
 		

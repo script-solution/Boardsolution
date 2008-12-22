@@ -105,7 +105,7 @@ final class BS_Front_Search_Utils extends FWS_UtilBase
 		
 		static $ignore = null;
 		if($ignore === null)
-			$ignore = $functions->get_search_ignore_words();
+			$ignore = self::get_ignore_words();
 		
 		$sections = array();
 		while(($start = FWS_String::strpos($input,'"')) !== false)
@@ -139,6 +139,69 @@ final class BS_Front_Search_Utils extends FWS_UtilBase
 			self::_add_words($sections,$ignore,trim($input));
 
 		return $sections;
+	}
+	
+	/**
+	 * returns the search-ignore words
+	 *
+	 * @return array an associative array with all words to ignore:
+	 * 	<code>
+	 * 		array(<word> => true)
+	 * 	</code>
+	 */
+	public static function get_ignore_words()
+	{
+		$functions = FWS_Props::get()->functions();
+
+		// we use the default-forum-language, because we guess that most of the posts will be in
+		// this language
+		$lang = $functions->get_def_lang_folder();
+		$file = FWS_Path::server_app().'language/'.$lang.'/search_words.txt';
+	
+		if(!file_exists($file))
+			return array();
+	
+		$words = array();
+		$lines = file($file);
+		foreach($lines as $l)
+		{
+			$line = trim($l);
+			if($line != '')
+				$words[$line] = true;
+		}
+	
+		return $words;
+	}
+	
+	/**
+	 * Determines the search-keywords and returns them
+	 *
+	 * @return array an numeric array with the keywords
+	 */
+	public static function get_keywords()
+	{
+		$input = FWS_Props::get()->input();
+
+		$hl = $input->get_var(BS_URL_HL,'get',FWS_Input::STRING);
+		if($hl !== null)
+		{
+			// undo the stuff of the input-class
+			$hl = stripslashes(str_replace('&quot;','"',$hl));
+			// backslashes are not supported here
+			$hl = str_replace('\\','',$hl);
+			
+			$temp = explode('"',$hl);
+			$keywords = array();
+			for($i = 0;$i < count($temp);$i++)
+			{
+				$temp[$i] = trim($temp[$i]);
+				if($temp[$i] != '')
+					$keywords[] = $temp[$i];
+			}
+			return $keywords;
+		}
+		
+		return null;
 	}
 	
 	/**

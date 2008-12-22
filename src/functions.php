@@ -305,14 +305,11 @@ final class BS_Functions extends FWS_Object
 	}
 	
 	/**
-	 * Signalizes the document that the login form should be displayed (instead of the module)
-	 * The denied-message will be displayed if the user is loggedin or a login-form
-	 * if the user is loggedout
+	 * Builds the login-form (template inc_login.htm) for guests(!)
 	 *
 	 * @param boolean $display_denied_reasons do you want to display the denied-reasons? (default=true)
-	 * @return string the login-form
 	 */
-	public function show_login_form($display_denied_reasons = true)
+	public function build_login_form($display_denied_reasons = true)
 	{
 		$user = FWS_Props::get()->user();
 		$cfg = FWS_Props::get()->cfg();
@@ -322,137 +319,96 @@ final class BS_Functions extends FWS_Object
 		$msgs = FWS_Props::get()->msgs();
 		$doc = FWS_Props::get()->doc();
 
-		if(!$user->is_loggedin())
+		if($cfg['enable_registrations'] && !BS_ENABLE_EXPORT)
+			$register_url = BS_URL::build_mod_url('register');
+		else if($cfg['enable_registrations'] && BS_EXPORT_REGISTER_TYPE == 'link')
+			$register_url = BS_EXPORT_REGISTER_LINK;
+		else
+			$register_url = '';
+
+		if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE == 'enabled')
+			$send_pw_url = BS_URL::build_mod_url('sendpw');
+		else if(BS_EXPORT_SEND_PW_TYPE == 'link')
+			$send_pw_url = BS_EXPORT_SEND_PW_LINK;
+		else
+			$send_pw_url = '';
+		
+		if(!BS_ENABLE_EXPORT)
+			$resend_act_link_url = BS_URL::build_mod_url('resend_activation');
+		else if(BS_EXPORT_RESEND_ACT_TYPE == 'link')
+			$resend_act_link_url = BS_EXPORT_RESEND_ACT_LINK;
+		else
+			$resend_act_link_url = '';
+
+		$denied = '';
+		if($display_denied_reasons)
 		{
-			if($cfg['enable_registrations'] && !BS_ENABLE_EXPORT)
-				$register_url = BS_URL::build_mod_url('register');
-			else if($cfg['enable_registrations'] && BS_EXPORT_REGISTER_TYPE == 'link')
-				$register_url = BS_EXPORT_REGISTER_LINK;
-			else
-				$register_url = '';
-	
-			if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE == 'enabled')
-				$send_pw_url = BS_URL::build_mod_url('sendpw');
-			else if(BS_EXPORT_SEND_PW_TYPE == 'link')
-				$send_pw_url = BS_EXPORT_SEND_PW_LINK;
-			else
-				$send_pw_url = '';
-			
-			if(!BS_ENABLE_EXPORT)
-				$resend_act_link_url = BS_URL::build_mod_url('resend_activation');
-			else if(BS_EXPORT_RESEND_ACT_TYPE == 'link')
-				$resend_act_link_url = BS_EXPORT_RESEND_ACT_LINK;
-			else
-				$resend_act_link_url = '';
-	
-			$denied = '';
-			if($display_denied_reasons)
+			$denied = '<ul>'."\n";
+			foreach(array('intern','usergroup','deactivated') as $type)
+				$denied .= '<li>'.$locale->lang('access_denied_reason_'.$type).'</li>'."\n";
+			$denied .= '</ul>'."\n";
+		}
+
+		$login_msg = '';
+		foreach(array('login','register','forgot_pw','activate') as $type)
+		{
+			switch($type)
 			{
-				$denied = '<ul>'."\n";
-				foreach(array('intern','usergroup','deactivated') as $type)
-					$denied .= '<li>'.$locale->lang('access_denied_reason_'.$type).'</li>'."\n";
-				$denied .= '</ul>'."\n";
-			}
-	
-			$login_msg = '';
-			foreach(array('login','register','forgot_pw','activate') as $type)
-			{
-				switch($type)
-				{
-					case 'register':
-						if($cfg['enable_registrations'] &&
-							(!BS_ENABLE_EXPORT || BS_EXPORT_REGISTER_TYPE == 'link'))
+				case 'register':
+					if($cfg['enable_registrations'] &&
+						(!BS_ENABLE_EXPORT || BS_EXPORT_REGISTER_TYPE == 'link'))
+					{
+						$login_msg .= sprintf(
+							' '.$locale->lang('login_message_'.$type),
+							'<a href="'.$register_url.'">'.$locale->lang('here').'</a>'
+						);
+					}
+					break;
+
+				case 'forgot_pw':
+					if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE != 'disabled')
+						$login_msg .= $locale->lang('login_message_'.$type);
+					break;
+
+				case 'activate':
+					if(!BS_ENABLE_EXPORT || BS_EXPORT_RESEND_ACT_TYPE == 'link')
+					{
+						if($cfg['account_activation'] == 'email')
 						{
 							$login_msg .= sprintf(
-								' '.$locale->lang('login_message_'.$type),
-								'<a href="'.$register_url.'">'.$locale->lang('here').'</a>'
+								$locale->lang('login_message_'.$type),
+								'<a href="'.$resend_act_link_url.'">'
+									.$locale->lang('here').'</a>'
 							);
 						}
-						break;
-	
-					case 'forgot_pw':
-						if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE != 'disabled')
-							$login_msg .= $locale->lang('login_message_'.$type);
-						break;
-	
-					case 'activate':
-						if(!BS_ENABLE_EXPORT || BS_EXPORT_RESEND_ACT_TYPE == 'link')
-						{
-							if($cfg['account_activation'] == 'email')
-							{
-								$login_msg .= sprintf(
-									$locale->lang('login_message_'.$type),
-									'<a href="'.$resend_act_link_url.'">'
-										.$locale->lang('here').'</a>'
-								);
-							}
-						}
-						break;
-	
-					default:
-						$login_msg .= $locale->lang('login_message_'.$type);
-						break;
-				}
-			}
-	
-			if($input->isset_var('login','post') || $display_denied_reasons)
-				$title = $locale->lang('login_access_denied');
-			else
-				$title = $locale->lang('loginform');
-	
-			$tpl->set_template('login.htm');
-			$tpl->add_variables(array(
-				'action_type' => BS_ACTION_LOGIN,
-				'target_url' => BS_URL::build_mod_url('login'),
-				'show_sendpw_link' => !BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE != 'disabled',
-				'show_register_link' => $cfg['enable_registrations'] &&
-					(!BS_ENABLE_EXPORT || BS_EXPORT_REGISTER_TYPE == 'link'),
-				'register_url' => $register_url,
-				'send_pw_url' => $send_pw_url,
-				'title' => $title,
-				'login_msg' => $login_msg,
-				'denied_msg' => $denied
-			));
-			$tpl->restore_template();
-		}
-		// if the user is loggedin we simply set an error-message
-		else
-			$msgs->add_error($locale->lang('permission_denied'));
-		
-		// TODO how to do that?
-		if($doc->get_renderer() instanceof BS_Front_Renderer_HTML)
-			$doc->get_renderer()->set_template('login.htm');
-	}
-	
-	/**
-	 * Determines the search-keywords and returns them
-	 *
-	 * @return array an numeric array with the keywords
-	 */
-	public function get_search_keywords()
-	{
-		$input = FWS_Props::get()->input();
+					}
+					break;
 
-		$hl = $input->get_var(BS_URL_HL,'get',FWS_Input::STRING);
-		if($hl !== null)
-		{
-			// undo the stuff of the input-class
-			$hl = stripslashes(str_replace('&quot;','"',$hl));
-			// backslashes are not supported here
-			$hl = str_replace('\\','',$hl);
-			
-			$temp = explode('"',$hl);
-			$keywords = array();
-			for($i = 0;$i < count($temp);$i++)
-			{
-				$temp[$i] = trim($temp[$i]);
-				if($temp[$i] != '')
-					$keywords[] = $temp[$i];
+				default:
+					$login_msg .= $locale->lang('login_message_'.$type);
+					break;
 			}
-			return $keywords;
 		}
-		
-		return null;
+
+		if($input->isset_var('login','post') || $display_denied_reasons)
+			$title = $locale->lang('login_access_denied');
+		else
+			$title = $locale->lang('loginform');
+
+		$tpl->set_template('inc_login.htm');
+		$tpl->add_variables(array(
+			'action_type' => BS_ACTION_LOGIN,
+			'target_url' => BS_URL::build_mod_url('login'),
+			'show_sendpw_link' => !BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE != 'disabled',
+			'show_register_link' => $cfg['enable_registrations'] &&
+				(!BS_ENABLE_EXPORT || BS_EXPORT_REGISTER_TYPE == 'link'),
+			'register_url' => $register_url,
+			'send_pw_url' => $send_pw_url,
+			'title' => $title,
+			'login_msg' => $login_msg,
+			'denied_msg' => $denied
+		));
+		$tpl->restore_template();
 	}
 	
 	/**
@@ -506,17 +462,6 @@ final class BS_Functions extends FWS_Object
 		//$dstr = 'return \'<a target="_blank" href="http://www.script-solution.de">'.BS_VERSION.'</a> | &copy; Nils Asmussen 2003-2007\';';
 		//echo base64_encode($dstr);
 		return eval($str);
-	}
-	
-	/**
-	 * Determines the newest member
-	 * 
-	 * @return string the link to the member
-	 */
-	public function get_newest_member()
-	{
-		$nm = BS_DAO::get_profile()->get_newest_user();
-		return BS_UserUtils::get_link($nm['id'],$nm['user_name'],$nm['user_group']);
 	}
 	
 	####################################################################
@@ -827,38 +772,6 @@ final class BS_Functions extends FWS_Object
 		$c->set_charset(BS_HTML_CHARSET);
 		
 		return $c;
-	}
-	
-	/**
-	 * returns the search-ignore words
-	 *
-	 * @return array an associative array with all words to ignore:
-	 * 	<code>
-	 * 		array(<word> => true)
-	 * 	</code>
-	 */
-	public function get_search_ignore_words()
-	{
-		$functions = FWS_Props::get()->functions();
-
-		// we use the default-forum-language, because we guess that most of the posts will be in
-		// this language
-		$lang = $functions->get_def_lang_folder();
-		$file = FWS_Path::server_app().'language/'.$lang.'/search_words.txt';
-	
-		if(!file_exists($file))
-			return array();
-	
-		$words = array();
-		$lines = file($file);
-		foreach($lines as $l)
-		{
-			$line = trim($l);
-			if($line != '')
-				$words[$line] = true;
-		}
-	
-		return $words;
 	}
 	
 	protected function get_dump_vars()
