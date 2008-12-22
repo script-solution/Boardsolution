@@ -17,7 +17,6 @@ FWS_AutoLoader::register_loader('BS_Autoloader');
 // include the files that we need at the very beginning
 include_once(BS_PATH.'config/mysql.php');
 include_once(BS_PATH.'config/general.php');
-include_once(BS_PATH.'config/community.php');
 include_once(BS_PATH.'src/props.php');
 
 // set the accessor and loader for boardsolution
@@ -45,4 +44,11 @@ if(defined('BS_ACP'))
 
 $user->init();
 $sessions->garbage_collection();
+
+// TODO remove!
+if(defined('_JEXEC'))
+{
+	include_once(JPATH_COMPONENT_SITE.'/community.php');
+	BS_Community_Manager::get_instance()->add_login_listener(new BS_LoginListener());
+}
 ?>

@@ -35,20 +35,6 @@ interface BS_Community_Export
 	public function user_registered($user);
 	
 	/**
-	 * Will be called as soon as a user has logged in
-	 *
-	 * @param BS_Community_User $user the user-data
-	 */
-	public function user_login($user);
-	
-	/**
-	 * Will be called as soon as a user has logged out
-	 *
-	 * @param BS_Community_User $user the user-data
-	 */
-	public function user_logout($user);
-	
-	/**
 	 * Will be called as soon as an attribute of the user has changed
 	 *
 	 * @param BS_Community_User $user the user-data

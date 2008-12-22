@@ -61,10 +61,10 @@
 					
 					{if gisloggedin == false}
 					
-					{if forgotpw_link != ''}
+					{if forgotpw_link}
 					<a href="{forgotpw_link}">{glocale.lang('forgetpw')}</a> &middot;
 					{endif}
-					{if resendact_link != ''}
+					{if resendact_link}
 					<a href="{resendact_link}">{glocale.lang('resend_activation_link')}</a>
 					{endif}
 		

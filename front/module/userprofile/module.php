@@ -111,7 +111,7 @@ final class BS_Front_Module_userprofile extends BS_Front_SubModuleContainer
 		$tpl->add_variables(array(
 			'max_inbox' => $cfg['pm_max_inbox'],
 			'max_outbox' => $cfg['pm_max_outbox'],
-			'allow_pw_change' => !BS_ENABLE_EXPORT,
+			'allow_pw_change' => BS_Community_Manager::get_instance()->is_user_management_enabled(),
 			'enable_avatars' => $cfg['enable_avatars'],
 			'enable_signatures' => $cfg['enable_signatures'],
 			'enable_email_notification' => $cfg['enable_email_notification'] == 1,

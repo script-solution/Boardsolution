@@ -142,7 +142,8 @@ final class BS_ACP_Menu extends FWS_Singleton
 					),
 					'useractivation' => array(
 						'title' => 'acpmod_user_activation',
-						'access' => BS_ENABLE_EXPORT ? 'no' : 'default',
+						'access' => BS_Community_Manager::get_instance()->is_user_management_enabled() ?
+								'default' : 'no',
 					),
 					'additionalfields' => array(
 						'title' => 'acpmod_addfields',

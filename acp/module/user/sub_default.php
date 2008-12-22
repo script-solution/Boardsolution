@@ -62,6 +62,7 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 			$order = $input->get_var('order','get',FWS_Input::STRING);
 			$ad = $input->get_var('ad','get',FWS_Input::STRING);
 			$ids = implode(',',$delete);
+			$com = BS_Community_Manager::get_instance();
 			
 			$url = BS_URL::get_acpsub_url();
 			$url->set('order',$order);
@@ -79,7 +80,7 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 				$yes_url = $url->set('at',BS_ACP_ACTION_USER_UNBAN)->to_url();
 				$message = $locale->lang('unblock_accounts');
 			}
-			else if(!BS_ENABLE_EXPORT)
+			else if($com->is_user_management_enabled())
 			{
 				$yes_url = $url->set('at',BS_ACP_ACTION_USER_DELETE)->to_url();
 				$message = $locale->lang('delete_accounts');
@@ -215,7 +216,7 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 
 		$tpl->add_variables(array(
 			'user' => $users,
-			'not_export' => !BS_ENABLE_EXPORT
+			'comman_enabled' => BS_Community_Manager::get_instance()->is_user_management_enabled()
 		));
 
 		$pagination->populate_tpl($baseurl);

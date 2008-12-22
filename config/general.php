@@ -123,6 +123,27 @@ define('BS_MODE_LOCK_TOPICS',									13);
  */
 define('BS_MODE_MARK_TOPICS_IMPORTANT',				14);
 
+// the constants for the old community-export concept
+/**
+ * The user-id field
+ */
+define('BS_EXPORT_USER_ID','id');
+
+/**
+ * The user-name field
+ */
+define('BS_EXPORT_USER_NAME','user_name');
+
+/**
+ * The password field
+ */
+define('BS_EXPORT_USER_PW','user_pw');
+
+/**
+ * The email field
+ */
+define('BS_EXPORT_USER_EMAIL','user_email');
+
 
 // some general constants
 /**

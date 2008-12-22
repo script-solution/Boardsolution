@@ -47,11 +47,12 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 		$input = FWS_Props::get()->input();
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
+		$com = BS_Community_Manager::get_instance();
 
 		// community exported?
-		if(BS_ENABLE_EXPORT)
+		if(!$com->is_user_management_enabled())
 		{
-			$msgs->add_error($locale->lang('activation_community_exported'));
+			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('user_management_disabled'));
 			return;
 		}
 		
@@ -104,9 +105,6 @@ final class BS_ACP_Module_useractivation extends BS_ACP_Module
 			);
 		}
 		
-		$tpl->add_variables(array(
-			'not_exported' => !BS_ENABLE_EXPORT
-		));
 		$tpl->add_variable_ref('user',$user);
 
 		$pagination->populate_tpl(BS_URL::get_acpmod_url());

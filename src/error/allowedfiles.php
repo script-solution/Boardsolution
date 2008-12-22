@@ -27,7 +27,6 @@ final class BS_Error_AllowedFiles extends FWS_Object implements FWS_Error_Allowe
 	 */
 	private $_exclude = array(
 		'config/actions.php',
-		'config/community.php',
 		'config/dbbackup.php',
 		'config/general.php',
 		'config/mysql.php',

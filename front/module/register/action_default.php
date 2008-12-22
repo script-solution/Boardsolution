@@ -37,7 +37,8 @@ final class BS_Front_Action_register_default extends BS_Front_Action_Base
 		if($user->is_loggedin())
 			return 'You are already loggedin';
 		
-		if($cfg['enable_registrations'] == 0)
+		if($cfg['enable_registrations'] == 0 ||
+				BS_Community_Manager::get_instance()->is_registration_enabled())
 			return 'Registrations are disabled';
 
 		// check if the user already registered

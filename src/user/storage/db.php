@@ -70,7 +70,7 @@ final class BS_User_Storage_DB extends FWS_Object implements FWS_User_Storage
 	
 	public function get_hash_of_pw($pw,$data)
 	{
-		return BS_Ex_get_stored_password($pw,$data->get_all_fields());
+		return md5($pw);
 	}
 	
 	/**

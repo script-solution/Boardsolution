@@ -31,8 +31,9 @@ final class BS_Front_Module_sendpw extends BS_Front_Module
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
+		$com = BS_Community_Manager::get_instance();
 		
-		$renderer->set_has_access(!$user->is_loggedin());
+		$renderer->set_has_access(!$user->is_loggedin() && $com->is_send_pw_enabled());
 		
 		$renderer->add_action(BS_ACTION_SEND_PW,'default');
 
@@ -58,12 +59,6 @@ final class BS_Front_Module_sendpw extends BS_Front_Module
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
 
-		if(BS_ENABLE_EXPORT && BS_EXPORT_SEND_PW_TYPE != 'enabled')
-		{
-			$this->report_error();
-			return;
-		}
-		
 		$this->request_formular(false,false);
 		
 		$sec_code_field = FWS_StringHelper::generate_random_key(15);

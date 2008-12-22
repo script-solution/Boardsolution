@@ -343,6 +343,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		// show headline
 		if($this->_show_headline)
 		{
+			$com = BS_Community_Manager::get_instance();
+			
 			$tpl->set_template('inc_headline.htm');
 			$tpl->add_variables(array(
 				'location' => $breadcrumbs,
@@ -398,12 +400,12 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		
 			if(!$user->is_loggedin())
 			{
-				if($cfg['enable_registrations'] && (!BS_ENABLE_EXPORT || BS_EXPORT_REGISTER_TYPE == 'link'))
+				if($cfg['enable_registrations'] && ($regurl = $com->get_register_url()))
 				{
 					$top_links[] = array(
 						'title' => $locale->lang('register'),
 						'text' => $locale->lang('register'),
-						'url' => !BS_ENABLE_EXPORT ? BS_URL::build_mod_url('register') : BS_EXPORT_REGISTER_LINK
+						'url' => $regurl
 					);
 				}
 			}
@@ -454,21 +456,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			else
 			{
 				$username = $locale->lang('guest');
-				if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE != 'disabled')
-				{
-					if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE == 'enabled')
-						$sendpw_url = BS_URL::build_mod_url('sendpw');
-					else
-						$sendpw_url = BS_EXPORT_SEND_PW_LINK;
-				}
-				
-				if(!BS_ENABLE_EXPORT || BS_EXPORT_RESEND_ACT_TYPE == 'link')
-				{
-					if(!BS_ENABLE_EXPORT)
-						$resend_url = BS_URL::build_mod_url('resend_activation');
-					else
-						$resend_url = BS_EXPORT_RESEND_ACT_LINK;
-				}
+				$sendpw_url = $com->get_send_pw_url();
+				$resend_url = $com->get_resend_act_url();
 			}
 			
 			$lastlogin = false;
@@ -509,6 +498,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		$functions = FWS_Props::get()->functions();
 		$forums = FWS_Props::get()->forums();
 		$unread = FWS_Props::get()->unread();
+		$com = BS_Community_Manager::get_instance();
 		
 		if($this->_show_headline)
 		{
@@ -542,8 +532,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$options['portal'] = $locale->lang('portal');
 			if($user->is_admin())
 				$options['admin'] = $locale->lang('adminarea');
-			if(!$user->is_loggedin() && $cfg['enable_registrations'] &&
-					(!BS_ENABLE_EXPORT || BS_EXPORT_REGISTER_TYPE == 'link'))
+			if(!$user->is_loggedin() && $cfg['enable_registrations'] && $com->get_register_url())
 				$options['register'] = $locale->lang('register');
 			else if($user->is_loggedin())
 				$options['profile'] = $locale->lang('profile');
@@ -606,7 +595,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			$tpl->add_variables(array(
 				'insert_time' => $debug,
 				'forums_init' => $functions->cache_basic_data(),
-				'options' => $options
+				'options' => $options,
+				'register_url' => $com->get_register_url()
 			));
 		
 			$tpl->add_variable_ref('forums',$nodes);

@@ -27,6 +27,7 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 		$cache = FWS_Props::get()->cache();
 		$msgs = FWS_Props::get()->msgs();
 		$user = FWS_Props::get()->user();
+		$com = BS_Community_Manager::get_instance();
 
 		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
@@ -36,7 +37,7 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 		if($data === false)
 			return 'No user with id="'.$id.'" found';
 		
-		if(!BS_ENABLE_EXPORT)
+		if($com->is_user_management_enabled())
 		{
 			$user_name = $input->get_var('user_name','post',FWS_Input::STRING);
 			// check username
@@ -101,7 +102,7 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 		}
 
 		// update the database
-		if(!BS_ENABLE_EXPORT)
+		if($com->is_user_management_enabled())
 			BS_DAO::get_user()->update($id,$user_name,md5($user_pw),$user_email);
 
 		$groups = array();

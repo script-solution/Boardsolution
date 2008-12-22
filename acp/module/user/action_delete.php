@@ -25,10 +25,11 @@ final class BS_ACP_Action_user_delete extends BS_ACP_Action_Base
 		$cache = FWS_Props::get()->cache();
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
+		$com = BS_Community_Manager::get_instance();
 
-		if(BS_ENABLE_EXPORT)
-			return 'The community is exported';
-	
+		if(!$com->is_user_management_enabled())
+			return 'The user-management is disabled';
+		
 		$idstr = $input->get_var('ids','get',FWS_Input::STRING);
 		if(!($ids = FWS_StringHelper::get_ids($idstr)))
 			return 'Got an invalid id-string via GET';

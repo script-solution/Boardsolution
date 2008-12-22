@@ -25,10 +25,11 @@ final class BS_Front_Action_sendpw_default extends BS_Front_Action_Base
 		$functions = FWS_Props::get()->functions();
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
+		$com = BS_Community_Manager::get_instance();
 
 		// check if the user is allowed to do this
-		if((BS_ENABLE_EXPORT && BS_EXPORT_SEND_PW_TYPE != 'enabled') || $user->is_loggedin())
-			return 'The community is exported and the send-pw-type is not enabled or you are a guest';
+		if(!$com->is_send_pw_enabled() || $user->is_loggedin())
+			return 'Send-pw is disabled or you are a guest';
 
 		if(!$functions->check_security_code())
 			return 'invalid_security_code';

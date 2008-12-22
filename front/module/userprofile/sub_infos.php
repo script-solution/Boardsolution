@@ -54,10 +54,11 @@ final class BS_Front_SubModule_userprofile_infos extends BS_Front_SubModule
 		$form = $this->request_formular(false);
 		
 		$email_change = BS_DAO::get_changeemail()->get_by_user($user->get_user_id());
+		$com = BS_Community_Manager::get_instance();
 		
 		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_EDIT_PERS_PROFILE,
-			'show_email' => !BS_ENABLE_EXPORT && $cfg['allow_email_changes'],
+			'show_email' => $com->is_user_management_enabled() && $cfg['allow_email_changes'],
 			'email_value' => $form->get_input_value('user_email',$user->get_profile_val('user_email')),
 			'target_url' => BS_URL::build_sub_url(),
 			'confirm_emails' => $cfg['confirm_email_addresses'],

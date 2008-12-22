@@ -13,7 +13,7 @@ var BBCodeMode = '{bbcode_mode}';
 <div class="a_border">
 	<h1 class="a_topic">{glocale.lang('edit_user')}</h1>
 	<fieldset class="a_form">
-		{if not_export}
+		{if comman_enabled}
 		<dl>
 			<dt>{glocale.lang('username')}: *</dt>
 			<dd>{form.get_textbox('user_name',user_name,30,30)}</dd>

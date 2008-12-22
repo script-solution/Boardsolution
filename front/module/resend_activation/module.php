@@ -57,8 +57,9 @@ final class BS_Front_Module_resend_activation extends BS_Front_Module
 		$user = FWS_Props::get()->user();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
+		$com = BS_Community_Manager::get_instance();
 
-		if(BS_ENABLE_EXPORT)
+		if(!$com->is_resend_act_enabled())
 		{
 			$this->report_error();
 			return;

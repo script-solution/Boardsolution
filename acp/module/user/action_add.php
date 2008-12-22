@@ -26,9 +26,10 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 		$cache = FWS_Props::get()->cache();
 		$msgs = FWS_Props::get()->msgs();
 		$locale = FWS_Props::get()->locale();
+		$com = BS_Community_Manager::get_instance();
 
-		if(BS_ENABLE_EXPORT)
-			return 'The community is exported';
+		if(!$com->is_user_management_enabled())
+			return 'The user-management is disabled';
 		
 		// check username
 		$user_name = $input->get_var('user_name','post',FWS_Input::STRING);

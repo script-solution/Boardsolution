@@ -28,13 +28,14 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 		$cache = FWS_Props::get()->cache();
 		$cookies = FWS_Props::get()->cookies();
 		$user = FWS_Props::get()->user();
+		$com = BS_Community_Manager::get_instance();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
 
 		// this is not allowed if the community has been exported
-		if(BS_ENABLE_EXPORT)
+		if(!$com->is_user_management_enabled())
 			return 'The community is exported';
 
 		// is the user loggedin?

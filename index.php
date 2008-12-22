@@ -67,13 +67,6 @@ FWS_Path::set_client_app(BS_PATH);
 // init boardsolution
 include_once(BS_PATH.'src/init.php');
 
-// TODO remove!
-if(defined('_JEXEC'))
-{
-	include_once(JPATH_COMPONENT_SITE.'/community.php');
-	BS_Community_Manager::get_instance()->register_export(new BS_ComExport());
-}
-
 // show the page
 $doc = new BS_Front_Document();
 FWS_Props::get()->set_doc($doc);

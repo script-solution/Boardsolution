@@ -25,12 +25,13 @@ final class BS_Front_Action_resend_activation_default extends BS_Front_Action_Ba
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
+		$com = BS_Community_Manager::get_instance();
 
 		if($user->is_loggedin())
 			return 'You are loggedin';
 
-		if(BS_ENABLE_EXPORT)
-			return 'The community is exported';
+		if($com->is_resend_act_enabled())
+			return 'Resend-act-link is disabled';
 
 		if(!$functions->check_security_code())
 			return 'invalid_security_code';

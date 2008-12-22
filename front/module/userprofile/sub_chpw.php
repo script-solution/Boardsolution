@@ -47,8 +47,9 @@ final class BS_Front_SubModule_userprofile_chpw extends BS_Front_SubModule
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
+		
 		// has the user the permission to change user/pw
-		if(BS_ENABLE_EXPORT)
+		if(!BS_Community_Manager::get_instance()->is_user_management_enabled())
 		{
 			$this->report_error(FWS_Document_Messages::ERROR);
 			return;

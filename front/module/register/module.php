@@ -32,8 +32,10 @@ final class BS_Front_Module_register extends BS_Front_Module
 		$user = FWS_Props::get()->user();
 		$cfg = FWS_Props::get()->cfg();
 		$renderer = $doc->use_default_renderer();
+		$com = BS_Community_Manager::get_instance();
 		
-		$renderer->set_has_access($cfg['enable_registrations'] && !$user->is_loggedin() && !BS_ENABLE_EXPORT);
+		$renderer->set_has_access($cfg['enable_registrations'] && !$user->is_loggedin() &&
+			$com->is_registration_enabled());
 		
 		$renderer->add_action(BS_ACTION_REGISTER,'default');
 

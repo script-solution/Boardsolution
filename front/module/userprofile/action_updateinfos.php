@@ -27,6 +27,7 @@ final class BS_Front_Action_userprofile_updateinfos extends BS_Front_Action_Base
 		$locale = FWS_Props::get()->locale();
 		$msgs = FWS_Props::get()->msgs();
 		$user = FWS_Props::get()->user();
+		$com = BS_Community_Manager::get_instance();
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
@@ -37,7 +38,7 @@ final class BS_Front_Action_userprofile_updateinfos extends BS_Front_Action_Base
 			return 'You are a guest';
 
 		$email = '';
-		if(!BS_ENABLE_EXPORT && $cfg['allow_email_changes'])
+		if($com->is_user_management_enabled() && $cfg['allow_email_changes'])
 		{
 			$email = $input->get_var('user_email','post',FWS_Input::STRING);
 
@@ -74,7 +75,7 @@ final class BS_Front_Action_userprofile_updateinfos extends BS_Front_Action_Base
 		}
 
 		// update the email-address
-		if(!BS_ENABLE_EXPORT && $cfg['allow_email_changes'] &&
+		if($com->is_user_management_enabled() && $cfg['allow_email_changes'] &&
 			$email != $user->get_profile_val('user_email'))
 		{
 			// confirm it first?

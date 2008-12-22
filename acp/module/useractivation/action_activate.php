@@ -23,9 +23,10 @@ final class BS_ACP_Action_useractivation_activate extends BS_ACP_Action_Base
 	{
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
+		$com = BS_Community_Manager::get_instance();
 
-		if(BS_ENABLE_EXPORT)
-			return 'The community is exported';
+		if(!$com->is_user_management_enabled())
+			return 'The user-management is disabled';
 		
 		$idstr = $input->get_var('ids','get',FWS_Input::STRING);
 		if(!($ids = FWS_StringHelper::get_ids($idstr)))

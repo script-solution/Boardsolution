@@ -24,10 +24,11 @@ final class BS_Front_Action_change_password_default extends BS_Front_Action_Base
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
+		$com = BS_Community_Manager::get_instance();
 
 		// check if the user is allowed to do this
-		if((BS_ENABLE_EXPORT && BS_EXPORT_SEND_PW_TYPE != 'enabled') || $user->is_loggedin())
-			return 'Community exported and send-pw-type not enabled or not loggedin';
+		if(!$com->is_send_pw_enabled() || $user->is_loggedin())
+			return 'Send-pw disabled or not loggedin';
 
 		$user_id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$user_key = $input->get_var(BS_URL_KW,'get',FWS_Input::STRING);
@@ -57,9 +58,7 @@ final class BS_Front_Action_change_password_default extends BS_Front_Action_Base
 		if($userdata === false)
 			return 'The user with id "'.$user_id.'" doesn\'t exist!';
 		
-		// build the password with the community-export-function
-		$dbpw = BS_Ex_get_stored_password($password,$userdata);
-		BS_DAO::get_user()->update($user_id,'',$dbpw);
+		BS_DAO::get_user()->update($user_id,'',md5($password));
 
 		// finally delete the entry in the change-password-table
 		BS_DAO::get_changepw()->delete_by_user($user_id);

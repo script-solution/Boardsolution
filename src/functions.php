@@ -318,27 +318,11 @@ final class BS_Functions extends FWS_Object
 		$tpl = FWS_Props::get()->tpl();
 		$msgs = FWS_Props::get()->msgs();
 		$doc = FWS_Props::get()->doc();
+		$com = BS_Community_Manager::get_instance();
 
-		if($cfg['enable_registrations'] && !BS_ENABLE_EXPORT)
-			$register_url = BS_URL::build_mod_url('register');
-		else if($cfg['enable_registrations'] && BS_EXPORT_REGISTER_TYPE == 'link')
-			$register_url = BS_EXPORT_REGISTER_LINK;
-		else
-			$register_url = '';
-
-		if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE == 'enabled')
-			$send_pw_url = BS_URL::build_mod_url('sendpw');
-		else if(BS_EXPORT_SEND_PW_TYPE == 'link')
-			$send_pw_url = BS_EXPORT_SEND_PW_LINK;
-		else
-			$send_pw_url = '';
-		
-		if(!BS_ENABLE_EXPORT)
-			$resend_act_link_url = BS_URL::build_mod_url('resend_activation');
-		else if(BS_EXPORT_RESEND_ACT_TYPE == 'link')
-			$resend_act_link_url = BS_EXPORT_RESEND_ACT_LINK;
-		else
-			$resend_act_link_url = '';
+		$register_url = $com->get_register_url();
+		$send_pw_url = $com->get_send_pw_url();
+		$resend_act_link_url = $com->get_resend_act_url();
 
 		$denied = '';
 		if($display_denied_reasons)
@@ -355,8 +339,7 @@ final class BS_Functions extends FWS_Object
 			switch($type)
 			{
 				case 'register':
-					if($cfg['enable_registrations'] &&
-						(!BS_ENABLE_EXPORT || BS_EXPORT_REGISTER_TYPE == 'link'))
+					if($cfg['enable_registrations'] && $register_url)
 					{
 						$login_msg .= sprintf(
 							' '.$locale->lang('login_message_'.$type),
@@ -366,21 +349,18 @@ final class BS_Functions extends FWS_Object
 					break;
 
 				case 'forgot_pw':
-					if(!BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE != 'disabled')
+					if($send_pw_url)
 						$login_msg .= $locale->lang('login_message_'.$type);
 					break;
 
 				case 'activate':
-					if(!BS_ENABLE_EXPORT || BS_EXPORT_RESEND_ACT_TYPE == 'link')
+					if($resend_act_link_url && $cfg['account_activation'] == 'email')
 					{
-						if($cfg['account_activation'] == 'email')
-						{
-							$login_msg .= sprintf(
-								$locale->lang('login_message_'.$type),
-								'<a href="'.$resend_act_link_url.'">'
-									.$locale->lang('here').'</a>'
-							);
-						}
+						$login_msg .= sprintf(
+							$locale->lang('login_message_'.$type),
+							'<a href="'.$resend_act_link_url.'">'
+								.$locale->lang('here').'</a>'
+						);
 					}
 					break;
 
@@ -399,9 +379,7 @@ final class BS_Functions extends FWS_Object
 		$tpl->add_variables(array(
 			'action_type' => BS_ACTION_LOGIN,
 			'target_url' => BS_URL::build_mod_url('login'),
-			'show_sendpw_link' => !BS_ENABLE_EXPORT || BS_EXPORT_SEND_PW_TYPE != 'disabled',
-			'show_register_link' => $cfg['enable_registrations'] &&
-				(!BS_ENABLE_EXPORT || BS_EXPORT_REGISTER_TYPE == 'link'),
+			'show_register_link' => $cfg['enable_registrations'] && $register_url,
 			'register_url' => $register_url,
 			'send_pw_url' => $send_pw_url,
 			'title' => $title,

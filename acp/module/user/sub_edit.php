@@ -50,6 +50,7 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		$tpl = FWS_Props::get()->tpl();
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
+		$com = BS_Community_Manager::get_instance();
 		$id = $input->get_var('id','get',FWS_Input::ID);
 		if($id == null)
 		{
@@ -111,27 +112,21 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		));
 
 		// avatar
-		$avatar = '';
-		$rowspan = BS_ENABLE_EXPORT ? (count($fields) + 1) : 5;
-		$avatar = '<td width="35%" align="center" class="a_main" rowspan="'.$rowspan.'">';
 		$av = BS_UserUtils::get_profile_avatar($data['avatar'],$data['id']);
-		$avatar .= $av;
+		$avatar = $av;
 		if($av != $locale->lang('nopictureavailable'))
 		{
 			$avatar .= '<br />'.$locale->lang('delete').': ';
 			$avatar .= $form->get_radio_yesno('remove_avatar',0);
 		}
-		$avatar .= '</td>'."\n";
 
 		$tpl->add_variables(array(
 			'avatar' => $avatar,
-			'avatar_export' => BS_ENABLE_EXPORT ? $avatar : '',
 			'target_url' => $murl->to_url(),
 			'bbcode_mode' => $data['bbcode_mode'],
-			'not_export' => !BS_ENABLE_EXPORT,
+			'comman_enabled' => $com->is_user_management_enabled(),
 			'user_name' => $data['user_name'],
 			'user_email' => $data['user_email'],
-			'show_avatar' => BS_ENABLE_EXPORT,
 			'av_rowspan' => count($fields) + 1,
 		));
 

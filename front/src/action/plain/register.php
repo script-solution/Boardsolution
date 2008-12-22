@@ -193,10 +193,6 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		$cfg = FWS_Props::get()->cfg();
 		$locale = FWS_Props::get()->locale();
 
-		// this is only possible if the community has not been exported
-		if(BS_ENABLE_EXPORT)
-			return 'The community is exported';
-
 		// is the username valid?
 		if(BS_DAO::get_user()->name_exists($this->_user_name))
 			return 'registeruservorhanden';

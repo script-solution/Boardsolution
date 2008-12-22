@@ -32,8 +32,9 @@ final class BS_Front_Module_change_password extends BS_Front_Module
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
+		$com = BS_Community_Manager::get_instance();
 		
-		$renderer->set_has_access(!$user->is_loggedin());
+		$renderer->set_has_access(!$user->is_loggedin() && $com->is_send_pw_enabled());
 		
 		$renderer->add_action(BS_ACTION_CHANGE_PASSWORD,'default');
 
@@ -63,12 +64,6 @@ final class BS_Front_Module_change_password extends BS_Front_Module
 		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
-
-		if(BS_ENABLE_EXPORT && BS_EXPORT_SEND_PW_TYPE != 'enabled')
-		{
-			$this->report_error();
-			return;
-		}
 
 		$user_id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$user_key = $input->get_var(BS_URL_KW,'get',FWS_Input::STRING);

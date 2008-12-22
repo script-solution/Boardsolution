@@ -11,8 +11,9 @@
  */
 
 /**
- * The community-mananger. Contains the import-/export-implementations and provides methods
- * to work with them (fire events, check wether the community is imported/exported, ...).
+ * The community-manager of Boardsolution. You can register listeners to get notified of
+ * logins, logouts, registrations and so on. Additionally you can disable features and change
+ * links to some features (registration, send-pw, ...).
  * 
  * @package			Boardsolution
  * @subpackage	src.community
@@ -36,54 +37,214 @@ final class BS_Community_Manager extends FWS_Singleton
 	private $_export = null;
 	
 	/**
-	 * The import-implementation
+	 * The login-implementation
 	 *
-	 * @var BS_Community_Import
+	 * @var BS_Community_Login
 	 */
-	private $_import = null;
+	private $_login = null;
 	
 	/**
-	 * @return boolean true if the community is imported
-	 */
-	public function is_imported()
-	{
-		return $this->_import !== null;
-	}
-	
-	/**
-	 * @return boolean true if the community is exported
-	 */
-	public function is_exported()
-	{
-		return $this->_export !== null;
-	}
-	
-	/**
-	 * Registers the given import-implementation.
+	 * Wether the user-management is enabled
 	 *
-	 * @param BS_Community_Import $import the import-implementation
+	 * @var boolean
 	 */
-	public function register_import($import)
+	private $_user_management_enabled = true;
+	
+	/**
+	 * Wether the registration is enabled
+	 *
+	 * @var boolean
+	 */
+	private $_registration_enabled = true;
+	
+	/**
+	 * Wether the resend-activation-feature is enabled
+	 *
+	 * @var boolean
+	 */
+	private $_resend_act_enabled = true;
+	
+	/**
+	 * Wether the send-pw-feature is enabled
+	 *
+	 * @var boolean
+	 */
+	private $_send_pw_enabled = true;
+	
+	/**
+	 * The URL for the registration
+	 *
+	 * @var string
+	 */
+	private $_register_url;
+	
+	/**
+	 * The URL for the resend-activation-feature
+	 *
+	 * @var string
+	 */
+	private $_resend_act_url;
+	
+	/**
+	 * The URL for the send-pw-feature
+	 *
+	 * @var string
+	 */
+	private $_send_pw_url;
+	
+	/**
+	 * Constructor
+	 */
+	public function __construct()
 	{
-		if(!($import instanceof BS_Community_Import))
-			FWS_Helper::def_error('instance','import','BS_Community_Import',$import);
-		if($this->_export !== null)
-			FWS_Helper::error('You can\'t export and import the community at the same time!');
+		parent::__construct();
 		
-		$this->_import = $import;
+		// build default URLs
+		$this->_register_url = BS_URL::build_mod_url('register');
+		$this->_send_pw_url = BS_URL::build_mod_url('sendpw');
+		$this->_resend_act_url = BS_URL::build_mod_url('resend_activation');
+	}
+
+	/**
+	 * @return boolean wether the user-management is enabled
+	 */
+	public function is_user_management_enabled()
+	{
+		return $this->_user_management_enabled;
+	}
+
+	/**
+	 * Disables the user-management
+	 */
+	public function disable_user_management()
+	{
+		$this->_user_management_enabled = false;
+	}
+
+	/**
+	 * @return boolean wether the registration is enabled
+	 */
+	public function is_registration_enabled()
+	{
+		return $this->_registration_enabled;
+	}
+
+	/**
+	 * Disables the registration
+	 */
+	public function disable_registration()
+	{
+		$this->_registration_enabled = false;
+	}
+
+	/**
+	 * @return boolean wether the resend-activation-feature is enabled
+	 */
+	public function is_resend_act_enabled()
+	{
+		return $this->_resend_act_enabled;
+	}
+
+	/**
+	 * Disables the resend-activation-feature
+	 */
+	public function disable_resend_act()
+	{
+		$this->_resend_act_enabled = false;
+	}
+
+	/**
+	 * @return boolean wether the send-pw-feature is enabled
+	 */
+	public function is_send_pw_enabled()
+	{
+		return $this->_send_pw_enabled;
+	}
+
+	/**
+	 * Disables the send-pw-feature
+	 */
+	public function disable_send_pw()
+	{
+		$this->_send_pw_enabled = false;
+	}
+
+	/**
+	 * @return string the URL for the registration (empty = don't display)
+	 */
+	public function get_register_url()
+	{
+		return $this->_register_url;
+	}
+
+	/**
+	 * Sets the URL for the registration
+	 * 
+	 * @param string $url the new value (empty = don't display)
+	 */
+	public function set_register_link($url)
+	{
+		$this->_register_url = $url;
+	}
+
+	/**
+	 * @return string the URL for the send-pw-feature (empty = don't display)
+	 */
+	public function get_send_pw_url()
+	{
+		return $this->_send_pw_url;
+	}
+
+	/**
+	 * Sets the URL for the send-pw-feature
+	 * 
+	 * @param string $url the new value (empty = don't display)
+	 */
+	public function set_send_pw_url($url)
+	{
+		$this->_send_pw_url = $url;
+	}
+
+	/**
+	 * @return string the URL for the resend-activation-feature (empty = don't display)
+	 */
+	public function get_resend_act_url()
+	{
+		return $this->_resend_act_url;
+	}
+
+	/**
+	 * Sets the URL for the resend-activation-feature
+	 * 
+	 * @param string $url the new value (empty = don't display)
+	 */
+	public function set_resend_act_url($url)
+	{
+		$this->_resend_act_url = $url;
 	}
 	
 	/**
-	 * Registers the given export-implementation.
+	 * Registers the given login-listener.
 	 *
-	 * @param BS_Community_Export $export the export-implementation
+	 * @param BS_Community_Login $login the login-listener
 	 */
-	public function register_export($export)
+	public function add_login_listener($login)
+	{
+		if(!($login instanceof BS_Community_Login))
+			FWS_Helper::def_error('instance','login','BS_Community_Login',$login);
+		
+		$this->_login = $login;
+	}
+	
+	/**
+	 * Registers the given export-listener.
+	 *
+	 * @param BS_Community_Export $export the export-listener
+	 */
+	public function add_export_listener($export)
 	{
 		if(!($export instanceof BS_Community_Export))
 			FWS_Helper::def_error('instance','export','BS_Community_Export',$export);
-		if($this->_import !== null)
-			FWS_Helper::error('You can\'t export and import the community at the same time!');
 		
 		$this->_export = $export;
 	}
@@ -106,8 +267,8 @@ final class BS_Community_Manager extends FWS_Singleton
 	 */
 	public function fire_user_login($user)
 	{
-		if($this->_export !== null)
-			$this->_export->user_login($user);
+		if($this->_login !== null)
+			$this->_login->user_login($user);
 	}
 	
 	/**
@@ -117,8 +278,8 @@ final class BS_Community_Manager extends FWS_Singleton
 	 */
 	public function fire_user_logout($user)
 	{
-		if($this->_export !== null)
-			$this->_export->user_logout($user);
+		if($this->_login !== null)
+			$this->_login->user_logout($user);
 	}
 	
 	/**
