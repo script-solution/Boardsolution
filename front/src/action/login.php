@@ -51,8 +51,7 @@ final class BS_Front_Action_login extends BS_Front_Action_Base
 				if(preg_match('/'.preg_quote(BS_URL_ACTION,'/').'=([a-zA-Z0-9_]+)/',$goto_url,$matches))
 				{
 					// does the module exist?
-					$module_file = FWS_Path::server_app().'front/module/'.$matches[1].'/module_';
-					$module_file .= $matches[1].'.php';
+					$module_file = FWS_Path::server_app().'front/module/'.$matches[1].'/module.php';
 					if(is_file($module_file))
 					{
 						// so include the module and check if it is a guest-only-module
