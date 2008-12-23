@@ -48,7 +48,7 @@ $sessions->garbage_collection();
 // TODO remove!
 if(defined('_JEXEC'))
 {
-	include_once(JPATH_COMPONENT_SITE.'/community.php');
+	include_once(JPATH_SITE.'/components/com_joobs/community.php');
 	BS_Community_Manager::get_instance()->add_login_listener(new BS_LoginListener());
 }
 ?>
