@@ -31,8 +31,9 @@ final class BS_Front_Module_resend_activation extends BS_Front_Module
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
+		$com = BS_Community_Manager::get_instance();
 		
-		$renderer->set_has_access(!$user->is_loggedin());
+		$renderer->set_has_access(!$user->is_loggedin() && $com->is_resend_act_enabled());
 		
 		$renderer->add_action(BS_ACTION_RESEND_ACT_LINK,'default');
 
@@ -57,14 +58,7 @@ final class BS_Front_Module_resend_activation extends BS_Front_Module
 		$user = FWS_Props::get()->user();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
-		$com = BS_Community_Manager::get_instance();
 
-		if(!$com->is_resend_act_enabled())
-		{
-			$this->report_error();
-			return;
-		}
-		
 		$this->request_formular(false,false);
 		
 		$sec_code_field = FWS_StringHelper::generate_random_key(15);

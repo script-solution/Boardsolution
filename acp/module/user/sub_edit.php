@@ -77,7 +77,7 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		$ad = $input->correct_var('ad','get',FWS_Input::STRING,array('ASC','DESC'),'DESC');
 		$site = $input->get_var('site','get',FWS_Input::INTEGER);
 
-		$baseurl = BS_URL::get_acpsub_url();
+		$baseurl = BS_URL::get_acpsub_url(0);
 		$baseurl->set('order',$order);
 		$baseurl->set('ad',$ad);
 		$baseurl->set('site',$site);
@@ -163,7 +163,7 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		$tpl->add_variables(array(
 			'addfields' => $tplfields,
 			'signature' => $form->get_input_value('text',$data['signature_posted']),
-			'base_url' => $baseurl->to_url()
+			'base_url' => $baseurl->set('action','default')->to_url()
 		));
 	}
 }
