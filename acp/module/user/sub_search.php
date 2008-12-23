@@ -308,7 +308,10 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 			// ok, store them to the session and redirect to the results-page
 			$user->set_session_data('user_search_params',$search_params);
 			$user->set_session_data('user_search_ids',$user_ids);
-			$doc->redirect(BS_URL::get_acpsub_url(0,'default'));
+			$referer = $input->get_var('HTTP_REFERER','server',FWS_Input::STRING);
+			$url = BS_URL::get_acpsub_url(0,'default');
+			$url->set_path(dirname(strtok($referer,'?')));
+			$doc->redirect($url);
 		}
 		// show the search-form again, if we have found 0 user
 		else
