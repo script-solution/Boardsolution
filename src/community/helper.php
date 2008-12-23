@@ -70,10 +70,17 @@ final class BS_Community_Helper extends FWS_UtilBase
 		if(!($user instanceof BS_Community_User))
 			FWS_Helper::def_error('instance','user','BS_Community_User',$user);
 		
+		// build default-values for the required fields
+		$addfields = array();
+		$afm = BS_AddField_Manager::get_instance();
+		foreach($afm->get_required_fields() as $field)
+			$addfields[$field->get_data()->get_name()] = $field->get_default_value();
+		
 		$plain = new BS_Front_Action_Plain_Register(
-			$user->get_name(),$user->get_pw_plain(),$user->get_email(),array($user->get_status())
+			$user->get_name(),$user->get_pw_plain(),$user->get_email(),array($user->get_status()),
+			$user->get_id(),$addfields
 		);
-		if(!$plain->check_data())
+		if(($err = $plain->check_data()) != '')
 			return;
 		
 		$plain->perform_action();
@@ -110,7 +117,7 @@ final class BS_Community_Helper extends FWS_UtilBase
 		// update groups
 		BS_DAO::get_profile()->update_user_by_id(array(
 			'user_group' => implode(',',$ngids).','
-		));
+		),$user->get_id());
 	}
 	
 	/**

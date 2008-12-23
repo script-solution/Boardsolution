@@ -59,8 +59,8 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		
 		// build plain-action
 		return new BS_Front_Action_Plain_Register(
-			$user_name,$user_pw,$user_email,array(BS_STATUS_USER),$addfields,$active,$email_display_mode,
-			$allow_pms,$allow_board_emails
+			$user_name,$user_pw,$user_email,array(BS_STATUS_USER),null,$addfields,$active,
+			$email_display_mode,$allow_pms,$allow_board_emails
 		);
 	}
 	
@@ -147,6 +147,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 	 * @param string $user_pw the password (clear text)
 	 * @param string $user_email the email
 	 * @param array $user_groups An array with all user-groups. The first group will be the main-group!
+	 * @param int $user_id the user-id to use (null = automatically)
 	 * @param array $additional_fields An array with all additional-fields to set. In the following form:
 	 * 	<code>
 	 * 		array(
@@ -159,7 +160,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 	 * @param boolean $allow_pms wether PMs should be enabled
 	 * @param boolean $allow_board_emails wether board-emails should be enabled
 	 */
-	public function __construct($user_name,$user_pw,$user_email,$user_groups,
+	public function __construct($user_name,$user_pw,$user_email,$user_groups,$user_id = null,
 		$additional_fields = array(),$active = true,$email_display_mode = 'default',$allow_pms = true,
 		$allow_board_emails = true)
 	{
@@ -168,6 +169,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		if(!is_array($additional_fields))
 			FWS_Helper::def_error('array','additional_fields',$additional_fields);
 		
+		$this->_user_id = (int)$user_id;
 		$this->_user_name = (string)$user_name;
 		$this->_user_pw = (string)$user_pw;
 		$this->_user_email = (string)$user_email;
@@ -192,6 +194,10 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		$functions = FWS_Props::get()->functions();
 		$cfg = FWS_Props::get()->cfg();
 		$locale = FWS_Props::get()->locale();
+		
+		// check user-id
+		if($this->_user_id !== null && BS_DAO::get_user()->get_user_by_id($this->_user_id) !== false)
+			return 'User-id '.$this->_user_id.' exists!';
 
 		// is the username valid?
 		if(BS_DAO::get_user()->name_exists($this->_user_name))
@@ -272,9 +278,11 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		$db->start_transaction();
 		
 		// insert the user into the database
-		$this->_user_id = BS_DAO::get_user()->create(
-			$this->_user_name,$this->_user_email,$this->_user_pw
+		$id = BS_DAO::get_user()->create(
+			$this->_user_name,$this->_user_email,$this->_user_pw,$this->_user_id
 		);
+		if($this->_user_id !== null)
+			$this->_user_id = $id;
 		
 		$time = time();
 		

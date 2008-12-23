@@ -42,7 +42,9 @@ abstract class BS_Install_Action_Base extends FWS_Action_Base
 		$input = FWS_Props::get()->input();
 		$action = $input->get_var('action','get',FWS_Input::STRING);
 		$dir = $input->get_var('dir','get',FWS_Input::STRING);
+		$phpself = $input->get_var('PHP_SELF','server',FWS_Input::STRING);
 		$url = new FWS_URL();
+		$url->set_file(basename($phpself));
 		if($dir == 'back')
 			$url->set('action',$action - 1);
 		else if($dir == 'forward')

@@ -283,9 +283,10 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 * @param string $user_name the user-name (has to be unique!)
 	 * @param string $user_email the email
 	 * @param string $user_pw the password in plain-text
+	 * @param int $user_id the id to use (null = automatically)
 	 * @return int the id of the user that has been used
 	 */
-	public function create($user_name,$user_email,$user_pw)
+	public function create($user_name,$user_email,$user_pw,$user_id = null)
 	{
 		$db = FWS_Props::get()->db();
 
@@ -295,12 +296,18 @@ class BS_DAO_User extends BS_DAO_UserBase
 			FWS_Helper::def_error('notempty','user_email',$user_email);
 		if(empty($user_pw))
 			FWS_Helper::def_error('notempty','user_pw',$user_pw);
+		if($user_id !== null && (!FWS_Helper::is_integer($user_id) || $user_id <= 0))
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
 		
-		return $db->insert(BS_TB_USER,array(
+		$fields = array(
 			BS_EXPORT_USER_NAME => $user_name,
 			BS_EXPORT_USER_EMAIL => $user_email,
 			BS_EXPORT_USER_PW => md5($user_pw)
-		));
+		);
+		if($user_id !== null)
+			$fields[BS_EXPORT_USER_ID] = $user_id;
+		
+		return $db->insert(BS_TB_USER,$fields);
 	}
 	
 	/**
