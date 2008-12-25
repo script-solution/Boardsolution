@@ -56,64 +56,23 @@ final class BS_ACP_Module_faq extends BS_ACP_Module
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
 
-		$locale->add_language_file('lang_admin_faq.php');
-
-		$this->_add_entry(
-			$locale->lang('faq_q_board_logo'),$locale->lang('faq_a_board_logo')
-		);
-		$this->_add_entry(
-			$locale->lang('faq_q_moderators'),$locale->lang('faq_a_moderators')
-		);
-		$this->_add_entry(
-			$locale->lang('faq_q_gzip'),$locale->lang('faq_a_gzip')
-		);
-		$this->_add_entry(
-			$locale->lang('faq_q_link_to_hp'),$locale->lang('faq_a_link_to_hp')
-		);
-		$this->_add_entry(
-			$locale->lang('faq_q_status_messages'),$locale->lang('faq_a_status_messages')
-		);
-		$this->_add_entry(
-			$locale->lang('faq_q_add_bbcode'),$locale->lang('faq_a_add_bbcode')
-		);
-		$this->_add_entry(
-			$locale->lang('faq_q_subforums'),$locale->lang('faq_a_subforums')
-		);
-		$this->_add_entry(
-			$locale->lang('faq_q_reduce_userdata'),$locale->lang('faq_a_reduce_userdata')
-		);
-		$this->_add_entry(
-			$locale->lang('faq_q_templates'),$locale->lang('faq_a_templates')
-		);
-		$this->_add_entry(
-			$locale->lang('faq_q_logout'),$locale->lang('faq_a_logout')
-		);
-		$this->_add_entry(
-			$locale->lang('faq_q_emails_spam'),$locale->lang('faq_a_emails_spam')
-		);
-		$this->_add_entry(
-			$locale->lang('faq_q_bs_api'),$locale->lang('faq_a_bs_api')
-		);
-		$this->_add_entry(
-			$locale->lang('faq_q_bbceditor_extra_tags'),$locale->lang('faq_a_bbceditor_extra_tags')
-		);
+		$http = new FWS_HTTP('localhost');
+		// TODO change the URL!
+		$xml = $http->get('/joomla15final/lang-de/bs-informationen/faq?format=raw');
+		$doc = new SimpleXMLElement($xml);
 		
-		$tpl->add_variable_ref('questions',$this->_entries);
-	}
-
-	/**
-	 * Adds an entry to the list
-	 *
-	 * @param string $question he question
-	 * @param string $answer the answer
-	 */
-	private function _add_entry($question,$answer)
-	{
-		$this->_entries[] = array(
-			'id' => $this->_id++,
-			'question' => $question,
-			'answer' => $answer
-		);
+		$id = 1;
+		$entries = array();
+		foreach($doc->question as $question)
+		{
+			$entries[] = array(
+				'id' => $id++,
+				'question' => (string)$question->title,
+				'answer' => (string)$question->answer
+			);
+		}
+		
+		$tpl->add_variable_ref('questions',$entries);
 	}
 }
 ?>

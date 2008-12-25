@@ -46,18 +46,15 @@ $user->init();
 $sessions->garbage_collection();
 
 // TODO remove!
-$cm = BS_Community_Manager::get_instance();
+/*$cm = BS_Community_Manager::get_instance();
 $cm->disable_registration();
 $cm->disable_resend_act();
 $cm->disable_send_pw();
 $cm->disable_user_management();
-$cm->set_register_link('../../joomlabs/index.php?option=com_user&amp;task=register');
+$cm->set_register_url('../../joomlabs/index.php?option=com_user&amp;task=register');
 $cm->set_resend_act_url('');
 $cm->set_send_pw_url('../../joomlabs/index.php?option=com_user&amp;view=reset');
 
-/*if(defined('_JEXEC'))
-{
-	include_once(JPATH_SITE.'/components/com_joobs/community.php');
-	BS_Community_Manager::get_instance()->add_login_listener(new BS_LoginListener());
-}*/
+if(defined('_JEXEC'))
+	BS_Community_Manager::get_instance()->add_login_listener(new BS_JLoginListener());*/
 ?>

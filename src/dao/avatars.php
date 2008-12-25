@@ -207,8 +207,8 @@ class BS_DAO_Avatars extends FWS_Singleton
 
 		if(empty($path))
 			FWS_Helper::def_error('notempty','path',$path);
-		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
-			FWS_Helper::def_error('intgt0','user_id',$user_id);
+		if(!FWS_Helper::is_integer($user_id) || $user_id < 0)
+			FWS_Helper::def_error('intge0','user_id',$user_id);
 		
 		return $db->insert(BS_TB_AVATARS,array(
 			'av_pfad' => $path,

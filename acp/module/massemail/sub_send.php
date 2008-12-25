@@ -38,7 +38,6 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 		$locale = FWS_Props::get()->locale();
 		$renderer = $doc->use_default_renderer();
 		
-		$renderer->add_action(BS_ACP_ACTION_ACPACCESS_MODULE,'module');
 		$renderer->add_breadcrumb($locale->lang('send_emails_process'));
 	}
 	

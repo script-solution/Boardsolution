@@ -86,6 +86,7 @@ final class BS_ACP_SubModule_linklist_edit extends BS_ACP_SubModule
 		$tpl->add_variable_ref('data',$data);
 		$tpl->add_variables(array(
 			'id' => $id,
+			'action_type' => BS_ACP_ACTION_EDIT_LINK,
 			'categories' => $options
 		));
 	}

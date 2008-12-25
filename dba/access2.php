@@ -1,4 +1,4 @@
 <?php
-define('BS_DBA_USERNAME','W49CC5');
-define('BS_DBA_PASSWORD','W91X3qiZqP');
+define('BS_DBA_USERNAME','WD2nQZ');
+define('BS_DBA_PASSWORD','sudfBqRX8C');
 ?>

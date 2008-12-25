@@ -182,7 +182,7 @@ final class BS_Community_Manager extends FWS_Singleton
 	 * 
 	 * @param string $url the new value (empty = don't display)
 	 */
-	public function set_register_link($url)
+	public function set_register_url($url)
 	{
 		$this->_register_url = $url;
 	}

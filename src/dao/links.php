@@ -233,10 +233,10 @@ class BS_DAO_Links extends FWS_Singleton
 
 		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
 			FWS_Helper::def_error('intarray>0','ids',$ids);
-		if($active !== 1 && $active !== 2)
+		if($active !== 1 && $active !== 0)
 			FWS_Helper::error('Active should be 0 or 1');
 		
-		return $db->update(BS_TB_LINKS,'WHERE id = IN ('.implode(',',$ids).')',array(
+		return $db->update(BS_TB_LINKS,'WHERE id IN ('.implode(',',$ids).')',array(
 			'active' => $active
 		));
 	}

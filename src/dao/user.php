@@ -219,7 +219,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 		$db = FWS_Props::get()->db();
 
 		$where = $this->get_user_by_groups_where($group_ids,$user_ids);
-		return $db->get_row_count(BS_TB_PROFILES,'id',$where);
+		return $db->get_row_count(BS_TB_PROFILES.' p','*',$where);
 	}
 	
 	/**

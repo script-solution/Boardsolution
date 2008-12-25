@@ -70,6 +70,17 @@ span.bs_highlight {
 	color: #000;
 }
 
+/* ------------ ADMIN-FAQ ------------ */
+
+code {
+	font-size: 1.2em;
+	display: block;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	padding: 4px;
+	margin: 2px;
+}
+
 /* ------------ BBCODE BUTTONS ------------ */
 
 input.bs_bbcode {
