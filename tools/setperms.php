@@ -24,9 +24,9 @@
 // Please remove the following 3 lines so that you can call the script in the browser.
 // This will be possible for everyone. Therefore you should re-add it IN EVERY CASE
 // as soon as you're ready!
-/*die('Bitte &ouml;ffnen Sie diese Datei via FTP und entfernen Sie diese Zeile um das Script
+die('Bitte &ouml;ffnen Sie diese Datei via FTP und entfernen Sie diese Zeile um das Script
 	benutzen zu k&ouml;nnen!<br /><br />
-	Please open this file via FTP and remove this line to be able to use this script!');*/
+	Please open this file via FTP and remove this line to be able to use this script!');
 
 define('BS_PATH','../');
 include(BS_PATH.'extern/bs_api.php');

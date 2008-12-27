@@ -1,7 +1,6 @@
 <?php
 /**
- * Refreshes the db-cache. This script may be usefull if the cache is broken and you can't refresh
- * it in the adminarea because you are unable to get there.
+ * Changes all BS-table-engines to InnoDB
  *
  * @version			$Id$
  * @package			Boardsolution
@@ -24,12 +23,21 @@ die('Bitte &ouml;ffnen Sie diese Datei via FTP und entfernen Sie diese Zeile um 
 define('LINE_WRAP',PHP_SAPI == 'cli' ? "\n" : '<br />');
 
 define('BS_PATH','../');
-include(BS_PATH.'extern/bs_api.php');
+include_once(BS_PATH.'extern/bs_api.php');
+$db = FWS_Props::get()->db();
 
-echo "Refreshing cache...";
-$cache = FWS_Props::get()->cache();
-$cache->refresh_all();
-echo "DONE".LINE_WRAP;
+echo "Starting...".LINE_WRAP;
+$const = get_defined_constants();
+foreach($const as $name => $value)
+{
+	if(FWS_String::starts_with($name,'BS_TB_'))
+	{
+		echo "\tChanging engine of \"".$value."\"...";
+		$db->execute('ALTER TABLE `'.$value.'` ENGINE = InnoDB');
+		echo "DONE".LINE_WRAP;
+	}
+}
+echo "Finished!".LINE_WRAP;
 
 BS_finish();
 ?>
