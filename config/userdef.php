@@ -59,8 +59,6 @@ define('BS_DEBUG',1);
  * supports transactions, you can (and should) set this value to "true". This ensures that changes
  * to the database will be done completely or not at all. That means the database remains in a
  * consistent status even if a query fails, the script has been terminated or similar.
- * 
- * TODO disable this by default
  */
 define('BS_USE_TRANSACTIONS',true);
 
