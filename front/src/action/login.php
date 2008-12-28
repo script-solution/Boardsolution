@@ -81,13 +81,7 @@ final class BS_Front_Action_login extends BS_Front_Action_Base
 			return '';
 		}
 
-		// otherwise we want to show nothing, therefore we simulate that we haven't done anything
 		$this->set_action_performed(false);
-		
-		// TODO this is not used any more, right?
-		$url = BS_URL::get_mod_url('login');
-		$url->set(BS_URL_ID,$error_code);
-		$this->set_redirect(true,$url);
 		return $locale->lang('login_error_'.$error_code);
 	}
 }

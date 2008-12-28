@@ -436,9 +436,6 @@ final class BS_Functions extends FWS_Object
 			'cmV0dXJuICc8YSB0YXJnZXQ9Il9ibGFuayIgaHJlZj0iaHR0cDovL3d3dy5zY3JpcHQtc29sdXRpb24uZGUiPk'
 		 .'JvYXJkc29sdXRpb24gdjEuNDAgQWxwaGExPC9hPiB8ICZjb3B5OyBOaWxzIEFzbXVzc2VuIDIwMDMtMjAwNyc7'
 		);
-		// TODO remove that!
-		//$dstr = 'return \'<a target="_blank" href="http://www.script-solution.de">'.BS_VERSION.'</a> | &copy; Nils Asmussen 2003-2007\';';
-		//echo base64_encode($dstr);
 		return eval($str);
 	}
 	

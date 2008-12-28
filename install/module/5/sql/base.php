@@ -37,8 +37,7 @@ abstract class BS_Install_Module_5_SQL_Base extends FWS_Object
 		$install_type = $user->get_session_data('install_type','full');
 		
 		$this->add_to_log('Creating "config/mysql.php"...');
-		// TODO change!
-		if(FWS_FileUtils::write('config/mysql2.php',$this->_get_mysql_config()))
+		if(FWS_FileUtils::write('config/mysql.php',$this->_get_mysql_config()))
 		{
 			$this->add_to_log_success();
 			
@@ -47,8 +46,7 @@ abstract class BS_Install_Module_5_SQL_Base extends FWS_Object
 			$content .= 'define(\'BS_DBA_USERNAME\',\''.FWS_StringHelper::generate_random_key(6).'\');'."\n";
 			$content .= 'define(\'BS_DBA_PASSWORD\',\''.FWS_StringHelper::generate_random_key(10).'\');'."\n";
 			$content .= '?>';
-			// TODO change!
-			if(FWS_FileUtils::write('dba/access2.php',$content))
+			if(FWS_FileUtils::write('dba/access.php',$content))
 			{
 				$this->add_to_log_success();
 						

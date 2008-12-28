@@ -51,11 +51,5 @@ final class BS_Front_Module_security_code extends BS_Front_Module
 		
 		$user->set_session_data('security_code',$captcha->get_chars());
 	}
-	
-	// TODO we have to consider this!
-	public function require_board_access()
-	{
-		return false;
-	}
 }
 ?>

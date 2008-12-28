@@ -26,16 +26,6 @@ abstract class BS_Document extends FWS_Document
 	{
 		parent::finish();
 		
-		// TODO temporary!
-		$msgs = FWS_Props::get()->msgs();
-		$str = '';
-		foreach($msgs->get_all_messages() as $type => $list)
-		{
-			foreach($list as $text)
-				$str .= $type.': '.$text."\n";
-		}
-		FWS_FileUtils::append('msglog.txt',$str);
-		
 		$db = FWS_Props::get()->db();
 		$db->disconnect();
 	}
@@ -55,8 +45,8 @@ abstract class BS_Document extends FWS_Document
 		$tpl->add_global('guserid',$user->get_user_id());
 		$tpl->add_global('gisadmin',$user->is_admin());
 		$tpl->add_global('glang',$user->get_language());
-		// TODO add theme
-		// TODO add current module
+		$tpl->add_global('gmodule',$this->get_module_name());
+		$tpl->add_global('gtheme',$user->get_theme());
 		
 		$this->set_charset(BS_HTML_CHARSET);
 		FWS_Path::set_outer($cfg['board_url'].'/');

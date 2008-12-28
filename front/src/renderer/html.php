@@ -41,6 +41,13 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 	private $_show_bottom = true;
 	
 	/**
+	 * Wether the login-form should be displayed instead of the module
+	 *
+	 * @var boolean
+	 */
+	private $_show_login = false;
+	
+	/**
 	 * The value for the meta-tag "robots".
 	 *
 	 * @var string
@@ -196,7 +203,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		$doc = FWS_Props::get()->doc();
 		
 		$loginform = false;
-		if($msgs->contains_no_access() || $doc->get_module()->error_occurred())
+		if($msgs->contains_no_access() || $this->_show_login)
 		{
 			if($user->is_loggedin())
 				$msgs->add_error($locale->lang('permission_denied'));
@@ -251,7 +258,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			if($board_access)
 			{
 				// board deactivated?
-				if($doc->get_module_name() != 'login' && $cfg['enable_board'] == 0 &&
+				if(!$module->is_always_viewable() && $cfg['enable_board'] == 0 &&
 					!$user->is_admin())
 				{
 					$msg = nl2br(FWS_StringHelper::htmlspecialchars_back($cfg['board_disabled_text']));
@@ -269,6 +276,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				{
 					$functions->build_login_form();
 					$module->set_error();
+					$this->_show_login = true;
 				}
 				else
 					parent::content();

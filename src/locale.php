@@ -141,7 +141,6 @@ final class BS_Locale extends FWS_Object implements FWS_Locale
 		if(!method_exists($user,'get_language'))
 			return ',';
 		
-		// TODO improve that?
 		switch($user->get_language())
 		{
 			case 'ger_du':
@@ -160,7 +159,6 @@ final class BS_Locale extends FWS_Object implements FWS_Locale
 		if(!method_exists($user,'get_language'))
 			return '.';
 		
-		// TODO improve that?
 		switch($user->get_language())
 		{
 			case 'ger_du':
@@ -179,7 +177,6 @@ final class BS_Locale extends FWS_Object implements FWS_Locale
 		if(!method_exists($user,'get_language'))
 			return array('d','m','Y');
 		
-		// TODO improve that?
 		switch($user->get_language())
 		{
 			case 'ger_du':
@@ -198,7 +195,6 @@ final class BS_Locale extends FWS_Object implements FWS_Locale
 		if(!method_exists($user,'get_language'))
 			return '.';
 		
-		// TODO improve that?
 		switch($user->get_language())
 		{
 			case 'ger_du':

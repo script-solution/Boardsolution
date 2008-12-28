@@ -89,7 +89,6 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 		if($search_cond === null)
 			return null;
 		
-		// TODO allow unlimited results?
 		$limit_vals = array(10,25,50,100,250,500);
 		$limit = $input->correct_var('limit','post',FWS_Input::INTEGER,$limit_vals,250);
 		

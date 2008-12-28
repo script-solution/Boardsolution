@@ -26,14 +26,53 @@
 abstract class BS_Front_Module extends FWS_Module
 {
 	/**
-	 * Should return wether this module is viewable by guests only. The default value is "false".
-	 * Please overwrite the method if you want to change it.
-	 * 
-	 * @return boolean true if it is only for guests
+	 * Wether this module is guest-only
+	 *
+	 * @var boolean
 	 */
-	public function is_guest_only()
+	private $_guest_only = false;
+	
+	/**
+	 * Wether the module is always viewable
+	 *
+	 * @var boolean
+	 */
+	private $_always_viewable = false;
+	
+	/**
+	 * @return boolean wether this module is viewable by guests only
+	 */
+	public final function is_guest_only()
 	{
-		return false;
+		return $this->_guest_only;
+	}
+	
+	/**
+	 * Sets wether this module is viewable by guests only
+	 *
+	 * @param boolean $guestonly the new value
+	 */
+	public final function set_guest_only($guestonly)
+	{
+		$this->_guest_only = (bool)$guestonly;
+	}
+	
+	/**
+	 * @return boolean wether the module is always viewable
+	 */
+	public final function is_always_viewable()
+	{
+		return $this->_always_viewable;
+	}
+	
+	/**
+	 * Sets wether the module is always viewable
+	 *
+	 * @param boolean $val the new value
+	 */
+	public final function set_always_viewable($val)
+	{
+		$this->_always_viewable = (bool)$val;
 	}
 	
 	/**

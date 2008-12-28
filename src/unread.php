@@ -410,8 +410,6 @@ final class BS_Unread extends FWS_Object
 			}
 		}
 		
-		// TODO is here a bug that causes (sometimes) a duplicate row in the unread-table?
-		
 		// now determine which of the unread posts are unread news
 		if($grab_news && count($topic_ids) > 0)
 		{

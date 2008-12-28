@@ -43,10 +43,9 @@ final class BS_Front_Action_userprofile_uploadavatar extends BS_Front_Action_Bas
 		// check the image-size
 		if($_FILES['bild_upload']['size'] > ($cfg['profile_max_img_filesize'] * 1024))
 		{
-			// TODO the error-message is wrong here ;)
-			list($img_width,$img_height) = explode('x',$cfg['profile_max_img_size']);
 			return sprintf(
-				$locale->lang('error_imagetoobig'),$img_width,$img_height
+				$locale->lang('error_image_filesize'),$cfg['profile_max_img_filesize'] * 1024,
+				$_FILES['bild_upload']['size']
 			);
 		}
 

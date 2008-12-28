@@ -1131,8 +1131,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		
 		
 		$this->add_to_log('Generating DB-Cache...');
-		// TODO change!
-		include_once(FWS_Path::server_app().'config/mysql2.php');
+		include_once(FWS_Path::server_app().'config/mysql.php');
 		$cache = FWS_Props::get()->cache();
 		$cache->refresh_all();
 		$this->add_to_log_success();

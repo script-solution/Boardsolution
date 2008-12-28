@@ -28,6 +28,8 @@ final class BS_Front_Module_new_poll extends BS_Front_Module
 	{
 		parent::init($doc);
 		
+		$this->set_guest_only(true);
+		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
 		$auth = FWS_Props::get()->auth();
@@ -45,16 +47,6 @@ final class BS_Front_Module_new_poll extends BS_Front_Module
 		$url = BS_URL::get_mod_url();
 		$url->set(BS_URL_FID,$fid);
 		$renderer->add_breadcrumb($locale->lang('newpoll'),$url->to_url());
-	}
-	
-	/**
-	 * @see BS_Front_Module::is_guest_only()
-	 *
-	 * @return boolean
-	 */
-	public function is_guest_only()
-	{
-		return true;
 	}
 	
 	/**
