@@ -208,11 +208,6 @@ img.bs_bbcode {
 	vertical-align: top;
 }
 
-select.bs_bbcode {
-	height: 24px;
-	padding: 1px;
-}
-
 .bs_bbcode_popup {
 	background-color: #fff;
 	border: 1px solid #aaa;

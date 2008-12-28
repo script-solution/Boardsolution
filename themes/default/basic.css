@@ -150,6 +150,7 @@ div.bs_headline {
 
 .bs_welcome {
 	color: #000;
+	background-color: #ebebeb;
 }
 
 li.bs_welcome_left {
@@ -388,11 +389,6 @@ img.bs_bbcode {
 	vertical-align: top;
 }
 
-select.bs_bbcode {
-	height: 24px;
-	padding: 1px;
-}
-
 /* {{bbcode_popup}} */
 
 .bs_bbcode_popup {
@@ -598,3 +594,4 @@ a.bs_button_selected:hover {
 	color: #d75858;
 	text-decoration: none;
 }
+

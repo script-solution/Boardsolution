@@ -410,11 +410,6 @@ img.bs_bbcode {
 	vertical-align: top;
 }
 
-select.bs_bbcode {
-	height: 24px;
-	padding: 1px;
-}
-
 /* {{bbcode_popup}} */
 
 .bs_bbcode_popup {

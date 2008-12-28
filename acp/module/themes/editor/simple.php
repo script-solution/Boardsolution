@@ -86,6 +86,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 		{
 			if($block->get_type() == FWS_CSS_Block::COMMENT)
 			{
+				$matches = array();
 				if(preg_match('/\/\*\s*\{\{(.*?)\}\}\s*\*\//',$block->get_content(),$matches) && $cat)
 				{
 					$group = $matches[1];
@@ -287,7 +288,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 			$res .= '	</tr>'."\n";
 		}
 		$res .= '	<tr>'."\n";
-		$res .= '		<td class="a_main" colspan="2"><img border="1" src="acp/images/design/';
+		$res .= '		<td class="a_main" colspan="2"><img style="border: 1px solid #000;" src="acp/images/design/';
 		$res .= $image_name.'" alt="" />';
 		$res .= '</td>'."\n";
 		$res .= '	</tr>'."\n";
@@ -334,155 +335,221 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 		{
 			case 'body':
 				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"',''),
-					'body.gif',
-					array('"'.$locale->lang('tag_body').'"',
-								'"'.$locale->lang('tag_td').'", "'.$locale->lang('tag_div').'"')
+					array('"body.bs_body"',''),
+					'body.png',
+					array('".bs_body a", ".bs_body a:hover"',
+								'"body.bs_body"')
 				);
 			
 			case 'main':
+				return $this->_get_explanation_table(
+					array('".bs_main"',''),
+					'main.png',
+					array('','".bs_main a", ".bs_main a:hover"')
+				);
+			
+			case 'coldesc':
 				$res = $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_td').'"',''),
-					'main1.gif',
-					array('','"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"')
+					array('".bs_coldesc"',''),
+					'coldesc.png',
+					array('".bs_coldesc a", ".bs_coldesc a:hover"','')
 				);
 				$res .= $this->_get_explanation_divider();
 				$res .= $this->_get_explanation_table(
-					array('',''),
-					'main2.gif',
-					array('"'.$locale->lang('tag_td').'"','')
+					array('".bs_left"',''),
+					'left.png',
+					array('','')
 				);
 				return $res;
 			
-			case 'coldesc':
-				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_td').'"',''),
-					'coldesc.gif',
-					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"','')
-				);
-			
 			case 'topic':
 				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"',''),
-					'topic.gif',
-					array('"'.$locale->lang('tag_td').'"','')
+					array('".bs_topic a", ".bs_topic a:hover"',''),
+					'topic.png',
+					array('".bs_topic", "td.bs_topic", "h1.bs_topic"','')
 				);
 			
 			case 'desc':
 				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_div').'"',''),
-					'desc.gif',
+					array('".bs_desc"',''),
+					'desc.png',
 					array('','')
 				);
 			
 			case 'border':
 				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_td').'"',''),
-					'tbl_border.gif',
+					array('".bs_border"',''),
+					'border.png',
 					array('','')
 				);
 			
 			case 'headline':
+				$res = $this->_get_explanation_table(
+					array('"div.bs_headline"','".bs_menu_wrapper"'),
+					'headline_left.png',
+					array('".bs_menu a", ".bs_menu a:hover"','"li.bs_welcome_left"')
+				);
+				$res .= $this->_get_explanation_divider();
+				$res .= $this->_get_explanation_table(
+					array('"li.bs_welcome_right"','".bs_welcome"'),
+					'headline_right.png',
+					array('','')
+				);
+				return $res;
+			
+			case 'bottom':
 				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_div').'"',''),
-					'headline.gif',
+					array('"div.bs_bottom"','"li.bs_bottom"'),
+					'bottom.png',
 					array('','')
 				);
 			
-			case 'border':
-				return '';
-			
 			case 'form':
-				return '';
+				$res = $this->_get_explanation_table(
+					array('"fieldset.bs_form dl"',''),
+					'formular.png',
+					array('"fieldset.bs_form dt"','"fieldset.bs_form dd"')
+				);
+				$res .= $this->_get_explanation_divider();
+				$res .= $this->_get_explanation_table(
+					array('"fieldset.bs_subform dl"',''),
+					'formular_sub.png',
+					array('"fieldset.bs_subform dt"','"fieldset.bs_subform dd"')
+				);
+				return $res;
 			
 			case 'forums':
 				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"',''),
-					'forums.gif',
-					array('"'.$locale->lang('tag_td').'"','')
+					array('".bs_forums a", ".bs_forums a:hover"',''),
+					'forums.png',
+					array('"td.bs_forums"','')
 				);
 			
 			case 'forums_small':
 				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"',''),
-					'forums_small.gif',
-					array('','')
+					array('"td.bs_forums_small"',''),
+					'forums_small.png',
+					array('','".bs_forums_small a", ".bs_forums_small a:hover"')
 				);
 			
 			case 'categories':
 				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'", "'
-						.$locale->lang('tag_td').'"',''),
-					'categories.gif',
+					array('".bs_categories a", ".bs_categories a:hover"','"td.bs_categories"'),
+					'categories.png',
 					array('','')
 				);
 			
 			case 'topics_small':
-				return '';
-			
-			case 'post':
 				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"',''),
-					'post_bar.gif',
-					array('"'.$locale->lang('tag_td').'"','')
+					array('".bs_topics_small a", ".bs_topics_small a:hover"'),
+					'topics_small.png',
+					array('','')
 				);
 			
+			case 'post':
+				$res = $this->_get_explanation_table(
+					array('".bs_posts_bar_X a"','".bs_posts_bar_X"'),
+					'posts1.png',
+					array('".bs_posts_left_X"','".bs_posts_left_X a"')
+				);
+				$res .= $this->_get_explanation_divider();
+				$res .= $this->_get_explanation_table(
+					array('".bs_post_separator"',''),
+					'posts2.png',
+					array('".bs_posts_main_X"','".bs_posts_main_X a"')
+				);
+				return $res;
+			
 			case 'bbcode':
-				return '';
+				return $this->_get_explanation_table(
+					array('"img.bs_bbcode"',''),
+					'bbcode.png',
+					array('','"input.bs_bbcode"')
+				);
 			
 			case 'bbcode_popup':
-				return '';
+				return $this->_get_explanation_table(
+					array('".bs_bbcode_popup"','".bs_bbcode_popup li a", ".bs_bbcode_popup li a:hover"'),
+					'bbcode_popup.png',
+					array('".bs_bbcode_popup li"','')
+				);
 			
 			case 'quote':
-				return '';
+				return $this->_get_explanation_table(
+					array('".bs_quote_section"','".bs_quote_section_top"'),
+					'quote.png',
+					array('".bs_quote_section_main"','')
+				);
 			
 			case 'code':
-				return '';
+				return $this->_get_explanation_table(
+					array('".bs_lcode"','".bs_rcode"'),
+					'code.png',
+					array('','')
+				);
 			
 			case 'calendar':
 				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_td').'"',''),
-					'calendar.gif',
-					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"','')
+					array('"td.bs_calendar"',''),
+					'calendar.png',
+					array('".bs_calendar a", ".bs_calendar a:hover"','"td.bs_calendar_today"')
 				);
 			
 			case 'calendar_empty':
 				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_td').'"',''),
-					'calendar_empty.gif',
+					array('"td.bs_calendar_empty"','"td.bs_calendar_empty_today"'),
+					'calendar_empty.png',
 					array('','','')
 				);
 			
 			case 'calendar_border':
 				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_td').'"',''),
-					'calendar_border.gif',
-					array('','','')
+					array('"td.bs_calendar_border"',''),
+					'calendar_border.png',
+					array('','"td.bs_calendar_border_today"')
 				);
 			
 			case 'unread':
 				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_div').'"',''),
-					'unread_pms.gif',
+					array('"span.bs_unread"',''),
+					'unread.png',
 					array('','')
 				);
 			
 			case 'highlight':
 				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_div').'"',''),
-					'search_keywords.gif',
+					array('"span.bs_highlight"',''),
+					'highlight.png',
 					array('','')
 				);
 			
 			case 'formelements':
-				return '';
-			
-			case 'button':
 				return $this->_get_explanation_table(
-					array('"'.$locale->lang('tag_a').'", "'.$locale->lang('tag_ahover').'"',''),
-					'button.gif',
+					array('"input,select,textarea"',''),
+					'formelements.png',
 					array('','')
 				);
+			
+			case 'pagination':
+				return $this->_get_explanation_table(
+					array('".bs_pagecurrent"','".bs_pageno"'),
+					'pagination.png',
+					array('','".bs_pageno a", ".bs_pageno a:hover"')
+				);
+			
+			case 'button':
+				$res = $this->_get_explanation_table(
+					array('"a.bs_button_selected", "a.bs_button_selected:hover"',''),
+					'button.png',
+					array('"a.bs_button", "a.bs_button:hover"','')
+				);
+				$res .= $this->_get_explanation_divider();
+				$res .= $this->_get_explanation_table(
+					array('"a.bs_button_big", "a.bs_button_big:hover"',''),
+					'button_big.png',
+					array('','')
+				);
+				return $res;
 			
 			default:
 			  return '';

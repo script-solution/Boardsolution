@@ -300,7 +300,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 				$locale->lang('lastlogin'),'lastlogin','DESC',$order,$orderurl
 			),
 			'register_col' => $functions->get_order_column(
-				$locale->lang('Registered'),'register','DESC',$order,$orderurl
+				$locale->lang('registeredsince'),'register','DESC',$order,$orderurl
 			),
 			'usergroup_col' => $functions->get_order_column(
 				$locale->lang('group'),'user_group','ASC',$order,$orderurl
