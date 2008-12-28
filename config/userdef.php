@@ -24,9 +24,7 @@
  * You can also add parameters if this is required. For example if you call the board with
  * "page.php?site=forum" you have to use the value "page.php?site=forum".
  */
-// TODO changed for joomla
-define('BS_FRONTEND_FILE','index.php?option=com_joobs&Itemid=26');
-//define('BS_FRONTEND_FILE','index.php');
+define('BS_FRONTEND_FILE','index.php');
 
 ############################ GENERAL ############################
 
@@ -47,8 +45,6 @@ define('BS_FWS_PATH','../PHPLib/');
  * 	0 = disabled
  * 	1 = display just time, query-count and memory-usage
  * 	2 = display all infos
- * 
- * TODO set to 1 by default
  */
 define('BS_DEBUG',1);
 
