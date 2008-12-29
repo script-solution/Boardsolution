@@ -485,6 +485,9 @@ final class BS_User_Current extends FWS_User_Current
 
 		if($cfg['default_forum_lang'] > 0)
 			$this->_language = $functions->get_def_lang_folder();
+		// fall back to default one
+		else
+			$this->_language = 'ger_du';
 	}
 
 	/**
