@@ -93,8 +93,6 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		$input = FWS_Props::get()->input();
 		$renderer = $doc->use_default_renderer();
 		
-		$renderer->add_breadcrumb(BS_VERSION.' vs. '.$this->_compare_version);
-		
 		$http = new FWS_HTTP('www.script-solution.de');
 		$this->_versions = $http->get('/bsversions/versions.xml');
 		if($this->_versions === false)
@@ -131,6 +129,7 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		}
 		
 		$this->_error = false;
+		$renderer->add_breadcrumb(BS_VERSION.' vs. '.$this->_compare_version);
 	}
 	
 	/**
@@ -351,8 +350,8 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		static $excl = array('dba/backups','images/smileys','images/avatars');
 		// define the root-folders and files we want to compare
 		static $allow = array(
-			'acp','bbceditor','config','dba','extern','front','images','install','language','src','themes',
-			'admin.php','index.php','standalone.php','.htaccess'
+			'acp','bbceditor','config','dba','extern','front','images','install','language','src','tools',
+			'themes','admin.php','index.php','standalone.php','.htaccess'
 		);
 		// store the regex's for the arrays (just once)
 		static $exregex = null;
