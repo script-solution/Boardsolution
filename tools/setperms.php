@@ -29,7 +29,9 @@ die('Bitte &ouml;ffnen Sie diese Datei via FTP und entfernen Sie diese Zeile um 
 	Please open this file via FTP and remove this line to be able to use this script!');
 
 define('BS_PATH','../');
-include(BS_PATH.'extern/bs_api.php');
+include(BS_PATH.'config/userdef.php');
+define('FWS_PATH',BS_PATH.BS_FWS_PATH);
+include(FWS_PATH.'init.php');
 
 // CLI or webserver?
 define('LINE_WRAP',PHP_SAPI == 'cli' ? "\n" : '<br />');
@@ -61,8 +63,6 @@ foreach(FWS_FileUtils::get_list(BS_PATH.'themes') as $theme)
 		}
 	}
 }
-
-BS_finish();
 
 /**
  * @param string $file the file
