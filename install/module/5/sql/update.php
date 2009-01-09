@@ -398,8 +398,8 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		// languages
 		$this->add_to_log('Adding language to "'.$consts['BS_TB_LANGS'].'"...');
 		$db->execute(
-			"INSERT INTO `{$consts['BS_TB_LANGS']}`
-			(`lang_folder`, `lang_name`) VALUES('fra', 'Français');"
+			utf8_decode("INSERT INTO `{$consts['BS_TB_LANGS']}`
+			(`lang_folder`, `lang_name`) VALUES('fra', 'Français');")
 		);
 		$this->add_to_log_success();
 		
