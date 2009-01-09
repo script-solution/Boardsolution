@@ -396,6 +396,10 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 			"INSERT INTO `".$consts['BS_TB_LANGS']."` (`id`, `lang_folder`, `lang_name`) VALUES
 			 (4, 'dk', 'Dansk');"
 		);
+		$db->execute(
+			"INSERT INTO `".$consts['BS_TB_LANGS']."` (`id`, `lang_folder`, `lang_name`) VALUES
+			 (5, 'fra', 'Français');"
+		);
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_LINKS'].'"...');
