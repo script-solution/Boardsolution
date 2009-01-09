@@ -4,7 +4,7 @@
  *
  * @version			$Id$
  * @package			Boardsolution
- * @subpackage	front.modules
+ * @subpackage	front.module
  * @author			Nils Asmussen <nils@script-solution.de>
  * @copyright		2003-2008 Nils Asmussen
  * @link				http://www.script-solution.de
@@ -14,7 +14,7 @@
  * The update-config-action
  *
  * @package			Boardsolution
- * @subpackage	front.modules
+ * @subpackage	front.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
 final class BS_Front_Action_userprofile_updateconfig extends BS_Front_Action_Base

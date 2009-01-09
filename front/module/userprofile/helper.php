@@ -4,7 +4,7 @@
  *
  * @version			$Id$
  * @package			Boardsolution
- * @subpackage	front.modules
+ * @subpackage	front.module
  * @author			Nils Asmussen <nils@script-solution.de>
  * @copyright		2003-2008 Nils Asmussen
  * @link				http://www.script-solution.de
@@ -14,7 +14,7 @@
  * The helper-class for the user-profile
  *
  * @package			Boardsolution
- * @subpackage	front.modules
+ * @subpackage	front.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
 final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton

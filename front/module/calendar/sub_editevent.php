@@ -4,7 +4,7 @@
  * 
  * @version			$Id$
  * @package			Boardsolution
- * @subpackage	front.modules
+ * @subpackage	front.module
  * @author			Nils Asmussen <nils@script-solution.de>
  * @copyright		2003-2008 Nils Asmussen
  * @link				http://www.script-solution.de
@@ -14,7 +14,7 @@
  * The editevent submodule for module calendar
  * 
  * @package			Boardsolution
- * @subpackage	front.modules
+ * @subpackage	front.module
  * @author			Nils Asmussen <nils@script-solution.de>
  */
 final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
