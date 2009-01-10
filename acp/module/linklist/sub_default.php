@@ -145,6 +145,8 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 			
 			list($lurl_d,$lurl_c) = FWS_StringHelper::get_limited_string($data['link_url'],25);
 			$user = BS_ACP_Utils::get_userlink($data['user_id'],$data['user_name']);
+			if($lurl_c == '')
+				$lurl_c = $lurl_d;
 			
 			$links[] = array(
 				'id' => $data['id'],
