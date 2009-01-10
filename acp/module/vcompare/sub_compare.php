@@ -40,6 +40,37 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 	const REMOVE = 3;
 	
 	/**
+	 * define some subdirs that we don't want to compare
+	 *
+	 * @var array
+	 */
+	private static $_excl = array('dba/backups','images/smileys','images/avatars');
+	
+	/**
+	 * define the root-folders and files we want to compare
+	 *
+	 * @var array
+	 */
+	private static $_allow = array(
+		'acp','bbceditor','config','dba','extern','front','fws','images','install','language','src',
+		'tools','themes','admin.php','index.php','standalone.php','.htaccess'
+	);
+	
+	/**
+	 * Regex to check excluded files/folders
+	 *
+	 * @var string
+	 */
+	private static $_exregex = null;
+	
+	/**
+	 * Regex to check allowed files/folders
+	 *
+	 * @var string
+	 */
+	private static $_alregex = null;
+	
+	/**
 	 * Stores the found paths to detect new files
 	 * 
 	 * @var array
@@ -89,6 +120,16 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 	public function init($doc)
 	{
 		parent::init($doc);
+		
+		// store the regex's for the arrays (just once)
+		$excl = array();
+		foreach(self::$_excl as $k => $e)
+			$excl[$k] = preg_quote($e,'/');
+		$allow = array();
+		foreach(self::$_allow as $k => $e)
+			$allow[$k] = preg_quote($e,'/');
+		self::$_exregex = '/^('.implode('|',$excl).')/';
+		self::$_alregex = '/^('.implode('|',$allow).')/';
 		
 		$input = FWS_Props::get()->input();
 		$renderer = $doc->use_default_renderer();
@@ -173,25 +214,28 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		$missing = array_diff(array_keys($paths),array_keys($this->_found_paths));
 		foreach($missing as $miss)
 		{
-			$parts = explode('/',$miss);
-			$name = '';
-			$target = &$structure;
-			for($i = 0,$len = count($parts) - 1;$i < $len;$i++)
+			if(!preg_match(self::$_exregex,$miss) && preg_match(self::$_alregex,$miss))
 			{
-				$name .= $i > 0 ? '/'.$parts[$i] : $parts[$i];
-				$vname = ($i < $len) ? '/'.$name : $name;
-				if(isset($target[0][$vname]))
-					$target = &$target[0][$vname];
-				else
+				$parts = explode('/',$miss);
+				$name = '';
+				$target = &$structure;
+				for($i = 0,$len = count($parts) - 1;$i < $len;$i++)
 				{
-					$target[0][$vname] = array(array(),self::ADD);
-					uksort($target[0],array($this,'_sort_paths_afterwards'));
-					$target = &$target[0][$vname];
+					$name .= $i > 0 ? '/'.$parts[$i] : $parts[$i];
+					$vname = ($i < $len) ? '/'.$name : $name;
+					if(isset($target[0][$vname]))
+						$target = &$target[0][$vname];
+					else
+					{
+						$target[0][$vname] = array(array(),self::ADD);
+						uksort($target[0],array($this,'_sort_paths_afterwards'));
+						$target = &$target[0][$vname];
+					}
 				}
+				$this->_changed[] = $miss;
+				$target[0][$miss] = self::ADD;
+				uksort($target[0],array($this,'_sort_paths_afterwards'));
 			}
-			$this->_changed[] = $miss;
-			$target[0][$miss] = self::ADD;
-			uksort($target[0],array($this,'_sort_paths_afterwards'));
 		}
 		
 		// now build the array for the templates
@@ -346,26 +390,6 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 	 */
 	private function _build_structure($dir,$paths)
 	{
-		// define some subdirs that we don't want to compare
-		static $excl = array('dba/backups','images/smileys','images/avatars');
-		// define the root-folders and files we want to compare
-		static $allow = array(
-			'acp','bbceditor','config','dba','extern','front','images','install','language','src','tools',
-			'themes','admin.php','index.php','standalone.php','.htaccess'
-		);
-		// store the regex's for the arrays (just once)
-		static $exregex = null;
-		static $alregex = null;
-		if($exregex === null)
-		{
-			foreach($excl as $k => $e)
-				$excl[$k] = preg_quote($e,'/');
-			foreach($allow as $k => $e)
-				$allow[$k] = preg_quote($e,'/');
-			$exregex = '/^('.implode('|',$excl).')/';
-			$alregex = '/^('.implode('|',$allow).')/';
-		}
-		
 		// read the folder-content and sort it
 		$structure = array();
 		$changed = self::EQUAL;
@@ -377,7 +401,8 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 			// cut the "./"
 			$item = FWS_String::substr($item,2);
 			// do we want to compare the file?
-			if(strpos($item,'.svn') === false && !preg_match($exregex,$item) && preg_match($alregex,$item))
+			if(strpos($item,'.svn') === false && !preg_match(self::$_exregex,$item) &&
+					preg_match(self::$_alregex,$item))
 			{
 				if(is_dir($item))
 				{
