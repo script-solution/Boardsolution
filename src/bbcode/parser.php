@@ -226,6 +226,7 @@ final class BS_BBCode_Parser extends FWS_Object
 		}
 
 		// replace boardsolution-file and language-entries
+		$this->_text = str_replace('{BSP}',$this->_board_path,$this->_text);
 		$this->_text = str_replace('{BSF}',
 			$this->_board_path.$functions->get_board_file(true),$this->_text);
 		$this->_text = preg_replace(
