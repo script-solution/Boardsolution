@@ -56,9 +56,8 @@ final class BS_ACP_Module_faq extends BS_ACP_Module
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
 
-		$http = new FWS_HTTP('localhost');
-		// TODO change the URL!
-		$xml = $http->get('/joomla15final/lang-de/bs-informationen/faq?format=raw');
+		$http = new FWS_HTTP('script-solution.de');
+		$xml = $http->get('/lang-de/bs-informationen/faq?format=raw');
 		$doc = new SimpleXMLElement($xml);
 		
 		$id = 1;
