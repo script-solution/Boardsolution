@@ -433,8 +433,8 @@ final class BS_Functions extends FWS_Object
 	public function cache_basic_data()
 	{
 		$str = base64_decode(
-			'cmV0dXJuICc8YSB0YXJnZXQ9Il9ibGFuayIgaHJlZj0iaHR0cDovL3d3dy5zY3JpcHQtc29sdXRpb24uZGUiPic'
-		 .'uQlNfVkVSU0lPTi4nPC9hPiB8ICZjb3B5OyBOaWxzIEFzbXVzc2VuIDIwMDMtMjAwNyc7'
+			'cmV0dXJuICc8YSB0YXJnZXQ9Il9ibGFuayIgaHJlZj0iaHR0cDovL3d3dy5zY3JpcHQtc29sdXRpb24uZGUiP'
+		 .'icuQlNfVkVSU0lPTi4nPC9hPiB8ICZjb3B5OyBOaWxzIEFzbXVzc2VuIDIwMDMtMjAwOSc7'
 		);
 		return eval($str);
 	}
