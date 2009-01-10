@@ -56,7 +56,7 @@ final class BS_ACP_Module_faq extends BS_ACP_Module
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
 
-		$http = new FWS_HTTP('script-solution.de');
+		$http = new FWS_HTTP('www.boardsolution.de');
 		$xml = $http->get('/lang-de/bs-informationen/faq?format=raw');
 		$doc = new SimpleXMLElement($xml);
 		
