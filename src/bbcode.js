@@ -357,6 +357,7 @@ function _getSelection(id)
 function _insertAtCursor(id,text)
 {
 	var textarea = document.getElementById(id);
+	var scroll_top = textarea.scrollTop;
 	textarea.focus();
 
 	// for IE and opera
@@ -383,6 +384,8 @@ function _insertAtCursor(id,text)
 		// just paste the text at the end
 		textarea.value += text;
 	}
+	
+	textarea.scrollTop = scroll_top;
 }
 
 /**
@@ -417,6 +420,7 @@ function moveCursorForward(id,count)
 function _surroundMarkedText(textarea,tag,startTag)
 {
 	startTag = startTag.trim();
+	var scroll_top = textarea.scrollTop;
 
 	var EndTag = "[/" + tag + "]";
 	if(EndTag == "")
@@ -432,8 +436,10 @@ function _surroundMarkedText(textarea,tag,startTag)
 			range.text = startTag + selection + EndTag;
 			range.move('character',range.text);
 			range.select();
+			textarea.scrollTop = scroll_top;
 			return true;
 		}
+		textarea.scrollTop = scroll_top;
 		return false;
 	}
 
@@ -445,9 +451,11 @@ function _surroundMarkedText(textarea,tag,startTag)
 		textarea.value = content.substring(0,SelStart);
 		textarea.value += startTag + content.substring(SelStart,SelEnd) + EndTag;
 		textarea.value += content.substring(SelEnd,content.length);
+		textarea.scrollTop = scroll_top;
 		return true;
 	}
 
+	textarea.scrollTop = scroll_top;
 	return false;
 }
 
