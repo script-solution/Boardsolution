@@ -141,7 +141,7 @@
 		cp['{number}'] = new FWS_ColorPicker(
 			'{gfwspath}','group_color',
 			function(color) {
-				popupElementClick({number},'{tag}',color);
+				popupElementClick({number},'{tag}','#' + color);
 			},
 			function() {
 				popups['{tag}{number}'] = 0;
