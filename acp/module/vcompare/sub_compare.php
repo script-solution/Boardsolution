@@ -224,7 +224,10 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 					$name .= $i > 0 ? '/'.$parts[$i] : $parts[$i];
 					$vname = ($i < $len) ? '/'.$name : $name;
 					if(isset($target[0][$vname]))
+					{
 						$target = &$target[0][$vname];
+						$target[1] = self::CHANGE;
+					}
 					else
 					{
 						$target[0][$vname] = array(array(),self::ADD);
@@ -418,7 +421,6 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 					{
 						$changed = self::CHANGE;
 						$structure[$item] = self::REMOVE;
-						$this->_changed[] = $item;
 					}
 					// otherwise we check if the hashs are equal
 					else
