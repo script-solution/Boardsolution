@@ -52,7 +52,7 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 		$str = '';
 		foreach($this->_keywords as $kw)
 			$str .= '"'.$kw.'" ';
-		return array(BS_URL_KW => urlencode(rtrim($str)));
+		return array(BS_URL_KW => rtrim($str));
 	}
 	
 	public function encode_keywords()

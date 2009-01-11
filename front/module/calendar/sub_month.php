@@ -26,6 +26,7 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 	{
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
 
 		$helper = BS_Front_Module_Calendar_Helper::get_instance();
 		list($year,$month) = $helper->get_date();

@@ -53,7 +53,7 @@ final class BS_Front_Search_Request_SimilarTopics extends BS_Front_Search_Reques
 		$str = '';
 		foreach($this->_keywords as $kw)
 			$str .= '"'.$kw.'" ';
-		return array(BS_URL_KW => urlencode(rtrim($str)));
+		return array(BS_URL_KW => rtrim($str));
 	}
 	
 	public function encode_keywords()

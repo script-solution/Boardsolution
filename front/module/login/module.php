@@ -28,7 +28,6 @@ final class BS_Front_Module_login extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$this->set_guest_only(true);
 		$this->set_always_viewable(true);
 		
 		$locale = FWS_Props::get()->locale();
@@ -38,6 +37,15 @@ final class BS_Front_Module_login extends BS_Front_Module
 		$renderer->set_has_access(!$user->is_loggedin());
 
 		$renderer->add_breadcrumb($locale->lang('login'),BS_URL::build_mod_url('login'));
+	}
+	
+	/**
+	 * @see BS_Front_Module::is_guest_only()
+	 * @return boolean
+	 */
+	public function is_guest_only()
+	{
+		return true;
 	}
 	
 	/**

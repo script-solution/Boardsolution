@@ -28,8 +28,6 @@ final class BS_Front_Module_activate extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$this->set_guest_only(true);
-		
 		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
 		$renderer = $doc->use_default_renderer();
@@ -37,6 +35,15 @@ final class BS_Front_Module_activate extends BS_Front_Module
 		$renderer->set_template('extern_conf.htm');
 		$renderer->set_has_access(!$user->is_loggedin());
 		$renderer->add_breadcrumb($locale->lang('activation'),'');
+	}
+	
+	/**
+	 * @see BS_Front_Module::is_guest_only()
+	 * @return boolean
+	 */
+	public function is_guest_only()
+	{
+		return true;
 	}
 	
 	/**

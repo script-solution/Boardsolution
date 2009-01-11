@@ -44,7 +44,7 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 	 *
 	 * @var array
 	 */
-	private static $_excl = array('dba/backups','images/smileys','images/avatars');
+	private static $_excl = array('dba/backups','images/smileys','images/avatars','install.php');
 	
 	/**
 	 * define the root-folders and files we want to compare

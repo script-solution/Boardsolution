@@ -54,12 +54,12 @@ final class BS_ACP_Miscellaneous_Tasks_UserExp extends FWS_Object implements FWS
 		{
 			if(!isset($user_data[$data['post_user']]['posts']))
 				$user_data[$data['post_user']]['posts'] = 0;
-			$user_data[$data['post_user']]['posts'] += $data['posts'];
+			$user_data[$data['post_user']]['posts'] += $data['num'];
 
 			if(!isset($user_data[$data['post_user']]['exp']))
 				$user_data[$data['post_user']]['exp'] = 0;
 			if($data['increase_experience'] == 1)
-				$user_data[$data['post_user']]['exp'] += $data['posts'] * BS_EXPERIENCE_FOR_POST;
+				$user_data[$data['post_user']]['exp'] += $data['num'] * BS_EXPERIENCE_FOR_POST;
 		}
 
 		// grab all topics of these users from the database
@@ -77,7 +77,10 @@ final class BS_ACP_Miscellaneous_Tasks_UserExp extends FWS_Object implements FWS
 		foreach($user_data as $user_id => $stats)
 		{
 			BS_DAO::get_profile()->update_user_by_id(
-				array('posts' => 'posts + '.$stats['posts'],'exppoints' => 'exppoints + '.$stats['exp']),
+				array(
+					'posts' => array('posts + '.$stats['posts']),
+					'exppoints' => array('exppoints + '.$stats['exp'])
+				),
 				$user_id
 			);
 		}

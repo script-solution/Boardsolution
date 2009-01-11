@@ -1131,6 +1131,10 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		
 		$this->add_to_log('Generating settings...');
 		BS_Install_Module_5_Helper::generate_settings();
+		// disable the board
+		$db->execute(
+			'UPDATE '.$consts['BS_TB_CONFIG'].' SET value = 0 WHERE name = "enable_board"'
+		);
 		$this->add_to_log_success();
 		
 		

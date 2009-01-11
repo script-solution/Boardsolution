@@ -28,8 +28,6 @@ final class BS_Front_Module_resend_activation extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$this->set_guest_only(true);
-		
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
@@ -40,6 +38,15 @@ final class BS_Front_Module_resend_activation extends BS_Front_Module
 		$renderer->add_action(BS_ACTION_RESEND_ACT_LINK,'default');
 
 		$renderer->add_breadcrumb($locale->lang('resend_activation_link'),BS_URL::build_mod_url());
+	}
+	
+	/**
+	 * @see BS_Front_Module::is_guest_only()
+	 * @return boolean
+	 */
+	public function is_guest_only()
+	{
+		return true;
 	}
 	
 	/**

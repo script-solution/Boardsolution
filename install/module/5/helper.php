@@ -106,8 +106,8 @@ final class BS_Install_Module_5_Helper extends FWS_UtilBase
 								'properties' => "width=90%\nheight=80px",
 								'suffix' => '',
 								'affects_msgs' => 0,
-								'default' => "Das Board ist aufgrund von Wartungsarbeiten vorübergehend deaktiviert.
-		Bitte haben Sie Verständnis."
+								'default' => "Das Board ist aufgrund von Wartungsarbeiten vor&uuml;bergehend deaktiviert."
+									." Bitte haben Sie Verst&auml;ndnis."
 							),
 						),
 					),
