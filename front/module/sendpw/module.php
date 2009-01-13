@@ -28,7 +28,6 @@ final class BS_Front_Module_sendpw extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$this->set_guest_only(true);
 		$this->set_always_viewable(true);
 		
 		$locale = FWS_Props::get()->locale();
@@ -41,6 +40,15 @@ final class BS_Front_Module_sendpw extends BS_Front_Module
 		$renderer->add_action(BS_ACTION_SEND_PW,'default');
 
 		$renderer->add_breadcrumb($locale->lang('forgetpw'),BS_URL::build_mod_url());
+	}
+	
+	/**
+	 * @see BS_Front_Module::is_guest_only()
+	 * @return boolean
+	 */
+	public function is_guest_only()
+	{
+		return true;
 	}
 	
 	/**

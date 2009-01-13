@@ -51,11 +51,17 @@ final class BS_Front_Search_Result_Posts extends FWS_Object implements BS_Front_
 		
 		$small_page_split = $pagination->get_small($murl);
 
+		$public_url = clone $murl;
+		$public_url->remove(BS_URL_ID);
+		$public_url->remove(BS_URL_SITE);
+		$public_url->set(BS_URL_LOC,$this->get_name());
+		
 		$tpl->set_template('search_result_posts.htm');
 		$tpl->add_variables(array(
 			'small_page_split' => $locale->lang('page').' '.$small_page_split,
 			'result_title' => '',
-			'result_title' => $request->get_title($search)
+			'result_title' => $request->get_title($search),
+			'publish_result_url' => $public_url->to_url()
 		));
 		
 		$posts = array();

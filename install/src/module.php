@@ -77,6 +77,7 @@ abstract class BS_Install_Module extends FWS_Module
 		
 		$msgs->add_error($locale->lang('error_session_expired'));
 		$url = new FWS_URL();
+		$url->set_file('install.php');
 		$url->set('action',2);
 		$msgs->add_link($locale->lang('back'),$url->to_url());
 		$doc->request_redirect($url,5);

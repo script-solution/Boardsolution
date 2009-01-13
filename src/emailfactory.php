@@ -564,7 +564,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			$locale->lang('new_entry_text'),
 			array(
 				'forum_name' => $cfg['forum_title'],
-				'board_url' => $murl,
+				'board_url' => $murl->to_url(),
 				'text' => FWS_StringHelper::htmlspecialchars_back($text),
 				'user_name' => $user_name
 			)

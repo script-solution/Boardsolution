@@ -48,7 +48,7 @@ define('BS_FONT_SIZE_SMALL',7);
 /**
  * The background-color (hexadecimal)
  */
-define('BS_BACKGROUND_COLOR','#ebebeb7f');
+define('BS_BACKGROUND_COLOR','#ebebeb');
 
 /**
  * The diagram background-color (hexadecimal)
