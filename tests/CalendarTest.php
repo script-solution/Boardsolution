@@ -11,7 +11,9 @@ class CalendarTest extends BaseTest
     $this->ensureAdmin();
     $this->click("link=Kalender");
     $this->waitForPageToLoad("30000");
-    $this->click("//a[contains(@href, '/scriptsolution/Boardsolution/index.php?action=calendar&year=2009&month=1')]");
+    $this->select("month", "label=Januar");
+    $this->select("year", "label=2009");
+    $this->click("//input[@value='Go!']");
     $this->waitForPageToLoad("30000");
     $this->click("link=«");
     $this->waitForPageToLoad("30000");

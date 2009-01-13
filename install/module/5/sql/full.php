@@ -116,28 +116,28 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$db->execute("INSERT INTO `{$consts['BS_TB_BBCODES']}`
 			(`id`, `name`, `type`, `content`, `replacement`, `replacement_param`, `param`, `param_type`, `allow_nesting`, `ignore_whitespace`, `ignore_unknown_tags`, `allowed_content`)
 			VALUES
-			(1, 'b', 'inline', 'text', '<b>{TEXT}</b>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
-			(2, 'i', 'inline', 'text', '<i>{TEXT}</i>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
-			(3, 'u', 'inline', 'text', '<u>{TEXT}</u>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
-			(6, 's', 'inline', 'text', '<s>{TEXT}</s>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
-			(7, 'font', 'inline', 'font', '', '<span style=\"font-family: {PARAM};\">{TEXT}</span>', 'required', 'text', 0, 0, 0, 'inline,link'),
-			(8, 'color', 'inline', 'text', '', '<span style=\"color: {PARAM};\">{TEXT}</span>', 'required', 'color', 0, 0, 0, 'inline,link'),
-			(9, 'size', 'inline', 'size', '', '<span style=\"font-size: {PARAM}px;\">{TEXT}</span>', 'required', 'integer', 0, 0, 0, 'inline,link'),
-			(10, 'url', 'link', 'url', '<a target=\"_blank\" href=\"{TEXT}\">{TEXT}</a>', '<a target=\"_blank\" href=\"{PARAM}\">{TEXT}</a>', 'optional', 'url', 0, 0, 0, 'inline'),
-			(11, 'mail', 'link', 'text', '<a href=\"mailto:{TEXT}\">{TEXT}</a>', '<a href=\"mailto:{PARAM}\">{TEXT}</a>', 'optional', 'mail', 0, 0, 0, 'inline'),
-			(12, 'img', 'inline', 'image', '<img src=\"{TEXT}\" alt=\"{TEXT}\" style=\"max-width: 100%;\" />', '', 'no', 'text', 0, 0, 0, ''),
-			(13, 'quote', 'block', 'text', '<div class=\"bs_quote_section\"><div class=\"bs_quote_section_top\"><b>{LANG=quote}</b>:</div><div class=\"bs_quote_section_main\">{TEXT}</div></div>', '<div class=\"bs_quote_section\"><div class=\"bs_quote_section_top\"><b>{PARAM}</b> {LANG=wrotethefollowing}:</div><div class=\"bs_quote_section_main\">{TEXT}</div></div>', 'optional', 'text', 1, 0, 0, 'inline,link,block'),
-			(14, 'code', 'block', 'code', '<div class=\"bs_quote_section\" style=\"overflow: hidden;\"><div class=\"bs_quote_section_top\"><b>{LANG=code}:</b></div><div class=\"bs_quote_section_main\" style=\"overflow: auto;\">{TEXT}</div></div>', '<div class=\"bs_quote_section\" style=\"overflow: hidden;\"><div class=\"bs_quote_section_top\"><b>{PARAM}:</b></div><div class=\"bs_quote_section_main\" style=\"overflow: auto;\">{TEXT}</div></div>', 'optional', 'identifier', 0, 0, 0, ''),
-			(15, 'list', 'block', 'list', '{TEXT}', '{TEXT}', 'optional', 'text', 1, 0, 0, 'inline,link,block'),
-			(16, 'topic', 'link', 'text', '', '<a target=\"_blank\" href=\"{BSF}action=redirect&amp;loc=show_topic&amp;tid={PARAM}\">{TEXT}</a>', 'required', 'integer', 0, 0, 0, 'inline'),
-			(17, 'post', 'link', 'text', '', '<a target=\"_blank\" href=\"{BSF}action=redirect&amp;loc=show_post&amp;id={PARAM}\">{TEXT}</a>', 'required', 'integer', 0, 0, 0, 'inline'),
-			(18, 'sub', 'inline', 'text', '<sub>{TEXT}</sub>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
-			(19, 'sup', 'inline', 'text', '<sup>{TEXT}</sup>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
-			(20, 'left', 'block', 'text', '<div align=\"left\">{TEXT}</div>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
-			(21, 'center', 'block', 'text', '<div align=\"center\">{TEXT}</div>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
-			(22, 'right', 'block', 'text', '<div align=\"right\">{TEXT}</div>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
-			(23, 'att', 'inline', 'attachment', '', '{TEXT}', 'required', 'text', 0, 0, 0, 'inline'),
-			(24, 'attimg', 'inline', 'attachmentimage', '{TEXT}', '', 'no', 'text', 0, 0, 0, '');");
+			(1, 'b', 'inline', 'text', '<b><TEXT></b>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
+			(2, 'i', 'inline', 'text', '<i><TEXT></i>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
+			(3, 'u', 'inline', 'text', '<u><TEXT></u>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
+			(6, 's', 'inline', 'text', '<s><TEXT></s>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
+			(7, 'font', 'inline', 'font', '', '<span style=\"font-family: <PARAM>;\"><TEXT></span>', 'required', 'text', 0, 0, 0, 'inline,link'),
+			(8, 'color', 'inline', 'text', '', '<span style=\"color: <PARAM>;\"><TEXT></span>', 'required', 'color', 0, 0, 0, 'inline,link'),
+			(9, 'size', 'inline', 'size', '', '<span style=\"font-size: <PARAM>px;\"><TEXT></span>', 'required', 'integer', 0, 0, 0, 'inline,link'),
+			(10, 'url', 'link', 'url', '<a target=\"_blank\" href=\"<TEXT>\"><TEXT></a>', '<a target=\"_blank\" href=\"<PARAM>\"><TEXT></a>', 'optional', 'url', 0, 0, 0, 'inline'),
+			(11, 'mail', 'link', 'text', '<a href=\"mailto:<TEXT>\"><TEXT></a>', '<a href=\"mailto:<PARAM>\"><TEXT></a>', 'optional', 'mail', 0, 0, 0, 'inline'),
+			(12, 'img', 'inline', 'image', '<img src=\"<TEXT>\" alt=\"<TEXT>\" style=\"max-width: 100%;\" />', '', 'no', 'text', 0, 0, 0, ''),
+			(13, 'quote', 'block', 'text', '<div class=\"bs_quote_section\"><div class=\"bs_quote_section_top\"><b><LANG=quote></b>:</div><div class=\"bs_quote_section_main\"><TEXT></div></div>', '<div class=\"bs_quote_section\"><div class=\"bs_quote_section_top\"><b><PARAM></b> <LANG=wrotethefollowing>:</div><div class=\"bs_quote_section_main\"><TEXT></div></div>', 'optional', 'text', 1, 0, 0, 'inline,link,block'),
+			(14, 'code', 'block', 'code', '<div class=\"bs_quote_section\" style=\"overflow: hidden;\"><div class=\"bs_quote_section_top\"><b><LANG=code>:</b></div><div class=\"bs_quote_section_main\" style=\"overflow: auto;\"><TEXT></div></div>', '<div class=\"bs_quote_section\" style=\"overflow: hidden;\"><div class=\"bs_quote_section_top\"><b><PARAM>:</b></div><div class=\"bs_quote_section_main\" style=\"overflow: auto;\"><TEXT></div></div>', 'optional', 'identifier', 0, 0, 0, ''),
+			(15, 'list', 'block', 'list', '<TEXT>', '<TEXT>', 'optional', 'text', 1, 0, 0, 'inline,link,block'),
+			(16, 'topic', 'link', 'text', '', '<a target=\"_blank\" href=\"<BSF>action=redirect&amp;loc=show_topic&amp;tid=<PARAM>\"><TEXT></a>', 'required', 'integer', 0, 0, 0, 'inline'),
+			(17, 'post', 'link', 'text', '', '<a target=\"_blank\" href=\"<BSF>action=redirect&amp;loc=show_post&amp;id=<PARAM>\"><TEXT></a>', 'required', 'integer', 0, 0, 0, 'inline'),
+			(18, 'sub', 'inline', 'text', '<sub><TEXT></sub>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
+			(19, 'sup', 'inline', 'text', '<sup><TEXT></sup>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
+			(20, 'left', 'block', 'text', '<div align=\"left\"><TEXT></div>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
+			(21, 'center', 'block', 'text', '<div align=\"center\"><TEXT></div>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
+			(22, 'right', 'block', 'text', '<div align=\"right\"><TEXT></div>', '', 'no', 'text', 0, 0, 0, 'inline,link'),
+			(23, 'att', 'inline', 'attachment', '', '<TEXT>', 'required', 'text', 0, 0, 0, 'inline'),
+			(24, 'attimg', 'inline', 'attachmentimage', '<TEXT>', '', 'no', 'text', 0, 0, 0, '');");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_BOTS'].'"...');
@@ -764,6 +764,8 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 									VALUES (4, 'minimal', 'Minimal');");
 		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
 									VALUES (5, 'bots', 'Bots');");
+		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
+									VALUES (6, 'mobile', 'Mobile');");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_THREADS'].'"...');

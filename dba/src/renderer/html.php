@@ -155,14 +155,15 @@ final class BS_DBA_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		{
 			// collect available dbs
 			$dbs = array();
-			$rows = $db->get_rows('SHOW DATABASES',false);
-			if($rows !== false)
+			try
 			{
-				foreach($rows as $data)
+				foreach($db->get_rows('SHOW DATABASES') as $data)
 					$dbs[$data['Database']] = $data['Database'];
 			}
-			else
+			catch(FWS_DB_Exception_QueryFailed $ex)
+			{
 				$dbs[BS_MYSQL_DATABASE] = BS_MYSQL_DATABASE;
+			}
 			
 			//form.get_combobox('database',databases,selected_db)
 			$dbcombo = new FWS_HTML_ComboBox('database','database',$selected_db,null);

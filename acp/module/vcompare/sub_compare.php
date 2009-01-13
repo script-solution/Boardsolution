@@ -226,7 +226,8 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 					if(isset($target[0][$vname]))
 					{
 						$target = &$target[0][$vname];
-						$target[1] = self::CHANGE;
+						if($target[1] == self::EQUAL)
+							$target[1] = self::CHANGE;
 					}
 					else
 					{

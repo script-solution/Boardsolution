@@ -186,6 +186,22 @@ final class BS_Install_Module_5_Helper extends FWS_UtilBase
 								'default' => 1
 							),
 							array(
+								'name' => 'bot_theme',
+								'type' => 'themes',
+								'properties' => "",
+								'suffix' => '',
+								'affects_msgs' => 0,
+								'default' => 5
+							),
+							array(
+								'name' => 'mobile_theme',
+								'type' => 'themes',
+								'properties' => "",
+								'suffix' => '',
+								'affects_msgs' => 0,
+								'default' => 6
+							),
+							array(
 								'name' => 'allow_custom_style',
 								'type' => 'yesno',
 								'properties' => "",

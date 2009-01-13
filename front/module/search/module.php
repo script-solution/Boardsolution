@@ -91,7 +91,7 @@ final class BS_Front_Module_search extends BS_Front_Module
 			$manager->add_result();
 		else
 		{
-			$order_vals = array('lastpost','topic_name','topic_type','replies','views','relevance');
+			$order_vals = array('date','topic_name','topic_type','replies','views','relevance');
 			$order = $input->correct_var('order','post',FWS_Input::STRING,$order_vals,'relevance');
 			$ad = $input->correct_var('ad','post',FWS_Input::STRING,array('ASC','DESC'),'DESC');
 			$limit_vals = array(10,25,50,100,250,500);
@@ -109,7 +109,7 @@ final class BS_Front_Module_search extends BS_Front_Module
 
 			$order_options = array(
 				'relevance' => $locale->lang('relevance'),
-				'lastpost' => $locale->lang('date'),
+				'date' => $locale->lang('date'),
 				'topic_name' => $locale->lang('name'),
 				'topic_type' => $locale->lang('threadtype'),
 				'replies' => $locale->lang('posts'),

@@ -1,4 +1,6 @@
-/* ------------ BODY ------------ */
+/* [[main]] */
+
+/* {{body}} */
 
 body.bs_body {
 	margin: 10px 20px;
@@ -8,61 +10,22 @@ body.bs_body {
 	background-color: #fff;
 }
 
-a {
+.bs_body a {
 	color: #3b4776;
 	text-decoration: none;
 }
-a:hover {
+.bs_body a:hover {
 	text-decoration: underline;
 }
 
-/* ------------ BORDER ------------ */
-
-.bs_border {
-	border: 1px solid #e5e5e5;
-	padding: 1px;
-}
-
-/* ------------ HEADLINE ------------ */
-
-.bs_menu_wrapper {
-	border: 1px solid #e5e5e5;
-}
-.bs_menu a {
-	border-right: 1px solid #e5e5e5;
-	font-weight: bold;
-}
-.bs_menu a:hover {
-	background-color: #fff;
-	text-decoration: underline;
-}
-
-.bs_welcome {
-	padding: 0.4em 0.8em 0.2em 0.8em;
-	border-top: 1px solid #e5e5e5;
-}
-
-/* ------------ MAIN ------------ */
+/* {{main}} */
 
 .bs_main {
 	padding: 0.5em;
 }
 
-.bs_title {
-	background-color: #e5e5e5;
-	padding: 0.5em;
-	font-weight: bold;
-	font-size: 1.1em;
-}
+/* {{coldesc}} */
 
-.bs_left {
-	padding: 0.3em;
-	font-size: 0.9em;
-	background-color: #f0f0f0;
-	font-weight: bold;
-}
-
-/* the description-columns and something similar */
 .bs_coldesc {
 	padding: 0.3em;
 	font-size: 0.9em;
@@ -78,7 +41,14 @@ a:hover {
 	line-height: 1px;
 }
 
-/* the topics (titles of areas) */
+.bs_left {
+	padding: 0.3em;
+	font-size: 0.9em;
+	font-weight: bold;
+}
+
+/* {{topic}} */
+
 .bs_topic {
 	font-size: 1.1em;
 	font-weight: bold;
@@ -100,17 +70,86 @@ h1.bs_topic {
 	color: #000;
 }
 
-/* ------------ POLL ------------ */
+/* {{border}} */
 
-.bs_poll_bar {
+.bs_border {
 	border: 1px solid #e5e5e5;
 	padding: 1px;
-}
-.bs_poll_bar div {
-	background-color: #e5e5e5;
+	margin: 0.4em 0;
 }
 
-/* ------------ BBCODE BUTTONS ------------ */
+/* {{headline}} */
+
+.bs_menu_wrapper {
+	border: 1px solid #e5e5e5;
+}
+.bs_menu a {
+	border-right: 1px solid #e5e5e5;
+	font-weight: bold;
+}
+.bs_menu a:hover {
+	background-color: #fff;
+	text-decoration: underline;
+}
+
+.bs_welcome {
+	padding: 0.4em 0.8em 0.2em 0.8em;
+	border-top: 1px solid #e5e5e5;
+}
+
+/* {{form}} */
+
+fieldset.bs_form dt {
+	padding: 0.5em;
+	font-weight: bold;
+	text-align: left;
+}
+
+fieldset.bs_form dd {
+	padding: 0.5em;
+}
+
+/* [[content]] */
+
+
+/* {{topics_small}} */
+
+.bs_topics_small a {
+	font-size: 0.9em;
+	color: #808080;
+	text-decoration: none;
+}
+
+.bs_topics_small a:hover {
+	color: #000000;
+	text-decoration: underline;
+}
+
+/* {{post}} */
+
+.bs_posts_main_1 {
+	padding: 0.5em;
+	line-height: 140%;
+}
+
+.bs_post_separator {
+	background-color: #e5e5e5;
+	height: 4px;
+	line-height: 4px;
+	font-size: 4px;
+	padding: 0;
+	margin: 0;
+}
+
+.bs_signature_sep {
+	color: #888;
+	height: 1px;
+	width: 50%;
+}
+
+/* [[formating]] */
+
+/* {{bbcode}} */
 
 input.bs_bbcode {
 	height: 26px;
@@ -124,54 +163,30 @@ img.bs_bbcode {
 	vertical-align: top;
 }
 
+/* {{bbcode_popup}} */
+
 .bs_bbcode_popup {
 	background-color: #fff;
 	border: 1px solid #aaa;
 	border-bottom: none;
 }
+
 .bs_bbcode_popup li {
 	border-bottom: 1px solid #aaa;
 }
+
 .bs_bbcode_popup li a {
 	color: #000;
 	padding: 0.2em;
 }
+
 .bs_bbcode_popup li a:hover {
 	color: #000;
 	background-color: #f0f0f0;
 	text-decoration: none;
 }
 
-/* ------------ POSTS ------------ */
-
-.bs_post_separator {
-	background-color: #e5e5e5;
-	height: 4px;
-	line-height: 4px;
-	font-size: 4px;
-	padding: 0;
-	margin: 0;
-}
-
-.bs_post {
-	padding: 0.5em;
-	line-height: 140%;
-}
-
-.bs_posts_main_1 {
-	padding: 0.5em;
-	line-height: 140%;
-}
-
-.bs_post_date {
-	text-align: right;
-}
-
-.bs_signature_sep {
-	color: #888;
-	height: 1px;
-	width: 50%;
-}
+/* {{quote}} */
 
 .bs_quote_section {
 	border: 1px solid #e5e5e5;
@@ -190,6 +205,8 @@ img.bs_bbcode {
 	background-color: #FFFFFF;
 }
 
+/* {{code}} */
+
 .bs_lcode {
 	width: 20px;
 	border-right: 1px solid #ccc;
@@ -197,34 +214,27 @@ img.bs_bbcode {
 }
 .bs_rcode {
 	padding-left: 0.2em;
-	font-family: courier new, monospace;
+	font-family: "courier new", monospace;
 	font-size: 1.2em;
 }
 
-/* ------------ TOPICS ------------ */
+/* [[other]] */
 
-.bs_topics_small a {
-	font-size: 0.9em;
-	color: #808080;
-	text-decoration: none;
-}
+/* {{unread}} */
 
-.bs_topics_small a:hover {
-	color: #000000;
-	text-decoration: underline;
-}
-
-/* ------------ FORMULARS ------------ */
-
-fieldset.bs_form dt {
-	padding: 0.5em;
+span.bs_unread {
+	color: #FF0000;
 	font-weight: bold;
-	text-align: left;
 }
 
-fieldset.bs_form dd {
-	padding: 0.5em;
+/* {{highlight}} */
+
+span.bs_highlight {
+	background-color: #FFFF00;
+	color: #000;
 }
+
+/* {{formelements}} */
 
 input,select,textarea {
 	padding: 0.2em;
@@ -233,7 +243,7 @@ input,select,textarea {
 	color: #000000;
 }
 
-/* ------------ BUTTON ------------ */
+/* {{button}} */
 
 a.bs_button {
 	border: 1px solid #e5e5e5;

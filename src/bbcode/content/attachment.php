@@ -23,7 +23,8 @@ final class BS_BBCode_Content_Attachment extends BS_BBCode_Content_Default
 	{
 		$murl = BS_URL::get_standalone_url('download');
 		$murl->set('path',$param);
-		$murl->set_path('{BSP}');
+		$murl->set_path('');
+		$murl->set_file('<BSP>standalone.php');
 		return '<a href="'.$murl->to_url().'">'.$inner.'</a>';
 	}
 	

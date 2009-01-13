@@ -204,13 +204,13 @@ final class BS_BBCode_Section extends FWS_Object
 				{
 					$content = $conobj->get_text($result,$param);
 		
-					$result = str_replace('{TEXT}',$content,$tag_config[$replacement]);
+					$result = str_replace('<TEXT>',$content,$tag_config[$replacement]);
 		
 					// replace parameter
 					if($param != '' && $tag_config['param'] != 'no')
-						$result = str_replace('{PARAM}',$param,$result);
+						$result = str_replace('<PARAM>',$param,$result);
 					else if($tag_config['param'] == 'optional')
-						$result = str_replace('{PARAM}','',$result);
+						$result = str_replace('<PARAM>','',$result);
 		
 					return $result;
 				}

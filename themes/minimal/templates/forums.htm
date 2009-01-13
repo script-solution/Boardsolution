@@ -12,15 +12,15 @@
 {include "inc_forums.htm"}
 
 <div style="float: right; text-align: right;">
-	{if gisloggedin}
 	<a href="{gurl.simple_url(0,'&amp;$URL_AT=$ACTION_CHANGE_READ_STATUS&amp;$URL_LOC=read&amp;$URL_MODE=all','&amp;',true)}">{glocale.lang('markallasread')}</a>
 	<br />
-	{endif}
 	<a href="{gurl.simple_url('team')}">{glocale.lang('the_team')}</a>
 </div>
 <br style="clear: both;" />
 
+{if view_useronline_list}
 {include "inc_online_user.htm"}
+{endif}
 
 {if latest_topics_bottom}
 <div class="bs_padtop_big">

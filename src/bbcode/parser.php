@@ -226,16 +226,16 @@ final class BS_BBCode_Parser extends FWS_Object
 		}
 
 		// replace boardsolution-file and language-entries
-		$this->_text = str_replace('{BSP}',$this->_board_path,$this->_text);
-		$this->_text = str_replace('{BSF}',
+		$this->_text = str_replace('<BSP>',$this->_board_path,$this->_text);
+		$this->_text = str_replace('<BSF>',
 			$this->_board_path.$functions->get_board_file(true),$this->_text);
 		$this->_text = preg_replace(
-			'/{LANG=([^}]+?)}/e','FWS_Props::get()->locale()->lang("\\1")',$this->_text
+			'/<LANG=([^}]+?)>/e','FWS_Props::get()->locale()->lang("\\1")',$this->_text
 		);
 
 		// replace paths
 		if($this->_enable_smileys)
-			$this->_text = str_replace('{EMP}',$this->_board_path.'images/smileys/',$this->_text);
+			$this->_text = str_replace('<EMP>',$this->_board_path.'images/smileys/',$this->_text);
 
 		return $this->_text;
 	}
@@ -303,7 +303,7 @@ final class BS_BBCode_Parser extends FWS_Object
 	private function _get_smiley_code($code,$image)
 	{
 		$this->_smiley_count++;
-		return '<img title="'.$code.'" alt="'.$code.'" src="{EMP}'.$image.'" />';
+		return '<img title="'.$code.'" alt="'.$code.'" src="<EMP>'.$image.'" />';
 	}
 
 	/**

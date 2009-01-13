@@ -169,7 +169,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		if(!is_array($additional_fields))
 			FWS_Helper::def_error('array','additional_fields',$additional_fields);
 		
-		$this->_user_id = (int)$user_id;
+		$this->_user_id = $user_id;
 		$this->_user_name = (string)$user_name;
 		$this->_user_pw = (string)$user_pw;
 		$this->_user_email = (string)$user_email;
@@ -281,8 +281,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		$id = BS_DAO::get_user()->create(
 			$this->_user_name,$this->_user_email,$this->_user_pw,$this->_user_id
 		);
-		if($this->_user_id !== null)
-			$this->_user_id = $id;
+		$this->_user_id = $id;
 		
 		$time = time();
 		

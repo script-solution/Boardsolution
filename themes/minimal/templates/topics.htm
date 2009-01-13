@@ -8,18 +8,23 @@
 <br />
 {endif}
 
-<div style="float: right; width: 50%;">
-	{if display_event}
-	<a class="bs_button_big" title="{glocale.lang('createnewevent')}" href="{gurl.simple_url('new_event','&amp;$URL_FID='~fid)}">{glocale.lang('newevent')}</a>
-	{endif}
-	{if display_poll}
-	<a class="bs_button_big" title="{glocale.lang('createnewpoll')}" href="{gurl.simple_url('new_poll','&amp;$URL_FID='~fid)}">{glocale.lang('newpoll')}</a>
-	{endif}
-	{if display_topic}
-	<a class="bs_button_big" title="{glocale.lang('createnewthread')}" href="{gurl.simple_url('new_topic','&amp;$URL_FID='~fid)}">{glocale.lang('newthread')}</a>
-	{endif}
+<div>
+	<div style="float: left;">
+		<b>{glocale.lang('moderators')}:</b> {moderators}
+	</div>
+	<div style="float: right; width: 50%;">
+		{if display_event}
+		<a class="bs_button_big" title="{glocale.lang('createnewevent')}" href="{gurl.simple_url('new_event','&amp;$URL_FID='~fid)}">{glocale.lang('newevent')}</a>
+		{endif}
+		{if display_poll}
+		<a class="bs_button_big" title="{glocale.lang('createnewpoll')}" href="{gurl.simple_url('new_poll','&amp;$URL_FID='~fid)}">{glocale.lang('newpoll')}</a>
+		{endif}
+		{if display_topic}
+		<a class="bs_button_big" title="{glocale.lang('createnewthread')}" href="{gurl.simple_url('new_topic','&amp;$URL_FID='~fid)}">{glocale.lang('newthread')}</a>
+		{endif}
+	</div>
+	<br style="clear: both;" />
 </div>
-<br style="clear: both;" />
 
 {if sub_forums}
 <div class="bs_padbottom">
@@ -38,15 +43,23 @@
 {if show_topic_action}
 </form>
 {endif}
-{endif}
 
 <div class="bs_padtop">
 {include "inc_pagination.htm"}
 </div>
+{endif}
 
+{if latest_topics_bottom}
+<div class="bs_padtop">
+{include "inc_topics.htm"}
+</div>
+{endif}
+
+{if view_useronline_list}
 <div class="bs_padtop">
 {include "inc_online_user.htm"}
 </div>
+{endif}
 
 {endif}
 {endif}

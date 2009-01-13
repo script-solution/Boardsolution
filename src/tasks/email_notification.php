@@ -54,12 +54,12 @@ final class BS_Tasks_email_notification extends FWS_Tasks_Base
 		$post_ids = array_keys($posts_to_user);
 		if(is_array($post_ids) && count($post_ids) > 0)
 		{
-			$murl = BS_URL::get_frontend_url('posts','&',false);
+			$murl = BS_URL::get_frontend_url('redirect','&',false);
 			
 			foreach(BS_DAO::get_posts()->get_posts_for_email($post_ids) as $data)
 			{
-				$murl->set(BS_URL_FID,$data['rubrikid']);
-				$murl->set(BS_URL_ID,$data['threadid']);
+				$murl->set(BS_URL_LOC,'show_post');
+				$murl->set(BS_URL_ID,$data['id']);
 				
 				foreach($posts_to_user[$data['id']] as $user_id)
 				{

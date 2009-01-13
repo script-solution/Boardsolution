@@ -72,6 +72,10 @@ final class BS_Functions extends FWS_Object
 
 		// check the security-code
 		$name = $user->get_session_data('sec_code_field');
+		// the name has to be not empty
+		if(!$name)
+			return false;
+		
 		$security_code = $input->get_var($name,'post',FWS_Input::STRING);
 		$session_code = $user->get_session_data('security_code');
 		if($session_code != null)

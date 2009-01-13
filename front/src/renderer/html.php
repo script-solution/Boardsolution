@@ -356,6 +356,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			$tpl->set_template('inc_headline.htm');
 			$tpl->add_variables(array(
 				'location' => $breadcrumbs,
+				'breadcrumbs' => $this->get_breadcrumbs(),
 				'action_type' => BS_ACTION_LOGIN,
 				'login_url' => BS_URL::build_mod_url('login'),
 				'show_deactivated_notice' => $cfg['enable_board'] == 0 && $user->is_admin(),
@@ -482,6 +483,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				'enable_pms' => $user->is_loggedin() && $cfg['enable_pms'] == 1 &&
 					$user->get_profile_val('allow_pms') == 1,
 				'username' => $username,
+				'username_plain' => $user->is_loggedin() ? $user->get_profile_val('user_name') : $username,
 				'forgotpw_link' => $sendpw_url,
 				'resendact_link' => $resend_url,
 				'current_date' => $cdate->to_format('longdate',true),

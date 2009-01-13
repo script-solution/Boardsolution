@@ -392,92 +392,69 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		
 		$tploptions = array();
 		
-		// result
-		if($show_results)
+		$this->request_formular(false,false);
+		$img_rating_back = $user->get_theme_item_path('images/diagrams/rate_back.gif');
+
+		$total_votes = 0;
+		$poll_options = array();
+		$optionlist = BS_DAO::get_polls()->get_options_by_id($topic_data['type'],'option_value','DESC');
+		foreach($optionlist as $pdata)
 		{
-			$img_rating_back = $user->get_theme_item_path('images/diagrams/rate_back.gif');
-	
-			$total_votes = 0;
-			$poll_options = array();
-			$optionlist = BS_DAO::get_polls()->get_options_by_id($topic_data['type'],'option_value','DESC');
-			foreach($optionlist as $pdata)
-			{
-				$poll_options[] = $pdata;
-				$total_votes += $pdata['option_value'];
-			}
-	
-			foreach($poll_options as $pdata)
-			{
-				if($pdata['option_value'] == 0)
-					$percent = 0;
-				else
-					$percent = @round(100 / ($total_votes / $pdata['option_value']),2);
-	
-				if($percent != 0)
-					$img_back = '<img src="'.$img_rating_back.'" alt="" />';
-				else
-					$img_back = '';
-	
-				$img_percent = round($percent,0);
-	
-				$tploptions[] = array(
-					'index' => 0,
-					'multichoice' => $pdata['multichoice'],
-					'option_name' => $pdata['option_name'],
-					'option_value' => $pdata['option_value'],
-					'option_id' => $pdata['id'],
-					'percent' => $percent,
-					'img_width' => ($img_percent > 0 ? '100%' : '0px'),
-					'img_percent' => $img_percent,
-					'img_remaining_percent' => 100 - $img_percent,
-					'img_back' => $img_back
-				);
-			}
-			
-			$tpl->add_variables(array(
-				'show_poll_options' => $user->is_loggedin() &&
-					!$user_voted && $topic_data['thread_closed'] == 0
-			));
+			$poll_options[] = $pdata;
+			$total_votes += $pdata['option_value'];
 		}
-		// vote
-		else
+
+		$i = 0;
+		foreach($poll_options as $pdata)
 		{
-			$this->request_formular(false,false);
-			
-			foreach(BS_DAO::get_polls()->get_options_by_id($topic_data['type']) as $i => $pdata)
+			if($pdata['multichoice'] == 1)
 			{
-				if($pdata['multichoice'] == 1)
-				{
-					$vote_button =  new FWS_HTML_Checkbox(
-						'vote_option[]','vote_'.$i.'_'.$pdata['id'],null,null,'',$pdata['id']
-					);
-				}
-				else
-				{
-					$vote_button = new FWS_HTML_RadioButtonGroup('vote_option','vote_'.$i,null);
-					$vote_button->add_option($pdata['id'],'');
-				}
-				$vote_button->set_custom_attribute('onclick','this.checked = !this.checked;');
-	
-				$tploptions[] = array(
-					'option_name' => $pdata['option_name'],
-					'option_value' => $pdata['option_value'],
-					'option_id' => $pdata['id'],
-					'vote_button' => $vote_button->to_html()
+				$vote_button =  new FWS_HTML_Checkbox(
+					'vote_option[]','vote_'.$i.'_'.$pdata['id'],null,null,'',$pdata['id']
 				);
 			}
-	
-			$tpl->add_variables(array(
-				'show_poll_options' => true
-			));
+			else
+			{
+				$vote_button = new FWS_HTML_RadioButtonGroup('vote_option','vote_'.$i,null);
+				$vote_button->add_option($pdata['id'],'');
+			}
+			$vote_button->set_custom_attribute('onclick','this.checked = !this.checked;');
+
+			if($pdata['option_value'] == 0)
+				$percent = 0;
+			else
+				$percent = @round(100 / ($total_votes / $pdata['option_value']),2);
+
+			if($percent != 0)
+				$img_back = '<img src="'.$img_rating_back.'" alt="" />';
+			else
+				$img_back = '';
+
+			$img_percent = round($percent,0);
+
+			$tploptions[] = array(
+				'index' => 0,
+				'multichoice' => $pdata['multichoice'],
+				'option_name' => $pdata['option_name'],
+				'option_value' => $pdata['option_value'],
+				'option_id' => $pdata['id'],
+				'percent' => $percent,
+				'img_width' => ($img_percent > 0 ? '100%' : '0px'),
+				'img_percent' => $img_percent,
+				'img_remaining_percent' => 100 - $img_percent,
+				'img_back' => $img_back,
+				'vote_button' => $vote_button->to_html()
+			);
+			$i++;
 		}
 		
 		$tpl->add_variables(array(
+			'show_poll_options' => !$show_results || ($user->is_loggedin() &&
+				!$user_voted && $topic_data['thread_closed'] == 0),
 			'show_results' => $show_results,
 			'result_url' => $result_url,
 			'vote_url' => $vote_url
 		));
-		
 		$tpl->add_variable_ref('poll_options',$tploptions);
 		$tpl->restore_template();
 	}

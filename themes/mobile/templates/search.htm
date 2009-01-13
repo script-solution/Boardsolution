@@ -1,0 +1,74 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+{if result_num > 0}
+
+{include result_tpl}
+
+{else}
+<script type="text/javascript" src="{gjs.get_file('src/ajax_user_matches.js')}"></script>
+
+<form action="{target_url}" method="post">
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('search')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('searchkeyword')}:</dt>
+			<dd>
+				{form.get_textbox('keyword',keyword,'80%',100)}
+				<br />
+				{form.get_radio_boxes('keyword_mode',keyword_mode_options,'and')}
+				<div class="bs_desc bs_padtop">{search_explain_keyword}</div>
+			</dd>
+		</dl>
+		<div class="bs_coldesc_sep">&nbsp;</div>
+		<dl>
+			<dt>{glocale.lang('search_posts_of_user')}:</dt>
+			<dd>
+				<input id="user_name_input" autocomplete="off" type="text" style="width: 80%;"
+						maxlength="100" name="un" value="{user_name}" />
+				<div class="bs_desc bs_padtop">{search_explain_user}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('in')} {glocale.lang('forum')}:</dt>
+			<dd>{forum_combo}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('orderby')}:</dt>
+			<dd>
+				{form.get_combobox('order',order_options,order)}&nbsp;{form.get_combobox('ad',ad_options,ad)}
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('result_type')}:</dt>
+			<dd>
+				{form.get_combobox('result_type',result_type_options,'posts')}
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('maximal')}:</dt>
+			<dd>
+				{form.get_combobox('limit',limit_options,limit)} {glocale.lang('results')}
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="submit" value="{glocale.lang('search')}" />
+</center>
+</form>
+
+<script type="text/javascript">
+<!--
+new BS_AJAXUserSearch('{gpath}','user_name_input','{action_param}','{glocale.lang('matching_user')}');
+//-->
+</script>
+{endif}
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

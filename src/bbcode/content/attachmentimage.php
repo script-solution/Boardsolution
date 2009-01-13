@@ -27,7 +27,8 @@ final class BS_BBCode_Content_AttachmentImage extends BS_BBCode_Content_Default
 		list($att_width,$att_height) = explode('x',$cfg['attachments_images_size']);
 		$murl = BS_URL::get_standalone_url('download');
 		$murl->set('path',$inner);
-		$murl->set_path('{BSP}');
+		$murl->set_path('');
+		$murl->set_file('<BSP>standalone.php');
 		
 		$img_url = BS_URL::get_standalone_url('thumbnail');
 		$img_url->set('path',$inner);

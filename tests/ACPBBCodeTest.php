@@ -22,19 +22,19 @@ class ACPBBCodeTest extends BaseTest
     $this->waitForPageToLoad("30000");
     $this->select("type", "label=Block");
     $this->select("type", "label=Inline");
-    $this->type("replacement", "<b>{TEXT}</b>\nund noch viel mehr");
+    $this->type("replacement", "<b><TEXT></b>\nund noch viel mehr");
     $this->click("submit");
     $this->waitForPageToLoad("30000");
     try {
-        $this->assertEquals("<b>{TEXT}</b>\nund noch viel mehr", $this->getValue("replacement"));
+        $this->assertEquals("<b><TEXT></b>\nund noch viel mehr", $this->getValue("replacement"));
     } catch (PHPUnit_Framework_AssertionFailedError $e) {
         array_push($this->verificationErrors, $e->toString());
     }
-    $this->type("replacement", "<b>{TEXT}</b>");
+    $this->type("replacement", "<b><TEXT></b>");
     $this->click("submit");
     $this->waitForPageToLoad("30000");
     try {
-        $this->assertEquals("<b>{TEXT}</b>", $this->getValue("replacement"));
+        $this->assertEquals("<b><TEXT></b>", $this->getValue("replacement"));
     } catch (PHPUnit_Framework_AssertionFailedError $e) {
         array_push($this->verificationErrors, $e->toString());
     }
@@ -43,7 +43,7 @@ class ACPBBCodeTest extends BaseTest
     $this->click("link=BBCode-Tag hinzufügen");
     $this->waitForPageToLoad("30000");
     $this->type("name", "meintag");
-    $this->type("replacement", "<pre>{TEXT}</pre>");
+    $this->type("replacement", "<pre><TEXT></pre>");
     $this->type("allowed_content", "");
     $this->click("submit");
     $this->waitForPageToLoad("30000");

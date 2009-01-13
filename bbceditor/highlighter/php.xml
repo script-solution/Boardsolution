@@ -1173,6 +1173,7 @@
 			<kw>const</kw>
 			<kw>static</kw>
 			<kw>final</kw>
+			<kw>throw</kw>
 		</def>
 	</keywords>
 	<colors>

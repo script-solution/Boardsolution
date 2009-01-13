@@ -130,6 +130,7 @@ final class BS_PostingUtils extends FWS_UtilBase
 				'quote_post_url' => $quote_url === null ? '' : $quote_url->set(BS_URL_PID,$pid),
 				'post_id' => $pid,
 				'user_name' => $post->get_username(),
+				'user_name_plain' => $post->get_username(false),
 				'date' => FWS_Date::get_date($post->get_field('post_time'),true),
 				'text' => $post->get_post_text(false,false,false)
 			);

@@ -58,7 +58,7 @@ class testsSuite extends PHPUnit_Framework_TestSuite
     	'InstallTest.php'
     );
     $this->addTestSuite('InstallTest');
-    //$this->addTestSuite('ACPTasksTest');
+    /*$this->addTestSuite('CalendarTest');*/
     foreach(FWS_FileUtils::get_list('./',false,false) as $item)
     {
     	if(!in_array($item,$filter) && preg_match('/^.*?Test\.php$/',$item))

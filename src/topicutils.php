@@ -217,7 +217,7 @@ final class BS_TopicUtils extends FWS_UtilBase
 	
 			$symbols .= '</label>';
 			if($i < BS_NUMBER_OF_TOPIC_ICONS)
-				$symbols .= '&nbsp;';
+				$symbols .= ' ';
 		}
 	
 		return $symbols;

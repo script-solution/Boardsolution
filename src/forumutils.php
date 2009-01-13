@@ -160,7 +160,10 @@ final class BS_ForumUtils extends FWS_UtilBase
 					if($forum_type_cats)
 					{
 						if(!$daten->get_display_subforums())
+						{
 							$clap_forum = false;
+							$catinfo = array(-1,-1);
+						}
 						
 						$clapurl->set(BS_URL_FID,$parent_id);
 						$clapurl->set(BS_URL_ID,$forum_id);

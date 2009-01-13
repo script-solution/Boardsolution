@@ -28,7 +28,6 @@ class ACPAddFieldsTest extends BaseTest
     $this->type("field_name", "meinfeld");
     $this->click("submit");
     $this->waitForPageToLoad("30000");
-    $this->assertEquals("Boardsolution v1.40 Alpha1 - Adminbereich", $this->getTitle());
     try {
         $this->assertTrue($this->isTextPresent("Hinweis: Das Feld wurde erfolgreich erstellt."));
     } catch (PHPUnit_Framework_AssertionFailedError $e) {

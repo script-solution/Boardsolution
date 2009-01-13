@@ -75,6 +75,14 @@ h1.bs_topic {
 
 /* ------------ POLL ------------ */
 
+.bs_poll_bar {
+	border: 1px solid #e5e5e5;
+	padding: 1px;
+}
+.bs_poll_bar div {
+	background-color: #e5e5e5;
+}
+
 .bs_poll {
 	margin: 0;
 	padding: 0;
@@ -86,14 +94,21 @@ h1.bs_topic {
 
 /* ------------ POSTS ------------ */
 
+.bs_post {
+	padding: 0.5em;
+	line-height: 140%;
+}
+
 .bs_post_username {
 	float: left;
+	text-align: left;
 	width: 50%;
 }
 
 .bs_post_date {
 	float: left;
 	width: 50%;
+	text-align: right;
 }
 
 /* ------------ FORMULARS ------------ */

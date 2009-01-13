@@ -197,15 +197,15 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 
 
 		$last_post['post_an_user'] = empty($last_post['post_an_user']) ?
-			'NULL' : "'".$last_post['post_an_user']."'";
+			null : $last_post['post_an_user'];
 
 		// create topic
 		if($type == 'split')
 		{
 			$first_post['post_an_user'] = empty($first_post['post_an_user']) ?
-				'NULL' : "'".$first_post['post_an_user']."'";
+				null : $first_post['post_an_user'];
 			$first_post['post_an_mail'] = empty($first_post['post_an_mail']) ?
-				'NULL' : "'".$first_post['post_an_mail']."'";
+				null : $first_post['post_an_mail'];
 
 			// insert the new topic
 			$fields = array(

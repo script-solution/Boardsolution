@@ -4,7 +4,7 @@
 {if module_error == false}
 
 <div class="bs_border">
-	<h2 class="bs_title">{thread_type_ins}: &quot;{threadname_ins}&quot;</h2>
+	<h1 class="bs_topic">{thread_type_ins}: &quot;{threadname_ins}&quot;</h1>
 	{if show_event}
 	{include "inc_event.htm"}
 	{endif}
@@ -16,7 +16,7 @@
 {if posts.length > 0}
 {loop posts as post}
 <div class="bs_border">
-	<div class="bs_title">
+	<div class="bs_topic">
 		<div class="bs_post_username">{post:user_name_plain}</div>
 		<div class="bs_post_date">{post:post_date}</div>
 		<br style="clear: both;" />

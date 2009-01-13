@@ -27,6 +27,13 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 	private $_css;
 	
 	/**
+	 * The categories in the CSS-file
+	 *
+	 * @var array
+	 */
+	private $_categories;
+	
+	/**
 	 * All attributes:
 	 * <code>
 	 * 	array(<attribute> => <name>,...)
@@ -119,6 +126,20 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
 		$tpl = FWS_Props::get()->tpl();
+		
+		$theme = $input->get_var('theme','get',FWS_Input::STRING);
+		
+		if(count($this->_categories) == 0)
+		{
+			$doc = FWS_Props::get()->doc();
+			$msgs = FWS_Props::get()->msgs();
+			$doc->get_module()->set_error();
+			$url = BS_URL::get_acpsub_url();
+			$url->set('theme',$theme);
+			$url->set('mode','advanced');
+			$msgs->add_error(sprintf($locale->lang('css_has_no_categories'),$url->to_url()));
+			return;
+		}
 
 		$groupa = explode('::',$input->get_var('group','get',FWS_Input::STRING));
 		if(count($groupa) == 2)
@@ -128,8 +149,6 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 			$cat = key($this->_categories);
 			$group = key($this->_categories[$cat]);
 		}
-		
-		$theme = $input->get_var('theme','get',FWS_Input::STRING);
 
 		$del = $input->get_var('del','post');
 		if($input->isset_var('delete','post') && $del != null)

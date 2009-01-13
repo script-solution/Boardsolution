@@ -88,8 +88,10 @@ final class BS_Front_Search_Result_Posts extends FWS_Object implements BS_Front_
 			
 			$posts[] = array(
 				'user_name' => $post->get_username(),
+				'user_name_plain' => $post->get_username(false),
 				'user_group' => $post->get_user_group(),
 				'location' => $location,
+				'post_url' => $post_url,
 				'date' => FWS_Date::get_date($post->get_field('post_time'),true),
 				'posts_main_class' => $post->get_css_class('main'),
 				'posts_left_class' => $post->get_css_class('left'),

@@ -1,43 +1,32 @@
-/* ------------ BODY ------------ */
+/* [[main]] */
+
+/* {{body}} */
 
 body.bs_body {
-	margin: 10px 20px;
+	margin: 2px;
 	font-family: verdana, tahoma, arial, helvetica, sans-serif;
 	font-size: 0.7em;
 	color: #000;
 	background-color: #fff;
 }
 
-a {
+.bs_body a {
 	color: #00f;
 	font-weight: bold;
 	text-decoration: none;
 }
-a:hover {
+.bs_body a:hover {
 	text-decoration: none;
 }
 
-/* ------------ BORDER ------------ */
-
-.bs_border {
-	border: 1px solid #e5e5e5;
-	padding: 1px;
-}
-
-/* ------------ MAIN ------------ */
+/* {{main}} */
 
 .bs_main {
 	padding: 0.5em;
 }
 
-.bs_title {
-	background-color: #e5e5e5;
-	padding: 0.5em;
-	font-weight: bold;
-	font-size: 1.1em;
-}
+/* {{coldesc}} */
 
-/* the description-columns and something similar */
 .bs_coldesc {
 	padding: 0.3em;
 	font-size: 0.9em;
@@ -53,7 +42,8 @@ a:hover {
 	line-height: 1px;
 }
 
-/* the topics (titles of areas) */
+/* {{topic}} */
+
 .bs_topic {
 	font-size: 1.1em;
 	font-weight: bold;
@@ -75,32 +65,36 @@ h1.bs_topic {
 	color: #000;
 }
 
-/* ------------ POLL ------------ */
+/* {{border}} */
 
-.bs_poll_bar {
+.bs_border {
 	border: 1px solid #e5e5e5;
 	padding: 1px;
 }
-.bs_poll_bar div {
-	background-color: #e5e5e5;
-}
 
-/* ------------ POSTS ------------ */
+/* {{form}} */
 
-.bs_post {
+fieldset.bs_form dt {
 	padding: 0.5em;
-	line-height: 140%;
+	font-weight: bold;
+	text-align: left;
 }
 
-.bs_post_date {
-	text-align: right;
+fieldset.bs_form dd {
+	padding: 0.5em;
 }
+
+/* [[content]] */
+
+/* {{post}} */
 
 .bs_signature_sep {
 	color: #888;
 	height: 1px;
 	width: 50%;
 }
+
+/* {{quote}} */
 
 .bs_quote_section {
 	border: 1px solid #e5e5e5;
@@ -119,6 +113,8 @@ h1.bs_topic {
 	background-color: #FFFFFF;
 }
 
+/* {{code}} */
+
 .bs_lcode {
 	width: 20px;
 	border-right: 1px solid #ccc;
@@ -128,16 +124,4 @@ h1.bs_topic {
 	padding-left: 0.2em;
 	font-family: courier new, monospace;
 	font-size: 1.2em;
-}
-
-/* ------------ FORMULARS ------------ */
-
-fieldset.bs_form dt {
-	padding: 0.5em;
-	font-weight: bold;
-	text-align: left;
-}
-
-fieldset.bs_form dd {
-	padding: 0.5em;
 }

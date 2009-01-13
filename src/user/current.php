@@ -497,12 +497,27 @@ final class BS_User_Current extends FWS_User_Current
 	{
 		$cfg = FWS_Props::get()->cfg();
 		$cache = FWS_Props::get()->cache();
+		
+		// is it a bot?
+		if($this->is_bot())
+		{
+			$data = $cache->get_cache('themes')->get_element($cfg['bot_theme']);
+			if(is_string($data['theme_folder']))
+			{
+				$this->set_theme($data['theme_folder']);
+				return;
+			}
+		}
 
 		// is it a mobile device?
 		if($this->_user->uses_mobile_device())
 		{
-			$this->set_theme('bots');
-			return;
+			$data = $cache->get_cache('themes')->get_element($cfg['mobile_theme']);
+			if(is_string($data['theme_folder']))
+			{
+				$this->set_theme($data['theme_folder']);
+				return;
+			}
 		}
 		
 		// use theme of user?
