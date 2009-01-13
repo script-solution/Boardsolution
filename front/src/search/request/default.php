@@ -31,12 +31,8 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 	{
 		$input = FWS_Props::get()->input();
 
-		$type = $input->get_var('result_type','post',FWS_Input::STRING);
-		if($type === null)
-			$type = $input->get_var(BS_URL_LOC,'get',FWS_Input::STRING);
-		if(!in_array($type,array('topics','posts')))
-			$type = 'topics';
-		return $type;
+		$result_types = array('topics','posts');
+		return $input->correct_var('result_type','post',FWS_Input::STRING,$result_types,'topics');
 	}
 	
 	public function set_result_type($result)
@@ -70,7 +66,7 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 			$str = '';
 			foreach($kws as $kw)
 				$str .= '"'.$kw.'" ';
-			$params[$name == 'kw' ? BS_URL_KW : BS_URL_UN] = rtrim($str);
+			$params[$name == 'kw' ? BS_URL_KW : BS_URL_UN] = urlencode(rtrim($str));
 		}
 		return $params;
 	}

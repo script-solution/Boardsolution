@@ -28,6 +28,8 @@ final class BS_Front_Module_new_poll extends BS_Front_Module
 	{
 		parent::init($doc);
 		
+		$this->set_guest_only(true);
+		
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
 		$auth = FWS_Props::get()->auth();

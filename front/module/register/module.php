@@ -28,6 +28,8 @@ final class BS_Front_Module_register extends BS_Front_Module
 	{
 		parent::init($doc);
 		
+		$this->set_guest_only(true);
+		
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
 		$cfg = FWS_Props::get()->cfg();
@@ -40,15 +42,6 @@ final class BS_Front_Module_register extends BS_Front_Module
 		$renderer->add_action(BS_ACTION_REGISTER,'default');
 
 		$renderer->add_breadcrumb($locale->lang('register'),BS_URL::build_mod_url());
-	}
-	
-	/**
-	 * @see BS_Front_Module::is_guest_only()
-	 * @return boolean
-	 */
-	public function is_guest_only()
-	{
-		return true;
 	}
 	
 	/**

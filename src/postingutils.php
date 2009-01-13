@@ -221,8 +221,7 @@ final class BS_PostingUtils extends FWS_UtilBase
 		// show template
 		$tpl->set_template('inc_post_preview.htm');
 		$tpl->add_variables(array(
-			'text' => $res['text'],
-			'location' => $location
+			'text' => $res['text']
 		));
 		$tpl->restore_template();
 	}

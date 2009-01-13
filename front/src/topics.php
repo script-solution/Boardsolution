@@ -74,13 +74,6 @@ final class BS_Front_Topics extends FWS_Object
 	 * @var string
 	 */
 	private $_left_content = '';
-	
-	/**
-	 * The content on the right side
-	 *
-	 * @var string
-	 */
-	private $_right_content = '';
 
 	/**
 	 * the content of the tbody-tag
@@ -205,16 +198,6 @@ final class BS_Front_Topics extends FWS_Object
 	public function set_left_content($content)
 	{
 		$this->_left_content = $content;
-	}
-
-	/**
-	 * Sets the content of the right header-side (it will be put right of the search-forum-form!)
-	 *
-	 * @param string $content the content to set
-	 */
-	public function set_right_content($content)
-	{
-		$this->_right_content = $content;
 	}
 
 	/**
@@ -530,7 +513,6 @@ final class BS_Front_Topics extends FWS_Object
 			'show_thread_action' => $this->_show_topic_action,
 			'thread_title' => $this->_title,
 			'left_content' => $this->_left_content,
-			'right_content' => $this->_right_content,
 			'show_search_forum' => $this->_show_search_forum,
 			'num' => isset($topiclist) ? count($topiclist) : 0,
 			'total_colspan' => $total_colspan,

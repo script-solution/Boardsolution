@@ -28,6 +28,7 @@ final class BS_Front_Module_change_password extends BS_Front_Module
 	{
 		parent::init($doc);
 		
+		$this->set_guest_only(true);
 		$this->set_always_viewable(true);
 		
 		$input = FWS_Props::get()->input();
@@ -46,15 +47,6 @@ final class BS_Front_Module_change_password extends BS_Front_Module
 		$url->set(BS_URL_ID,$user_id);
 		$url->set(BS_URL_KW,$user_key);
 		$renderer->add_breadcrumb($locale->lang('change_password'),$url->to_url());
-	}
-	
-	/**
-	 * @see BS_Front_Module::is_guest_only()
-	 * @return boolean
-	 */
-	public function is_guest_only()
-	{
-		return true;
 	}
 	
 	/**

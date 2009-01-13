@@ -115,8 +115,8 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		$tpl->add_variables(array(
 			'show_news' => $enable_news,
 			'forums_url' => BS_URL::build_forums_url(),
-			'new_pm_url' => BS_URL::build_sub_url('userprofile','pmcompose'),
-			'profile_config_url' => BS_URL::build_sub_url('userprofile','config'),
+			'new_pm_url' => BS_URL::build_sub_url(0,'pmcompose'),
+			'profile_config_url' => BS_URL::build_sub_url(0,'config'),
 			'rss20_feed' => $newsfeedurl->set(BS_URL_MODE,'rss20')->to_url(),
 			'atom_feed' => $newsfeedurl->set(BS_URL_MODE,'atom')->to_url(),
 			'show_feeds' => $enable_news && $cfg['enable_news_feeds'],

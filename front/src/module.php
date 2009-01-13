@@ -26,6 +26,13 @@
 abstract class BS_Front_Module extends FWS_Module
 {
 	/**
+	 * Wether this module is guest-only
+	 *
+	 * @var boolean
+	 */
+	private $_guest_only = false;
+	
+	/**
 	 * Wether the module is always viewable
 	 *
 	 * @var boolean
@@ -35,9 +42,19 @@ abstract class BS_Front_Module extends FWS_Module
 	/**
 	 * @return boolean wether this module is viewable by guests only
 	 */
-	public function is_guest_only()
+	public final function is_guest_only()
 	{
-		return false;
+		return $this->_guest_only;
+	}
+	
+	/**
+	 * Sets wether this module is viewable by guests only
+	 *
+	 * @param boolean $guestonly the new value
+	 */
+	public final function set_guest_only($guestonly)
+	{
+		$this->_guest_only = (bool)$guestonly;
 	}
 	
 	/**

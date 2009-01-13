@@ -20,11 +20,6 @@
 final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 {
 	/**
-	 * The maximum number of unread posts to insert per user
-	 */
-	const MAX_UNREAD_PER_USER = 50;
-	
-	/**
 	 * @see BS_Install_Module_5_SQL_Base::run()
 	 */
 	protected function run()
@@ -307,10 +302,6 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 				 WHERE name = "'.$name.'"'
 			);
 		}
-		// disable the board
-		$db->execute(
-			'UPDATE '.$consts['BS_TB_CONFIG'].' SET value = 0 WHERE name = "enable_board"'
-		);
  		
  		// config
 		$this->add_to_log('Deleting Table "'.$prefix.'config"...');
@@ -455,30 +446,16 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 				);
 			}
 		}
-		
-		function _sort_unread($a,$b)
-		{
-			return $b[0] - $a[0];
-		}
-		
 		$rows = $db->get_rows(
 			"SELECT id,unread_topics FROM `{$consts['BS_TB_PROFILES']}` WHERE unread_topics != ''"
 		);
 		foreach($rows as $row)
 		{
 			$unread = unserialize($row['unread_topics']);
-			$postids = array();
 			if(isset($unread['t']))
 			{
-				uasort($unread['t'],'_sort_unread');
-				$x = 0;
 				foreach($unread['t'] as $tid => $tunread)
 				{
-					if($x++ > MAX_UNREAD_PER_USER)
-						break;
-					if(isset($postids[$tunread[0]]))
-						continue;
-					$postids[$tunread[0]] = 1;
 					$db->execute(
 						"INSERT INTO `{$consts['BS_TB_UNREAD']}` (user_id,post_id,is_news)
 						 VALUES (".$row['id'].",".$tunread[0].",".(isset($unread['n'][$tid]) ? 1 : 0).");"

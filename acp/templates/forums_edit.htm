@@ -7,7 +7,7 @@
 function toggleForumType()
 {
 	var cb = FWS_getElement('forum_type');
-	var ids = new Array('rowclosed','rowdesc','rowexp','additional','htmlallowed','rightsexplain');
+	var ids = new Array('rowclosed','rowdesc','rowexp','additional');
 	for(var i = 0;i < ids.length;i++)
 	{
 		if(cb.value == 'contains_cats')
@@ -71,9 +71,9 @@ function toggleForumType()
 		onclick="document.location.href = '{gurl.simple_acp_url()}';" />
 </center>
 
-<p class="a_block_pad" id="htmlallowed">* = {glocale.lang('html_allowed')}</p>
+<p class="a_block_pad">* = {glocale.lang('html_allowed')}</p>
 
-<p class="a_block a_pad_double" id="rightsexplain">{glocale.lang('forum_rights_explain')}</p>
+<p class="a_block a_pad_double">{glocale.lang('forum_rights_explain')}</p>
 
 <div id="additional">
 	<div class="a_border a_pad">

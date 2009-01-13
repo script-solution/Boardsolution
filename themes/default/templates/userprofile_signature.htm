@@ -1,5 +1,3 @@
-{include "inc_post_preview.htm"}
-
 <form method="post" action="{target_url}" onsubmit="BS_refresh_text();">
 <input type="hidden" name="action_type" value="{action_type}" />
 <div class="bs_border">
@@ -21,13 +19,6 @@
 	</fieldset>
 </div>
 <center>
-	<input type="submit" name="preview" value="{glocale.lang('preview')}" />
 	<input type="submit" name="submit" value="{glocale.lang('save')}" />
 </center>
 </form>
-
-{if sig_max_height > 0}
-<div class="bs_padtop">
-{signature_maxheight_notice}
-</div>
-{endif}

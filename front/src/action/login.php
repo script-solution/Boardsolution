@@ -60,11 +60,9 @@ final class BS_Front_Action_login extends BS_Front_Action_Base
 	
 						if(class_exists($class))
 						{
-							$doc = FWS_Props::get()->doc();
-							
 							// instantiate the module
 							$c = new $class();
-							
+	
 							// if it is a guest-only module we don't want to redirect to that module
 							if($c->is_guest_only())
 								$goto_url = BS_URL::get_start_url();

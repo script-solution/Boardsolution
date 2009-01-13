@@ -27,9 +27,7 @@ final class BS_Front_Search_Result_Topics extends FWS_Object implements BS_Front
 	public function display_result($search,$request)
 	{
 		$cfg = FWS_Props::get()->cfg();
-		$user = FWS_Props::get()->user();
 		$locale = FWS_Props::get()->locale();
-		
 		/* @var $search BS_Front_Search_Manager */
 		/* @var $request BS_Front_Search_Request */
 		
@@ -51,20 +49,11 @@ final class BS_Front_Search_Result_Topics extends FWS_Object implements BS_Front
 			$murl->set($name,$value);
 		$small_page_split = $pagination->get_small($murl);
 
-		$public_url = clone $murl;
-		$public_url->remove(BS_URL_ID);
-		$public_url->remove(BS_URL_SITE);
-		$public_url->set(BS_URL_LOC,$this->get_name());
-
 		$sql = ' t.id IN ('.$idstr.') AND moved_tid = 0';
 
 		// display the topics
 		$topics = new BS_Front_Topics($request->get_title($search),$sql,$order,$ad,$end);
 		$topics->set_left_content($locale->lang('page').' '.$small_page_split);
-		$topics->set_right_content('<a href="'.$public_url->to_url().'"><img 
-						src="'.$user->get_theme_item_path('images/world.gif').'"
-						alt="'.$locale->lang('publish_search_result').'"
-						title="'.$locale->lang('publish_search_result').'" /></a>');
 		$topics->set_show_topic_action(false);
 		$topics->set_show_important_first(false);
 		$topics->set_show_relevance(true);

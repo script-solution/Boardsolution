@@ -441,7 +441,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 			
 			case 'topics_small':
 				return $this->_get_explanation_table(
-					array('".bs_topics_small a", ".bs_topics_small a:hover"',''),
+					array('".bs_topics_small a", ".bs_topics_small a:hover"'),
 					'topics_small.png',
 					array('','')
 				);

@@ -54,7 +54,7 @@ final class BS_Front_Search_Request_PMSearch extends BS_Front_Search_Request_PMB
 			$str = '';
 			foreach($kws as $kw)
 				$str .= '"'.$kw.'" ';
-			$params[$name == 'kw' ? BS_URL_KW : BS_URL_UN] = rtrim($str);
+			$params[$name == 'kw' ? BS_URL_KW : BS_URL_UN] = urlencode(rtrim($str));
 		}
 		return $params;
 	}
