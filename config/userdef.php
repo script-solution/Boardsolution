@@ -46,7 +46,7 @@ define('BS_FWS_PATH','../PHPLib/');
  * 	1 = display just time, query-count and memory-usage
  * 	2 = display all infos
  */
-define('BS_DEBUG',1);
+define('BS_DEBUG',2);
 
 /**
  * Falls Sie nicht MyISAM sondern z.B. InnoDB als MySQL-Storage-Engine benutzen, d.h. eine Storage-
