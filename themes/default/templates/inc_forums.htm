@@ -24,7 +24,7 @@
 			{endloop}
 			<td height="20" class="bs_categories">
 			{if forum:clap_forum}
-			&nbsp;<a href="{forum:clap_forum_url}" onclick="clapForum('{forum:forum_id}','{forum:cookie_prefix}'); return false;" title="{glocale.lang('hidethisforum')}"><img id="cross_{forum:forum_id}" src="{forum:img_ins}" alt="Toggle" /></a>
+			&nbsp;<a href="{forum:clap_forum_url}" onclick="clapForum('{forum:forum_id}','{forum:cookie_prefix}'); return false;" title="{glocale.lang('hidethisforum')}"><img id="cross_{forum:forum_id}" src="{forum:img_ins}" style="vertical-align: middle;" alt="Toggle" /></a>
 			<a href="{forum:forum_url}">{forum:forum_name_ins}</a>
 			{else}
 			&nbsp;&nbsp;<a href="{forum:forum_url}">{forum:forum_name_ins}</a>
