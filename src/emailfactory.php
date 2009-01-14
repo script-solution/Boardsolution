@@ -93,7 +93,7 @@ final class BS_EmailFactory extends FWS_Singleton
 	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
 	 * It will be used the language with given id.
 	 *
-	 * @param int $langid the language-id to use for the email
+	 * @param int $langid the language-id to use for the email (0 = default)
 	 * @param string $oldname the old user-name
 	 * @param string $newname the new user-name
 	 * @param string $oldemail the old email-address
@@ -109,10 +109,12 @@ final class BS_EmailFactory extends FWS_Singleton
 		$cfg = FWS_Props::get()->cfg();
 		$tpl = FWS_Props::get()->tpl();
 
-		if(!FWS_Helper::is_integer($langid) || $langid <= 0)
-			FWS_Helper::def_error('intgt0','langid',$langid);
+		if(!FWS_Helper::is_integer($langid) || $langid < 0)
+			FWS_Helper::def_error('intge0','langid',$langid);
 		
-		$lang_data = $cache->get_cache('languages')->get_element($langid);
+		$lang_data = null;
+		if($langid > 0)
+			$lang_data = $cache->get_cache('languages')->get_element($langid);
 		if($lang_data != null)
 			$locale->add_language_file('email',$lang_data['lang_folder']);
 		else
