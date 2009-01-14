@@ -36,6 +36,11 @@ final class BS_Front_Action_logout extends BS_Front_Action_Base
 				return 'Invalid session-id';
 	
 			$user->logout();
+			
+			// delete all unread topics for guest and ensure that nothing will be added
+			$gunread = new BS_UnreadStorage_Guest();
+			$gunread->remove_all();
+			$gunread->set_last_update(time());
 		}
 		
 		$this->set_success_msg(sprintf($locale->lang('success_'.BS_ACTION_LOGOUT),$username));
