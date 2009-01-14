@@ -47,6 +47,7 @@ final class BS_Front_Search_Result_Topics extends FWS_Object implements BS_Front
 		$murl->set(BS_URL_ORDER,$order);
 		$murl->set(BS_URL_AD,$ad);
 		$murl->set(BS_URL_MODE,$request->get_name());
+		$murl->set(BS_URL_LOC,$this->get_name());
 		foreach($request->get_url_params() as $name => $value)
 			$murl->set($name,$value);
 		$small_page_split = $pagination->get_small($murl);
@@ -54,7 +55,6 @@ final class BS_Front_Search_Result_Topics extends FWS_Object implements BS_Front
 		$public_url = clone $murl;
 		$public_url->remove(BS_URL_ID);
 		$public_url->remove(BS_URL_SITE);
-		$public_url->set(BS_URL_LOC,$this->get_name());
 
 		$sql = ' t.id IN ('.$idstr.') AND moved_tid = 0';
 

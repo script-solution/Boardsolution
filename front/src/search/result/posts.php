@@ -46,6 +46,7 @@ final class BS_Front_Search_Result_Posts extends FWS_Object implements BS_Front_
 		$murl->set(BS_URL_ORDER,$order);
 		$murl->set(BS_URL_AD,$ad);
 		$murl->set(BS_URL_MODE,$request->get_name());
+		$murl->set(BS_URL_LOC,$this->get_name());
 		foreach($request->get_url_params() as $name => $value)
 			$murl->set($name,$value);
 		
@@ -54,7 +55,6 @@ final class BS_Front_Search_Result_Posts extends FWS_Object implements BS_Front_
 		$public_url = clone $murl;
 		$public_url->remove(BS_URL_ID);
 		$public_url->remove(BS_URL_SITE);
-		$public_url->set(BS_URL_LOC,$this->get_name());
 		
 		$tpl->set_template('search_result_posts.htm');
 		$tpl->add_variables(array(
