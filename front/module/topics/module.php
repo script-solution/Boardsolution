@@ -204,6 +204,7 @@ final class BS_Front_Module_topics extends BS_Front_Module
 		
 		$type = $forums->get_forum_type($fid);
 		$tpl->add_variables(array(
+			'forum_name' => $forum_data->get_name(),
 			'moderators' => $auth->get_forum_mods($fid),
 			'latest_topics_top' => $type == 'contains_cats' && $display_lt && $display_lt_top,
 			'latest_topics_bottom' => $type == 'contains_cats' && $display_lt && $display_lt_bottom,
