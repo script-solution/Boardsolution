@@ -22,22 +22,27 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 	/**
 	 * Indicates that the files are equal
 	 */
-	const EQUAL = 0;
+	const EQUAL						= 1;
 	
 	/**
 	 * Indicates that both files exist but are not equal
 	 */
-	const CHANGE = 1;
+	const CHANGE					= 2;
 	
 	/**
 	 * Indicates that the file has been added
 	 */
-	const ADD = 2;
+	const ADD							= 4;
 	
 	/**
 	 * Indicates that the file has been removed
 	 */
-	const REMOVE = 3;
+	const REMOVE					= 8;
+	
+	/**
+	 * Indicates that the file has been changed by the user
+	 */
+	const USER_MODIFIED		= 16;
 	
 	/**
 	 * define some subdirs that we don't want to compare
@@ -83,6 +88,13 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 	 * @var array
 	 */
 	private $_changed = array();
+	
+	/**
+	 * Stores all conflicted files
+	 *
+	 * @var array
+	 */
+	private $_conflicts = array();
 	
 	/**
 	 * All versions
@@ -197,11 +209,27 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 			return;
 		}
 		
+		// load current version, if not already done
+		if($this->_file != BS_VERSION_ID)
+		{
+			$cversioninfo = $http->get('/bsversions/v'.BS_VERSION_ID.'.txt');
+			if($cversioninfo === false)
+			{
+				$this->report_error(
+					FWS_Document_Messages::ERROR,$http->get_error_code().': '.$http->get_error_message()
+				);
+				return;
+			}
+		}
+		else
+			$cversioninfo = $versioninfo;
+		
 		// extract all paths with the md5-hashs from the xml-document
 		$pathids = $this->_get_path_hashes($versioninfo);
+		$cpathids = $this->_get_path_hashes($cversioninfo);
 		
 		// build a recursive structure of it
-		$structure = $this->_build_structure('./',$pathids);
+		$structure = $this->_build_structure('./',$pathids,$cpathids);
 		
 		// add files that are present in the compared version but not in the current one
 		$paths = array();
@@ -226,8 +254,11 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 					if(isset($target[0][$vname]))
 					{
 						$target = &$target[0][$vname];
-						if($target[1] == self::EQUAL)
-							$target[1] = self::CHANGE;
+						if($target[1] & self::EQUAL)
+						{
+							$target[1] &= ~self::EQUAL;
+							$target[1] |= self::CHANGE;
+						}
 					}
 					else
 					{
@@ -253,7 +284,8 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 			'add_color' => $this->_get_color(self::ADD),
 			'change_color' => $this->_get_color(self::CHANGE),
 			'remove_color' => $this->_get_color(self::REMOVE),
-			'changed_paths' => $this->_changed
+			'changed_paths' => $this->_changed,
+			'conflict_paths' => $this->_conflicts
 		));
 	}
 	
@@ -306,7 +338,7 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 	 */
 	private function _get_color($diff)
 	{
-		switch($diff)
+		switch($diff & ~self::USER_MODIFIED)
 		{
 			case self::ADD:
 				return '#86f483';
@@ -341,6 +373,7 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 				'image' => '',
 				'layerend' => false,
 				'id' => str_replace('/','_',$name),
+				'usermodified' => $folder[1] & self::USER_MODIFIED,
 				'color' => $this->_get_color($folder[1])
 			);
 		}
@@ -352,7 +385,7 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 				$this->_build_items($items,$item,FWS_String::substr($path,1),$layer + 1);
 			else
 			{
-				if($item != self::ADD)
+				if(($item & self::ADD) == 0)
 				{
 					$size = number_format(
 						filesize($path),
@@ -371,8 +404,9 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 					'id' => str_replace('/','_',$path),
 					'layerend' => false,
 					'color' => $this->_get_color($item),
-					'size' => $item == self::ADD ? $locale->lang('notavailable') : $size.' Bytes',
-					'changed' => $item == self::ADD ? $locale->lang('notavailable') : $changed
+					'usermodified' => $item & self::USER_MODIFIED,
+					'size' => ($item & self::ADD) ? $locale->lang('notavailable') : $size.' Bytes',
+					'changed' => ($item & self::ADD) ? $locale->lang('notavailable') : $changed
 				);
 			}
 		}
@@ -389,10 +423,11 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 	 * Builds a recursive structure for the local filesystem
 	 *
 	 * @param string $dir the current folder
-	 * @param array $paths the paths of the compare-version
+	 * @param array $paths the paths of the compare version
+	 * @param array $cpaths the paths of the current version
 	 * @return array the recursive structure
 	 */
-	private function _build_structure($dir,$paths)
+	private function _build_structure($dir,$paths,$cpaths)
 	{
 		// read the folder-content and sort it
 		$structure = array();
@@ -410,17 +445,19 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 			{
 				if(is_dir($item))
 				{
-					$res = $this->_build_structure('./'.$item,$paths);
+					$res = $this->_build_structure('./'.$item,$paths,$cpaths);
 					$structure['/'.$item] = $res;
-					if($res[1] != self::EQUAL)
-						$changed = self::CHANGE;
+					if(($res[1] & self::EQUAL) == 0)
+						$changed = self::CHANGE | ($changed & self::USER_MODIFIED);
+					if($res[1] & self::USER_MODIFIED)
+						$changed |= self::USER_MODIFIED;
 				}
 				else
 				{
 					// if the compare-version hasn't this file it has been removed
 					if(!isset($paths[$item]))
 					{
-						$changed = self::CHANGE;
+						$changed = self::CHANGE | ($changed & self::USER_MODIFIED);
 						$structure[$item] = self::REMOVE;
 					}
 					// otherwise we check if the hashs are equal
@@ -430,16 +467,38 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 						$hash = md5_file($item);
 						if($hash != $paths[$item])
 						{
-							$changed = self::CHANGE;
+							$changed = self::CHANGE | ($changed & self::USER_MODIFIED);
 							$this->_changed[] = $item;
 						}
 						$structure[$item] = $hash != $paths[$item] ? self::CHANGE : self::EQUAL;
+					}
+					
+					// compare with current version
+					if(!isset($cpaths[$item]))
+					{
+						$structure[$item] |= self::USER_MODIFIED;
+						$changed |= self::USER_MODIFIED;
+					}
+					else
+					{
+						if($structure[$item] == self::REMOVE)
+							$hash = md5_file($item);
+						if($hash != $cpaths[$item] && $hash != $paths[$item])
+						{
+							$structure[$item] |= self::USER_MODIFIED;
+							$changed |= self::USER_MODIFIED;
+							$this->_conflicts[] = $item;
+						}
 					}
 				}
 			}
 		}
 		
-		return array($structure,isset($paths[substr($dir,2)]) ? $changed : self::REMOVE);
+		if(isset($paths[substr($dir,2)]))
+			$status = $changed;
+		else
+			$status = self::REMOVE | ($changed & self::USER_MODIFIED);
+		return array($structure,$status);
 	}
 	
 	/**

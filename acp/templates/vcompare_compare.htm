@@ -5,6 +5,9 @@
 {loop changed_paths as path}
 <input type="hidden" name="paths[]" value="{path}" />
 {endloop}
+{loop conflict_paths as path}
+<input type="hidden" name="conflicts[]" value="{path}" />
+{endloop}
 <div class="a_block">
 	<div class="a_menubar">
 		<a href="javascript:FWS_getElement('dlform').submit();">
@@ -32,6 +35,7 @@
 		{if item:isfile == false}
 		<div class="a_main" style="margin-top: 1px; {if item:color}background-color: {item:color};{endif}">
 			<div style="padding-left: {item:layer * 15}px;">
+				{if item:usermodified}<img src="{gpath}acp/images/warning.gif" alt="" />{endif}
 				<a href="javascript:FWS_toggleElement('{item:id}');">
 				<img src="{gpath}acp/images/directory.gif" alt="Folder" />
 				{item:name}
@@ -43,6 +47,7 @@
 			<tr>
 				<td width="60%" class="a_main" {if item:color}style="background-color: {item:color};"{endif}>
 					<div style="padding-left: {item:layer * 15}px;">
+						{if item:usermodified}<img src="{gpath}acp/images/warning.gif" alt="" />{endif}
 						<img src="{gpath}images/filetypes/{item:image}" alt="File" /> {item:name}
 					</div>
 				</td>
@@ -63,6 +68,9 @@
 
 <div class="a_border a_pad">
 	<h1 class="a_topic">{glocale.lang('legend')}</h1>
+	<div class="a_main" style="margin-top: 1px;">
+		<img src="{gpath}acp/images/warning.gif" alt="" /> {glocale.lang('diff_usermodified')}
+	</div>
 	<div class="a_main" style="margin-top: 1px;">{glocale.lang('diff_equal')}</div>
 	<div class="a_main" style="margin-top: 1px; background-color: {add_color};">{glocale.lang('diff_add')}</div>
 	<div class="a_main" style="margin-top: 1px; background-color: {change_color};">{glocale.lang('diff_change')}</div>
