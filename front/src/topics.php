@@ -123,7 +123,7 @@ final class BS_Front_Topics extends FWS_Object
 	 *
 	 * @var boolean
 	 */
-	private $_show_topic_action = true;
+	private $_show_topic_action = false;
 	
 	/**
 	 * display the topic-opening-time?
@@ -561,7 +561,8 @@ final class BS_Front_Topics extends FWS_Object
 			
 			$posts_url = clone $psurl;
 			$posts_url->set(BS_URL_SITE,1);
-			$posts_url->set_sef(true);
+			if(!$kws)
+				$posts_url->set_sef(true);
 			
 			$post_order = BS_PostingUtils::get_posts_order();
 			$is_important = false;

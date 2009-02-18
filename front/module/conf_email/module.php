@@ -32,16 +32,6 @@ final class BS_Front_Module_conf_email extends BS_Front_Module
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_template('extern_conf.htm');
-		$renderer->set_has_access(!$user->is_loggedin());
-	}
-	
-	/**
-	 * @see BS_Front_Module::is_guest_only()
-	 * @return boolean
-	 */
-	public function is_guest_only()
-	{
-		return true;
 	}
 	
 	/**
@@ -74,7 +64,7 @@ final class BS_Front_Module_conf_email extends BS_Front_Module
 		
 		$db->start_transaction();
 		
-		BS_DAO::get_user()->update($id,'',$data['email_address']);
+		BS_DAO::get_user()->update($id,'','',$data['email_address']);
 		BS_DAO::get_changeemail()->delete_by_user($id);
 		
 		$db->commit_transaction();

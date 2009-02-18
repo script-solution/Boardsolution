@@ -33,10 +33,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		// name and email
 		$user_name = $input->get_var('user_name','post',FWS_Input::STRING);
 		$user_email = $input->get_var('user_email','post',FWS_Input::STRING);
-		$user_email_conf = $input->get_var('user_email_conf','post',FWS_Input::STRING);
-		if($user_email != $user_email_conf)
-			return 'emails_not_equal';
-
+		
 		// password
 		$user_pw = $input->get_var('user_pw','post',FWS_Input::STRING);
 		$user_pw_conf = $input->get_var('user_pw_conf','post',FWS_Input::STRING);

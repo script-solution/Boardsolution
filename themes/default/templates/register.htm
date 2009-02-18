@@ -34,10 +34,6 @@
 				{endif}
 			</dd>
 		</dl>
-		<dl>
-			<dt>{glocale.lang('email_confirmation')}: *</dt>
-			<dd>{form.get_textbox('user_email_conf','',40,255)}</dd>
-		</dl>
 		{loop add_fields as field}
 		<dl>
 			<dt>{field:field_name}:{field:required_field}</dt>

@@ -15,6 +15,7 @@ body.bs_body {
 	font-weight: bold;
 	text-decoration: none;
 }
+
 .bs_body a:hover {
 	text-decoration: none;
 }
@@ -51,16 +52,20 @@ body.bs_body {
 	background-color: #e5e5e5;
 	text-align: center;
 }
+
 td.bs_topic {
 	padding: 0.3em;
 }
+
 h1.bs_topic {
 	padding: 0.3em;
 }
+
 .bs_topic a {
 	background-image: none;
 	text-decoration: underline;
 }
+
 .bs_topic a:hover {
 	color: #000;
 }
@@ -120,8 +125,10 @@ fieldset.bs_form dd {
 	border-right: 1px solid #ccc;
 	padding-right: 0.2em;
 }
+
 .bs_rcode {
 	padding-left: 0.2em;
 	font-family: courier new, monospace;
 	font-size: 1.2em;
 }
+

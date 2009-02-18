@@ -52,7 +52,10 @@ final class BS_ACP_Action_user_unban extends BS_ACP_Action_Base
 		
 		// add errors
 		foreach(array_keys($error_msgs) as $msg)
-			$msgs->add_error($msg);
+		{
+			if($msg)
+				$msgs->add_error($msg);
+		}
 	
 		$this->set_success_msg($locale->lang('user_reactivated_success'));
 		$this->set_action_performed(true);

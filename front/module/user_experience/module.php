@@ -111,7 +111,7 @@ final class BS_Front_Module_user_experience extends BS_Front_Module
 				return;
 			}
 			
-			$userdata = BS_DAO::get_profile()->get_user_by_id($id);
+			$userdata = BS_DAO::get_profile()->get_user_by_id($id,-1,-1);
 			// does the user exist?
 			if($userdata === false)
 			{

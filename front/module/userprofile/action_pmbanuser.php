@@ -52,7 +52,7 @@ final class BS_Front_Action_userprofile_pmbanuser extends BS_Front_Action_Base
 			$id = $data['id'];
 		}
 		// otherwise check if the id exists
-		else if(BS_DAO::get_user()->id_exists($id))
+		else if(!BS_DAO::get_user()->id_exists($id))
 			return 'banlist_user_not_found';
 
 		// we do not want to ban ourself ;)

@@ -448,7 +448,7 @@ span.bs_msg_notice {
 
 a.bs_button {
 	width: 80px;
-	height: 20px;
+	height: 16px;
 	padding-top: 2px;
 	margin: 0px 2px 0px 2px;
 	display: block;
@@ -457,7 +457,7 @@ a.bs_button {
 
 a.bs_button_big {
 	width: 120px;
-	height: 20px;
+	height: 16px;
 	padding-top: 2px;
 	margin: 0px 2px 0px 2px;
 	display: block;

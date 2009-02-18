@@ -550,8 +550,14 @@ input, select, textarea {
 /* {{button}} */
 
 a.bs_button {
-	background-image: url(images/button.gif);
-	background-repeat: no-repeat;
+	background-image: url(images/btnbg.gif);
+	background-repeat: repeat-x;
+	border: 1px solid #6a7a97;
+	border-left: 5px solid #6a7a97;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-khtml-border-radius: 2px;
+	-webkit-border-radius: 2px;
 	text-align: center;
 	text-decoration: none;
 	font-weight: bold;
@@ -565,8 +571,14 @@ a.bs_button:hover {
 }
 
 a.bs_button_big {
-	background-image: url(images/button_big.gif);
-	background-repeat: no-repeat;
+	background-image: url(images/btnbg.gif);
+	background-repeat: repeat-x;
+	border: 1px solid #6a7a97;
+	border-left: 5px solid #6a7a97;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-khtml-border-radius: 2px;
+	-webkit-border-radius: 2px;
 	text-align: center;
 	text-decoration: none;
 	font-weight: bold;
@@ -580,13 +592,8 @@ a.bs_button_big:hover {
 }
 
 a.bs_button_selected {
-	background-image: url(images/button_selected.gif);
-	background-repeat: no-repeat;
-	text-align: center;
-	text-decoration: none;
-	font-weight: bold;
-	font-size: 0.9em;
-	color: #000000;
+	border: 1px solid #d75858;
+	border-left: 5px solid #d75858;
 }
 
 a.bs_button_selected:hover {

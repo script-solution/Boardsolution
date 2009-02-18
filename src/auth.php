@@ -106,16 +106,49 @@ final class BS_Auth extends FWS_Object
 	}
 	
 	/**
+	 * Checks wether the user with given id (0 = current) is an admin
+	 *
+	 * @param int $id the user-id (0 = current)
+	 * @return boolean true if so
+	 */
+	public function is_admin($id = 0)
+	{
+		if($id > 0)
+		{
+			$data = BS_DAO::get_profile()->get_user_by_id($id);
+			return $this->is_in_group($data['user_group'],BS_STATUS_ADMIN);
+		}
+		
+		$user = FWS_Props::get()->user();
+		return $user->is_admin();
+	}
+	
+	/**
 	 * Checks wether the current user or the given one is moderator in the current forum
 	 * 
 	 * @param int $user_id the id of th user (0 = current)
 	 * @param string $group_ids a comma-separated string with all groups of the user (just if
-	 * 	$user_id != 0)
+	 * 	$user_id != 0). if not given it will be loaded from db
 	 * @return boolean true if the user is a moderator in the current forum
 	 */
 	public function is_moderator_in_current_forum($user_id = 0,$group_ids = '')
 	{
 		$input = FWS_Props::get()->input();
+		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
+		return $this->is_moderator_in_forum($fid,$user_id,$group_ids);
+	}
+	
+	/**
+	 * Checks wether the current user or the given one is moderator in the given forum
+	 * 
+	 * @param int $fid the forum-id
+	 * @param int $user_id the id of th user (0 = current)
+	 * @param string $group_ids a comma-separated string with all groups of the user (just if
+	 * 	$user_id != 0). if not given it will be loaded from db
+	 * @return boolean true if the user is a moderator in the given forum
+	 */
+	public function is_moderator_in_forum($fid,$user_id = 0,$group_ids = '')
+	{
 		$cache = FWS_Props::get()->cache();
 
 		// current user?
@@ -123,12 +156,18 @@ final class BS_Auth extends FWS_Object
 			return $this->_is_current_forum_mod;
 		
 		// check for the given user-id and user-groups
-		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 		$is_mod = $cache->get_cache('moderators')->element_exists_with(array(
 			'rid' => $fid,'user_id' => $user_id
 		));
 		if($is_mod)
 			return true;
+		
+		// load group-ids if not present
+		if($group_ids == '')
+		{
+			$data = BS_DAO::get_profile()->get_user_by_id($user_id);
+			$group_ids = $data['user_group'];
+		}
 		
 		// is one of the groups super-mod?
 		$ugroups = $cache->get_cache('user_groups');
@@ -146,7 +185,8 @@ final class BS_Auth extends FWS_Object
 	 * Checks wether the given user or the current user is a moderator in any forum.
 	 * 
 	 * @param int $user_id the id of the user (0 = current user)
-	 * @param string $group_ids the usergroups of the user. (just if $user_id != 0)
+	 * @param string $group_ids the usergroups of the user. (just if $user_id != 0). if not given
+	 * 	it will be loaded from db
 	 * @return boolean true if this user is a moderator in any forum
 	 */
 	public function is_moderator_in_any_forum($user_id = 0,$group_ids = '')
@@ -156,6 +196,13 @@ final class BS_Auth extends FWS_Object
 		// the current user?
 		if($user_id == 0)
 			return $this->_is_mod_in_any_forum;
+		
+		// load group-ids if not present
+		if($group_ids == '')
+		{
+			$data = BS_DAO::get_profile()->get_user_by_id($user_id);
+			$group_ids = $data['user_group'];
+		}
 		
 		// is one of the groups super-mod?
 		$ugroups = $cache->get_cache('user_groups');
@@ -494,7 +541,9 @@ final class BS_Auth extends FWS_Object
 	public function is_in_any_group($groups)
 	{
 		$user = FWS_Props::get()->user();
-
+		
+		if(!is_array($groups))
+			$groups = func_get_args();
 		return count(array_intersect($user->get_all_user_groups(),$groups)) > 0;
 	}
 

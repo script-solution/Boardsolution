@@ -256,7 +256,7 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 				$mail = BS_EmailFactory::get_instance()->get_pm_inbox_full_mail(
 					$this->_inbox_counts[$i],$this->_receiver_email[$this->_receiver_ids[$i]]
 				);
-				if(!$mail->send_mail())
+				if(!$mail->send_mail() && $mail->get_error_message())
 					$msgs->add_error($mail->get_error_message());
 			}
 
@@ -266,7 +266,7 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 				$email = BS_EmailFactory::get_instance()->get_new_pm_mail(
 					$this->_receiver_email[$this->_receiver_ids[$i]]
 				);
-				if(!$email->send_mail())
+				if(!$email->send_mail() && $email->get_error_message())
 					$msgs->add_error($email->get_error_message());
 			}
 		}

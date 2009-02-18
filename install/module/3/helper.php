@@ -78,8 +78,6 @@ final class BS_Install_Module_3_Helper extends FWS_UtilBase
 		$check['board_url'] = FWS_String::substr($board_url,0,7) == "http://" &&
 			$board_url[FWS_String::strlen($board_url) - 1] != '/';
 		
-		$check['chmod_themes'] = self::_check_chmod_themes();
-		
 		return $check;
 	}
 	
@@ -116,45 +114,7 @@ final class BS_Install_Module_3_Helper extends FWS_UtilBase
 			$status['mysql'] = false;
 		}
 		
-		// special case
-		if($values['chmod_themes'] > 0)
-			$errors[] = $locale->lang('error_chmod_themes_'.$values['chmod_themes']);
-		$status['chmod_themes'] = $values['chmod_themes'] == 0;
-		
 		return $errors;
-	}
-	
-	/**
-	 * checks the CHMOD-attributes of all templates and the style.css in all themes
-	 * 
-	 * @return int 0 if successfull or the error-code
-	 * 
-	 * 	error-codes:
-	 * 		1 => themes/default/style.css,
-	 * 		2 => a template in themes/default/templates
-	 */
-	private static function _check_chmod_themes()
-	{
-		// check all themes
-		foreach(FWS_FileUtils::get_list('themes',false,false) as $theme)
-		{
-			if(is_dir('themes/'.$theme) && $theme[0] != '.')
-			{
-				// check css-file
-				if(!FWS_FileUtils::is_writable('themes/'.$theme.'/basic.css'))
-					return 1;
-				
-				// check templates
-				foreach(FWS_FileUtils::get_list('themes/'.$theme.'/templates',false,false) as $tpl)
-				{
-					if(preg_match('/\.htm$/',$tpl) && $tpl != 'index.htm' &&
-							!FWS_FileUtils::is_writable('themes/'.$theme.'/templates/'.$tpl))
-						return 2;
-				}
-			}
-		}
-		
-		return 0;
 	}
 }
 ?>

@@ -89,7 +89,7 @@ final class BS_Front_Action_userprofile_updateinfos extends BS_Front_Action_Base
 
 				$uid = $user->get_user_id();
 				$mail = BS_EmailFactory::get_instance()->get_change_email_mail($uid,$email,$key);
-				if(!$mail->send_mail())
+				if(!$mail->send_mail() && $mail->get_error_message())
 					$msgs->add_error($mail->get_error_message());
 			}
 			else

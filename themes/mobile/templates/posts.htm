@@ -6,7 +6,7 @@
 
 {if display_reply}
 <div>
-	<a class="bs_button_big" title="{glocale.lang('answer_desc')}" href="{reply_url}" onclick="return quote('{quoteLink}');">{glocale.lang('answer')}</a>
+	<a id="reply_btn_1" class="bs_button_big" title="{glocale.lang('answer_desc')}" href="{reply_url}" onclick="return quote('{quoteLink}');">{glocale.lang('answer')}</a>
 	<br style="clear: both;" />
 </div>
 {endif}
@@ -44,7 +44,7 @@
 <div class="bs_padtop">
 	<div style="float: right;">
 		{if display_reply}
-		<a class="bs_button_big" title="{glocale.lang('answer_desc')}" href="{reply_url}" onclick="return quote('{quoteLink}');">{glocale.lang('answer')}</a>
+		<a id="reply_btn_2" class="bs_button_big" title="{glocale.lang('answer_desc')}" href="{reply_url}" onclick="return quote('{quoteLink}');">{glocale.lang('answer')}</a>
 		{if gisloggedin}
 		<a class="bs_button_big" href="javascript:toggleQuickReply();">{glocale.lang('quick_reply')}</a>
 		{endif}
@@ -62,8 +62,12 @@ function toggleQuickReply()
 	if(d != null)
 		d.style.display = d.style.display == 'block' ? 'none' : 'block';
 }
+var BBCodeModes = new Array();
+BBCodeModes['1'] = 'simple';
 //-->
 </script>
+<script type="text/javascript" src="{gjs.get_file('src/bbcode.js')}"></script>
+<script type="text/javascript" src="{gjs.get_file('src/ajax_quote_message.js')}"></script>
 <div id="quickReply" style="display: none;">
 <form method="post" action="{gurl.simple_url('new_post','&amp;$URL_FID='~fid~'&amp;$URL_TID='~tid)}">
 <input type="hidden" name="action_type" value="{quick_reply_action_type}" />
@@ -73,7 +77,7 @@ function toggleQuickReply()
 		<dl>
 			<dt>{glocale.lang('text')}:</dt>
 			<dd>
-				<textarea name="text" cols="50" rows="15" style="width: 90%;"></textarea>
+				<textarea id="quickReply_text" name="text" cols="50" rows="15" style="width: 90%;"></textarea>
 				<div class="bs_padtop">
 					<input type="checkbox" id="ubb" name="use_bbcode" value="checked" checked="checked" />
 					<label for="ubb">{glocale.lang('use_bbcode')}</label><br />

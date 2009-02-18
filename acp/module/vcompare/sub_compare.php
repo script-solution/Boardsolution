@@ -97,9 +97,9 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 	private $_conflicts = array();
 	
 	/**
-	 * All versions
+	 * All versions (instances of BS_Version)
 	 *
-	 * @var string
+	 * @var array
 	 */
 	private $_versions;
 	
@@ -146,9 +146,9 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		$input = FWS_Props::get()->input();
 		$renderer = $doc->use_default_renderer();
 		
-		$http = new FWS_HTTP('www.script-solution.de');
-		$this->_versions = $http->get('/bsversions/versions.xml');
-		if($this->_versions === false)
+		$http = new FWS_HTTP(BS_Version::VERSION_HOST);
+		$versions = $http->get(BS_Version::VERSION_PATH);
+		if($versions === false)
 		{
 			$this->report_error(
 				FWS_Document_Messages::ERROR,$http->get_error_code().': '.$http->get_error_message()
@@ -156,10 +156,11 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 			return;
 		}
 		
-		$xml = new SimpleXMLElement($this->_versions);
+		$this->_versions = BS_Version::read_versions($versions);
+		
 		$cbversions = array();
-		foreach($xml->version as $v)
-			$cbversions[(string)$v['id']] = (string)$v['name'];
+		foreach($this->_versions as $v)
+			$cbversions[$v->get_id()] = $v->get_name();
 		
 		$compare = $input->get_var('compare','post',FWS_Input::STRING);
 		if(!isset($cbversions[$compare]))
@@ -171,12 +172,12 @@ final class BS_ACP_SubModule_vcompare_compare extends BS_ACP_SubModule
 		}
 		
 		// find the filename
-		foreach($xml->version as $v)
+		foreach($this->_versions as $v)
 		{
-			if((string)$v['id'] == $compare)
+			if($v->get_id() == $compare)
 			{
-				$this->_file = (string)$v['id'];
-				$this->_compare_version = (string)$v;
+				$this->_file = $v->get_id();
+				$this->_compare_version = $v->get_name();
 				break;
 			}
 		}

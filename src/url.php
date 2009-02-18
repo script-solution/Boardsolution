@@ -145,7 +145,7 @@ final class BS_URL extends FWS_URL
 			if($action != null)
 				$url->set(BS_URL_ACTION,$action);
 		}
-		else
+		else if($mod !== -1)
 			$url->set(BS_URL_ACTION,$mod);
 		
 		return $url;

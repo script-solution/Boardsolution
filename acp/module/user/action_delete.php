@@ -39,7 +39,7 @@ final class BS_ACP_Action_user_delete extends BS_ACP_Action_Base
 		// at first e collect all existing users and update their topics and posts so that they
 		// have been created by guests (with the corresponding name)
 		$existing_ids = array();
-		foreach(BS_DAO::get_user()->get_users_by_ids($ids) as $data)
+		foreach(BS_DAO::get_profile()->get_users_by_ids($ids) as $data)
 		{
 			if($data['id'] == $user->get_user_id())
 				continue;

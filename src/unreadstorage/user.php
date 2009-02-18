@@ -133,6 +133,19 @@ final class BS_UnreadStorage_User extends FWS_Object implements BS_UnreadStorage
 	{
 		$user = FWS_Props::get()->user();
 
+		// remove post-ids that we already have (userid-postid is the PK in the db!)
+		foreach($this->_forums as $topics)
+		{
+			foreach($topics as $posts)
+			{
+				foreach($posts as $pid)
+				{
+					if(isset($ids[$pid]))
+						unset($ids[$pid]);
+				}
+			}
+		}
+		
 		BS_DAO::get_unread()->create($user->get_user_id(),$ids);
 	}
 

@@ -472,6 +472,9 @@ final class BS_Front_Post_Data extends FWS_Object
     	
     	$qurl = BS_URL::get_mod_url('new_post');
     	$qurl->copy_params($epurl,array(BS_URL_FID,BS_URL_TID,BS_URL_SITE));
+    	
+    	$ajaxqurl = BS_URL::get_standalone_url('ajax_quote','&');
+    	$ajaxqurl->set(BS_URL_ID,'__ID__');
 	    		
     	$cache = array(
 				'can_reply'					=> $auth->has_current_forum_perm(BS_MODE_REPLY),
@@ -487,7 +490,8 @@ final class BS_Front_Post_Data extends FWS_Object
 				'is_admin'					=> $user->is_admin(),
     		'delete_post_url'		=> $dpurl,
     		'edit_post_url'			=> $epurl,
-    		'quote_url'					=> $qurl
+    		'quote_url'					=> $qurl,
+    		'ajax_qurl'					=> $ajaxqurl->to_url()
 			);
 		}
 		
@@ -541,11 +545,11 @@ final class BS_Front_Post_Data extends FWS_Object
 	    	($cache['is_admin'] || $cache['topic']['thread_closed'] == 0))
 	    {
 	    	$murl = $cache['quote_url'];
-	    	$murl->set(BS_URL_PID,$this->_data['bid']);	
+	    	$murl->set(BS_URL_PID,$this->_data['bid']);
 	      $btns .= '<a id="quote_link_'.$this->_data['bid'].'" class="bs_button"';
 	      $btns .= ' title="'.$locale->lang('quotethispost').'"';
-				$btns .= ' href="'.$murl->to_url().'" onclick="toggleQuote('.$this->_data['bid'].');';
-				$btns .= ' return false;">'.$locale->lang('quote').'+</a>';
+				$btns .= ' href="'.$murl->to_url().'" onclick="toggleQuote(\''.$cache['ajax_qurl'].'\',';
+				$btns .= $this->_data['bid'].'); return false;">'.$locale->lang('quote').'+</a>';
 	    }
 	  }
 	  

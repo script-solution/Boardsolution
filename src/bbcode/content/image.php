@@ -22,7 +22,7 @@ final class BS_BBCode_Content_Image extends BS_BBCode_Content_Default
 	public function get_text($inner,$param)
 	{
 		BS_BBCode_Helper::get_instance()->increment_images();
-		return $inner;
+		return trim($inner);
 	}
 }
 ?>

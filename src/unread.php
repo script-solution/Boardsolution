@@ -353,6 +353,7 @@ final class BS_Unread extends FWS_Object
 		$cache = FWS_Props::get()->cache();
 		$user = FWS_Props::get()->user();
 		$cfg = FWS_Props::get()->cfg();
+		$db = FWS_Props::get()->db();
 
 		$last_update = $this->_storage->get_last_update();
 		$stats = $cache->get_cache('stats')->get_element(0,false);
@@ -361,6 +362,9 @@ final class BS_Unread extends FWS_Object
 		// nothing to do?
 		if($last_post <= $last_update)
 			return false;
+		
+		// use transactions here. just to be sure
+		$db->start_transaction();
 		
 		// select the NOT-favorite-forums for the current user
 		$forum_ids = array();
@@ -428,6 +432,8 @@ final class BS_Unread extends FWS_Object
 		
 		$this->_add_post_ids($post_ids);
 		$this->_storage->set_last_update(time());
+		
+		$db->commit_transaction();
 		
 		// we update the topics to the db at this point. Therefore we don't set _unread_update to true.
 

@@ -566,7 +566,7 @@ input, select, textarea {
 }
 
 .bs_pageno a:hover {
-	background-color: #3F5E88;
+	background-color: #AB1111;
 	color: #fff;
 	text-decoration: none;
 }
@@ -574,8 +574,14 @@ input, select, textarea {
 /* {{button}} */
 
 a.bs_button {
-	background-image: url(images/button.gif);
-	background-repeat: no-repeat;
+	background-image: url(images/btnbg.gif);
+	background-repeat: repeat-x;
+	border: 1px solid #AB1111;
+	border-left: 5px solid #AB1111;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-khtml-border-radius: 2px;
+	-webkit-border-radius: 2px;
 	text-align: center;
 	text-decoration: none;
 	font-weight: bold;
@@ -584,13 +590,19 @@ a.bs_button {
 }
 
 a.bs_button:hover {
-	color: #981A1A;
+	color: #AB1111;
 	text-decoration: none;
 }
 
 a.bs_button_big {
-	background-image: url(images/button_big.gif);
-	background-repeat: no-repeat;
+	background-image: url(images/btnbg.gif);
+	background-repeat: repeat-x;
+	border: 1px solid #AB1111;
+	border-left: 5px solid #AB1111;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-khtml-border-radius: 2px;
+	-webkit-border-radius: 2px;
 	text-align: center;
 	text-decoration: none;
 	font-weight: bold;
@@ -599,18 +611,13 @@ a.bs_button_big {
 }
 
 a.bs_button_big:hover {
-	color: #981A1A;
+	color: #AB1111;
 	text-decoration: none;
 }
 
 a.bs_button_selected {
-	background-image: url(images/button_selected.gif);
-	background-repeat: no-repeat;
-	text-align: center;
-	text-decoration: none;
-	font-weight: bold;
-	font-size: 0.9em;
-	color: #000000;
+	border: 1px solid #cd940a;
+	border-left: 5px solid #cd940a;
 }
 
 a.bs_button_selected:hover {

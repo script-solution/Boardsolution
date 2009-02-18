@@ -202,7 +202,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 			FWS_Helper::def_error('intge0','count',$count);
 		
 		return $db->get_rows(
-			'SELECT s.*,t.*
+			'SELECT s.*,t.*,s.id
 			 FROM '.BS_TB_SUBSCR.' s
 			 LEFT JOIN '.BS_TB_THREADS.' t ON s.topic_id = t.id
 			 WHERE user_id = '.$user_id.' AND topic_id > 0

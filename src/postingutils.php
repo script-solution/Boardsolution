@@ -117,7 +117,8 @@ final class BS_PostingUtils extends FWS_UtilBase
 		));
 		
 		$posts = array();
-		$pagination = new BS_Pagination(BS_TOPIC_REVIEW_POST_COUNT,BS_TOPIC_REVIEW_POST_COUNT);
+		// use FWS_Pagination here to set the page manually
+		$pagination = new FWS_Pagination(BS_TOPIC_REVIEW_POST_COUNT,BS_TOPIC_REVIEW_POST_COUNT);
 		$postcon = new BS_Front_Post_Container(
 			0,$topic_data['id'],null,$pagination,'p.id DESC'
 		);
@@ -311,6 +312,7 @@ final class BS_PostingUtils extends FWS_UtilBase
 	{
 		$locale = FWS_Props::get()->locale();
 		$input = FWS_Props::get()->input();
+		$msgs = FWS_Props::get()->msgs();
 
 		$options = self::get_message_options($location);
 		$locale->add_language_file('messages');
@@ -352,6 +354,10 @@ final class BS_PostingUtils extends FWS_UtilBase
 		{
 			return $ex->getMessage();
 		}
+		
+		// add highlight-limit warning
+		if($bbcode->reached_highlighting_limit())
+			$msgs->add_warning(sprintf($locale->lang('warning_reached_hl_limit'),BS_CODE_HIGHLIGHT_LIMIT));
 	
 		// not too many smileys and pictures?
 		if($enable_smileys && $bbcode->get_number_of_smileys() > $options['max_smileys'])

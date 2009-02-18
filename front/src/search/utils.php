@@ -260,7 +260,7 @@ final class BS_Front_Search_Utils extends FWS_UtilBase
 					FWS_String::strlen($trimmed) >= BS_SEARCH_MIN_KEYWORD_LEN && !isset($ignore[$trimmed]))
 			{
 				// we delete all &, < and > to prevent problems
-				$sections[] = str_replace(array('&','<','>'),'',$trimmed);
+				$sections[] = htmlspecialchars(str_replace(array('&','<','>'),'',$trimmed),ENT_QUOTES);
 			}
 		}
 	}

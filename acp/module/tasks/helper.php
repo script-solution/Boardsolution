@@ -30,7 +30,7 @@ final class BS_ACP_Module_Tasks_Helper extends FWS_UtilBase
 		$default = array(
 			'attachments.php','change_email_pw.php','email_notification.php',
 			'error_log.php','events.php','logged_ips.php','registrations.php',
-			'subscriptions.php'
+			'subscriptions.php','updates.php'
 		);
 		return in_array($name,$default);
 	}

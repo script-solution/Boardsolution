@@ -30,7 +30,7 @@ final class BS_Front_Action_resend_activation_default extends BS_Front_Action_Ba
 		if($user->is_loggedin())
 			return 'You are loggedin';
 
-		if($com->is_resend_act_enabled())
+		if(!$com->is_resend_act_enabled())
 			return 'Resend-act-link is disabled';
 
 		if(!$functions->check_security_code())

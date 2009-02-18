@@ -81,6 +81,7 @@ final class BS_BBCode_Content_Code extends BS_BBCode_Content_Default
 				{
 					$use_highlighting = false;
 					$code = htmlspecialchars($code,ENT_QUOTES);
+					$helper->set_reached_hl_limit();
 				}
 				else
 				{

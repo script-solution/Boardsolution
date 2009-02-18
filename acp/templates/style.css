@@ -70,6 +70,21 @@ span.bs_highlight {
 	color: #000;
 }
 
+.a_update_notice {
+	background-color: #008000;
+	color: #fff;
+	font-size: 1.3em;
+	padding: 1em;
+}
+
+.a_update_notice a {
+	color: #fff;
+	text-decoration: underline;
+}
+.a_update_notice a:hover {
+	color: #333;
+}
+
 /* ------------ ADMIN-FAQ ------------ */
 
 code {

@@ -89,10 +89,6 @@ final class BS_Install_Module_3 extends BS_Install_Module
 			'images/avatars/',$status['chmod_avatars'],$locale->lang('writable'),
 			$locale->lang('notwritable')
 		);
-		$configs[] = $this->get_status(
-			'themes/ *',$status['chmod_themes'],$locale->lang('writable'),
-			$locale->lang('notwritable'),0,$locale->lang('themes_chmod_notice')
-		);
 		
 		$configs[] = array('type' => 'separator','desc' => $locale->lang('step3_db'));
 		

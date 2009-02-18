@@ -49,12 +49,37 @@ final class BS_BBCode_Helper extends FWS_Singleton
 	private $_replacements = array();
 	
 	/**
+	 * Wether the highlighting-limit has been reached
+	 *
+	 * @var boolean
+	 */
+	private $_reached_hl_limit = false;
+	
+	/**
 	 * Resets everything for a new text to parse
 	 */
 	public function reset()
 	{
+		$this->_reached_hl_limit = false;
 		$this->_variables = array();
 		$this->_replacements = array();
+	}
+	
+	/**
+	 * @return boolean wether a code-section could not be highlighted because the hl-limit has been
+	 * 	reached
+	 */
+	public function reached_hl_limit()
+	{
+		return $this->_reached_hl_limit;
+	}
+	
+	/**
+	 * Sets that the highlighting-limit has been reached
+	 */
+	public function set_reached_hl_limit()
+	{
+		$this->_reached_hl_limit = true;
 	}
 	
 	/**

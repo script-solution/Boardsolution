@@ -141,7 +141,8 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 			return;
 		}
 
-		$groupa = explode('::',$input->get_var('group','get',FWS_Input::STRING));
+		$cgroup = $input->get_var('group','get',FWS_Input::STRING);
+		$groupa = explode('::',$cgroup);
 		if(count($groupa) == 2)
 			list($cat,$group) = $groupa;
 		else
@@ -175,7 +176,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 			
 			$url = BS_URL::get_acpsub_url(0,'editor');
 			$url->set('theme',$theme);
-			$url->set('class','$class');
+			$url->set('group',$cgroup);
 			
 			$yurl = clone $url;
 			$yurl->set('at',BS_ACP_ACTION_THEME_EDITOR_SIMPLE_DELETE);

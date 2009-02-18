@@ -39,14 +39,19 @@ abstract class BS_Document extends FWS_Document
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
 		$user = FWS_Props::get()->user();
+		$auth = FWS_Props::get()->auth();
 		
 		$tpl->add_global('gisloggedin',$user->is_loggedin());
 		$tpl->add_global('gusername',$user->get_user_name());
 		$tpl->add_global('guserid',$user->get_user_id());
 		$tpl->add_global('gisadmin',$user->is_admin());
+		$tpl->add_global('gismod',$auth->is_moderator_in_any_forum());
 		$tpl->add_global('glang',$user->get_language());
 		$tpl->add_global('gmodule',$this->get_module_name());
 		$tpl->add_global('gtheme',$user->get_theme());
+		
+		$tpl->add_global_ref('gauth',$auth);
+		$tpl->add_allowed_method('gauth','is_in_any_group');
 		
 		$this->set_charset(BS_HTML_CHARSET);
 		FWS_Path::set_outer($cfg['board_url'].'/');

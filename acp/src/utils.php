@@ -142,19 +142,18 @@ final class BS_ACP_Utils extends FWS_UtilBase
 		$msgs = FWS_Props::get()->msgs();
 
 		$error_msgs = array();
-		foreach(BS_DAO::get_user()->get_users_by_ids($user_ids) as $data)
+		foreach(BS_DAO::get_user()->get_users_by_ids($user_ids,-1,-1) as $data)
 		{
 			$mail->set_recipient($data['user_email']);
 			if(!$mail->send_mail())
-			{
-				$error = $mail->get_error_message();
-				if(!isset($error_msgs[$error]))
-					$error_msgs[$error] = true;
-			}
+				$error_msgs[$mail->get_error_message()] = true;
 		}
 		
 		foreach(array_keys($error_msgs) as $error)
-			$msgs->add_error($error);
+		{
+			if($error)
+				$msgs->add_error($error);
+		}
 	}
 }
 ?>

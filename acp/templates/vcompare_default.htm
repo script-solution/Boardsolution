@@ -1,13 +1,29 @@
 {include "inc_header.htm"}
 
 {if module_error == false}
+{if update}
+<div class="a_block a_pad_bottom">
+	<div class="a_update_notice">
+	{update_notice}
+	{if update_instr.length > 0}
+	<br />{glocale.lang('vcompare_update_instructions')}
+	<ul>
+		{loop update_instr as url}
+		<li><a target="_blank" href="{url}">{url}</a></li>
+		{endloop}
+	</ul>
+	{endif}
+	</div>
+</div>
+{endif}
+
 <p class="a_block">{glocale.lang('version_compare_explanation')}</p>
 
 <form method="post" action="{gurl.simple_acp_url(0,'&amp;action=compare')}">
 <div class="a_border a_pad">
 	<div class="a_main">
 		{glocale.lang('your_version')}: <b>{current_version}</b>,
-		{glocale.lang('compare_to')}: {form.get_combobox('compare',versions)}
+		{glocale.lang('compare_to')}: {form.get_combobox('compare',versions,selected_version)}
 		<input type="submit" value="{glocale.lang('go')}" />
 	</div>
 </div>

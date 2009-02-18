@@ -157,6 +157,15 @@ final class BS_BBCode_Parser extends FWS_Object
 	{
 		$this->_text = stripslashes($this->_text);
 	}
+	
+	/**
+	 * @return boolean wether a code-section could not be highlighted because the hl-limit has been
+	 * 	reached
+	 */
+	public function reached_highlighting_limit()
+	{
+		return BS_BBCode_Helper::get_instance()->reached_hl_limit();
+	}
 
 	/**
 	 * prepares the message for storage in the database.
@@ -225,12 +234,15 @@ final class BS_BBCode_Parser extends FWS_Object
 			$this->_text = str_replace("\n",'<br />',$this->_text);
 		}
 
-		// replace boardsolution-file and language-entries
+		// replace special variables and macros
 		$this->_text = str_replace('<BSP>',$this->_board_path,$this->_text);
 		$this->_text = str_replace('<BSF>',
 			$this->_board_path.$functions->get_board_file(true),$this->_text);
 		$this->_text = preg_replace(
 			'/<LANG=([^}]+?)>/e','FWS_Props::get()->locale()->lang("\\1")',$this->_text
+		);
+		$this->_text = preg_replace(
+			'/<THEMEITEM=([^}]+?)>/e','FWS_Props::get()->user()->get_theme_item_path("\\1")',$this->_text
 		);
 
 		// replace paths
@@ -460,6 +472,7 @@ final class BS_BBCode_Parser extends FWS_Object
 		$sub_count = 0;
 
 		$list_open = 0;
+		$code_open = 0;
 		$open_tags = array();
 		$open_count = 0;
 		for($key = 0,$tagcount = count($tags[3]);$key < $tagcount;$key++)
@@ -483,7 +496,7 @@ final class BS_BBCode_Parser extends FWS_Object
 				$allowed = $this->_check_allowed_content($sub_tags,$sub_count,$bbctags[$tag_name]['type']);
 
 				// error?
-				if($allowed == 0)
+				if($allowed == 0 || ($allowed == 1 && $code_open == 0))
 				{
 					throw new BS_BBCode_Exception_Syntax(
 						$this->_text,$info[1] - 1,self::ERR_DISALLOWED_OPEN_TAGS
@@ -491,7 +504,7 @@ final class BS_BBCode_Parser extends FWS_Object
 				}
 
 				// treat as plain-text?
-				if($allowed == 1)
+				if($allowed == 1 && $code_open > 0)
 					continue;
 
 				// nested tag and nesting disallowed?
@@ -523,6 +536,8 @@ final class BS_BBCode_Parser extends FWS_Object
 				// add it to the open tags
 				if($tag == 'list')
 					$list_open++;
+				else if($tag == 'code')
+					$code_open++;
 
 				$open_tags[$open_count++] = $tag;
 			}
@@ -538,7 +553,7 @@ final class BS_BBCode_Parser extends FWS_Object
 					$allowed = $this->_check_allowed_content($sub_tags,$sub_count,$bbctags[$tag_name]['type']);
 
 				// treat as plain-text?
-				if($allowed == 1)
+				if($allowed == 1 && $code_open > 0)
 					continue;
 
 				// if there are no tags open anymore (we are about to close a tag) break here
@@ -630,6 +645,8 @@ final class BS_BBCode_Parser extends FWS_Object
 
 				if($tag_name == 'list')
 					$list_open--;
+				else if($tag == 'code')
+					$code_open--;
 			}
 		}
 

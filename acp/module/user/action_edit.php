@@ -57,6 +57,9 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 			// check inputs
 			if($user_pw != '' && $user_pw != $user_pw_conf)
 				return 'registerpwsnichtidentisch';
+			// ensure that both are empty if they are not equal
+			if($user_pw != $user_pw_conf)
+				$user_pw = $user_pw_conf = '';
 
 			// check email
 			$user_email = trim($user_email);
@@ -103,7 +106,7 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 
 		// update the database
 		if($com->is_user_management_enabled())
-			BS_DAO::get_user()->update($id,$user_name,md5($user_pw),$user_email);
+			BS_DAO::get_user()->update($id,$user_name,$user_pw != '' ? md5($user_pw) : '',$user_email);
 
 		$groups = array();
 		if($user->get_user_id() == $id)

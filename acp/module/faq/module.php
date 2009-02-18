@@ -65,7 +65,7 @@ final class BS_ACP_Module_faq extends BS_ACP_Module
 		foreach($doc->question as $question)
 		{
 			$entries[] = array(
-				'id' => $id++,
+				'id' => (string)$question->name,
 				'question' => (string)$question->title,
 				'answer' => (string)$question->answer
 			);

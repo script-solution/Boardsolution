@@ -173,15 +173,9 @@ final class BS_BBCode_Section extends FWS_Object
 					case 'color':
 						$valid_param = preg_match('/^#[a-f0-9]{6}|[a-z-]+$/i',$this->_param);
 						break;
+					// URLs are always valid since we want to allow relative ones, too
 					case 'url':
-						$param = FWS_StringHelper::correct_homepage($this->_param);
-						if($param === false)
-							$valid_param = false;
-						else
-						{
-							$valid_param = true;
-							$this->_param = $param;
-						}
+						$valid_param = true;
 						break;
 					case 'mail':
 						$valid_param = FWS_StringHelper::is_valid_email($this->_param);

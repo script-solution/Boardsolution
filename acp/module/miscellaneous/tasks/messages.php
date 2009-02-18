@@ -156,6 +156,10 @@ final class BS_ACP_Miscellaneous_Tasks_Messages extends FWS_Object implements FW
 				BS_DAO::get_profile()->update_user_by_id(array('signatur' => $text),$data['id']);
 			}
 		}
+		
+		// clear warnings here (highlighting-limit e.g.)
+		$msgs = FWS_Props::get()->msgs();
+		$msgs->clear_type(FWS_Document_Messages::WARNING);
 	}
 	
 	protected function get_dump_vars()

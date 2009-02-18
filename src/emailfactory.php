@@ -160,7 +160,8 @@ final class BS_EmailFactory extends FWS_Singleton
 		$url->set(BS_URL_ID,$user_id);
 		$url->set(BS_URL_PID,$user_key);
 		$url->set_separator('&');
-		$url->set_sid_policy(BS_URL::SID_FORCE);
+		$url->set_sid_policy(BS_URL::SID_OFF);
+		$url->set_absolute(true);
 		
 		$subject = sprintf($locale->lang('change_email_email_title'),$cfg['forum_title']);
 		$text = $tpl->parse_string(
@@ -227,9 +228,10 @@ final class BS_EmailFactory extends FWS_Singleton
 		$locale->add_language_file('email');
 		$url = BS_URL::get_mod_url('activate');
 		$url->set(BS_URL_ID,$user_id);
-		$url->set(BS_URL_PID,$user_key);
+		$url->set(BS_URL_KW,$user_key);
 		$url->set_separator('&');
-		$url->set_sid_policy(BS_URL::SID_FORCE);
+		$url->set_sid_policy(BS_URL::SID_OFF);
+		$url->set_absolute(true);
 
 		// send the email
 		$subject = $locale->lang('account_activation_email_title');
@@ -401,9 +403,10 @@ final class BS_EmailFactory extends FWS_Singleton
 		{
 			$url = BS_URL::get_mod_url('activate');
 			$url->set(BS_URL_ID,$user_id);
-			$url->set(BS_URL_PID,$user_key);
+			$url->set(BS_URL_KW,$user_key);
 			$url->set_separator('&');
-			$url->set_sid_policy(BS_URL::SID_FORCE);
+			$url->set_sid_policy(BS_URL::SID_OFF);
+			$url->set_absolute(true);
 			$murl = $url->to_url();
 		}
 		
@@ -540,6 +543,7 @@ final class BS_EmailFactory extends FWS_Singleton
 		$murl = BS_URL::get_frontend_url('posts','&',false);
 		$murl->set(BS_URL_FID,$fid);
 		$murl->set(BS_URL_TID,$tid);
+		$murl->set_sid_policy(BS_URL::SID_OFF);
 		$murl->set_anchor('b_'.$pid);
 		
 		if(BS_PostingUtils::get_posts_order() == 'ASC')
@@ -577,6 +581,29 @@ final class BS_EmailFactory extends FWS_Singleton
 			'text_def' => $text_def,
 			'text_post' => $text_post
 		);
+	}
+	
+	/**
+	 * Builds the instance of {@link FWS_Email_Base} with the corresponding subject and text.
+	 *
+	 * @param boolean $update wether it is an update (not a release)
+	 * @return FWS_Email_Base the email-instance
+	 */
+	public function get_updates_mail($update)
+	{
+		$locale = FWS_Props::get()->locale();
+		$tpl = FWS_Props::get()->tpl();
+		$functions = FWS_Props::get()->functions();
+
+		$locale->add_language_file('email');
+		
+		$subject = sprintf($locale->lang('updates_available_title'),$cfg['forum_title']);
+		$text = $tpl->parse_string(
+			$locale->lang('updates_available_text'),
+			array('update' => $update)
+		);
+		
+		return $functions->get_mailer($email,$subject,$text);
 	}
 }
 ?>

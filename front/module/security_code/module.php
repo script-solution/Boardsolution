@@ -43,8 +43,7 @@ final class BS_Front_Module_security_code extends BS_Front_Module
 		$captcha = new FWS_GD_Captcha();
 		$captcha->add_ttf_font(new FWS_GD_Font_TTF($imagedir.'veramono.ttf'),35);
 		$captcha->add_ttf_font(new FWS_GD_Font_TTF($imagedir.'thros.ttf'),40);
-		$captcha->add_ttf_font(new FWS_GD_Font_TTF($imagedir.'holstein2.ttf'),40);
-		$captcha->set_ttf_font_propability(1.0);
+		$captcha->add_ttf_font(new FWS_GD_Font_TTF($imagedir.'holstein.ttf'),40);
 		$captcha->create_image();
 		
 		$renderer = $doc->use_gdimage_renderer();

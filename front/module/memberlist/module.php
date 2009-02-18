@@ -193,10 +193,10 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 		);
 
 		$where .= FWS_StringHelper::build_date_range_sql(
-			'p.registerdate',(int)$s_from_reg,(int)$s_to_reg
+			'p.registerdate',$s_from_reg,$s_to_reg
 		);
 		$where .= FWS_StringHelper::build_date_range_sql(
-			'p.lastlogin',(int)$s_from_lastlogin,(int)$s_to_lastlogin
+			'p.lastlogin',$s_from_lastlogin,$s_to_lastlogin
 		);
 
 		// check how many entries exist
