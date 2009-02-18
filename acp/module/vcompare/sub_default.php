@@ -71,7 +71,7 @@ final class BS_ACP_SubModule_vcompare_default extends BS_ACP_SubModule
 		$tpl->add_variables(array(
 			'current_version' => BS_VERSION,
 			'versions' => $cbversions,
-			'selected_version' => $res[count($res) - 1]->get_id(),
+			'selected_version' => is_array($res) ? $res[count($res) - 1]->get_id() : 0,
 			'update' => $res !== null,
 			'update_notice' => $update_notice,
 			'update_instr' => $instr
