@@ -417,6 +417,13 @@ define('BS_RSS_FEED_ENCODING','UTF-8');
 ############################ TASKS ############################
 
 /**
+ * Wieviele zuletzt aktive Foren sollen im Portal (max.) angezeigt werden?
+ * 
+ * How many last active forums should be displayed (max.) in the portal?
+ */
+define('BS_PORTAL_LAST_FORUMS_COUNT',5);
+
+/**
  * Nach wievielen Sekunden sollen nicht aktivierte User-Accounts
  * geloescht werden? Dies wird von dem Task "Registrierungen"
  * uebernommen. (Standard = 1 Woche)

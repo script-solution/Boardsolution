@@ -95,7 +95,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		
 		// build last active forum-list
 		$nodes = array();
-		foreach($this->_get_last_active_forums(5) as $node)
+		foreach($this->_get_last_active_forums(BS_PORTAL_LAST_FORUMS_COUNT) as $node)
 		{
 			$data = $node->get_data();
 			/* @var $data BS_Forums_NodeData */
