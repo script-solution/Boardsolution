@@ -204,7 +204,7 @@ final class BS_BBCode_Helper extends FWS_Singleton
 	public function parse_url($url)
 	{
 		$url = trim($url);
-		$url = str_replace("\n",'',$url);
+		$url = str_replace(array("\n",'&quot;'),'',$url);
 		// prevent javascript
 		$url = preg_replace('/javascript:/i','java_script_',$url);
 
