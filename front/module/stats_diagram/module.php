@@ -196,7 +196,7 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 		$padding_left = 30;
 		$padding_top = 1;
 		$padding_right = 100;
-		$padding_bottom = 45;
+		$padding_bottom = 50;
 		
 		$img = new FWS_GD_Image(BS_IMG_WIDTH,BS_IMG_HEIGHT,true);
 		$img->set_background(new FWS_GD_Color(BS_BACKGROUND_COLOR));
