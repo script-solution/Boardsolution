@@ -168,6 +168,15 @@ final class BS_Front_Module_portal extends BS_Front_Module
 			$nodes[] = array($data->get_lastpost_time(),$node);
 		}
 		
+		// filter out denied forums
+		$denied = BS_ForumUtils::get_denied_forums(false);
+		$denied = array_flip($denied);
+		foreach($nodes as $k => $node)
+		{
+			if(isset($denied[$node[1]->get_id()]))
+				unset($nodes[$k]);
+		}
+		
 		usort($nodes,array($this,'_sort_active_forums'));
 		$res = array();
 		for($i = 0,$len = min(count($nodes),$count);$i < $len;$i++)
