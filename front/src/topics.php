@@ -123,7 +123,7 @@ final class BS_Front_Topics extends FWS_Object
 	 *
 	 * @var boolean
 	 */
-	private $_show_topic_action = false;
+	private $_show_topic_action = true;
 	
 	/**
 	 * display the topic-opening-time?

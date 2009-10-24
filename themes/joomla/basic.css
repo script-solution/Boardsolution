@@ -16,7 +16,7 @@
 a {
 	color: #851B1B;
 	border-bottom: 1px dotted #851B1B;
-	line-height: 150%;
+	/*line-height: 150%;*/
 	text-decoration: none;
 	font-weight: normal;
 }

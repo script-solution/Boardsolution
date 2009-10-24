@@ -81,7 +81,7 @@ function toggleForumList(id)
 </div>
 {endif}
 
-{loop other as name => user}
+{loop other as name => users}
 <div class="bs_border bs_padtop">
 	<h1 class="bs_topic">{name}</h1>
 	<table class="bs_table" cellpadding="2" cellspacing="1">
@@ -90,6 +90,7 @@ function toggleForumList(id)
 			<th width="50%" class="bs_coldesc">{glocale.lang('mod_forums')}</th>
 			<th width="20%" class="bs_coldesc">{glocale.lang('pm')}</th>
 		</tr>
+		{loop users as user}
 		<tr>
 			<td class="bs_main">{user:user_name}</td>
 			<td class="bs_main">-</td>
@@ -101,6 +102,7 @@ function toggleForumList(id)
 			{endif}
 			</td>
 		</tr>
+		{endloop}
 	</table>
 </div>
 {endloop}

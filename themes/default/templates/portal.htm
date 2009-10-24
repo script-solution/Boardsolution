@@ -23,9 +23,10 @@
 						</tr>
 						<tr>
 							<td class="bs_main bs_posts_main_1" valign="top" colspan="2">
-							<div style="max-height: 200px; overflow: auto;">
+							<div id="news_{news:id}" style="max-height: 200px; overflow: auto;">
 								{news:text}
 							</div>
+							<a href="#" onclick="document.getElementById('news_{news:id}').style.maxHeight = '';">klick</a>
 							</td>
 						</tr>
 						<tr>

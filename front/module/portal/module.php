@@ -382,6 +382,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 				// show news
 				$news[] = array(
 					'news_title' => $data['name'],
+					'id' => $data['id'],
 					'news_icon' => $news_icon,
 					'topic_url' => BS_URL::build_posts_url($data['rubrikid'],$data['threadid']),
 					'username' => $username,

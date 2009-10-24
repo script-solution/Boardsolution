@@ -211,7 +211,7 @@ final class BS_BBCode_Helper extends FWS_Singleton
 		// prepend http:// if necessary
 		if(!preg_match('/^(http|https|ftp|news):\/\//i',$url))
 		{
-			if(preg_match('/^www\./i',$url))
+			if(!preg_match('/^magnet:/i',$url) && preg_match('/^www\./i',$url))
 				$url = 'http://'.$url;
 		}
 

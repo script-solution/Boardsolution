@@ -165,7 +165,7 @@ class BS_DAO_LogIPs extends FWS_Singleton
 			FWS_Helper::def_error('intgt0','timeout',$timeout);
 		
 		$db->execute(
-			'DELETE FROM '.BS_TB_LOG_ERRORS.' WHERE date < '.(time() - $timeout)
+			'DELETE FROM '.BS_TB_LOG_IPS.' WHERE date < '.(time() - $timeout)
 		);
 		return $db->get_affected_rows();
 	}

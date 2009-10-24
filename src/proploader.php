@@ -173,6 +173,7 @@ class BS_PropLoader extends FWS_PropLoader
 	protected function sessions()
 	{
 		$c = new BS_Session_Manager();
+		$c->set_online_timeout(BS_ONLINE_TIMEOUT);
 		return $c;
 	}
 	

@@ -149,7 +149,7 @@ final class BS_Front_Module_team extends BS_Front_Module
 				if(!isset($other[$gname]))
 					$other[$gname] = array();
 				
-				$other[$gname] = array(
+				$other[$gname][] = array(
 					'user_name' => BS_UserUtils::get_link($udata['id'],$udata['user_name'],
 						$udata['user_group']),
 					'id' => $udata['id'],

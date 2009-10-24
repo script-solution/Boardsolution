@@ -519,6 +519,11 @@ final class BS_Functions extends FWS_Object
 		else
 			$title = $auth->get_groupname((int)$group_ids);
 		
+		if($auth->is_in_group($group_ids,BS_STATUS_ADMIN))
+			return '<img src="images/admin.gif" alt="'.$title.'" />';
+		if($auth->is_moderator_in_any_forum($user_id,$group_ids))
+			return '<img src="images/mod.gif" alt="'.$title.'" />';
+		
 		for($i = 0;$i <= $rank_pos;$i++)
 		{
 			$result .= '<img alt="*" title="'.$title.'"';
