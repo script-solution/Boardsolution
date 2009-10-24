@@ -24,6 +24,7 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
 		$cfg = FWS_Props::get()->cfg();
+		$auth = FWS_Props::get()->auth();
 
 		$helper = BS_Front_Module_Calendar_Helper::get_instance();
 		$week_start = $helper->get_week_timestamp();
