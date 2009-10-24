@@ -420,8 +420,7 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 				}
 				
 				$user_link = BS_UserUtils::get_link(
-					$content['user_id'],$username,$content['user_group'],false,
-					'font-size: 7pt;'.$title
+					$content['user_id'],$username,$content['user_group'],false,$title
 				);
 				
 				$res['bd'][] = array(
