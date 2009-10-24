@@ -746,7 +746,8 @@ class BS_DAO_Posts extends FWS_Singleton
 			'SELECT MAX(id) AS max FROM '.BS_TB_POSTS.'
 			 WHERE rubrikid = '.$fid.$exclude
 		);
-		if(!$data)
+		// lastpost_id = NULL may causes problems
+		if(!$data || $data['max'] === null)
 			return 0;
 		
 		return $data['max'];
