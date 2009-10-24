@@ -269,7 +269,7 @@ final class BS_BBCode_Parser extends FWS_Object
 			$search[] = '/(\A|\s)([-_a-z0-9\.]+)@([-_a-z0-9]+).([a-z]+)/i';
 
 			$replace[] = '"\\1<a target=\"_blank\" href=\""'
-				.'.BS_BBCode_Helper::get_instance()->parse_url("\\2\\5")."\">\\2\\5</a>"';
+				.'.BS_BBCode_Helper::get_instance()->parse_url(\'\\2\\5\').\'">\\2\\5</a>\'';
 			$replace[] = '\\1<a href="mailto:\\2@\\3.\\4">\\2@\\3.\\4</a>';
 		}
 
@@ -288,7 +288,7 @@ final class BS_BBCode_Parser extends FWS_Object
 				}
 			}
 		}
-
+		
 		if(count($search) > 0)
 			$this->_text = preg_replace($search,$replace,$this->_text);
 
