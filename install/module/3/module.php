@@ -2,7 +2,7 @@
 /**
  * Contains the config module for the installation
  * 
- * @version			$Id: type.php 49 2008-07-30 12:35:41Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	install.module
  * @author			Nils Asmussen <nils@script-solution.de>

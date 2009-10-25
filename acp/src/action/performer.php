@@ -2,7 +2,7 @@
 /**
  * Contains the action-performer
  *
- * @version			$Id: performer.php 95 2008-12-13 16:12:18Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	acp.src.action
  * @author			Nils Asmussen <nils@script-solution.de>

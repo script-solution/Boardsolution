@@ -2,7 +2,7 @@
 /**
  * Contains install-document
  *
- * @version			$Id: document.php 54 2008-12-01 10:26:23Z nasmussen $
+ * @version			$Id$
  * @package			Boardsolution
  * @subpackage	install.src
  * @author			Nils Asmussen <nils@script-solution.de>
