@@ -102,7 +102,7 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		// is the topic closed?
 		if($data['thread_closed'] == 1 && !$user->is_admin())
 		{
-			$this->report_error();
+			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('topic_is_closed'));
 			return;
 		}
 

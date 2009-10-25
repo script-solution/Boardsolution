@@ -140,6 +140,7 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 		$tpl->add_variables(array(
 			'target_url' => $url->to_url(),
 			'action_type' => BS_ACTION_REPLY,
+			'timestamp' => time(),
 			'back_url' => BS_URL::build_posts_url($fid,$tid,$site)
 		));
 

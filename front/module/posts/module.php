@@ -251,7 +251,8 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$tpl->add_variables(array(
 			'show_bottom_bar' => $show_bottom_bar,
 			'quick_reply_action_type' => BS_ACTION_REPLY,
-			'view_useronline_list' => $view_useronline
+			'view_useronline_list' => $view_useronline,
+			'timestamp' => time()
 		));
 		
 		// mark topic read

@@ -49,8 +49,7 @@ final class BS_Front_EventUtils extends FWS_UtilBase
 		$events = array('list' => array(),'more' => $ev['more']);
 		if(is_array($ev))
 		{
-			$durl = BS_URL::get_mod_url('calendar');
-			$durl->set(BS_URL_MODE,'event_detail');
+			$durl = BS_URL::get_sub_url('calendar','eventdetails');
 			
 			foreach($ev['events'] as $edata)
 			{

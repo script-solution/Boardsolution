@@ -117,7 +117,7 @@ gui.statusbar.loading_image = "Lade Bild '%s'"
 gui.dialog.help.title = "Hilfe"
 gui.dialog.help.close = "Schließen"
 gui.dialog.help.text = "[size=20]Einige Tipps und Tricks[/size][list]
-[*]Listen, Zitate und Code-Bereiche funktionieren alle auf die gleiche Art und Weise. Es ist [b]immer[/b] mindestens eine Zeile davor und dahinter! Daher müssen/können diese Bereiche nicht mittels \"Doppelt-Enter\" verlassen werden.
+[*]Listen, Zitate und Code-Bereiche funktionieren alle auf die gleiche Art und Weise. Es ist [b]immer[/b] mindestens eine Zeile davor und dahinter! Daher müssen diese Bereiche nicht mittels \"Doppelt-Enter\" verlassen werden. Dies ist jedoch bei Listen möglich.
 [*]Neben dem Einfügen von Smileys per Klick kannst Du auch einfach den Smiley-Code eintippen. Der Editor erkennt automatisch die Smiley-Codes und wird diesen mit dem entsprechenden Smiley ersetzen.
 [*]Du kannst die Größe von Bildern ändern, so dass sie nicht mehr so viel Platz wegnehmen. Beachte, dass dies [b]nicht[/b] die Darstellung im Board beeinflusst!
 [*]Du kannst die folgenden Tastatur-Kürzel verwenden:
@@ -147,10 +147,10 @@ Strg+U					Schaltet das Unterstrichen-Attribut um
 Strg+L					Setzt die Ausrichtung auf \"links\"
 Strg+E					Setzt die Ausrichtung auf \"zentriert\"
 Strg+R					Setzt die Ausrichtung auf \"rechts\"
-Ctrl+O					Fügt eine Liste ein
-Ctrl+P					Fügt eine Code-Sektion ein
-Ctrl+Q					Fügt ein Zitat ein
-Ctrl+S					Splittet Listen, Codes oder Zitate
+Strg+O					Fügt eine Liste ein
+Strg+P					Fügt eine Code-Sektion ein
+Strg+Q					Fügt ein Zitat ein
+Strg+S					Splittet Listen, Codes oder Zitate
 [/font]
 [b]Hinweis:[/b] Es kann sein, dass einige Shortcuts deaktiviert sind, da die dazugehörigen Tags deaktiviert sind!
 

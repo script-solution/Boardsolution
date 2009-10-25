@@ -471,15 +471,18 @@ final class BS_User_Current extends FWS_User_Current
 		$cfg = FWS_Props::get()->cfg();
 		$cache = FWS_Props::get()->cache();
 		$functions = FWS_Props::get()->functions();
-
+		
 		if($this->is_loggedin() && $cfg['allow_custom_lang'] == 1)
 		{
 			if($this->get_profile_val('forum_lang') > 0)
 			{
 				$lang = $this->get_profile_val('forum_lang');
 				$lang_data = $cache->get_cache('languages')->get_element($lang);
-				$this->_language = $lang_data['lang_folder'];
-				return;
+				if($lang_data !== null)
+				{
+					$this->_language = $lang_data['lang_folder'];
+					return;
+				}
 			}
 		}
 

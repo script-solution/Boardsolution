@@ -57,6 +57,11 @@ final class BS_Front_Action_new_post_default extends BS_Front_Action_Base
 		$topic_data = BS_DAO::get_topics()->get_by_id($tid);
 		if(!$user->is_admin() && $topic_data['thread_closed'] == 1)
 			return 'You are no admin and the topic is closed';
+		
+		// check wether there was a reply in the meantime
+		$timestamp = $input->get_var('timestamp','post',FWS_Input::INTEGER);
+		if($topic_data['lastpost_time'] > $timestamp)
+			return 'newpost_while_replying';
 
 		// build plain-action
 		$post = BS_Front_Action_Plain_Post::get_default($fid,$tid,false);

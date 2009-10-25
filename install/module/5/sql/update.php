@@ -375,6 +375,10 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 			 ADD `description_posted` text NOT NULL,
 			 DROP `announced_user`"
  		);
+		$db->execute(
+			"UPDATE `{$consts['BS_TB_EVENTS']}`
+			 SET `description_posted` = `description`"
+    );
  		$this->add_to_log_success();
 		
  		// forum-perms

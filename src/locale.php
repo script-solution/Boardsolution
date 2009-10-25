@@ -136,74 +136,30 @@ final class BS_Locale extends FWS_Object implements FWS_Locale
 	
 	public function get_dec_separator()
 	{
-		$user = FWS_Props::get()->user();
-
-		if(!method_exists($user,'get_language'))
-			return ',';
-		
-		switch($user->get_language())
-		{
-			case 'ger_du':
-			case 'ger_sie':
-				return ',';
-			
-			default:
-				return '.';
-		}
+		if($this->contains_lang('dec_separator'))
+			return $this->lang('dec_separator');
+		return ',';
 	}
 	
 	public function get_thousands_separator()
 	{
-		$user = FWS_Props::get()->user();
-
-		if(!method_exists($user,'get_language'))
-			return '.';
-		
-		switch($user->get_language())
-		{
-			case 'ger_du':
-			case 'ger_sie':
-				return '.';
-			
-			default:
-				return ',';
-		}
+		if($this->contains_lang('thousand_separator'))
+			return $this->lang('thousand_separator');
+		return '.';
 	}
 	
 	public function get_date_order()
 	{
-		$user = FWS_Props::get()->user();
-
-		if(!method_exists($user,'get_language'))
-			return array('d','m','Y');
-		
-		switch($user->get_language())
-		{
-			case 'ger_du':
-			case 'ger_sie':
-				return array('d','m','Y');
-			
-			default:
-				return array('m','d','Y');
-		}
+		if($this->contains_lang('date_comp_order'))
+			return explode(',',$this->lang('date_comp_order'));
+		return array('m','d','Y');
 	}
 	
 	public function get_date_separator()
 	{
-		$user = FWS_Props::get()->user();
-
-		if(!method_exists($user,'get_language'))
-			return '.';
-		
-		switch($user->get_language())
-		{
-			case 'ger_du':
-			case 'ger_sie':
-				return '.';
-			
-			default:
-				return '/';
-		}
+		if($this->contains_lang('date_separator'))
+			return $this->lang('date_separator');
+		return '.';
 	}
 	
 	public function get_timezone()

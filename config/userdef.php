@@ -49,6 +49,24 @@ define('BS_FWS_PATH','../PHPLib/');
 define('BS_DEBUG',1);
 
 /**
+ * Legt fest ob der Calltrace bei Fehler angezeigt werden soll, d.h. welche Funktionen aufgerufen
+ * wurden inkl. ein Codeausschnitt dieser (sofern es keine sensible Datei ist).
+ *
+ * Sets wether the calltrace should be displayed if an error occurrs, i.e. which functions have
+ * been called including a small code-section (if it's no sensible file).
+ */
+define('BS_ERRORS_SHOW_CALLTRACE',true);
+
+/**
+ * Legt fest ob Fehlermeldungen zusätzlich als BBCode (ausklappbar) angezeigt werden sollen. Dies kann
+ * hilfreich sein, wenn man die Meldung in einem Forum o.ae. posten moechte.
+ *
+ * Sets wether error-messages should be displayed as BBCode (foldout), too. This can be helpful
+ * if you want to post this message in a forum or similar.
+ */
+define('BS_ERRORS_SHOW_BBCODE',true);
+
+/**
  * Falls Sie nicht MyISAM sondern z.B. InnoDB als MySQL-Storage-Engine benutzen, d.h. eine Storage-
  * Engine, die Transaktionen unterstuetzt, koennen (und sollten) Sie diesen Wert auf "true" setzen.
  * Dadurch wird sichergestellt, dass Aenderungen an der Datenbank ganz oder gar nicht durchgefuehrt

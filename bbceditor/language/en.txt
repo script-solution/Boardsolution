@@ -117,7 +117,7 @@ gui.statusbar.loading_image = "Loading image '%s'"
 gui.dialog.help.title = "Help"
 gui.dialog.help.close = "Close"
 gui.dialog.help.text = "[size=20]Some tipps and tricks[/size][list]
-[*]Lists, quotes and code-areas work all the same. There is [b]always[/b] at least one line above and below! Therefore you don't have to/can leave these areas with \"double-enter\".
+[*]Lists, quotes and code-areas work all the same. There is [b]always[/b] at least one line above and below! Therefore you don't have to leave these areas with \"double-enter\". But this is possible in lists.
 [*]Besides inserting smileys by click you can also just type the smiley-code. The editor will automaticly detect smiley-codes and replace them by the corresponding smiley.
 [*]You can resize images to make them smaller so that they don't occupie so much space. Note that they will [b]not[/b] be displayed this way in the board!
 [*]You can use the following keyboard-shortcuts:
