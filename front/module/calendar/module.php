@@ -115,11 +115,14 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		$helper = BS_Front_Module_Calendar_Helper::get_instance();
 		$monthdata = array();
 		
-		$day_ts = FWS_Date::get_timestamp(array(0,0,0,$month,1,$year));
+		$day_ts = FWS_Date::get_timestamp(array(0,0,0,$month,1,$year),FWS_Date::TZ_GMT);
 		$mon_len = FWS_Date::get_formated_date('t',$day_ts);
 	
 		$wd_short = $helper->get_weekdays_short();
-		$tpl->add_variable_ref('wd_short',$wd_short);
+		// the indices are the weekday-numbers, i.e. sunday=0 etc., but there are in the order
+		// depending on the timezone (monday first in germany, ...)
+		// therefore we pass array_values() to the template
+		$tpl->add_variable_ref('wd_short',array_values($wd_short));
 		
 		$months = $helper->get_months();
 		$url = BS_URL::get_mod_url('calendar');
@@ -133,8 +136,8 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		$weekurl = BS_URL::get_sub_url('calendar','week');
 		
 		$today = FWS_Date::get_formated_date('jnY');
-		$month_offset = $helper->get_month_offset((int)FWS_Date::get_formated_date('w',$day_ts));
-		$day = 1;
+		$weekday = FWS_Date::get_formated_date('w',$day_ts);
+		$month_offset = $helper->get_month_offset(FWS_Date::get_timestamp(array(0,0,0,$month,1,$year)));
 		$weektime = FWS_Date::get_timestamp(
 			array(0,0,0,$month,1,$year),FWS_Date::TZ_USER,'-'.$month_offset.'days'
 		);
@@ -142,6 +145,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		$events = $helper->get_events();
 		$birthdays = $helper->get_birthdays();
 		
+		$day = 1;
 		for($w = 0;$w < 6;$w++)
 		{
 			$monthdata['weeks'][$w] = array();
@@ -158,7 +162,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 					$birth_index .= $month < 10 ? '0'.$month : $month;
 					if(isset($events[$birth_index.$year]) || isset($birthdays[$birth_index]))
 					{
-						$days = '<a href="'.$dayurl->set(BS_URL_DAY,$day_ts)->to_url().'">';
+						$days = '<a href="'.$dayurl->set(BS_URL_DAY,$weektime)->to_url().'">';
 						$days .= $day.'</a>';
 						$class = 'bs_calendar';
 					}

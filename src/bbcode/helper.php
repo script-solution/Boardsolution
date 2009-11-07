@@ -35,6 +35,13 @@ final class BS_BBCode_Helper extends FWS_Singleton
 	private $_tags = null;
 	
 	/**
+	 * A copy of the tags, to be able to restore the loaded tags on reset
+	 *
+	 * @var array
+	 */
+	private $_tags_copy = null;
+	
+	/**
 	 * A storage for every kind of variable that should be valid for the whole text
 	 *
 	 * @var array
@@ -60,6 +67,7 @@ final class BS_BBCode_Helper extends FWS_Singleton
 	 */
 	public function reset()
 	{
+		$this->_tags = $this->_tags_copy;
 		$this->_reached_hl_limit = false;
 		$this->_variables = array();
 		$this->_replacements = array();
@@ -230,6 +238,8 @@ final class BS_BBCode_Helper extends FWS_Singleton
 			$tag['allowed_content'] = FWS_Array_Utils::get_fast_access($con);
 			$this->_tags[$tag['name']] = $tag;
 		}
+		// save a copy
+		$this->_tags_copy = $this->_tags;
 	}
 	
 	protected function get_dump_vars()

@@ -31,7 +31,7 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 		$helper = BS_Front_Module_Calendar_Helper::get_instance();
 		list($year,$month) = $helper->get_date();
 		
-		$sel_ts = FWS_Date::get_timestamp(array(0,0,0,$month,1,$year));
+		$sel_ts = FWS_Date::get_timestamp(array(0,0,0,$month,1,$year),FWS_Date::TZ_USER);
 		$mon_len = FWS_Date::get_formated_date('t',$sel_ts);
 		list($prevyear,$prevmonth) = $helper->get_relative_date($month,$year,-1);
 		
@@ -46,7 +46,10 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 		$forward_url = $url->to_url();
 	
 		$weekdays = $helper->get_weekdays();
-		$tpl->add_variable_ref('wd_detail',$weekdays);
+		// the indices are the weekday-numbers, i.e. sunday=0 etc., but there are in the order
+		// depending on the timezone (monday first in germany, ...)
+		// therefore we pass array_values() to the template
+		$tpl->add_variable_ref('wd_detail',array_values($weekdays));
 		
 		$months = $helper->get_months();
 		$tpl->add_variables(array(
@@ -59,7 +62,7 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 		
 		$weeks = array();
 		$today = FWS_Date::get_formated_date('date');
-		$month_offset = $helper->get_month_offset((int)FWS_Date::get_formated_date('w',$sel_ts));
+		$month_offset = $helper->get_month_offset($sel_ts);
 		$day = 1;
 		$week = FWS_Date::get_timestamp(
 			array(0,0,0,$month,1,$year),FWS_Date::TZ_USER,'-'.$month_offset.'days'

@@ -119,15 +119,15 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 
 		if($this->_weekdays_short === null)
 		{
-			$this->_weekdays_short = array(
-				1 => $locale->lang('mo'),
-				$locale->lang('tu'),
-				$locale->lang('we'),
-				$locale->lang('th'),
-				$locale->lang('fr'),
-				$locale->lang('sa'),
-				0 => $locale->lang('su')
-			);
+			$names = array('su','mo','tu','we','th','fr','sa');
+			$ts = $this->get_weekstart('now');
+			$this->_weekdays_short = array();
+			for($i = 0; $i < count($names); $i++)
+			{
+				$wday = FWS_Date::get_formated_date('w',$ts);
+				$this->_weekdays_short[$wday] = $locale->lang($names[$wday]);
+				$ts += 86400;
+			}
 		}
 		return $this->_weekdays_short;
 	}
@@ -141,15 +141,15 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 
 		if($this->_weekdays === null)
 		{
-			$this->_weekdays = array(
-				1 => $locale->lang('monday'),
-				$locale->lang('tuesday'),
-				$locale->lang('wednesday'),
-				$locale->lang('thursday'),
-				$locale->lang('friday'),
-				$locale->lang('saturday'),
-				0 => $locale->lang('sunday')
-			);
+			$names = array('sunday','monday','tuesday','wednesday','thursday','friday','saturday');
+			$ts = $this->get_weekstart('now');
+			$this->_weekdays = array();
+			for($i = 0; $i < count($names); $i++)
+			{
+				$wday = FWS_Date::get_formated_date('w',$ts);
+				$this->_weekdays[$wday] = $locale->lang($names[$wday]);
+				$ts += 86400;
+			}
 		}
 		return $this->_weekdays;
 	}
@@ -171,24 +171,29 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 			// ensure that all parameters are valid
 			$this->_week = $uday !== null ? $uday : $uweek;
 			if(!FWS_Date::is_valid_timestamp($this->_week))
-				$this->_week = time();
-			
-			if($uday !== null)
-			{
-				// map the weekday to the week which starts on monday
-				$year = FWS_Date::get_formated_date('Y',$uday);
-				$month = FWS_Date::get_formated_date('m',$uday);
-				$day = FWS_Date::get_formated_date('d',$uday);
-				$weekday = FWS_Date::get_formated_date('w',$uday);
-				$weekday = $weekday == 0 ? 6 : $weekday - 1;
-				
-				$this->_week = FWS_Date::get_timestamp(
-					array(0,0,0,$month,$day,$year),FWS_Date::TZ_USER,'-'.$weekday.'days'
-				);
-			}
+				$this->_week = $this->get_weekstart(time());
 		}
 		
 		return $this->_week;
+	}
+	
+	/**
+	 * Determines the start of the week from the given timestamp
+	 *
+	 * @param int $ts the timestamp
+	 * @param int $timezone the desired timezone for 0:00 on the weekstart
+	 * @return int the week-start-timestamp
+	 */
+	private function get_weekstart($ts,$timezone = FWS_Date::TZ_GMT)
+	{
+		$year = FWS_Date::get_formated_date('Y',$ts,FWS_Date::TZ_GMT,FWS_Date::TZ_GMT);
+		$month = FWS_Date::get_formated_date('m',$ts,FWS_Date::TZ_GMT,FWS_Date::TZ_GMT);
+		$day = FWS_Date::get_formated_date('d',$ts,FWS_Date::TZ_GMT,FWS_Date::TZ_GMT);
+		$weekday = FWS_Date::get_formated_date('w',$ts,FWS_Date::TZ_GMT,FWS_Date::TZ_GMT);
+		$weekday = $weekday == 0 ? 6 : $weekday - 1;
+		return FWS_Date::get_timestamp(
+			array(0,0,0,$month,$day,$year),$timezone,'-'.$weekday.'days'
+		);
 	}
 	
 	/**
@@ -489,18 +494,21 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 	}
 	
 	/**
-	 * Determines the month-offset for the given month-start
+	 * Determines the month-offset for the given timestamp
 	 * this is used to calculate the number of "blank" days in a week
 	 *
-	 * @param int $month_start the start-day (sunday,monday,...)
+	 * @param int $timestamp the timestamp
 	 * @return int the offset
 	 */
-	public function get_month_offset($month_start)
+	public function get_month_offset($timestamp)
 	{
-		if($month_start == 0)
-			return 6;
-	
-		return $month_start - 1;
+		$weekstart = $this->get_weekstart($timestamp);
+		$wstartday = FWS_Date::get_formated_date('w',$weekstart);
+		$curday = FWS_Date::get_formated_date('w',$timestamp);
+		if($wstartday == 1)
+			return ($curday == 0 ? 7 : $curday) - 1;
+		else
+			return ($curday == 0 ? 7 : $curday) % 7;
 	}
 	
 	/**

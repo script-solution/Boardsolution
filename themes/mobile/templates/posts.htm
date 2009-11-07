@@ -71,6 +71,7 @@ BBCodeModes['1'] = 'simple';
 <div id="quickReply" style="display: none;">
 <form method="post" action="{gurl.simple_url('new_post','&amp;$URL_FID='~fid~'&amp;$URL_TID='~tid)}">
 <input type="hidden" name="action_type" value="{quick_reply_action_type}" />
+<input type="hidden" name="timestamp" value="{timestamp}" />
 <div class="bs_border bs_padtop">
 	<h1 class="bs_topic">{glocale.lang('quick_reply')}</h1>
 	<fieldset class="bs_form">

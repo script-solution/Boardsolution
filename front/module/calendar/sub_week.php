@@ -37,7 +37,9 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 		$forward = $week_start + (86400 * 7);
 		$forward_url = $url->set(BS_URL_WEEK,$forward)->to_url();
 	
-		$weekname = FWS_Date::get_formated_date('W',$week_start);
+		// using the second day of the week seems to work; the first week doesn't work for the timezone
+		// 'new york' for example.
+		$weekname = FWS_Date::get_formated_date('W',$week_start + 3600 * 24);
 		$year = FWS_Date::get_formated_date('o',$week_start);
 		$tpl->add_variables(array(
 			'title' => sprintf($locale->lang('week_in_year'),$weekname,$year),
@@ -72,9 +74,9 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 				}
 			}
 	
-			for($d = 1;$d <= 4;$d++)
+			for($d = 0;$d < 4;$d++)
 			{
-				if($l == 0 || $d < 4)
+				if($l == 0 || $d < 3)
 				{
 					$event_index = FWS_Date::get_formated_date('dm',$timestamp);
 					$border = $event_index == $today ? 'bs_calendar_border_today' : 'bs_calendar_border';

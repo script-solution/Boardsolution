@@ -12,7 +12,13 @@
 
 // reduce error-reporting-level if debugging is not fully enabled
 if(BS_DEBUG < 2)
-	error_reporting(E_ALL & ~E_NOTICE);
+{
+	// disable deprecated notices when using PHP >= 5.3
+	if(version_compare(PHP_VERSION,'5.3.0') >= 0)
+		error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+	else
+		error_reporting(E_ALL & ~E_NOTICE);
+}
 
 // The ids of the predefined user-groups
 /**

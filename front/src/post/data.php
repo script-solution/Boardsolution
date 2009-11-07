@@ -269,15 +269,10 @@ final class BS_Front_Post_Data extends FWS_Object
 		$auth = FWS_Props::get()->auth();
 		$locale = FWS_Props::get()->locale();
 
-		if(isset(self::$_profiles[$this->_data['id']]['userstatus']))
-			return self::$_profiles[$this->_data['id']]['userstatus'];
-		
 		if($auth->has_global_permission('view_user_ip') && $this->_data['ip_adresse'] != '')
 			$status = $this->_data['ip_adresse'];
 		else
 			$status = $locale->lang('notavailable');
-		
-		self::$_profiles[$this->_data['id']]['userstatus'] = $status;
 		return $status;
 	}
 	
@@ -473,7 +468,7 @@ final class BS_Front_Post_Data extends FWS_Object
     	$qurl = BS_URL::get_mod_url('new_post');
     	$qurl->copy_params($epurl,array(BS_URL_FID,BS_URL_TID,BS_URL_SITE));
     	
-    	$ajaxqurl = BS_URL::get_standalone_url('ajax_quote','&');
+    	$ajaxqurl = BS_URL::get_standalone_url('ajax_quote');
     	$ajaxqurl->set(BS_URL_ID,'__ID__');
 	    		
     	$cache = array(
