@@ -34,28 +34,6 @@
 {endif}
 
 <div class="a_border a_pad">
-	<h1 class="a_topic">{glocale.lang('online_user')}</h1>
-	<table class="a_table" cellpadding="2" cellspacing="1">
-		<tr>
-			<td width="13%" class="a_coldesc">{glocale.lang('username')}</td>
-			<td width="35%" class="a_coldesc">{glocale.lang('location')}</td>
-			<td width="12%" class="a_coldesc" align="center">{glocale.lang('user_ip')}</td>
-			<td width="25%" class="a_coldesc" align="center">{glocale.lang('user_agent')}</td>
-			<td width="15%" class="a_coldesc" align="center">{glocale.lang('date')}</td>
-		</tr>
-		{loop online_user as user}
-		<tr>
-			<td class="a_main">{user:name}</td>
-			<td class="a_main">{user:location}</td>
-			<td class="a_main" align="center">{user:ip}</td>
-			<td class="a_main" align="center">{user:agent}</td>
-			<td class="a_main" align="center">{user:date}</td>
-		</tr>
-		{endloop}
-	</table>
-</div>
-
-<div class="a_border a_pad">
 	<h1 class="a_topic">{glocale.lang('statistics')}</h1>
 	<table class="a_table" cellpadding="2" cellspacing="1">
 		<tr>
@@ -145,6 +123,28 @@
 			<td class="a_main"><b>upload_max_filesize:</b></td>
 			<td class="a_main">{upload_max_filesize}</td>
 		</tr>
+	</table>
+</div>
+
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('online_user')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="13%" class="a_coldesc">{glocale.lang('username')}</td>
+			<td width="35%" class="a_coldesc">{glocale.lang('location')}</td>
+			<td width="12%" class="a_coldesc" align="center">{glocale.lang('user_ip')}</td>
+			<td width="25%" class="a_coldesc" align="center">{glocale.lang('user_agent')}</td>
+			<td width="15%" class="a_coldesc" align="center">{glocale.lang('date')}</td>
+		</tr>
+		{loop online_user as user}
+		<tr>
+			<td class="a_main">{user:name}</td>
+			<td class="a_main">{user:location}</td>
+			<td class="a_main" align="center">{user:ip}</td>
+			<td class="a_main" align="center">{user:agent}</td>
+			<td class="a_main" align="center">{user:date}</td>
+		</tr>
+		{endloop}
 	</table>
 </div>
 {endif}
