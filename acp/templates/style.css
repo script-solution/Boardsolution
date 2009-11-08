@@ -224,14 +224,15 @@ span.a_msg_notice {
 .a_menubar {
 	text-align: right;
 	border: 1px solid #777;
-	background-color: #ebebeb;
-	padding: 0.6em;
+	height: 32px;
 	padding-right: 0px;
-	padding-bottom: 6px;
+	background-color: #ebebeb;
 }
 
 .a_menubar a {
-	padding: 0.6em;
+	display: block;
+	float: right;
+	padding: 8px;
 	margin-right: 1px;
 	border-left: 1px solid #777;
 	text-decoration: none;
@@ -246,7 +247,7 @@ span.a_msg_notice {
 .a_menubar_left {
 	float: left;
 	position: relative;
-	top: -3px;
+	padding: 3px;
 }
 .a_menubar_right {
 	
@@ -261,7 +262,7 @@ input,select,textarea {
 	color: #000000;
 }
 
-input.a_searchtb {
+/*input.a_searchtb {
 	height: 13px;
 	padding: 1px;
 	margin: 0px;
@@ -273,7 +274,7 @@ input.a_searchbtn {
 	height: 22px;
 	padding: 0px;
 	margin: 0px;
-}
+}*/
 
 /* ------------ PADDING ------------ */
 

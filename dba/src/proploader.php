@@ -28,6 +28,17 @@ final class BS_DBA_PropLoader extends BS_PropLoader
 	{
 		return new BS_DBA_Document();
 	}
+
+	/**
+	 * @return FWS_Cookies the property
+	 */
+	protected function cookies()
+	{
+		// use a different cookie-prefix, to prevent conflicts
+		$c = new FWS_Cookies(BS_COOKIE_PREFIX.'dba');
+		$c->set_lifetime(BS_COOKIE_LIFETIME);
+		return $c;
+	}
 	
 	/**
 	 * @return FWS_Template_Handler the template-handler

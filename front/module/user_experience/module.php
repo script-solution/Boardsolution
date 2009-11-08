@@ -201,7 +201,7 @@ final class BS_Front_Module_user_experience extends BS_Front_Module
 		{
 			$cf = new FWS_GD_ColorFade($bar_length,$bar_length,$colors);
 			$filled_length = $filled_end - BS_HALF_HEIGHT;
-			if($filled_length < $bar_length)
+			if($filled_length >= 0 && $filled_length < $bar_length)
 				$colors[1] = $cf->get_color_at($filled_length)->get_comps(false);
 			
 			// draw the color-fade
