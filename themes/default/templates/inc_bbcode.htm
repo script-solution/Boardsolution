@@ -271,7 +271,7 @@
 		{endif}
 		
 		{set tag='closeall'}
-		<input id="helper_{tag}_{number}" type="button" class="bs_bbcode"
+		<input style="position: absolute;" id="helper_{tag}_{number}" type="button" class="bs_bbcode"
 		 onmouseout="unhoverItem({number},'helper_{tag}_{number}');"
 		 onmouseover="hoverItem({number},'helper_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 		 value="{glocale.lang('bbcode_element_closeall')}"

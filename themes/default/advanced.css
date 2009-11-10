@@ -28,7 +28,7 @@ div#ajax_wait_bar {
 
 img {
 	border: 0;
-	vertical-align: text-top;
+	vertical-align: top;
 }
 
 img[onclick] {

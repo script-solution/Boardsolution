@@ -274,7 +274,7 @@ final class BS_Install_Module_5_Helper extends FWS_UtilBase
 							array(
 								'name' => 'error_log_days',
 								'type' => 'int',
-								'properties' => "size=5\nmaxlen=4",
+								'properties' => "size=4\nmaxlen=3",
 								'suffix' => '%days',
 								'affects_msgs' => 0,
 								'default' => 7
@@ -311,7 +311,7 @@ final class BS_Install_Module_5_Helper extends FWS_UtilBase
 							array(
 								'name' => 'profile_max_login_tries',
 								'type' => 'int',
-								'properties' => "size=2\nmaxlen=2",
+								'properties' => "size=3\nmaxlen=2",
 								'suffix' => '',
 								'affects_msgs' => 0,
 								'default' => 2
@@ -336,7 +336,7 @@ final class BS_Install_Module_5_Helper extends FWS_UtilBase
 							array(
 								'name' => 'ip_log_days',
 								'type' => 'line',
-								'properties' => "size=2\nmaxlen=4",
+								'properties' => "size=3\nmaxlen=2",
 								'suffix' => '%days',
 								'affects_msgs' => 0,
 								'default' => 5
@@ -365,7 +365,7 @@ final class BS_Install_Module_5_Helper extends FWS_UtilBase
 							array(
 								'name' => 'mod_color',
 								'type' => 'color',
-								'properties' => "size=6\nmaxlen=6",
+								'properties' => "size=7\nmaxlen=6",
 								'suffix' => '',
 								'affects_msgs' => 0,
 								'default' => '008000'
