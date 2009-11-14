@@ -157,11 +157,11 @@ html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_topic:first-child {
 /* ------------ CALENDAR ------------ */
 
 .bs_calendar_left {
-	width: 19%;
+	width: 21%;
 	float: left;
 }
 .bs_calendar_right {
-	width: 81%;
+	width: 79%;
 	float: right;
 }
 

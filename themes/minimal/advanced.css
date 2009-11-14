@@ -78,11 +78,11 @@ table.bs_table {
 /* ------------ CALENDAR ------------ */
 
 .bs_calendar_left {
-	width: 19%;
+	width: 21%;
 	float: left;
 }
 .bs_calendar_right {
-	width: 81%;
+	width: 79%;
 	float: right;
 }
 
