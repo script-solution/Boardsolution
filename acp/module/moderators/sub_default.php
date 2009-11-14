@@ -52,7 +52,7 @@ final class BS_ACP_SubModule_moderators_default extends BS_ACP_SubModule
 		$hiddenfields['action'] = 'edituser';
 		
 		$url = BS_URL::get_acpmod_url('usersearch','&');
-		$url->set('comboid','user_');
+		$url->set('comboid','__cid__');
 		$tpl->add_variables(array(
 			'search_url' => $url->to_url(),
 			'action_param' => BS_URL_ACTION,

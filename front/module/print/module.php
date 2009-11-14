@@ -30,6 +30,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 		
 		$locale = FWS_Props::get()->locale();
 		$input = FWS_Props::get()->input();
+		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_template('popup_print.htm');
@@ -46,6 +47,11 @@ final class BS_Front_Module_print extends BS_Front_Module
 		$url->set(BS_URL_FID,$fid);
 		$url->set(BS_URL_TID,$tid);
 		$renderer->add_breadcrumb($locale->lang('print_topic'),$url->to_url());
+		
+		$theme = $user->get_theme();
+		$renderer->add_css_file(
+			FWS_Path::client_app().'themes/'.$theme.'/templates/popup_print_style.css'
+		);
 	}
 	
 	/**
@@ -92,10 +98,8 @@ final class BS_Front_Module_print extends BS_Front_Module
 		$add_location .= $locale->lang('printview_title');
 		
 		// change some values in the header-template
-		$theme = $user->get_theme();
 		$tpl->set_template('inc_popup_header.htm');
 		$tpl->add_variables(array(
-			'css_file' => FWS_Path::client_app().'themes/'.$theme.'/templates/popup_print_style.css',
 			'page_title' => $cfg['forum_title'].' &raquo; '.strip_tags($add_location),
 		));
 		$tpl->restore_template();

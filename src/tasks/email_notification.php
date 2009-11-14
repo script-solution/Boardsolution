@@ -45,7 +45,8 @@ final class BS_Tasks_email_notification extends FWS_Tasks_Base
 					'include_post' => $row['emails_include_post'],
 					'language' => $row['forum_lang'] > 0 ? $row['forum_lang'] : $cfg['default_forum_lang'],
 					'mail_text' => '',
-					'last_topic' => -1
+					'last_topic' => -1,
+					'topics' => array()
 				);
 			}
 		}
@@ -102,15 +103,18 @@ final class BS_Tasks_email_notification extends FWS_Tasks_Base
 			// now we have to send the emails
 			foreach($user_emails as $data)
 			{
-				$lang_entry = $this->_get_email_language_data($data['language']);
-				$email = BS_EmailFactory::get_instance()->get_delayed_email_notification_mail(
-					$lang_entry['delayed_email_notification_title'],
-					$lang_entry['delayed_email_notification_text'],
-					$data['user_name'],
-					$data['user_email'],
-					$data['topics']
-				);
-				$email->send_mail();
+				if(count($data['topics']) > 0)
+				{
+					$lang_entry = $this->_get_email_language_data($data['language']);
+					$email = BS_EmailFactory::get_instance()->get_delayed_email_notification_mail(
+						$lang_entry['delayed_email_notification_title'],
+						$lang_entry['delayed_email_notification_text'],
+						$data['user_name'],
+						$data['user_email'],
+						$data['topics']
+					);
+					$email->send_mail();
+				}
 			}
 
 			// finally we have to update the user-table so that this emails will not be sent again

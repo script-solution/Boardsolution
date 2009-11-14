@@ -99,7 +99,15 @@ class BS_DAO_Unread extends FWS_Singleton
 			if($i++ < $len - 1)
 				$sql .= ',';
 		}
-		$db->execute($sql);
+		
+		try
+		{
+			$db->execute($sql);
+		}
+		catch(FWS_DB_Exception_QueryFailed $e)
+		{
+			// ignore errors here because it doesn't really hurt if the unread post is already present
+		}
 	}
 	
 	/**

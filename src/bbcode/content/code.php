@@ -21,6 +21,13 @@
 final class BS_BBCode_Content_Code extends BS_BBCode_Content_Default
 {
 	/**
+	 * Language-cache
+	 *
+	 * @var array
+	 */
+	private static $_langs = array();
+	
+	/**
 	 * The original parameter
 	 *
 	 * @var string
@@ -88,7 +95,13 @@ final class BS_BBCode_Content_Code extends BS_BBCode_Content_Default
 					// ok, highlight the code
 					$helper->set_variable('code_total_length',$current_length + $code_length);
 	
-					$lang = new FWS_Highlighting_Language_XML($hldir.$this->_old_param.'.xml');
+					if(isset(self::$_langs[$this->_old_param]))
+						$lang = self::$_langs[$this->_old_param];
+					else
+					{
+						$lang = new FWS_Highlighting_Language_XML($hldir.$this->_old_param.'.xml');
+						self::$_langs[$this->_old_param] = $lang;
+					}
 					$dec = new FWS_Highlighting_Decorator_HTML();
 					$hl = new FWS_Highlighting_Processor($code,$lang,$dec);
 					$code = $hl->highlight();
