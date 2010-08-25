@@ -23,6 +23,7 @@ final class BS_DBA_Action_importbackup_import extends BS_DBA_Action_Base
 	{
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
+		$backups = FWS_Props::get()->backups();
 
 		$prefix = $input->get_var('prefix','post',FWS_Input::STRING);
 		if($prefix === null || FWS_String::strlen($prefix) == 0)
@@ -51,7 +52,7 @@ final class BS_DBA_Action_importbackup_import extends BS_DBA_Action_Base
 		if($count == 0)
 			return 'import_backup_failed';
 		
-		if(!$this->backups->add_backup($prefix,$count,$size))
+		if(!$backups->add_backup($prefix,$count,$size))
 			return 'invalid_prefix';
 		
 		$this->set_success_msg($locale->lang('import_backup_success'));
