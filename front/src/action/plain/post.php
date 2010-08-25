@@ -241,6 +241,7 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 	{
 		$user = FWS_Props::get()->user();
 		$forums = FWS_Props::get()->forums();
+		$functions = FWS_Props::get()->functions();
 
 		// are all parameters valid?
 		if($this->_fid == null || $this->_tid == null)
@@ -274,12 +275,19 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 		// check guest-data
 		if($this->_user_id == 0)
 		{
+			if($functions->is_banned('user',$this->_guest_name))
+				return 'usernamenotallowed';
 			if(!BS_UserUtils::check_username($this->_guest_name))
 				return 'invalid_username';
 			
 			$this->_guest_email = trim($this->_guest_email);
-			if($this->_guest_email != '' && !FWS_StringHelper::is_valid_email($this->_guest_email))
-				return 'invalid_email';
+			if($this->_guest_email != '')
+			{
+				if($functions->is_banned('mail',$this->_guest_email))
+					return 'mailnotallowed';
+				if(!FWS_StringHelper::is_valid_email($this->_guest_email))
+					return 'invalid_email';
+			}
 		}
 		
 		// convert and check text
