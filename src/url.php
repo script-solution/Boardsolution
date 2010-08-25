@@ -367,7 +367,7 @@ final class BS_URL extends FWS_URL
 		$cfg = FWS_Props::get()->cfg();
 		$user = FWS_Props::get()->user();
 		if($cfg['enable_portal'] == 1 &&
-			($user->is_loggedin() || $user->get_profile_val('startmodule') == 'portal'))
+			(!$user->is_loggedin() || $user->get_profile_val('startmodule') == 'portal'))
 			return BS_URL::get_portal_url();
 		
 		return BS_URL::get_forums_url();
