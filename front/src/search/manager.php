@@ -128,22 +128,25 @@ final class BS_Front_Search_Manager extends FWS_Object
 		$ids = $this->_request->get_result_ids();
 		if($ids === null)
 			return;
-
-		// create ip-table entry
-		$ips->add_entry('search');
 		
 		// store all found ids in the db
 		$mode = $this->_request->get_name();
+		// null-keywords mean that an error occurred
+		$keywords = $this->_request->encode_keywords();
+		if($keywords == null)
+			return;
 		$search = array(
 			'session_id' => $user->get_session_id(),
 			'search_date' => time(),
 			'search_mode' => $mode,
 			'result_ids' => implode(',',$ids),
 			'result_type' => $result_type,
-			'keywords' => $this->_request->encode_keywords()
+			'keywords' => $keywords
 		);
 
 		$this->_search_id = BS_DAO::get_search()->create($search);
+		// create ip-table entry
+		$ips->add_entry('search');
 		
 		$this->_result_ids = $ids;
 	}
