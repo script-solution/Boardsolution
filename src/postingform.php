@@ -240,7 +240,7 @@ final class BS_PostingForm extends FWS_Object
 		$cfg = FWS_Props::get()->cfg();
 
 		$options = BS_PostingUtils::get_message_options($this->_type);
-		$sallowed = BS_PostingUtils::get_message_option('allowed_tags',$this->_type);
+		$sallowed = strtolower(BS_PostingUtils::get_message_option('allowed_tags',$this->_type));
 		$path = $path === null ? FWS_Path::client_app() : $path;
 		
 		$bbcode_buttons = '';
@@ -551,7 +551,7 @@ final class BS_PostingForm extends FWS_Object
 			$i = 0;
 			foreach(BS_BBCode_Helper::get_instance()->get_tags() as $row)
 			{
-				if(in_array($row['name'],$allowed))
+				if(in_array(strtolower($row['name']),$allowed))
 				{
 					$bbcode_data .= 'BBCODE['.$i.'] = new Array();'."\n";
 					$bbcode_data .= 'BBCODE['.$i.']["tag"] = "'.$row['name'].'";'."\n";
@@ -600,20 +600,20 @@ final class BS_PostingForm extends FWS_Object
 		if($allowed === null)
 		{
 			$sallowed = BS_PostingUtils::get_message_option('allowed_tags',$this->_type);
-			$allowed = FWS_Array_Utils::advanced_explode(',',$sallowed);
+			$allowed = FWS_Array_Utils::advanced_explode(',',strtolower($sallowed));
 		}
 		
 		if(func_num_args() > 1)
 		{
 			foreach(func_get_args() as $arg)
 			{
-				if(in_array($arg,$allowed))
+				if(in_array(strtolower($arg),$allowed))
 					return true;
 			}
 			return false;
 		}
 		
-		return in_array($tag,$allowed);
+		return in_array(strtolower($tag),$allowed);
 	}
 	
 	protected function get_dump_vars()

@@ -167,10 +167,10 @@ final class BS_BBCode_Helper extends FWS_Singleton
 			$this->_load_tags();
 		
 		$sallowed = BS_PostingUtils::get_message_option('allowed_tags',$location);
-		$allowed = FWS_Array_Utils::advanced_explode(',',$sallowed);
+		$allowed = FWS_Array_Utils::advanced_explode(',',strtolower($sallowed));
 		foreach(array_keys($this->_tags) as $name)
 		{
-			if(!in_array($name,$allowed))
+			if(!in_array(strtolower($name),$allowed))
 				unset($this->_tags[$name]);
 		}
 	}
