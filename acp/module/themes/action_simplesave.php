@@ -44,7 +44,7 @@ final class BS_ACP_Action_themes_simplesave extends BS_ACP_Action_Base
 				}
 				$block = $css->get_block($blockno);
 				if($block->get_type() == FWS_CSS_Block::RULESET)
-					$block->set_property($split[1],stripslashes($value));
+					$block->set_property($split[1],$input->unescape_value($value,'post'));
 			}
 		}
 		

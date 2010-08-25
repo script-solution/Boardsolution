@@ -651,7 +651,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 				$match = array();
 				if(preg_match('/^([\.\d]+)(pt|pc|in|mm|cm|px|em|ex|%)$/',$value,$match))
 				{
-					$res = $form->get_textbox($name.'|'.$attribute.'|val',$match[1],4,255).' ';
+					$res = $form->get_textbox($name.'|'.$attribute.'|val',htmlspecialchars($match[1]),4,255).' ';
 					$type = array(
 						'pt' => $locale->lang('type_pt'),
 						'pc' => $locale->lang('type_pc'),
@@ -666,7 +666,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 					$res .= $form->get_combobox($name.'|'.$attribute.'|type',$type,$match[2]);
 				}
 				else
-					$res = $form->get_textbox($name.'|'.$attribute,$value,6,255);
+					$res = $form->get_textbox($name.'|'.$attribute,htmlspecialchars($value),6,255);
 				
 				return $res;
 
@@ -760,7 +760,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 				return $form->get_combobox($name.'|'.$attribute,$array,$value);
 
 			case 'background-image':
-				return $form->get_textbox($name.'|'.$attribute,$value,35,255);
+				return $form->get_textbox($name.'|'.$attribute,htmlspecialchars($value),35,255);
 
 			case 'background-attachment':
 				$array = array(
@@ -779,7 +779,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 				return $form->get_combobox($name.'|'.$attribute,$array,$value);
 
 			default:
-				return $form->get_textbox($name.'|'.$attribute,$value,35,255);
+				return $form->get_textbox($name.'|'.$attribute,htmlspecialchars($value),35,255);
 		}
 	}
 	
