@@ -357,7 +357,7 @@ final class BS_ForumUtils extends FWS_UtilBase
 			{
 				if($i < $len - 1 || $start_with_raquo)
 					$res .= ' &raquo; ';
-				$res .= '<a href="'.BS_URL::build_topics_url($path[$i][1]).'"';
+				$res .= '<a href="'.BS_URL::build_topics_url($path[$i][1],1).'"';
 	
 				list($named,$namec) = FWS_StringHelper::get_limited_string(
 					$path[$i][0],BS_MAX_FORUM_TITLE_LENGTH

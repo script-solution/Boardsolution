@@ -197,7 +197,7 @@ final class BS_Location extends FWS_Object
 	
 				if($enable_links)
 				{
-					$topic_url = BS_URL::build_posts_url($parts[1],$parts[2]);
+					$topic_url = BS_URL::build_posts_url($parts[1],$parts[2],1);
 					$topic = '<a href="'.$topic_url.'">'.$topic_title.'</a>';
 				}
 				else
