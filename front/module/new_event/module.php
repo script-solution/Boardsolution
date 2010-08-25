@@ -40,7 +40,10 @@ final class BS_Front_Module_new_event extends BS_Front_Module
 		$renderer->add_action(BS_ACTION_START_EVENT,'default');
 
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
-		$this->add_loc_forum_path($fid);
+		
+		// don't show thread- and forum-title if its intern
+		if($auth->has_access_to_intern_forum($fid))
+			$this->add_loc_forum_path($fid);
 		
 		$url = BS_URL::get_mod_url();
 		$url->set(BS_URL_FID,$fid);

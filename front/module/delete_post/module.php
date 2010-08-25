@@ -28,6 +28,7 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 	{
 		parent::init($doc);
 		
+		$auth = FWS_Props::get()->auth();
 		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
 		
@@ -41,8 +42,12 @@ final class BS_Front_Module_delete_post extends BS_Front_Module
 		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 
-		$this->add_loc_forum_path($fid);
-		$this->add_loc_topic();
+		// don't show thread- and forum-title if its intern
+		if($auth->has_access_to_intern_forum($fid))
+		{
+			$this->add_loc_forum_path($fid);
+			$this->add_loc_topic();
+		}
 
 		$url = BS_URL::get_mod_url();
 		$url->set(BS_URL_FID,$fid);

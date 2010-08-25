@@ -28,6 +28,7 @@ final class BS_Front_Module_posts extends BS_Front_Module
 	{
 		parent::init($doc);
 		
+		$auth = FWS_Props::get()->auth();
 		$input = FWS_Props::get()->input();
 		$renderer = $doc->use_default_renderer();
 		
@@ -39,8 +40,12 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$renderer->add_action(BS_ACTION_SUBSCRIBE_TOPIC,'subscribetopic');
 
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
-		$this->add_loc_forum_path($fid);
-		$this->add_loc_topic();
+		// don't show thread- and forum-title if its intern
+		if($auth->has_access_to_intern_forum($fid))
+		{
+			$this->add_loc_forum_path($fid);
+			$this->add_loc_topic();
+		}
 	}
 	
 	/**
@@ -57,7 +62,6 @@ final class BS_Front_Module_posts extends BS_Front_Module
 		$cfg = FWS_Props::get()->cfg();
 		$tpl = FWS_Props::get()->tpl();
 		$forums = FWS_Props::get()->forums();
-		$functions = FWS_Props::get()->functions();
 		$unread = FWS_Props::get()->unread();
 		$doc = FWS_Props::get()->doc();
 

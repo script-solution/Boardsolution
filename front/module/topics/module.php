@@ -29,13 +29,16 @@ final class BS_Front_Module_topics extends BS_Front_Module
 		parent::init($doc);
 		
 		$input = FWS_Props::get()->input();
+		$auth = FWS_Props::get()->auth();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_robots_value('index,follow');		
 		$renderer->add_action(BS_ACTION_SUBSCRIBE_FORUM,'subscribeforum');
 
 		$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
-		$this->add_loc_forum_path($fid);
+		// don't show thread- and forum-title if its intern
+		if($auth->has_access_to_intern_forum($fid))
+			$this->add_loc_forum_path($fid);
 	}
 	
 	/**
