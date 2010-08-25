@@ -122,7 +122,8 @@ final class BS_Front_Search_Utils extends FWS_UtilBase
 					$sec = FWS_String::substr($input,$start + 1,$ende);
 
 				$sec = trim($sec);
-				if(FWS_String::strlen($sec) >= BS_SEARCH_MIN_KEYWORD_LEN && !isset($ignore[$sec]))
+				if(FWS_String::strlen($sec) >= BS_SEARCH_MIN_KEYWORD_LEN &&
+						!isset($ignore[strtolower($sec)]))
 					$sections[] = $sec;
 
 				$input = FWS_String::substr($input,$start + 2 + $ende);
@@ -165,7 +166,7 @@ final class BS_Front_Search_Utils extends FWS_UtilBase
 		$lines = file($file);
 		foreach($lines as $l)
 		{
-			$line = trim($l);
+			$line = strtolower(trim($l));
 			if($line != '')
 				$words[$line] = true;
 		}
@@ -257,7 +258,8 @@ final class BS_Front_Search_Utils extends FWS_UtilBase
 		for($i = 0;$i < $len;$i++)
 		{
 			if(($trimmed = trim($split[$i])) != '' &&
-					FWS_String::strlen($trimmed) >= BS_SEARCH_MIN_KEYWORD_LEN && !isset($ignore[$trimmed]))
+				FWS_String::strlen($trimmed) >= BS_SEARCH_MIN_KEYWORD_LEN &&
+				!isset($ignore[strtolower($trimmed)]))
 			{
 				// we delete all &, < and > to prevent problems
 				$sections[] = htmlspecialchars(str_replace(array('&','<','>'),'',$trimmed),ENT_QUOTES);

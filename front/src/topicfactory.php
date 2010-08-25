@@ -84,7 +84,7 @@ final class BS_Front_TopicFactory extends FWS_UtilBase
 		$ignore = BS_Front_Search_Utils::get_ignore_words();
 		foreach(array_keys($words) as $k)
 		{
-			if(isset($ignore[$k]))
+			if(isset($ignore[strtolower($k)]))
 				continue;
 	
 			$search_string .= " OR t.name LIKE '%".$k."%'";
