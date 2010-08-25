@@ -21,8 +21,10 @@
 {endloop}
 <link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('advanced.css')}" />
 <link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('basic.css')}" />
+{if feeds_enabled}
 <link rel="alternate" type="application/rss+xml" title="RSS 2.0 Newsfeed" href="{rss20_feed}" />
 <link rel="alternate" type="application/atom+xml" title="Atom Newsfeed" href="{atom_feed}" />
+{endif}
 <style type="text/css">
 div.bs_signature {
 	{if sig_max_height > 0}

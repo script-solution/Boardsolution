@@ -200,7 +200,6 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
 		$user = FWS_Props::get()->user();
-		$doc = FWS_Props::get()->doc();
 		
 		$loginform = false;
 		if($msgs->contains_no_access() || $this->_show_login)
@@ -350,7 +349,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			'rss20_feed' => $feedurl->set(BS_URL_MODE,'rss20')->to_url(),
 			'atom_feed' => $feedurl->set(BS_URL_MODE,'atom')->to_url(),
 			'sig_max_height' => $cfg['sig_max_height'],
-			'show_headline' => $this->_show_headline
+			'show_headline' => $this->_show_headline,
+			'feeds_enabled' => $cfg['enable_news_feeds']
 		));
 		$tpl->restore_template();
 
