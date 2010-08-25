@@ -239,6 +239,7 @@ final class BS_PostingForm extends FWS_Object
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
 
+		$use_applet = $use_applet && $cfg['msgs_allow_java_applet'];
 		$options = BS_PostingUtils::get_message_options($this->_type);
 		$sallowed = strtolower(BS_PostingUtils::get_message_option('allowed_tags',$this->_type));
 		$path = $path === null ? FWS_Path::client_app() : $path;
@@ -401,6 +402,8 @@ final class BS_PostingForm extends FWS_Object
 		$tpl->add_variables(array(
 			'get_post_form_url' => $url->to_url(),
 			'number' => self::$number,
+			'applet_enabled' => $cfg['msgs_allow_java_applet'],
+			'bbcode_enabled' => $options['enable_bbcode'],
 			'bbcode_activated' => $bbc_act,
 			'smileys_activated' => $smileys_act,
 			'post_title' => $this->_title,
