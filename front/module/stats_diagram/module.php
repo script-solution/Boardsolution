@@ -193,7 +193,7 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 		
 		
 		$font = new FWS_GD_Font_TTF(FWS_Path::server_app().BS_FONT_FILE);
-		$padding_left = 30;
+		$padding_left = 40;
 		$padding_top = 1;
 		$padding_right = 100;
 		$padding_bottom = 50;
