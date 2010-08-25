@@ -341,7 +341,9 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 					$year = FWS_String::substr($date_key,4,4);
 					for($i = 1;$end_key != $date_key;$i++)
 					{
-						$next = FWS_Date::get_timestamp(array(0,0,0,$month,$day + $i,$year));
+						$nextdate = new FWS_Date(array(0,0,0,$month,$day,$year));
+						$nextdate->modify('+'.$i.'days');
+						$next = $nextdate->to_timestamp();
 						$date_key = FWS_Date::get_formated_date('dmY',$next);
 						if(isset($this->_events[$date_key]))
 							$this->_events[$date_key][] = $array;

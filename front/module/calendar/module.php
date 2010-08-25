@@ -99,7 +99,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 			$months_small[] = $this->_get_month_small($syear,$smonth);
 		}
 	
-		$tpl->add_variable_ref('months',$months_small);
+		$tpl->add_variables(array('months' => $months_small));
 	}
 	
 	/**
@@ -122,7 +122,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		// the indices are the weekday-numbers, i.e. sunday=0 etc., but there are in the order
 		// depending on the timezone (monday first in germany, ...)
 		// therefore we pass array_values() to the template
-		$tpl->add_variable_ref('wd_short',array_values($wd_short));
+		$tpl->add_variables(array('wd_short' => array_values($wd_short)));
 		
 		$months = $helper->get_months();
 		$url = BS_URL::get_mod_url('calendar');

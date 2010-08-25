@@ -44,12 +44,12 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 		$url->set(BS_URL_YEAR,$nextyear);
 		$url->set(BS_URL_MONTH,$nextmonth);
 		$forward_url = $url->to_url();
-	
+
 		$weekdays = $helper->get_weekdays();
 		// the indices are the weekday-numbers, i.e. sunday=0 etc., but there are in the order
 		// depending on the timezone (monday first in germany, ...)
 		// therefore we pass array_values() to the template
-		$tpl->add_variable_ref('wd_detail',array_values($weekdays));
+		$tpl->add_variables(array('wd_detail' => array_values($weekdays)));
 		
 		$months = $helper->get_months();
 		$tpl->add_variables(array(
@@ -110,7 +110,7 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 	
 			$week += 86400 * 7;
 		}
-	
+		
 		$tpl->add_variable_ref('weeks',$weeks);
 	}
 }
