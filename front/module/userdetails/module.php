@@ -66,7 +66,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 			return;
 		}
 	
-		$user_data = BS_DAO::get_profile()->get_user_by_id($id);
+		$user_data = BS_DAO::get_profile()->get_user_by_id($id,1,-1);
 	
 		// check wether the user has been found
 		if($user_data === false)
@@ -192,27 +192,27 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 		$options = '';
 		
 		$options .= '<a class="bs_button" style="float: left;" href="';
-	  $options .= BS_URL::build_mod_url('user_locations').'">';
-	  $location = $sessions->get_user_location($user_data['id']);
-	  if($location != '' && ($user_data['ghost_mode'] == 0 || $cfg['allow_ghost_mode'] == 0 ||
-	  		$user->is_admin()))
-	  {
-	  	$loc = '';
-	  	if($auth->has_global_permission('view_online_locations'))
-	  	{
-	  		$lobj = new BS_Location($location);
-				$loc = $lobj->decode(false);
-	  	}
-	  
-	  	$options .= '<span title="'.$loc.'" style="color: #008000;">';
-	  	$options .= $locale->lang('status_online').'</span>';
-	  }
-	  else
-	  	$options .= '<span style="color: #CC0000;">'.$locale->lang('status_offline').'</span>';
-	  $options .= '</a>';
+		$options .= BS_URL::build_mod_url('user_locations').'">';
+		$location = $sessions->get_user_location($user_data['id']);
+		if($location != '' && ($user_data['ghost_mode'] == 0 || $cfg['allow_ghost_mode'] == 0 ||
+				$user->is_admin()))
+		{
+			$loc = '';
+			if($auth->has_global_permission('view_online_locations'))
+			{
+				$lobj = new BS_Location($location);
+			$loc = $lobj->decode(false);
+			}
+		
+			$options .= '<span title="'.$loc.'" style="color: #008000;">';
+			$options .= $locale->lang('status_online').'</span>';
+		}
+		else
+			$options .= '<span style="color: #CC0000;">'.$locale->lang('status_offline').'</span>';
+		$options .= '</a>';
 		
 		if(($cfg['display_denied_options'] || $user->is_loggedin()) && $cfg['enable_pms'] == 1 &&
-			$user_data['allow_pms'] == 1)
+			$user_data['allow_pms'] == 1 && $user_data['banned'] == 0)
 		{
 			$url = BS_URL::get_sub_url('userprofile','pmcompose');
 			$url->set(BS_URL_ID,$user_data['id']);

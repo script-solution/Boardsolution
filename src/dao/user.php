@@ -105,14 +105,16 @@ class BS_DAO_User extends BS_DAO_UserBase
 	}
 	
 	/**
-	 * Returns the user with the given id. Note that the user has to be active and not banned!
+	 * Returns the user with the given id
 	 *
 	 * @param int $id the user-id
+	 * @param int $active wether the user has to be activated: -1 = indifferent, 0 = no, 1 = yes
+	 * @param int $banned wether the user has to be banned: -1 = indifferent, 0 = no, 1 = yes
 	 * @return array the user-data as associative array or false if not found
 	 */
-	public function get_user_by_id($id)
+	public function get_user_by_id($id,$active = 1,$banned = 0)
 	{
-		$rows = $this->get_users_by_ids(array($id));
+		$rows = $this->get_users_by_ids(array($id),$active,$banned);
 		if(count($rows) == 0)
 			return false;
 		

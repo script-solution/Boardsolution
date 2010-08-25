@@ -56,7 +56,7 @@ final class BS_Front_Search_Request_UserPosts extends BS_Front_Search_Request_TP
 		if($uid == null)
 			return null;
 		
-		$user = BS_DAO::get_user()->get_user_by_id($uid);
+		$user = BS_DAO::get_user()->get_user_by_id($uid,1,-1);
 		if($user === false)
 			return null;
 		

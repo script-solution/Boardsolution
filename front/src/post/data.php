@@ -216,9 +216,9 @@ final class BS_Front_Post_Data extends FWS_Object
 		$locale = FWS_Props::get()->locale();
 
 		if($this->_data['post_an_mail'] != '')
-    	return $this->_data['post_an_mail'];
-    else
-    	return $locale->lang('notavailable');
+			return $this->_data['post_an_mail'];
+		else
+			return $locale->lang('notavailable');
 	}
 	
 	/**
@@ -251,14 +251,14 @@ final class BS_Front_Post_Data extends FWS_Object
 			);
 			$stats .= '<br />';
 
-    	if($cfg['enable_user_ranks'] == 1)
-    		$stats .= '<i>'.$rank['rank'].'</i> '.$locale->lang('with').' ';
-    	$stats .= $this->_data['exppoints'].' '.$locale->lang('points').', ';
-    	$stats .= $this->_data['posts'].' '.$locale->lang('posts');
-    }
-    
-    self::$_profiles[$this->_data['id']]['stats'] = $stats;
-    return $stats;
+			if($cfg['enable_user_ranks'] == 1)
+				$stats .= '<i>'.$rank['rank'].'</i> '.$locale->lang('with').' ';
+			$stats .= $this->_data['exppoints'].' '.$locale->lang('points').', ';
+			$stats .= $this->_data['posts'].' '.$locale->lang('posts');
+		}
+		
+		self::$_profiles[$this->_data['id']]['stats'] = $stats;
+		return $stats;
 	}
 	
 	/**
@@ -392,12 +392,12 @@ final class BS_Front_Post_Data extends FWS_Object
 		$locale = FWS_Props::get()->locale();
 
 		$fields = array();
-	  if($this->_data['post_user'] != 0)
-	  {
-	  	$left_class = $this->get_css_class('left');
-	  	foreach($this->_container->get_additional_fields() as $field)
-	    {
-	    	$fdata = $field->get_data();
+		if($this->_data['post_user'] != 0)
+		{
+			$left_class = $this->get_css_class('left');
+			foreach($this->_container->get_additional_fields() as $field)
+			{
+				$fdata = $field->get_data();
 				$val = $this->_data['add_'.$fdata->get_name()];
 				if($field->is_empty($val))
 				{
@@ -414,9 +414,9 @@ final class BS_Front_Post_Data extends FWS_Object
 					'field_value' => $field_value
 				);
 			}
-	  }
-	  
-	  return $fields;
+		}
+		
+		return $fields;
 	}
 	
 	/**
@@ -434,9 +434,9 @@ final class BS_Front_Post_Data extends FWS_Object
 		$attlist = $attachments ? $this->_container->get_attachments() : array();
 		$keywords = $this->_container->get_highlight_keywords();
 		return BS_PostingUtils::get_post_text(
-	  	$this->_data,$keywords === false ? null : $keywords,$attachments,$signatures,$edit_notice,
-	  	$attlist,$wordwrap_codes
-	  );
+			$this->_data,$keywords === false ? null : $keywords,$attachments,$signatures,$edit_notice,
+			$attlist,$wordwrap_codes
+		);
 	}
 	
 	/**
@@ -458,97 +458,97 @@ final class BS_Front_Post_Data extends FWS_Object
 			$site = $this->_container->get_pagination()->get_page();
 			
 			$dpurl = BS_URL::get_mod_url('delete_post');
-    	$dpurl->set(BS_URL_FID,$fid);
-    	$dpurl->set(BS_URL_TID,$tid);
-    	
-    	$epurl = BS_URL::get_mod_url('edit_post');
-    	$epurl->copy_params($dpurl,array(BS_URL_FID,BS_URL_TID));
-    	$epurl->set(BS_URL_SITE,$site);
-    	
-    	$qurl = BS_URL::get_mod_url('new_post');
-    	$qurl->copy_params($epurl,array(BS_URL_FID,BS_URL_TID,BS_URL_SITE));
-    	
-    	$ajaxqurl = BS_URL::get_standalone_url('ajax_quote');
-    	$ajaxqurl->set(BS_URL_ID,'__ID__');
-	    		
-    	$cache = array(
+			$dpurl->set(BS_URL_FID,$fid);
+			$dpurl->set(BS_URL_TID,$tid);
+			
+			$epurl = BS_URL::get_mod_url('edit_post');
+			$epurl->copy_params($dpurl,array(BS_URL_FID,BS_URL_TID));
+			$epurl->set(BS_URL_SITE,$site);
+			
+			$qurl = BS_URL::get_mod_url('new_post');
+			$qurl->copy_params($epurl,array(BS_URL_FID,BS_URL_TID,BS_URL_SITE));
+			
+			$ajaxqurl = BS_URL::get_standalone_url('ajax_quote');
+			$ajaxqurl->set(BS_URL_ID,'__ID__');
+				
+			$cache = array(
 				'can_reply'					=> $auth->has_current_forum_perm(BS_MODE_REPLY),
-				'fclosed'						=> $forums->forum_is_closed($this->_data['rubrikid']),
-				'fid'								=> $fid,
-				'tid'								=> $tid,
-				'action'						=> $input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING),
-				'site'							=> $site,
+				'fclosed'					=> $forums->forum_is_closed($this->_data['rubrikid']),
+				'fid'						=> $fid,
+				'tid'						=> $tid,
+				'action'					=> $input->get_var(BS_URL_ACTION,'get',FWS_Input::STRING),
+				'site'						=> $site,
 				'total_pages'				=> $this->_container->get_pagination()->get_page_count(),
 				'total_posts'				=> $this->_container->get_post_count(),
-				'topic'							=> BS_Front_TopicFactory::get_current_topic(),
+				'topic'						=> BS_Front_TopicFactory::get_current_topic(),
 				'posts_order'				=> BS_PostingUtils::get_posts_order(),
 				'is_admin'					=> $user->is_admin(),
-    		'delete_post_url'		=> $dpurl,
-    		'edit_post_url'			=> $epurl,
-    		'quote_url'					=> $qurl,
-    		'ajax_qurl'					=> $ajaxqurl->to_url()
+				'delete_post_url'			=> $dpurl,
+				'edit_post_url'				=> $epurl,
+				'quote_url'					=> $qurl,
+				'ajax_qurl'					=> $ajaxqurl->to_url()
 			);
 		}
 		
 		$btns = '';
-	  if($cache['action'] == 'posts' && ($cache['is_admin'] || !$cache['fclosed']))
-	  {
-	    // delete
-	    if(($this->_no == 0 && $cache['site'] == 1 && $cache['posts_order'] == 'ASC') ||
-	    	 ($this->_no == $cache['total_posts'] - 1 && $cache['site'] == $cache['total_pages'] &&
-	    	 	$cache['posts_order'] == 'DESC'))
-	    {
-	    	// delete topic
-	    	if($cfg['display_denied_options'] ||
-	    		 $auth->has_current_forum_perm(BS_MODE_DELETE_TOPICS,$this->_data['post_user']))
-	    	{
-	    		$murl = BS_URL::get_mod_url('delete_topics');
-	    		$murl->set(BS_URL_FID,$cache['fid']);
-	    		$murl->set(BS_URL_ID,$cache['tid']);
-		    	$btns .= '<a class="bs_button_big" title="'.$locale->lang('delete_topic');
+		if($cache['action'] == 'posts' && ($cache['is_admin'] || !$cache['fclosed']))
+		{
+			// delete
+			if(($this->_no == 0 && $cache['site'] == 1 && $cache['posts_order'] == 'ASC') ||
+				 ($this->_no == $cache['total_posts'] - 1 && $cache['site'] == $cache['total_pages'] &&
+				$cache['posts_order'] == 'DESC'))
+			{
+				// delete topic
+				if($cfg['display_denied_options'] ||
+					 $auth->has_current_forum_perm(BS_MODE_DELETE_TOPICS,$this->_data['post_user']))
+				{
+					$murl = BS_URL::get_mod_url('delete_topics');
+					$murl->set(BS_URL_FID,$cache['fid']);
+					$murl->set(BS_URL_ID,$cache['tid']);
+					$btns .= '<a class="bs_button_big" title="'.$locale->lang('delete_topic');
 					$btns .= '" href="'.$murl->to_url().'">'.$locale->lang('delete_topic').'</a>';
-	    	}
-	    }
-	    else
-	    {
-	    	// delete post
-	    	if($cfg['display_denied_options'] ||
-	    		 ($auth->has_current_forum_perm(BS_MODE_DELETE_POSTS,$this->_data['post_user']) &&
-	    		  ($cache['is_admin'] || $cache['topic']['thread_closed'] == 0)))
-	    	{
-	    		$murl = $cache['delete_post_url'];
-	    		$murl->set(BS_URL_ID,$this->_data['bid']);
-		    	$btns .= '<a title="'.$locale->lang('deletepost').'" class="bs_button" href="';
-		    	$btns .= $murl->to_url().'">'.$locale->lang('delete').'</a>';
-	    	}
-	    }
+				}
+			}
+			else
+			{
+				// delete post
+				if($cfg['display_denied_options'] ||
+					 ($auth->has_current_forum_perm(BS_MODE_DELETE_POSTS,$this->_data['post_user']) &&
+						($cache['is_admin'] || $cache['topic']['thread_closed'] == 0)))
+				{
+					$murl = $cache['delete_post_url'];
+					$murl->set(BS_URL_ID,$this->_data['bid']);
+					$btns .= '<a title="'.$locale->lang('deletepost').'" class="bs_button" href="';
+					$btns .= $murl->to_url().'">'.$locale->lang('delete').'</a>';
+				}
+			}
 	
-	    // edit post
-	    if($cfg['display_denied_options'] ||
-	    	 ($auth->has_current_forum_perm(BS_MODE_EDIT_POST,$this->_data['post_user']) &&
-	    	  ($cache['is_admin'] || $cache['topic']['thread_closed'] == 0)))
-	    {
-	    	$murl = $cache['edit_post_url'];
-    		$murl->set(BS_URL_ID,$this->_data['bid']);
-		    $btns .= '<a class="bs_button" title="'.$locale->lang('editpost');
+			// edit post
+			if($cfg['display_denied_options'] ||
+				 ($auth->has_current_forum_perm(BS_MODE_EDIT_POST,$this->_data['post_user']) &&
+				  ($cache['is_admin'] || $cache['topic']['thread_closed'] == 0)))
+			{
+				$murl = $cache['edit_post_url'];
+				$murl->set(BS_URL_ID,$this->_data['bid']);
+				$btns .= '<a class="bs_button" title="'.$locale->lang('editpost');
 				$btns .= '" href="'.$murl->to_url().'">'.$locale->lang('edit').'</a>';
-	    }
+			}
 	
-	  	// quote button
-	    if(($cfg['display_denied_options'] || $cache['can_reply']) &&
-	    	$cache['topic']['comallow'] == 1 &&
-	    	($cache['is_admin'] || $cache['topic']['thread_closed'] == 0))
-	    {
-	    	$murl = $cache['quote_url'];
-	    	$murl->set(BS_URL_PID,$this->_data['bid']);
-	      $btns .= '<a id="quote_link_'.$this->_data['bid'].'" class="bs_button"';
-	      $btns .= ' title="'.$locale->lang('quotethispost').'"';
+			// quote button
+			if(($cfg['display_denied_options'] || $cache['can_reply']) &&
+				$cache['topic']['comallow'] == 1 &&
+				($cache['is_admin'] || $cache['topic']['thread_closed'] == 0))
+			{
+				$murl = $cache['quote_url'];
+				$murl->set(BS_URL_PID,$this->_data['bid']);
+				$btns .= '<a id="quote_link_'.$this->_data['bid'].'" class="bs_button"';
+				$btns .= ' title="'.$locale->lang('quotethispost').'"';
 				$btns .= ' href="'.$murl->to_url().'" onclick="toggleQuote(\''.$cache['ajax_qurl'].'\',';
 				$btns .= $this->_data['bid'].'); return false;">'.$locale->lang('quote').'+</a>';
-	    }
-	  }
-	  
-	  return $btns;
+			}
+		}
+		
+		return $btns;
 	}
 	
 	/**
@@ -571,15 +571,15 @@ final class BS_Front_Post_Data extends FWS_Object
 				'is_admin'					=> $user->is_admin(),
 				'is_loggedin'				=> $user->is_loggedin(),
 				'mail_url'					=> BS_URL::get_mod_url('new_mail'),
-				'pm_url'						=> BS_URL::get_sub_url('userprofile','pmcompose'),
-				'user_loc_url'			=> BS_URL::build_mod_url('user_locations')
+				'pm_url'					=> BS_URL::get_sub_url('userprofile','pmcompose'),
+				'user_loc_url'				=> BS_URL::build_mod_url('user_locations')
 			);
 		}
 		
 		$btns = '';
 	
-	  $btns .= '<a class="bs_button" style="float: left;" href="'.$cache['user_loc_url'].'">';
-	  $location = $sessions->get_user_location($this->_data['post_user']);
+		$btns .= '<a class="bs_button" style="float: left;" href="'.$cache['user_loc_url'].'">';
+		$location = $sessions->get_user_location($this->_data['post_user']);
 		if($this->_data['post_user'] > 0 && $location != '' && ($this->_data['ghost_mode'] == 0 ||
 				$cfg['allow_ghost_mode'] == 0 || $cache['is_admin']))
 		{
@@ -590,37 +590,36 @@ final class BS_Front_Post_Data extends FWS_Object
 				$loc = $lobj->decode(false);
 			}
 	
-	  	$btns .= '<span title="'.$loc.'" style="color: #008000;">';
-	  	$btns .= $locale->lang('status_online').'</span>';
-	  }
-	  else
-	  	$btns .= '<span style="color: #CC0000;">'.$locale->lang('status_offline').'</span>';
-	  $btns .= '</a>';
-	
+			$btns .= '<span title="'.$loc.'" style="color: #008000;">';
+			$btns .= $locale->lang('status_online').'</span>';
+		}
+		else
+			$btns .= '<span style="color: #CC0000;">'.$locale->lang('status_offline').'</span>';
+		$btns .= '</a>';
+		
 		// email button
-	  if($cfg['enable_emails'] == 1 && FWS_StringHelper::is_valid_email($this->_data['email']) &&
+		if($cfg['enable_emails'] == 1 && FWS_StringHelper::is_valid_email($this->_data['email']) &&
 			 $this->_data['allow_board_emails'] == 1 &&
 			 ($cfg['display_denied_options'] || $cache['send_mails']))
-	  {
-	  	$murl = $cache['mail_url'];
-	  	$murl->set(BS_URL_ID,$this->_data['post_user']);
-	  	$btns .= '<a class="bs_button" style="float: left;" title="';
-	  	$btns .= sprintf($locale->lang('send_mail_to_user'),$this->_data['user']);
-	  	$btns .= '" href="'.$murl->to_url().'">'.$locale->lang('email').'</a>';
-	  }
-	
-	  // pm button
-	  if($cfg['enable_pms'] == 1 && $this->_data['post_user'] != 0 &&
-	  	 $this->_data['allow_pms'] == 1 && ($cfg['display_denied_options'] || $cache['is_loggedin']))
-	  {
-	  	$murl = $cache['pm_url'];
-	  	$murl->set(BS_URL_ID,$this->_data['post_user']);
-	    $btns .= '<a class="bs_button" style="float: left;" title="';
+		{
+			$murl = $cache['mail_url'];
+			$murl->set(BS_URL_ID,$this->_data['post_user']);
+			$btns .= '<a class="bs_button" style="float: left;" title="';
+			$btns .= sprintf($locale->lang('send_mail_to_user'),$this->_data['user']);
+			$btns .= '" href="'.$murl->to_url().'">'.$locale->lang('email').'</a>';
+		}
+		
+		// pm button
+		if($this->_data['banned'] == 0 && $cfg['enable_pms'] == 1 && $this->_data['post_user'] != 0 &&
+			 $this->_data['allow_pms'] == 1 && ($cfg['display_denied_options'] || $cache['is_loggedin']))
+		{
+			$murl = $cache['pm_url'];
+			$murl->set(BS_URL_ID,$this->_data['post_user']);
+			$btns .= '<a class="bs_button" style="float: left;" title="';
 			$btns .= sprintf($locale->lang('send_pm_to_user'),$this->_data['user']).'"';
-	    $btns .= ' href="'.$murl->to_url().'">'.$locale->lang('pm_short').'</a>';
-	  }
-	  
-	  return $btns;
+			$btns .= ' href="'.$murl->to_url().'">'.$locale->lang('pm_short').'</a>';
+		}
+		return $btns;
 	}
 	
 	/**
@@ -633,7 +632,7 @@ final class BS_Front_Post_Data extends FWS_Object
 		if($unread->is_unread_thread($this->_data['threadid']))
 		{
 			$first_unread = $unread->get_first_unread_post($this->_data['threadid']);
-	    return $this->_data['bid'] >= $first_unread;
+			return $this->_data['bid'] >= $first_unread;
 		}
 		return false;
 	}
@@ -648,33 +647,33 @@ final class BS_Front_Post_Data extends FWS_Object
 		$locale = FWS_Props::get()->locale();
 
 		// determine post unread image
-	  if($unread->is_unread_thread($this->_data['threadid']))
-	  {
+		if($unread->is_unread_thread($this->_data['threadid']))
+		{
 			$first_unread = $unread->get_first_unread_post($this->_data['threadid']);
-	    if($this->_data['bid'] >= $first_unread)
-	    {
-	    	$image = $user->get_theme_item_path('images/unread/post_unread.gif');
-	      $img = '<img alt="'.$locale->lang('newentry').'" title="';
-	      $img .= $locale->lang('newentry').'"';
-	      $img .= ' src="'.$image.'" />';
-	    }
-	    else
-	    {
-	    	$image = $user->get_theme_item_path('images/unread/post_read.gif');
-	      $img = '<img alt="'.$locale->lang('nonewentry').'" title="';
-	      $img .= $locale->lang('nonewentry').'"';
-	      $img .= ' src="'.$image.'" />';
-	    }
-	  }
-	  else
-	  {
-	    $image = $user->get_theme_item_path('images/unread/post_read.gif');
-	    $img = '<img alt="'.$locale->lang('nonewentry').'" title="';
-	    $img .= $locale->lang('nonewentry').'"';
-	    $img .= ' src="'.$image.'" />';
-	  }
-	  
-	  return $img;
+			if($this->_data['bid'] >= $first_unread)
+			{
+				$image = $user->get_theme_item_path('images/unread/post_unread.gif');
+				$img = '<img alt="'.$locale->lang('newentry').'" title="';
+				$img .= $locale->lang('newentry').'"';
+				$img .= ' src="'.$image.'" />';
+			}
+			else
+			{
+				$image = $user->get_theme_item_path('images/unread/post_read.gif');
+				$img = '<img alt="'.$locale->lang('nonewentry').'" title="';
+				$img .= $locale->lang('nonewentry').'"';
+				$img .= ' src="'.$image.'" />';
+			}
+		}
+		else
+		{
+			$image = $user->get_theme_item_path('images/unread/post_read.gif');
+			$img = '<img alt="'.$locale->lang('nonewentry').'" title="';
+			$img .= $locale->lang('nonewentry').'"';
+			$img .= ' src="'.$image.'" />';
+		}
+		
+		return $img;
 	}
 	
 	protected function get_dump_vars()

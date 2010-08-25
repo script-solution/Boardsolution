@@ -114,7 +114,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 		$name_col_width = ($cfg['enable_pms'] == 1) ? 20 : 25;
 
 		// build where-statement
-		$where = ' WHERE p.active = 1 AND p.banned = 0';
+		$where = ' WHERE p.active = 1';
 		if($s_name)
 			$where .= ' AND u.`'.BS_EXPORT_USER_NAME."` LIKE '%".str_replace('*','%',$s_name)."%'";
 
@@ -271,7 +271,7 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 				
 				$user[] = array(
 					'user_id' => $data['id'],
-					'allow_pms' => $data['allow_pms'],
+					'allow_pms' => $data['banned'] == 0 && $data['allow_pms'],
 					'name_col_width' => $name_col_width,
 					'user_name' => BS_UserUtils::get_link(
 						$data['id'],$data['user_name'],$data['user_group']
