@@ -28,7 +28,6 @@ final class BS_Front_Module_conf_email extends BS_Front_Module
 	{
 		parent::init($doc);
 		
-		$user = FWS_Props::get()->user();
 		$renderer = $doc->use_default_renderer();
 		
 		$renderer->set_template('extern_conf.htm');
@@ -75,7 +74,7 @@ final class BS_Front_Module_conf_email extends BS_Front_Module
 		$user = BS_Community_User::get_instance_from_data($udata);
 		BS_Community_Manager::get_instance()->fire_user_changed($user);
 	
-		$murl = BS_URL::get_portal_url();
+		$murl = BS_URL::get_start_url();
 		$message = sprintf(
 			$locale->lang('email_change_success'),
 			'<a href="'.$murl->to_url().'">'.$locale->lang('here').'</a>'
