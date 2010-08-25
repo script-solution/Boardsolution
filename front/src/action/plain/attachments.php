@@ -133,12 +133,14 @@ final class BS_Front_Action_Plain_Attachments extends BS_Front_Action_Plain
 	 * @param int $pm_id the pm-id
 	 * @param int $user_id the user-id
 	 */
-	public function set_target($post_id,$topic_id,$pm_id = 0,$user_id = 0)
+	public function set_target($post_id,$topic_id,$pm_id = -1,$user_id = -1)
 	{
 		$this->_post_id = $post_id;
 		$this->_topic_id = $topic_id;
-		$this->_pm_id = $pm_id;
-		$this->_user_id = $user_id;
+		if($pm_id != -1)
+			$this->_pm_id = $pm_id;
+		if($user_id != -1)
+			$this->_user_id = $user_id;
 	}
 	
 	public function check_data()
