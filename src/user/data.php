@@ -87,7 +87,7 @@ final class BS_User_Data extends FWS_User_Data
 		if($value !== null && !is_scalar($value))
 			FWS_Helper::def_error('scalar','value',$value);
 		
-		$this->_data[$name] = $value;
+		$this->_data[$name] = $value === NULL ? '' : $value;
 	}
 	
 	protected function get_dump_vars()
