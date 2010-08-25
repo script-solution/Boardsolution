@@ -48,10 +48,7 @@ final class BS_Front_Module_print extends BS_Front_Module
 		$url->set(BS_URL_TID,$tid);
 		$renderer->add_breadcrumb($locale->lang('print_topic'),$url->to_url());
 		
-		$theme = $user->get_theme();
-		$renderer->add_css_file(
-			FWS_Path::client_app().'themes/'.$theme.'/templates/popup_print_style.css'
-		);
+		$renderer->add_css_file($user->get_theme_item_path('templates/popup_print_style.css'));
 	}
 	
 	/**
@@ -62,7 +59,6 @@ final class BS_Front_Module_print extends BS_Front_Module
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
 		$auth = FWS_Props::get()->auth();
-		$user = FWS_Props::get()->user();
 		$tpl = FWS_Props::get()->tpl();
 		$cfg = FWS_Props::get()->cfg();
 
