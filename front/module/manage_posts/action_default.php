@@ -116,6 +116,9 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 			$target_topic_data = BS_DAO::get_topics()->get_by_id($topic_id);
 			if($target_topic_data === false)
 				return 'invalid_topic_id';
+			// don't move to ourself ;)
+			if($topic_id == $tid)
+				return 'invalid_topic_id';
 
 			$target_fid = $target_topic_data['rubrikid'];
 		}
