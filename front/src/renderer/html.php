@@ -281,6 +281,12 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				else
 					parent::content();
 			}
+			else
+			{
+				$functions->build_login_form();
+				$module->set_error();
+				$this->_show_login = true;
+			}
 		}
 	}
 
