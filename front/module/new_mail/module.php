@@ -60,7 +60,6 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 	{
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
-		$user = FWS_Props::get()->user();
 		$tpl = FWS_Props::get()->tpl();
 		// check if the id is valid
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
@@ -98,9 +97,6 @@ final class BS_Front_Module_new_mail extends BS_Front_Module
 		
 		$pform = new BS_PostingForm($locale->lang('text').':');
 		$pform->add_form();
-		
-		$sec_code_field = FWS_StringHelper::generate_random_key(15);
-		$user->set_session_data('sec_code_field',$sec_code_field);
 		
 		$content_type_options = array(
 			'plain' => $locale->lang('content_type_plain'),

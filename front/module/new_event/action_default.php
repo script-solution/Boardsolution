@@ -51,6 +51,11 @@ final class BS_Front_Action_new_event_default extends BS_Front_Action_Base
 				return 'threadpollipsperre';
 		}
 		
+		// check security-code for guests
+		if(!$user->is_loggedin() && $cfg['use_captcha_for_guests'] == 1 &&
+				!FWS_Props::get()->functions()->check_security_code(false))
+			return 'invalid_security_code';
+		
 		// build plain actions
 		$event = BS_Front_Action_Plain_Event::get_default();
 		$post = BS_Front_Action_Plain_Post::get_default($fid);

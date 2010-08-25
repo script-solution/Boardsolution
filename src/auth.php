@@ -685,7 +685,7 @@ final class BS_Auth extends FWS_Object
 			// guests if never access to intern forums
 			if(!$user->is_loggedin())
 				return false;
-
+			
 			$rows = $cache->get_cache('intern')->get_elements_with(array('fid' => $fid));
 			if(is_array($rows) && count($rows) > 0)
 			{

@@ -51,6 +51,11 @@ final class BS_Front_Action_new_poll_default extends BS_Front_Action_Base
 			if($ips->entry_exists('topic'))
 				return 'threadpollipsperre';
 		}
+		
+		// check security-code for guests
+		if(!$user->is_loggedin() && $cfg['use_captcha_for_guests'] == 1 &&
+				!FWS_Props::get()->functions()->check_security_code(false))
+			return 'invalid_security_code';
 
 		// build and check poll
 		$options = $input->get_var('polloptions','post',FWS_Input::STRING);

@@ -52,21 +52,20 @@ final class BS_Front_Action_new_mail_default extends BS_Front_Action_Base
 		if(!$user->is_loggedin())
 		{
 			$user_name = $input->get_var('user_name','post',FWS_Input::STRING);
-			if(!BS_UserUtils::check_username($user_name))
+			$user_name = trim($user_name);
+			if($user_name == '' || !BS_UserUtils::check_username($user_name))
 				return 'invalid_username';
 	
 			$user_email = $input->get_var('email_adr','post',FWS_Input::STRING);
 			$user_email = trim($user_email);
-			if($user_email != '' && !FWS_StringHelper::is_valid_email($user_email))
+			if($user_email == '' || !FWS_StringHelper::is_valid_email($user_email))
 				return 'invalid_email';
 	
 			// check security-code
 			if($cfg['use_captcha_for_guests'] == 1 && !$functions->check_security_code(false))
 				return 'invalid_security_code';
 			
-			$email_address = $user_name;
-			if($user_email != '')
-				$email_address .= ' <'.$user_email.'>';
+			$email_address = $user_email;
 		}
 		else
 			$email_address = $user->get_profile_val('user_email');
