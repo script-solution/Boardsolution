@@ -32,6 +32,49 @@ class BS_DAO_Unread extends FWS_Singleton
 	}
 	
 	/**
+	 * Returns all unread posts that are affected of the given post-ids. You'll get an array of:
+	 * <code>array('user_id' => ..., 'post_id' => ...,'user_group' => ...)</code>
+	 *
+	 * @param array $ids the post-ids
+	 * @return array the rows
+	 */
+	public function get_posts_for_posts_move($ids)
+	{
+		$db = FWS_Props::get()->db();
+		
+		if(!is_array($ids) || count($ids) == 0)
+			FWS_Helper::def_error('array>0','ids',$ids);
+		
+		return $db->get_rows(
+			'SELECT u.user_id,u.post_id,pr.user_group FROM '.BS_TB_UNREAD.' u
+			 LEFT JOIN '.BS_TB_PROFILES.' pr ON u.user_id = pr.id
+			 WHERE u.post_id IN ('.implode(',',$ids).')'
+		);
+	}
+	
+	/**
+	 * Returns all unread posts that are affected of the given topic-ids. You'll get an array of:
+	 * <code>array('user_id' => ..., 'post_id' => ...,'user_group' => ...)</code>
+	 *
+	 * @param array $ids the topic-ids
+	 * @return array the rows
+	 */
+	public function get_posts_for_topic_move($ids)
+	{
+		$db = FWS_Props::get()->db();
+		
+		if(!is_array($ids) || count($ids) == 0)
+			FWS_Helper::def_error('array>0','ids',$ids);
+		
+		return $db->get_rows(
+			'SELECT u.user_id,u.post_id,pr.user_group FROM '.BS_TB_UNREAD.' u
+			 LEFT JOIN '.BS_TB_POSTS.' p ON u.post_id = p.id
+			 LEFT JOIN '.BS_TB_PROFILES.' pr ON u.user_id = pr.id
+			 WHERE p.threadid IN ('.implode(',',$ids).')'
+		);
+	}
+	
+	/**
 	 * Returns all unread rows with given ids for the given type
 	 *
 	 * @param string $type the type: rubrikid or threadid

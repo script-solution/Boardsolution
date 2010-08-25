@@ -26,6 +26,7 @@ final class BS_Front_Action_move_topics_default extends BS_Front_Action_Base
 		$user = FWS_Props::get()->user();
 		$auth = FWS_Props::get()->auth();
 		$locale = FWS_Props::get()->locale();
+		$functions = FWS_Props::get()->functions();
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
@@ -131,6 +132,29 @@ final class BS_Front_Action_move_topics_default extends BS_Front_Action_Base
 			
 			if($max_target_last_post_id > 0)
 				$fields['lastpost_id'] = $max_target_last_post_id;
+			
+			// if we're moving topics to an intern forum, we have to remove unread-posts of
+			// the users that don't have access to it
+			if($target_forum_data->get_forum_is_intern())
+			{
+				$delposts = array();
+				$unread_posts = BS_DAO::get_unread()->get_posts_for_topic_move($moved_topic_ids);
+				foreach($unread_posts as $data)
+				{
+					// check if the user has access
+					$groups = FWS_Array_Utils::advanced_explode(',',$data['user_group']);
+					if(!$functions->has_access_to_intern_forum($data['user_id'],$groups,$target_fid))
+					{
+						if(!isset($delposts[$data['user_id']]))
+							$delposts[$data['user_id']] = array();
+						$delposts[$data['user_id']][] = $data['post_id'];
+					}
+				}
+				
+				// delete them
+				foreach($delposts as $uid => $postids)
+					BS_DAO::get_unread()->delete_posts_of_user($uid,$postids);
+			}
 
 			BS_DAO::get_forums()->update_by_id($target_fid,$fields);
 

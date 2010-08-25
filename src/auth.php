@@ -666,45 +666,13 @@ final class BS_Auth extends FWS_Object
 	public function has_access_to_intern_forum($id = 0)
 	{
 		$input = FWS_Props::get()->input();
-		$forums = FWS_Props::get()->forums();
 		$user = FWS_Props::get()->user();
-		$cache = FWS_Props::get()->cache();
-
-		$fid = ($id == 0) ? $input->get_var(BS_URL_FID,'get',FWS_Input::ID) : $id;
-
-		$forum_data = $forums->get_node_data($fid);
-		if($forum_data === null)
-			return false;
+		$functions = FWS_Props::get()->functions();
 		
-		if($forum_data->get_forum_is_intern())
-		{
-			// admins have always access
-			if($user->is_admin())
-				return true;
-
-			// guests if never access to intern forums
-			if(!$user->is_loggedin())
-				return false;
-			
-			$rows = $cache->get_cache('intern')->get_elements_with(array('fid' => $fid));
-			if(is_array($rows) && count($rows) > 0)
-			{
-				$ugroups = $user->get_all_user_groups();
-				$uid = $user->get_user_id();
-				foreach($rows as $data)
-				{
-					if($data['access_type'] == 'user' && $data['access_value'] == $uid)
-						return true;
-					else if($data['access_type'] == 'group' && in_array($data['access_value'],$ugroups))
-						return true;
-				}
-			}
-
-			return false;
-		}
-
-		// it is no intern forum, so the user has access
-		return true;
+		$fid = ($id == 0) ? $input->get_var(BS_URL_FID,'get',FWS_Input::ID) : $id;
+		return $functions->has_access_to_intern_forum(
+			$user->get_user_id(),$user->get_all_user_groups(),$fid
+		);
 	}
 
 	/**

@@ -20,6 +20,53 @@
 final class BS_Functions extends FWS_Object
 {
 	/**
+	 * checks wether the given user has access to the forum with given id
+	 *
+	 * @param int $uid the user-id (0 = guest)
+	 * @param array $groups an array with all usergroups of the given user (empty = guest)
+	 * @param int $fid the id of the forum
+	 * @return boolean true if the user has access
+	 */
+	public function has_access_to_intern_forum($uid,$groups,$fid)
+	{
+		$forums = FWS_Props::get()->forums();
+		$cache = FWS_Props::get()->cache();
+
+		$forum_data = $forums->get_node_data($fid);
+		if($forum_data === null)
+			return false;
+		
+		if($forum_data->get_forum_is_intern())
+		{
+			// guests if never access to intern forums
+			if($uid == 0)
+				return false;
+				
+			// admins have always access
+			if(in_array(BS_STATUS_ADMIN,$groups))
+				return true;
+			
+			// check if the user-id or a group-id has access
+			$rows = $cache->get_cache('intern')->get_elements_with(array('fid' => $fid));
+			if(is_array($rows) && count($rows) > 0)
+			{
+				foreach($rows as $data)
+				{
+					if($data['access_type'] == 'user' && $data['access_value'] == $uid)
+						return true;
+					else if($data['access_type'] == 'group' && in_array($data['access_value'],$groups))
+						return true;
+				}
+			}
+
+			return false;
+		}
+
+		// it is no intern forum, so the user has access
+		return true;
+	}
+	
+	/**
 	 * @return string the name of the folder of the default-language
 	 */
 	public function get_def_lang_folder()
