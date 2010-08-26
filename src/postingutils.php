@@ -157,7 +157,7 @@ final class BS_PostingUtils extends FWS_UtilBase
 		$post_text = $input->get_var('text','post',FWS_Input::STRING);
 		$text = '';
 		$error = self::prepare_message_for_db(
-			$text,$post_text,$location,(bool)$use_smileys,(bool)$use_bbcode
+			$text,$post_text,$location,$use_smileys,$use_bbcode
 		);
 		
 		// any error? so break here
