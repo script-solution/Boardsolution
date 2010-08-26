@@ -105,6 +105,8 @@ final class BS_Front_Module_manage_posts extends BS_Front_Module
 		}
 		
 		$form = $this->request_formular(false,false);
+		if($input->isset_var('change_display','post'))
+			$form->set_condition(true);
 		
 		// correct the mode if we don't have the permission to do the selected operation
 		if($mode == 'delete' && !$auth->has_current_forum_perm(BS_MODE_DELETE_POSTS))
