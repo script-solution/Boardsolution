@@ -92,7 +92,9 @@ final class BS_Front_SubModule_calendar_month extends BS_Front_SubModule
 					$days = FWS_Date::get_formated_date('date',$days_ts);
 					$day++;
 					
-					$event = $helper->get_events_of($birthday_index);
+					$event = $helper->get_events_of($birthday_index,10,3);
+					if($event['count'] > 3)
+						$event['toomany'] = $weeks[$w]['url'];
 					$border = $days == $today ? 'bs_calendar_border_today' : 'bs_calendar_border';
 				}
 				

@@ -82,7 +82,7 @@ final class BS_Front_SubModule_calendar_week extends BS_Front_SubModule
 					$border = $event_index == $today ? 'bs_calendar_border_today' : 'bs_calendar_border';
 					
 					$rows[$l]['days'][] = array(
-						'event' => $helper->get_events_of($event_index,30,10000),
+						'event' => $helper->get_events_of($event_index,30,0),
 						'border' => $border
 					);
 				}

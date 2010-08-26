@@ -407,7 +407,7 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 				if($content['age'] < 0)
 					continue;
 				
-				if($count >= $max_events)
+				if($max_events != 0 && $count >= $max_events)
 				{
 					$count++;
 					break;
@@ -446,7 +446,7 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 			
 			foreach($events[$date.$year] as $content)
 			{
-				if($count >= $max_events)
+				if($max_events != 0 && $count >= $max_events)
 				{
 					$count++;
 					break;
@@ -478,20 +478,8 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 				$count++;
 			}
 		}
-	
-		if($count > $max_events)
-		{
-			$loc = FWS_Date::get_timestamp(array(
-				0,0,0,
-				FWS_String::substr($date,2,2),
-				FWS_String::substr($date,0,2),
-				$year
-			));
-			$curl = BS_URL::get_sub_url('calendar','week');
-			$curl->set(BS_URL_DAY,$loc);
-			$res['toomany'] = $curl->to_url();
-		}
 		
+		$res['count'] = $count;
 		return $res;
 	}
 	
