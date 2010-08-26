@@ -42,6 +42,13 @@ final class BS_BBCode_Helper extends FWS_Singleton
 	private $_tags_copy = null;
 	
 	/**
+	 * The available fonts
+	 *
+	 * @var array
+	 */
+	private $_fonts = null;
+	
+	/**
 	 * A storage for every kind of variable that should be valid for the whole text
 	 *
 	 * @var array
@@ -201,6 +208,17 @@ final class BS_BBCode_Helper extends FWS_Singleton
 			return $this->_tags[$name];
 		
 		return null;
+	}
+	
+	/**
+	 * @return array the available fonts (in lower-case)
+	 */
+	public function get_fonts()
+	{
+		$cfg = FWS_Props::get()->cfg();
+		if($this->_fonts === null)
+			$this->_fonts = FWS_Array_Utils::advanced_explode(',',strtolower($cfg['post_font_pool']));
+		return $this->_fonts;
 	}
 	
 	/**

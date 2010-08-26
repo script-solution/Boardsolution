@@ -546,6 +546,7 @@ final class BS_PostingForm extends FWS_Object
 	{
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
+		$cfg = FWS_Props::get()->cfg();
 
 		$allowed = FWS_Array_Utils::advanced_explode(',',$sallowed);
 		
@@ -580,13 +581,16 @@ final class BS_PostingForm extends FWS_Object
 		$hldir = FWS_Path::server_app().'bbceditor/highlighter/';
 		FWS_Highlighting_Languages::ensure_inited($hldir.'languages.xml');
 		
+		$fonts = FWS_Array_Utils::advanced_explode(',',$cfg['post_font_pool']);
+		sort($fonts);
 		$tpl->add_variables(array(
 			'textarea_id' => 'bbcode_area'.self::$number,
 			'number' => self::$number,
 			'bspath' => $bspath,
 			'bbcode' => $this,
 			'hllangs' => FWS_Highlighting_Languages::get_languages(),
-			'bbcode_data' => $bbcode_data
+			'bbcode_data' => $bbcode_data,
+			'post_fonts' => $fonts
 		));
 		$tpl->add_allowed_method('bbcode','is_allowed');
 	

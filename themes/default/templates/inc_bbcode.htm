@@ -124,11 +124,9 @@
 			alt=" [{tag}] " />
 		<div class="bs_bbcode_popup" id="tag_{tag}_{number}_popup">
 			<ul class="bs_none_list">
-				<li><a style="font-family: Arial;" href="javascript:popupElementClick({number},'{tag}','Arial');">Arial</a></li>
-				<li><a style="font-family: Times;" href="javascript:popupElementClick({number},'{tag}','Times');">Times</a></li>
-				<li><a style="font-family: Courier;" href="javascript:popupElementClick({number},'{tag}','Courier');">Courier</a></li>
-				<li><a style="font-family: Impact;" href="javascript:popupElementClick({number},'{tag}','Impact');">Impact</a></li>
-				<li><a style="font-family: Verdana;" href="javascript:popupElementClick({number},'{tag}','Verdana');">Verdana</a></li>
+				{loop post_fonts as fontname}
+				<li><a style="font-family: {fontname};" href="javascript:popupElementClick({number},'{tag}','{fontname}');">{fontname}</a></li>
+				{endloop}
 			</ul>
 		</div>
 		{endif}
@@ -257,7 +255,7 @@
 		{endif}
 		
 		{set tag='closeall'}
-		<input style="position: absolute;" id="helper_{tag}_{number}" type="button" class="bs_bbcode"
+		<input id="helper_{tag}_{number}" type="button" class="bs_bbcode"
 		 onmouseout="unhoverItem({number},'helper_{tag}_{number}');"
 		 onmouseover="hoverItem({number},'helper_{tag}_{number}','{glocale.lang('bbcode_help_'~tag)}');"
 		 value="{glocale.lang('bbcode_element_closeall')}"

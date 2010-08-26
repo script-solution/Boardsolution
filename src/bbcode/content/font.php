@@ -21,8 +21,9 @@ final class BS_BBCode_Content_Font extends BS_BBCode_Content_Default
 {
 	public function get_param($param)
 	{
+		$fonts = BS_BBCode_Helper::get_instance()->get_fonts();
 		$param = FWS_String::strtolower($param);
-		if(in_array($param,array('arial','verdana','courier','impact','times')))
+		if(in_array($param,$fonts))
 			return $param;
 		
 		return false;

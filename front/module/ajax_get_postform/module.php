@@ -38,9 +38,9 @@ final class BS_Front_Module_ajax_get_postform extends BS_Front_Module
 	{
 		$input = FWS_Props::get()->input();
 		$doc = FWS_Props::get()->doc();
-
+		
 		$type = $input->correct_var(
-			'type','get',FWS_Input::STRING,array('post','sig','linkdesc','pm'),'post'
+			'type','get',FWS_Input::STRING,array('post','sig','desc','pm'),'post'
 		);
 		$mode = $input->correct_var(
 			'mode','get',FWS_Input::STRING,array('simple','advanced','applet'),'simple'
