@@ -49,8 +49,8 @@ function getPostForm(type)
 			var ftext = '';
 			if(self.type == 'applet')
 				ftext = field.value;
-			else if(field.getBBCode || typeof field.getBBCode == 'function')
-				ftext = field.getBBCode();
+			else if(field.toString || typeof field.toString == 'function')
+				ftext = field.toString();
 			
 			form.innerHTML = text;
 			

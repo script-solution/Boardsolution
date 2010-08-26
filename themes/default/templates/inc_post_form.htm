@@ -52,8 +52,10 @@
 							{
 								var applet = document.getElementById('bbcode_area' + no);
 								var text = '';
-								if(applet.getBBCode || typeof applet.getBBCode == 'function')
-									text = applet.getBBCode();
+								// the IE seems not to be able to call self-written methods of the applet.
+								// therefore we use toString to get the text. that works :) 
+								if(applet.toString || typeof applet.toString == 'function')
+									text = applet.toString();
 								document.getElementById('hiddenText' + no).value = text;
 							}
 						}
