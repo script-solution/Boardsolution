@@ -157,6 +157,19 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	}
 	
 	/**
+	 * Returns all users that have the given group-id as main-group
+	 * 
+	 * @param int gid the group-id
+	 * @return array all found users
+	 */
+	public function get_users_by_maingroup($gid)
+	{
+		if(!FWS_Helper::is_integer($gid) || $gid <= 0)
+			FWS_Helper::def_error('intgt0','gid',$gid);
+		return $this->get_users_by_custom_search('WHERE p.user_group LIKE "'.$gid.',%"');
+	}
+	
+	/**
 	 * Returns all users that are member of at least one of the given groups. You may
 	 * specify an empty groups-array and you may also specify user-ids that are required.
 	 * Additionally you can define a start-position and the max. number of user

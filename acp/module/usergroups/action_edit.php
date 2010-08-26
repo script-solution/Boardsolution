@@ -82,7 +82,7 @@ final class BS_ACP_Action_usergroups_edit extends BS_ACP_Action_Base
 			{
 				// ok, we assign all users, that have this group as main-group the group BS_STATUS_USER as
 				// main-group
-				foreach(BS_DAO::get_profile()->get_users_by_groups(array($id)) as $row)
+				foreach(BS_DAO::get_profile()->get_users_by_maingroup($id) as $row)
 				{
 					$groups = FWS_Array_Utils::advanced_explode(',',$row['user_group']);
 					$groups[0] = BS_STATUS_USER;
