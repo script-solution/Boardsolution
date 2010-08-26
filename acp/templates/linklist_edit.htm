@@ -2,7 +2,7 @@
 {include "inc_delete_message.htm"}
 
 {if module_error == false}
-<form method="post" action="{gurl.simple_acp_url(0,'&amp;action=edit&amp;id='~id)}">
+<form method="post" action="{gurl.simple_acp_url(0,'&amp;action=edit&amp;id='~id)}" onsubmit="BS_refresh_text();">
 <input type="hidden" name="action_type" value="{action_type}" />
 <div class="a_border">
 	<h1 class="a_topic">{glocale.lang('edit')}</h1>
