@@ -72,10 +72,12 @@
 					<input type="radio" name="bbcode_mode_{number}" id="bbcode_mode_simple_{number}"
 						onclick="changeBBCodeMode({number},'simple',postForms['{number}']);" value="simple"{bb_si_checked} />
 					<label for="bbcode_mode_simple_{number}">{glocale.lang('bbcode_mode_simple')}</label>
+					{if bbcode_enabled}
 					&nbsp;&nbsp;
 					<input type="radio" name="bbcode_mode_{number}" id="bbcode_mode_advanced_{number}"
 						onclick="changeBBCodeMode({number},'advanced',postForms['{number}']);" value="advanced"{bb_ad_checked} />
 					<label for="bbcode_mode_advanced_{number}">{glocale.lang('bbcode_mode_advanced')}</label>
+					{endif}
 					{if applet_enabled}
 					&nbsp;&nbsp;
 					<input type="radio" name="bbcode_mode_{number}" id="bbcode_mode_applet_{number}"
@@ -83,8 +85,6 @@
 					<label for="bbcode_mode_applet_{number}">{glocale.lang('bbcode_mode_applet')}</label>
 					{endif}
 				</div>
-				{if bbcode_enabled}
-				{endif}
 				<div id="post_form_{number}">
 					{textarea}
 				</div>

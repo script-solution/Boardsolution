@@ -1,3 +1,20 @@
+<!-- put this here to prevent problems when the applet is the default mode and the user
+switches back to simple/advanced mode -->
+<script type="text/javascript" src="{gjs.get_file('js/colorpicker.js','fws')}"></script>
+<script type="text/javascript">
+<!--
+cp['{number}'] = new FWS_ColorPicker(
+	'{gfwspath}','group_color',
+	function(color) {
+		popupElementClick({number},'color','#' + color);
+	},
+	function() {
+		popups['color{number}'] = 0;
+	}
+);
+//-->
+</script>
+
 {if applet}
 <input id="hiddenText{number}" type="hidden" name="text{name_suffix}" value="" />
 <applet id="bbcode_area{number}" code="bbcodeeditor.gui.WysiwygBBCodeEditor.class"
