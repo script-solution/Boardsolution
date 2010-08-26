@@ -542,20 +542,23 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	/**
 	 * Changes the type or length of the additional field with given name
 	 *
-	 * @param string $name the name of the field (without "add_")
+	 * @param string $oldname the old name of the field (without "add_")
+	 * @param string $newname the new name of the field (without "add_")
 	 * @param string $type the type: int, text, date, enum, line
 	 * @param int $length the length of the field (just for int and line)
 	 */
-	public function change_additional_field($name,$type,$length)
+	public function change_additional_field($oldname,$newname,$type,$length)
 	{
 		$db = FWS_Props::get()->db();
 
-		if(empty($name))
-			FWS_Helper::def_error('notempty','name',$name);
+		if(empty($oldname))
+			FWS_Helper::def_error('notempty','oldname',$oldname);
+		if(empty($newname))
+			FWS_Helper::def_error('notempty','newname',$newname);
 		
 		$db->execute(
 			'ALTER TABLE '.BS_TB_PROFILES.'
-			 CHANGE `add_'.$name.'` `add_'.$name.'`
+			 CHANGE `add_'.$oldname.'` `add_'.$newname.'`
 			 '.$this->get_field_sql_syntax($type,$length)
 		);
 	}

@@ -41,7 +41,7 @@ final class BS_ACP_Action_additionalfields_edit extends BS_ACP_Action_Base
 			 	$data['field_length'] != $values['field_length']))
 		{
 			BS_DAO::get_profile()->change_additional_field(
-				$data['field_name'],$values['field_type'],$values['field_length']
+				$data['field_name'],$values['field_name'],$values['field_type'],$values['field_length']
 			);
 		}
 
