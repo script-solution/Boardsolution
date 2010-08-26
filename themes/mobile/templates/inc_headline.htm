@@ -1,6 +1,14 @@
 <div class="bs_border bs_padbottom">
 	<div class="bs_main">
-		<div>{glocale.lang('welcome')}, <b>{username_plain}</b>!</div>
+		<div>
+			{glocale.lang('welcome')}, <b>{username_plain}</b>!
+			{if gisloggedin}
+			<div style="float: right;">
+				<a href="{gurl.simple_url(-1,'&amp;$URL_AT=$ACTION_LOGOUT','&amp;',true)}">
+				{glocale.lang('logout')}</a>
+			</div>
+			{endif}
+		</div>
 		{if gisloggedin == false}
 		<div>
 			<form method="post" action="{login_url}">
@@ -22,20 +30,24 @@
 			({if unread_news_count > 0}<span class="bs_unread">{unread_news_count}</span>{else}0{endif})
 			&middot;
 			{endif}
+			{if gisloggedin && enable_pms}
+			<a title="{glocale.lang('privatemsgs')} ( {unread_pm_count} {glocale.lang('newmsgs')} )"
+			   href="{gurl.simple_url('userprofile','&amp;$URL_SUB=pmoverview')}">{glocale.lang('pms')}</a>
+			({if unread_pm_count > 0}<span class="bs_unread">{unread_pm_count}</span>{else}0{endif}) &middot;
+			{endif}
 			<a title="{glocale.lang('unread_threads')}"
 				  href="{gurl.simple_url('unread')}">UT</a>
 			({if unread_topic_count > 0}<span class="bs_unread">{unread_topic_count}</span>
 			<a href="{first_unread_url}"><img src="{guser.get_theme_item_path('images/unread/first_unread_post.gif')}"
 					alt="" /></a>{else}0{endif}) &middot;
 			{loop top_links as id => link}
+			{if link:text == glocale.lang('profile')}
+			<a href="{link:url}">{link:text}</a> &middot;
+			{endif}
 			{if link:text == glocale.lang('search')}
 			<a href="{link:url}">{link:text}</a>
 			{endif}
 			{endloop}
-			{if gisloggedin}
-			&middot; <a href="{gurl.simple_url(-1,'&amp;$URL_AT=$ACTION_LOGOUT','&amp;',true)}">
-				{glocale.lang('logout')}</a>
-			{endif}
 		</div>
 	</div>
 </div>

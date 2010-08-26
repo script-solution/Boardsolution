@@ -1,0 +1,51 @@
+{if mode != 'overview'}
+{include "inc_delete_message.htm"}
+{endif}
+
+{include "inc_userprofile_pmjs.htm"}
+
+<form id="pm_form" method="post" action="{inbox_url}">
+<div class="bs_border">
+	<h1 class="bs_topic">{title}{if inbox_num != ''} ({inbox_num}){endif}</h1>
+	{if num == 0}
+	<div align="center">{glocale.lang('no_pms_found')}</div>
+	{else}
+	<ul>
+		{loop pms as index => pm}
+		<li>
+			<input type="checkbox" id="inbox_{index}" name="delete[]" value="{pm:pm_id}" />
+			<img title="{pm:status_title}" alt="{pm:status_title}" src="{pm:status_picture}" />
+			{pm:prefix}<a title="{pm:complete_title}" href="{pm:details_link}">{pm:pm_title}</a><br />
+			{glocale.lang('from')} {pm:sender}, {pm:date}
+			<div style="float: right;">{pm:reply}</div>
+		</li>
+		{endloop}
+	</ul>
+	{endif}
+</div>
+
+<div style="padding-left: 25px;">
+	<img src="{guser.get_theme_item_path('images/thread_option.gif')}" alt="" />
+	<select id="operation" name="operation">
+		<option value="delete">{glocale.lang('delete')}</option>
+		<option value="mark_read">{glocale.lang('mark_pms_read')}</option>
+		<option value="mark_unread">{glocale.lang('mark_pms_unread')}</option>
+	</select>
+	<input id="inbox_submit_btn" type="submit" onclick="submitForm();" value="{glocale.lang('submit')}" />
+</div>
+</form>
+
+<script type="text/javascript">
+<!--
+if(!Browser.isIE)
+	document.getElementById('inbox_submit_btn').type = 'button';
+//-->
+</script>
+
+{if mode != "overview"}
+{include "inc_userprofile_pmbottom.htm"}
+{endif}
+
+<div class="bs_padtop_big">
+{include "inc_pagination.htm"}
+</div>
