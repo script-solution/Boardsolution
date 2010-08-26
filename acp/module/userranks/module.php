@@ -69,7 +69,7 @@ final class BS_ACP_Module_userranks extends BS_ACP_Module
 		));
 	
 		$ranks = $cache->get_cache('user_ranks')->get_elements();
-		$tpl->add_variable_ref('ranks',$ranks);
+		$tpl->add_variables(array('ranks' => array_values($ranks)));
 	}
 }
 ?>
