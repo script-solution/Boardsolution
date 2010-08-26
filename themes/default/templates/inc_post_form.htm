@@ -36,7 +36,6 @@
 		</dt>
 		<dd>
 			<div style="padding-left: 0.5em;">
-				{if bbcode_enabled}
 				<div style="padding-bottom: 0.3em;">
 					{if number == 1}
 					<script type="text/javascript" src="{gjs.get_file('src/bbcode.js')}"></script>
@@ -84,6 +83,7 @@
 					<label for="bbcode_mode_applet_{number}">{glocale.lang('bbcode_mode_applet')}</label>
 					{endif}
 				</div>
+				{if bbcode_enabled}
 				{endif}
 				<div id="post_form_{number}">
 					{textarea}

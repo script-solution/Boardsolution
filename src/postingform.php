@@ -241,9 +241,11 @@ final class BS_PostingForm extends FWS_Object
 
 		$use_applet = $use_applet && $cfg['msgs_allow_java_applet'];
 		$options = BS_PostingUtils::get_message_options($this->_type);
-		$sallowed = strtolower(BS_PostingUtils::get_message_option('allowed_tags',$this->_type));
 		$path = $path === null ? FWS_Path::client_app() : $path;
 		
+		$sallowed = '';
+		if($options['enable_bbcode'])
+			$sallowed = strtolower(BS_PostingUtils::get_message_option('allowed_tags',$this->_type));
 		$bbcode_buttons = '';
 		if(!$use_applet && $options['enable_bbcode'])
 			$bbcode_buttons = $this->_get_bbcode_for_post($sallowed,$path);
@@ -260,6 +262,7 @@ final class BS_PostingForm extends FWS_Object
 			'max_line_length' => $cfg['msgs_max_line_length'],
 			'code_line_numbers' => $cfg['msgs_code_line_numbers'],
 			'allowed_tags' => $sallowed,
+			'font_families' => $cfg['post_font_pool'],
 			'text' => $text,
 			'applet_text' => str_replace("\t","%t%",str_replace("\n","%n%",$text))
 		));
