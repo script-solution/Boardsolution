@@ -178,18 +178,18 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 	}
 	
 	/**
-	 * Determines the start of the week from the given timestamp
+	 * Determines the start of the week from the given date
 	 *
-	 * @param int $ts the timestamp
+	 * @param int|string|array $date the date (argument for FWS_Date)
 	 * @param int $timezone the desired timezone for 0:00 on the weekstart
 	 * @return int the week-start-timestamp
 	 */
-	private function get_weekstart($ts,$timezone = FWS_Date::TZ_GMT)
+	private function get_weekstart($date,$timezone = FWS_Date::TZ_GMT)
 	{
-		$year = FWS_Date::get_formated_date('Y',$ts,FWS_Date::TZ_GMT,FWS_Date::TZ_GMT);
-		$month = FWS_Date::get_formated_date('m',$ts,FWS_Date::TZ_GMT,FWS_Date::TZ_GMT);
-		$day = FWS_Date::get_formated_date('d',$ts,FWS_Date::TZ_GMT,FWS_Date::TZ_GMT);
-		$weekday = FWS_Date::get_formated_date('w',$ts,FWS_Date::TZ_GMT,FWS_Date::TZ_GMT);
+		$year = FWS_Date::get_formated_date('Y',$date,FWS_Date::TZ_GMT,FWS_Date::TZ_GMT);
+		$month = FWS_Date::get_formated_date('m',$date,FWS_Date::TZ_GMT,FWS_Date::TZ_GMT);
+		$day = FWS_Date::get_formated_date('d',$date,FWS_Date::TZ_GMT,FWS_Date::TZ_GMT);
+		$weekday = FWS_Date::get_formated_date('w',$date,FWS_Date::TZ_GMT,FWS_Date::TZ_GMT);
 		$weekday = $weekday == 0 ? 6 : $weekday - 1;
 		return FWS_Date::get_timestamp(
 			array(0,0,0,$month,$day,$year),$timezone,'-'.$weekday.'days'
