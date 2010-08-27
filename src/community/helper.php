@@ -80,7 +80,7 @@ final class BS_Community_Helper extends FWS_UtilBase
 			$user->get_name(),$user->get_pw_plain(),$user->get_email(),array($user->get_status()),
 			$user->get_id(),$addfields
 		);
-		if(($err = $plain->check_data()) != '')
+		if($plain->check_data() != '')
 			return;
 		
 		$plain->perform_action();

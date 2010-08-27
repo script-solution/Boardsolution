@@ -591,6 +591,7 @@ final class BS_EmailFactory extends FWS_Singleton
 	 */
 	public function get_updates_mail($update)
 	{
+		$cfg = FWS_Props::get()->cfg();
 		$locale = FWS_Props::get()->locale();
 		$tpl = FWS_Props::get()->tpl();
 		$functions = FWS_Props::get()->functions();
@@ -603,7 +604,7 @@ final class BS_EmailFactory extends FWS_Singleton
 			array('update' => $update)
 		);
 		
-		return $functions->get_mailer($email,$subject,$text);
+		return $functions->get_mailer('',$subject,$text);
 	}
 }
 ?>

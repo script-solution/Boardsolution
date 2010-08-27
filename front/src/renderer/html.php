@@ -524,7 +524,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			$unread_topics = $unread->get_unread_topics();
 			if(count($unread_topics) > 0)
 			{
-				list($utid,$udata) = each($unread_topics);
+				list(,$udata) = each($unread_topics);
 				$uurl = BS_URL::get_mod_url('redirect');
 				$uurl->set(BS_URL_LOC,'show_post');
 				$uurl->set(BS_URL_ID,$udata[0]);

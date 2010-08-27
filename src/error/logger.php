@@ -67,7 +67,7 @@ final class BS_Error_Logger extends FWS_Object implements FWS_Error_Logger
 					'message' => addslashes($msg),
 					'backtrace' => addslashes($sbacktrace)
 				));
-				$this->_log_count++;
+				++$this->_log_count;
 			}
 		}
 	}

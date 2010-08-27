@@ -314,7 +314,7 @@ final class BS_BBCode_Parser extends FWS_Object
 	 */
 	private function _get_smiley_code($code,$image)
 	{
-		$this->_smiley_count++;
+		++$this->_smiley_count;
 		return '<img title="'.$code.'" alt="'.$code.'" src="<EMP>'.$image.'" />';
 	}
 

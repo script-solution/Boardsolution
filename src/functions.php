@@ -362,13 +362,10 @@ final class BS_Functions extends FWS_Object
 	 */
 	public function build_login_form($display_denied_reasons = true)
 	{
-		$user = FWS_Props::get()->user();
 		$cfg = FWS_Props::get()->cfg();
 		$locale = FWS_Props::get()->locale();
 		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
-		$msgs = FWS_Props::get()->msgs();
-		$doc = FWS_Props::get()->doc();
 		$com = BS_Community_Manager::get_instance();
 
 		$register_url = $com->get_register_url();
