@@ -45,7 +45,6 @@ class BS_Pagination extends FWS_Pagination
 	 * Puts all variables to the template inc_pagination.htm so that it can be included.
 	 *
 	 * @param BS_URL $url the URL-instance
-	 * @return string the result
 	 */
 	public function populate_tpl($url)
 	{

@@ -187,7 +187,7 @@ final class BS_Front_Module_stats_diagram extends BS_Front_Module
 				$max = array('type' => 'topics','index' => $date,'value' => $topic_times[$type][$date]);
 		}
 		
-		$max['value'] = sprintf('%.2f',$max['value']);
+		$max['value'] = (float)sprintf('%.2f',$max['value']);
 		
 		####################### Generate the image #######################
 		
@@ -458,7 +458,7 @@ class BS_HorizontalDiagram extends FWS_Object
 	 * @param int $startX the x-start-pos
 	 * @param int $startY the y-start-pos (top-padding)
 	 * @param int $count the total number of values
-	 * @param int $max_value the maximum value
+	 * @param float $max_value the maximum value
 	 */
 	public function __construct($width,$height,$startX,$startY,$count,$max_value)
 	{

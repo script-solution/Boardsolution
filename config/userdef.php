@@ -33,7 +33,7 @@ define('BS_FRONTEND_FILE','index.php');
  * 
  * The path to FrameWorkSolution (relative) with trailing slash.
  */
-define('BS_FWS_PATH','../PHPLib/');
+define('BS_FWS_PATH','../FrameWorkSolution/');
 
 /**
  * Hiermit koennen Debug-Infos konfiguriert werden:
@@ -46,7 +46,7 @@ define('BS_FWS_PATH','../PHPLib/');
  * 	1 = display just time, query-count and memory-usage
  * 	2 = display all infos
  */
-define('BS_DEBUG',1);
+define('BS_DEBUG',2);
 
 /**
  * Legt fest ob der Calltrace bei Fehler angezeigt werden soll, d.h. welche Funktionen aufgerufen

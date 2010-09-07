@@ -168,7 +168,7 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 	 *
 	 * @param array $data the smiley-data
 	 * @param string $search the search-keyword
-	 * @return true if it matches
+	 * @return bool true if it matches
 	 */
 	private function _matches($data,$search)
 	{

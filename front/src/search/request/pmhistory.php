@@ -23,7 +23,7 @@ final class BS_Front_Search_Request_PMHistory extends BS_Front_Search_Request_PM
 	/**
 	 * The keyword
 	 *
-	 * @var array
+	 * @var string
 	 */
 	private $_keyword;
 	

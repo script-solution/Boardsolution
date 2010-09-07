@@ -98,7 +98,7 @@ final class BS_DBA_Backup_Manager extends FWS_Object
 					closedir($dir);
 					
 					unset($this->_backups[$key]);
-					return $this->write_to_file();
+					return $this->write_to_file() !== false;
 				}
 			}
 		}
@@ -112,6 +112,7 @@ final class BS_DBA_Backup_Manager extends FWS_Object
 	 * @param string $prefix the prefix
 	 * @param int $total_files the number of files
 	 * @param int $size the complete size
+	 * @return boolean true if successfull
 	 */
 	public function add_backup($prefix,$total_files,$size)
 	{
@@ -122,14 +123,13 @@ final class BS_DBA_Backup_Manager extends FWS_Object
 		$backup = new BS_DBA_Backup_Data($parts);
 		$this->_backups[] = $backup;
 		
-		$this->write_to_file();
-		return true;
+		return $this->write_to_file() !== false;
 	}
 	
 	/**
 	 * Writes the backups to file
 	 *
-	 * @return boolean true if successfull
+	 * @return bool|int the number of written bytes or false
 	 */
 	public function write_to_file()
 	{
@@ -147,8 +147,7 @@ final class BS_DBA_Backup_Manager extends FWS_Object
 	}
 	
 	/**
-	 * parses the file and stores the found backups including the attributes
-	 *
+	 * Parses the file and stores the found backups including the attributes
 	 */
 	private function _parse_file()
 	{

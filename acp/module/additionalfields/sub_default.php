@@ -131,6 +131,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 	 *
 	 * @param array $fields all fields
 	 * @param string $keyword the keyword
+	 * @return array the result-fields
 	 */
 	private function _filter_fields($fields,$keyword)
 	{

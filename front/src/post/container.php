@@ -62,7 +62,7 @@ final class BS_Front_Post_Container extends FWS_Object
 	 *
 	 * @var array
 	 */
-	private $_keywords = false;
+	private $_keywords;
 	
 	/**
 	 * Constructor

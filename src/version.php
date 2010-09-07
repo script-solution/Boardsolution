@@ -165,7 +165,7 @@ final class BS_Version extends FWS_Object
 	 */
 	public function get_release_number()
 	{
-		return FWS_String::substr($this->_id,0,2);
+		return (int)FWS_String::substr($this->_id,0,2);
 	}
 	
 	/**

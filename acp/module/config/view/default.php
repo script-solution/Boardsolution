@@ -79,11 +79,6 @@ final class BS_ACP_Module_Config_View_Default extends FWS_Object implements FWS_
 		return $this->_items;
 	}
 	
-	/**
-	 * @see FWS_Config_View::begin_group()
-	 *
-	 * @param int $id
-	 */
 	public function begin_group($item,$group)
 	{
 		$locale = FWS_Props::get()->locale();
@@ -120,11 +115,6 @@ final class BS_ACP_Module_Config_View_Default extends FWS_Object implements FWS_
 		// ignore
 	}
 
-	/**
-	 * @see FWS_Config_View::show_item()
-	 *
-	 * @param FWS_Config_Item $item
-	 */
 	public function show_item($item)
 	{
 		$locale = FWS_Props::get()->locale();

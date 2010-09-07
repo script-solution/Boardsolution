@@ -53,7 +53,7 @@ class BS_DAO_ChangePW extends FWS_Singleton
 	/**
 	 * Creates a new entry for the given user and key
 	 *
-	 * @param int $id the used-id
+	 * @param int $user_id the used-id
 	 * @param string $key the key
 	 * @return int the used id
 	 */
@@ -74,7 +74,7 @@ class BS_DAO_ChangePW extends FWS_Singleton
 	/**
 	 * Updates the entry of the given user and sets the key to the given one and the date to now.
 	 *
-	 * @param int $id the used-id
+	 * @param int $user_id the used-id
 	 * @param string $key the key
 	 * @return int the number of affected rows
 	 */

@@ -45,7 +45,7 @@ class BS_DAO_Events extends FWS_Singleton
 	 * Returns the event-data of the given event-id
 	 *
 	 * @param int $id the event-id
-	 * @return array the data or false if not found
+	 * @return array|bool the data or false if not found
 	 */
 	public function get_by_id($id)
 	{
@@ -65,7 +65,7 @@ class BS_DAO_Events extends FWS_Singleton
 	 * Returns the event-data of the given topic-id
 	 *
 	 * @param int $tid the topic-id
-	 * @return array the data or false if not found
+	 * @return array|bool the data or false if not found
 	 */
 	public function get_by_topic_id($tid)
 	{
@@ -190,7 +190,7 @@ class BS_DAO_Events extends FWS_Singleton
 	 *
 	 * @param int $id the event-id
 	 * @param array $fields the fields to set
-	 * @return the number of affected rows
+	 * @return int the number of affected rows
 	 */
 	public function update($id,$fields)
 	{
@@ -207,7 +207,7 @@ class BS_DAO_Events extends FWS_Singleton
 	 *
 	 * @param int $tid the topic-id
 	 * @param array $fields the fields to set
-	 * @return the number of affected rows
+	 * @return int the number of affected rows
 	 */
 	public function update_by_topicid($tid,$fields)
 	{
@@ -223,7 +223,7 @@ class BS_DAO_Events extends FWS_Singleton
 	 * Deletes all events with the given ids
 	 *
 	 * @param array $ids the event-ids
-	 * @return the number of affected rows
+	 * @return int the number of affected rows
 	 */
 	public function delete_by_ids($ids)
 	{
@@ -234,7 +234,7 @@ class BS_DAO_Events extends FWS_Singleton
 	 * Deletes all events with the given topic-ids
 	 *
 	 * @param array $tids the topic-ids
-	 * @return the number of affected rows
+	 * @return int the number of affected rows
 	 */
 	public function delete_by_topicids($tids)
 	{
@@ -246,7 +246,7 @@ class BS_DAO_Events extends FWS_Singleton
 	 *
 	 * @param string $field the field-name
 	 * @param array $ids the ids
-	 * @return the number of affected rows
+	 * @return int the number of affected rows
 	 */
 	protected function delete_by($field,$ids)
 	{

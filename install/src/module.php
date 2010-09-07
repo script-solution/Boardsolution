@@ -94,6 +94,7 @@ abstract class BS_Install_Module extends FWS_Module
 	 * @param int $size the size of the input-field
 	 * @param int $maxlength the max length of the input field
 	 * @param string $description the description of the field
+	 * @return array the field
 	 */
 	protected function get_input($title,$name,$cond,$default = "admin",$size = 20,$maxlength = 20,
 		$description = '')
@@ -122,6 +123,7 @@ abstract class BS_Install_Module extends FWS_Module
 	 * @param mixed $title_out the text to display at the right side
 	 * @param string $description the description of the field
 	 * @param string $failed_img the failed-image
+	 * @return array the field
 	 */
 	protected function get_status($title,$status,$in_ok = 0,$in_nok = 0,$title_out = 0,
 		$description = '',$failed_img = 'failed')

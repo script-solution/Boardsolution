@@ -43,8 +43,8 @@ final class BS_Front_Search_Manager extends FWS_Object
 	/**
 	 * Constructor
 	 * 
-	 * @param string the id of the search (0 if not initialized)
-	 * @param BS_Front_Search_Request the request-object
+	 * @param string $search_id the id of the search (0 if not initialized)
+	 * @param BS_Front_Search_Request $request the request-object
 	 */
 	public function __construct($search_id,$request)
 	{

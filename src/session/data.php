@@ -30,7 +30,7 @@ final class BS_Session_Data extends FWS_Session_Data
 	/**
 	 * Contains the name of the bot, if the user is one
 	 *
-	 * @var string
+	 * @var int|string
 	 */
 	private $_bot_name = -1;
 	
@@ -110,7 +110,7 @@ final class BS_Session_Data extends FWS_Session_Data
 		if($this->_bot_name === -1)
 			$this->_bot_name = $this->_get_bot_name($this->get_user_agent(),$this->get_user_ip());
 		
-		return $this->_bot_name;
+		return (string)$this->_bot_name;
 	}
 
 	/**

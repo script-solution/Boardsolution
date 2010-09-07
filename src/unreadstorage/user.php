@@ -106,7 +106,7 @@ final class BS_UnreadStorage_User extends FWS_Object implements BS_UnreadStorage
 	{
 		$user = FWS_Props::get()->user();
 
-		return $user->get_profile_val('last_unread_update');
+		return (int)$user->get_profile_val('last_unread_update');
 	}
 
 	/**

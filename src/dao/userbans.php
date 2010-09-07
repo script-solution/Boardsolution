@@ -57,7 +57,7 @@ class BS_DAO_UserBans extends FWS_Singleton
 	 *
 	 * @param int $id the user-id
 	 * @param array $ids the baned users
-	 * @return the found entries
+	 * @return array the found entries
 	 */
 	public function get_by_user($id,$ids)
 	{

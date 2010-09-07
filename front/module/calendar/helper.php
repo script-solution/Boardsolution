@@ -390,7 +390,8 @@ final class BS_Front_Module_Calendar_Helper extends FWS_Singleton
 	 * @param string $date the date in the format <var><day><month></var>
 	 * @param int $max_name_len the maximum length of names
 	 * @param int $max_events the maximum number of events per day
-	 * @return string the html-code for the events and birthdays
+	 * @return array an array of the form:
+	 * 		<code>array('bd' => array(),'ev' => array(),'toomany' => '')</code>
 	 */
 	public function get_events_of($date,$max_name_len = 10,$max_events = 3)
 	{

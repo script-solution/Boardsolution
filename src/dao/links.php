@@ -107,7 +107,7 @@ class BS_DAO_Links extends FWS_Singleton
 	 * Returns the data of the link with given id
 	 *
 	 * @param int $id the link-id
-	 * @return array the data or false if not found
+	 * @return array|bool the data or false if not found
 	 */
 	public function get_by_id($id)
 	{

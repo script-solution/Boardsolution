@@ -120,7 +120,7 @@ abstract class BS_DAO_UserBase extends FWS_Singleton
 	 *
 	 * @param string $fields the fields to select
 	 * @param string $email the email-address
-	 * @return array the user-data
+	 * @return array|bool the user-data or false if it failed
 	 */
 	protected function get_user_by_email_impl($fields,$email)
 	{

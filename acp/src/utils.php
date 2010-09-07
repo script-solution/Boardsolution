@@ -66,6 +66,7 @@ final class BS_ACP_Utils extends FWS_UtilBase
 	 *
 	 * @param int $id the user-id
 	 * @param string $name the username
+	 * @return string the HTML-code
 	 */
 	public static function get_userlink($id,$name)
 	{

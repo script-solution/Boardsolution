@@ -24,7 +24,7 @@ final class BS_IPs extends FWS_Object
 	 * Returns the data of the entry of given action (and the current user)
 	 * 
 	 * @param string $action the action-name
-	 * @return array the data of the entry
+	 * @return array|bool the data of the entry or false if it failed
 	 */
 	public function get_entry($action)
 	{
@@ -40,7 +40,7 @@ final class BS_IPs extends FWS_Object
 	 * Checks wether an entry for the given action exists
 	 * 
 	 * @param string $action the action-name
-	 * @return true if so
+	 * @return bool true if so
 	 */
 	public function entry_exists($action)
 	{

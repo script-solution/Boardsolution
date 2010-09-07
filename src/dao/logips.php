@@ -54,7 +54,7 @@ class BS_DAO_LogIPs extends FWS_Singleton
 	 * @param string $action the action
 	 * @param string $ip the ip
 	 * @param int $timeout the timeout in seconds (0 = ignore)
-	 * @return array the entry or false if not found
+	 * @return array|bool the entry or false if not found
 	 */
 	public function get_by_action_for_ip($action,$ip,$timeout = 0)
 	{

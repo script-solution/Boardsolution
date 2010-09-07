@@ -4,8 +4,8 @@
 ##########################################
 define('BS_MYSQL_HOST','localhost');
 define('BS_MYSQL_LOGIN','root');
-define('BS_MYSQL_PASSWORD','');
-define('BS_MYSQL_DATABASE','bssupportboard_136');
+define('BS_MYSQL_PASSWORD','neu');
+define('BS_MYSQL_DATABASE','bs_141online');
 ##########################################
 
 ############## MySQL-Tables ############

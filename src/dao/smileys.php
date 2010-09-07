@@ -60,7 +60,7 @@ class BS_DAO_Smileys extends FWS_Singleton
 	 *
 	 * @param string $code the smiley-code
 	 * @param int $id the smiley-id
-	 * @return true if the code exists
+	 * @return bool true if the code exists
 	 */
 	public function code_exists($code,$id)
 	{
@@ -77,7 +77,7 @@ class BS_DAO_Smileys extends FWS_Singleton
 	 * Returns the smiley with given id
 	 *
 	 * @param int $id the smiley-id
-	 * @return array the smiley-data
+	 * @return array|bool the smiley-data or false if failed
 	 */
 	public function get_by_id($id)
 	{

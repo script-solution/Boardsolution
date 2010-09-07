@@ -103,7 +103,7 @@ class BS_DAO_Attachments extends FWS_Singleton
 	 * Returns the attachment with the given id
 	 *
 	 * @param int $id the attachment-id
-	 * @return array the data of it or false if not found
+	 * @return array|bool the data of it or false if not found
 	 */
 	public function get_by_id($id)
 	{
@@ -128,7 +128,7 @@ class BS_DAO_Attachments extends FWS_Singleton
 	 *
 	 * @param string $path the attachment-path
 	 * @param int $user_id user-id (0 = guest)
-	 * @return array the attachment or false if not found
+	 * @return array|bool the attachment or false if not found
 	 */
 	public function get_attachment_of_user_by_path($path,$user_id)
 	{

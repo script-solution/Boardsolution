@@ -28,10 +28,6 @@ final class BS_Session_Manager extends FWS_Session_Manager
 		parent::__construct(new BS_Session_Storage_DB());
 	}
 	
-  /**
-   * @param FWS_Session_Data $user
-   * @param string $currentsid
-   */
   protected function check_online_timeout($user,$currentsid)
   {
   	// We want to treat acp-users different from frontend-users

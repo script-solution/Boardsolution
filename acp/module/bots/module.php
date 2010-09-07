@@ -49,7 +49,7 @@ final class BS_ACP_Module_bots extends BS_ACP_SubModuleContainer
 	 * Checks the formular-values and returns the error-message, if any, or an array
 	 * with the values
 	 * 
-	 * @return array the values
+	 * @return array|string the values
 	 */
 	public static function check_values()
 	{

@@ -220,7 +220,7 @@ class BS_DAO_Posts extends FWS_Singleton
 	 * and the user-name for post_user.
 	 *
 	 * @param int $id the post-id
-	 * @return array the post-data or false if not found
+	 * @return array|bool the post-data or false if not found
 	 */
 	public function get_post_by_id($id)
 	{
@@ -398,7 +398,7 @@ class BS_DAO_Posts extends FWS_Singleton
 	 * @param int $id the post-id
 	 * @param int $fid the forum-id
 	 * @param int $tid the topic-id
-	 * @return array the post-data or false if not found
+	 * @return array|bool the post-data or false if not found
 	 */
 	public function get_post_from_topic($id,$fid,$tid)
 	{
@@ -530,7 +530,7 @@ class BS_DAO_Posts extends FWS_Singleton
 	 *
 	 * @param int $id the post-id
 	 * @param int $tid the topic-id
-	 * @return int the post-id or false if not found
+	 * @return int|bool the post-id or false if not found
 	 */
 	public function get_next_post_id($id,$tid)
 	{
@@ -785,10 +785,9 @@ class BS_DAO_Posts extends FWS_Singleton
 			 WHERE threadid = '.$id.$exclude.'
 			 ORDER BY id DESC'
 		);
-		if(!$data)
+		if($data === false)
 			return array('id' => 0,'post_user' => 0,'post_an_user' => null,'post_time' => 0);
-		
-		return $data;
+		return (array)$data;
 	}
 	
 	/**

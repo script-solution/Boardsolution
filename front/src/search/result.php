@@ -29,8 +29,8 @@ interface BS_Front_Search_Result
 	/**
 	 * Should display the search-result for the given search
 	 *
-	 * @param BS_Front_Search_Manager the search-object
-	 * @param BS_Front_Search_Request the request-object
+	 * @param BS_Front_Search_Manager $search the search-object
+	 * @param BS_Front_Search_Request $request the request-object
 	 */
 	public function display_result($search,$request);
 	

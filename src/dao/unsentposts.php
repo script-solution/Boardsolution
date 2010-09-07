@@ -85,7 +85,7 @@ class BS_DAO_UnsentPosts extends FWS_Singleton
 	 * Deletes all entries for the given users
 	 *
 	 * @param array $ids the user-ids
-	 * @return unknown
+	 * @return int the number of affected rows
 	 */
 	public function delete_by_users($ids)
 	{

@@ -35,7 +35,7 @@ class BS_DAO_AddFields extends FWS_Singleton
 	 * Returns the field with given id
 	 *
 	 * @param int $id the id
-	 * @return array the row or false if not found
+	 * @return array|bool the row or false if not found
 	 */
 	public function get_by_id($id)
 	{

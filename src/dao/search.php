@@ -35,7 +35,7 @@ class BS_DAO_Search extends FWS_Singleton
 	 * Returns the entry with given id
 	 *
 	 * @param int $id the search-id
-	 * @return array the data or false if not found
+	 * @return array|bool the data or false if not found
 	 */
 	public function get_by_id($id)
 	{

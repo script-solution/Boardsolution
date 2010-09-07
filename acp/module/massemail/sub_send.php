@@ -127,6 +127,8 @@ final class BS_ACP_SubModule_massemail_send extends BS_ACP_SubModule implements 
 
 	/**
 	 * Transfers the mails to send to the session
+	 * 
+	 * @return bool true if successfull
 	 */
 	private function _transfer_to_session()
 	{

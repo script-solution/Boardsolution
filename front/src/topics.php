@@ -686,7 +686,7 @@ final class BS_Front_Topics extends FWS_Object
 	 * generates the topic-starter
 	 *
 	 * @param array $data the topic-data
-	 * @return string the result-string
+	 * @return array an array with key 'date' and key 'username'
 	 */
 	private function _get_topic_starter(&$data)
 	{
@@ -711,7 +711,7 @@ final class BS_Front_Topics extends FWS_Object
 	 * @param array $data the topic-data
 	 * @param string $posts_order the post-order: ASC or DESC
 	 * @param int $pages the number of pages
-	 * @return string the result-string
+	 * @return array|bool an array with keys 'date', 'username' and 'url', or false if no last-post
 	 */
 	private function _get_topic_lastpost(&$data,$posts_order,$pages)
 	{

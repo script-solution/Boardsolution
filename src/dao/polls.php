@@ -42,7 +42,7 @@ class BS_DAO_Polls extends FWS_Singleton
 	 * </code>
 	 *
 	 * @param int $tid the topic-id
-	 * @return array the data
+	 * @return array|bool the data or false if failed
 	 */
 	public function get_data_by_topic_id($tid)
 	{
@@ -121,7 +121,7 @@ class BS_DAO_Polls extends FWS_Singleton
 	 * Votes for the given option-id (!)
 	 *
 	 * @param int $id the option-id
-	 * @return the number of affected rows
+	 * @return int the number of affected rows
 	 */
 	public function vote($id)
 	{
@@ -140,7 +140,7 @@ class BS_DAO_Polls extends FWS_Singleton
 	 *
 	 * @param int $id the poll-id
 	 * @param int $multichoice wether multichoice is enabled
-	 * @return the number of affected rows
+	 * @return int the number of affected rows
 	 */
 	public function set_multichoice($id,$multichoice)
 	{
@@ -158,7 +158,7 @@ class BS_DAO_Polls extends FWS_Singleton
 	 * Deletes all polls with given ids
 	 *
 	 * @param array $ids the poll-ids
-	 * @return the number of affected rows
+	 * @return int the number of affected rows
 	 */
 	public function delete_by_ids($ids)
 	{

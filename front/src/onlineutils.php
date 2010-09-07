@@ -23,7 +23,6 @@ final class BS_Front_OnlineUtils extends FWS_UtilBase
 	 * Adds a block with the currently online users
 	 * 
 	 * @param string $loc the location: forums, topics, posts
-	 * @return string the html-code
 	 */
 	public static function add_currently_online($loc = 'forums')
 	{
@@ -48,7 +47,7 @@ final class BS_Front_OnlineUtils extends FWS_UtilBase
 	 * Gathers the information to display the currently online user
 	 * 
 	 * @param string $location the location: all, forums, topics, posts
-	 * @return an array of the form:
+	 * @return array an array of the form:
 	 * 	<code>
 	 * 		array(
 	 * 			'conclusion' => ...,

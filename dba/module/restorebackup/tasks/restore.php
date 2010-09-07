@@ -70,7 +70,7 @@ final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends FWS_Object
 
 		// import file
 		$filename = $this->_get_next_file($pos);
-		if($filename != '')
+		if($filename)
 		{
 			$statements = FWS_SQLParser::get_statements_from_file('backups/'.$filename);
 			foreach($statements as $sql)
@@ -86,7 +86,7 @@ final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends FWS_Object
 	 * determines the next file to import
 	 * 
 	 * @param int $pos the current position
-	 * @return string the next file
+	 * @return string|bool the next file or false if we're done
 	 */
 	private function _get_next_file($pos)
 	{

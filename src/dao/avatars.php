@@ -143,7 +143,7 @@ class BS_DAO_Avatars extends FWS_Singleton
 	 * Returns the avatar with the given id
 	 *
 	 * @param int $id the avatar-id
-	 * @return array the avatar or false if not found
+	 * @return array|bool the avatar or false if not found
 	 */
 	public function get_by_id($id)
 	{

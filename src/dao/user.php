@@ -110,7 +110,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 * @param int $id the user-id
 	 * @param int $active wether the user has to be activated: -1 = indifferent, 0 = no, 1 = yes
 	 * @param int $banned wether the user has to be banned: -1 = indifferent, 0 = no, 1 = yes
-	 * @return array the user-data as associative array or false if not found
+	 * @return array|bool the user-data as associative array or false if not found
 	 */
 	public function get_user_by_id($id,$active = 1,$banned = 0)
 	{
@@ -153,7 +153,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 * Returns the user with the given name
 	 *
 	 * @param string $name the name of the user (case-sensitive and complete!)
-	 * @return array the user-data or false if not found
+	 * @return array|bool the user-data or false if not found
 	 */
 	public function get_user_by_name($name)
 	{
@@ -179,7 +179,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 * Returns the user with the given email
 	 *
 	 * @param string $email the email-address of the user
-	 * @return array the user-data
+	 * @return array|bool the user-data or false if it failed
 	 */
 	public function get_user_by_email($email)
 	{

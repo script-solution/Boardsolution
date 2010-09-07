@@ -151,7 +151,7 @@ class BS_DAO_Topics extends FWS_Singleton
 	 * Returns the topic-data for the given id
 	 *
 	 * @param int $tid the topic-id
-	 * @return array the topic-data or false if not found
+	 * @return array|bool the topic-data or false if not found
 	 */
 	public function get_by_id($tid)
 	{
@@ -372,7 +372,7 @@ class BS_DAO_Topics extends FWS_Singleton
 	 *
 	 * @param int $fid the forum-id
 	 * @param int $tid the topic-id
-	 * @return array the topic-data or false if not found
+	 * @return array|bool the topic-data or false if not found
 	 */
 	public function get_topic_for_cache($fid,$tid)
 	{
@@ -578,7 +578,7 @@ class BS_DAO_Topics extends FWS_Singleton
 	 *
 	 * @param string $field the field-name
 	 * @param array $ids the ids
-	 * @return unknown
+	 * @return int the number of affected rows
 	 */
 	protected function delete_by($field,$ids)
 	{

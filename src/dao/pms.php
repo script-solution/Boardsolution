@@ -83,7 +83,7 @@ class BS_DAO_PMs extends FWS_Singleton
 	 * Returns the data of the PM with given id
 	 *
 	 * @param int $id the PM-id
-	 * @return array the PM-data or false if not found
+	 * @return array|bool the PM-data or false if not found
 	 */
 	public function get_by_id($id)
 	{
@@ -107,7 +107,7 @@ class BS_DAO_PMs extends FWS_Singleton
 	 *
 	 * @param int $id the PM-id
 	 * @param int $userid the user-id
-	 * @return array the PM-details
+	 * @return array|bool the PM-details or false if not found
 	 */
 	public function get_pm_details($id,$userid)
 	{
@@ -172,7 +172,7 @@ class BS_DAO_PMs extends FWS_Singleton
 	 * @param int $id the PM-id
 	 * @param string $folder the folder: inbox or outbox
 	 * @param int $user_id the user-id
-	 * @return array the PM-data or false if not found
+	 * @return array|bool the PM-data or false if not found
 	 */
 	public function get_pm_in_folder($id,$folder,$user_id)
 	{
@@ -339,7 +339,7 @@ class BS_DAO_PMs extends FWS_Singleton
 	 * @param int $pm_id the PM-id where to start
 	 * @param int $user_id the user-id
 	 * @param string $folder the folder: inbox or outbox
-	 * @return int the PM-id or false if not found
+	 * @return int|bool the PM-id or false if not found
 	 */
 	public function get_prev_pm_id_of_user($pm_id,$user_id,$folder = 'inbox')
 	{
@@ -352,7 +352,7 @@ class BS_DAO_PMs extends FWS_Singleton
 	 * @param int $pm_id the PM-id where to start
 	 * @param int $user_id the user-id
 	 * @param string $folder the folder: inbox or outbox
-	 * @return int the PM-id or false if not found
+	 * @return int|bool the PM-id or false if not found
 	 */
 	public function get_next_pm_id_of_user($pm_id,$user_id,$folder = 'inbox')
 	{
@@ -500,7 +500,7 @@ class BS_DAO_PMs extends FWS_Singleton
 	 * @param int $user_id the user-id
 	 * @param string $folder the folder: inbox or outbox
 	 * @param string $op the operation: &lt; or &gt;
-	 * @return int the id or false if not found
+	 * @return int|bool the id or false if not found
 	 */
 	protected function get_np_pm_id_of_user($pm_id,$user_id,$folder = 'inbox',$op = '>')
 	{

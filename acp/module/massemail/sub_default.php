@@ -201,7 +201,7 @@ final class BS_ACP_SubModule_massemail_default extends BS_ACP_SubModule
 	/**
 	 * Sends the mail via BCC
 	 * 
-	 * @return string the error-message or true
+	 * @return string|bool the error-message or true
 	 */
 	private function _send_emails_bcc()
 	{

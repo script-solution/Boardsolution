@@ -58,6 +58,12 @@ final class BS_Session_Storage_DB extends FWS_Object implements FWS_Session_Stor
 		BS_DAO::get_sessions()->delete_by_sids($ids);
 	}
 	
+	/**
+	 * Builds the fields to store
+	 * 
+	 * @param BS_Session_Data $user
+	 * @return array the fields to store
+	 */
 	private function _get_fields($user)
 	{
 		return array(

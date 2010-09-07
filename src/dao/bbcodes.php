@@ -62,6 +62,7 @@ class BS_DAO_BBCodes extends FWS_Singleton
 	 *
 	 * @param string $name the tag-name
 	 * @param int $id the bbcode-id (0 = ignore)
+	 * @return bool true if it exists
 	 */
 	public function name_exists($name,$id = 0)
 	{
@@ -77,7 +78,7 @@ class BS_DAO_BBCodes extends FWS_Singleton
 	
 	/**
 	 * @param int $id the bbcode-id
-	 * @return array the tag with given id or false if not found
+	 * @return array|bool the tag with given id or false if not found
 	 */
 	public function get_by_id($id)
 	{

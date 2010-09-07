@@ -35,7 +35,7 @@ class BS_DAO_UserGroups extends FWS_Singleton
 	 * Returns the data of the group with given id
 	 *
 	 * @param int $id the group-id
-	 * @return array the data of the group or false if not found
+	 * @return array|bool the data of the group or false if not found
 	 */
 	public function get_by_id($id)
 	{

@@ -48,7 +48,6 @@ final class BS_ACP_Module_Forums_Helper extends FWS_UtilBase
 	 * Refreshes the intern-table including the cache
 	 *
 	 * @param int $id the forum-id
-	 * @param array $changeable the changeable-data
 	 * @param string $selected_user a string with the user-ids separated by ","
 	 * @param array $selected_groups an associative array of the form:
 	 * 	<code>array(<group_id> => <selected>)</code>

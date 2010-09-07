@@ -502,7 +502,7 @@ final class BS_Auth extends FWS_Object
 	 *
 	 * @param int $action the action to perform (BS_MODE_REPLY, BS_MODE_START_TOPIC, ...)
 	 * @param int $fid the id of the forum
-	 * @return true if the user has permission
+	 * @return bool true if the user has permission
 	 */
 	public function has_permission_in_forum($action,$fid)
 	{

@@ -123,7 +123,7 @@ class BS_DAO_LogErrors extends FWS_Singleton
 	 * Creates a new log-entry with the given fields
 	 *
 	 * @param array $fields the fields to set
-	 * @return int the used id or false if failed
+	 * @return int|bool the used id or false if failed
 	 */
 	public function create($fields)
 	{

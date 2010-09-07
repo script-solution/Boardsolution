@@ -54,7 +54,7 @@ class BS_DAO_Activation extends FWS_Singleton
 	 * Returns the entry of the given user
 	 *
 	 * @param int $id the user-id
-	 * @return array the entry
+	 * @return bool|array the entry or false if it failed
 	 */
 	public function get_by_user($id)
 	{

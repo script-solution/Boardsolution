@@ -235,7 +235,7 @@ final class BS_Functions extends FWS_Object
 	 * @param string $name the name of the area to clap
 	 * @param string $url the URL for the clap-link
 	 * @param string $display the display-value to show the block
-	 * @return an array of the form:
+	 * @return array an array of the form:
 	 * 	<code>
 	 * 		array(
 	 * 			'divparams' => <additionalDivParameters>,

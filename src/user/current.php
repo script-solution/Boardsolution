@@ -255,7 +255,7 @@ final class BS_User_Current extends FWS_User_Current
 	 * @see FWS_User_Current::set_userdata()
 	 *
 	 * @param int $id
-	 * @param string $user
+	 * @param string|bool $user
 	 * @return int
 	 */
 	protected function set_userdata($id,$user = false)

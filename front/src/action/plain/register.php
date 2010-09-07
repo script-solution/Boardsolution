@@ -22,7 +22,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 	/**
 	 * Returns the default instance (variables read from POST) of this class.
 	 *
-	 * @return BS_Front_Action_Plain_Register the register-object or the error-message if anything
+	 * @return BS_Front_Action_Plain_Register|string the register-object or the error-message if anything
 	 * 	went wrong
 	 */
 	public static function get_default()

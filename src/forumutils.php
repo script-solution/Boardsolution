@@ -23,7 +23,6 @@ final class BS_ForumUtils extends FWS_UtilBase
 	 * Builds all childforums of the given parent-id (0 = all forums)
 	 *
 	 * @param int $parent_id the parent-id
-	 * @return string the html-code
 	 */
 	public static function get_forum_list($parent_id)
 	{
@@ -591,7 +590,7 @@ final class BS_ForumUtils extends FWS_UtilBase
 	 *
 	 * @param array $data the forum-data
 	 * @param string $post_order the post-order: ASC or DESC
-	 * @return array the lastpost-informations
+	 * @return array|bool the lastpost-informations or false if there is no last post
 	 */
 	private static function _get_forum_lastpost($data,$post_order)
 	{

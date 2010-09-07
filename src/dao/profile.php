@@ -72,7 +72,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 * @param int $id the user id
 	 * @param int $active wether the user has to be activated: -1 = indifferent, 0 = no, 1 = yes
 	 * @param int $banned wether the user has to be banned: -1 = indifferent, 0 = no, 1 = yes
-	 * @return array the user-data or false if not found
+	 * @return array|bool the user-data or false if not found
 	 */
 	public function get_user_by_id($id,$active = 1,$banned = 0)
 	{
@@ -123,7 +123,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 * Returns the user with the given name
 	 * 
 	 * @param string $name the name of the user (case-sensitive and complete!)
-	 * @return array the user-data or false if not found
+	 * @return array|bool the user-data or false if not found
 	 */
 	public function get_user_by_name($name)
 	{
@@ -149,7 +149,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 * Returns the user with the given email
 	 * 
 	 * @param string $email the email-address of the user
-	 * @return array the user-data
+	 * @return array|bool the user-data
 	 */
 	public function get_user_by_email($email)
 	{
@@ -159,7 +159,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	/**
 	 * Returns all users that have the given group-id as main-group
 	 * 
-	 * @param int gid the group-id
+	 * @param int $gid the group-id
 	 * @return array all found users
 	 */
 	public function get_users_by_maingroup($gid)
@@ -256,7 +256,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	/**
 	 * Returns the newest user
 	 *
-	 * @return array the user-data
+	 * @return array|bool the user-data or false if it failed
 	 */
 	public function get_newest_user()
 	{
@@ -274,7 +274,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	/**
 	 * Returns the latest active user
 	 *
-	 * @return array the user-data
+	 * @return array|bool the user-data or false if it failed
 	 */
 	public function get_last_active_user()
 	{
@@ -440,7 +440,7 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 	 *	)
 	 * </code>
 	 *
-	 * @return unknown
+	 * @return array the array
 	 */
 	public function get_users_stats_grouped_by_regdate()
 	{

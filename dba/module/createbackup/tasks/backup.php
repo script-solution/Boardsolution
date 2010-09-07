@@ -247,7 +247,7 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends FWS_Object implement
 		$res = FWS_FileUtils::write($file,$content);
 		if($res)
 			@chmod($file,0666);
-		return $res;
+		return $res !== false;
 	}
 
 	protected function get_dump_vars()

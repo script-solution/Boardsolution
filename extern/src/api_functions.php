@@ -13,10 +13,9 @@
 /**
  * Loads the API-module with given name and returns an instance
  * 
- * @param string $path the path to BS
  * @param string $name the name of the module
  * @param array $params an array with parameters to pass to the module
- * @return mixed the instance if successfull, otherwise false
+ * @return BS_API_Module|bool the instance if successfull, otherwise false
  */
 function BS_API_get_module($name,$params = null)
 {
