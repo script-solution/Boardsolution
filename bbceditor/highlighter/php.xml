@@ -1174,6 +1174,10 @@
 			<kw>static</kw>
 			<kw>final</kw>
 			<kw>throw</kw>
+			<kw>try</kw>
+			<kw>catch</kw>
+			<kw>namespace</kw>
+			<kw>use</kw>
 		</def>
 	</keywords>
 	<colors>
