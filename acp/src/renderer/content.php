@@ -95,7 +95,7 @@ final class BS_ACP_Renderer_Content extends FWS_Document_Renderer_HTML_Default
 		
 		if($user->is_loggedin() && !$auth->has_access_to_module($doc->get_module_name()))
 		{
-			if($this->_module_name == 'index')
+			if($doc->get_module_name() == 'index')
 				$msgs->add_notice($locale->lang('welcome_message'));
 			else
 				$msgs->add_error($locale->lang('access_to_module_denied'));

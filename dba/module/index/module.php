@@ -94,10 +94,16 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 		{
 			foreach($rows as $data)
 			{
-				$size = $data['Data_length'] + $data['Index_length'] + $data['Data_free'];
+				$overhead = 0;
+				$size = $data['Data_length'] + $data['Index_length'];
+				if($data['Engine'] != 'InnoDB')
+				{
+					$size += $data['Data_free'];
+					$overhead = $data['Data_free'];
+				}
 				$total_size += $size;
 				$total_rows += $data['Rows'];
-				$total_overhead += $data['Data_free'];
+				$total_overhead += $overhead;
 				
 				$create_date = BS_DBA_Utils::get_instance()->mysql_date_to_time($data['Create_time']);
 				
@@ -111,7 +117,7 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 					'size' => number_format($size,0,',','.').' Bytes',
 					'entries' => $data['Rows'] ? $data['Rows'] : '0',
 					'date_created' => $create_date,
-					'overhead' => number_format($data['Data_free'],0,',','.'). ' Bytes'
+					'overhead' => number_format($overhead,0,',','.'). ' Bytes'
 				);
 			}
 		}

@@ -34,12 +34,6 @@ final class BS_BBCode_Content_Code extends BS_BBCode_Content_Default
 	 */
 	private $_old_param;
 	
-	/**
-	 * @see BS_BBCode_Content_Default::get_param()
-	 *
-	 * @param unknown_type $param
-	 * @return unknown
-	 */
 	public function get_param($param)
 	{
 		$cfg = FWS_Props::get()->cfg();

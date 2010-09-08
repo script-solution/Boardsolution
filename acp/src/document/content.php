@@ -20,9 +20,10 @@
 final class BS_ACP_Document_Content extends BS_ACP_Document
 {
 	/**
-	 * @see FWS_Document::use_default_renderer()
+	 * Returns the default renderer. If it is already set the instance will be returned. Otherwise
+	 * it will be created, set and returned.
 	 *
-	 * @return BS_ACP_Renderer_Content
+	 * @return BS_ACP_Renderer_Content the default renderer
 	 */
 	public function use_default_renderer()
 	{

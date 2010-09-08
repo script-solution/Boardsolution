@@ -450,8 +450,7 @@ final class BS_BBCode_Parser extends FWS_Object
 	 * Corrects all tags if possible. if it is not possible the method returns false
 	 *
 	 * @param array $tags the preg_match_all() result with the found tags
-	 * @return array the error-code of the format <code>array(<pos>,<code>)</code> or true if
-	 * 	everything is ok.
+	 * @throws BS_BBCode_Exception_Syntax if a syntax-error is detected
 	 */
 	private function _correct_tags(&$tags)
 	{
@@ -664,8 +663,6 @@ final class BS_BBCode_Parser extends FWS_Object
 
 			$open_count--;
 		}
-
-		return true;
 	}
 
 	/**
@@ -693,6 +690,7 @@ final class BS_BBCode_Parser extends FWS_Object
 	 *
 	 * @param array $current the current allowed content
 	 * @param array $new the new allowed content
+	 * @return array the next allowed content
 	 */
 	private function _get_allowed_content($current,$new)
 	{

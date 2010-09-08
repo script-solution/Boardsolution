@@ -67,7 +67,7 @@ final class BS_Front_Action_change_password_default extends BS_Front_Action_Base
 		$groups = FWS_Array_Utils::advanced_explode(',',$userdata['user_group']);
 		$status = BS_Community_User::get_status_from_groups($groups);
 		$u = new BS_Community_User(
-			$user_id,$userdata['user_name'],$userdata['user_email'],$status,$dbpw,
+			$user_id,$userdata['user_name'],$userdata['user_email'],$status,md5($password),
 			$input->unescape_value($password,'post')
 		);
 		BS_Community_Manager::get_instance()->fire_user_changed($u);

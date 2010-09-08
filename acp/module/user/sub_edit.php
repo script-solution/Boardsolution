@@ -117,7 +117,7 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		if($av != $locale->lang('nopictureavailable'))
 		{
 			$avatar .= '<br />'.$locale->lang('delete').': ';
-			$avatar .= $form->get_radio_yesno('remove_avatar',0);
+			$avatar .= $form->get_radio_yesno('remove_avatar',false);
 		}
 
 		$tpl->add_variables(array(

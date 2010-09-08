@@ -101,7 +101,7 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 	 *
 	 * @var array
 	 */
-	private $_receiver_mails = array();
+	private $_receiver_email = array();
 	
 	/**
 	 * The number of PMs in the inboxes of the receivers

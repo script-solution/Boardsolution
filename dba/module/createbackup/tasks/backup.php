@@ -40,6 +40,7 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends FWS_Object implement
 			{
 				$msgs = FWS_Props::get()->msgs();
 				$doc = FWS_Props::get()->doc();
+				$locale = FWS_Props::get()->locale();
 				$msgs->add_error($locale->lang('no_tables_selected'));
 				$doc->get_module()->set_error();
 				return;

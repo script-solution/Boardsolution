@@ -37,7 +37,8 @@ final class BS_DBA_Document extends FWS_Document
 	}
 	
 	/**
-	 * @see FWS_Document::use_default_renderer
+	 * Returns the default renderer. If it is already set the instance will be returned. Otherwise
+	 * it will be created, set and returned.
 	 *
 	 * @return BS_DBA_Renderer_HTML
 	 */

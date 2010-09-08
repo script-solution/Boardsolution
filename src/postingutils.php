@@ -89,7 +89,6 @@ final class BS_PostingUtils extends FWS_UtilBase
 	 * @param boolean $show_quote do you want to show the quote-button?
 	 * @param BS_URL $quote_url the url to quote a post
 	 * @param int $number the number of the bbcode-area (default 1)
-	 * @return string the html-code
 	 */
 	public static function add_topic_review($topic_data,$show_quote = true,$quote_url = null,$number = 1)
 	{

@@ -39,7 +39,8 @@ final class BS_Front_Document extends BS_Document
 	}
 	
 	/**
-	 * @see FWS_Document::use_default_renderer()
+	 * Returns the default renderer. If it is already set the instance will be returned. Otherwise
+	 * it will be created, set and returned.
 	 *
 	 * @return BS_Front_Renderer_HTML
 	 */

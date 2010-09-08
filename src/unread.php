@@ -336,7 +336,6 @@ final class BS_Unread extends FWS_Object
 		$this->_unread_threads = array();
 		$this->_unread_forums = array();
 		$this->_unread_news = array();
-		$this->_lastpost_time = time();
 		
 		$this->_storage->remove_all();
 	}

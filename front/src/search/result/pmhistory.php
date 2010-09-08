@@ -55,7 +55,6 @@ final class BS_Front_Search_Result_PMHistory extends FWS_Object implements BS_Fr
 		$pmlist = BS_DAO::get_pms()->get_pms_of_user_by_ids(
 			$user->get_user_id(),$ids,$sql_order,$ad,$pagination->get_start(),$end
 		);
-		$this->_pm_subject = preg_replace('/^(RE: )*(.*)/','\\2',$pmlist[0]['pm_title']);
 
 		$tpl->set_template('inc_message_review.htm');
 		
