@@ -95,8 +95,11 @@ final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends FWS_Object
 		
 		if($handle = @opendir('backups'))
 		{
-			if($pos == 0)
+			if($pos == 0 && is_file($data['prefix'].'structure.sql'))
 				return $data['prefix'].'structure.sql';
+			// pretend that we had a structure.sql
+			if(!is_file($data['prefix'].'structure.sql'))
+				$pos++;
 		
 			$files = array();
 			while($file = readdir($handle))
