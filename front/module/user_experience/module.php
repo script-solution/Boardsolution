@@ -23,7 +23,7 @@ define('BS_IMG_HEIGHT',11);
 /**
  * Just a shortcut for the half-image-height :)
  */
-define('BS_HALF_HEIGHT',BS_IMG_HEIGHT / 2);
+define('BS_HALF_HEIGHT',(int)(BS_IMG_HEIGHT / 2));
 
 /**
  * The background-color (hexadecimal)
