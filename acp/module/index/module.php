@@ -44,7 +44,7 @@ final class BS_ACP_Module_index extends BS_ACP_Module
 		// check board-url
 		$host = $input->get_var('HTTP_HOST','server');
 		if(!preg_match('/^https?:\/\/'.preg_quote($host,'/').'/',$cfg['board_url']))
-			$msgs->add_warning($locale->lang('board_url_invalid'));
+			$msgs->add_warning(sprintf($locale->lang('board_url_invalid'),$host,$cfg['board_url']));
 		
 		// check if all required files and folders are writable
 		$writable_items = array(
