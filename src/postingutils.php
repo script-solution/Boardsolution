@@ -499,10 +499,15 @@ final class BS_PostingUtils extends FWS_UtilBase
 		// show the edited-information if the post has been edited
 	  if($show_edited_notice && $post_data['edited_times'] > 0)
 	  {
-	  	$user = BS_UserUtils::get_link(
-	  		$post_data['edited_user'],$post_data['edited_user_name'],$post_data['edited_user_group'],
-	  		false
-	  	);
+	  	if($post_data['edited_user'] > 0)
+	  	{
+		  	$user = BS_UserUtils::get_link(
+		  		$post_data['edited_user'],$post_data['edited_user_name'],$post_data['edited_user_group'],
+		  		false
+		  	);
+	  	}
+	  	else
+	  		$user = '<i>'.BS_ANONYMOUS_NAME.'</i>';
 	    
 	    $tpl->add_variables(array(
 	    	'edited' => sprintf(

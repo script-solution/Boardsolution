@@ -941,6 +941,24 @@ class BS_DAO_Posts extends FWS_Singleton
 	}
 	
 	/**
+	 * Assignes all edits of the given user-id to guests (sets the user-id to 0)
+	 *
+	 * @param int $id the user-id
+	 * @return int the number of affected rows
+	 */
+	public function assign_edited_to_guest($id)
+	{
+		$db = FWS_Props::get()->db();
+
+		if(!FWS_Helper::is_integer($id) || $id <= 0)
+			FWS_Helper::def_error('intgt0','id',$id);
+		
+		return $db->update(BS_TB_POSTS,'WHERE edited_user = '.$id,array(
+			'edited_user' => 0
+		));
+	}
+	
+	/**
 	 * Deletes all posts with given ids
 	 *
 	 * @param array $ids all ids to delete

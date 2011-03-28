@@ -51,6 +51,7 @@ final class BS_ACP_Action_user_delete extends BS_ACP_Action_Base
 				$user_name = addslashes($data['user_name']);
 
 			BS_DAO::get_posts()->assign_posts_to_guest($data['id'],$user_name);
+			BS_DAO::get_posts()->assign_edited_to_guest($data['id']);
 			BS_DAO::get_topics()->assign_topics_to_guest($data['id'],$user_name);
 
 			$existing_ids[] = $data['id'];
