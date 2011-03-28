@@ -22,12 +22,12 @@
 			{endif}
 					
 			{if gisloggedin && enable_pms}
-			<a title="{glocale.lang('privatemsgs')} ( {unread_pm_count} {glocale.lang('newmsgs')} )"
+			<a title="{glocale.lang('privatemsgs')} ({unread_pm_count} {glocale.lang('newmsgs')})"
 			   href="{gurl.simple_url('userprofile','&amp;$URL_SUB=pmoverview')}">{glocale.lang('privatemsgs')}</a>
 			({if unread_pm_count > 0}<span class="bs_unread">{unread_pm_count}</span>{else}0{endif}) &middot;
 			{endif}
 			
-			<a title="{glocale.lang('unread_threads')}"
+			<a title="{unread_topics_title}"
 			   href="{gurl.simple_url('unread')}">{glocale.lang('unread_threads')}</a>
 			({if unread_topic_count > 0}<span class="bs_unread">{unread_topic_count}</span>
 			<a href="{first_unread_url}"><img src="{guser.get_theme_item_path('images/unread/first_unread_post.gif')}"

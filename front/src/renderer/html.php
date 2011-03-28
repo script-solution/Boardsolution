@@ -465,8 +465,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		  	);
 		  	
 				$news_num = $unread->get_unread_news_num();
-				$unread_news_title = $locale->lang('portal').' ( ';
-				$unread_news_title .= sprintf($locale->lang('unread_news'),$news_num).' )';
+				$unread_news_title = $locale->lang('portal').' (';
+				$unread_news_title .= sprintf($locale->lang('unread_news'),$news_num).')';
 			}
 			else
 			{
@@ -537,6 +537,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				'first_unread_url' => $first_unread_url,
 				'unread_news_count' => $unread->get_unread_news_num(),
 				'unread_topic_count' => $unread->get_length(),
+				'unread_topics_title' => sprintf($locale->lang('unread_topics_title'),$unread->get_length()),
 				'unread_pm_count' => $user->is_loggedin() ? $user->get_profile_val('unread_pms') : 0,
 			),'inc_headline.htm');
 		}
