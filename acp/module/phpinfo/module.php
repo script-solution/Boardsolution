@@ -43,7 +43,15 @@ final class BS_ACP_Module_phpinfo extends BS_ACP_Module
 	public function run()
 	{
 		$tpl = FWS_Props::get()->tpl();
+		$locale = FWS_Props::get()->locale();
 
+		$phpinfo = new ReflectionFunction('phpinfo');
+		if($phpinfo->isDisabled())
+		{
+			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('phpinfo_disabled'));
+			return;
+		}
+		
 		ob_start();
 		phpinfo(INFO_GENERAL | INFO_CONFIGURATION | INFO_MODULES | INFO_VARIABLES);
 		$phpinfo = ob_get_contents();
