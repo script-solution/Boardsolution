@@ -46,7 +46,7 @@ define('BS_FWS_PATH','../FrameWorkSolution/');
  * 	1 = display just time, query-count and memory-usage
  * 	2 = display all infos
  */
-define('BS_DEBUG',2);
+define('BS_DEBUG',1);
 
 /**
  * Legt fest ob der Calltrace bei Fehler angezeigt werden soll, d.h. welche Funktionen aufgerufen
@@ -183,6 +183,14 @@ define('BS_MM_OPERATIONS_PER_CYCLE',200);
  * slow internet connections.
  */
 define('BS_ENABLE_ADMIN_GZIP',false);
+
+/**
+ * Der Username der beim Loeschen von Usern verwendet wird um die Themen und Beitraege zu
+ * anomymisieren.
+ * 
+ * The username that is used when deleting users to make the topics and posts anonymous.
+ */
+define('BS_ANONYMOUS_NAME','Anonymous');
 
 ############################ FORUMS ############################
 

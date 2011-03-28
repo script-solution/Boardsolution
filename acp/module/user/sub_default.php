@@ -82,8 +82,11 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 			}
 			else if($com->is_user_management_enabled())
 			{
-				$yes_url = $url->set('at',BS_ACP_ACTION_USER_DELETE)->to_url();
-				$message = $locale->lang('delete_accounts');
+				$yes_url = $url->set('at',BS_ACP_ACTION_USER_DELETE);
+				if($type == 'deleteanon')
+					$yes_url = $url->set('anonymous',1);
+				$yes_url = $yes_url->to_url();
+				$message = $locale->lang($type == 'deleteanon' ? 'delete_anon_accounts' : 'delete_accounts');
 			}
 			
 			$nurl = clone $url;

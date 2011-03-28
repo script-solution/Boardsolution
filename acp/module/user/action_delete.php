@@ -34,6 +34,7 @@ final class BS_ACP_Action_user_delete extends BS_ACP_Action_Base
 		if(!($ids = FWS_StringHelper::get_ids($idstr)))
 			return 'Got an invalid id-string via GET';
 		
+		$anonymous = $input->isset_var('anonymous','get');
 		$userdatas = array();
 		
 		// at first e collect all existing users and update their topics and posts so that they
@@ -44,7 +45,10 @@ final class BS_ACP_Action_user_delete extends BS_ACP_Action_Base
 			if($data['id'] == $user->get_user_id())
 				continue;
 
-			$user_name = addslashes($data['user_name']);
+			if($anonymous)
+				$user_name = addslashes(BS_ANONYMOUS_NAME);
+			else
+				$user_name = addslashes($data['user_name']);
 
 			BS_DAO::get_posts()->assign_posts_to_guest($data['id'],$user_name);
 			BS_DAO::get_topics()->assign_topics_to_guest($data['id'],$user_name);
