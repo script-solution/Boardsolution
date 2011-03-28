@@ -64,7 +64,7 @@
 				{if item:is_default == false}
 				<a style="float: right;" href="
 				{if view == 'search'}
-				{gurl.simple_acp_url(0,'&amp;action=search&amp;kw='~kw~'&amp;id='~item:id~'&amp;at='~at)}
+				{gurl.simple_acp_url(0,'&amp;action=search&amp;kw='~keyword~'&amp;id='~item:id~'&amp;at='~at)}
 				{else}{gurl.simple_acp_url(0,'&amp;action=items&amp;gid='~gid~'&amp;id='~item:id~'&amp;at='~at)}
 				{endif}
 				"><img src="{gpath}acp/images/reset.png" alt="{glocale.lang('revert_setting')}" title="{glocale.lang('revert_setting')}" /></a>

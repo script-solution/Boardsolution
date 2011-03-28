@@ -58,7 +58,7 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 		if($keyword != null)
 		{
 			$url = BS_URL::get_acpsub_url();
-			$url->set('kw',$keyword);
+			$url->set('kw',$input->unescape_value($keyword,'get'));
 			$renderer->add_breadcrumb($locale->lang('config_search_result_title'),$url->to_url());
 		}
 	}
@@ -99,21 +99,20 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 		$hidden_fields['action'] = 'search';
 		
 		$url = BS_URL::get_acpsub_url();
-		$url->set('kw',$keyword);
+		$url->set('kw',$input->unescape_value($keyword,'get'));
 		
 		$tpl->add_variables(array(
 			'form_target' => $url->to_url(),
 			'action_type' => BS_ACP_ACTION_SAVE_SETTINGS,
-			'title' => sprintf($locale->lang('config_search_result'),$this->_keyword),
+			'title' => sprintf($locale->lang('config_search_result'),$input->unescape_value($keyword,'get')),
 			'items' => $items,
 			'hidden_fields' => $hidden_fields,
 			'groups_per_line' => $perline,
 			'group_rows' => $helper->get_groups(0,$perline),
-			'keyword' => $keyword,
+			'keyword' => $input->unescape_value($keyword,'get'),
 			'groups_width' => round(100 / $perline),
 			'at' => BS_ACP_ACTION_REVERT_SETTING,
 			'view' => 'search',
-			'kw' => $keyword,
 			'display_affects_msgs_hints' => $view->has_affects_msgs_settings()
 		));
 	}
