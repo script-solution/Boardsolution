@@ -139,55 +139,55 @@ function toggleForumType()
 		<input type="button" value="{glocale.lang('back')}"
 			onclick="document.location.href = '{gurl.simple_acp_url()}';" />
 	</center>
-	
-	<div class="a_border a_pad">
-		<h1 class="a_topic">{glocale.lang('forum_intern_access')}</h1>
-		<fieldset class="a_form">
-			<dl>
-				<dt>{glocale.lang('forum_is_intern')}:</dt>
-				<dd>
-					{form.get_radio_yesno('is_intern',default:forum_is_intern)}
-					<div class="a_desc">{glocale.lang('forum_is_intern_desc')}</div>
-				</dd>
-			</dl>
-			<dl>
-				<dt>{glocale.lang('access')}:</dt>
-				<dd>
-					<table width="100%" cellpadding="2" cellspacing="0">
-						<tr>
-							<td class="a_main" width="60%" align="center"><u>{glocale.lang('user_groups')}</u></td>
-							<td class="a_main" width="40%" colspan="2" align="center"><u>{glocale.lang('user')}</u></td>
-						</tr>
-						<tr>
-							<td class="a_main" align="center" valign="top">
-							<table width="100%" cellpadding="2" cellspacing="0">
-								{loop usergroups as group}
-								<tr>
-									<td class="a_main" align="left">{group:title}:</td>
-									<td class="a_main">{form.get_radio_yesno('group_access['~group:id~']',group:value)}</td>
-								</tr>
-								{endloop}
-							</table>
-							<br />
-							<div class="a_desc" align="left">{glocale.lang('intern_forums_hint')}</div>
-							</td>
-							<td class="a_main" valign="top">
-							{user_combo}
-							<br />
-							<input style="width: 100%;" type="button" value="{glocale.lang('add_user')}" onclick="FWS_openDefaultPopup('{search_url}','UserSuche',800,700);" /><br />
-							<input style="width: 100%;" type="button" value="{glocale.lang('remove_selected')}" onclick="removeMarkedUser('user_intern');" />
-							</td>
-						</tr>
-					</table>
-				</dd>
-			</dl>
-		</fieldset>
-	</div>
-	<center>
-		<input type="button" value="{glocale.lang('save')}" onclick="transferSelectedUser('user_intern','selectedUsers','formular');" />
-		<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.simple_acp_url()}';" />
-	</center>
 </div>
+
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('forum_intern_access')}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('forum_is_intern')}:</dt>
+			<dd>
+				{form.get_radio_yesno('is_intern',default:forum_is_intern)}
+				<div class="a_desc">{glocale.lang('forum_is_intern_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('access')}:</dt>
+			<dd>
+				<table width="100%" cellpadding="2" cellspacing="0">
+					<tr>
+						<td class="a_main" width="60%" align="center"><u>{glocale.lang('user_groups')}</u></td>
+						<td class="a_main" width="40%" colspan="2" align="center"><u>{glocale.lang('user')}</u></td>
+					</tr>
+					<tr>
+						<td class="a_main" align="center" valign="top">
+						<table width="100%" cellpadding="2" cellspacing="0">
+							{loop usergroups as group}
+							<tr>
+								<td class="a_main" align="left">{group:title}:</td>
+								<td class="a_main">{form.get_radio_yesno('group_access['~group:id~']',group:value)}</td>
+							</tr>
+							{endloop}
+						</table>
+						<br />
+						<div class="a_desc" align="left">{glocale.lang('intern_forums_hint')}</div>
+						</td>
+						<td class="a_main" valign="top">
+						{user_combo}
+						<br />
+						<input style="width: 100%;" type="button" value="{glocale.lang('add_user')}" onclick="FWS_openDefaultPopup('{search_url}','UserSuche',800,700);" /><br />
+						<input style="width: 100%;" type="button" value="{glocale.lang('remove_selected')}" onclick="removeMarkedUser('user_intern');" />
+						</td>
+					</tr>
+				</table>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('save')}" onclick="transferSelectedUser('user_intern','selectedUsers','formular');" />
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.simple_acp_url()}';" />
+</center>
 </form>
 
 <script type="text/javascript">
