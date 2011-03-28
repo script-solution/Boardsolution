@@ -43,6 +43,7 @@ final class BS_ACP_SubModule_vcompare_default extends BS_ACP_SubModule
 		$cbversions = array();
 		$current = new BS_Version(BS_VERSION_ID,BS_VERSION);
 		$vs = BS_Version::read_versions($versions);
+		rsort($vs);
 		foreach($vs as $v)
 		{
 			/* @var $v BS_Version */
