@@ -46,7 +46,7 @@ define('BS_FWS_PATH','../FrameWorkSolution/');
  * 	1 = display just time, query-count and memory-usage
  * 	2 = display all infos
  */
-define('BS_DEBUG',1);
+define('BS_DEBUG',2);
 
 /**
  * Legt fest ob der Calltrace bei Fehler angezeigt werden soll, d.h. welche Funktionen aufgerufen

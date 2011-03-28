@@ -156,6 +156,9 @@ final class BS_BBCode_Section extends FWS_Object
 			// if the parameter is optional, it is valid
 			if($this->_param == '' && $tag_config['param'] != 'required')
 				$valid_param = true;
+			// if the parameter is required and missing, its invalid
+			else if($this->_param == '' && $tag_config['param'] == 'required')
+				$valid_param = false;
 			// if the param has been specified but is not allowed, it is not valid
 			else if($this->_param != '' && $tag_config['param'] == 'no')
 				$valid_param = false;
@@ -207,6 +210,12 @@ final class BS_BBCode_Section extends FWS_Object
 						$result = str_replace('<PARAM>','',$result);
 		
 					return $result;
+				}
+				else
+				{
+					throw new BS_BBCode_Exception_InvalidParam(
+						$this->_name,$this->_param,$tag_config['param_type']
+					);
 				}
 			}
 			else

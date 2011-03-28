@@ -545,6 +545,10 @@ final class BS_URL extends FWS_URL
 	public function __construct()
 	{
 		parent::__construct();
+		// no SID for bots
+		$user = FWS_Props::get()->user();
+		if($user->is_bot())
+			$this->set_sid_policy(self::SID_OFF);
 		// by default we use the frontend-file
 		$this->set_file(strtok(BS_FRONTEND_FILE,'?'));
 	}

@@ -95,10 +95,10 @@ final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends FWS_Object
 		
 		if($handle = @opendir('backups'))
 		{
-			if($pos == 0 && is_file($data['prefix'].'structure.sql'))
+			if($pos == 0 && is_file('backups/'.$data['prefix'].'structure.sql'))
 				return $data['prefix'].'structure.sql';
 			// pretend that we had a structure.sql
-			if(!is_file($data['prefix'].'structure.sql'))
+			if(!is_file('backups/'.$data['prefix'].'structure.sql'))
 				$pos++;
 		
 			$files = array();
@@ -107,14 +107,15 @@ final class BS_DBA_Module_RestoreBackup_Tasks_Restore extends FWS_Object
 				if($file == '.' || $file == '..')
 					continue;
 				
-				if(preg_match('/^'.preg_quote($data['prefix'],'/').'data\d+\.sql$/',$file))
-					$files[] = $file;
+				if(preg_match('/^'.preg_quote($data['prefix'],'/').'data(\d+)\.sql$/',$file,$match))
+					$files[$file] = $match[1];
 			}
 			closedir($handle);
 			
 			asort($files);
-			if(isset($files[$pos - 1]))
-				return $files[$pos - 1];
+			$files = array_flip($files);
+			if(isset($files[$pos]))
+				return $files[$pos];
 		}
 		
 		return false;

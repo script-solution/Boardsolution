@@ -24,7 +24,7 @@ final class BS_BBCode_Exception_InvalidParam extends BS_BBCode_Exception
 	 *
 	 * @param string $tagname the name of the tag
 	 * @param string $param the parameter
-	 * @param string $paramtype the type of the parameter (idenitifer, integer, color, url, mail)
+	 * @param string $paramtype the type of the parameter (idenitifer, integer, color, url, mail, text)
 	 */
 	public function __construct($tagname,$param,$paramtype)
 	{
