@@ -550,26 +550,26 @@ final class BS_ForumUtils extends FWS_UtilBase
 						$sub_forums .= " ..., ";
 						$sub_forums_count++;
 					}
-				}
 	
-				if($daten->get_lastpost_id() != 0 && $daten->get_lastpost_time() > $lastpost[0])
-				{
-					$lastpost = array(
-						$daten->get_lastpost_time(),
-						$daten->get_lastpost_id(),
-						$daten->get_lastpost_username(),
-						$daten->get_lastpost_topicname(),
-						$fid,
-						$daten->get_lastpost_userid(),
-						$daten->get_lastpost_topicid(),
-						$daten->get_lastpost_an_user(),
-						$daten->get_lastpost_topicposts(),
-						$daten->get_lastpost_usergroups()
-					);
+					if($daten->get_lastpost_id() != 0 && $daten->get_lastpost_time() > $lastpost[0])
+					{
+						$lastpost = array(
+							$daten->get_lastpost_time(),
+							$daten->get_lastpost_id(),
+							$daten->get_lastpost_username(),
+							$daten->get_lastpost_topicname(),
+							$fid,
+							$daten->get_lastpost_userid(),
+							$daten->get_lastpost_topicid(),
+							$daten->get_lastpost_an_user(),
+							$daten->get_lastpost_topicposts(),
+							$daten->get_lastpost_usergroups()
+						);
+					}
+					
+					$thread_num += $daten->get_threads();
+					$post_num += $daten->get_posts();
 				}
-				
-				$thread_num += $daten->get_threads();
-				$post_num += $daten->get_posts();
 			}
 		}
 	
