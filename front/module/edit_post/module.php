@@ -43,7 +43,7 @@ final class BS_Front_Module_edit_post extends BS_Front_Module
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		
 		// don't show thread- and forum-title if its intern
-		if($auth->has_access_to_intern_forum($fid))
+		if($fid !== null && $auth->has_access_to_intern_forum($fid))
 		{
 			$this->add_loc_forum_path($fid);
 			$this->add_loc_topic();

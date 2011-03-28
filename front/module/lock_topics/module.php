@@ -42,7 +42,7 @@ final class BS_Front_Module_lock_topics extends BS_Front_Module
 		$ids = $input->get_var(BS_URL_ID,'get',FWS_Input::STRING);
 		
 		// don't show forum-title if its intern
-		if($auth->has_access_to_intern_forum($fid))
+		if($fid !== null && $auth->has_access_to_intern_forum($fid))
 			$this->add_loc_forum_path($fid);
 		
 		$url = BS_URL::get_mod_url();

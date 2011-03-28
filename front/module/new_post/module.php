@@ -44,7 +44,7 @@ final class BS_Front_Module_new_post extends BS_Front_Module
 			$site = 1;
 
 		// don't show thread- and forum-title if its intern
-		if($auth->has_access_to_intern_forum($fid))
+		if($fid !== null && $auth->has_access_to_intern_forum($fid))
 		{
 			$this->add_loc_forum_path($fid);
 			$this->add_loc_topic();
