@@ -1,0 +1,24 @@
+	<form method="post" action="{vote_action}">
+	<input type="hidden" name="action_type" value="{action_type}" />
+	<div class="bs_main">
+		<ul class="bs_none_list">
+			{loop poll_options as index => option}
+			<li>
+				{if show_results}
+				<div>{option:option_name} ({option:percent} %, {option:option_value} {glocale.lang('votes')})</div>
+				<div class="bs_poll_bar"><div style="width: {option:percent}%;">&nbsp;</div></div>
+				{else}
+				<div>{option:vote_button} {option:option_name}</div>
+				{endif}
+			</li>
+			{endloop}
+		</ul>
+		{if show_poll_options}
+		{if show_results == false}
+		<input type="button" value="{glocale.lang('goto_results')}" onclick="document.location.href = '{result_url}';" />
+		{else}
+		<input type="button" value="{glocale.lang('goto_vote')}" onclick="document.location.href = '{vote_url}';" />
+		{endif}
+		{endif}
+	</div>
+	</form>		

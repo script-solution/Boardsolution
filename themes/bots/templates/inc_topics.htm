@@ -1,0 +1,28 @@
+<div class="bs_border">
+	<h1 class="bs_topic">{thread_title}</h1>
+	<ul>
+	{if num == 0}
+	<div class="bs_main">{glocale.lang('no_topics_found')}</div>
+	{endif}
+	{loop topics as index => topic}
+		<li>
+			{if topic:is_important}
+			<b>{glocale.lang('important')}</b>:
+			{endif}
+			<a {if topic:name_complete != ''}title="{topic:name_complete}" {endif}href="{topic:topic_url}">
+			{if topic:is_moved}
+			<i>{topic:name}</i>
+			{else}
+			{topic:name}
+			{endif}
+			</a>
+			{if topic:page_split}
+			&nbsp;&nbsp;<span class="bs_desc">{topic:page_split}</span>
+			{endif}
+			{if topic:show_forum}
+			<div class="bs_topics_small">{topic:forum_path}</div>
+			{endif}
+		</li>
+	{endloop}
+	</ul>
+</div>

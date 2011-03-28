@@ -1,0 +1,37 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+
+{if max_login_tries}
+<form method="post" action="{forum_index_url}">
+<input type="hidden" name="login" value="1" />
+<input type="hidden" name="conf" value="1" />
+<input type="hidden" name="user_login" value="{user}" />
+<input type="hidden" name="pw_login" value="{pw}" />
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('login_confirmation')}</h1>
+	<div class="bs_main">{glocale.lang('max_login_tries_reached')}</div>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('security_code')}:</dt>
+			<dd>
+				<img src="{security_code_img}" style="padding-bottom: 5px; cursor: pointer;" onclick="reloadImage(this);" alt="{glocale.lang('reload_sec_image')}" title="{glocale.lang('reload_sec_image')}" />
+				<br clear="all" />
+				<input type="text"  name="{sec_code_field}" size="15" maxlength="10" />
+				<div class="bs_desc">{glocale.lang('security_code_desc')}</div>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center><input type="submit" value="{glocale.lang('submit')}" /></center>
+</form>
+{endif}
+
+{if loginform}
+{include "inc_login.htm"}
+{endif}
+
+{endif}
+
+{include "inc_footer.htm"}

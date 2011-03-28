@@ -1,0 +1,52 @@
+<?php
+/**
+ * Contains the switch-addfields-action
+ *
+ * @version			$Id$
+ * @package			Boardsolution
+ * @subpackage	acp.module
+ * @author			Nils Asmussen <nils@script-solution.de>
+ * @copyright		2003-2008 Nils Asmussen
+ * @link				http://www.script-solution.de
+ */
+
+/**
+ * The switch-addfields-action
+ *
+ * @package			Boardsolution
+ * @subpackage	acp.module
+ * @author			Nils Asmussen <nils@script-solution.de>
+ */
+final class BS_ACP_Action_additionalfields_switch extends BS_ACP_Action_Base
+{
+	public function perform_action()
+	{
+		$input = FWS_Props::get()->input();
+		$cache = FWS_Props::get()->cache();
+
+		$id_str = $input->get_var('ids','get',FWS_Input::STRING);
+		if(!($ids = FWS_StringHelper::get_ids($id_str)) || count($ids) != 2)
+			return 'Got an invalid id-string via GET';
+		
+		list($id1,$id2) = $ids;
+		$first = BS_DAO::get_addfields()->get_by_id($id1);
+		$second = BS_DAO::get_addfields()->get_by_id($id2);
+		if(!$first['field_sort'])
+			return 'A field with id "'.$id1.'" does not exist';
+		if(!$second['field_sort'])
+			return 'A field with id "'.$id2.'" does not exist';
+		
+		// update sort
+		BS_DAO::get_addfields()->update_sort_by_id($second['field_sort'],$id1);
+		BS_DAO::get_addfields()->update_sort_by_id($first['field_sort'],$id2);
+		
+		// refresh cache
+		$cache->refresh('user_fields');
+		
+		$this->set_show_status_page(false);
+		$this->set_action_performed(true);
+
+		return '';
+	}
+}
+?>

@@ -1,0 +1,35 @@
+{if mode != 'overview'}
+{include "inc_delete_message.htm"}
+{endif}
+
+<form method="post" action="{outbox_url}">
+<div class="bs_border">
+	<h1 class="bs_topic">{title}{if outbox_num != ''} ({outbox_num}){endif}</h1>
+	{if num == 0}
+	<div align="center">{glocale.lang('no_pms_found')}</div>
+	{else}
+	<ul>
+		{loop pms as index => pm}
+		<li>
+			<input type="checkbox" id="outbox_{index}" name="delete[]" value="{pm:pm_id}" />
+			<img title="{glocale.lang('read_pm')}" alt="{glocale.lang('read_pm')}" src="{pm:status_picture}" />
+			{pm:prefix}<a title="{pm:complete_title}" href="{pm:details_link}">{pm:pm_title}</a><br />
+			{glocale.lang('from')} {pm:sender}, {pm:date}
+		</li>
+		{endloop}
+	</ul>
+	{endif}
+</div>
+
+<div style="padding-left: 25px;">
+	<img src="{guser.get_theme_item_path('images/thread_option.gif')}" alt="" />
+	<select name="operation">
+		<option value="delete">{glocale.lang('delete')}</option>
+	</select>
+	<input type="submit" value="{glocale.lang('submit')}" />
+</div>
+</form>
+
+<div class="bs_padtop_big">
+{include "inc_pagination.htm"}
+</div>

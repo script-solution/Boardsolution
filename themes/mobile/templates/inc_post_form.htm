@@ -1,0 +1,50 @@
+	{if number == 1}
+	{if gisloggedin == false}
+	<dl>
+		<dt>{glocale.lang('yourname')}:</dt>
+		<dd>
+			<input type="text" name="user_name" size="30" maxlength="{user_maxlength}" value="{user_name_value}" />
+		</dd>
+	</dl>
+	<dl>
+		<dt>{glocale.lang('youremail')}:</dt>
+		<dd><input type="text" name="email_adr" size="40" value="{email_value}" /></dd>
+	</dl>
+	{if enable_security_code}
+	<dl>
+		<dt>{glocale.lang('security_code')}:</dt>
+		<dd>
+		<img src="{security_code_img}" style="padding-bottom: 5px; cursor: pointer;" onclick="reloadImage(this);" alt="{glocale.lang('reload_sec_image')}" title="{glocale.lang('reload_sec_image')}" />
+		<br clear="all" />
+		<input type="text"  name="{sec_code_field}" size="15" maxlength="10" />
+		<br />
+		<div class="bs_desc">{glocale.lang('security_code_desc')}</div>
+		</dd>
+	</dl>
+	{endif}
+	{endif}
+	{endif}
+	<dl>
+		<dt>{post_title}</dt>
+		<dd>
+			<div style="padding-left: 0.5em;">
+				{if number == 1}
+				<script type="text/javascript" src="{gjs.get_file('src/bbcode.js')}"></script>
+				<script type="text/javascript">
+				<!--
+				var BBCodeModes = new Array();
+				//-->
+				</script>
+				{endif}
+				<script type="text/javascript">
+				<!--
+				BBCodeModes['{number}'] = "{bbcode_mode}";
+				//-->
+				</script>
+				<div id="post_form_{number}">
+					{textarea}
+				</div>
+				{toggle_smbb}
+			</div>
+		</dd>
+	</dl>

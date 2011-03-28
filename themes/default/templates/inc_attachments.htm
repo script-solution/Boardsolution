@@ -1,0 +1,38 @@
+	{if attachment_limits}
+	<dl>
+	  <dt>{glocale.lang('attachment')}:</dt>
+	  <dd>
+	  	<fieldset class="bs_subform">
+	  		{if hint}
+	  		<div>{hint}</div>
+	  		{endif}
+	  		<dl>
+	  			<dt>{glocale.lang('attached_files')}:</dt>
+	  			<dd>
+	  			{if show_attachments}
+		      <table width="100%" cellpadding="1" cellspacing="0">
+		        {loop attachments as attachment}
+		        <tr>
+		          <td width="40%" class="bs_main_no_pad">{attachment:attached_file}</td>
+		          <td width="60%" class="bs_main_no_pad">{attachment:input_stuff}</td>
+		        </tr>
+		        {endloop}
+		      </table>
+		      {else}
+		      -
+		      {endif}
+	  			</dd>
+	  		</dl>
+	  		<hr style="color: #888;" align="left" size="1" width="80%" />
+	  		<dl>
+	  			<dt>{glocale.lang('attach_new_file')}:</dt>
+	  			<dd>
+	  				<input type="file" name="attachment" size="35" />
+		      	<input type="submit" name="add_attachment" value="{glocale.lang('upload')}" />
+	  			</dd>
+	  		</dl>
+	  		<div class="bs_desc">{attachment_limits}</div>
+	  	</fieldset>
+	  </dd>
+	</dl>
+	{endif}

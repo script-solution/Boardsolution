@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.script-solution.de/schemas/bs/bbc/languages"
+	xmlns:tns="http://www.script-solution.de/schemas/bs/bbc/languages"
+	elementFormDefault="qualified">
+	<!-- Type definitions -->
+	<complexType name="languagesType">
+		<sequence>
+			<element name="language" type="tns:languageType" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<complexType name="languageType">
+		<attribute name="id" type="string" use="required"/>
+		<attribute name="name" type="string" use="required"/>
+		<attribute name="file" type="string" use="required"/>
+	</complexType>
+	
+	<!-- Content -->
+	<element name="languages" type="tns:languagesType"/>
+</schema>

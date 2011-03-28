@@ -1,0 +1,69 @@
+<!-- put this here to prevent problems when the applet is the default mode and the user
+switches back to simple/advanced mode -->
+<script type="text/javascript" src="{gjs.get_file('js/colorpicker.js','fws')}"></script>
+<script type="text/javascript">
+<!--
+cp['{number}'] = new FWS_ColorPicker(
+	'{gfwspath}','group_color',
+	function(color) {
+		popupElementClick({number},'color','#' + color);
+	},
+	function() {
+		popups['color{number}'] = 0;
+	}
+);
+//-->
+</script>
+
+{if applet}
+<input id="hiddenText{number}" type="hidden" name="text{name_suffix}" value="" />
+<applet id="bbcode_area{number}" code="bbcodeeditor.gui.WysiwygBBCodeEditor.class"
+	alt="{glocale.lang('bbceditor_no_java')}" archive="{bspath}bbceditor/bbcapplet.jar"
+	width="100%" height="{textarea_height + 150}">
+	<param name="path" value="{bspath}bbceditor/" />
+	<param name="bgColor" value="#EBEBEB" />
+	<param name="lookAndFeel" value="system" />
+	<param name="lang" value="{glang}" />
+	<param name="maxLineLength" value="{max_line_length}" />
+	<param name="displayCodeLineNumbers" value="{code_line_numbers}" />
+	<param name="enabledTags" value="{allowed_tags}" />
+	<param name="fontFamilies" value="{font_families}" />
+	{if enable_smileys}
+	<param name="smileyCount" value="{smileys.length}" />
+	{loop smileys as index => smiley}
+	<param name="smileyPrimCode{index+1}" value="{smiley:primary_code}" />
+	<param name="smileySecCode{index+1}" value="{smiley:secondary_code}" />
+	<param name="smileyPath{index+1}" value="../images/smileys/{smiley:smiley_path}" />
+	{endloop}
+	{else}
+	<param name="smileyCount" value="0" />
+	{endif}
+	<param name="text" value="{applet_text}" />
+	<param name="scriptable" value="true" />
+</applet>
+{else}
+{bbcode_buttons}
+
+<textarea id="bbcode_area{number}" style="width: 90%; min-height: 50px; height: {textarea_height}"
+	name="text{name_suffix}" rows="10" cols="10">{text}</textarea>
+{endif}
+
+<script type="text/javascript" src="{gjs.get_file('src/taresize.js')}"></script>
+<div id="bbcode_area{number}_resizer" class="bs_coldesc_sep bbcode_area_resizer"
+	onmousedown="BS_set_textarea_ids('bbcode_area{number}','bbcode_area{number}_resizer');">&nbsp;</div>
+
+{if applet == false && enable_smileys}
+<div class="bs_padtop">
+{loop smileys as smiley}
+{if smiley:is_base}
+<a href="javascript:insertSmiley('bbcode_area{number}','{smiley:prim_code_insert}');">
+<img alt="{smiley:primary_code}" src="{bspath}images/smileys/{smiley:smiley_path}" />
+</a>
+{endif}
+{endloop}
+
+{if more_smileys}
+&nbsp;&nbsp;[ <a href="javascript:FWS_openDefaultPopup('{smiley_popup_url}','Smileys',300,{smiley_popup_height});">{glocale.lang('showallsmileys')}</a> ]
+{endif}
+</div>
+{endif}

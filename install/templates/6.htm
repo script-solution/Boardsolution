@@ -1,0 +1,50 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<form method="post" action="index.php">
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('information')}</h1>
+	<div class="bs_main" style="text-align: center;">
+	<b>{glocale.lang('installation_complete')}</b><br />
+	
+	{if type == 'update'}
+	<div class="bs_padtop bs_padbottom">
+		<span style="font-size: 12px; color: #FF0000;">{glocale.lang('important_tasks')}</span>
+	</div>
+	{endif}
+	
+	<div class="bs_padtop">
+		<input id="submit_btn" type="submit" value="{glocale.lang('toboard')}"
+			{if type == 'update'}disabled="disabled" {endif}/>
+	</div>
+	</div>
+</div>
+</form>
+
+{if type == 'update'}
+<script type="text/javascript">
+<!--
+function countDown(id,title,seconds)
+{
+	var d = document.getElementById(id);
+	if(seconds > 0)
+	{
+		d.value = title + " " + seconds + "...";
+		d.style.color = '#CCCCCC';
+		window.setTimeout('countDown("' + id + '","' + title + '",' + (seconds - 1) + ')',1000);
+	}
+	else
+	{
+		d.value = title;
+		d.style.color = '#000000';
+		d.disabled = false;
+	}
+}
+
+countDown("submit_btn","{glocale.lang('toboard')}",10);
+//-->
+</script>
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

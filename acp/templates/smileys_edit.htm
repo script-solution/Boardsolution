@@ -1,0 +1,34 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<form method="post" action="{gurl.simple_acp_url(0,'&amp;action=edit&amp;id='~id~'&amp;site='~site)}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="a_border">
+	<h1 class="a_topic">{glocale.lang('edit_smiley')}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('filename')}:</dt>
+			<dd>images/smileys/{form.get_textbox('smiley_path',smiley:smiley_path,30,255)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('primary_code')}:</dt>
+			<dd>{form.get_textbox('primary_code',smiley:primary_code,10,15)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('secondary_code')}:</dt>
+			<dd>{form.get_textbox('secondary_code',smiley:secondary_code,10,15)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('is_base')}:</dt>
+			<dd>{form.get_radio_yesno('is_base',smiley:is_base)}</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="submit" value="{glocale.lang('save')}" />
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.simple_acp_url(0,'&amp;site='~site)}';" />
+</center>
+</form>
+{endif}
+
+{include "inc_footer.htm"}

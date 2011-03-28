@@ -1,0 +1,44 @@
+<div class="bs_border">
+	<h1 class="bs_topic">{thread_title}</h1>
+	<ul>
+	{if num == 0}
+	<div class="bs_main">{glocale.lang('no_topics_found')}</div>
+	{endif}
+	{loop topics as index => topic}
+		<li>
+			{if show_thread_action}
+			<input id="id_{index}" type="checkbox" name="selected_topics[]" value="{topic:topic_id}" />
+			{endif}
+			{if topic:is_unread}*{endif}
+			{if topic:is_important}
+			<b>{glocale.lang('important')}</b>:
+			{endif}
+			<a href="{topic:topic_url}">
+			{if topic:is_moved}
+			<i>{if topic:name_complete != ''}{topic:name_complete}{else}{topic:name}{endif}</i>
+			{else}
+			{if topic:name_complete != ''}{topic:name_complete}{else}{topic:name}{endif}
+			{endif}
+			</a>
+			{if topic:page_split}
+			&nbsp;&nbsp;<span class="bs_desc">{topic:page_split}</span>
+			{endif}
+			{if topic:show_forum}
+			<div class="bs_topics_small">{topic:forum_path}</div>
+			{endif}
+			<div class="bs_topics_small">
+				<u>{glocale.lang('lastpost')}:</u>
+				{if topic:lastpost == false}
+				-
+				{else}
+				{topic:lastpost:date}, {glocale.lang('from')}: {topic:lastpost:username}
+				<a title="{glocale.lang('gotolastpost')}" href="{topic:lastpost:url}">
+				<img src="{guser.get_theme_item_path('images/lastpost.gif')}"
+					style="vertical-align: middle;" alt="{glocale.lang('gotolastpost')}" />
+				</a>
+				{endif}
+			</div>
+		</li>
+	{endloop}
+	</ul>
+</div>

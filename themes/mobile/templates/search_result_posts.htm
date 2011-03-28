@@ -1,0 +1,48 @@
+<div class="bs_border">
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td colspan="2" class="bs_topic">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="75%" align="left"><b>{result_title}</b></td>
+					<td width="25%" align="right">
+					<a href="{publish_result_url}"><img 
+						src="{guser.get_theme_item_path('images/world.gif')}"
+						alt="{glocale.lang('publish_search_result')}"
+						title="{glocale.lang('publish_search_result')}" /></a>
+					</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		{loop posts as post}
+		<tr>
+			<td class="{post:posts_var_class}">
+			<a href="{post:post_url}">{post:user_name_plain} , <span style="font-weight: normal;">{post:date}</span></a>
+			</td>
+		</tr>
+		<tr>
+			<td class="{post:posts_main_class}">
+			<table width="100%" cellpadding="0" cellspacing="0" style="table-layout: fixed;">
+				<tr>
+					<td>
+					<div style="overflow: auto; max-height: 300px;">
+						{post:text}
+					</div>
+					</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		{if post:show_separator}
+		<tr>
+			<td colspan="2" class="bs_post_separator">&nbsp;</td>
+		</tr>
+		{endif}
+		{endloop}
+	</table>
+</div>
+
+<div class="bs_padtop">
+{include "inc_pagination.htm"}
+</div>

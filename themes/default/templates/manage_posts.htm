@@ -1,0 +1,180 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<script type="text/javascript">
+<!--
+var firstIsRealFirst = {is_first_post};
+
+function switchToOperation(op)
+{
+	var operations = new Array('delete','split','merge');
+	for(var i = 0;i < operations.length;i++)
+	{
+		var div = document.getElementById('op_' + operations[i]);
+		var link = document.getElementById('link_' + operations[i]);
+		if(operations[i] == op)
+		{
+			if(div != null)
+				div.style.display = 'block';
+			link.style.fontWeight = 'bold';
+		}
+		else
+		{
+			if(div != null)
+				div.style.display = 'none';
+			link.style.fontWeight = 'normal';
+		}
+	}
+	
+	document.getElementById('operation').value = op;
+	
+	var firstPost = document.getElementById('post_0');
+	var at = document.getElementById('action_type');
+	switch(op)
+	{
+		case 'delete':
+			if(firstPost && firstIsRealFirst)
+				firstPost.disabled = true;
+			at.value = '{at_delete}';
+			break;
+		case 'merge':
+			if(firstPost)
+				firstPost.disabled = false;
+			at.value = '{at_merge}';
+			break;
+		case 'split':
+			if(firstPost)
+				firstPost.disabled = false;
+			at.value = '{at_split}';
+			break;
+	}
+}
+
+function changeSelection(tdid,cbid)
+{
+	var cb = document.getElementById(cbid);
+	if(!cb.disabled)
+	{
+		var td = document.getElementById(tdid);
+		if(cb.checked)
+			cb.checked = false;
+		else
+			cb.checked = true;
+	}
+}
+//-->
+</script>
+
+<form method="post" action="{target_url}">
+<input id="operation" type="hidden" name="mode" value="{operation}" />
+<input id="action_type" type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('manage_posts')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('operation')}:</dt>
+			<dd>
+				<ul>
+					{if show_delete}
+					<li><a id="link_delete" {delete_bold}  href="{delete_posts_url}"
+							onclick="switchToOperation('delete'); return false;">{glocale.lang('delete_posts')}</a></li>
+					{endif}
+					{if show_move}
+					<li><a id="link_split" {split_bold}  href="{split_posts_url}"
+							onclick="switchToOperation('split'); return false;">{glocale.lang('split_posts')}</a></li>
+					<li><a id="link_merge" {merge_bold}  href="{merge_posts_url}"
+							onclick="switchToOperation('merge'); return false;">{glocale.lang('merge_posts')}</a></li>
+					{endif}
+				</ul>
+			</dd>
+		</dl>
+		<div id="op_split" style="display: {display_split};">
+			<dl>
+				<dt>{glocale.lang('split_type')}:</dt>
+				<dd>
+					{form.get_combobox('split_type',merge_split_options,'selected',false)}
+					<div class="bs_desc">{glocale.lang('split_type_desc')}</div>
+				</dd>
+			</dl>
+			<dl>
+				<dt>{glocale.lang('threadname')}:</dt>
+				<dd>
+					{form.get_textbox('new_topic_name','',40,200)}
+					<div class="bs_desc">{glocale.lang('split_topic_name_desc')}</div>
+				</dd>
+			</dl>
+			<dl>
+				<dt>{glocale.lang('symbol')}:</dt>
+				<dd>
+					{symbols}
+					<div class="bs_desc">{glocale.lang('split_symbol_desc')}</div>
+				</dd>
+			</dl>
+			<dl>
+				<dt>{glocale.lang('forum')}:</dt>
+				<dd>
+					{forum_combo}
+					<div class="bs_desc">{glocale.lang('split_forum_desc')}</div>
+				</dd>
+			</dl>
+		</div>
+		<div id="op_merge" style="display: {display_merge};">
+			<dl>
+				<dt>{glocale.lang('merge_type')}:</dt>
+				<dd>
+					{form.get_combobox('merge_type',merge_split_options,'selected',false)}
+					<div class="bs_desc">{glocale.lang('merge_type_desc')}</div>
+				</dd>
+			</dl>
+			<dl>
+				<dt>{glocale.lang('topic_id')}:</dt>
+				<dd>{form.get_textbox('topic_id','',10)}</dd>
+			</dl>
+		</div>
+	</fieldset>
+</div>	
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{back_url}';" />
+	<input type="submit" name="submit" value="{glocale.lang('submit')}" />
+</center>
+
+<div class="bs_border bs_padtop">
+	<h1 class="bs_topic">{glocale.lang('posts')}</h1>
+	<div class="bs_coldesc" align="center">
+		<div style="float: right;"><a href="javascript:invertSelection('post_',1,false);">{glocale.lang('invertmark')}</a></div>
+		{glocale.lang('keyword')}: <span style="font-weight: normal;"><input type="text" name="keyword" value="{keyword}" size="15" /></span>&nbsp;,&nbsp;
+		{glocale.lang('time_periode')}: <span style="font-weight: normal;">{start_date} {glocale.lang('to')} {end_date}
+		<input type="submit" name="change_display" value="{glocale.lang('refresh')}" /></span>
+	</div>
+	<table class="bs_table" cellpadding="0" cellspacing="1">
+	{loop posts as index => post}
+		<tr>
+			<td width="25%" class="bs_left" valign="top">
+			<span id="user_{post:post_id}">{post:user_name}</span> , <span style="font-weight: normal;">{post:date}</span>
+			</td>
+			<td width="70%" class="bs_posts_main_1" valign="top">
+			<div style="overflow: auto; max-height: 300px;">{post:text}</div>
+			</td>
+			<td id="td_{index}" width="5%" class="bs_main" align="center" onclick="changeSelection('td_{index}','post_{index}');">
+			<input id="post_{index}" onclick="changeSelection('td_{index}','post_{index}');" type="checkbox" name="selected_posts[]" {post:selected} value="{post:post_id}" />
+			</td>
+		</tr>
+	{endloop}
+	</table>
+</div>
+</form>
+
+<script type="text/javascript">
+<!--
+var op = document.getElementById('operation');
+if(op.value == 'delete' && firstIsRealFirst)
+	document.getElementById('post_0').disabled = true;
+//-->
+</script>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

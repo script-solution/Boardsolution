@@ -1,0 +1,170 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+{if latest_topics_top}
+{include "inc_topics.htm"}
+<br />
+{endif}
+
+<div style="padding-bottom: 0.3em;">
+	<div style="float: left;">
+		<b>{glocale.lang('moderators')}:</b> {moderators}
+	</div>
+	<div style="float: right; width: 50%;">
+		{if display_event}
+		<a class="bs_button_big" title="{glocale.lang('createnewevent')}" href="{gurl.simple_url('new_event','&amp;$URL_FID='~fid)}">{glocale.lang('newevent')}</a>
+		{endif}
+		{if display_poll}
+		<a class="bs_button_big" title="{glocale.lang('createnewpoll')}" href="{gurl.simple_url('new_poll','&amp;$URL_FID='~fid)}">{glocale.lang('newpoll')}</a>
+		{endif}
+		{if display_topic}
+		<a class="bs_button_big" title="{glocale.lang('createnewthread')}" href="{gurl.simple_url('new_topic','&amp;$URL_FID='~fid)}">{glocale.lang('newthread')}</a>
+		{endif}
+	</div>
+	<br style="clear: both;" />
+</div>
+
+{if sub_forums}
+<div class="bs_padbottom">
+{include "inc_forums.htm"}
+</div>
+{endif}
+
+{if contains_topics}
+{include "inc_topic_action_js.htm"}
+
+{include "inc_topics.htm"}
+
+<div style="padding-top: 0.3em;">
+	<div style="padding-left: 20px; float: left;">
+		{if display_topic_actions}
+		<img src="{guser.get_theme_item_path('images/thread_option.gif')}" alt="" />
+		{topic_action_combo}
+		<input type="submit" onclick="performModAction(getModActionURL());" value="{glocale.lang('performaction')}" /> |
+		<a href="javascript:invertSelection('id_',0);">{glocale.lang('invertmark')}</a>
+		{else}
+		&nbsp;
+		{endif}
+	</div>
+	<div style="float: right; width: 50%;">
+		{if display_event}
+		<a class="bs_button_big" title="{glocale.lang('createnewevent')}" href="{gurl.simple_url('new_event','&amp;$URL_FID='~fid)}">{glocale.lang('newevent')}</a>
+		{endif}
+		{if display_poll}
+		<a class="bs_button_big" title="{glocale.lang('createnewpoll')}" href="{gurl.simple_url('new_poll','&amp;$URL_FID='~fid)}">{glocale.lang('newpoll')}</a>
+		{endif}
+		{if display_topic}
+		<a class="bs_button_big" title="{glocale.lang('createnewthread')}" href="{gurl.simple_url('new_topic','&amp;$URL_FID='~fid)}">{glocale.lang('newthread')}</a>
+		{endif}
+	</div>
+	<br style="clear: both;" />
+</div>
+
+<div class="bs_padtop">
+{include "inc_pagination.htm"}
+</div>
+{endif}
+
+{if latest_topics_bottom}
+<div class="bs_padtop">
+{include "inc_topics.htm"}
+</div>
+{endif}
+
+{if view_useronline_list}
+<div class="bs_padtop">
+{include "inc_online_user.htm"}
+</div>
+{endif}
+
+{if contains_topics}
+<form method="get" action="{php_self}">
+<input type="hidden" name="{action_param}" value="topics" />
+<input type="hidden" name="{fid_param}" value="{fid}" />
+{loop hidden_fields as k => v}
+<input type="hidden" name="{k}" value="{v}" />
+{endloop}
+<div class="bs_border bs_padtop">
+	<div class="bs_topic">
+		<table width="100%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td width="20%" align="left">
+				<a href="{gurl.simple_url(0,'&amp;$URL_FID='~fid~'&amp;$URL_KW=clap_options')}"
+					onclick="clapArea('options_row','clap_img','{cookie_prefix}topic_options'); return false;">
+					<img id="clap_img" src="{guser.get_theme_item_path('images/cross'~img_type~'.gif')}" alt="Toggle" /></a>
+				</td>
+				<td width="60%" align="center">{glocale.lang('options')}</td>
+				<td width="20%">&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="bs_main" id="options_row"{hide_options}>
+		<table width="100%" cellpadding="2" cellspacing="1">
+			<tr>
+				<td width="65%" valign="bottom">
+				<table width="100%" cellpadding="2" cellspacing="0">
+					{if number_of_threads > 0}
+					<tr>
+						<td colspan="2" class="bs_main">
+						{glocale.lang('orderthreadsby')}:
+						{order_ins}
+						{ascdesc_ins}
+						{glocale.lang('and')}
+						{tps_ins}
+						{glocale.lang('threadsperpage')}
+						<input type="submit" value="{glocale.lang('show')}" />
+						</td>
+					</tr>
+					{endif}
+					<tr>
+						<td class="bs_main" width="50%">
+						<img src="{guser.get_theme_item_path('images/thread_status/important_en.gif')}" alt="" />
+						<img src="{guser.get_theme_item_path('images/thread_status/important_dis.gif')}" alt="" /> =
+						{glocale.lang('important_desc')}
+						</td>
+						<td class="bs_main" width="50%">
+						<img src="{guser.get_theme_item_path('images/thread_status/hot_en.gif')}" alt="" />
+						<img src="{guser.get_theme_item_path('images/thread_status/hot_dis.gif')}" alt="" /> =
+						{glocale.lang('hot_desc')}
+						</td>
+					</tr>
+					<tr>
+						<td class="bs_main" width="50%">
+						<img src="{guser.get_theme_item_path('images/thread_status/closed_en.gif')}" alt="" />
+						<img src="{guser.get_theme_item_path('images/thread_status/closed_dis.gif')}" alt="" /> =
+						{glocale.lang('closed_desc')}
+						</td>
+						<td class="bs_main" width="50%">
+						<img src="{guser.get_theme_item_path('images/thread_status/moved_en.gif')}" alt="" />
+						<img src="{guser.get_theme_item_path('images/thread_status/moved_dis.gif')}" alt="" /> =
+						{glocale.lang('moved_desc')}
+						</td>
+					</tr>
+					<tr>
+						<td class="bs_main" colspan="2">
+						<img src="{guser.get_theme_item_path('images/thread_status/read_explain.gif')}" alt="" />
+						<img src="{guser.get_theme_item_path('images/thread_status/unread_explain.gif')}" alt="" /> =
+						{glocale.lang('unread_desc')}
+						</td>
+					</tr>
+				</table>
+				</td>
+				<td width="35%" class="bs_main_no_pad" align="right" valign="top">
+				<u><b>{glocale.lang('youroptions')}:</b></u><br />
+				{loop options as option}
+				{option}<br />
+				{endloop}
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+</form>
+{endif}
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

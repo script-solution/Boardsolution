@@ -1,0 +1,14 @@
+<textarea id="bbcode_area{number}" style="width: 90%; height: {textarea_height}"
+	name="text{name_suffix}" rows="10" cols="10">{text}</textarea>
+
+{if enable_smileys}
+<div class="bs_padtop">
+{loop smileys as smiley}
+{if smiley:is_base}
+<a href="javascript:insertSmiley('bbcode_area{number}','{smiley:prim_code_insert}');">
+<img alt="{smiley:primary_code}" src="{bspath}images/smileys/{smiley:smiley_path}" />
+</a>
+{endif}
+{endloop}
+</div>
+{endif}

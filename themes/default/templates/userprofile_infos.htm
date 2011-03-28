@@ -1,0 +1,33 @@
+<form method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('personal_info')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('email')}: *</dt>
+			<dd>
+				{if show_email}
+				<input type="text" name="user_email" size="50" maxlength="100" value="{email_value}" />
+				{if confirm_emails}
+				<div class="bs_desc">{glocale.lang('change_email_notice')}</div>
+				{if new_email_address}
+				<div class="bs_desc"><b>{glocale.lang('waiting_for_email_conf')}: {new_email_address}</b></div>
+				{endif}
+				{endif}
+				{else}
+				{email_value}
+				{endif}
+			</dd>
+		</dl>
+		{loop additional_fields as field}
+		<dl>
+			<dt>{field:field_name}:{field:required_field}</dt>
+			<dd>{field:field_value}</dd>
+		</dl>
+		{endloop}
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="submit" value="{glocale.lang('save')}" />
+</center>
+</form>

@@ -1,0 +1,29 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<p class="a_block">{glocale.lang('theme_add_notice')}</p>
+
+<form method="post" action="{gurl.simple_acp_url(0,'&amp;action=add')}">
+<input type="hidden" name="action_type" value="{at_add}" />
+<div class="a_border">
+	<h1 class="a_topic">{glocale.lang('add_theme')}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('theme_name')}:</dt>
+			<dd>{form.get_textbox('theme_name','',20,50)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('theme_folder')}:</dt>
+			<dd>themes/{form.get_textbox('theme_folder','',20,50)}</dd>
+		</dl>
+	</fieldset>
+</div>
+<div align="center" class="a_block">
+	<input type="submit" name="submit" value="{glocale.lang('add')}" />
+	<input type="button" value="{glocale.lang('back')}"
+		onclick="document.location.href = '{gurl.simple_acp_url()}';" />
+</div>
+</form>
+{endif}
+
+{include "inc_footer.htm"}

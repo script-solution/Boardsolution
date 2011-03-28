@@ -1,0 +1,54 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<div class="bs_border">
+	<h1 class="bs_topic">
+	{glocale.lang('user_locations')}
+	( <a href="{toggle_duplicate_url}">{toggle_duplicate_title}</a> )
+	</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<th width="{u_width}%" class="bs_coldesc" align="left">{col_username}</th>
+			<th width="{l_width}%" class="bs_coldesc" align="left">{col_location}</th>
+			{if view_details}
+			<th width="12%" class="bs_coldesc">{col_ip}</th>
+			<th width="25%" class="bs_coldesc">{col_user_agent}</th>
+			{endif}
+			<th width="{d_width}%" class="bs_coldesc">{col_date}</th>
+		</tr>
+		{loop user_list as user}
+		<tr>
+			<td class="bs_main">
+			{if is_hidden}
+			{glocale.lang('hidden_user')}
+			{else}
+			{user:user_name} {if user:duplicates > 0}({user:duplicates}x){endif}
+			{endif}
+			</td>
+			<td class="bs_main">
+			{if is_hidden}
+			{glocale.lang('notavailable')}
+			{else}
+			{user:location}
+			{endif}
+			</td>
+			{if view_details}
+			<td class="bs_main" align="center">{user:user_ip}</td>
+			<td class="bs_main" align="center">{user:user_agent}</td>
+			{endif}
+			<td class="bs_main" align="center">{user:date}</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+
+<div class="bs_padtop">
+{include "inc_pagination.htm"}
+</div>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; {charset}" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<script type="text/javascript" language="javascript" src="{gjs.get_file('js/basic.js','fws')}"></script>
+{if gisloggedin == false}
+<script type="text/javascript" language="javascript">
+<!--
+	parent.location.href = 'admin.php';
+//-->
+</script>
+{endif}
+<script type="text/javascript" language="javascript">
+<!--
+function open_close(cat_id,img_id,path)
+{
+	display =(document.getElementById(cat_id).style.display == 'none') ? 'block' : 'none';
+	document.getElementById(cat_id).style.display = display;
+	document.images[img_id].src = path + "images/cross" + ((display == "block") ? 'open' : 'closed') + ".gif";
+}
+
+var selected = -1;
+
+function ChangeSelection(id,default_class,selected_class)
+{
+	if(selected != -1)
+		FWS_removeClassName(document.getElementById("item_" + selected),selected_class);
+	
+	FWS_addClassName(document.getElementById("item_" + id),selected_class);
+	selected = id;
+}
+//-->
+</script>
+<style type="text/css">
+body {
+	font-family: verdana, tahoma, arial, helvetica, sans-serif;
+	font-size: 0.65em;
+	color: #000;
+	background-color: #bbb;
+	margin: 0;
+	margin-right: 1px;
+}
+
+img {
+	border: 0;
+}
+
+ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+li {
+	margin: 0;
+	padding: 0;
+}
+
+li.cat a.cat {
+	padding-top: 0.2em;
+	padding-bottom: 0;
+	display: block;
+	background-image: url(acp/images/topic.gif);
+	background-repeat: repeat-x;
+	border: 1px solid #444;
+	height: 16px;
+	color: #fff;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+li.cat img {
+	vertical-align: middle;
+}
+
+li.sub a {
+	padding-top: 1px;
+	padding-left: 0.3em;
+	display: block;
+	height: 15px;
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+}
+li.sub a:hover {
+	background-color: #fff;
+}
+
+a.border {
+	border-bottom: 1px dashed #000;
+}
+a.selected {
+	background-color: #FFBE5C;
+}
+
+</style>
+<title>{page_title}</title>
+</head>
+<body>
+
+<ul>
+	{loop categories as category}
+	<li class="cat">
+		<a class="cat" href="#" onclick="open_close('cat_{category:id}','img_{category:id}','{gpath}acp/');">
+		<img id="img_{category:id}" src="{gpath}acp/images/crossopen.gif" alt="+/-" /> {category:title}
+		</a>
+		<ul id="cat_{category:id}">
+		{loop category:modules as module}
+		<li class="sub">
+			<a id="item_{module:id}" {if category:modules.current < category:modules.last || categories.current == categories.last}class="border"{endif}
+			onclick="ChangeSelection({module:id},'border','selected'); {module:javascript}" {module:frame} href="{module:url}">- {module:title}</a>
+		</li>
+		{endloop}
+		</ul>
+	</li>
+	{endloop}
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+	<form method="post" action="{vote_action}">
+	<input type="hidden" name="action_type" value="{action_type}" />
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		{loop poll_options as index => option}
+		<tr>
+			<td colspan="2" class="bs_main">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				{if show_results}
+				<tr>
+					<td width="35%" class="bs_main">{option:option_name}</td>
+					<td width="40%" class="bs_main">
+					<table width="100%" cellpadding="0" cellspacing="0">
+						<tr>
+							<td>{option:img_back}</td>
+							<td width="{option:img_percent}%">
+							<img src="{guser.get_theme_item_path('images/diagrams/rate_blue.gif')}"
+								style="width: {option:img_width}; height: 10px;" alt="{option:img_percent}%" />
+							</td>
+							<td width="{option:img_remaining_percent}%">{option:img_back}</td>
+						</tr>
+					</table>
+					</td>
+					<td width="10%" class="bs_main">{option:percent} %</td>
+					<td width="15%" class="bs_main">{option:option_value} {glocale.lang('votes')}</td>
+					{else}
+				<tr onclick="var c = document.getElementById('vote_{index}_{option:option_id}'); if(c) { c.checked = !c.checked; }">
+					<td width="75%" class="bs_main">{option:option_name}</td>
+					<td width="25%" class="bs_main">{option:vote_button}</td>
+					{endif}
+				</tr>
+			</table>
+			</td>
+		</tr>
+		{endloop}
+		{if show_poll_options}
+		<tr>
+			<td colspan="2" class="bs_main">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					{if show_results == false}
+					<td width="75%" class="bs_main">
+					<input type="button" value="{glocale.lang('goto_results')}" onclick="document.location.href = '{result_url}';" />
+					</td>
+					<td width="25%" class="bs_main"><input type="submit" name="submit" value="{glocale.lang('vote')}" /></td>
+					{else}
+					<td class="bs_main">
+					<input type="button" value="{glocale.lang('goto_vote')}" onclick="document.location.href = '{vote_url}';" />
+					</td>
+					{endif}
+				</tr>
+			</table>
+			</td>
+		</tr>
+		{endif}
+	</table>
+	</form>

@@ -1,0 +1,52 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<form name="form_insert" method="post" action="{gurl.simple_acp_url(0,'&amp;action=add')}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="a_border">
+	<h1 class="a_topic">{glocale.lang('register_user')}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('username')}: *</dt>
+			<dd>{form.get_textbox('user_name','',30,30)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('password')}: *</dt>
+			<dd>{form.get_passwordbox('user_pw','',30,50)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('password_conf')}: *</dt>
+			<dd>{form.get_passwordbox('user_pw_conf','',30,50)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('email')}: *</dt>
+			<dd>{form.get_textbox('user_email','',30,255)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('user_group')}:</dt>
+			<dd>
+				{glocale.lang('main_group')}:
+				{form.get_combobox('main_group',groups,main_group)}<br />
+				{glocale.lang('other_groups')}:<br />
+				{form.get_combobox('other_groups[]',groups,other_groups,true,groups.length)}
+			</dd>
+		</dl>
+		<div class="a_coldesc_sep">&nbsp;</div>
+		<dl>
+			<dt>{glocale.lang('user_edit_notify')}:</dt>
+			<dd>
+				{form.get_radio_yesno('notify',0)}
+				<div class="a_desc">{glocale.lang('user_edit_notify_explain')}</div>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="submit" value="{glocale.lang('add')}" />
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.simple_acp_url()}';" />
+</center>
+</form>
+
+{endif}
+
+{include "inc_footer.htm"}

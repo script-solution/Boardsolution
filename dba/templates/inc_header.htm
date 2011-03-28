@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{glocale.lang('dbadmin_title')}</title>
+<meta http-equiv="Content-Type" content="text/html; {charset}" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+{if redirect}
+<meta http-equiv="refresh" content="{redirect:time}; url={redirect:url}" />
+{endif}
+<script type="text/javascript" src="{gjs.get_file('js/basic.js','fws')}"></script>
+<link rel="stylesheet" type="text/css" href="{gpath}dba/templates/style.css" />
+</head>
+<body class="bs_body">
+
+<form method="post" action="{gurl.build_url()}">
+<a style="float: left;" class="bs_button_big" href="{gurl.build_url('index')}">{glocale.lang('show_tables')}</a>
+<a style="float: left;" class="bs_button_big" href="{gurl.build_url('backups')}">{glocale.lang('show_backups')}</a>
+<span style="line-height: 20px; float: left;">&nbsp;&nbsp;&middot;&nbsp;&nbsp;</span>
+{if is_loggedin == false}
+<a style="float: left;" class="bs_button_big" href="{board_url}">{glocale.lang('backtoboard')}</a>
+{endif}
+{if is_loggedin}
+<a style="float: left;" class="bs_button_big" href="{gurl.build_url(-1,'&amp;logout=1')}">{glocale.lang('logout')}</a>
+{endif}
+
+{if show_db_combo}
+<span style="line-height: 20px; float: right;">
+{glocale.lang('database')}: {db_combo}
+<input type="submit" name="selectdb" value="{glocale.lang('select')}" />
+</span>
+{endif}
+</form>
+
+<br clear="all" />
+<br />
+
+{include "inc_messages.htm"}

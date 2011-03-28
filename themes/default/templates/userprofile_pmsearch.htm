@@ -1,0 +1,58 @@
+{if result_num > 0}
+
+{include "inc_delete_message.htm"}
+{include result_tpl}
+
+{else}
+
+<script type="text/javascript" src="{gjs.get_file('src/ajax_user_matches.js')}"></script>
+
+<form action="{target_url}" method="post">
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('search')}</h1>
+	<table class="bs_main" width="100%" cellpadding="2" cellspacing="0">
+		<tr>
+			<td width="20%" class="bs_main" valign="top"><b>{glocale.lang('searchkeyword')}:</b></td>
+			<td width="80%" class="bs_main">
+			<input type="text" style="width: 80%;" maxlength="100" name="keyword" value='{keyword_value}' />
+			<div>
+				{keyword_mode_combo}
+				<div class="bs_padtop">
+					{search_explain_keyword}
+				</div>
+			</div>
+			</td>
+		</tr>
+		<tr>
+			<td class="bs_main" valign="top"><b>{glocale.lang('search_pms_of_user')}:</b></td>
+			<td class="bs_main">
+			<input id="user_input_field" autocomplete="off" type="text" style="width: 80%;"
+				maxlength="100" name="un" value="{user_name_value}" />
+			<div class="bs_padtop">
+				{search_explain_user}
+			</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="bs_coldesc_sep">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="bs_main"><b>{glocale.lang('orderby')}:</b></td>
+			<td class="bs_main">{order_combo}&nbsp;{ad_combo}</td>
+		</tr>
+	</table>
+</div>
+<center>
+	<input type="reset" value="{glocale.lang('reset')}" />
+	<input type="submit" name="submit" value="{glocale.lang('search')}" />
+</center>
+</form>
+
+<script type="text/javascript">
+<!--
+new BS_AJAXUserSearch('{gpath}','user_input_field','{action_param}','{glocale.lang('matching_user')}',
+	'{guser.get_theme_item_path("images/wait.gif")}',true,true,' ');
+//-->
+</script>
+
+{endif}

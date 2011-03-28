@@ -1,0 +1,114 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+{include "inc_delete_message.htm"}
+{include "inc_js_row_selector.htm"}
+
+<form method="post" action="{search_url}">
+<div class="a_block">
+	<div class="a_menubar_left">
+		{glocale.lang('username')}:
+		<input class="a_searchtb" type="text" size="20" maxlength="30" name="user_name" value="{search_val}" />
+		<input class="a_searchbtn" type="submit" name="submit" value="{glocale.lang('search')}" />
+	</div>
+	<div class="a_menubar">
+		<a href="{gurl.simple_acp_url(0,'&amp;action=add')}">
+		<img src="{gpath}acp/images/plus.png" alt="{glocale.lang('register_user')}" />
+		{glocale.lang('register_user')}
+		</a>
+		{if is_searching}
+		<a href="{gurl.simple_acp_url(0,'&amp;action=search&amp;use_sess=1')}">
+		<img src="{gpath}acp/images/edit_search.png" alt="{glocale.lang('change_search')}" />
+		{glocale.lang('change_search')}
+		</a>
+		<a href="{gurl.simple_acp_url(0,'&amp;reset=1')}">
+		<img src="{gpath}acp/images/reset_search.png" alt="{glocale.lang('reset_search')}" />
+		{glocale.lang('reset_search')}
+		</a>
+		{endif}
+		<a href="{gurl.simple_acp_url(0,'&amp;action=search')}">
+		<img src="{gpath}acp/images/search.png" alt="{glocale.lang('start_new_search')}" />
+		{glocale.lang('start_new_search')}
+		</a>
+	</div>
+</div>
+</form>
+
+<form method="post" action="{target_url}">
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('found_user')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="18%" class="a_coldesc">
+			<a href="{baseurl}&amp;order=user&amp;ad=ASC">{glocale.lang('username')}</a> {user_sort}
+			</td>
+			<td width="21%" class="a_coldesc" align="center">
+			<a href="{baseurl}&amp;order=group&amp;ad=ASC">{glocale.lang('user_group')}</a> {group_sort}
+			</td>
+			<td width="21%" class="a_coldesc" align="center">
+			<a href="{baseurl}&amp;order=experience&amp;ad=DESC">{glocale.lang('experience')}</a> {experience_sort}
+			</td>
+			<td width="17%" class="a_coldesc" align="center">
+			<a href="{baseurl}&amp;order=regdate&amp;ad=DESC">{glocale.lang('registeredsince')}</a> {registered_sort}
+			</td>
+			<td width="13%" class="a_coldesc" align="center">
+			<a href="{baseurl}&amp;order=blocked&amp;ad=DESC">{glocale.lang('blocked')}</a> {blocked_sort}
+			</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+		</tr>
+		{if user.length == 0}
+		<tr>
+			<td colspan="6" align="center" class="a_main">{glocale.lang('no_user_found')}</td>
+		</tr>
+		{endif}
+		{loop user as row => data}
+		<tr id="row_{row}" class="hlRow">
+			<td class="hlCol">{data:user_name}</td>
+			<td class="hlCol" align="center">{data:group_combo}</td>
+			<td class="hlCol" align="center">{data:user_experience}</td>
+			<td class="hlCol" align="center">{data:register_date}</td>
+			<td class="hlCol" align="center">{data:is_blocked}</td>
+			<td class="hlCol" align="center">
+			<a href="{data:edit_url}">
+			<img src="{gpath}acp/images/edit.png" alt="{glocale.lang('edit')}" title="{glocale.lang('edit')}" />
+			</a>
+			</td>
+			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			<input id="check_{row}" class="a_box" type="checkbox" name="delete[]" value="{data:id}" />
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="20%" class="a_body">&nbsp;</td>
+		<td width="60%" align="center" class="a_body">
+		{glocale.lang('marked')}:
+		<select name="action_type">
+			<option value="none">- {glocale.lang('no_action')} -</option>
+			<option value="unblock">{glocale.lang('unblock')}</option>
+			<option value="block">{glocale.lang('block')}</option>
+			{if comman_enabled}
+			<option value="delete">{glocale.lang('delete')}</option>
+			<option value="deleteanon">{glocale.lang('delete_and_make_anonymous')}</option>
+			{endif}
+			<option value="edit_groups">{glocale.lang('edit_groups')}</option>
+		</select>
+		<input type="submit" value="{glocale.lang('submit')}" />
+		</td>
+		<td width="20%" align="right" class="a_body">
+		<a href="Javascript:rowHL.toggleAllSelected();">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+
+<div class="a_pad">
+	{include "inc_pagination.htm"}
+</div>
+
+{endif}
+
+{include "inc_footer.htm"}

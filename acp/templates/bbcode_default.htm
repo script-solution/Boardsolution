@@ -1,0 +1,82 @@
+{include "inc_header.htm"}
+{include "inc_delete_message.htm"}
+
+{if module_error == false}
+{include "inc_js_row_selector.htm"}
+
+<div class="a_block">{glocale.lang('bbcode_tags_desc')}</div>
+<form method="get" action="{search_url}">
+{loop hidden as k => v}
+<input type="hidden" name="{k}" value="{v}" />
+{endloop}
+<div class="a_block">
+	<div class="a_menubar">
+		<div class="a_menubar_left">
+			{glocale.lang('search')}:
+			<input class="a_searchtb" type="text" name="search" size="20" maxlength="255" value="{search_val}" />
+			<input class="a_searchbtn" type="submit" value="{glocale.lang('search')}" />
+		</div>
+		<div class="a_menubar_right">
+			<a href="{gurl.simple_acp_url(0,'&amp;action=edit&amp;site='~site)}">
+			<img src="{gpath}acp/images/plus.png" alt="{glocale.lang('add_tag')}" />
+			{glocale.lang('add_tag')}
+			</a>
+		</div>
+	</div>
+</div>
+</form>
+
+<form method="post" action="{gurl.simple_acp_url(0,'&amp;site='~site)}">
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('acpmod_bbcode')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td class="a_coldesc" width="25%">{glocale.lang('tag_name')}</td>
+			<td class="a_coldesc" width="25%" align="center">{glocale.lang('tag_type')}</td>
+			<td class="a_coldesc" width="25%" align="center">{glocale.lang('tag_content')}</td>
+			<td class="a_coldesc" width="15%" align="center">{glocale.lang('tag_param')}</td>
+			<td class="a_coldesc" width="5%" align="center">&nbsp;</td>
+			<td class="a_coldesc" width="5%" align="center">&nbsp;</td>
+		</tr>
+		{if tags.length == 0}
+		<tr>
+			<td class="a_main" colspan="6" align="center">{glocale.lang('no_tags_found')}</td>
+		</tr>
+		{endif}
+		{loop tags as row => tag}
+		<tr id="row_{row}" class="hlRow">
+			<td class="hlCol">{tag:name}</td>
+			<td class="hlCol" align="center">{tag:type}</td>
+			<td class="hlCol" align="center">{tag:content}</td>
+			<td class="hlCol" align="center">{tag:param}</td>
+			<td class="hlCol" align="center">
+			<a href="{gurl.simple_acp_url(0,'&amp;action=edit&amp;id='~tag:id~'&amp;site='~site)}">
+			<img src="{gpath}acp/images/edit.png" alt="{glocale.lang('edit')}" title="{glocale.lang('edit')}" />
+			</a>
+			</td>
+			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			<input id="check_{row}" type="checkbox" name="delete[]" value="{tag:id}" />
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td class="a_body" width="30%">&nbsp;</td>
+		<td class="a_body" width="40%" align="center">
+		{glocale.lang('marked')}: <input type="submit" value="{glocale.lang('delete')}" />
+		</td>
+		<td class="a_body" width="30%" align="right">
+		<a href="javascript:rowHL.toggleAllSelected();">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+
+<div class="a_pad">
+	{include "inc_pagination.htm"}
+</div>
+{endif}
+
+{include "inc_footer.htm"}

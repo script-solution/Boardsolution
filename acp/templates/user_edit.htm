@@ -1,0 +1,73 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+<script type="text/javascript">
+<!--
+var BBCodeMode = '{bbcode_mode}';
+//-->
+</script>
+
+<form name="form_insert" method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="a_border">
+	<h1 class="a_topic">{glocale.lang('edit_user')}</h1>
+	<fieldset class="a_form">
+		{if comman_enabled}
+		<dl>
+			<dt>{glocale.lang('username')}: *</dt>
+			<dd>{form.get_textbox('user_name',user_name,30,30)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('avatar')}:</dt>
+			<dd>{avatar}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('password')}:</dt>
+			<dd>{form.get_passwordbox('user_pw','',30,50)} ( {glocale.lang('required_at_change_only')} )</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('password_conf')}:</dt>
+			<dd>{form.get_passwordbox('user_pw_conf','',30,50)} ( {glocale.lang('required_at_change_only')} )</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('email')}: *</dt>
+			<dd>{form.get_textbox('user_email',user_email,30,255)}</dd>
+		</dl>
+		{endif}
+		<dl>
+			<dt>{glocale.lang('user_group')}:</dt>
+			<dd>
+				{glocale.lang('main_group')}:
+				{form.get_combobox('main_group',maingroups,main_group,false,1,is_own_user)}<br />
+				{glocale.lang('other_groups')}:<br />
+				{form.get_combobox('other_groups[]',groups,other_groups,true,groups.length)}
+				<div class="a_desc">{glocale.lang('user_edit_groups_notice')}</div>
+			</dd>
+		</dl>
+		{loop addfields as field}
+		<dl>
+			<dt>{field:name}:{field:is_required}</dt>
+			<dd>{field:value}</dd>
+		</dl>
+		{endloop}
+		{include "inc_post_form.htm"}
+		<div class="a_coldesc_sep">&nbsp;</div>
+		<dl>
+			<dt>{glocale.lang('user_edit_notify')}:</dt>
+			<dd>
+				{form.get_radio_yesno('notify',0)}
+				<div class="a_desc">{glocale.lang('user_edit_notify_explain')}</div>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="submit" value="{glocale.lang('save')}" />
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{base_url}';" />
+</center>
+</form>
+
+{endif}
+
+{include "inc_footer.htm"}

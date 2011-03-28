@@ -1,0 +1,32 @@
+<script type="text/javascript">
+<!--
+function getModActionURL()
+{
+	var comboBox = document.getElementById('topic_action');
+	if(comboBox.value != "")
+	{
+		switch(comboBox.value)
+		{
+			case "edit":
+				return "{gurl.simple_url('edit_topic','&$URL_FID='~fid~'&$URL_ID=__ID__','&')}";
+			case "delete":
+				return "{gurl.simple_url('delete_topics','&$URL_FID='~fid~'&$URL_ID=__ID__','&')}";
+			case "move":
+				return "{gurl.simple_url('move_topics','&$URL_FID='~fid~'&$URL_ID=__ID__','&')}";
+			case "open":
+				return "{gurl.simple_url('openclose_topics','&$URL_MODE=open&$URL_FID='~fid~'&$URL_ID=__ID__','&')}";
+			case "close":
+				return "{gurl.simple_url('openclose_topics','&$URL_MODE=close&$URL_FID='~fid~'&$URL_ID=__ID__','&')}";
+			case "lock":
+				return "{gurl.simple_url('lock_topics','&$URL_FID='~fid~'&$URL_ID=__ID__','&')}";
+			case "mark_read":
+				return "{gurl.simple_url(0,'&$URL_AT=$ACTION_CHANGE_READ_STATUS&$URL_LOC=read&$URL_MODE=topics&$URL_FID='~fid~'&$URL_SITE='~site~'&$URL_ID=__ID__','&',true)}";
+			case "mark_unread":
+				return "{gurl.simple_url(0,'&$URL_AT=$ACTION_CHANGE_READ_STATUS&$URL_LOC=unread&$URL_MODE=topics&$URL_FID='~fid~'&$URL_SITE='~site~'&$URL_ID=__ID__','&',true)}";
+		}
+	}
+
+	return "";
+}
+//-->
+</script>

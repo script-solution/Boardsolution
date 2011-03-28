@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<languages xmlns="http://www.script-solution.de/schemas/bs/bbc/languages"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.script-solution.de/schemas/bs/bbc/languages languages.xsd">
+	<language id="c" name="C" file="c.xml"/>
+	<language id="cpp" name="C++" file="cpp.xml"/>
+	<language id="php" name="PHP" file="php.xml"/>
+	<language id="java" name="Java" file="java.xml"/>
+	<language id="js" name="Javascript" file="js.xml"/>
+	<language id="ini" name="Ini" file="ini.xml"/>
+	<language id="css" name="CSS" file="css.xml"/>
+	<language id="html" name="HTML" file="html.xml"/>
+	<language id="tpl" name="(BS-)Template" file="tpl.xml"/>
+	<language id="bash" name="Bash" file="bash.xml"/>
+	<language id="xml" name="XML" file="xml.xml"/>
+	<language id="sql" name="SQL" file="sql.xml"/>
+</languages>

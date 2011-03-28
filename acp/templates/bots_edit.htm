@@ -1,0 +1,46 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+<form method="post" action="{form_target}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="a_border">
+	<h1 class="a_topic">{title}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('bot_name')}:</dt>
+			<dd>{form.get_textbox('bot_name',default:bot_name,30,255)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('bot_match')}:</dt>
+			<dd>
+				{form.get_textbox('bot_match',default:bot_match,30,255)}
+				<div class="a_desc">{glocale.lang('bot_match_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('bot_ip_range')}:</dt>
+			<dd>
+				{form.get_textbox('bot_ip_start',default:bot_ip_start,15,15)} ...
+				{form.get_textbox('bot_ip_end',default:bot_ip_end,15,15)}
+				<div class="a_desc">{glocale.lang('bot_ip_range_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('bot_access')}:</dt>
+			<dd>
+				{form.get_radio_yesno('bot_access',default:bot_access)}
+				<div class="a_desc">{glocale.lang('bot_access_desc')}</div>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="submit" value="{glocale.lang('save')}" />
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.simple_acp_url(0,'&amp;site='~site)}';" />
+</center>
+</form>
+
+{endif}
+
+{include "inc_footer.htm"}

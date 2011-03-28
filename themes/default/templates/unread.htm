@@ -1,0 +1,30 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<form name="thread_action" method="post" action="{target_url}">
+<input type="hidden" name="topic_action" value="mark_read" />
+
+{include "inc_topics.htm"}
+
+<div class="bs_padbottom">
+	<img style="margin-left: 20px;" src="{guser.get_theme_item_path('images/thread_option.gif')}" alt="" />
+	<input type="submit" onclick="performModAction('{js_url}'); return false;" value="Als gelesen markieren" /> |
+	<a href="javascript:invertSelection('id_',0);">{glocale.lang('invertmark')}</a>
+</div>
+</form>
+
+<div class="bs_padtop">
+{include "inc_pagination.htm"}
+</div>
+
+<div class="bs_padtop" style="float: right;">
+	<a href="{gurl.simple_url(0,'&amp;$URL_AT=$ACTION_CHANGE_READ_STATUS&amp;$URL_LOC=read&amp;$URL_MODE=all','&amp;',true)}">{glocale.lang('markallasread')}</a>
+</div>
+<br style="clear: both;" />
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

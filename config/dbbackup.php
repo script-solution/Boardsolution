@@ -1,0 +1,32 @@
+<?php
+/**
+ * Contains constants for the dbbackup-script
+ *
+ * @version			$Id$
+ * @package			Boardsolution
+ * @subpackage	config
+ * @author			Nils Asmussen <nils@script-solution.de>
+ * @copyright		2003-2008 Nils Asmussen
+ * @link				http://www.script-solution.de
+ */
+
+/**
+ * The used language
+ */
+define('BS_DBA_LANGUAGE','ger_du');
+
+/**
+ * The used line-wrap
+ */
+define('BS_DBA_LINE_WRAP',"\n");
+
+/**
+ * Do you want to enable GZip?
+ */
+define('BS_DBA_ENABLE_GZIP',false);
+
+/**
+ * The number of SQL-statements per file
+ */
+define('BS_DBA_OPERATIONS_PER_CYCLE',200);
+?>

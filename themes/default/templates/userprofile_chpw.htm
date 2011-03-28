@@ -1,0 +1,48 @@
+{js_script}
+
+<form method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">
+		{if enable_username_change}
+		{glocale.lang('user_n_pw_change')}
+		{else}
+		{glocale.lang('pw_change')}
+		{endif}
+	</h1>
+	<fieldset class="bs_form">
+		{if enable_username_change}
+		<dl>
+			<dt>{glocale.lang('name')}:</dt>
+			<dd>
+				{form.get_textbox('user_name',user_name,user_name_size,user_name_maxlength)}
+				{if max_changes_notice}
+				<div class="bs_desc">{max_changes_notice}</div>
+				{endif}
+			</dd>
+		</dl>
+		{endif}
+		<dl>
+			<dt>{glocale.lang('oldpw')}:</dt>
+			<dd>{form.get_passwordbox('current_password','',password_size,password_maxlength)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('newpw')}:</dt>
+			<dd>
+				<input id="pw_field" type="password" name="new_password" size="{password_size}"
+						maxlength="{password_maxlength}" onkeyup="show_pw_complexity('pw_field','pw_complexity_notice');" />
+				<div class="bs_desc" id="pw_complexity_notice"></div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('newpw')}:</dt>
+			<dd>
+				<input type="password" name="new_password_conf" size="{password_size}" maxlength="{password_maxlength}" />
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="submit" value="{glocale.lang('save')}" />
+</center>
+</form>

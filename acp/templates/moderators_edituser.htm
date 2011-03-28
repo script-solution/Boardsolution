@@ -1,0 +1,27 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<form method="post" action="{gurl.simple_acp_url(0,'&amp;action=edituser&amp;usernames='~usernames)}">
+<input type="hidden" name="action_type" value="{action_type}" />
+{loop user as u}
+<input type="hidden" name="user[]" value="{u:id}" />
+{endloop}
+<div class="a_border">
+	<h1 class="a_topic">{glocale.lang('config_mod_forums')}</h1>
+	<fieldset class="a_form">
+		{loop user as u}
+		<dl>
+			<dt>{u:name}:</dt>
+			<dd>{u:forum_combo}</dd>
+		</dl>
+		{endloop}
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.simple_acp_url()}';" />
+	<input type="submit" value="{glocale.lang('save')}" />
+</center>
+</form>
+{endif}
+
+{include "inc_footer.htm"}

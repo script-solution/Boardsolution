@@ -1,0 +1,103 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+<script type="text/javascript" src="{gjs.get_file('src/quote.js')}"></script>
+
+{if display_reply}
+<div>
+	<a id="reply_btn_1" class="bs_button_big" title="{glocale.lang('answer_desc')}" href="{reply_url}" onclick="return quote('{quoteLink}');">{glocale.lang('answer')}</a>
+	<br style="clear: both;" />
+</div>
+{endif}
+
+<div class="bs_border bs_padbottom">
+	<h1 class="bs_topic">{thread_type_ins}: &quot;{threadname_ins}&quot;</h1>
+	{if show_event}
+	{include "inc_event.htm"}
+	{endif}
+	{if show_poll}
+	{include "inc_poll.htm"}
+	{endif}
+</div>
+
+{if posts.length > 0}
+{loop posts as post}
+<a id="b_{post:bid}"></a>
+<div class="bs_border">
+	<div class="bs_topic">
+		<div class="bs_post_username">{post:user_name_plain}</div>
+		<div class="bs_post_date">{post:post_date}</div>
+		<br style="clear: both;" />
+	</div>
+	<div class="bs_post">{post:text_ins}</div>
+	<div style="float: right;">{post:bottom_ins}</div>
+	<br style="clear: both;" />
+</div>
+{endloop}
+{endif}
+
+<div class="bs_padtop">
+{include "inc_pagination.htm"}
+</div>
+
+<div class="bs_padtop">
+	<div style="float: right;">
+		{if display_reply}
+		<a id="reply_btn_2" class="bs_button_big" title="{glocale.lang('answer_desc')}" href="{reply_url}" onclick="return quote('{quoteLink}');">{glocale.lang('answer')}</a>
+		{if gisloggedin}
+		<a class="bs_button_big" href="javascript:toggleQuickReply();">{glocale.lang('quick_reply')}</a>
+		{endif}
+		{endif}
+	</div>
+	<br style="clear: both;" />
+</div>
+
+{if gisloggedin}
+<script type="text/javascript">
+<!--
+function toggleQuickReply()
+{
+	var d = document.getElementById('quickReply');
+	if(d != null)
+		d.style.display = d.style.display == 'block' ? 'none' : 'block';
+}
+var BBCodeModes = new Array();
+BBCodeModes['1'] = 'simple';
+//-->
+</script>
+<script type="text/javascript" src="{gjs.get_file('src/bbcode.js')}"></script>
+<script type="text/javascript" src="{gjs.get_file('src/ajax_quote_message.js')}"></script>
+<div id="quickReply" style="display: none;">
+<form method="post" action="{gurl.simple_url('new_post','&amp;$URL_FID='~fid~'&amp;$URL_TID='~tid)}">
+<input type="hidden" name="action_type" value="{quick_reply_action_type}" />
+<input type="hidden" name="timestamp" value="{timestamp}" />
+<div class="bs_border bs_padtop">
+	<h1 class="bs_topic">{glocale.lang('quick_reply')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('text')}:</dt>
+			<dd>
+				<textarea id="quickReply_text" name="text" cols="50" rows="15" style="width: 90%;"></textarea>
+				<div class="bs_padtop">
+					<input type="checkbox" id="ubb" name="use_bbcode" value="checked" checked="checked" />
+					<label for="ubb">{glocale.lang('use_bbcode')}</label><br />
+					<input type="checkbox" id="usm" name="use_smileys" value="checked" checked="checked" />
+					<label for="usm">{glocale.lang('use_smileys')}</label>
+				</div>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="preview" value="{glocale.lang('preview')}" />
+	<input type="submit" name="submit" value="{glocale.lang('submit')}" />
+</center>
+</form>
+</div>
+{endif}
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

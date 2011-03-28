@@ -1,0 +1,92 @@
+div.calendar {
+	background-color: #ebebeb;
+	border: 1px solid #7F90AE;
+	font-size: 0.9em;
+}
+
+div.calendar table {
+	border-collapse: separate;
+	border-spacing: 1px;
+}
+
+div.calendar td.cal_button_disabled {
+	border: 1px solid #ccc;
+	color: #aaa;
+	background-color: #738cae;
+}
+div.calendar td.cal_button {
+	border: 1px solid #ccc;
+	color: white;
+	background-color: #738cae;
+}
+div.calendar td.cal_button_hover {
+	border: 1px solid #ccc;
+	background-color: #3F5E88;
+	color: white;
+	cursor: pointer;
+}
+
+div.calendar td {
+	padding: 0.2em;
+	border: 1px solid #ccc;
+}
+
+div.calendar tbody td {
+	padding: 0px;
+	height: 25px;
+	width: 25px;
+	text-align: center;
+}
+
+div.calendar td.cal_month {
+	background-color: #DBDBDB;
+	font-weight: bold;
+}
+
+div.calendar td.cal_wkno {
+	background-color: #fff;
+}
+
+div.calendar td.cal_wkcorner {
+	background-color: #DBDBDB;
+}
+
+div.calendar td.cal_wkday {
+	background-color: #fff;
+}
+
+div.calendar tbody td.cal_today {
+	border: 1px solid #800000;
+}
+
+div.calendar tbody td.cal_selected {
+	background-color: #3F5E88;
+	color: white;
+}
+
+div.calendar tbody td.cal_valid_hover {
+	border: 1px solid #333;
+	cursor: pointer;
+}
+
+div.calendar tbody td.cal_invalid {
+	color: #999;
+	text-align: center;
+}
+
+div.calendar thead td {
+	text-align: center;
+}
+
+div.calendar tfoot td {
+	background-color: #DBDBDB;
+	text-align: center;	
+}
+
+div.calendar a {
+	color: #3F5E88;
+	text-decoration: none;
+}
+div.calendar a:hover {
+	text-decoration: underline;
+}

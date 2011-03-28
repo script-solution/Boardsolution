@@ -1,0 +1,33 @@
+{include "inc_post_preview.htm"}
+
+<form method="post" action="{target_url}" onsubmit="BS_refresh_text();">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('signature')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('preview')}:</dt>
+			<dd>
+				{if signature_preview != ''}
+				<div class="bs_posts_main_1 bs_signature">
+				{signature_preview}
+				</div>
+				{else}
+				&nbsp;
+				{endif}
+			</dd>
+		</dl>
+		{include "inc_post_form.htm"}
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="preview" value="{glocale.lang('preview')}" />
+	<input type="submit" name="submit" value="{glocale.lang('save')}" />
+</center>
+</form>
+
+{if sig_max_height > 0}
+<div class="bs_padtop">
+{signature_maxheight_notice}
+</div>
+{endif}

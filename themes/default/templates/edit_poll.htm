@@ -1,0 +1,53 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<form method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('edit_topic')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('forum')}:</dt>
+			<dd>{forum_name}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('question')}:</dt>
+			<dd>{form.get_textbox('topic_name',topic_name_def,60)}</dd>
+		</dl>
+		{if view_important}
+		<dl>
+			<dt>{glocale.lang('important')}:</dt>
+			<dd>{form.get_radio_yesno('important',important_def)} ( {glocale.lang('alwaysshowontop')} )</dd>
+		</dl>
+		{endif}
+		<dl>
+			<dt>{glocale.lang('allowposts')}:</dt>
+			<dd>{form.get_radio_yesno('allow_posts',allow_posts_def)}</dd>
+		</dl>
+		{if view_options}
+		<dl>
+			<dt>{glocale.lang('multichoice')}:</dt>
+			<dd>{form.get_radio_yesno('multichoice',multichoice_def)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('poll_options')}:</dt>
+			<dd>
+				{form.get_textarea('poll_options',poll_options_def,'90%',15)}
+				<div class="bs_desc">{glocale.lang('poll_notice_1line4option')}</div>
+			</dd>
+		</dl>
+		{endif}
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{back_url}'" />
+	<input type="submit" value="{glocale.lang('save')}" />
+</center>
+</form>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

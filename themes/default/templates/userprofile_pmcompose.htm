@@ -1,0 +1,96 @@
+<script type="text/javascript" src="{gjs.get_file('src/ajax_user_matches.js')}"></script>
+<script type="text/javascript">
+<!--
+function submitButton(btnID)
+{
+	var btn = document.getElementById(btnID);
+	btn.type = "submit";
+	btn.click();
+}
+
+function user_search_callback(selectedUser)
+{
+	var tF = document.getElementById('new_receiver');
+	if(tF.value != "" && selectedUser.length > 0)
+		tF.value += ", ";
+	
+	for(var i = 0;i < selectedUser.length;i++)
+	{
+		tF.value += selectedUser[i];
+		if(i < selectedUser.length - 1)
+			tF.value += ", ";
+	}
+}
+//-->
+</script>
+
+{include "inc_post_preview.htm"}
+
+<form enctype="multipart/form-data" method="post" action="{target_url}" onsubmit="BS_refresh_text();">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('newpm')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('receiver')}:</dt>
+			<dd>
+				{if receiver_num == false}
+				<i>{glocale.lang('no_receivers_assigned')}</i>
+				{else}
+				<table width="70%" cellpadding="0" cellspacing="0">
+					{loop receivers as index => receiver}
+					<tr>
+						<td>
+						<input type="hidden" name="receiver[]" value="{receiver}" />
+						{receiver}
+						</td>
+						<td>
+						<input type="submit" id="remove_recv_{index}" name="remove_pm_recv[{receiver}]" value="{glocale.lang('delete')}" onclick="submitButton('remove_recv_{index}')" />
+						</td>
+					</tr>
+					{endloop}
+				</table>
+				{endif}
+				
+				<div class="bs_padtop">
+					<input type="text" autocomplete="off" id="new_receiver" name="new_receiver" size="30" />
+					<input type="button" onclick="FWS_openDefaultPopup('{user_search_url}','UserSuche',600,700);" value="{glocale.lang('search')}" />
+					<input type="submit" id="add_receiver_id" name="add_receiver" value="{glocale.lang('add')}" />
+				</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('title')}:</dt>
+			<dd>{form.get_textbox('pm_title',title_value,50,80)}</dd>
+		</dl>
+		{include "inc_post_form.htm"}
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="preview" value="{glocale.lang('preview')}" />
+	<input type="submit" name="submit" value="{glocale.lang('submit')}" accesskey="s" />
+</center>
+</form>
+
+<script type="text/javascript">
+<!--
+new BS_AJAXUserSearch('{gpath}','new_receiver','{action_param}','{glocale.lang('matching_user')}',
+	'{guser.get_theme_item_path("images/wait.gif")}',true,false,',');
+
+if(!Browser.isIE)
+{
+    for(var i = 0;;i++)
+    {
+        var btn = document.getElementById('remove_recv_' + i);
+        if(btn == null)
+            break;
+    
+        btn.type = "button";
+    }
+}
+//-->
+</script>
+
+<div class="bs_padtop">
+{include "inc_message_review.htm"}
+</div>

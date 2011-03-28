@@ -1,0 +1,455 @@
+/* ------------ BODY ------------ */
+
+[title] {
+	cursor: help;
+}
+
+div#ajax_wait_bar {
+	left: 0px;
+	text-align: center;
+	background-color: #008000;
+	color: white;
+	font-size: 14px;
+	font-weight: bold;
+	padding: 4px;
+	border: 1px dotted #fff;
+}
+
+#fws_image_viewer {
+	border: 1px dotted #444;
+	color: #000;
+	background-color: #fff;
+	padding: 5px;
+	cursor: pointer;
+}
+#fws_image_viewer_bg {
+	background-color: #444;
+}
+
+img {
+	border: 0;
+	vertical-align: text-top;
+}
+
+img[onclick] {
+	cursor: pointer;
+}
+
+code {
+	font-family: monospace;
+	font-size: 12px;
+}
+
+/* ------------ PADDING ------------ */
+
+.bs_padtop {
+	margin-top: 0.9em;
+}
+
+.bs_padtop_big {
+	margin-top: 1.5em;
+}
+
+.bs_padbottom {
+	margin-bottom: 0.9em;
+}
+
+.bs_padbottom_big {
+	margin-bottom: 1.5em;
+}
+
+/* ------------ TABLE ------------ */
+
+table.bs_table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0;
+	padding: 0;
+}
+
+table.bs_table > tbody > tr > td, table.bs_table > tbody > tr > th {
+	border: 1px solid #b9b9b9;
+}
+
+/* Fix the table-display in IE */
+*:first-child+html table.bs_table {
+	border-collapse: separate;
+}
+*:first-child+html table.bs_table > tbody > tr > td {
+	border: none;
+}
+
+/* Fix the table-display in firefox and partly in opera */
+table.bs_table > tbody > tr:last-child > td.bs_coldesc {
+	border-bottom: 1px solid #4A4A4A;
+}
+table.bs_table > tbody > tr:last-child > td.bs_left {
+	border-bottom: 1px solid #4A4A4A;
+}
+table.bs_table > tbody > tr:last-child > td.bs_main {
+	border-bottom: 1px solid #C7C7C7;
+}
+table.bs_table > tbody > tr:last-child > td.bs_topic {
+	border-bottom: 1px solid #aa1011;
+}
+table.bs_table > tbody > tr > td.bs_coldesc:last-child {
+	border-right: 1px solid #4A4A4A;
+}
+table.bs_table > tbody > tr > td.bs_left:last-child {
+	border-right: 1px solid #4A4A4A;
+}
+table.bs_table > tbody > tr > td.bs_main:last-child {
+	border-right: 1px solid #C7C7C7;
+}
+table.bs_table > tbody > tr > td.bs_topic:last-child {
+	border-right: 1px solid #aa1011;
+}
+
+/* Fix the table-display in opera >= 9 */
+@media all and (min-width:0px) {
+	table.bs_table > tbody > tr > td.bs_coldesc:first-child {
+		border-left: 1px solid #4A4A4A;
+	}
+	table.bs_table > tbody > tr > td.bs_left:first-child {
+		border-left: 1px solid #4A4A4A;
+	}
+	table.bs_table > tbody > tr > td.bs_main:first-child {
+		border-left: 1px solid #C7C7C7;
+	}
+	table.bs_table > tbody > tr > td.bs_topic:first-child {
+		border-left: 1px solid #aa1011;
+	}
+	table.bs_table > tbody > tr:first-child > td.bs_topic {
+		border-top: 1px solid #aa1011;
+	}
+}
+
+/* Fix the table-display in konqueror >= 3.4.3 */
+html:not(:nth-child(1)) table.bs_table > tbody > tr > td:last-child {
+	border: 1px solid #fff;
+}
+html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_coldesc:first-child {
+	border-left: 1px solid #4A4A4A;
+}
+html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_left:first-child {
+	border-left: 1px solid #4A4A4A;
+}
+html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_main:first-child {
+	border-left: 1px solid #C7C7C7;
+}
+html:not(:nth-child(1)) table.bs_table > tbody > tr:first-child > td.bs_topic {
+	border-top: 1px solid #aa1011;
+}
+html:not(:nth-child(1)) table.bs_table > tbody > tr > td.bs_topic:first-child {
+	border-left: 1px solid #aa1011;
+}
+/* ------------ PORTAL ------------ */
+
+.bs_portal_left {
+	width: 70%;
+	float: left;
+}
+.bs_portal_right {
+	width: 29%;
+	float: right;
+}
+
+/* ------------ CALENDAR ------------ */
+
+.bs_calendar_left {
+	width: 21%;
+	float: left;
+}
+.bs_calendar_right {
+	width: 79%;
+	float: right;
+}
+
+/* ------------ PROFILE ------------ */
+
+.bs_profile_left {
+	width: 17%;
+	float: left;
+}
+
+.bs_profile_right {
+	width: 82%;
+	float: right;
+}
+
+/* ------------ HEADLINE ------------ */
+
+.bs_menu_wrapper {
+	margin: 1px 0;
+}
+.bs_menu {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.bs_menu li {
+	display: block;
+	float: left;
+	margin: 0;
+	padding: 1px;
+}
+.bs_menu a {
+	display: block;
+	float: left;
+	padding: 2px 0.7em;
+}
+
+/* Fixes for the IE < 7 */
+* html .bs_menu_wrapper {
+	height: 20px;
+}
+/* Fixes for the IE >= 7 */
+*:first-child+html .bs_menu_wrapper {
+	height: 20px;
+}
+
+ul.bs_welcome {
+	display: table;
+	width: 100%;
+}
+li.bs_welcome_left {
+	display: table-cell;
+	width: auto;
+}
+li.bs_welcome_right {
+	display: table-cell;
+	width: auto;
+	text-align: right;
+}
+
+/* Hacks for the IE < 7 */
+* html li.bs_welcome_left {
+	display: inline;
+	zoom: 1;
+	float: left;
+}
+* html li.bs_welcome_right {
+	display: inline;
+	zoom: 1;
+	float: right;
+}
+
+/* Hacks for the IE >= 7 */
+*:first-child+html li.bs_welcome_left {
+	display: inline;
+	zoom: 1;
+	float: left;
+}
+*:first-child+html li.bs_welcome_right {
+	display: inline;
+	zoom: 1;
+	float: right;
+}
+
+/* ------------ BOTTOM ------------ */
+
+ul.bs_bottom {
+	display: table;
+	width: 100%;
+}
+* html ul.bs_bottom {
+	display: block;
+}
+li.bs_bottom {
+	display: table-cell;
+	width: auto;
+}
+li.bs_bottom_left {
+	width: 30%;
+}
+li.bs_bottom_center {
+	text-align: center;
+}
+li.bs_bottom_right {
+	text-align: right;
+}
+
+/* Hacks for IE < 7 */
+* html li.bs_bottom {
+	display: inline;
+	width: 32%;
+	zoom: 1;
+	margin-top: 0.7em;
+}
+* html li.bs_bottom_left, * html li.bs_bottom_center {
+	float: left;
+}
+* html li.bs_bottom_right {
+	float: right;
+	margin-top: 0;
+	margin-bottom: 0.5em;
+}
+
+/* Hacks for IE >= 7 */
+*:first-child+html li.bs_bottom {
+	display: inline;
+	width: 32%;
+	zoom: 1;
+	margin-top: 0.7em;
+}
+*:first-child+html li.bs_bottom_left, *:first-child+html li.bs_bottom_center {
+	float: left;
+}
+*:first-child+html li.bs_bottom_right {
+	float: right;
+	margin-top: 0;
+	margin-bottom: 0.5em;
+}
+
+/* ------------ LISTS ------------ */
+
+ul.bs_none_list {
+	list-style: none;
+	margin: 0;
+	margin-top: 1px;
+	padding: 0;
+}
+
+li.bs_main {
+	margin: 1px 0 0 0;
+}
+
+li.bs_left, li.bs_coldesc {
+	margin: 1px 0 0 0;
+}
+
+/* ------------ FORMULARS ------------ */
+
+fieldset.bs_form {
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+fieldset.bs_form dl {
+	padding: 0;
+	margin: 0;
+	margin-top: 1px;
+}
+
+fieldset.bs_form dt {
+	display: block;
+	margin: 0;
+	float: left;
+}
+
+fieldset.bs_form dd {
+	display: block;
+	margin: 0;
+}
+
+fieldset.bs_subform {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+fieldset.bs_subform dl {
+	
+}
+
+fieldset.bs_subform dt {
+	
+}
+
+/* ------------ BBCODE BUTTONS ------------ */
+
+ul.bs_bbcode_helper {
+	padding-top: 0.5em;
+}
+
+.bs_bbcode_popup {
+	display: none;
+}
+.bs_bbcode_popup li {
+	padding: 0;
+}
+.bs_bbcode_popup li a {
+	display: block;
+}
+
+.bbcode_area_resizer {
+	width: 91%;
+	margin: 0;
+	padding: 0;
+	border: 1px dotted #888;
+	cursor: move;
+}
+
+/* Fix for konqueror */
+html:not(:nth-child(1)) .bbcode_area_resizer {
+	width: 90%;
+}
+
+/* ------------ POSTS ------------ */
+
+li.bs_post_list {
+	margin: 0;
+	padding: 0;
+}
+
+/* ------------ OTHER ------------ */
+
+form {
+	margin: 0;
+}
+
+ul {
+	margin: 5px 0 0 0;
+	padding: 0 0 0 20px;
+}
+
+li {
+	padding: 0 0 5px 0;
+}
+
+label {
+	cursor: pointer;
+}
+
+input.bs_bbcode_notice {
+	border: none;
+	background-color: #C7C7C7;
+}
+
+/* ------------ MESSAGES ------------ */
+
+span.bs_msg_error {
+	color: #f00;
+	font-weight: bold;
+}
+
+span.bs_msg_warning {
+	color: #f90;
+	font-weight: bold;
+}
+
+span.bs_msg_notice {
+	color: #008000;
+	font-weight: bold;
+}
+
+/* ------------ BUTTON ------------ */
+
+a.bs_button {
+	width: 80px;
+	height: 16px;
+	padding-top: 2px;
+	margin: 0px 2px 0px 2px;
+	display: block;
+	float: right;
+}
+
+a.bs_button_big {
+	width: 120px;
+	height: 16px;
+	padding-top: 2px;
+	margin: 0px 2px 0px 2px;
+	display: block;
+	float: right;
+}

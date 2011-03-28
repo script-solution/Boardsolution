@@ -1,0 +1,136 @@
+{include "inc_header.htm"}
+{include "inc_delete_message.htm"}
+
+{if module_error == false}
+{include "inc_js_row_selector.htm"}
+
+<div class="a_block">
+	<div class="a_menubar">
+		<a href="{gurl.simple_acp_url(0,'&amp;action=edit')}">
+		<img src="{gpath}acp/images/plus.png" alt="{glocale.lang('create_new_forum')}" />
+		{glocale.lang('create_new_forum')}
+		</a>
+		<a href="{correct_sort_url}">
+		<img src="{gpath}acp/images/accept.png" alt="{glocale.lang('forum_correct_sort')}" />
+		{glocale.lang('forum_correct_sort')}
+		</a>
+	</div>
+</div>
+
+<form method="post" action="{gurl.simple_acp_url()}">
+<input type="hidden" name="action_type" value="{at_update}" />
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('acpmod_forums')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="38%" class="a_coldesc">{glocale.lang('forum_name')}</td>
+			<td width="40%" class="a_coldesc" align="center">
+			<span style="font-size: 9px;">{glocale.lang('thread')} | {glocale.lang('poll')} | {glocale.lang('event')} | {glocale.lang('answer')} | {glocale.lang('intern')}</span>
+			</td>
+			<td width="12%" class="a_coldesc" align="center">{glocale.lang('sort')}</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+		</tr>
+		{if forums.length == 0}
+		<tr>
+			<td class="a_main" align="center" colspan="5">{glocale.lang('no_categories_found')}</td>
+		</tr>
+		{endif}
+		{loop forums as row => forum}
+		{if forum:show_separator}
+		<tr>
+			<td colspan="5" class="a_coldesc_sep">&nbsp;</td>
+		</tr>
+		{endif}
+		<tr id="row_{row}" class="hlRow">
+			<td class="hlCol" style="padding: 2px;" valign="middle">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					{loop forum:path_images as pimage}
+					<td width="25" height="10" valign="top" class="hlCol">{pimage}</td>
+					{endloop}
+					<td style="padding-left: 5px;" valign="top" class="hlCol">
+					<img style="margin-bottom: 5px;" title="{forum:forum_type_title}"
+							src="{gpath}acp/images/forums/{forum:forum_type}.gif" alt="{forum:forum_type_title}" />
+					<span style="font-size: 10pt;">{forum:forum_name}</span>
+					</td>
+				</tr>
+			</table>
+				</td>
+				<td class="hlCol" align="center">
+				<table width="100%" cellpadding="1" cellspacing="0">
+					<tr>
+						<td width="20%" class="hlCol" style="border-right: 1px solid;" align="center">
+						{if forum:permissions:topic != ''}{forum:permissions:topic}{else}-{endif}
+						</td>
+						<td width="20%" class="hlCol" style="border-right: 1px solid;" align="center">
+						{if forum:permissions:poll != ''}{forum:permissions:poll}{else}-{endif}
+						</td>
+						<td width="20%" class="hlCol" style="border-right: 1px solid;" align="center">
+						{if forum:permissions:event != ''}{forum:permissions:event}{else}-{endif}
+						</td>
+						<td width="20%" class="hlCol" style="border-right: 1px solid;" align="center">
+						{if forum:permissions:answer != ''}{forum:permissions:answer}{else}-{endif}
+						</td>
+						<td width="20%" class="hlCol" align="center">
+						{if forum:permissions:intern != ''}{forum:permissions:intern}{else}-{endif}
+						</td>
+					</tr>
+				</table>
+				</td>
+			<td class="hlCol" align="center">
+			( {forum:sortierung} )
+
+			{if forum:up_index != -1}
+			<a href="{forum:switch_up_url}"><img src="{gpath}acp/images/asc.gif" title="{glocale.lang('forum_up')}"
+				 alt="{glocale.lang('forum_up')}" /></a>
+			{else}
+			<img src="{gpath}acp/images/up_disabled.gif" title="{glocale.lang('notavailable')}" alt="{glocale.lang('notavailable')}" />
+			{endif}
+
+			{if forum:down_index != -1}
+			<a href="{forum:switch_down_url}"><img src="{gpath}acp/images/desc.gif" title="{glocale.lang('forum_down')}"
+				 alt="{glocale.lang('forum_down')}" /></a>
+			{else}
+			<img src="{gpath}acp/images/down_disabled.gif" title="{glocale.lang('notavailable')}" alt="{glocale.lang('notavailable')}" />
+			{endif}
+			</td>
+			<td class="hlCol" align="center">
+			<a href="{forum:options_url}">
+			<img src="{gpath}acp/images/edit.png" alt="{glocale.lang('edit')}" title="{glocale.lang('edit')}" />
+			</a>
+			</td>
+			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			<input id="check_{row}" type="checkbox" name="delete[]" value="{forum:fid}" />
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="35%" class="a_body">&nbsp;</td>
+		<td width="30%" class="a_body" align="center">
+		{glocale.lang('marked')}:
+		<select name="action_type">
+			<option value="">- {glocale.lang('no_action')} -</option>
+			<option value="delete">{glocale.lang('delete')}</option>
+			<option value="empty">{glocale.lang('empty_forum')}</option>
+		</select>
+		<input type="submit" value="{glocale.lang('submit')}" /></td>
+		<td width="35%" class="a_body" align="right">
+		<a href="javascript:rowHL.toggleAllSelected();">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+
+<p class="a_block_pad"><u>{glocale.lang('shortcuts')}</u>:<br />
+	{loop shortcuts as shortcut => groupname}
+	<b>{groupname}</b> = {shortcut}<br />
+	{endloop}
+</p>
+
+{endif}
+
+{include "inc_footer.htm"}

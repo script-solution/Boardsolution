@@ -1,0 +1,40 @@
+<form method="post" action="{target_url}">
+{if action_type}
+<input type="hidden" name="action_type" value="{action_type}" />
+{endif}
+<input type="hidden" name="save" value="1" />
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('acpmod_tpleditor')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td class="a_coldesc" style="font-weight: normal;">
+			<b>{glocale.lang('filename')}:</b>
+			<img src="{gpath}images/filetypes/{image}" alt="" /> {filename}
+			</td>
+			<td class="a_coldesc" style="font-weight: normal;">
+			<b>{glocale.lang('filesize')}:</b> {filesize} Bytes
+			</td>
+			<td class="a_coldesc" style="font-weight: normal;">
+			<b>{glocale.lang('modified')}:</b> {last_modification}
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" class="a_main" align="center">
+			<textarea id="taedit" name="file_content"
+				style="width: 98%; height: 400px;" cols="50" rows="10">{file_content}</textarea>
+			<script type="text/javascript" src="{gjs.get_file('src/taresize.js')}"></script>
+			<div id="bbcode_area_resizer" class="a_coldesc_sep"
+				onmousedown="BS_set_textarea_ids('taedit',this.id);"
+				style="cursor: pointer; width: 99%;">&nbsp;</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" class="a_coldesc" align="center">
+			<input type="submit" value="{glocale.lang('save')}" />
+			{if back_button}
+			<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{back_url}';" /></td>
+			{endif}
+		</tr>
+	</table>
+</div>
+</form>

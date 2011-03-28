@@ -1,0 +1,62 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+<script type="text/javascript">
+<!--
+window.print();
+//-->
+</script>
+
+<h1>{board_title}</h1>
+
+<div class="bs_padtop_big"><b>{glocale.lang('position')}:</b> {location}</div>
+
+{if show_poll}
+<div class="bs_border bs_padtop">
+	<h1 class="bs_topic">{question}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		{loop poll_options as option}
+		<tr>
+			<td width="35%" class="bs_main">{option:option_name}</td>
+			<td width="40%" class="bs_main">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="bs_vote_bar" width="{option:img_percent}%">&nbsp;</td>
+					<td width="{option:img_remaining_percent}%">&nbsp;</td>
+				</tr>
+			</table>
+			</td>
+			<td width="10%" class="bs_main">{option:percent} %</td>
+			<td width="15%" class="bs_main">{option:option_value} {glocale.lang('votes')}</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+{endif}
+
+{if show_event}
+<div class="bs_border bs_padtop">
+	<h1 class="bs_topic">{event_title}</h1>
+	{include "inc_event.htm"}
+</div>
+{endif}
+
+<div class="bs_border bs_padtop">
+{loop posts as post}
+<table class="bs_table" cellpadding="2" cellspacing="1" style="table-layout: fixed;">
+	<tr>
+		<th class="bs_coldesc" align="left" style="font-weight: normal;">
+		<b>{post:user_name}</b>, {post:date}
+		</th>
+	</tr>
+	<tr>
+		<td class="bs_posts_main_1">{post:text}</td>
+	</tr>
+</table>
+{endloop}
+</div>
+
+{endif}
+
+{include "inc_footer.htm"}

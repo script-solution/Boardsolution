@@ -1,0 +1,27 @@
+{if delete_message}
+<form method="post" action="{delete_target}">
+<div class="bs_border bs_padbottom">
+<h1 class="bs_topic">{glocale.lang('information')}</h1>
+	<div class="bs_main" style="text-align: center;">
+		{delete_message}
+		<div class="bs_padtop_big">
+			<input id="del_yes" type="submit" style="width: 50px;" name="option_yes"
+					value="{glocale.lang('yes')}" onclick="document.location.href = '{yes_url}';" />
+			&nbsp;
+			<input id="del_no" type="submit" style="width: 50px;" name="option_no"
+					value="{glocale.lang('no')}" onclick="document.location.href = '{no_url}';" />
+		</div>
+	</div>
+</div>
+</form>
+
+<script type="text/javascript">
+<!--
+if(!Browser.isIE)
+{
+    document.getElementById('del_yes').type = 'button';
+    document.getElementById('del_no').type = 'button';
+}
+//-->
+</script>
+{endif}

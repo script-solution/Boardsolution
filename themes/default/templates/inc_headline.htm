@@ -1,0 +1,87 @@
+{if show_deactivated_notice}
+<div class="bs_body" style="font-size: 13px; color: #FF0000;">{glocale.lang('board_is_disabled_admin_hint')}</div>
+{endif}
+
+{if gisloggedin == false}
+<form method="post" action="{login_url}">
+<input type="hidden" name="login" value="1" />
+<input type="hidden" name="action_type" value="{action_type}" />
+{endif}
+
+<div class="bs_border">
+	<div>
+		<div class="bs_headline" onclick="document.location.href = '{headline_url}';"></div>
+		<div class="bs_menu_wrapper">
+			<ul class="bs_menu">
+				{loop top_links as id => link}
+				<li><a href="{link:url}">{link:text}</a></li>
+				{endloop}
+			</ul>
+			<br style="clear: both;" />
+		</div>
+		
+		<div class="bs_welcome">
+			<ul class="bs_welcome bs_none_list">
+				<li class="bs_welcome_left">{glocale.lang('welcome')}, <b>{username}</b>!</li>
+				<li class="bs_welcome_right">{current_date}, {current_time}</li>
+			</ul>
+			<ul class="bs_welcome bs_none_list">
+				<li class="bs_welcome_left">
+					{if gisloggedin == false}
+					<b>{glocale.lang('quicklogin')}:</b>
+					<input style="padding: 1px;" type="text" name="user_login" size="12" value="Username"
+							onblur="if(this.value == '') this.value = 'Username';"
+							onfocus="if(this.value == 'Username') this.value = '';" />
+					<input style="padding: 1px;" type="password" name="pw_login" size="12" value="password"
+							onblur="if(this.value == '') this.value = 'password';"
+							onfocus="if(this.value == 'password') this.value = '';" />
+					<input style="padding: 1px;" type="submit" value="&nbsp;{glocale.lang('login')}&nbsp;" />&nbsp;
+					{else}
+					{glocale.lang('lastlogin')}: {if lastlogin}{lastlogin}{else}<i>{glocale.lang('notavailable')}</i>{endif}
+					{endif}
+				</li>
+				<li class="bs_welcome_right">
+					{if enable_portal}
+					<a href="{gurl.build_portal_url()}" title="{unread_news_title}">{glocale.lang('portal')}</a>
+					({if unread_news_count > 0}<span class="bs_unread">{unread_news_count}</span>{else}0{endif})
+					&middot;
+					{endif}
+					
+					{if gisloggedin && enable_pms}
+					<a title="{glocale.lang('privatemsgs')} ({unread_pm_count} {glocale.lang('newmsgs')})"
+					   href="{gurl.simple_url('userprofile','&amp;$URL_SUB=pmoverview')}">{glocale.lang('privatemsgs')}</a>
+					({if unread_pm_count > 0}<span class="bs_unread">{unread_pm_count}</span>{else}0{endif}) &middot;
+					{endif}
+					
+					<a title="{unread_topics_title}"
+					   href="{gurl.simple_url('unread')}">{glocale.lang('unread_threads')}</a>
+					({if unread_topic_count > 0}<span class="bs_unread">{unread_topic_count}</span>
+					<a href="{first_unread_url}"><img src="{guser.get_theme_item_path('images/unread/first_unread_post.gif')}"
+						alt="" /></a>{else}0{endif}) &middot;
+					
+					{if gisloggedin == false}
+					
+					{if forgotpw_link != ''}
+					<a href="{forgotpw_link}">{glocale.lang('forgetpw')}</a> &middot;
+					{endif}
+					{if resendact_link != ''}
+					<a href="{resendact_link}">{glocale.lang('resend_activation_link')}</a>
+					{endif}
+		
+					{else}
+					
+					<a href="{gurl.simple_url(-1,'&amp;$URL_AT=$ACTION_LOGOUT','&amp;',true)}">{glocale.lang('logout')}</a>
+					
+					{endif}
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+{if gisloggedin == false}
+</form>
+{endif}
+
+<div class="bs_body bs_padtop bs_padbottom" style="clear: both;">
+	<b>{glocale.lang('position')}:</b> {location}
+</div>

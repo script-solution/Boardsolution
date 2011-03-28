@@ -1,0 +1,15 @@
+</div>
+
+{if debug > 0}
+<div class="a_block_pad">
+	<b>Debug-Info:</b> {render_time} Sec., {db_queries} DB-Queries, {mem_usage} memory
+	{if debug > 1}
+	<div class="a_block">
+	{queries}
+	</div>
+	{endif}
+</div>
+{endif}
+
+</body>
+</html>

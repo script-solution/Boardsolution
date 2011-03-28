@@ -1,0 +1,78 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+{if num > 0}
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('linklist')}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<th width="25%" class="bs_coldesc" align="left">{glocale.lang('url')}</th>
+			<th width="20%" class="bs_coldesc">{glocale.lang('added')}</th>
+			<th width="7%" class="bs_coldesc">{glocale.lang('clicks')}</th>
+			<th width="38%" class="bs_coldesc">{glocale.lang('rating')}</th>
+			<th width="10%" class="bs_coldesc">{glocale.lang('details')}</th>
+		</tr>
+		{loop links as data}
+		{if data:show_category}
+		<tr>
+			<td colspan="5" class="bs_coldesc">{glocale.lang('category')} &raquo; <u>{data:category}</u></td>
+		</tr>
+		{endif}
+		<tr>
+			<td colspan="5" class="bs_main">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="25%">
+					<a target="_blank" href="{data:redirect_url}">{data:link_url}</a>
+					</td>
+					<td width="20%" align="center">
+					{data:link_date} {glocale.lang('of')} {data:user_name}
+					</td>
+					<td width="7%" align="center">{data:clicks}</td>
+					<td width="38%">{data:link_rating}</td>
+					<td width="10%" align="center">
+					<a id="link_{data:index}"  href="{data:details_url}" onclick="toggleArea('detail_{data:index}'); return false;">{glocale.lang('show')}</a>
+					</td>
+				</tr>
+			</table>
+			<div id="detail_{data:index}" class="bs_main" style="display: {data:display};">
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td width="52%">{data:description}</td>
+						<td width="48%" valign="top">
+						{if data:can_vote}
+						<form method="post" action="{gurl.simple_url('linklist','&amp;$URL_ID='~data:id~'&amp;$URL_AT=$ACTION_VOTE_LINK','&amp;',true)}">
+						{glocale.lang('yourvote')}: {form.get_combobox('link_rating_'~data:id,data:vote_options,0)}
+						<input type="submit" value="{glocale.lang('vote')}" />
+						</form>
+						{else}
+						{glocale.lang('linklist_already_voted')}
+						{endif}
+						</td>
+					</tr>
+				</table>
+			</div>
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+
+<div class="bs_padtop">
+{include "inc_pagination.htm"}
+</div>
+
+{endif}
+<br />
+
+{if show_add_link}
+<a class="bs_button_big" href="{add_link_url}">{glocale.lang('addnewlink')}</a>
+<br style="clear: both;" />
+{endif}
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

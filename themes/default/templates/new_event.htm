@@ -1,0 +1,98 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+{include "inc_post_preview.htm"}
+
+<form method="post" enctype="multipart/form-data" action="{target_url}" onsubmit="BS_refresh_text();">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('newevent')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('event_name')}:</dt>
+			<dd>{form.get_textbox('topic_name','',70)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('location')}:</dt>
+			<dd>{form.get_textbox('location','',50,100)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('begin')}:</dt>
+			<dd>{form.get_date_chooser('b_')}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('end')}:</dt>
+			<dd>
+				{form.get_date_chooser('e_')} {glocale.lang('or')}
+				<input id="openend" type="checkbox" name="open_end" {open_end} value="1" />
+				<label for="openend">{glocale.lang('openend')}</label>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('announcements')}:</dt>
+			<dd>
+				<table cellpadding="0" cellspacing="0">
+					<tr>
+						<td colspan="2">
+						{form.get_radio_yesno('enable_announcements',1)}
+						| {glocale.lang('maximal')}:
+						{form.get_textbox('max_announcements','0','4','5')}
+						( 0 = {glocale.lang('unlimited')} )
+						</td>
+					</tr>
+					<tr>
+						<td><u>{glocale.lang('application_deadline')}:</u></td>
+						<td>
+						<input type="radio" name="timeout_type" value="begin" {timeout_type_begin} id="cab" />
+						<label for="cab">{glocale.lang('event_begin')}</label>
+						</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>
+						<input type="radio" name="timeout_type" value="self" {timeout_type_self} id="cas" />
+						<label for="cas">{glocale.lang('custom')}</label>:
+						{form.get_date_chooser('c_')}
+						</td>
+					</tr>
+				</table>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('allowposts')}:</dt>
+			<dd>{form.get_radio_yesno('allow_posts',1)}</dd>
+		</dl>
+		{if enable_email_notification == 1}
+		<dl>
+			<dt>{glocale.lang('enable_email_notification')}:</dt>
+			<dd>
+				{form.get_radio_yesno('subscribe_topic',subscribe_topic_def)}
+				( {glocale.lang('after_an_reply')} )
+			</dd>
+		</dl>
+		{endif}
+		{if important_allowed}
+		<dl>
+			<dt>{glocale.lang('important')}:</dt>
+			<dd>
+				{form.get_radio_yesno('important',0)}
+				( {glocale.lang('alwaysshowontop')} )
+			</dd>
+		</dl>
+		{endif}
+		{include "inc_post_form.htm"}
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href='{back_url}'" />
+	<input type="submit" name="preview" value="{glocale.lang('preview')}" />
+	<input type="submit" name="submit" value="{glocale.lang('submit')}" accesskey="s" />
+</center>
+</form>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

@@ -1,0 +1,43 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+{if latest_topics_top}
+{include "inc_topics.htm"}
+<br />
+{endif}
+
+<div>
+	<div style="float: right;">
+		{if display_topic}
+		<a class="bs_button_big" title="{glocale.lang('createnewthread')}" href="{gurl.simple_url('new_topic','&amp;$URL_FID='~fid)}">{glocale.lang('newthread')}</a>
+		{endif}
+	</div>
+	<br style="clear: both;" />
+</div>
+
+{if sub_forums}
+<div class="bs_padbottom">
+{include "inc_forums.htm"}
+</div>
+{endif}
+
+{if contains_topics}
+{include "inc_topics.htm"}
+
+<div class="bs_padtop">
+{include "inc_pagination.htm"}
+</div>
+{endif}
+
+{if latest_topics_bottom}
+<div class="bs_padtop">
+{include "inc_topics.htm"}
+</div>
+{endif}
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

@@ -1,0 +1,103 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+{include "inc_delete_message.htm"}
+{include "inc_js_row_selector.htm"}
+<script type="text/javascript">
+<!--
+function performAction(combo)
+{
+	var url = "";
+	switch(combo.value)
+	{
+		case "backup":
+			url = "{gurl.build_url('createbackup','&tables=%s','&')}";
+			break;
+		case "delete":
+			url = "{gurl.build_url(0,'&mode=qdelete&tables=%s','&')}";
+			break;
+		case "optimize":
+			url = "{optimize_url}";
+			break;
+		default:
+			return;
+	}
+	
+	var ids = "";
+	for(var i = 0;;i++)
+	{
+		var checkBox = document.getElementById('check_' + i);
+		if(checkBox == null)
+			break;
+		
+		if(checkBox.checked)
+			ids += checkBox.value + ";";
+	}
+	
+	document.location.href = url.replace(encodeURIComponent('%s'),encodeURIComponent(ids));
+}
+//-->
+</script>
+
+<form method="post" action="{gurl.build_url()}">
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('show_tables')}</h1>
+	<table class="bs_table" width="100%" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="30%" class="bs_coldesc">{glocale.lang('table_name')}</td>
+			<td align="center" width="13%" class="bs_coldesc">{glocale.lang('entries')}</td>
+			<td align="center" width="13%" class="bs_coldesc">{glocale.lang('size')}</td>
+			<td align="center" width="15%" class="bs_coldesc">{glocale.lang('overhead')}</td>
+			<td align="center" width="16%" class="bs_coldesc">{glocale.lang('date_created')}</td>
+			<td align="center" width="10%" class="bs_coldesc">{glocale.lang('selection')}</td>
+		</tr>
+		{if error_msg != ''}
+		<tr>
+			<td class="bs_main" align="center" colspan="6">
+			<span style="color: #FF0000; font-weight: bold;">{glocale.lang('error_occurred')}:</span> {error_msg}
+			</td>
+		</tr>
+		{else}
+		{if tables.length == 0}
+		<tr>
+			<td class="bs_main" align="center" colspan="6">{glocale.lang('no_tables_found')}</td>
+		</tr>
+		{endif}
+		{endif}
+		{loop tables as row => table}
+		<tr id="row_{row}" class="hlRow">
+			<td class="hlCol">{table:name}</td>
+			<td align="center" class="hlCol">{table:entries}</td>
+			<td align="center" class="hlCol">{table:size}</td>
+			<td align="center" class="hlCol">{table:overhead}</td>
+			<td align="center" class="hlCol">{table:date_created}</td>
+			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			<input id="check_{row}" type="checkbox" name="delete[]" value="{table:name}" />
+			</td>
+		</tr>
+		{endloop}
+		<tr>
+			<td class="bs_coldesc">
+			<span style="float: left;">{glocale.lang('total')}:</span>
+			<span style="float: right;">{tables.length} {glocale.lang('tables')}</span>
+			</td>
+			<td align="center" class="bs_coldesc">{entries} {glocale.lang('entries')}</td>
+			<td align="center" class="bs_coldesc">{size}</td>
+			<td align="center" class="bs_coldesc">{overhead}</td>
+			<td align="center" class="bs_coldesc">-</td>
+			<td align="center" class="bs_coldesc">-</td>
+		</tr>
+	</table>
+</div>
+
+<div align="right" style="padding-top: 3px;">
+	<a href="javascript:rowHL.toggleAllSelected();">{glocale.lang('invert_selection')}</a>
+	&middot; {glocale.lang('with_selected')} {action_combo} <input type="submit" value="{glocale.lang('submit')}" />
+	<img style="margin-right: 5%;" src="{gpath}dba/images/selection_hint.gif" alt="" />
+</div>
+</form>
+
+{endif}
+
+{include "inc_footer.htm"}

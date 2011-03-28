@@ -1,0 +1,23 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+{if mode == 'advanced'}
+<div style="float:left;">
+	{loop cssfiles as file}
+	<a href="{gurl.simple_acp_url(0,'&amp;action=editor&amp;theme='~theme~'&amp;mode=advanced&amp;file='~file)}">{file}</a>
+	{if cssfiles.current < cssfiles.last},{endif}
+	{endloop}
+</div>
+{endif}
+<div style="float:right;">
+	<a href="{gurl.simple_acp_url(0,'&amp;action=editor&amp;theme='~theme~'&amp;mode=simple')}">{glocale.lang('simple_mode')}</a>
+	| <a href="{gurl.simple_acp_url(0,'&amp;action=editor&amp;theme='~theme~'&amp;mode=advanced')}">{glocale.lang('advanced_mode')}</a>
+</div>
+<br style="clear:both;" />
+
+{include editor_tpl}
+
+{endif}
+
+{include "inc_footer.htm"}

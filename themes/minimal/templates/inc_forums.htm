@@ -1,0 +1,24 @@
+{if forums}
+<div class="bs_border bs_padtop">
+	<h1 class="bs_topic">{title}</h1>
+	<ul>
+	{loop forums as forum}
+		{if forum:contains_forums}
+		<li style="margin-left: {forum:path_images.length * 25}px;">
+			<a href="{forum:forum_url}"><b>{forum:forum_name_ins}</b></a>
+		</li>
+		{else}
+		<li style="margin-left: {forum:path_images.length * 25}px;">
+			{if forum:is_unread}*{endif}
+			<a href="{forum:forum_url}">{forum:forum_name_ins}</a>
+			{if forum:sub_forums}
+			<div class="bs_forums_small">
+			<b>{glocale.lang('subdirs')}:</b> {forum:sub_forums}
+			</div>
+			{endif}
+		</li>
+		{endif}
+	{endloop}
+	</ul>
+</div>
+{endif}

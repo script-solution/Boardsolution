@@ -1,0 +1,101 @@
+{include "inc_header.htm"}
+{include "inc_delete_message.htm"}
+
+{if module_error == false}
+{include "inc_js_row_selector.htm"}
+<script type="text/javascript" src="{gjs.get_file('acp/src/row_extension.js')}"></script>
+
+<form method="get" action="{search_url}">
+{loop hidden as k => v}
+<input type="hidden" name="{k}" value="{v}" />
+{endloop}
+<div class="a_block">
+	<div class="a_menubar">
+		<div class="a_menubar_left">
+			{glocale.lang('search')}:
+			<input class="a_searchtb" type="text" name="search" size="20" maxlength="255" value="{search_val}" />
+			<input class="a_searchbtn" type="submit" value="{glocale.lang('search')}" />
+		</div>
+		<div class="a_menubar_right">
+			&nbsp;
+		</div>
+	</div>
+</div>
+</form>
+
+<form method="post" action="{gurl.simple_acp_url()}">
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('acpmod_links')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="32%" class="a_coldesc">{col_url}</td>
+			<td width="20%" class="a_coldesc">{col_category}</td>
+			<td width="22%" class="a_coldesc" align="center">{col_added}</td>
+			<td width="8%" class="a_coldesc" align="center">{col_klicks}</td>
+			<td width="8%" class="a_coldesc" align="center">{col_activated}</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+		</tr>
+		{if links.length == 0}
+		<tr>
+			<td colspan="7" class="a_main" align="center">{glocale.lang('no_links_found')}</td>
+		</tr>
+		{endif}
+		{loop links as row => link}
+		<tr id="row_{row}" class="hlRow">
+			<td class="hlCol">
+			<a href="javascript:showEntry('row_{row}','details_row_{row}','image_{row}');"><img id="image_{row}" src="{link:details_image}" alt="Toggle" /></a>
+			&nbsp;<a href="{link:url_complete}" target="_blank" title="{link:url_complete}">
+			<img src="{gpath}acp/images/world.png" alt="" />
+			{link:url}
+			</a>
+			</td>
+			<td class="hlCol">{link:category}</td>
+			<td class="hlCol" align="center">{link:date}</td>
+			<td class="hlCol" align="center">{link:clicks}</td>
+			<td class="hlCol" align="center">{link:activated}</td>
+			<td class="hlCol" align="center">
+			<a href="{gurl.simple_acp_url(0,'&amp;action=edit&amp;id='~link:id)}">
+			<img src="{gpath}acp/images/edit.png" alt="{glocale.lang('edit')}" title="{glocale.lang('edit')}" />
+			</a>
+			</td>
+			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			<input id="check_{row}" type="checkbox" name="delete[]" value="{link:id}" />
+			</td>
+		</tr>
+		<tr id="details_row_{row}" valign="top" style="display: none;">
+			<td colspan="3" class="a_main" valign="top" style="border-left: 2px solid #777777; border-bottom: 2px solid #777777;">{link:description}</td>
+			<td colspan="4" class="a_main" valign="top" style="border-bottom: 2px solid #777777; border-right: 2px solid #777777;">{glocale.lang('rating')}: {link:rating}</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="30%" class="a_body">
+		<a href="javascript:toggleAll('{links.length}','row_','details_row_','image_');">{glocale.lang('toggle_all')}</a>
+		</td>
+		<td width="40%" align="center" class="a_body">
+		{glocale.lang('marked')}:
+		<select name="action_type">
+			<option value="">- {glocale.lang('please_choose')} -</option>
+			<option value="-1">{glocale.lang('delete')}</option>
+			<option value="{at_activate}">{glocale.lang('activate')}</option>
+			<option value="{at_deactivate}">{glocale.lang('deactivate')}</option>
+		</select>
+		<input type="submit" value="{glocale.lang('submit')}" />
+		</td>
+		<td width="30%" align="right" class="a_body">
+		<a href="javascript:rowHL.toggleAllSelected();">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+
+<div class="a_pad">
+	{include "inc_pagination.htm"}
+</div>
+
+{endif}
+
+{include "inc_footer.htm"}

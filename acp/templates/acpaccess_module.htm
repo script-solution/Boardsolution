@@ -1,0 +1,42 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+<script type="text/javascript" src="{gjs.get_file('acp/src/user_selection.js')}"></script>
+
+<form id="formular" method="post" action="{gurl.simple_acp_url(0,'&amp;action=module&amp;module='~module)}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<input type="hidden" id="selectedUsers" name="selectedUsers" value="" />
+<div class="a_border">
+	<h1 class="a_topic">{glocale.lang('edit_permissions_for_module')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="25%" class="a_coldesc">{glocale.lang('module_name')}</td>
+			<td width="35%" class="a_coldesc" align="center">{glocale.lang('user_groups')}</td>
+			<td width="40%" class="a_coldesc" align="center">{glocale.lang('user')}</td>
+		</tr>
+		<tr>
+			<td class="a_main" valign="center">{module_name}</td>
+			<td class="a_main" valign="top">
+			{group_combo}
+			<br />
+			<div class="a_desc">{glocale.lang('email_strg_hint')}</div>
+			</td>
+			<td class="a_main">
+			{user_combo}
+			<br />
+			<input style="width: 100%;" type="button" value="{glocale.lang('add_user')}" onclick="FWS_openDefaultPopup('{search_url}','UserSuche',800,700);" /><br />
+			<input style="width: 100%;" type="button" value="{glocale.lang('remove_selected')}" onclick="removeMarkedUser('user_intern');" />
+			</td>
+		</tr>
+	</table>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('save')}" onclick="transferSelectedUser('user_intern','selectedUsers','formular');" />
+	<input type="button" value="{glocale.lang('back')}" onClick="document.location.href = '{gurl.simple_acp_url()}';" />
+</center>
+</form>
+
+{endif}
+
+{include "inc_footer.htm"}

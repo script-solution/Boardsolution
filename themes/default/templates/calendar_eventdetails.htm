@@ -1,0 +1,72 @@
+{include "inc_delete_message.htm"}
+
+<div class="bs_border">
+	<h1 class="bs_topic">{event_title}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('location')}:</dt>
+			<dd>{location}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('begin')}:</dt>
+			<dd>{event_begin}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('end')}:</dt>
+			<dd>
+				{if event_end == 'open'}
+				<i>{glocale.lang('openend')}</i>
+				{else}
+				{event_end}
+				{endif}
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('description')}:</dt>
+			<dd>{description}</dd>
+		</dl>
+		{if announcements_enabled}
+		<dl>
+			<dt>{glocale.lang('announcements')}:</dt>
+			<dd>
+				<table cellpadding="2" cellspacing="0">
+					<tr>
+						<td><u>{glocale.lang('application_deadline')}:</u></td>
+						<td>{timeout}</td>
+					</tr>
+					<tr>
+						<td valign="top"><u>{glocale.lang('announced')}:</u></td>
+						<td>
+						{total_announcements} / 
+						{if max_announcements == 0}
+						<span title="{glocale.lang('unlimited')}">&infin;</span>:
+						{else}
+						{max_announcements}:
+						{endif}
+						<div style="padding-top: 5px;">{announcement_list}</div>
+						</td>
+					</tr>
+				</table>
+				{if can_announce || can_leave}
+				<div class="bs_padtop">
+					{if can_leave}
+					<a href="{gurl.simple_url('calendar','&amp;$URL_AT=$ACTION_CAL_LEAVE_EVENT&amp;$URL_SUB=eventdetails&amp;$URL_ID='~id,'&amp;',true)}">{glocale.lang('optout')}</a>
+					{else}
+					<a href="{gurl.simple_url('calendar','&amp;$URL_AT=$ACTION_CAL_JOIN_EVENT&amp;$URL_SUB=eventdetails&amp;$URL_ID='~id,'&amp;',true)}">{glocale.lang('announce')}</a>
+					{endif}
+				</div>
+				{endif}
+			</dd>
+		</dl>
+		{endif}
+	</fieldset>
+</div>
+
+<div class="bs_padtop">
+	{if display_edit_event}
+	<a class="bs_button_big" href="{edit_event}">{glocale.lang('edit_event')}</a>
+	{endif}
+	{if display_delete_event}
+	<a class="bs_button_big" href="{delete_event}">{glocale.lang('delete_event')}</a>
+	{endif}
+</div>

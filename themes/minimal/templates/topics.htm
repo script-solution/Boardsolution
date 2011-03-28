@@ -1,0 +1,67 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+{if latest_topics_top}
+{include "inc_topics.htm"}
+<br />
+{endif}
+
+<div>
+	<div style="float: left;">
+		<b>{glocale.lang('moderators')}:</b> {moderators}
+	</div>
+	<div style="float: right; width: 50%;">
+		{if display_event}
+		<a class="bs_button_big" title="{glocale.lang('createnewevent')}" href="{gurl.simple_url('new_event','&amp;$URL_FID='~fid)}">{glocale.lang('newevent')}</a>
+		{endif}
+		{if display_poll}
+		<a class="bs_button_big" title="{glocale.lang('createnewpoll')}" href="{gurl.simple_url('new_poll','&amp;$URL_FID='~fid)}">{glocale.lang('newpoll')}</a>
+		{endif}
+		{if display_topic}
+		<a class="bs_button_big" title="{glocale.lang('createnewthread')}" href="{gurl.simple_url('new_topic','&amp;$URL_FID='~fid)}">{glocale.lang('newthread')}</a>
+		{endif}
+	</div>
+	<br style="clear: both;" />
+</div>
+
+{if sub_forums}
+<div class="bs_padbottom">
+{include "inc_forums.htm"}
+</div>
+{endif}
+
+{if contains_topics}
+{if show_topic_action}
+<form name="thread_action" method="post" action="{redirect_url}">
+{endif}
+{include "inc_topics.htm"}
+{topic_action_combo}
+<input type="submit" onclick="performModAction(getModActionURL());" value="{glocale.lang('performaction')}" /> |
+<a href="javascript:invertSelection('id_',0);">{glocale.lang('invertmark')}</a>
+{if show_topic_action}
+</form>
+{endif}
+
+<div class="bs_padtop">
+{include "inc_pagination.htm"}
+</div>
+{endif}
+
+{if latest_topics_bottom}
+<div class="bs_padtop">
+{include "inc_topics.htm"}
+</div>
+{endif}
+
+{if view_useronline_list}
+<div class="bs_padtop">
+{include "inc_online_user.htm"}
+</div>
+{endif}
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

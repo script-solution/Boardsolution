@@ -1,0 +1,221 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<div>
+	<div class="bs_portal_left">
+		{if show_news}
+		<div class="bs_border">
+			<h1 class="bs_topic">{glocale.lang('news')}</h1>
+			<ul class="bs_none_list">
+				{if num == 0}
+				<li class="bs_main" style="text-align: center;">{glocale.lang('no_news_found')}</li>
+				{endif}
+				{loop news_list as news}
+				<li class="bs_main" style="padding: 0;">
+					<table width="100%" cellpadding="0" cellspacing="0" style="table-layout: fixed;">
+						<tr>
+							<td class="bs_coldesc">
+							<a href="#">{news:news_icon}</a>&nbsp;&nbsp;<a href="{news:topic_url}">{news:news_title}</a>
+							</td>
+							<td class="bs_coldesc" align="right">{news:forum_path}</td>
+						</tr>
+						<tr>
+							<td class="bs_main bs_posts_main_1" valign="top" colspan="2">
+							<div style="max-height: 200px; overflow: auto;">
+								{news:text}
+							</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="bs_coldesc">
+							<span style="font-weight: normal;">
+								<u>{glocale.lang('From')}:</u> <b>{news:username}</b>, {news:date}
+							</span>
+							</td>
+							<td class="bs_coldesc" align="right" style="font-weight: normal;">{news:comments}</td>
+						</tr>
+					</table>
+					{if news:show_separator}
+					<div class="bs_post_separator">&nbsp;</div>
+					{endif}
+				</li>
+				{endloop}
+			</ul>
+		</div>
+		<br />
+		{else}
+		{if show_latest_topics_full}
+		{include "inc_topics.htm"}
+		{endif}
+		{endif}
+	</div>
+	
+	<div class="bs_portal_right">
+		<div class="bs_border">
+			<h1 class="bs_topic">{glocale.lang('links')}</h1>
+			<ul class="bs_none_list">
+				<li class="bs_main"><a href="{forums_url}">{glocale.lang('forums')}</a></li>
+				<li class="bs_coldesc"><b>{glocale.lang('last_active_forums')}:</b></li>
+				{loop forums as forum}
+				<li class="bs_main">
+				{if forum:is_unread}
+				<img src="{guser.get_theme_item_path('images/unread/post_unread.gif')}" alt="* " />
+				{else}
+				<img src="{guser.get_theme_item_path('images/unread/post_read.gif')}" alt="" />
+				{endif}
+				{forum:path}
+				</li>
+				{endloop}
+				<li class="bs_coldesc_sep">&nbsp;</li>
+				{if gisloggedin}
+				<li class="bs_main"><a href="{profile_config_url}">{glocale.lang('profile_config')}</a></li>
+				{endif}
+				{if show_compose_pm}
+				<li class="bs_main"><a href="{new_pm_url}">{glocale.lang('compose_new_pm')}</a></li>
+				{endif}
+				{if show_feeds}
+				<li class="bs_main"><a href="{rss20_feed}">{glocale.lang('subscribe_news_feed')} [RSS 2.0]</a></li>
+				<li class="bs_main"><a href="{atom_feed}">{glocale.lang('subscribe_news_feed')} [Atom]</a></li>
+				{endif}
+				<li class="bs_main"><a href="{team_url}">{glocale.lang('the_team')}</a></li>
+			</ul>
+		</div>
+		
+		{if view_useronline_list}
+		<div class="bs_border bs_padtop">
+			<h1 class="bs_topic">{total_user_online}</h1>
+			<ul class="bs_none_list">
+				<li class="bs_main">{online:conclusion}</li>
+				<li class="bs_main">
+				{online:online_reg}
+				<div class="bs_desc" style="padding-top: 10px;">
+					<b>{glocale.lang('legend')}:</b> {legend}
+				</div>
+				</li>
+			</ul>
+		</div>
+		{endif}
+		
+		<div class="bs_border bs_padtop">
+			<h1 class="bs_topic"><a href="{calendar_url}">{glocale.lang('currently')}</a></h1>
+			<ul class="bs_none_list">
+				<li class="bs_main">
+				<b>{glocale.lang('lastactivity')}:</b>
+				{if lastlogin == ''}
+				<i>{glocale.lang('unknown')}</i>
+				{else}
+				{lastlogin}
+				{endif}
+				</li>
+				<li class="bs_main"><b>{glocale.lang('newest_member')}:</b> {newest_member}</li>
+				<li class="bs_main">
+				<img src="{guser.get_theme_item_path('images/thread_type/event.gif')}" alt="{glocale.lang('event')}" width="15" height="15" />
+				<u>{glocale.lang('current_events')}:</u>
+				<div>
+					{if events:list.length > 0}
+					{loop events:list as ev}
+					<a href="{ev:url}" {if ev:title_complete != ''}title="{ev:title_complete}" {endif}>{ev:title}</a>
+					({ev:date})
+					{if events:list.current != events:list.last}
+					,
+					{endif} 
+					{endloop}
+					{if events:more}
+					<a href="{gurl.simple_url('calendar')}">...</a>
+					{endif}
+					{else}
+					<i>{glocale.lang('none')}</i>
+					{endif}
+				</div>
+				</li>
+				<li class="bs_main">
+				<img src="{guser.get_theme_item_path('images/birthday.gif')}" alt="{glocale.lang('birthday')}" /> <u>{glocale.lang('todaysbirthdays')}:</u>
+				<div>
+					{if birthdays:list.length > 0}
+					{loop birthdays:list as bd}
+					{bd:username} ({bd:age})
+					{if birthdays:list.current != birthdays:list.last}
+					,
+					{endif} 
+					{endloop}
+					{if birthdays:more}
+					<a href="{gurl.simple_url('calendar')}">...</a>
+					{endif}
+					{else}
+					<i>{glocale.lang('none')}</i>
+					{endif}
+				</div>
+				</li>
+			</ul>
+		</div>
+		
+		{if show_latest_topics}
+		<div class="bs_border bs_padtop">
+			<h1 class="bs_topic"><a href="{current_topics_url}">{glocale.lang('current_topics')}</a></h1>
+			<table class="bs_table" width="100%" cellpadding="2" cellspacing="1">
+				{if topics == false}
+				<tr>
+					<td class="bs_main" colspan="2" align="center">
+					{glocale.lang('no_topics_found')}
+					</td>
+				</tr>
+				{endif}
+				{loop topics as topic}
+				<tr>
+					<td class="bs_main" width="5%">{topic:topic_symbol}</td>
+					<td class="bs_main" width="95%">
+					{if topic:is_unread}
+					<a title="{glocale.lang('goto_first_unread_post')}" href="{topic:first_unread_url}">
+					<img src="{guser.get_theme_item_path('images/unread/first_unread_post.gif')}"
+						alt="{glocale.lang('goto_first_unread_post')}" /></a>
+					{endif}
+					{if topic:is_important}
+					<b>{glocale.lang('important')}</b>: 
+					{endif}
+					<a {if topic:name_complete != ''}title="{topic:name_complete}" {endif}href="{topic:url}">
+					{if topic:is_unread}
+					<b>{topic:name}</b>
+					{else}
+					{topic:name}
+					{endif}
+					</a>
+					
+					<div style="font-size: 0.9em;">
+						<u>{glocale.lang('lastpost')}:</u>
+						{if topic:lastpost == false}
+						-
+						{else}
+						{topic:lastpost:username}, {topic:lastpost:date}
+						<a title="{glocale.lang('gotolastpost')}" href="{topic:lastpost:url}">
+						<img style="vertical-align: middle;" src="{guser.get_theme_item_path('images/lastpost.gif')}" alt="{glocale.lang('gotolastpost')}" />
+						</a>
+						{endif}
+					</div>
+					</td>
+				</tr>
+				{endloop}
+			</table>
+		</div>
+		{endif}
+		
+		<form method="post" action="{search_url}">
+		<div class="bs_border bs_padtop">
+			<h1 class="bs_topic"><a href="{search_url}">{glocale.lang('search')}</a></h1>
+			<ul class="bs_none_list">
+				<li class="bs_main">
+				<label for="search_field">{glocale.lang('searchkeyword')}:</label>
+				<input id="search_field" type="text" size="15" maxlength="100" name="keyword" style="width: 40%;" />
+				<input type="submit" name="submit" value="{glocale.lang('search')}" />
+				</li>
+			</ul>
+		</div>
+		</form>
+	</div>
+</div>
+<br style="clear: both;" />
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

@@ -1,0 +1,52 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+{include "inc_post_preview.htm"}
+
+<form method="post" action="{target_url}" onsubmit="BS_refresh_text();">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('email')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('receiver')}:</dt>
+			<dd>{receiver}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('subject')}:</dt>
+			<dd>{form.get_textbox('subject','',50,100)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('content_type')}:</dt>
+			<dd>
+				{form.get_combobox('content_type',content_type_options,'plain')}
+				<div class="bs_desc">{glocale.lang('content_type_notice')}</div>
+			</dd>
+		</dl>
+		{include "inc_post_form.htm"}
+		{if enable_security_code}
+		<dl>
+			<dt>{glocale.lang('security_code')}:</dt>
+			<dd>
+				<img src="{security_code_img}" style="padding-bottom: 5px; cursor: pointer;" onclick="reloadImage(this);" alt="{glocale.lang('reload_sec_image')}" title="{glocale.lang('reload_sec_image')}" />
+				<br clear="all" />
+				<input type="text"  name="{sec_code_field}" size="15" maxlength="10" />
+				<div class="bs_desc">{glocale.lang('security_code_desc')}</div>
+			</dd>
+		</dl>
+		{endif}
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="history.back()" />
+	<input type="submit" name="preview" value="{glocale.lang('preview')}" />
+	<input type="submit" name="submit" value="{glocale.lang('submit')}" />
+</center>
+</form>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

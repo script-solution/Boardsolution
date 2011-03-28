@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.script-solution.de/schemas/bs/bbc/extra_tags"
+	xmlns:tns="http://www.script-solution.de/schemas/bs/bbc/extra_tags"
+	elementFormDefault="qualified">
+	<!-- Type definitions -->
+	<complexType name="extraTagsType">
+		<sequence>
+			<element name="buttons" type="tns:buttonsType"/>
+			<element name="items" type="tns:itemsType"/>
+		</sequence>
+	</complexType>
+	
+	<complexType name="buttonsType">
+		<sequence>
+			<element name="button" type="tns:buttonType" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<complexType name="buttonType">
+		<sequence>
+			<element name="tooltip" type="string" minOccurs="0"/>
+			<element name="image" type="string" minOccurs="0"/>
+		</sequence>
+		<attribute name="name" type="string" use="required"/>
+	</complexType>
+	
+	<complexType name="itemsType">
+		<sequence>
+			<element name="item" type="tns:itemType" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+	
+	<complexType name="itemType">
+		<sequence>
+			<element name="buttonID" type="string" minOccurs="0"/>
+			<element name="comboName" type="string" minOccurs="0"/>
+			<element name="dialogTitle" type="string" minOccurs="0"/>
+			<element name="parameterTitle" type="string" minOccurs="0"/>
+			<element name="hasParameter" type="boolean" minOccurs="0"/>
+			<element name="description" type="string" minOccurs="0"/>
+		</sequence>
+		<attribute name="name" type="string" use="required"/>
+	</complexType>
+
+	<!-- Content -->
+	<element name="extraTags" type="tns:extraTagsType"/>
+</schema>

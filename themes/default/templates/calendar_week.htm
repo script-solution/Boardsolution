@@ -1,0 +1,57 @@
+<div class="bs_border">
+	<h1 class="bs_topic"><a href="{back}">&laquo;</a> {title} <a href="{forward}">&raquo;</a></h1>
+	<table width="100%" cellpadding="2" cellspacing="1">
+		<tr>
+			<td class="bs_main">
+			<table width="100%" cellpadding="2" cellspacing="2">
+				{loop rows as row}
+				<tr>
+					{loop row:day_titles as daytitle}
+					<th width="25%" class="bs_coldesc">
+					{if view_add_event}
+					<div style="float: right;">
+						<a href="{gurl.simple_url(0,'&amp;$URL_SUB=editevent&amp;$URL_DAY='~daytitle:timestamp)}">
+						<img src="{guser.get_theme_item_path('images/plus.png')}" alt="+" title="{glocale.lang('add_event')}" width="10" />
+						</a>
+					</div>
+					{endif}
+					{daytitle:name}
+					</th>
+					{endloop}
+				</tr>
+				<tr>
+					{loop row:days as day}
+					<td valign="top" align="center" class="{day:border}">
+					<table width="100%" cellpadding="2" cellspacing="0">
+						<tr>
+							<td height="150" valign="top" align="left" class="bs_calendar">
+							<div style="font-size: 1.0em;">
+								{loop day:event:bd as bd}
+								<div>
+									<img src="{guser.get_theme_item_path('images/birthday.gif')}"
+										alt="{glocale.lang('birthday')}"  title="{glocale.lang('birthday')}" />
+									{bd:username} ({bd:age})
+								</div>
+								{endloop}
+								
+								{loop day:event:ev as ev}
+								<div>
+									<img src="{guser.get_theme_item_path('images/thread_type/event.gif')}"
+										width="15" height="15" alt="{glocale.lang('event')}"
+										title="{glocale.lang('event')}" />
+									<a title="{ev:name_complete}" href="{ev:url}">{ev:name}</a>
+								</div>
+								{endloop}
+							</div>
+							</td>
+						</tr>
+					</table>
+					</td>
+					{endloop}
+				</tr>
+				{endloop}
+			</table>
+			</td>
+		</tr>
+	</table>
+</div>

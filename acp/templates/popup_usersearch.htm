@@ -1,0 +1,115 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+{include "inc_js_row_selector.htm"}
+<script type="text/javascript">
+<!--
+self.focus();
+
+function finish()
+{
+	var selUser = new Array();
+	for(var i = 0;;i++)
+	{
+		var checkbox = document.getElementById('check_' + i);
+		if(checkbox == null)
+			break;
+
+		if(checkbox.checked)
+		{
+			var splitRes = checkbox.value.split("|");
+			selUser[splitRes[0]] = splitRes[1];
+		}
+	}
+
+	opener.addUserToCombo('{combo_id}',selUser);
+	self.close();
+}
+//-->
+</script>
+
+<script type="text/javascript" src="{gjs.get_file('src/ajax_user_matches.js')}"></script>
+
+<form method="post" action="{action}">
+<input type="hidden" name="search" value="1" />
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('search_user')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td class="a_main" width="30%">{glocale.lang('username')}:</td>
+			<td class="a_main" width="70%">
+			<input id="user_name_input" autocomplete="off" type="text" size="30" maxlength="30" name="user_name" value="{user_name}" />
+			</td>
+		</tr>
+		<tr>
+			<td class="a_main" width="30%">{glocale.lang('email')}:</td>
+			<td class="a_main" width="70%">
+			<input type="text" name="user_email" size="30" maxlength="150" value="{user_email}" />
+			</td>
+		</tr>
+		<tr>
+			<td class="a_main" width="30%">{glocale.lang('user_group')}:</td>
+			<td class="a_main" width="70%">
+			{form.get_combobox('user_groups[]',user_group_options,user_groups,true,user_group_size)}
+			</td>
+		</tr>
+		<tr>
+			<td class="a_main" width="30%">{glocale.lang('registeredsince')}:</td>
+			<td class="a_main" width="70%">
+			{form.get_radio_boxes('sreg_mode',date_types,date_type)}
+			<div style="padding-left: 20px; padding-top: 5px;">{form.get_date_chooser('reg_',reg_time)}</div>
+			</td>
+		</tr>
+	</table>
+</div>
+<center>
+	<input type="submit" value="{glocale.lang('search')}" />
+</center>
+</form>
+
+<script type="text/javascript">
+<!--
+new BS_AJAXUserSearch('{gpath}','user_name_input','{action_param}','{glocale.lang('matching_user')}',
+		'acp/images/wait.gif',false);
+//-->
+</script>
+
+<form action="{action}">
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('search_result')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td class="a_coldesc" width="25%">{glocale.lang('username')}</td>
+			<td class="a_coldesc" width="30%">{glocale.lang('email')}</td>
+			<td class="a_coldesc" width="30%" align="center">{glocale.lang('user_group')}</td>
+			<td class="a_coldesc" width="15%" align="center">{glocale.lang('selection')}</td>
+		</tr>
+		{if users.length == 0}
+		<tr>
+			<td class="a_main" colspan="4" align="center">{glocale.lang('no_user_found')}</td>
+		</tr>
+		{endif}
+		{loop users as row => user}
+		<tr id="row_{row}" class="hlRow">
+			<td class="hlCol">{user:user_name}</td>
+			<td class="hlCol">{user:user_email}</td>
+			<td class="hlCol" align="center">{user:user_group}</td>
+			<td width="20%" class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			<input id="check_{row}" type="checkbox" name="delete[]" value="{user:id}|{user:user_name}" />
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('select')}" onclick="finish();" />
+</center>
+</form>
+
+<p class="a_block_pad" align="center">
+	<a href="Javascript:self.close();">{glocale.lang('close')}</a>
+</p>
+{endif}
+
+{include "inc_footer.htm"}

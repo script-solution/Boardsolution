@@ -1,0 +1,32 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+{if latest_topics_top}
+<div class="bs_padbottom_big">
+{include "inc_topics.htm"}
+</div>
+{endif}
+
+{include "inc_forums.htm"}
+
+{if latest_topics_bottom}
+<div class="bs_padtop_big">
+{include "inc_topics.htm"}
+</div>
+{endif}
+
+<div class="bs_border">
+	<div class="bs_main">
+		<form method="post" action="{gurl.simple_url('search')}">
+		{glocale.lang('search')}: <input type="text" name="keyword" size="15" />
+		<input type="submit" name="submit" value="{glocale.lang('go')}" />
+		</form>
+	</div>
+</div>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

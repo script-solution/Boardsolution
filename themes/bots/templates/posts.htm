@@ -1,0 +1,36 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<div class="bs_border">
+	<h1 class="bs_topic">{thread_type_ins}: &quot;{threadname_ins}&quot;</h1>
+	{if show_event}
+	{include "inc_event.htm"}
+	{endif}
+	{if show_poll}
+	{include "inc_poll.htm"}
+	{endif}
+</div>
+
+{if posts.length > 0}
+{loop posts as post}
+<div class="bs_border">
+	<div class="bs_topic">
+		<div class="bs_post_username">{post:user_name_plain}</div>
+		<div class="bs_post_date">{post:post_date}</div>
+		<br style="clear: both;" />
+	</div>
+	<div class="bs_post">{post:text_ins}</div>
+</div>
+{endloop}
+{endif}
+
+<div class="bs_padtop">
+{include "inc_pagination.htm"}
+</div>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

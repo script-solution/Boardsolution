@@ -1,0 +1,18 @@
+{if not_finished}
+<script type="text/javascript" language="javascript">
+function reload()
+{
+	document.location.href='{target_url}';
+}
+
+window.setTimeout('reload()',2000);
+</script>
+
+<div class="bs_border">
+	<h1 class="bs_topic">{title}</h1>
+	<div class="bs_main" style="padding: 20px;">
+		<img alt="{img_percent}%" src="{gpath}dba/images/topic.gif" width="{img_percent}%" height="20" />
+	</div>
+</div>
+<div class="bs_body" align="center">{percent}%</div>
+{endif}

@@ -1,0 +1,68 @@
+<dl>
+		<dt>
+			{post_title}
+			<br /><br />
+			<span class="bs_desc">
+			{bbcode_activated}<br />
+			{smileys_activated}<br />
+			{glocale.lang('html_not_activated')}
+			</span>
+		</dt>
+		<dd>
+			<div style="padding-left: 0.5em;">
+				{if bbcode_enabled}
+				<div style="padding-bottom: 0.3em;">
+					{if number == 1}
+					<script type="text/javascript" src="{gjs.get_file('src/bbcode.js')}"></script>
+					<script type="text/javascript" src="{gjs.get_file('src/ajax_get_post_form.js')}"></script>
+					<script type="text/javascript">
+					<!--
+					var BBCodeModes = new Array();
+					var postForms = new Array();
+					function BS_refresh_text()
+					{
+						for(var no in BBCodeModes)
+						{
+							if(BBCodeModes[no] == 'applet')
+							{
+								var applet = document.getElementById('bbcode_area' + no);
+								var text = '';
+								if(applet.getBBCode || typeof applet.getBBCode == 'function')
+									text = applet.getBBCode();
+								document.getElementById('hiddenText' + no).value = text;
+							}
+						}
+					}
+					//-->
+					</script>
+					{endif}
+					<script type="text/javascript">
+					<!--
+					BBCodeModes['{number}'] = "{bbcode_mode}";
+					postForms['{number}'] = new BS_getPostFormAJAXConstr(
+						'post_form_{number}','bbcode_area{number}','{gpath}','{get_post_form_url}'
+					);
+					//-->
+					</script>
+					<input type="radio" name="bbcode_mode_{number}" id="bbcode_mode_simple_{number}"
+						onclick="changeBBCodeMode({number},'simple',postForms['{number}']);" value="simple"{bb_si_checked} />
+					<label for="bbcode_mode_simple_{number}">{glocale.lang('bbcode_mode_simple')}</label>
+					&nbsp;&nbsp;
+					<input type="radio" name="bbcode_mode_{number}" id="bbcode_mode_advanced_{number}"
+						onclick="changeBBCodeMode({number},'advanced',postForms['{number}']);" value="advanced"{bb_ad_checked} />
+					<label for="bbcode_mode_advanced_{number}">{glocale.lang('bbcode_mode_advanced')}</label>
+					{if applet_enabled}
+					&nbsp;&nbsp;
+					<input type="radio" name="bbcode_mode_{number}" id="bbcode_mode_applet_{number}"
+						onclick="changeBBCodeMode({number},'applet',postForms['{number}']);" value="applet"{bb_app_checked} />
+					<label for="bbcode_mode_applet_{number}">{glocale.lang('bbcode_mode_applet')}</label>
+					{endif}
+				</div>
+				{endif}
+				<div id="post_form_{number}">
+					{textarea}
+				</div>
+				{toggle_smbb}
+			</div>
+		</dd>
+	</dl>

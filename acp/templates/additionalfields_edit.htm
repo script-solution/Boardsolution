@@ -1,0 +1,129 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<form method="post" action="{target_url}">
+<div class="a_border">
+	<h1 class="a_topic">{form_title}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('field_name')}:</dt>
+			<dd>
+				{if editable}
+				{form.get_textbox('field_name',default:field_name,30,30)}
+				{else}
+				<i>{default:field_name}</i>
+				{endif}
+				<div class="a_desc">{glocale.lang('field_name_explain')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('display_name')}:</dt>
+			<dd>
+				{form.get_textbox('display_name',default:display_name,30,50)}
+				<div class="a_desc">{glocale.lang('display_name_explain')}</div>
+			</dd>
+		</dl>
+		{if editable}
+		<dl>
+			<dt>{glocale.lang('field_type')}:</dt>
+			<dd>
+				<input type="radio" id="field_type_text" class="check" name="field_type"{type_sel:text} value="text" />
+				<label for="field_type_text">{glocale.lang('field_type_text')}</label><br />
+				<input type="radio" id="field_type_date" class="check" name="field_type"{type_sel:date} value="date" />
+				<label for="field_type_date">{glocale.lang('field_type_date')}</label><br />
+				<hr style="color: #000000;" size="1" width="98%" />
+				<input type="radio" id="field_type_int" class="check" name="field_type"{type_sel:int} value="int" />
+				<label for="field_type_int">{glocale.lang('field_type_int')}</label><br />
+				<input type="radio" id="field_type_line" class="check" name="field_type"{type_sel:line} value="line" />
+				<label for="field_type_line">{glocale.lang('field_type_line')}</label><br />
+				<div style="padding-left: 25px; padding-top: 3px;">
+					{glocale.lang('field_length')}: {form.get_textbox('field_length',default:field_length,3,3)} ( 0 - 255 )
+				</div>
+				<hr style="color: #000000;" size="1" width="98%" />
+				<input type="radio" id="field_type_enum" class="check" name="field_type"{type_sel:enum} value="enum" />
+				<label for="field_type_enum">{glocale.lang('field_type_enum')}</label><br />
+				<div style="padding-left: 25px; padding-top: 3px;">
+					{glocale.lang('field_values')}:<br />
+					{form.get_textarea('field_values',default:allowed_values,'90%','100px')}
+				</div>
+				<div class="a_desc">{glocale.lang('field_type_explain')}</div>
+			</dd>
+		</dl>
+		{endif}
+		<dl>
+			<dt>{glocale.lang('field_display')}:</dt>
+			<dd>
+				<div>
+					<table width="100%" cellpadding="0" cellspacing="0">
+						{loop locations as loc}
+						<tr>
+							<td width="30%" class="a_main"><u>{loc:title}</u></td>
+							<td width="70%" class="a_main">{form.get_radio_yesno('loc_'~loc:name,loc:display)}</td>
+						</tr>
+						{endloop}
+					</table>
+					<div class="a_desc">{glocale.lang('field_display_explain')}</div>
+				</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('field_is_required')}:</dt>
+			<dd>{form.get_radio_yesno('field_is_required',default:field_is_required)}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('display_always')}:</dt>
+			<dd>
+				{form.get_radio_yesno('display_always',default:display_always)}
+				<div class="a_desc">{glocale.lang('display_always_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('field_suffix')}:</dt>
+			<dd>
+				{form.get_textbox('field_suffix',default:field_suffix,40,100)}
+				<div class="a_desc">{glocale.lang('field_suffix_explain')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('field_edit_notice')}:</dt>
+			<dd>
+				{form.get_textbox('field_edit_notice',default:field_edit_notice,60)}
+				<div class="a_desc">{glocale.lang('field_edit_notice_explain')}</div>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="submit" value="{submit_title}" />
+	<input type="button" value="{glocale.lang('back')}"
+		onclick="document.location.href = '{gurl.simple_acp_url()}';" />
+</center>
+
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('field_expert_settings')}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('field_custom_display')}:</dt>
+			<dd>
+				{form.get_textarea('field_custom_display',default:field_custom_display,'90%','80px')}
+				<div class="a_desc">{glocale.lang('field_custom_display_explain')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('field_validation')}:</dt>
+			<dd>
+				{form.get_textbox('field_validation',default:field_validation,40,100)}
+				<div class="a_desc">{glocale.lang('field_validation_explain')}</div>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="submit" value="{submit_title}" />
+	<input type="button" value="{glocale.lang('back')}"
+		onclick="document.location.href = '{gurl.simple_acp_url()}';" />
+</center>
+</form>
+{endif}
+
+{include "inc_footer.htm"}

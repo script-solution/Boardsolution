@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{title}</title>
+<meta name="robots" content="{robots_value}" />
+<meta http-equiv="Content-Type" content="{mimetype}; {charset}" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="viewport" content="width=device-width; initial-scale=1.0; user-scalable=yes" />
+{if redirect}
+<meta http-equiv="refresh" content="{redirect:time}; url={redirect:url}" />
+{endif}
+{loop jsfiles as file}
+<script type="{file:type}" src="{file:src}"></script>
+{endloop}
+<script type="text/javascript" src="{gjs.get_file('js/basic.js','fws')}"></script>
+<script type="text/javascript" src="{gjs.get_file('js/ajax.js','fws')}"></script>
+<script type="text/javascript" src="{gjs.get_file('src/functions.js')}"></script>
+<script type="text/javascript" src="{gjs.get_file('js/imgviewer.js','fws')}"></script>
+{loop cssfiles as file}
+<link rel="stylesheet" type="{file:type}" href="{file:src}" />
+{endloop}
+<link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('advanced.css')}" />
+<link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('basic.css')}" />
+{if feeds_enabled}
+<link rel="alternate" type="application/rss+xml" title="RSS 2.0 Newsfeed" href="{rss20_feed}" />
+<link rel="alternate" type="application/atom+xml" title="Atom Newsfeed" href="{atom_feed}" />
+{endif}
+<style type="text/css">
+div.bs_signature {
+	{if sig_max_height > 0}
+	height: expression( this.scrollHeight > {sig_max_height - 1} ? "{sig_max_height}px" : "auto" );
+	max-height: {sig_max_height}px;
+	overflow: hidden;
+	{endif}
+}
+</style>
+{loop cssblocks as block}
+<style type="{block:type}">
+{block:code}
+</style>
+{endloop}
+<script type="text/javascript">
+<!--
+var myAjax = new FWS_Ajax();
+myAjax.setMimeType('text/plain; {charset}');
+myAjax.setEventHandler('onstart',function() {
+	FWS_displayWaitBar('ajax_wait_bar');
+});
+myAjax.setEventHandler('onfinish',function() {
+	FWS_hideElement('ajax_wait_bar');
+});
+
+FWS_configureImageViewer(
+	true,80,10,10,10,5,'30px','{guser.get_theme_item_path("images/wait.gif")}',5,
+	"{glocale.lang("imgviewer_load_error")}"
+);
+
+function setCookie(name,value,lifetime)
+{
+	document.cookie = escape(name) + "=" + escape(value) +
+		(lifetime ? ";expires=" + (new Date((new Date()).getTime() + (1000 * lifetime))).toGMTString() : "") +
+		";path={cookie_path};domain={cookie_domain}";
+}
+//-->
+</script>
+{loop jsblocks as block}
+<script type="{block:type}">
+<!--
+{block:code}
+//-->
+</script>
+{endloop}
+</head>
+<body class="bs_body">
+
+<a id="top"></a>
+
+{if show_headline}
+{include "inc_headline.htm"}
+{endif}
+{include "inc_messages.htm"}

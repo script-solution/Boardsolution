@@ -1,0 +1,100 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+<script type="text/javascript" src="{gjs.get_file('src/ajax_user_matches.js')}"></script>
+
+<form method="post" action="{search_target}">
+<div class="a_border">
+	<h1 class="a_topic">{glocale.lang('user_search')}</h1>
+	<div class="a_main">
+		<div style="float: left; width: 49.5%;">
+			<fieldset>
+				<legend><b>{glocale.lang('general')}</b></legend>
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td width="20%" class="a_main">{glocale.lang('name')}:</td>
+						<td width="80%" class="a_main">
+						<input id="user_name_input" autocomplete="off" type="text" size="30" maxlength="30" name="user_name" value="{name_value}" />
+						</td>
+					</tr>
+					<tr>
+						<td width="20%" class="a_main">{glocale.lang('email')}:</td>
+						<td width="80%" class="a_main">
+						<input type="text" name="user_email" size="30" maxlength="30" value="{email_value}" />
+						</td>
+					</tr>
+					<tr>
+						<td width="20%" valign="top" class="a_main">{glocale.lang('group')}:</td>
+						<td width="80%" class="a_main">{user_group_combo}</td>
+					</tr>
+				</table>
+			</fieldset>
+			
+			<fieldset>
+				<legend><b>{glocale.lang('activity')}</b></legend>
+				<table width="100%" cellpadding="0" cellspacing="0">
+					{if enable_post_count}
+					<tr>
+						<td width="20%" class="a_main">{glocale.lang('posts')}:</td>
+						<td width="80%" class="a_main">{posts_control}</td>
+					</tr>
+					<tr>
+						<td width="20%" class="a_main">{glocale.lang('points')}:</td>
+						<td width="80%" class="a_main">{points_control}</td>
+					</tr>
+					{endif}
+					<tr>
+						<td width="20%" class="a_main">{glocale.lang('Registered')}:</td>
+						<td width="80%" class="a_main">{reg_control}</td>
+					</tr>
+					<tr>
+						<td width="20%" class="a_main">{glocale.lang('lastlogin')}:</td>
+						<td width="80%" class="a_main">{lastlogin_control}</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
+		<div style="float: right; width: 49.5%;">
+			<fieldset>
+				<legend><b>{glocale.lang('additional_profile_fields')}</b></legend>
+				<table width="100%" cellpadding="0" cellspacing="0">
+					{loop addfields as field}
+					<tr>
+						<td width="20%" class="a_main" valign="top">{field:name}:</td>
+						<td width="80%" class="a_main">{field:value}</td>
+					</tr>
+					{endloop}
+				</table>
+			</fieldset>
+			
+			<fieldset>
+				<legend><b>{glocale.lang('miscellaneous')}</b></legend>
+				<table width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td width="20%" class="a_main">{glocale.lang('signature')}:</td>
+						<td width="80%" class="a_main">
+						<input type="text" name="signature" size="30" value="{signature_value}" />
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</div>
+		<div align="center" style="clear: both;">
+			<input type="button" value="{glocale.lang('reset')}" onclick="document.location.href = '{reset_url}';" />
+			<input type="submit" name="submit" value="{glocale.lang('search')}" />
+		</div>
+	</div>
+</div>
+</form>
+
+<script type="text/javascript">
+<!--
+new BS_AJAXUserSearch('{gpath}','user_name_input','{action_param}','{glocale.lang('matching_user')}',
+	'acp/images/wait.gif',false);
+//-->
+</script>
+
+{endif}
+
+{include "inc_footer.htm"}

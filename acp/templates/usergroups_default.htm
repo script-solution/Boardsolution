@@ -1,0 +1,85 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+{include "inc_delete_message.htm"}
+{include "inc_js_row_selector.htm"}
+
+<div class="a_block">{glocale.lang('user_in_multiple_groups_notice')}</div>
+
+<form method="get" action="{search_url}">
+{loop hidden as k => v}
+<input type="hidden" name="{k}" value="{v}" />
+{endloop}
+<div class="a_block_pad">
+	<div class="a_menubar">
+		<div class="a_menubar_left">
+			{glocale.lang('search')}:
+			<input class="a_searchtb" type="text" name="search" size="20" maxlength="255" value="{search_val}" />
+			<input class="a_searchbtn" type="submit" value="{glocale.lang('search')}" />
+		</div>
+		<div class="a_menubar_right">
+			<a href="{gurl.simple_acp_url(0,'&amp;action=edit')}">
+			<img src="{gpath}acp/images/plus.png" alt="{glocale.lang('insert_group')}" title="{glocale.lang('insert_group')}" />
+			{glocale.lang('insert_group')}
+			</a>
+		</div>
+	</div>
+</div>
+</form>
+
+<form method="post" action="{gurl.simple_acp_url()}">
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('acpmod_usergroups')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="50%" class="a_coldesc">{glocale.lang('group_title')}</td>
+			<td width="20%" class="a_coldesc" align="center">{glocale.lang('permission_is_super_mod')}</td>
+			<td width="20%" class="a_coldesc" align="center">{glocale.lang('is_visible')}</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+		</tr>
+		{if groups.length == 0}
+		<tr>
+			<td colspan="5" align="center" class="a_main">{glocale.lang('no_groups_found')}</td>
+		</tr>
+		{endif}
+		{loop groups as row => group}
+		<tr id="row_{row}" class="hlRow">
+			<td height="25" class="hlCol">{group:group_name}</td>
+			<td class="hlCol" align="center">{group:is_super_mod}</td>
+			<td class="hlCol" align="center">{group:is_visible}</td>
+			<td class="hlCol" align="center">
+			<a href="{gurl.simple_acp_url(0,'&amp;action=edit&amp;id='~group:id)}">
+			<img src="{gpath}acp/images/edit.png" alt="{glocale.lang('edit')}" title="{glocale.lang('edit')}" />
+			</a>
+			</td>
+			{if group:is_no_predefined_group}
+			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			<input id="check_{row}" type="checkbox" name="delete[]" value="{group:id}" />
+			</td>
+			{else}
+			<td class="hlCol" align="center">
+			<script type="text/javascript">rowHL.setRowDisabled({row});</script>
+			-
+			</td>
+			{endif}
+		</tr>
+		{endloop}
+	</table>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="40%" class="a_body">&nbsp;</td>
+		<td width="20%" align="center" class="a_body">
+		{glocale.lang('marked')}: <input type="submit" value="{glocale.lang('delete')}" />
+		</td>
+		<td width="40%" align="right" class="a_body">
+		<a href="Javascript:rowHL.toggleAllSelected();">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+
+{endif}
+
+{include "inc_footer.htm"}

@@ -1,0 +1,37 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+<p class="a_block">{glocale.lang('send_to_scriptsolution')}</p>
+<p class="a_block_pad">{glocale.lang('send_errors_time_note')}</p>
+
+<form method="post" action="{gurl.simple_acp_url(0,'&amp;action=sendform')}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="a_border">
+	<h1 class="a_topic">{glocale.lang('send_errors')}</h1>
+	<fieldset class="a_form">
+		<dl>
+			<dt>{glocale.lang('email')}:</dt>
+			<dd>
+				<input type="text" name="email" size="30" maxlength="255" />
+				<div class="a_desc">{glocale.lang('send_errors_email_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('text')}:</dt>
+			<dd>
+				<textarea name="text" style="width: 90%;" rows="10"></textarea>
+				<div class="a_desc">{glocale.lang('send_errors_text_desc')}</div>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="submit" value="{glocale.lang('send_errors_now')}" />
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.simple_acp_url()}';" />
+</center>
+</form>
+
+{endif}
+
+{include "inc_footer.htm"}

@@ -1,0 +1,254 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+<script type="text/javascript" src="{gjs.get_file('src/quote.js')}"></script>
+
+{if display_reply}
+<div>
+	<a id="reply_btn_1" class="bs_button_big" title="{glocale.lang('answer_desc')}" href="{reply_url}" onclick="return quote('{quoteLink}');">{glocale.lang('answer')}</a>
+	<br style="clear: both;" />
+</div>
+{endif}
+
+<div class="bs_border bs_padtop">
+	<div class="bs_topic">
+		<table width="100%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td align="left">
+				<a href="javascript:scrollTo(0,50000);"><img src="{guser.get_theme_item_path('images/tobottom.gif')}" alt="" /></a>
+				<b>{thread_type_ins}: &quot;{threadname_ins}&quot;</b>
+				[ {glocale.lang('page')} {sasinsert} ]
+				</td>
+				<td align="right">
+				{if enable_quick_search}
+				<form method="post" action="{gurl.simple_url('search','&amp;$URL_MODE=topic&amp;$URL_TID='~tid)}">
+				<label for="keywordtf">{glocale.lang('search_this_topic')}:</label>
+				<input type="text" style="padding: 1px;" id="keywordtf" name="keyword" size="15" />
+				<input type="submit" style="padding: 0px;" name="submit" value="{glocale.lang('go')}" />
+				</form>
+				{else}
+				&nbsp;
+				{endif}
+				</td>
+			</tr>
+		</table>
+	</div>
+	{if show_event}
+	{include "inc_event.htm"}
+	{endif}
+	{if show_poll}
+	{include "inc_poll.htm"}
+	{endif}
+</div>
+<br />
+
+{if posts.length > 0}
+<div class="bs_border">
+	{loop posts as post}
+	<a id="b_{post:bid}"></a>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td class="{post:posts_bar_class}" colspan="2">
+			<div style="float: left;">
+				<a href="#b_{post:bid}">{post:new_post_pic}</a> <b>{post:user_name}</b> , {post:post_date}
+			</div>
+			<div style="float: right;">
+				{glocale.lang('post')} <a href="{post:post_url}">#{post:number}</a>
+				&nbsp;&nbsp;
+				<a href="#top" title="{glocale.lang('totop')}">
+				<img src="{guser.get_theme_item_path('images/totop.gif')}" alt="" />
+				</a>
+			</div>
+			<br style="clear: both;" />
+			</td>
+		</tr>
+		<tr>
+			<td valign="top" class="{post:left_table_class}" width="28%">
+			<table width="100%" cellpadding="1" cellspacing="1">
+				{if post:show_avatar}
+				<tr>
+					<td class="{post:left_table_class}" colspan="2">
+					<img alt="" src="{post:avatar}" />
+					</td>
+				</tr>
+				{endif}
+				{if view_ip}
+				<tr>
+					<td class="{post:left_table_class}">IP:</td>
+					<td class="{post:left_table_class}">{post:user_ip}</td>
+				</tr>
+				{endif}
+				<tr>
+					<td class="{post:left_table_class}">{post:rank_title}:</td>
+					<td class="{post:left_table_class}">{post:rank_images}{post:user_status}</td>
+				</tr>
+				{if post:user_id != 0}
+				<tr>
+					<td class="{post:left_table_class}">{glocale.lang('registerdate')}:</td>
+					<td class="{post:left_table_class}">{post:register_time}</td>
+				</tr>
+				{endif}
+				{loop post:add_fields as field}
+				<tr>
+					<td class="{post:left_table_class}">{field:field_name}:</td>
+					<td class="{post:left_table_class}">{field:field_value}</td>
+				</tr>
+				{endloop}
+				{if post:user_id != 0}
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="{post:left_table_class}">{post:stats_ins_bottom}</td>
+				</tr>
+				{else}
+				<tr>
+					<td class="{post:left_table_class}">{glocale.lang('email')}:</td>
+					<td class="{post:left_table_class}">{post:an_email_ins}</td>
+				</tr>
+				{endif}
+			</table>
+			</td>
+			<td class="{post:main_table_class}" width="72%" valign="top">
+			<table width="100%" cellpadding="0" cellspacing="1" style="table-layout: fixed;">
+				<tr>
+					<td class="{post:main_table_class}" width="100%" valign="top">
+					{post:text_ins}
+					</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		<tr>
+			<td class="{post:posts_bar_class}" colspan="2">
+			<div style="float: left; width: 50%;">{post:message_ins}</div>
+			<div style="float: right; width: 49%;">{post:bottom_ins}</div>
+			<br style="clear: both;" />
+			</td>
+		</tr>
+	</table>
+	{if post:show_separator}
+	<div class="bs_post_separator">&nbsp;</div>
+	{endif}
+	{endloop}
+</div>
+{endif}
+
+<div class="bs_padtop">
+	<div style="float: left; width: 50%;">
+		{if enable_email_notification}
+		<a class="bs_button_big" style="float: left;" title="{glocale.lang('subscribe_desc')}"
+			 href="{gurl.simple_url(0,'&amp;$URL_AT=$ACTION_SUBSCRIBE_TOPIC&amp;$URL_FID='~fid~'&amp;$URL_TID='~tid,'&amp;',true)}"
+			 >{glocale.lang('subscribe_to_topic')}</a>
+		{endif}
+		<a class="bs_button_big" style="float: left;" title="{glocale.lang('print_desc')}"
+			 href="{print_url}" onclick="FWS_openDefaultPopup('{print_url}','{glocale.lang('print_topic')}',950,700); return false;"
+			 >{glocale.lang('print_topic')}</a>
+	</div>
+	<div style="float: right; width: 50%;">
+		{if display_reply}
+		<a id="reply_btn_2" class="bs_button_big" title="{glocale.lang('answer_desc')}" href="{reply_url}" onclick="return quote('{quoteLink}');">{glocale.lang('answer')}</a>
+		{if gisloggedin}
+		<a class="bs_button_big" href="javascript:toggleQuickReply();">{glocale.lang('quick_reply')}</a>
+		{endif}
+		{endif}
+	</div>
+	<br style="clear: both;" />
+</div>
+
+{if gisloggedin}
+<script type="text/javascript">
+<!--
+function toggleQuickReply()
+{
+	var d = document.getElementById('quickReply');
+	if(d != null)
+		d.style.display = d.style.display == 'block' ? 'none' : 'block';
+}
+var BBCodeModes = new Array();
+BBCodeModes['1'] = 'simple';
+//-->
+</script>
+<script type="text/javascript" src="{gjs.get_file('src/bbcode.js')}"></script>
+<script type="text/javascript" src="{gjs.get_file('src/ajax_quote_message.js')}"></script>
+<div id="quickReply" style="display: none;">
+<form method="post" action="{gurl.simple_url('new_post','&amp;$URL_FID='~fid~'&amp;$URL_TID='~tid)}">
+<input type="hidden" name="action_type" value="{quick_reply_action_type}" />
+<input type="hidden" name="timestamp" value="{timestamp}" />
+<div class="bs_border bs_padtop">
+	<h1 class="bs_topic">{glocale.lang('quick_reply')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('text')}:</dt>
+			<dd>
+				<textarea id="quickReply_text" name="text" cols="50" rows="15" style="width: 90%;"></textarea>
+				<div class="bs_padtop">
+					<input type="checkbox" id="ubb" name="use_bbcode" value="checked" checked="checked" />
+					<label for="ubb">{glocale.lang('use_bbcode')}</label><br />
+					<input type="checkbox" id="usm" name="use_smileys" value="checked" checked="checked" />
+					<label for="usm">{glocale.lang('use_smileys')}</label>
+				</div>
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="submit" name="preview" value="{glocale.lang('preview')}" />
+	<input type="submit" name="submit" value="{glocale.lang('submit')}" />
+</center>
+</form>
+</div>
+{endif}
+
+<div class="bs_padtop">
+{include "inc_pagination.htm"}
+</div>
+
+{if view_useronline_list}
+<div class="bs_padtop_big">
+{include "inc_online_user.htm"}
+</div>
+{endif}
+
+{if show_bottom_bar}
+{include "inc_topic_action_js.htm"}
+<script type="text/javascript">
+<!--
+function performModAction()
+{
+	document.location.href = getModActionURL().replace('__ID__','{tid}');
+}
+//-->
+</script>
+<div class="bs_border bs_padtop">
+	<div class="bs_main">
+		<div style="float: left;">
+			{if display_topic_actions}
+			{glocale.lang('topic_actions')}: {topic_action_combo}
+			{else}
+			&nbsp;
+			{endif}
+		</div>
+		<div style="float: right;">
+			{if display_post_actions}
+			<a href="{gurl.simple_url('manage_posts','&amp;$URL_FID='~fid~'&amp;$URL_TID='~tid)}">{manage_posts_title}</a>
+			{else}
+			&nbsp;
+			{endif}
+		</div>
+		<br style="clear: both;" />
+	</div>
+</div>
+{endif}
+
+{if similar_topics}
+<div class="bs_padtop_big">
+{include "inc_topics.htm"}
+</div>
+{endif}
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

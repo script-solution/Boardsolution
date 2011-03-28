@@ -1,0 +1,40 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+{if tables}
+<form method="post" action="{target_url}">
+{hidden_tables}
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('create_backup')}</h1>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('selected_tables')}:</dt>
+			<dd>{tables}</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('prefix')}:</dt>
+			<dd>
+				{form.get_textbox('prefix','',10,20)}
+				<div class="bs_desc">{glocale.lang('prefix_desc')}</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{glocale.lang('options')}:</dt>
+			<dd>
+				{form.get_checkbox('structure',1,null,lang_structure)}<br />
+				{form.get_checkbox('data',1,null,lang_data)}
+			</dd>
+		</dl>
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{gurl.build_url('index')}';" />
+	<input type="submit" name="submit" value="{glocale.lang('submit')}" />
+</center>
+</form>
+{else}
+{include "inc_progress.htm"}
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

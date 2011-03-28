@@ -1,0 +1,126 @@
+{include "inc_header.htm"}
+{include "inc_delete_message.htm"}
+
+{if module_error == false}
+{include "inc_js_row_selector.htm"}
+
+<p class="a_block"><b>{glocale.lang('additional_field_usage_warning')}</b></p>
+
+<form method="get" action="{search_url}">
+{loop hidden as k => v}
+<input type="hidden" name="{k}" value="{v}" />
+{endloop}
+<div class="a_block_pad">
+	<div class="a_menubar">
+		<div class="a_menubar_left">
+			{glocale.lang('search')}:
+			<input class="a_searchtb" type="text" name="search" size="20" maxlength="255" value="{search_val}" />
+			<input class="a_searchbtn" type="submit" value="{glocale.lang('search')}" />
+		</div>
+		<div class="a_menubar_right">
+			<a href="{gurl.simple_acp_url(0,'&amp;action=edit')}">
+			<img src="{gpath}acp/images/plus.png" alt="{glocale.lang('add_new_field')}" />
+			{glocale.lang('add_new_field')}
+			</a>
+		</div>
+	</div>
+</div>
+</form>
+
+<form method="post" action="{gurl.simple_acp_url()}">
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('acpmod_addfields')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="16%" class="a_coldesc">{glocale.lang('field_name')}</td>
+			<td width="22%" class="a_coldesc">{glocale.lang('display_name')}</td>
+			<td width="15%" class="a_coldesc" align="center">{glocale.lang('field_type')}</td>
+			<td width="10%" class="a_coldesc" align="center">{glocale.lang('sort')}</td>
+			<td width="25%" class="a_coldesc" align="center">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="25%" align="center">{glocale.lang('field_display_location_posts_short')}</td>
+					<td width="25%" align="center">{glocale.lang('field_display_location_registration_short')}</td>
+					<td width="25%" align="center">{glocale.lang('field_display_location_user_details_short')}</td>
+					<td width="25%" align="center">{glocale.lang('field_display_location_user_profile_short')}</td>
+				</tr>
+			</table>
+			</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+		</tr>
+		{if fields.length == 0}
+		<tr>
+			<td align="center" class="a_main" colspan="7">{glocale.lang('no_additional_fields_available')}</td>
+		</tr>
+		{endif}
+		{loop fields as row => field}
+		<tr id="row_{row}" class="hlRow">
+			<td class="hlCol">{field:name}</td>
+			<td class="hlCol">
+			{field:title}{if field:is_required} *{endif}
+			</td>
+			<td class="hlCol" align="center">{field:type}</td>
+			<td class="hlCol" align="center">
+			( {field:sort} )
+
+			{if field:switch_up_url}
+			<a href="{field:switch_up_url}"><img src="{gpath}acp/images/asc.gif" title="{glocale.lang('forum_up')}"
+				 alt="{glocale.lang('forum_up')}" /></a>
+			{else}
+			<img src="{gpath}acp/images/up_disabled.gif" title="{glocale.lang('notavailable')}" alt="{glocale.lang('notavailable')}" />
+			{endif}
+			
+			{if field:switch_down_url}
+			<a href="{field:switch_down_url}"><img src="{gpath}acp/images/desc.gif" title="{glocale.lang('forum_down')}"
+				 alt="{glocale.lang('forum_down')}" /></a>
+			{else}
+			<img src="{gpath}acp/images/down_disabled.gif" title="{glocale.lang('notavailable')}" alt="{glocale.lang('notavailable')}" />
+			{endif}
+			
+			<!-- {form.get_combobox('field_sort['~field:id~']',sort_options,field:sort)} -->
+			</td>
+			<td class="hlCol" align="center">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="25%" class="hlCol" align="center">{field:display:0}</td>
+					<td width="25%" class="hlCol" align="center">{field:display:1}</td>
+					<td width="25%" class="hlCol" align="center">{field:display:2}</td>
+					<td width="25%" class="hlCol" align="center">{field:display:3}</td>
+				</tr>
+			</table>
+			</td>
+			<td class="hlCol" align="center">
+			<a href="{gurl.simple_acp_url(0,'&amp;action=edit&amp;id='~field:id)}">
+			<img src="{gpath}acp/images/edit.png" border="0" align="top" alt="{glocale.lang('edit')}" title="{glocale.lang('edit')}" />
+			</a>
+			</td>
+			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			{if field:deletable}
+			<input id="check_{row}" type="checkbox" name="delete[]" value="{field:id}" />
+			{else}
+			<script type="text/javascript">rowHL.setRowDisabled({row});</script>
+			-
+			{endif}
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="40%" class="a_body">&nbsp;</td>
+		<td width="20%" align="center">
+		<input type="submit" name="submit" value="{glocale.lang('delete')}" />
+		</td>
+		<td width="40%" align="right">
+		<a href="javascript:rowHL.toggleAllSelected();">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+
+<p class="a_block_pad">{glocale.lang('field_location_short_explain')}</p>
+{endif}
+
+{include "inc_footer.htm"}

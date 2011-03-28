@@ -1,0 +1,51 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+{include "inc_delete_message.htm"}
+{include "inc_js_row_selector.htm"}
+
+<form method="post" action="{gurl.build_url()}">
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('show_backups')}</h1>
+	<table class="bs_table" width="100%" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="34%" class="bs_coldesc">{glocale.lang('backup_prefix')}</td>
+			<td align="center" width="15%" class="bs_coldesc">{glocale.lang('date')}</td>
+			<td align="center" width="13%" class="bs_coldesc">{glocale.lang('size')}</td>
+			<td align="center" width="13%" class="bs_coldesc">{glocale.lang('files')}</td>
+			<td align="center" width="15%" class="bs_coldesc">{glocale.lang('restore')}</td>
+			<td align="center" width="10%" class="bs_coldesc">{glocale.lang('selection')}</td>
+		</tr>
+		{if backups == false}
+		<tr>
+			<td class="bs_main" align="center" colspan="6">{glocale.lang('no_backups_found')}</td>
+		</tr>
+		{endif}
+		{loop backups as row => backup}
+		<tr id="row_{row}" class="hlRow">
+			<td class="hlCol">{backup:backup_prefix}</td>
+			<td align="center" class="hlCol">{backup:date}</td>
+			<td align="center" class="hlCol">{backup:size}</td>
+			<td align="center" class="hlCol">{backup:files}</td>
+			<td align="center" class="hlCol">
+			<a href="{backup:restore_url}">{glocale.lang('restore')}</a>
+			</td>
+			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			<input id="check_{row}" type="checkbox" name="delete[]" value="{backup:backup_prefix}" />
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+<center>
+	<input type="submit" value="{glocale.lang('delete')}" />
+</center>
+</form>
+
+<div class="bs_body" align="right">
+	<a href="{gurl.build_url('importbackup')}">{glocale.lang('import_backup')}</a>
+</div>
+
+{endif}
+
+{include "inc_footer.htm"}

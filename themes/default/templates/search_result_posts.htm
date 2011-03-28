@@ -1,0 +1,61 @@
+<div class="bs_border">
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td colspan="2" class="bs_topic">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td width="25%" align="left">{small_page_split}</td>
+					<td width="50%" align="center"><b>{result_title}</b></td>
+					<td width="25%" align="right">
+					<a href="{publish_result_url}"><img 
+						src="{guser.get_theme_item_path('images/world.gif')}"
+						alt="{glocale.lang('publish_search_result')}"
+						title="{glocale.lang('publish_search_result')}" /></a>
+					</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		{loop posts as post}
+		<tr>
+			<td width="25%" class="{post:posts_var_class}" valign="top">
+			<b>{post:user_name}</b> , <span style="font-weight: normal;">{post:date}</span>
+			</td>
+			<td width="75%" class="{post:posts_var_class}">
+			<b>{glocale.lang('position')}:</b> {post:location}
+			{if post:relevance}
+			&nbsp;&nbsp;({glocale.lang('relevance')}: {post:relevance})
+			{endif}
+			</td>
+		</tr>
+		<tr>
+			<td class="{post:posts_left_class}" valign="top">
+			{if post:avatar != ''}
+			<img src="{post:avatar}" alt="" />
+			{endif}
+			<div><b>{glocale.lang('user_group')}:</b> {post:user_group}</div>
+			</td>
+			<td class="{post:posts_main_class}" valign="top">
+			<table width="100%" cellpadding="0" cellspacing="0" style="table-layout: fixed;">
+				<tr>
+					<td>
+					<div style="overflow: auto; max-height: 300px;">
+						{post:text}
+					</div>
+					</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		{if post:show_separator}
+		<tr>
+			<td colspan="2" class="bs_post_separator">&nbsp;</td>
+		</tr>
+		{endif}
+		{endloop}
+	</table>
+</div>
+
+<div class="bs_padtop">
+{include "inc_pagination.htm"}
+</div>

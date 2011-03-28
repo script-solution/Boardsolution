@@ -1,0 +1,505 @@
+/* ------------ GENERAL ------------ */
+
+body {
+	margin: 0 0.6em 0.5em 0.6em;
+	font-family: verdana, tahoma, arial, helvetica, sans-serif;
+	font-size: 0.7em;
+	color: #000;
+	background-color: #fff;
+}
+
+img {
+	border: 0;
+	vertical-align: text-top;
+}
+
+div#ajax_wait_bar {
+	left: 0px;
+	text-align: center;
+	background-color: #008000;
+	color: white;
+	font-size: 14px;
+	font-weight: bold;
+	padding: 4px;
+	border: 1px dotted #fff;
+}
+
+p {
+	margin: 0;
+	margin-bottom: 0.4em;
+}
+
+a {
+	text-decoration: none;
+	color: #3F5E88;
+}
+a:hover {
+	text-decoration: underline;
+	color: #3F5E88;
+}
+
+form {
+	margin: 0px;
+}
+
+label {
+	cursor: pointer;
+}
+
+ul {
+	margin: 5px 0 0 0;
+	padding: 0 0 0 20px;
+}
+
+li {
+	padding: 0 0 5px 0;
+}
+
+ul.bs_none_list {
+	list-style: none;
+	margin: 0;
+	margin-top: 1px;
+	padding: 0;
+}
+ul.a_bbcode_helper {
+	padding-top: 0.5em;
+}
+
+span.bs_highlight {
+	background-color: #FFBE5C;
+	color: #000;
+}
+
+.a_update_notice {
+	background-color: #008000;
+	color: #fff;
+	font-size: 1.3em;
+	padding: 1em;
+}
+
+.a_update_notice a {
+	color: #fff;
+	text-decoration: underline;
+}
+.a_update_notice a:hover {
+	color: #333;
+}
+
+/* ------------ ADMIN-FAQ ------------ */
+
+code {
+	font-size: 1.2em;
+	display: block;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	padding: 4px;
+	margin: 2px;
+}
+
+/* ------------ BBCODE BUTTONS ------------ */
+
+input.bs_bbcode {
+	height: 26px;
+	padding: 2px;
+}
+
+img.bs_bbcode {
+	padding: 2px;
+	border: 1px solid #AAAAAA;
+	background-color: #FFFFFF;
+	vertical-align: top;
+}
+
+select.bs_bbcode {
+	height: 24px;
+	padding: 1px;
+}
+
+ul.bs_bbcode_helper {
+	list-style-type: none;
+	padding-top: 0.5em;
+}
+
+.bs_bbcode_popup {
+	display: none;
+	background-color: #fff;
+	border: 1px solid #aaa;
+	border-bottom: none;
+}
+.bs_bbcode_popup li {
+	padding: 0;
+	border-bottom: 1px solid #aaa;
+}
+.bs_bbcode_popup li a {
+	display: block;
+	color: #000;
+	padding: 0.2em;
+}
+.bs_bbcode_popup li a:hover {
+	color: #000;
+	background-color: #f0f0f0;
+	text-decoration: none;
+}
+
+input.bs_bbcode_notice {
+	border: none;
+	background-color: #ebebeb;
+}
+
+.bbcode_area_resizer {
+	width: 91%;
+	margin: 0;
+	margin-bottom: 1em;
+	padding: 0;
+	border: 1px dotted #888;
+	cursor: move;
+	background-color: #DBDBDB;
+	height: 3px;
+	font-size: 3px;
+	line-height: 3px;
+}
+.bs_padtop {
+	margin-top: 0.7em;
+}
+
+/* ------------ ROW-HOVER ------------ */
+
+td.hlCol {
+	padding: 0.4em;
+	background-color: #ebebeb;
+}
+
+tr.hlRow:hover td.hlCol {
+	background-color: #f5f5f5;
+}
+td.hlCol_sel {
+	padding: 0.4em;
+	background-color: #FFBE5C;
+}
+
+/* ------------ POSITION ------------ */
+
+#position {
+	padding: 0.4em;
+	background-color: #ebebeb;
+	border-bottom: 1px dotted #888;
+}
+
+/* ------------ MESSAGES ------------ */
+
+span.a_msg_error {
+	color: #f00;
+	font-weight: bold;
+}
+span.a_msg_warning {
+	color: #f90;
+	font-weight: bold;
+}
+span.a_msg_notice {
+	color: #008000;
+	font-weight: bold;
+}
+
+/* ------------ PAGINATION ------------ */
+
+.bs_pageno {
+	background-color: #f0f0f0;
+	border: 1px solid #ccc;
+}
+.bs_pagecurrent {
+	padding: 0 0.4em;
+	font-weight: bold;
+}
+.bs_pageno a {
+	padding: 1px 0.4em;
+}
+.bs_pageno a:hover {
+	background-color: #3F5E88;
+	color: #fff;
+	text-decoration: none;
+}
+
+/* ------------ MENUBAR ------------ */
+
+.a_menubar {
+	text-align: right;
+	border: 1px solid #777;
+	height: 32px;
+	padding-right: 0px;
+	background-color: #ebebeb;
+}
+
+.a_menubar a {
+	display: block;
+	float: right;
+	padding: 8px;
+	margin-right: 1px;
+	border-left: 1px solid #777;
+	text-decoration: none;
+	color: #3F5E88;
+}
+.a_menubar a:hover {
+	color: #000;
+	background-color: #fff;
+	text-decoration: none;
+}
+
+.a_menubar_left {
+	float: left;
+	position: relative;
+	padding: 3px;
+}
+.a_menubar_right {
+	
+}
+
+/* ------------ FORM ELEMENTS ------------ */
+
+input,select,textarea {
+	padding: 0.2em;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 0.9em;
+	color: #000000;
+}
+
+/*input.a_searchtb {
+	height: 13px;
+	padding: 1px;
+	margin: 0px;
+}
+html:not(:nth-child(1)) input.a_searchtb {
+	height: 18px;
+}
+input.a_searchbtn {
+	height: 22px;
+	padding: 0px;
+	margin: 0px;
+}*/
+
+/* ------------ PADDING ------------ */
+
+.a_block, .a_block_pad {
+	padding-top: 2px;
+	padding-bottom: 2px;
+	display: block;
+	width: 100%;
+}
+
+.a_pad, .a_block_pad {
+	margin-top: 0.6em;
+}
+
+.a_pad_double {
+	margin-top: 1.5em;
+}
+
+.a_pad_bottom {
+	margin-bottom: 0.6em;
+}
+
+
+/* ------------ THE DIFFERENT CONTENT-STYLES ------------ */
+
+/* for the main content */
+.a_main {
+	padding: 0.4em;
+	background-color: #ebebeb;
+}
+.a_main a {
+	text-decoration: none;
+	color: #3F5E88;
+}
+.a_main a:hover {
+	text-decoration: underline;
+}
+
+/* the description-columns and something similar */
+.a_coldesc {
+	padding: 0.3em;
+	font-size: 0.9em;
+	background-color: #DBDBDB;
+	font-weight: bold;
+}
+.a_coldesc a {
+	text-decoration: none;
+	color: #3F5E88;
+}
+.a_coldesc a:hover {
+	text-decoration: underline;
+}
+
+/* separators */
+.a_coldesc_sep, .a_coldesc_sep_text {
+	border-top: 1px solid #fff;
+	background-color: #DBDBDB;
+	padding: 0.3em;
+}
+.a_coldesc_sep {
+	height: 3px;
+	font-size: 3px;
+	line-height: 3px;
+}
+.a_coldesc_sep_text {
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+/* the topics (titles of areas) */
+.a_topic {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #fff;
+	padding: 0.4em;
+	background-color: #637591;
+	background-image: url(../images/topic.gif);
+	background-repeat: repeat-x;
+	text-align: center;
+}
+h1.a_topic {
+	margin: 0;
+	padding: 0.3em;
+}
+.a_topic a {
+	background-image: none;
+	text-decoration: underline;
+	color: #fff;
+}
+.a_topic a:hover {
+	color: #000;
+}
+
+/* small text (often descriptions) */
+.a_desc {
+	padding-top: 0.5em;
+	font-size: 0.9em;
+	font-weight: normal;
+}
+
+/* ------------ TABLE BORDER ------------ */
+
+.a_border {
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-khtml-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	padding: 1px;
+	border: 1px solid #7F90AE;
+}
+
+/* ------------ TABLE ------------ */
+
+table.a_table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0;
+	padding: 0;
+}
+table.a_table > tbody > tr > td {
+	border: 1px solid #fff;
+}
+/* Fix the table-display in firefox and partly in opera */
+table.a_table > tbody > tr:last-child > td.a_coldesc {
+	border-bottom: 1px solid #dbdbdb;
+}
+table.a_table > tbody > tr:last-child > td.a_main {
+	border-bottom: 1px solid #ebebeb;
+}
+table.a_table > tbody > tr:last-child > td.hlCol {
+	border-bottom: 1px solid #ebebeb;
+}
+table.a_table > tbody > tr > td.a_coldesc:last-child {
+	border-right: 1px solid #dbdbdb;
+}
+table.a_table > tbody > tr > td.a_main:last-child {
+	border-right: 1px solid #ebebeb;
+}
+table.a_table > tbody > tr > td.hlCol:last-child {
+	border-right: 1px solid #ebebeb;
+}
+
+/* Fix the table-display in opera >= 9 */
+@media all and (min-width:0px) {
+	table.a_table > tbody > tr > td.a_coldesc:first-child {
+		border-left: 1px solid #dbdbdb;
+	}
+	table.a_table > tbody > tr > td.a_main:first-child {
+		border-left: 1px solid #ebebeb;
+	}
+	table.a_table > tbody > tr > td.hlCol:first-child {
+		border-left: 1px solid #ebebeb;
+	}
+}
+
+/* Fix the table-display in konqueror >= 3.4.3 */
+html:not(:nth-child(1)) table.a_table > tbody > tr > td:last-child {
+	border: 1px solid #fff;
+}
+html:not(:nth-child(1)) table.a_table > tbody > tr > td.a_coldesc:first-child {
+	border-left: 1px solid #dbdbdb;
+}
+html:not(:nth-child(1)) table.a_table > tbody > tr > td.a_main:first-child {
+	border-left: 1px solid #ebebeb;
+}
+html:not(:nth-child(1)) table.a_table > tbody > tr > td.hlCol:first-child {
+	border-left: 1px solid #ebebeb;
+}
+
+/* ------------ FORMULARS ------------ */
+
+fieldset {
+	margin: 0.3em;
+	padding: 0.2em;
+}
+
+fieldset.a_form {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+fieldset.a_form dl {
+	padding: 0;
+	margin: 0;
+	margin-top: 1px;
+	background-color: #dbdbdb;
+}
+
+fieldset.a_form dt {
+	display: block;
+	float: left;
+	margin: 0;
+	padding: 0.5em;
+	width: 26%;
+	font-weight: bold;
+	text-align: left;
+	vertical-align: middle;
+}
+
+fieldset.a_form dd {
+	display: block;
+	margin: 0;
+	margin-left: 28%;
+	padding: 0.5em;
+	background-color: #ebebeb;
+	vertical-align: top;
+}
+
+fieldset.a_subform {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+fieldset.a_subform dl {
+	background-color: #ebebeb;
+}
+
+fieldset.a_subform dt {
+	font-weight: normal;
+	width: 20%;
+}
+
+fieldset.a_subform dd {
+	margin-left: 20%;
+}

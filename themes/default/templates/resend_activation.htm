@@ -1,0 +1,40 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<form method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('resend_activation_link')}</h1>
+	<div class="bs_main">
+		{glocale.lang('resend_activation_link_desc')}
+	</div>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('your_email_address')}:</dt>
+			<dd>{form.get_textbox('email','',30,255)}</dd>
+		</dl>
+		{if enable_security_code}
+		<dl>
+			<dt>{glocale.lang('security_code')}:</dt>
+			<dd>
+				<img src="{security_code_img}" style="padding-bottom: 5px; cursor: pointer;" onclick="reloadImage(this);" alt="{glocale.lang('reload_sec_image')}" title="{glocale.lang('reload_sec_image')}" />
+				<br clear="all" />
+				<input type="text"  name="{sec_code_field}" size="15" maxlength="10" />
+				<div class="bs_desc">{glocale.lang('security_code_desc')}</div>
+			</dd>
+		</dl>
+		{endif}
+	</fieldset>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="history.back();" />
+	<input type="submit" value="{glocale.lang('submit')}" />
+</center>
+</form>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

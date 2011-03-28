@@ -1,0 +1,35 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<script type="text/javascript" language="Javascript">
+<!--
+self.focus();
+function bbcode(ins)
+{
+	opener.insertSmiley('bbcode_area{number}',ins);
+}
+//-->
+</script>
+
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('smileys')}</h1>
+	<table class="bs_table" cellpadding="2" cellspacing="1">
+		{loop smileys as smiley}
+		<tr>
+			<td width="50%" class="bs_left" align="center">{smiley:display_code}</td>
+			<td width="50%" class="bs_main" align="center">
+			<a href="Javascript:bbcode('{smiley:smiley_code}');">
+			<img src="{smiley:smiley_path}" alt="{smiley:smiley_code}" />
+			</a>
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+
+<div class="bs_padtop" align="center">
+	<a href="Javascript:self.close()">{glocale.lang('closewindow')}</a>
+</div>
+{endif}
+
+{include "inc_footer.htm"}

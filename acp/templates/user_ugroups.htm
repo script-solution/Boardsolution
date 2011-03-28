@@ -1,0 +1,39 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+
+<p class="a_block">{glocale.lang('user_in_multiple_groups_notice')}</p>
+
+<form method="post" action="{target_url}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<input type="hidden" name="delete" value="{user_ids}" />
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('selected_user_groups')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="40%" class="a_coldesc">{glocale.lang('username')}</td>
+			<td width="30%" class="a_coldesc" align="center">{glocale.lang('main_group')}</td>
+			<td width="30%" class="a_coldesc" align="center">{glocale.lang('other_groups')}</td>
+		</tr>
+		{loop user as data}
+		<tr>
+			<td height="23" class="a_main">{data:user_name}<br />{data:current}</td>
+			<td height="23" class="a_main" align="center">
+			{form.get_combobox('main_group['~data:id~']',maingroups,data:main_group,false,1,data:is_own_user)}
+			</td>
+			<td height="23" class="a_main" align="center">
+			{form.get_combobox('other_groups['~data:id~'][]',groups,data:other_groups,true,groups.length)}
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+<center>
+	<input type="button" value="{glocale.lang('back')}" onclick="document.location.href = '{back_url}';" />
+	<input type="submit" name="submit" value="{glocale.lang('submit')}" />
+</center>
+</form>
+
+{endif}
+
+{include "inc_footer.htm"}

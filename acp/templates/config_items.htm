@@ -1,0 +1,95 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<form method="get" action="{form_target}">
+{loop hidden_fields as name => value}
+<input type="hidden" name="{name}" value="{value}" />
+{endloop}
+<div class="a_border">
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td colspan="{groups_per_line}" class="a_main">
+			<label for="keyword_field">{glocale.lang('search_in_settings')}:</label>
+			<input type="text" id="keyword_field" name="kw" value="{keyword}" size="20" maxlength="50" />
+			<input type="submit" value="{glocale.lang('search')}" />
+			<input type="reset" value="{glocale.lang('reset')}" onclick="document.location.href = '{gurl.simple_acp_url()}';" />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="{groups_per_line}" class="a_coldesc_sep">&nbsp;</td>
+		</tr>
+		{loop group_rows as grouprow}
+		<tr>
+			{loop grouprow as group}
+			<td align="center" width="{groups_width}%" style="font-size: 1.0em;" class="{group:class}">
+			<a href="{gurl.simple_acp_url(0,'&amp;action=items&amp;gid='~group:id)}"><b>{group:title}</b></a>
+			{if group:description}
+			<div class="a_desc">{group:description}</div>
+			{endif}
+			</td>
+			{endloop}
+		</tr>
+		{endloop}
+	</table>
+</div>
+</form>
+
+<form method="post" action="{form_target}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="a_border a_pad">
+	<h1 class="a_topic">{title}</h1>
+	{if items.length == 0}
+	<div class="a_main">{glocale.lang('no_settings_found')}</div>
+	{else}
+	<fieldset class="a_form">
+		{loop items as item}
+		{if item:show_sep}
+		{if item:separator == ''}
+		<div class="a_coldesc_sep">{item:separator}</div>
+		{else}
+		<div class="a_coldesc_sep_text">{item:separator}</div>
+		{endif}
+		{endif}
+		<dl>
+			<dt>
+				{item:title}:
+				{if item:affects_messages == 1}
+				<span style="color: #000080;">*</span>
+				{endif}
+				{if item:affects_messages == 2}
+				<span style="color: #FF0000;">*</span>
+				{endif}
+			</dt>
+			<dd>
+				{if item:is_default == false}
+				<a style="float: right;" href="
+				{if view == 'search'}
+				{gurl.simple_acp_url(0,'&amp;action=search&amp;kw='~keyword~'&amp;id='~item:id~'&amp;at='~at)}
+				{else}{gurl.simple_acp_url(0,'&amp;action=items&amp;gid='~gid~'&amp;id='~item:id~'&amp;at='~at)}
+				{endif}
+				"><img src="{gpath}acp/images/reset.png" alt="{glocale.lang('revert_setting')}" title="{glocale.lang('revert_setting')}" /></a>
+				{endif}
+				{item:content}
+				{if item:description != ""}
+				<div class="a_desc">{item:description}</div>
+				{endif}
+			</dd>
+		</dl>
+		{endloop}
+	</fieldset>
+	{endif}
+</div>
+<center>
+	<input type="submit" name="submit" value="{glocale.lang('save')}" />
+</center>
+</form>
+
+{if display_affects_msgs_hints}
+<p class="a_block_pad">
+	<span style="color: #000080;">*</span>: {glocale.lang('affects_messages_not_important')}<br />
+	<span style="color: #FF0000;">*</span>: {glocale.lang('affects_messages_important')}<br />
+</p>
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

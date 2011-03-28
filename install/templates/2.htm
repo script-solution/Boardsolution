@@ -1,0 +1,16 @@
+{include "inc_header.htm"}
+
+{if module_error == false}
+<div class="bs_border">
+	<h1 class="bs_topic">{glocale.lang('step_type')}</h1>
+	<div class="bs_main">{glocale.lang('step2_explain')}</div>
+	<fieldset class="bs_form">
+		<dl>
+			<dt>{glocale.lang('kindofinstall')}:</dt>
+			<dd>{form.get_combobox('install_type',type_options,type_val)}</dd>
+		</dl>
+	</fieldset>
+</div>
+{endif}
+
+{include "inc_footer.htm"}

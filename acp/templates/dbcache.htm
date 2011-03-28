@@ -1,0 +1,52 @@
+{include "inc_header.htm"}
+{include "inc_delete_message.htm"}
+
+{if module_error == false}
+{include "inc_js_row_selector.htm"}
+
+<p class="a_block">{glocale.lang('dbcache_notice')}</p>
+
+<form method="post" action="{gurl.simple_acp_url()}">
+<input type="hidden" name="action_type" value="{action_type}" />
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('acpmod_dbcache')}</h1>
+	<table class="a_table" cellpadding="2" cellspacing="1">
+		<tr>
+			<td width="70%" class="a_coldesc">{glocale.lang('table_name')}</td>
+			<td width="25%" class="a_coldesc" align="center">{glocale.lang('show')}</td>
+			<td width="5%" class="a_coldesc" align="center">&nbsp;</td>
+		</tr>
+		{loop entries as row => name}
+		<tr id="row_{row}" class="hlRow">
+			<td class="hlCol">{name}</td>
+			<td class="hlCol" align="center"><a href="{gurl.simple_acp_url(0,'&amp;name='~name)}">{glocale.lang('show')}</a></td>
+			<td class="hlCol" align="center" onclick="rowHL.toggleRowSelected({row});">
+			<input id="check_{row}" type="checkbox" name="delete[]" value="{name}" />
+			</td>
+		</tr>
+		{endloop}
+	</table>
+</div>
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="40%" class="a_body">&nbsp;</td>
+		<td width="20%" align="center" class="a_body">
+		{glocale.lang('marked')}: <input type="submit" value="{glocale.lang('refresh')}" />
+		</td>
+		<td width="40%" align="right" class="a_body">
+		<a href="javascript:rowHL.toggleAllSelected();">{glocale.lang('invertmark')}</a>
+		</td>
+	</tr>
+</table>
+</form>
+
+{if show_cache}
+<div class="a_border a_pad">
+	<h1 class="a_topic">{glocale.lang('details')} {glocale.lang('of')} &quot;{details_name}&quot;</h1>
+	<div class="a_main">{cache_content}</div>
+</div>
+{endif}
+
+{endif}
+
+{include "inc_footer.htm"}

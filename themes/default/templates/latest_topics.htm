@@ -1,0 +1,27 @@
+{include "inc_header.htm"}
+
+{if action_result < 1}
+{if module_error == false}
+
+<div class="bs_body">
+	<form method="get" action="{target_url}">
+	{loop hidden_fields as k => v}
+	<input type="hidden" name="{k}" value="{v}" />
+	{endloop}
+	{glocale.lang('forum')}: {forum_combo}
+	<input type="submit" value="{glocale.lang('show')}" />
+	</form>
+</div>
+
+<div class="bs_padtop">
+{include "inc_topics.htm"}
+</div>
+
+<div class="bs_padtop">
+{include "inc_pagination.htm"}
+</div>
+
+{endif}
+{endif}
+
+{include "inc_footer.htm"}

@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{title}</title>
+<meta name="robots" content="{robots_value}" />
+<meta http-equiv="Content-Type" content="text/html; {charset}" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+{if redirect}
+<meta http-equiv="refresh" content="{redirect:time}; url={redirect:url}" />
+{endif}
+<script type="text/javascript" src="{gjs.get_file('js/basic.js','fws')}"></script>
+<script type="text/javascript" src="{gjs.get_file('js/ajax.js','fws')}"></script>
+<script type="text/javascript" src="{gjs.get_file('src/functions.js')}"></script>
+
+<link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('advanced.css')}" />
+<link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('basic.css')}" />
+</head>
+<body class="bs_body">
+
+<a id="top"></a>
+
+{if show_headline}
+{include "inc_headline.htm"}
+{endif}
+{include "inc_messages.htm"}
