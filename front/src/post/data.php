@@ -283,10 +283,19 @@ final class BS_Front_Post_Data extends FWS_Object
 	{
 		$cfg = FWS_Props::get()->cfg();
 		$auth = FWS_Props::get()->auth();
+		$cache = FWS_Props::get()->cache();
+		$locale = FWS_Props::get()->locale();
 
 		if($cfg['enable_user_ranks'] == 1 && $this->_data['post_user'] > 0)
 			return '';
 		
+		$gdata = $cache->get_cache('user_groups')->get_element((int)$this->_data['user_group']);
+		if($gdata['overrides_mod'] == 0 &&
+			$auth->is_moderator_in_any_forum($this->_data['post_user'],$this->_data['user_group']))
+		{
+			return '<span style="color: #'.$cfg['mod_color'].';">'.$locale->lang('moderators').'</span>';
+		}
+
 		$group_id = $this->_data['post_user'] > 0 ? (int)$this->_data['user_group'] : BS_STATUS_GUEST;
 		return $auth->get_colored_groupname($group_id);
 	}
@@ -338,8 +347,11 @@ final class BS_Front_Post_Data extends FWS_Object
 	 */
 	public function get_rank_images()
 	{
+		$cfg = FWS_Props::get()->cfg();
 		$cache = FWS_Props::get()->cache();
 		$functions = FWS_Props::get()->functions();
+		if($cfg['enable_user_ranks'] == 0)
+			return '';
 
 		if(isset(self::$_profiles[$this->_data['id']]['rankimg']))
 			return self::$_profiles[$this->_data['id']]['rankimg'];
