@@ -68,10 +68,12 @@ final class BS_Front_Module_search extends BS_Front_Module
 					$request = new BS_Front_Search_Request_SimilarTopics();
 					break;
 				case 'topic':
-					$request = new BS_Front_Search_Request_Topic();
+					$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
+					$request = new BS_Front_Search_Request_Topic($tid);
 					break;
 				default:
-					$request = new BS_Front_Search_Request_Default();
+					$fids = $input->get_var(BS_URL_FID,'get',FWS_Input::STRING);
+					$request = new BS_Front_Search_Request_Default($fids ? explode(',',$fids) : null);
 					break;
 			}
 			

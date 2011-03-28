@@ -27,6 +27,27 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 	 */
 	private $_keywords;
 	
+	/**
+	 * The forum-ids
+	 * 
+	 * @var array
+	 */
+	private $_fids;
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param array $fids the forum-ids to search in
+	 */
+	public function __construct($fids = null)
+	{
+		$input = FWS_Props::get()->input();
+		
+		$this->_fids = $fids;
+		if(!$this->_fids)
+			$this->_fids = (array)$input->get_var('fid','post');
+	}
+	
 	public function get_initial_result_type()
 	{
 		$input = FWS_Props::get()->input();
@@ -65,6 +86,8 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 	public function get_url_params()
 	{
 		$params = array();
+		$params[BS_URL_LOC] = $this->get_initial_result_type();
+		$params[BS_URL_FID] = $this->_fids ? implode(',',$this->_fids) : '';
 		foreach($this->_keywords as $name => $kws)
 		{
 			$str = '';
@@ -216,7 +239,6 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 			return null;
 		}
 
-		$fid = $input->get_var('fid','post');
 		$sql = '';
 
 		// parse keywords
@@ -231,13 +253,13 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 			$sql .= ($sql != '' ? ' AND ' : '').$un;
 		
 		$sql = ' WHERE'.$sql;
-		if($fid != null)
+		if($this->_fids !== null)
 		{
 			$fids = array();
-			for($i = 0;$i < count($fid);$i++)
+			foreach($this->_fids as $fid)
 			{
-				if(FWS_Helper::is_integer($fid[$i]) && $fid[$i] != 0)
-					$fids[] = $fid[$i];
+				if(FWS_Helper::is_integer($fid) && $fid != 0)
+					$fids[] = $fid;
 			}
 			
 			if(count($fids) > 0)

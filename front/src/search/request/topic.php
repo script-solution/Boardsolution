@@ -26,6 +26,25 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 	 */
 	private $_keywords;
 	
+	/**
+	 * The topic-id
+	 * 
+	 * @var int
+	 */
+	private $_tid;
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param int $tid the topic-id
+	 */
+	public function __construct($tid = 0)
+	{
+		$this->_tid = $tid;
+		if(!$this->_tid)
+			$this->_tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
+	}
+	
 	public function get_initial_result_type()
 	{
 		return 'posts';
@@ -49,10 +68,14 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 	
 	public function get_url_params()
 	{
+		$params = array();
 		$str = '';
 		foreach($this->_keywords as $kw)
 			$str .= '"'.$kw.'" ';
-		return array(BS_URL_KW => rtrim($str));
+		$params[BS_URL_KW] = rtrim($str);
+		$params[BS_URL_MODE] = 'topic';
+		$params[BS_URL_TID] = $this->_tid;
+		return $params;
 	}
 	
 	public function encode_keywords()
@@ -71,8 +94,7 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 		$msgs = FWS_Props::get()->msgs();
 		$locale = FWS_Props::get()->locale();
 
-		$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
-		if($tid == null)
+		if($this->_tid == null)
 		{
 			$msgs->add_error($locale->lang('no_posts_found'));
 			return null;
@@ -99,7 +121,7 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 		$sql = ' WHERE'.BS_Front_Search_Utils::build_search_cond(
 			$this->_keywords,array('p.text_posted','t.name'),'AND'
 		);
-		$sql .= ' AND p.threadid = '.$tid;
+		$sql .= ' AND p.threadid = '.$this->_tid;
 		
 		return $this->get_result_ids_impl('posts',$sql,250,$this->_keywords);
 	}
