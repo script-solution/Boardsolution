@@ -106,7 +106,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 				$ext = FWS_FileUtils::get_extension($filename);
 
 				// check if it is a thumbnail
-				if($data == null && preg_match('/.+_thumb\.(jpeg|jpg|png)$/',$filename))
+				if($data == null && preg_match('/.+_thumb\.(jpeg|jpg|png)$/i',$filename))
 				{
 					$pos = FWS_String::strpos($filename,'_thumb');
 					$startp = FWS_String::substr($filename,0,$pos);
