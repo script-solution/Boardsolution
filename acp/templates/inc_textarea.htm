@@ -6,7 +6,7 @@ switches back to simple/advanced mode -->
 cp['{number}'] = new FWS_ColorPicker(
 	'{gfwspath}','group_color',
 	function(color) {
-		popupElementClick({number},'color',color);
+		popupElementClick({number},'color','#' + color);
 	},
 	function() {
 		popups['color{number}'] = 0;
