@@ -22,7 +22,7 @@ final class BS_BBCode_Content_URL extends BS_BBCode_Content_Default
 	public function get_text($inner,$param)
 	{
 		if($param != '')
-			$url = $inner;
+			$url = str_replace(array("\n",'&quot;'),'',$inner);
 		else
 			$url = BS_BBCode_Helper::get_instance()->parse_url($inner);
 		
