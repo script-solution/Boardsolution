@@ -271,8 +271,7 @@ final class BS_ForumUtils extends FWS_UtilBase
 		$user = FWS_Props::get()->user();
 		$forums = FWS_Props::get()->forums();
 
-		$ugroup = $user->get_user_group();
-		if($ugroup == BS_STATUS_ADMIN && !$include_categories)
+		if($user->is_admin() && !$include_categories)
 			return array();
 		
 		$denied = array();
@@ -290,7 +289,7 @@ final class BS_ForumUtils extends FWS_UtilBase
 			}
 	
 			// admins have always permission
-			if($ugroup == BS_STATUS_ADMIN)
+			if($user->is_admin())
 				continue;
 	
 			// is it an intern forum?
