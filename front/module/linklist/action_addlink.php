@@ -66,6 +66,9 @@ final class BS_Front_Action_linklist_addlink extends BS_Front_Action_Base
 		// insert the link into the database
 		$sql_category = ($new_category != '') ? $new_category : $category;
 		$active = ($cfg['linklist_activate_links'] == 1 && !$user->is_admin()) ? 0 : 1;
+		
+		if($sql_category == '')
+			return 'fillallfields';
 
 		$fields = array(
 			'link_url' => $link,
