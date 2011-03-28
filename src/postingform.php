@@ -384,17 +384,21 @@ final class BS_PostingForm extends FWS_Object
 		else
 			$smileys_act = $locale->lang('smileys_not_activated');
 
-		if(!$user->use_bbcode_applet()) {
+		if(!$user->use_bbcode_applet())
+		{
 			$tpl->add_variables(array(
 				'text' => $text
 			));
 		}
 	
-		if($user->is_loggedin())
-			$bbcode_mode = $user->get_profile_val('bbcode_mode');
-		else
-			$bbcode_mode = $cfg['msgs_default_bbcode_mode'];
-		$tpl_bbcode_mode = $this->_form->get_input_value('bbcode_mode_'.self::$number,$bbcode_mode);
+		$bbcode_mode = $input->get_var('bbcode_mode_'.self::$number,'post',FWS_Input::STRING);
+		if($bbcode_mode == null)
+		{
+			if($user->is_loggedin())
+				$bbcode_mode = $user->get_profile_val('bbcode_mode');
+			else
+				$bbcode_mode = $cfg['msgs_default_bbcode_mode'];
+		}
 		
 		$url = BS_URL::get_standalone_url('ajax_get_postform');
 		$url->set('type',$this->_type);
@@ -412,10 +416,10 @@ final class BS_PostingForm extends FWS_Object
 			'post_title' => $this->_title,
 			'toggle_smbb' => $toggle_smbb,
 			'textarea' => $textarea,
-			'bbcode_mode' => $tpl_bbcode_mode,
-			'bb_si_checked' => $tpl_bbcode_mode == 'simple' ? ' checked="checked"' : '',
-			'bb_ad_checked' => $tpl_bbcode_mode == 'advanced' ? ' checked="checked"' : '',
-			'bb_app_checked' => $tpl_bbcode_mode == 'applet' ? ' checked="checked"' : ''
+			'bbcode_mode' => $bbcode_mode,
+			'bb_si_checked' => $bbcode_mode == 'simple' ? ' checked="checked"' : '',
+			'bb_ad_checked' => $bbcode_mode == 'advanced' ? ' checked="checked"' : '',
+			'bb_app_checked' => $bbcode_mode == 'applet' ? ' checked="checked"' : ''
 		));
 		
 		$tpl->restore_template();
