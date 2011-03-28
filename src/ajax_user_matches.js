@@ -21,23 +21,21 @@ var _isReqPending = false;
  * @param string inputId the id of the input-field
  * @param string actionParam the action-parameter-name
  * @param string matchText the text to display at the beginning of the matches
+ * @param string waitImg the wait-image to use
  * @param boolean multiple is it allowed to enter more than one username?
  * @param boolean quotesAllowed are quotes (") allowed?
  * @param string separator the separator for multiple usernames
  */
-function BS_AJAXUserSearch(root,inputId,actionParam,matchText,multiple,quotesAllowed,separator)
+function BS_AJAXUserSearch(root,inputId,actionParam,matchText,waitImg,multiple,quotesAllowed,separator)
 {
 	this.lastKeyword = '';
 	this.root = root;
 	this.inputId = inputId;
 	this.resultId = 'ajax_umatches_result';
 	this.waitId = 'ajax_umatches_wait';
-	this.matchText = matchText;
 	this.actionParam = actionParam;
-	
-	if(typeof linkClass == "undefined")
-		linkClass = 'bs_main';
-	this.linkClass = linkClass;
+	this.matchText = matchText;
+	this.waitImg = waitImg;
 	
 	if(typeof multiple == "undefined")
 		multiple = true;
@@ -156,7 +154,7 @@ function displayWaitCursor()
 		div.style.border = '1px dotted #999';
 		div.style.position = 'absolute';
 		div.style.display = 'none';
-		div.innerHTML = '<img src="' + this.root + 'acp/images/wait.gif" alt="Wait" />';
+		div.innerHTML = '<img src="' + this.root + this.waitImg + '" alt="Wait" />';
 		inputField.parentNode.appendChild(div);
 	}
 	

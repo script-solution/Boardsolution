@@ -75,7 +75,7 @@ function user_search_callback(selectedUser)
 <script type="text/javascript">
 <!--
 new BS_AJAXUserSearch('{gpath}','new_receiver','{action_param}','{glocale.lang('matching_user')}',
-	true,false,',');
+	'{guser.get_theme_item_path("images/wait.gif")}',true,false,',');
 
 if(!Browser.isIE)
 {
