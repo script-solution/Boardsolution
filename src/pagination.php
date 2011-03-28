@@ -141,29 +141,31 @@ class BS_Pagination extends FWS_Pagination
 			FWS_Helper::def_error('instance','url','BS_URL',$url);;
 		
 		$locale = FWS_Props::get()->locale();
+		$user = FWS_Props::get()->user();
 
 		$result = '';
 		$total = $this->get_page_count();
 		$param = $this->get_page_param();
 		if($total > 1)
 		{
-			$result = '[ '.$locale->lang('pages').': ';
+			$result = '[&nbsp;<img src="'.$user->get_theme_item_path('images/pages.png').'" alt="';
+			$result .= $locale->lang('pages').'" />&nbsp;';
 			for($i = 1;$i <= $total;$i++)
 			{
 				if($i < 5)
-					$result .= '<a href="'.$url->set($param,$i)->to_url().'">'.$i.'</a> ';
+					$result .= '<a href="'.$url->set($param,$i)->to_url().'">'.$i.'</a>&nbsp;';
 			}
 	
 			if($total > 5)
-				$result .= ' ... ';
+				$result .= '&nbsp;...';
 	
 			if($total > 4)
 			{
 				$result .= '<a href="'.$url->set($param,$total)->to_url().'">';
-				$result .= $total.'</a>';
+				$result .= $total.'</a>&nbsp;';
 			}
-	
-			$result .= ' ]';
+			
+			$result .= ']';
 		}
 		return $result;
 	}
