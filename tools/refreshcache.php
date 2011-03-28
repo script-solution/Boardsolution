@@ -28,6 +28,28 @@ include(BS_PATH.'extern/bs_api.php');
 
 echo "Refreshing cache...";
 $cache = FWS_Props::get()->cache();
+
+// at first, make sure that all entries are in the db. if they're not, the cache won't be regenerated
+$db = FWS_Props::get()->db();
+$entries = array(
+	'banlist','intern','languages','moderators','themes','user_groups','user_ranks','config',
+	'user_fields','stats','tasks','acp_access','bots'
+);
+$refresh = false;
+foreach($entries as $name)
+{
+	if($cache->get_cache($name) === null)
+	{
+		$db->insert(BS_TB_CACHE,array('table_name' => $name));
+		$refresh = true;
+	}
+}
+if($refresh)
+{
+	FWS_Props::get()->reload('cache');
+	$cache = FWS_Props::get()->cache();
+}
+
 $cache->refresh_all();
 echo "DONE".LINE_WRAP;
 

@@ -33,7 +33,8 @@ BS_Front_Action_Base::load_actions();
 $e = FWS_Error_Handler::get_instance();
 $e->add_allowedfiles_listener(new BS_Error_AllowedFiles());
 $e->set_logger(new BS_Error_Logger());
-$e->set_output_handler(new FWS_Error_Output_Default(BS_ERRORS_SHOW_CALLTRACE,BS_ERRORS_SHOW_BBCODE));
+if(PHP_SAPI != 'cli')
+	$e->set_output_handler(new FWS_Error_Output_Default(BS_ERRORS_SHOW_CALLTRACE,BS_ERRORS_SHOW_BBCODE));
 
 // init the session-stuff
 $sessions = FWS_Props::get()->sessions();

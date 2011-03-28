@@ -65,8 +65,8 @@ class BS_PropLoader extends FWS_PropLoader
 		$cache->init_content('config',$s);
 		
 		$config = $cache->get_cache('config');
-		if($config->get_element_count() == 0)
-			FWS_Helper::error('The Config-entries are missing',false);
+		if($config === null || $config->get_element_count() == 0)
+			FWS_Helper::error('The Config-entries are missing. DB-Cache gone/broken?',false,E_USER_WARNING);
 		
 		// stats
 		$s = new BS_Cache_Source_Stats();
@@ -124,8 +124,10 @@ class BS_PropLoader extends FWS_PropLoader
 	{
 		$cache = FWS_Props::get()->cache();
 
-		$cfg = $cache->get_cache('config')->get_elements_quick();
-		return $cfg;
+		$cfg = $cache->get_cache('config');
+		if($cfg === null)
+			return array();
+		return $cfg->get_elements_quick();
 	}
 
 	/**
