@@ -217,9 +217,14 @@ final class BS_ACP_SubModule_user_default extends BS_ACP_SubModule
 			);
 		}
 
+		$search_params = $user->get_session_data('user_search_params',array());
 		$tpl->add_variables(array(
 			'user' => $users,
-			'comman_enabled' => BS_Community_Manager::get_instance()->is_user_management_enabled()
+			'comman_enabled' => BS_Community_Manager::get_instance()->is_user_management_enabled(),
+			'action_param' => BS_URL_ACTION,
+			'search_url' => BS_URL::build_acpsub_url(0,'search'),
+			'search_val' => isset($search_params['name']) ?
+				$input->unescape_value($search_params['name'],'post') : ''
 		));
 
 		$pagination->populate_tpl($baseurl);

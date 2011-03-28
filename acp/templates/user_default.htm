@@ -4,7 +4,13 @@
 {include "inc_delete_message.htm"}
 {include "inc_js_row_selector.htm"}
 
+<form method="post" action="{search_url}">
 <div class="a_block">
+	<div class="a_menubar_left">
+		{glocale.lang('username')}:
+		<input class="a_searchtb" type="text" size="20" maxlength="30" name="user_name" value="{search_val}" />
+		<input class="a_searchbtn" type="submit" name="submit" value="{glocale.lang('search')}" />
+	</div>
 	<div class="a_menubar">
 		<a href="{gurl.simple_acp_url(0,'&amp;action=add')}">
 		<img src="{gpath}acp/images/plus.png" alt="{glocale.lang('register_user')}" />
@@ -26,6 +32,7 @@
 		</a>
 	</div>
 </div>
+</form>
 
 <form method="post" action="{target_url}">
 <div class="a_border a_pad">
