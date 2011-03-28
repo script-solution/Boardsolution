@@ -593,6 +593,14 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		$db->execute("DELETE FROM `{$consts['BS_TB_TASKS']}` WHERE task_file = 'events.php'");
 		$this->add_to_log_success();
 		
+		$this->add_to_log('Adding Update-Task to "'.$consts['BS_TB_TASKS'].'"...');
+		$db->execute(
+			"INSERT INTO `{$consts['BS_TB_TASKS']}`
+			(`task_title`, `task_file`, `task_interval`, `last_execution`, `enabled`, `task_time`)
+			VALUES ('updates', 'updates.php', 259200, 0, 1, NULL);"
+		);
+		$this->add_to_log_success();
+		
 		
 		$this->add_to_log('Generating DB-Cache...');
 		include_once(FWS_Path::server_app().'config/mysql.php');

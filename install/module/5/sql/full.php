@@ -744,6 +744,11 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 			(`id`, `task_title`, `task_file`, `task_interval`, `last_execution`, `enabled`, `task_time`)
 			VALUES (7, 'error_log', 'error_log.php', 259200, 0, 1, '00:00:00');"
 		);
+		$db->execute(
+			"INSERT INTO `{$consts['BS_TB_TASKS']}`
+			(`id`, `task_title`, `task_file`, `task_interval`, `last_execution`, `enabled`, `task_time`)
+			VALUES (8, 'updates', 'updates.php', 259200, 0, 1, NULL);"
+		);
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_THEMES'].'"...');

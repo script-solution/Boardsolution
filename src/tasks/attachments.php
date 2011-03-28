@@ -54,7 +54,7 @@ final class BS_Tasks_attachments extends FWS_Tasks_Base
 			{
 				// check if it may be a thumbnail
 				$matches = array();
-				preg_match('/(.+)_thumb\.(jpeg|jpg|png)$/',$file,$matches);
+				preg_match('/(.+)_thumb\.(jpeg|jpg|png)$/i',$file,$matches);
 
 				// if the original-file should be deleted, too, we don't want to keep the thumbnail
 				if(count($matches) && !in_array($matches[1].'.'.$matches[2],$files))
