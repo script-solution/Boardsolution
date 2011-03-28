@@ -63,7 +63,8 @@ final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 		$functions = FWS_Props::get()->functions();
 
 		$loc = $input->get_var(BS_URL_SUB,'get',FWS_Input::STRING);
-		if($loc == 'pminbox' || $loc == 'pmoutbox' || $loc == 'pmoverview' || $loc == 'pmsearch')
+		if($loc == 'pminbox' || $loc == 'pmoutbox' || $loc == 'pmoverview' || $loc == 'pmsearch' ||
+			$loc == 'pmdetails')
 		{
 			$delete = $input->get_var('delete','post');
 			if($delete == null)
@@ -81,7 +82,7 @@ final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 				$site = $input->get_var(BS_URL_SITE,'get',FWS_Input::INTEGER);
 				$loc = $input->get_var(BS_URL_SUB,'get',FWS_Input::STRING);
 				
-				$yes_url = BS_URL::get_sub_url('userprofile',$loc);
+				$yes_url = BS_URL::get_sub_url('userprofile',$loc == 'pmdetails' ? 'pmoverview' : $loc);
 				$yes_url->set_sid_policy(BS_URL::SID_FORCE);
 				$yes_url->set(BS_URL_AT,BS_ACTION_DELETE_PMS);
 				$yes_url->set(BS_URL_SITE,$site);
@@ -90,6 +91,8 @@ final class BS_Front_Module_UserProfile_Helper extends FWS_Singleton
 				if($back_url === null)
 				{
 					$url = BS_URL::get_sub_url('userprofile',$loc);
+					if($loc == 'pmdetails')
+						$url->set(BS_URL_ID,$input->get_var(BS_URL_ID,'get'));
 					$url->set(BS_URL_SUB,$loc);
 					$back_url = $url->to_url();
 				}

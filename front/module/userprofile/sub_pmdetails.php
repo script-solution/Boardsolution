@@ -31,7 +31,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		$locale = FWS_Props::get()->locale();
 		$input = FWS_Props::get()->input();
 		$renderer = $doc->use_default_renderer();
-
+		
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$url = BS_URL::get_sub_url();
 		$url->set(BS_URL_ID,$id);
@@ -71,6 +71,8 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 			$this->report_error();
 			return;
 		}
+		
+		$helper->add_pm_delete_message();
 
 		// mark it read?
 		if($data['pm_read'] == 0)
@@ -204,15 +206,14 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		$tpl->add_variable_ref('attachments',$attachments);
 
 		// show bottom
-		$url = BS_URL::get_sub_url(0,'pmbanlist');
-		$url->set(BS_URL_AT,BS_ACTION_BAN_USER);
-		$uid = ($data['pm_type'] == 'inbox') ? $data['sender_id'] : $data['receiver_id'];
-		$url->set(BS_URL_ID,$uid);
-		$url->set_sid_policy(BS_URL::SID_FORCE);
+		$durl = BS_URL::get_sub_url();
+		$durl->set(BS_URL_ID,$data['id']);
+		$durl->set(BS_URL_DEL,$data['id']);
+		$durl->set(BS_URL_MODE,'delete');
 		
 		$tpl->add_variables(array(
 			'id' => $data['id'],
-			'ban_user_url' => $url->to_url(),
+			'delete_url' => $durl->to_url(),
 			'show_reply_btn' => $data['pm_type'] == 'inbox'
 		));
 	}
