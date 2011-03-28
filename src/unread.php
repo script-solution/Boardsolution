@@ -198,6 +198,12 @@ final class BS_Unread extends FWS_Object
 	{
 		$this->_storage->remove_all_news();
 		
+		// mark the topics read as well because they are not stored separatly, so that they'll be gone
+		// on the next request anyway
+		$topic_ids = array();
+		foreach(array_keys($this->_unread_news) as $tid)
+			$topic_ids[] = $tid;
+		$this->mark_topics_read($topic_ids);
 		$this->_unread_news = array();
 	}
 
