@@ -1,0 +1,6 @@
+/cache
+/config/mysql.php
+/images/avatars
+/uploads
+/dba/backups
+/dba/access.php
