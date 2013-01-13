@@ -53,7 +53,7 @@ abstract class BS_Install_Module_5_SQL_Base extends FWS_Object
 		{
 			$this->add_to_log_success();
 			
-			$this->add_to_log('Creating "dbbackup/access.php"...');
+			$this->add_to_log('Creating "dba/access.php"...');
 			$content = '<?php'."\n";
 			$content .= 'define(\'BS_DBA_USERNAME\',\''.FWS_StringHelper::generate_random_key(6).'\');'."\n";
 			$content .= 'define(\'BS_DBA_PASSWORD\',\''.FWS_StringHelper::generate_random_key(10).'\');'."\n";
