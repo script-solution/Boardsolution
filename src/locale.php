@@ -58,13 +58,13 @@ final class BS_Locale extends FWS_Object implements FWS_Locale
 		if(isset($this->_language_files[$lang.$file]))
 			return;
 		
-		$lang = $this->get_language_entries($file,$lang);
+		$entries = $this->get_language_entries($file,$lang);
 		
 		if(!is_array($this->_lang))
 			$this->_lang = array();
 		
 		$this->_language_files[$lang.$file] = true;
-		$this->_lang = array_merge($this->_lang,$lang);
+		$this->_lang = array_merge($this->_lang,$entries);
 	}
 	
 	/**
