@@ -60,7 +60,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `access_type` enum('user','group') NOT NULL,
 		  `access_value` int(10) unsigned NOT NULL default '0',
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_ACTIVATION'].'"...');
@@ -68,7 +68,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `user_id` int(10) unsigned NOT NULL default '0',
 		  `user_key` varchar(32) NOT NULL,
 		  PRIMARY KEY  (`user_id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_ATTACHMENTS'].'"...');
@@ -86,7 +86,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  KEY `thread_id` (`thread_id`),
 		  KEY `post_id` (`post_id`),
 		  KEY `pm_id` (`pm_id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_AVATARS'].'"...');
@@ -96,7 +96,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `user` int(10) unsigned NOT NULL default '0',
 		  PRIMARY KEY  (`id`),
 		  KEY `user` (`user`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_BANS'].'"...');
@@ -105,7 +105,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `bann_name` varchar(255) NOT NULL,
 		  `bann_type` varchar(5) NOT NULL,
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_BBCODES'].'"...');
@@ -123,7 +123,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `ignore_unknown_tags` tinyint(1) unsigned NOT NULL,
 		  `allowed_content` varchar(255) NOT NULL,
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		
 		$db->execute("INSERT INTO `{$consts['BS_TB_BBCODES']}`
 			(`id`, `name`, `type`, `content`, `replacement`, `replacement_param`, `param`, `param_type`, `allow_nesting`, `ignore_whitespace`, `ignore_unknown_tags`, `allowed_content`)
@@ -162,7 +162,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 			  `bot_ip_end` varchar(15) NOT NULL,
 			  `bot_access` tinyint(1) unsigned NOT NULL,
 			  PRIMARY KEY  (`id`)
-			) TYPE=MyISAM"
+			) ENGINE=MyISAM"
 		);
 		
 		$db->execute(
@@ -254,7 +254,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  									'bots') NOT NULL,
 		  `table_content` longtext NOT NULL,
 		  PRIMARY KEY  (`table_name`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		
 		$db->execute("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('banlist');");
 		$db->execute("INSERT INTO `{$consts['BS_TB_CACHE']}` (`table_name`) VALUES('intern');");
@@ -285,7 +285,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `default` text NOT NULL,
 		  `affects_msgs` tinyint(1) unsigned NOT NULL,
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_CONFIG_GROUPS'].'"...');
@@ -296,7 +296,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `title` varchar(255) NOT NULL,
 		  `sort` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_CHANGE_EMAIL'].'"...');
@@ -306,7 +306,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `email_address` varchar(255) NOT NULL,
 		  `email_date` int(10) unsigned NOT NULL default '0',
 		  PRIMARY KEY  (`user_id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_CHANGE_PW'].'"...');
@@ -315,7 +315,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `user_key` varchar(32) NOT NULL,
 		  `email_date` int(10) unsigned NOT NULL default '0',
 		  PRIMARY KEY  (`user_id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_EVENTS'].'"...');
@@ -333,7 +333,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `timeout` int(10) unsigned NOT NULL default '0',
 		  PRIMARY KEY  (`id`),
 		  KEY `tid` (`tid`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_EVENT_ANN'].'"...');
@@ -341,7 +341,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `event_id` int(10) unsigned NOT NULL,
 		  `user_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`event_id`,`user_id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_FORUMS'].'"...');
@@ -361,7 +361,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `forum_is_closed` tinyint(1) unsigned NOT NULL default '0',
 		  PRIMARY KEY  (`id`),
 		  KEY `lastpost_id` (`lastpost_id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_FORUMS_PERM'].'"...');
@@ -370,7 +370,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `group_id` int(10) unsigned NOT NULL,
 		  `type` enum('reply','topic','poll','event') NOT NULL,
 		  PRIMARY KEY  (`forum_id`,`group_id`,`type`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_INTERN'].'"...');
@@ -381,7 +381,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `access_value` int(10) unsigned NOT NULL default '0',
 		  PRIMARY KEY  (`id`),
 		  KEY `fid` (`fid`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_LANGS'].'"...');
@@ -390,7 +390,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `lang_folder` varchar(20) NOT NULL,
 		  `lang_name` varchar(50) NOT NULL,
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		
 		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_LANGS']."` (`id`, `lang_folder`, `lang_name`) VALUES
@@ -429,7 +429,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `link_desc_posted` text NOT NULL,
 		  PRIMARY KEY  (`id`),
 		  KEY `user_id` (`user_id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_LINK_VOTES'].'"...');
@@ -437,7 +437,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `user_id` int(10) unsigned NOT NULL,
 		  `link_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`user_id`,`link_id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_LOG_ERRORS'].'"...');
@@ -449,7 +449,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `message` text NOT NULL,
 		  `backtrace` text NOT NULL,
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_LOG_IPS'].'"...');
@@ -461,7 +461,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `date` int(10) unsigned NOT NULL,
 		  `action` varchar(20) NOT NULL,
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_MODS'].'"...');
@@ -472,7 +472,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  PRIMARY KEY  (`id`),
 		  KEY `rid` (`rid`),
 		  KEY `user_id` (`user_id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_PMS'].'"...');
@@ -490,7 +490,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  PRIMARY KEY  (`id`),
 		  KEY `receiver_id` (`receiver_id`),
 		  KEY `sender_id` (`sender_id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_POLL'].'"...');
@@ -502,7 +502,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `multichoice` tinyint(1) unsigned NOT NULL default '0',
 		  PRIMARY KEY  (`id`),
 		  KEY `pid` (`pid`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_POLL_VOTES'].'"...');
@@ -510,7 +510,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `poll_id` int(10) unsigned NOT NULL default '0',
 		  `user_id` int(10) unsigned NOT NULL default '0',
 		  PRIMARY KEY  (`poll_id`,`user_id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_POSTS'].'"...');
@@ -536,7 +536,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  KEY `threadid` (`threadid`),
 		  KEY `post_user` (`post_user`),
 		  KEY `edited_user` (`edited_user`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_PROFILES'].'"...');
@@ -585,7 +585,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `startmodule` enum('portal','forums') NOT NULL default 'portal',
 		  PRIMARY KEY  (`id`),
 		  KEY `avatar` (`avatar`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		
 		$db->execute("INSERT INTO `".$consts['BS_TB_PROFILES']."` SET
 			`id` = 1,
@@ -613,7 +613,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `keywords` text NOT NULL,
 		  `search_mode` enum('default','user_posts','user_topics','pms','topic','history','similar_topics') NOT NULL,
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_SESSIONS'].'"...');
@@ -627,7 +627,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `session_data` text NOT NULL,
 		  PRIMARY KEY  (`session_id`),
 		  KEY `user_id` (`user_id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_SMILEYS'].'"...');
@@ -639,7 +639,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `is_base` tinyint(1) unsigned NOT NULL default '0',
 		  `sort_key` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		
 		$i = 0;
 		$db->execute("INSERT INTO `".$consts['BS_TB_SMILEYS']."`
@@ -706,7 +706,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  KEY `topic_id` (`topic_id`),
 		  KEY `user_id` (`user_id`),
 		  KEY `forum_id` (`forum_id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_TASKS'].'"...');
@@ -719,7 +719,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `enabled` tinyint(1) unsigned NOT NULL default '0',
 		  `task_time` time default NULL,
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		
 		$db->execute(
 			"INSERT INTO `{$consts['BS_TB_TASKS']}`
@@ -769,7 +769,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `theme_folder` varchar(20) NOT NULL,
 		  `theme_name` varchar(50) NOT NULL,
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		
 		$db->execute("INSERT INTO `".$consts['BS_TB_THEMES']."` (`id`, `theme_folder`, `theme_name`)
 									VALUES (1, 'default', 'Script-solution');");
@@ -814,7 +814,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  KEY `post_user` (`post_user`),
 		  KEY `lastpost_id` (`lastpost_id`),
 		  KEY `lastpost_user` (`lastpost_user`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_UNREAD'].'"...');
@@ -823,7 +823,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `post_id` int(10) unsigned NOT NULL,
 		  `is_news` tinyint(1) unsigned NOT NULL,
 		  PRIMARY KEY  (`user_id`,`post_id`)
-		) TYPE=MyISAM");
+		) ENGINE=MyISAM");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_UNREAD_HIDE'].'"...');
@@ -831,7 +831,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `user_id` int(10) unsigned NOT NULL,
 		  `forum_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`user_id`,`forum_id`)
-		) TYPE=MyISAM");
+		) ENGINE=MyISAM");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_UNSENT_POSTS'].'"...');
@@ -839,7 +839,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `user_id` int(10) unsigned NOT NULL,
 		  `post_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`user_id`,`post_id`)
-		) TYPE=MyISAM");
+		) ENGINE=MyISAM");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_USER'].'"...');
@@ -849,7 +849,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `user_pw` varchar(32) NOT NULL,
 		  `user_email` varchar(255) NOT NULL,
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		
 		$admin_login = addslashes($user->get_session_data('admin_login'));
 		$admin_pw = $user->get_session_data('admin_pw');
@@ -870,7 +870,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  PRIMARY KEY  (`id`),
 		  KEY `user_id` (`user_id`),
 		  KEY `baned_user` (`baned_user`)
-		) TYPE=MyISAM");
+		) ENGINE=MyISAM");
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_USER_FIELDS'].'"...');
@@ -890,7 +890,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `field_edit_notice` text NOT NULL,
 		  `display_always` tinyint(1) unsigned NOT NULL default '0',
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		
 		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_USER_FIELDS']."` SET `id` = 1,
@@ -996,7 +996,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `view_useronline_list` tinyint(1) unsigned NOT NULL default '0',
 		  `is_team` tinyint(1) unsigned NOT NULL default '0',
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		
 		$db->execute("INSERT INTO `".$consts['BS_TB_USER_GROUPS']."` SET
 									`id` = ".BS_STATUS_ADMIN.",
@@ -1115,7 +1115,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `post_to` smallint(5) unsigned NOT NULL default '0',
 		  `post_from` smallint(5) unsigned NOT NULL default '0',
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		
 		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_RANKS']."` (`id`, `rank`, `post_to`, `post_from`)

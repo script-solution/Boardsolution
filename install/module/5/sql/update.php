@@ -73,7 +73,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		  `ignore_unknown_tags` tinyint(1) unsigned NOT NULL,
 		  `allowed_content` varchar(255) NOT NULL,
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		
 		$db->execute("INSERT INTO `{$consts['BS_TB_BBCODES']}`
 			(`id`, `name`, `type`, `content`, `replacement`, `replacement_param`, `param`, `param_type`, `allow_nesting`, `ignore_whitespace`, `ignore_unknown_tags`, `allowed_content`)
@@ -128,7 +128,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		  `default` text NOT NULL,
 		  `affects_msgs` tinyint(1) unsigned NOT NULL,
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
  		
  		// themes
@@ -155,7 +155,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		  `title` varchar(255) NOT NULL,
 		  `sort` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
  		
 		BS_Install_Module_5_Helper::generate_settings();
@@ -362,7 +362,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		  `event_id` int(10) unsigned NOT NULL,
 		  `user_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`event_id`,`user_id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		// events
@@ -400,7 +400,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		  `group_id` int(10) unsigned NOT NULL,
 		  `type` enum('reply','topic','poll','event') NOT NULL,
 		  PRIMARY KEY  (`forum_id`,`group_id`,`type`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		// forums
@@ -444,7 +444,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		  `user_id` int(10) unsigned NOT NULL,
 		  `link_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`user_id`,`link_id`)
-		) TYPE=MyISAM;");
+		) ENGINE=MyISAM;");
 		$this->add_to_log_success();
 		
 		// languages
@@ -470,7 +470,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		  `post_id` int(10) unsigned NOT NULL,
 		  `is_news` tinyint(1) unsigned NOT NULL,
 		  PRIMARY KEY  (`user_id`,`post_id`)
-		) TYPE=MyISAM");
+		) ENGINE=MyISAM");
 		$this->add_to_log_success();
 		
 		// unsent posts
@@ -479,7 +479,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		  `user_id` int(10) unsigned NOT NULL,
 		  `post_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`user_id`,`post_id`)
-		) TYPE=MyISAM");
+		) ENGINE=MyISAM");
 		$this->add_to_log_success();
 		
  		// profile
@@ -588,7 +588,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		  `user_id` int(10) unsigned NOT NULL,
 		  `forum_id` int(10) unsigned NOT NULL,
 		  PRIMARY KEY  (`user_id`,`forum_id`)
-		) TYPE=MyISAM");
+		) ENGINE=MyISAM");
 		$this->add_to_log_success();
 		
 		// user-groups
