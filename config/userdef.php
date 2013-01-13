@@ -44,7 +44,7 @@ define('BS_FRONTEND_FILE','index.php');
  * 
  * The path to FrameWorkSolution (relative) with trailing slash.
  */
-define('BS_FWS_PATH','../FrameWorkSolution/');
+define('BS_FWS_PATH','fws/');
 
 /**
  * Hiermit koennen Debug-Infos konfiguriert werden:
@@ -89,7 +89,7 @@ define('BS_ERRORS_SHOW_BBCODE',true);
  * to the database will be done completely or not at all. That means the database remains in a
  * consistent status even if a query fails, the script has been terminated or similar.
  */
-define('BS_USE_TRANSACTIONS',true);
+define('BS_USE_TRANSACTIONS',false);
 
 /**
  * Das Praefix der vom Board gesetzten Cookies
