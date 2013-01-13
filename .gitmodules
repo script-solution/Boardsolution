@@ -1,0 +1,3 @@
+[submodule "fws"]
+	path = fws
+	url = https://github.com/script-solution/FrameWorkSolution.git
