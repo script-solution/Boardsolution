@@ -1,10 +1,12 @@
+.project
 /cache/*
 !/cache/.gitkeep
 /config/mysql.php
-/images/avatars
-/uploads
+/images/avatars/*
+!/images/avatars/_blank.jpg
+/uploads/*
 !/uploads/.htaccess
-/dba/backups
+/dba/backups/*
 !/dba/backups/backups.txt
 !/dba/backups/index.htm
 /dba/access.php
