@@ -7,24 +7,24 @@
  			<dt>{glocale.lang('attached_files')}:</dt>
  			<dd>
  			{if show_attachments}
-      <table width="100%" cellpadding="1" cellspacing="0">
-        {loop attachments as attachment}
-        <tr>
-          <td width="40%" class="bs_main_no_pad">{attachment:attached_file}</td>
-          <td width="60%" class="bs_main_no_pad">{attachment:input_stuff}</td>
-        </tr>
-        {endloop}
-      </table>
-      {else}
-      -
-      {endif}
+			<table width="100%" cellpadding="1" cellspacing="0">
+				{loop attachments as attachment}
+				<tr>
+					<td width="40%" class="bs_main_no_pad">{attachment:attached_file}</td>
+					<td width="60%" class="bs_main_no_pad">{attachment:input_stuff}</td>
+				</tr>
+				{endloop}
+			</table>
+			{else}
+			-
+			{endif}
  			</dd>
  		</dl>
  		<dl>
  			<dt>{glocale.lang('attach_new_file')}:</dt>
  			<dd>
  				<input type="file" name="attachment" size="10" />
-      	<input type="submit" name="add_attachment" value="{glocale.lang('upload')}" />
+				<input type="submit" name="add_attachment" value="{glocale.lang('upload')}" />
  			</dd>
  		</dl>
  	</fieldset>

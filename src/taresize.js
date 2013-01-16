@@ -45,7 +45,7 @@ function BS_set_textarea_ids(id,rid)
 function BS_startDrag(ev)
 {
 	if(!ev)
-    ev = window.event;
+		ev = window.event;
 
 	var tar = FWS_getElement(ta_resizer_id);
 	if(tar == null)
@@ -78,7 +78,7 @@ function BS_stopDrag(ev)
 function BS_moveMouse(ev)
 {
 	if(!ev)
-    ev = window.event;
+		ev = window.event;
 
 	if(!ta_dragging)
 		return;

@@ -40,13 +40,13 @@ final class BS_Session_Manager extends FWS_Session_Manager
 		parent::__construct(new BS_Session_Storage_DB());
 	}
 	
-  protected function check_online_timeout($user,$currentsid)
-  {
-  	// We want to treat acp-users different from frontend-users
-  	$loc = $user->get_location();
-  	$timeout = FWS_String::starts_with($loc,'acp:') ? BS_ACP_ONLINE_TIMEOUT : BS_ONLINE_TIMEOUT;
-  	return $user->get_date() < (time() - $timeout) && $user->get_session_id() != $currentsid;
-  }
+	protected function check_online_timeout($user,$currentsid)
+	{
+		// We want to treat acp-users different from frontend-users
+		$loc = $user->get_location();
+		$timeout = FWS_String::starts_with($loc,'acp:') ? BS_ACP_ONLINE_TIMEOUT : BS_ONLINE_TIMEOUT;
+		return $user->get_date() < (time() - $timeout) && $user->get_session_id() != $currentsid;
+	}
 	
 	/**
 	 * determines the location of the user with given id

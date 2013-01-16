@@ -351,13 +351,13 @@ function _getTagData(tag)
 function _getSelection(id)
 {
 	if(typeof document.selection != 'undefined')
-  	return document.selection.createRange().text;
+		return document.selection.createRange().text;
 
-  var textarea = document.getElementById(id);
-  if(typeof textarea.selectionStart != 'undefined')
-  	return textarea.value.substring(textarea.selectionStart,textarea.selectionEnd);
+	var textarea = document.getElementById(id);
+	if(typeof textarea.selectionStart != 'undefined')
+		return textarea.value.substring(textarea.selectionStart,textarea.selectionEnd);
 
-  return "";
+	return "";
 }
 
 /**

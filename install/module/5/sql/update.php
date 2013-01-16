@@ -390,7 +390,7 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		$db->execute(
 			"UPDATE `{$consts['BS_TB_EVENTS']}`
 			 SET `description_posted` = `description`"
-    );
+		);
  		$this->add_to_log_success();
 		
  		// forum-perms
@@ -596,8 +596,8 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		$db->execute(
 			"ALTER TABLE `{$consts['BS_TB_USER_GROUPS']}`
 			ADD `view_useronline_list` tinyint(1) unsigned NOT NULL default '0',
-  		ADD `is_team` tinyint(1) unsigned NOT NULL default '0'"
-  	);
+			ADD `is_team` tinyint(1) unsigned NOT NULL default '0'"
+		);
 		$this->add_to_log_success();
 		
 		// tasks

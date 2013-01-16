@@ -172,11 +172,11 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		{
 			$durl = BS_URL::get_standalone_url('download');
 			
-    	list($att_width,$att_height) = explode('x',$cfg['attachments_images_size']);
+			list($att_width,$att_height) = explode('x',$cfg['attachments_images_size']);
 			$turl = BS_URL::get_standalone_url('thumbnail');
-    	$turl->set('width',$att_width);
-    	$turl->set('height',$att_height);
-    	$turl->set('method',$cfg['attachments_images_resize_method']);
+			$turl->set('width',$att_width);
+			$turl->set('height',$att_height);
+			$turl->set('method',$cfg['attachments_images_resize_method']);
 			
 			// show attachments
 			foreach(BS_DAO::get_attachments()->get_by_pmid($data['id']) as $adata)
@@ -188,21 +188,20 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 					($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png');
 	
 				if($is_image)
-		    {
-    			$turl->set('path',$adata['attachment_path']);
-		    	$image_url = $turl->to_url();
-		      $image_title = sprintf(
-		      	$locale->lang('download_image'),basename($adata['attachment_path'])
-		      );
-		    }
-		    else
-		    {
-		    	$image_url = '';
-		    	$image_title = '';
-		    }
-		    $file_icon = $functions->get_attachment_icon($ext);
-		    $attachment_name = basename($adata['attachment_path']);
-	
+				{
+					$turl->set('path',$adata['attachment_path']);
+					$image_url = $turl->to_url();
+					$image_title = sprintf(
+					$locale->lang('download_image'),basename($adata['attachment_path']));
+				}
+				else
+				{
+					$image_url = '';
+					$image_title = '';
+				}
+				$file_icon = $functions->get_attachment_icon($ext);
+				$attachment_name = basename($adata['attachment_path']);
+
 				$attachments[] = array(
 					'is_image' => $is_image,
 					'fileicon' => $file_icon,

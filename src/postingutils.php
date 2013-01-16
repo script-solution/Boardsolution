@@ -428,11 +428,11 @@ final class BS_PostingUtils extends FWS_UtilBase
 		self::add_default_font($text,$post_data['default_font']);
 	
 		// highlight keywords?
-	  if($highlight_keywords !== null)
-	  {
-	  	$kwhl = new FWS_KeywordHighlighter($highlight_keywords,'<span class="bs_highlight">');
-	  	$text = $kwhl->highlight($text);
-	  }
+		if($highlight_keywords !== null)
+		{
+			$kwhl = new FWS_KeywordHighlighter($highlight_keywords,'<span class="bs_highlight">');
+			$text = $kwhl->highlight($text);
+		}
 		
 		$tpl->add_variables(array(
 			'text' => $text,
@@ -443,36 +443,36 @@ final class BS_PostingUtils extends FWS_UtilBase
 		));
 	
 		// add attachments
-	  if($show_attachments && isset($attachments[$post_data['bid']]))
-	  {
-	  	$tpl->set_template('inc_attachments_display.htm');
-	  	
-	  	$durl = BS_URL::get_standalone_url('download');
-      list($att_width,$att_height) = explode('x',$cfg['attachments_images_size']);
-      $turl = BS_URL::get_standalone_url('thumbnail');
-	  	$turl->set('width',$att_width);
-	  	$turl->set('height',$att_height);
-	  	$turl->set('method',$cfg['attachments_images_resize_method']);
-	  	
-	  	$tplatt = array();
-	  	for($i = 0;$i < count($attachments[$post_data['bid']]);$i++)
-	    {
-	      $attachment = $attachments[$post_data['bid']][$i];
-	      $ext = FWS_FileUtils::get_extension($attachment['attachment_path']);
-	      $attachment_url = $durl->set(BS_URL_ID,$attachment['id'])->to_url();
+		if($show_attachments && isset($attachments[$post_data['bid']]))
+		{
+			$tpl->set_template('inc_attachments_display.htm');
+			
+			$durl = BS_URL::get_standalone_url('download');
+			list($att_width,$att_height) = explode('x',$cfg['attachments_images_size']);
+			$turl = BS_URL::get_standalone_url('thumbnail');
+			$turl->set('width',$att_width);
+			$turl->set('height',$att_height);
+			$turl->set('method',$cfg['attachments_images_resize_method']);
+			
+			$tplatt = array();
+			for($i = 0;$i < count($attachments[$post_data['bid']]);$i++)
+			{
+				$attachment = $attachments[$post_data['bid']][$i];
+				$ext = FWS_FileUtils::get_extension($attachment['attachment_path']);
+				$attachment_url = $durl->set(BS_URL_ID,$attachment['id'])->to_url();
 				$image_url = '';
 				$image_title = '';
 	
-	      $is_image = $cfg['attachments_images_show'] == 1 &&
-	      	($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif');
-	      
-	      if($is_image)
-	      {
-	        $turl->set('path',$attachment['attachment_path']);
-	      	$image_url = $turl->to_url();
-	        $image_title = sprintf($locale->lang('download_image'),
-	        	basename($attachment['attachment_path']));
-	      }
+				$is_image = $cfg['attachments_images_show'] == 1 &&
+					($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif');
+				
+				if($is_image)
+				{
+					$turl->set('path',$attachment['attachment_path']);
+					$image_url = $turl->to_url();
+					$image_title = sprintf($locale->lang('download_image'),
+						basename($attachment['attachment_path']));
+				}
 	
 				$tplatt[] = array(
 					'is_image' => $is_image,
@@ -484,52 +484,52 @@ final class BS_PostingUtils extends FWS_UtilBase
 					'attachment_size' => number_format($attachment['attachment_size'],0,',','.'),
 					'downloads' => $attachment['downloads']
 				);
-	    }
-	    
-	    $tpl->add_variable_ref('attachments',$tplatt);
-	    $tpl->restore_template();
-	  }
+			}
+			
+			$tpl->add_variable_ref('attachments',$tplatt);
+			$tpl->restore_template();
+		}
 	
 		// add signature
-	  if($show_signature && $cfg['enable_signatures'] == 1 &&
+		if($show_signature && $cfg['enable_signatures'] == 1 &&
 			 $post_data['attach_signature'] == 1 && $post_data['bsignatur'] != '')
-	  {
-	    $enable_smileys = self::get_message_option('enable_smileys','sig');
+		{
+			$enable_smileys = self::get_message_option('enable_smileys','sig');
 			$enable_bbcode = self::get_message_option('enable_bbcode','sig');
-	    $bbcode = new BS_BBCode_Parser(
-	    	$post_data['bsignatur'],'sig',$enable_bbcode,$enable_smileys
-	    );
-	    $signature = $bbcode->get_message_for_output();
+			$bbcode = new BS_BBCode_Parser(
+				$post_data['bsignatur'],'sig',$enable_bbcode,$enable_smileys
+			);
+			$signature = $bbcode->get_message_for_output();
 	
-	    self::add_default_font($signature,$post_data['default_font']);
-	    
-	    $tpl->add_variables(array(
-	    	'signature' => $signature
-	   	));
-	  }
+			self::add_default_font($signature,$post_data['default_font']);
+			
+			$tpl->add_variables(array(
+				'signature' => $signature
+		 	));
+		}
 	
 		// show the edited-information if the post has been edited
-	  if($show_edited_notice && $post_data['edited_times'] > 0)
-	  {
-	  	if($post_data['edited_user'] > 0)
-	  	{
-		  	$user = BS_UserUtils::get_link(
-		  		$post_data['edited_user'],$post_data['edited_user_name'],$post_data['edited_user_group'],
-		  		false
-		  	);
-	  	}
-	  	else
-	  		$user = '<i>'.BS_ANONYMOUS_NAME.'</i>';
-	    
-	    $tpl->add_variables(array(
-	    	'edited' => sprintf(
-		    	$locale->lang('last_edited_by_user'),$post_data['edited_times'],
+		if($show_edited_notice && $post_data['edited_times'] > 0)
+		{
+			if($post_data['edited_user'] > 0)
+			{
+				$user = BS_UserUtils::get_link(
+					$post_data['edited_user'],$post_data['edited_user_name'],$post_data['edited_user_group'],
+					false
+				);
+			}
+			else
+				$user = '<i>'.BS_ANONYMOUS_NAME.'</i>';
+			
+			$tpl->add_variables(array(
+				'edited' => sprintf(
+					$locale->lang('last_edited_by_user'),$post_data['edited_times'],
 					FWS_Date::get_date($post_data['edited_date']),$user
 				)
-	   	));
-	  }
+		 	));
+		}
 	
-	  return $tpl->parse_template();
+		return $tpl->parse_template();
 	}
 	
 	/**

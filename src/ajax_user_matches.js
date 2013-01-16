@@ -297,29 +297,29 @@ function hideResults(resultId)
  */
 function keyUp(pEvent)
 {
-  if(!pEvent)
-    pEvent = window.event;
-  
-  var key = -1;
-  if(pEvent.which)
-    key = pEvent.which;
-  else if(pEvent.keyCode)
-    key = pEvent.keyCode;
+	if(!pEvent)
+		pEvent = window.event;
+	
+	var key = -1;
+	if(pEvent.which)
+		key = pEvent.which;
+	else if(pEvent.keyCode)
+		key = pEvent.keyCode;
 
-  // typed in our input-field?
-  if(__currentObj != null)
-  {
+	// typed in our input-field?
+	if(__currentObj != null)
+	{
  	// strg + space for autocompletion
-  	if(key == 32 && pEvent.ctrlKey)
-  	{
+		if(key == 32 && pEvent.ctrlKey)
+		{
 			addUserToField(__currentObj.inputId,__currentObj.resultId,
 				__currentObj.multiple,__currentObj.separator,
 				__currentObj.quotesAllowed,__currentObj.foundUser[0]);
-  	}
-  	// escape to close matches
-  	else if(key == 27)
-  		hideResults(__currentObj.resultId);
-  }
+		}
+		// escape to close matches
+		else if(key == 27)
+			hideResults(__currentObj.resultId);
+	}
 }
 
 document.onkeyup = keyUp;

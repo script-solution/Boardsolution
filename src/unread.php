@@ -329,7 +329,7 @@ final class BS_Unread extends FWS_Object
 		{
 			// collect post-ids and remove topics and news
 			if(isset($this->_unread_forums[$fid]))
-      {
+			{
 				foreach($this->_unread_forums[$fid] as $tid => $content)
 				{
 					unset($this->_unread_threads[$tid]);
@@ -337,8 +337,8 @@ final class BS_Unread extends FWS_Object
 					
 					$post_ids = array_merge($post_ids,$content);
 				}
-      }
-      				
+			}
+							
 			// remove forum
 			unset($this->_unread_forums[$fid]);
 		}
