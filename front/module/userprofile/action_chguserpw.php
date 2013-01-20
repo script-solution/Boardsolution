@@ -79,7 +79,7 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 				return 'registeruservorhanden';
 
 			$len = FWS_String::strlen($user_name);
-			if($len < $cfg['profile_min_user_len'] && $len > $cfg['profile_max_user_len'])
+			if($len < $cfg['profile_min_user_len'] || $len > $cfg['profile_max_user_len'])
 				return sprintf($locale->lang('error_wronguserlen'),
 											 $cfg['profile_min_user_len'],
 											 $cfg['profile_max_user_len']);
