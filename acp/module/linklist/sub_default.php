@@ -184,7 +184,7 @@ final class BS_ACP_SubModule_linklist_default extends BS_ACP_SubModule
 			'at_deactivate' => BS_ACP_ACTION_DEACTIVATE_LINKS,
 			'search_url' => 'admin.php',
 			'hidden' => $hidden,
-			'search_val' => $search
+			'search_val' => stripslashes($search)
 		));
 		
 		$baseurl->set('order',$order);

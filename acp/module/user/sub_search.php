@@ -411,7 +411,7 @@ final class BS_ACP_SubModule_user_search extends BS_ACP_SubModule
 	private function _get_string_control($param,$val)
 	{
 		return '<input type="text" name="'.$param.'" size="30" maxlength="30"'
-					.' value="'.$val.'" />'."\n";
+					.' value="'.stripslashes($val).'" />'."\n";
 	}
 }
 ?>

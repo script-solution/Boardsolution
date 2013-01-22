@@ -113,7 +113,7 @@ final class BS_ACP_SubModule_smileys_default extends BS_ACP_SubModule
 			'correct_sort_url' => $url->set('at',BS_ACP_ACTION_RESORT_SMILEYS)->to_url(),
 			'search_url' => 'admin.php',
 			'hidden' => $hidden,
-			'search_val' => $search
+			'search_val' => stripslashes($search)
 		));
 		
 		$switchurl = BS_URL::get_acpsub_url();

@@ -154,9 +154,9 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 		$tpl->add_variables(array(
 			'search_url' => 'admin.php',
 			'hidden_fields' => $hidden_fields,
-			'keyword' => $keyword,
-			'date_from' => $date_from,
-			'date_to' => $date_to,
+			'keyword' => stripslashes($keyword),
+			'date_from' => stripslashes($date_from),
+			'date_to' => stripslashes($date_to),
 			'action' => $action,
 			'actions' => $actions,
 			'form_url' => $durl->to_url(),

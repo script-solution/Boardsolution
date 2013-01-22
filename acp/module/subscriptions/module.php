@@ -174,7 +174,7 @@ final class BS_ACP_Module_subscriptions extends BS_ACP_Module
 		$tpl->add_variables(array(
 			'search_url' => 'admin.php',
 			'hidden' => $hidden,
-			'search_val' => $search
+			'search_val' => stripslashes($search)
 		));
 
 		$murl = BS_URL::get_acpmod_url();
