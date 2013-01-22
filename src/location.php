@@ -89,7 +89,7 @@ final class BS_Location extends FWS_Object
 				else
 					$location = $action;
 			}
-			else
+			else if($action)
 				$location = $action;
 		}
 	
