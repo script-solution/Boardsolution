@@ -173,8 +173,8 @@ class BS_DAO_LogIPs extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 
-		if(!FWS_Helper::is_integer($timeout) || $timeout <= 0)
-			FWS_Helper::def_error('intgt0','timeout',$timeout);
+		if(!FWS_Helper::is_integer($timeout) || $timeout < 0)
+			FWS_Helper::def_error('intge0','timeout',$timeout);
 		
 		$db->execute(
 			'DELETE FROM '.BS_TB_LOG_IPS.' WHERE date < '.(time() - $timeout)
