@@ -411,6 +411,7 @@ final class BS_PostingUtils extends FWS_UtilBase
 		$cfg = FWS_Props::get()->cfg();
 		$locale = FWS_Props::get()->locale();
 		$functions = FWS_Props::get()->functions();
+		$auth = FWS_Props::get()->auth();
 
 		$tpl->set_template('inc_post_text.htm');
 		
@@ -462,18 +463,22 @@ final class BS_PostingUtils extends FWS_UtilBase
 				$attachment_url = $durl->set(BS_URL_ID,$attachment['id'])->to_url();
 				$image_url = '';
 				$image_title = '';
-	
-				$is_image = $cfg['attachments_images_show'] == 1 &&
-					($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif');
+				$is_image = false;
 				
-				if($is_image)
+				if($auth->has_global_permission('attachments_download'))
 				{
-					$turl->set('path',$attachment['attachment_path']);
-					$image_url = $turl->to_url();
-					$image_title = sprintf($locale->lang('download_image'),
-						basename($attachment['attachment_path']));
+					$is_image = $cfg['attachments_images_show'] == 1 &&
+						($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif');
+					
+					if($is_image)
+					{
+						$turl->set('path',$attachment['attachment_path']);
+						$image_url = $turl->to_url();
+						$image_title = sprintf($locale->lang('download_image'),
+							basename($attachment['attachment_path']));
+					}
 				}
-	
+				
 				$tplatt[] = array(
 					'is_image' => $is_image,
 					'fileicon' => $functions->get_attachment_icon($ext),
