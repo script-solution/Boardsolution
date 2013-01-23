@@ -26,10 +26,10 @@ define('TYPE_GUEST',	1);
 define('TYPE_LOGGEDIN',	2);
 
 // CLI or webserver?
-define('LINE_WRAP',PHP_SAPI == 'cli' ? "\n" : '<br />');
-define('INDENT',PHP_SAPI == 'cli' ? "\t" : '&nbsp;&nbsp;&nbsp;&nbsp;');
-define('SESS_ID','1234-5678');
-define('USER_ID',1);
+define('LINE_WRAP',		PHP_SAPI == 'cli' ? "\n" : '<br />');
+define('INDENT',		PHP_SAPI == 'cli' ? "\t" : '&nbsp;&nbsp;&nbsp;&nbsp;');
+define('SESS_ID',		'1234-5678');
+define('USER_ID',		1);
 
 define('BS_PATH','../');
 include_once(BS_PATH.'extern/bs_api.php');
@@ -45,19 +45,19 @@ $pages = array(
 	'index.php?action=calendar'						=> TYPE_GUEST | TYPE_LOGGEDIN,
 	'index.php?action=search'						=> TYPE_GUEST | TYPE_LOGGEDIN,
 	'index.php?action=userdetails&id='.USER_ID		=> TYPE_GUEST | TYPE_LOGGEDIN,
-	'index.php?action=userprofile&sub=infos'		=> TYPE_GUEST | TYPE_LOGGEDIN,
-	'index.php?action=userprofile&sub=signature'	=> TYPE_GUEST | TYPE_LOGGEDIN,
-	'index.php?action=userprofile&sub=config'		=> TYPE_GUEST | TYPE_LOGGEDIN,
-	'index.php?action=userprofile&sub=avatars'		=> TYPE_GUEST | TYPE_LOGGEDIN,
-	'index.php?action=userprofile&sub=chgpw'		=> TYPE_GUEST | TYPE_LOGGEDIN,
-	'index.php?action=userprofile&sub=forums'		=> TYPE_GUEST | TYPE_LOGGEDIN,
-	'index.php?action=userprofile&sub=topics'		=> TYPE_GUEST | TYPE_LOGGEDIN,
-	'index.php?action=userprofile&sub=pmoverview'	=> TYPE_GUEST | TYPE_LOGGEDIN,
-	'index.php?action=userprofile&sub=pminbox'		=> TYPE_GUEST | TYPE_LOGGEDIN,
-	'index.php?action=userprofile&sub=pmoutbox'		=> TYPE_GUEST | TYPE_LOGGEDIN,
-	'index.php?action=userprofile&sub=pmbanlist'	=> TYPE_GUEST | TYPE_LOGGEDIN,
-	'index.php?action=userprofile&sub=pmsearch'		=> TYPE_GUEST | TYPE_LOGGEDIN,
-	'index.php?action=userprofile&sub=pmcompose'	=> TYPE_GUEST | TYPE_LOGGEDIN,
+	'index.php?action=userprofile&sub=infos'		=> TYPE_LOGGEDIN,
+	'index.php?action=userprofile&sub=signature'	=> TYPE_LOGGEDIN,
+	'index.php?action=userprofile&sub=config'		=> TYPE_LOGGEDIN,
+	'index.php?action=userprofile&sub=avatars'		=> TYPE_LOGGEDIN,
+	'index.php?action=userprofile&sub=chgpw'		=> TYPE_LOGGEDIN,
+	'index.php?action=userprofile&sub=forums'		=> TYPE_LOGGEDIN,
+	'index.php?action=userprofile&sub=topics'		=> TYPE_LOGGEDIN,
+	'index.php?action=userprofile&sub=pmoverview'	=> TYPE_LOGGEDIN,
+	'index.php?action=userprofile&sub=pminbox'		=> TYPE_LOGGEDIN,
+	'index.php?action=userprofile&sub=pmoutbox'		=> TYPE_LOGGEDIN,
+	'index.php?action=userprofile&sub=pmbanlist'	=> TYPE_LOGGEDIN,
+	'index.php?action=userprofile&sub=pmsearch'		=> TYPE_LOGGEDIN,
+	'index.php?action=userprofile&sub=pmcompose'	=> TYPE_LOGGEDIN,
 );
 
 $types = array(
