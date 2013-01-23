@@ -84,7 +84,7 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 			$view_allowed = $auth->has_access_to_intern_forum($postdata['rubrikid']);
 		}
 
-		if(!$view_allowed)
+		if(!$auth->has_global_permission('attachments_download') || !$view_allowed)
 		{
 			$this->report_error();
 			return;
