@@ -584,7 +584,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 				return $res;
 			
 			default:
-			  return '';
+				return '';
 		}
 	}
 

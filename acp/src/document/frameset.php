@@ -88,27 +88,27 @@ final class BS_ACP_Document_Frameset extends BS_ACP_Document
 			$content_file = FWS_Path::client_app().'admin.php?page=content&amp;';
 			$content_file .= BS_URL_SID.'='.$user->get_session_id();
 			
-		  $tpl->set_template('frameset.htm');
-		  $tpl->add_variables(array(
-		  	'navi_file' => $navi_file,
-		  	'content_file' => $content_file,
+			$tpl->set_template('frameset.htm');
+			$tpl->add_variables(array(
+				'navi_file' => $navi_file,
+				'content_file' => $content_file,
 				'charset' => 'charset='.BS_HTML_CHARSET,
-		  	'page_title' => sprintf($locale->lang('page_title'),BS_VERSION)
-		  ));
-		  $res = $tpl->parse_template();
+				'page_title' => sprintf($locale->lang('page_title'),BS_VERSION)
+			));
+			$res = $tpl->parse_template();
 		}
 		else
 		{
-		  $tpl->set_template('login.htm');
-		  $tpl->add_variables(array(
-		  	'login_target' => 'admin.php',
-		  	'error_msg' => $this->_error_msg,
+			$tpl->set_template('login.htm');
+			$tpl->add_variables(array(
+				'login_target' => 'admin.php',
+				'error_msg' => $this->_error_msg,
 				'charset' => 'charset='.BS_HTML_CHARSET,
-		  	'page_title' => sprintf($locale->lang('page_title'),BS_VERSION)
-		  ));
-		  $res = $tpl->parse_template();
+				'page_title' => sprintf($locale->lang('page_title'),BS_VERSION)
+			));
+			$res = $tpl->parse_template();
 		}
-		
+
 		$this->finish();
 		return $res;
 	}

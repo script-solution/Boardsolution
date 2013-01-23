@@ -365,15 +365,15 @@ final class BS_Front_Module_portal extends BS_Front_Module
 				if($unread->is_unread_news($data['threadid']))
 				{
 					$news_icon = '<img alt="'.$locale->lang('unread_news').'" title="';
-		      $news_icon .= $locale->lang('unread_news').'"';
-		      $news_icon .= ' src="'.$cache['unread_image'].'" />';
+					$news_icon .= $locale->lang('unread_news').'"';
+					$news_icon .= ' src="'.$cache['unread_image'].'" />';
 				}
 				else
-			  {
-			    $news_icon = '<img alt="'.$locale->lang('read_news').'" title="';
-			    $news_icon .= $locale->lang('read_news').'"';
-			    $news_icon .= ' src="'.$cache['read_image'].'" />';
-			  }
+				{
+					$news_icon = '<img alt="'.$locale->lang('read_news').'" title="';
+					$news_icon .= $locale->lang('read_news').'"';
+					$news_icon .= ' src="'.$cache['read_image'].'" />';
+				}
 				
 				// build comments-link
 				if($data['posts'] > 0)

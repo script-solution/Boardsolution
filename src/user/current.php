@@ -104,7 +104,7 @@ final class BS_User_Current extends FWS_User_Current
 		{
 			// delete the cookies, too
 			$cookies->delete_cookie('user');
-	    $cookies->delete_cookie('pw');
+			$cookies->delete_cookie('pw');
 			$this->set_use_cookies(false);
 		}
 		
@@ -164,7 +164,7 @@ final class BS_User_Current extends FWS_User_Current
 		// login confirmation?
 		if($input->isset_var('login','post') && $cfg['enable_security_code'] == 1)
 		{
-	    if($input->isset_var('conf','post'))
+			if($input->isset_var('conf','post'))
 			{
 				$hashpw = false; // the password is already hashed
 				if(!$functions->check_security_code(false))
@@ -173,10 +173,10 @@ final class BS_User_Current extends FWS_User_Current
 			// max login tries?
 			else if($cfg['profile_max_login_tries'] > 0 && $this->_userdata !== null &&
 							$this->_userdata->get_profile_val('login_tries') >= $cfg['profile_max_login_tries'])
-	    {
-	    	$this->_max_login_tries = true;
+			{
+				$this->_max_login_tries = true;
 				$loggedin = self::LOGIN_ERROR_MAX_LOGIN_TRIES; // she/he has to confirm the login
-	  	}
+			}
 		}
 		
 		if($hashpw && $loggedin == self::LOGIN_ERROR_NO_ERROR)
@@ -184,14 +184,14 @@ final class BS_User_Current extends FWS_User_Current
 		
 		if($loggedin == self::LOGIN_ERROR_NO_ERROR)
 		{
-	    // perform stripslashes here because addslashes() has been called on the value
-		  // and we want to compare it with as it is
+			// perform stripslashes here because addslashes() has been called on the value
+			// and we want to compare it with as it is
 			$username = stripslashes($username);
 	
 			if(empty($pw))
-		    $loggedin = self::LOGIN_ERROR_PW_INCORRECT;
-		  else
-		  	$loggedin = $this->check_user($username,$pw);
+				$loggedin = self::LOGIN_ERROR_PW_INCORRECT;
+			else
+				$loggedin = $this->check_user($username,$pw);
 		}
 		
 		// increase the login-tries, if the pw was incorrect

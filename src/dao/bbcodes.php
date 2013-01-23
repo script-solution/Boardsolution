@@ -138,7 +138,7 @@ class BS_DAO_BBCodes extends FWS_Singleton
 		
 		return $db->get_rows(
 			'SELECT * FROM '.BS_TB_BBCODES.'
-		  '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
+			'.($count > 0 ? 'LIMIT '.$start.','.$count : '')
 		);
 	}
 	
@@ -166,7 +166,7 @@ class BS_DAO_BBCodes extends FWS_Singleton
 			 	content LIKE "%'.$keyword.'%" OR replacement LIKE "%'.$keyword.'%" OR
 			 	replacement_param LIKE "%'.$keyword.'%" OR param LIKE "%'.$keyword.'%" OR
 			 	param_type LIKE "%'.$keyword.'%" OR allowed_content LIKE "%'.$keyword.'%"
-		  '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
+			'.($count > 0 ? 'LIMIT '.$start.','.$count : '')
 		);
 	}
 	

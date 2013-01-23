@@ -474,8 +474,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$username = BS_UserUtils::get_link(
 					$user->get_user_id(),$user->get_profile_val('user_name'),
 					$user->get_profile_val('user_group')
-		  	);
-		  	
+				);
+
 				$news_num = $unread->get_unread_news_num();
 				$unread_news_title = $locale->lang('portal').' (';
 				$unread_news_title .= sprintf($locale->lang('unread_news'),$news_num).')';

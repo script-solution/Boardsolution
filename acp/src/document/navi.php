@@ -54,7 +54,7 @@ final class BS_ACP_Document_Navi extends BS_ACP_Document
 			'cookie_init_value' => ($menu != null) ? $menu : '',
 			'cookie_path' => $cfg['cookie_path'],
 			'cookie_domain' => $cfg['cookie_domain'],
-		  'page_title' => sprintf($locale->lang('page_title'),BS_VERSION)
+			'page_title' => sprintf($locale->lang('page_title'),BS_VERSION)
 		));
 		
 		$this->_load_modules();

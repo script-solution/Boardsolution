@@ -343,7 +343,7 @@ class BS_DAO_Posts extends FWS_Singleton
 			 '.$where.'
 			 '.($type == 'topics' ? 'GROUP BY p.threadid' : '').'
 			 ORDER BY '.$order.'
-		   '.($number > 0 ? 'LIMIT '.$number : '')
+			'.($number > 0 ? 'LIMIT '.$number : '')
 		);
 	}
 	

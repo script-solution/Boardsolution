@@ -210,8 +210,8 @@ final class BS_Front_Post_Data extends FWS_Object
 			if($link)
 			{
 				return BS_UserUtils::get_link(
-		  		$this->_data['post_user'],$this->_data['user'],$this->_data['user_group']
-		  	);
+					$this->_data['post_user'],$this->_data['user'],$this->_data['user_group']
+				);
 			}
 			
 			return $this->_data['user'];
