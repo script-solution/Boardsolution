@@ -49,7 +49,6 @@ final class BS_ACP_Miscellaneous_Tasks_Topics extends FWS_Object implements FWS_
 	 */
 	public function run($pos,$ops)
 	{
-		$db = FWS_Props::get()->db();
 		$main = array();
 		
 		foreach(BS_DAO::get_topics()->get_list($pos,$ops) as $data)
