@@ -96,6 +96,8 @@ final class BS_Front_Action_edit_topic_topic extends BS_Front_Action_Base
 
 		// edit topic
 		BS_DAO::get_topics()->update($id,$fields);
+		//edit shadow topics
+		BS_DAO::get_topics()->update_shadows_by_ids(array($id),$fields);
 
 		$this->set_action_performed(true);
 		$this->add_link($locale->lang('back_to_forum'),BS_URL::get_topics_url($fid));

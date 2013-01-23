@@ -49,6 +49,9 @@ final class BS_ACP_Miscellaneous_Tasks_Topics extends FWS_Object implements FWS_
 	 */
 	public function run($pos,$ops)
 	{
+		$db = FWS_Props::get()->db();
+		$main = array();
+		
 		foreach(BS_DAO::get_topics()->get_list($pos,$ops) as $data)
 		{
 			$posts = BS_DAO::get_posts()->get_count_in_topic($data['id']);
@@ -58,11 +61,23 @@ final class BS_ACP_Miscellaneous_Tasks_Topics extends FWS_Object implements FWS_
 				$lastpost['id'] = 0;
 				$lastpost['post_user'] = 0;
 				$lastpost['post_an_user'] = null;
+				
+				$main_data = BS_DAO::get_topics()->get_original_data_of_shadow_topic($data['moved_tid']);
+				$main['name'] = $main_data['name'];
+				$main['symbol'] = $main_data['symbol'];
+				$main['comallow'] = $main_data['comallow'];
+				$main['important'] = $main_data['important'];
 			}
 			else
+			{
 				$lastpost = BS_DAO::get_posts()->get_lastpost_data_in_topic($data['id']);
-			
-			BS_DAO::get_topics()->update_properties($data['id'],$lastpost,max(0,$posts - 1));
+				$main['name'] = $data['name'];
+				$main['symbol'] = $data['symbol'];
+				$main['comallow'] = $data['comallow'];
+				$main['important'] = $data['important'];
+			}
+
+			BS_DAO::get_topics()->update_properties($data['id'],$lastpost,max(0,$posts - 1),$main);
 		}
 	}
 	

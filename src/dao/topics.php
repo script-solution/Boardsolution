@@ -436,6 +436,22 @@ class BS_DAO_Topics extends FWS_Singleton
 		$info = $db->get_row('SHOW TABLE STATUS LIKE "'.BS_TB_THREADS.'"');
 		return $info['Auto_increment'];
 	}
+
+	/**
+	 * Returns the original data of a shadow-topic
+	 *
+	 * @param int $id the original-topic-id
+	 * @return array with the field name, symbol, comallow and important
+	 */
+	public function get_original_data_of_shadow_topic($id)
+	{
+		$db = FWS_Props::get()->db();
+	
+		return $db->get_row(
+				'SELECT name, symbol, comallow, important
+			 FROM '.BS_TB_THREADS.'
+			 WHERE id = '.$id);
+	}
 	
 	/**
 	 * Creates a new topic with the given fields
@@ -524,12 +540,13 @@ class BS_DAO_Topics extends FWS_Singleton
 	 * the given topic.
 	 *
 	 * @param int $tid the topic-id
+	 * @param array $needed the name, symbol and settings of the topic
 	 * @param array $lastpost the data of the last-post with the fields 'id','post_time','post_user',
 	 * 	and 'post_an_user'
 	 * @param int $replies the number of replies to set
 	 * @return int the number of affected rows
 	 */
-	public function update_properties($tid,$lastpost,$replies)
+	public function update_properties($tid,$lastpost,$replies,$main)
 	{
 		$db = FWS_Props::get()->db();
 
@@ -548,6 +565,14 @@ class BS_DAO_Topics extends FWS_Singleton
 			$fields['lastpost_an_user'] = NULL;
 		else
 			$fields['lastpost_an_user'] = $lastpost['post_an_user'];
+
+		if($main)
+		{
+			$fields['name'] = $main['name'];
+			$fields['symbol'] = $main['symbol'];
+			$fields['comallow'] = $main['comallow'];
+			$fields['important'] = $main['important'];
+		}
 		
 		return $db->update(BS_TB_THREADS,'WHERE id = '.$tid,$fields);
 	}
