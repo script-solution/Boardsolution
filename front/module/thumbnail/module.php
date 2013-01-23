@@ -220,19 +220,19 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 		$renderer->set_file(FWS_Path::server_app().$filename.'_thumb.'.$ext);
 		
 		// set the appropriate header
-		switch($ext)
+		switch(FWS_String::strtolower($ext))
 		{
 			case 'jpg':
 			case 'jpeg':
-				$doc->set_header('Content-type','image/jpeg');
+				$doc->set_header('Content-Type','image/jpeg');
 				break;
 			
 			case 'gif':
-				$doc->set_header('Content-type','image/gif');
+				$doc->set_header('Content-Type','image/gif');
 				break;
 			
 			case 'png':
-				$doc->set_header('Content-type','image/png');
+				$doc->set_header('Content-Type','image/png');
 				break;
 		}
 	}
