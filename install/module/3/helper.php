@@ -57,8 +57,6 @@ final class BS_Install_Module_3_Helper extends FWS_UtilBase
 		$check = array();
 		$check['php'] = phpversion();
 		$mysql_version = $db->get_server_version();
-		if(!$mysql_version)
-			$mysql_version = $db->get_client_version();
 		$check['mysql'] = $mysql_version;
 		$check['gd'] = FWS_PHPConfig::get_gd_version();
 		$check['chmod_cache'] = FWS_FileUtils::is_writable('cache');
