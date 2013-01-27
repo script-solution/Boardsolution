@@ -155,20 +155,10 @@
 {else}
 {if sub_forum == false}
 <div class="bs_border">
-	<table class="bs_table" cellpadding="2" cellspacing="1">
-		<tr>
-			<td class="bs_topic" colspan="{total_colspan}">
-			<table width="100%" cellpadding="0" cellspacing="0">
-				<tr>
-					<td width="{middle_col_width}%"><b>{thread_title}</b></td>
-				</tr>
-			</table>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="{total_colspan}" align="center" class="bs_main">{glocale.lang('no_forums_available')}</td>
-		</tr>
-	</table>
+	<h1 class="bs_topic">{thread_title}</h1>
+	<div class="bs_main" style="text-align: center;">
+		{glocale.lang('no_forums_available')}
+	</div>
 </div>
 {endif}
 {endif}

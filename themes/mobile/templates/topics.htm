@@ -3,7 +3,7 @@
 {if action_result < 1}
 {if module_error == false}
 
-{if latest_topics_top}
+{if latest_topics_top && sub_forum}
 {include "inc_topics.htm"}
 <br />
 {endif}
@@ -29,9 +29,11 @@
 <div class="bs_padtop">
 {include "inc_pagination.htm"}
 </div>
+{else}
+{include "inc_topics.htm"}
 {endif}
 
-{if latest_topics_bottom}
+{if latest_topics_bottom && sub_forum}
 <div class="bs_padtop">
 {include "inc_topics.htm"}
 </div>
