@@ -365,6 +365,8 @@ final class BS_Front_Topics extends FWS_Object
 		$tpl = FWS_Props::get()->tpl();
 		$input = FWS_Props::get()->input();
 		$unread = FWS_Props::get()->unread();
+		$forums = FWS_Props::get()->forums();
+		
 		if($this->_total_topic_num != 0)
 		{
 			// generate sorting
@@ -534,6 +536,20 @@ final class BS_Front_Topics extends FWS_Object
 			$redirect_url = $url->to_url();
 		}
 		
+
+		$sub_forum = false;
+		$type = false;
+		
+		if($fid>0)
+		{
+			$type = $forums->get_forum_type($fid);
+			
+			if($forums->has_childs($fid))
+			{		
+				$sub_forum = true;
+			}
+		}
+		
 		// display header		
 		$tpl->add_variables(array(
 			'tbody_content' => $this->_tbody_content,
@@ -551,6 +567,8 @@ final class BS_Front_Topics extends FWS_Object
 			'middle_col_width' => $this->_middle_width,
 			'right_col_width' => (100 - $this->_middle_width) / 2,
 			'fid' => $fid,
+			'sub_forum' => $sub_forum,
+			'type' => $type,
 			'quick_search_target' => BS_URL::build_mod_url('search'),
 			'redirect_url' => $redirect_url,
 		));

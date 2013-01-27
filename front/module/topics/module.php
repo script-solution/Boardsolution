@@ -119,6 +119,8 @@ final class BS_Front_Module_topics extends BS_Front_Module
 		$display_lt_bottom = strpos($cfg['current_topic_loc'],'bottom') !== false;
 		$display_lt = $cfg['current_topic_enable'] == 1 && ($display_lt_bottom || $display_lt_top);
 		
+		$sub_forum = false;
+		
 		if($forums->has_childs($fid))
 		{
 			if($forums->get_forum_type($fid) == 'contains_cats' && $display_lt)
@@ -126,92 +128,98 @@ final class BS_Front_Module_topics extends BS_Front_Module
 
 			BS_ForumUtils::get_forum_list($fid);
 			
+			$sub_forum = true;
+			
 			$tpl->add_variables(array(
-				'sub_forums' => true
+				'sub_forums' => $sub_forum
 			));
 		}
 
-		if($forums->get_forum_type($fid) == 'contains_threads')
+		$url = BS_URL::get_mod_url();
+		$url->set(BS_URL_LOC,'read');
+		$url->set(BS_URL_MODE,'forum');
+		$url->set(BS_URL_FID,$fid);
+		$url->set(BS_URL_AT,BS_ACTION_CHANGE_READ_STATUS);
+		$url->set_sid_policy(BS_URL::SID_FORCE);
+		$forum_read_url = $url->to_url();
+
+		$pagination = new BS_Pagination($limit,$forum_data->get_threads());
+		
+		$tpl->set_template('inc_topic_action_js.htm');
+		$tpl->add_variables(array(
+			'fid' => $fid,
+			'site' => $pagination->get_page()
+		));
+		$tpl->restore_template();
+
+		$mark_read = '<a style="font-size: 0.9em;" href="'.$forum_read_url.'">';
+		$mark_read .= $locale->lang('mark_forum_read').'</a>';
+
+		if($cfg['enable_email_notification'] == 1 &&
+			$auth->has_global_permission('subscribe_forums'))
 		{
 			$url = BS_URL::get_mod_url();
-			$url->set(BS_URL_LOC,'read');
-			$url->set(BS_URL_MODE,'forum');
 			$url->set(BS_URL_FID,$fid);
-			$url->set(BS_URL_AT,BS_ACTION_CHANGE_READ_STATUS);
+			$url->set(BS_URL_AT,BS_ACTION_SUBSCRIBE_FORUM);
 			$url->set_sid_policy(BS_URL::SID_FORCE);
-			$forum_read_url = $url->to_url();
+			$subscribe_forum_url = $url->to_url();
+			$subscr_forum = '<a style="font-size: 0.9em;" href="'.$subscribe_forum_url.'">';
+			$subscr_forum .= $locale->lang('subscribe_forum').'</a>';
+			$mark_read .= ', ';
+		}
+		else
+			$subscr_forum = '';
 
-			$pagination = new BS_Pagination($limit,$forum_data->get_threads());
-			
-			$tpl->set_template('inc_topic_action_js.htm');
-			$tpl->add_variables(array(
-				'fid' => $fid,
-				'site' => $pagination->get_page()
-			));
-			$tpl->restore_template();
-
-			$mark_read = '<a style="font-size: 0.9em;" href="'.$forum_read_url.'">';
-			$mark_read .= $locale->lang('mark_forum_read').'</a>';
-
-			if($cfg['enable_email_notification'] == 1 &&
-				$auth->has_global_permission('subscribe_forums'))
-			{
-				$url = BS_URL::get_mod_url();
-				$url->set(BS_URL_FID,$fid);
-				$url->set(BS_URL_AT,BS_ACTION_SUBSCRIBE_FORUM);
-				$url->set_sid_policy(BS_URL::SID_FORCE);
-				$subscribe_forum_url = $url->to_url();
-				$subscr_forum = '<a style="font-size: 0.9em;" href="'.$subscribe_forum_url.'">';
-				$subscr_forum .= $locale->lang('subscribe_forum').'</a>';
-				$mark_read .= ', ';
-			}
-			else
-				$subscr_forum = '';
-
-			// display the topics
-			$show_topic_action = $cfg['display_denied_options'] || $user->is_loggedin();
+		// display the topics
+		$show_topic_action = $cfg['display_denied_options'] || $user->is_loggedin();
+		if($forums->get_forum_type($fid)=='contains_threads')
+		{
 			$topics = new BS_Front_Topics($locale->lang('threads'),'',$order,$ad,$limit,$fid);
 			$topics->set_show_topic_action($show_topic_action);
 			$topics->set_left_content($mark_read.$subscr_forum);
 			$topics->set_total_topic_num($forum_data->get_threads());
 			$topics->set_middle_width(20);
-			$show_search_forum = $cfg['enable_search'] && 
-				($cfg['display_denied_options'] || $auth->has_global_permission('view_search'));
+			$show_search_forum = $cfg['enable_search'] &&
+			($cfg['display_denied_options'] || $auth->has_global_permission('view_search'));
 			$topics->set_show_search_forum($show_search_forum);
-			$topics->add_topics();
-
-			$this->_add_options_bottom();
-
-			if($input->isset_var(BS_URL_ORDER,'get'))
-			{
-				$ad = $input->get_var(BS_URL_AD,'get',FWS_Input::STRING);
-				$page_url = BS_URL::get_mod_url();
-				$page_url->set(BS_URL_FID,$fid);
-				$page_url->set(BS_URL_ORDER,$order);
-				$page_url->set(BS_URL_AD,$ad);
-				$page_url->set(BS_URL_LIMIT,$limit);
-			}
-			else
-			{
-				$page_url = BS_URL::get_mod_url();
-				$page_url->set(BS_URL_FID,$fid);
-				$page_url->set_sef(true);
-			}
-
-			$page_split = $pagination->populate_tpl($page_url);
-			
-			$rurl = BS_URL::get_mod_url('redirect');
-			$rurl->set(BS_URL_LOC,'topic_action');
-			$rurl->set(BS_URL_FID,$fid);
-			$rurl->set(BS_URL_SITE,$pagination->get_page());
-			$tpl->add_variables(array(
-				'redirect_url' => $rurl->to_url(),
-				'show_topic_action' => $show_topic_action,
-				'page_split' => $page_split
-			));
-
-			$this->_add_bottom();
 		}
+		else
+			$topics = new BS_Front_Topics($locale->lang('forums'),'',$order,$ad,$limit,$fid);
+
+		$topics->add_topics();
+
+		$this->_add_options_bottom();
+
+		if($input->isset_var(BS_URL_ORDER,'get'))
+		{
+			$ad = $input->get_var(BS_URL_AD,'get',FWS_Input::STRING);
+			$page_url = BS_URL::get_mod_url();
+			$page_url->set(BS_URL_FID,$fid);
+			$page_url->set(BS_URL_ORDER,$order);
+			$page_url->set(BS_URL_AD,$ad);
+			$page_url->set(BS_URL_LIMIT,$limit);
+		}
+		else
+		{
+			$page_url = BS_URL::get_mod_url();
+			$page_url->set(BS_URL_FID,$fid);
+			$page_url->set_sef(true);
+		}
+
+		$page_split = $pagination->populate_tpl($page_url);
+		
+		$rurl = BS_URL::get_mod_url('redirect');
+		$rurl->set(BS_URL_LOC,'topic_action');
+		$rurl->set(BS_URL_FID,$fid);
+		$rurl->set(BS_URL_SITE,$pagination->get_page());
+		$tpl->add_variables(array(
+			'redirect_url' => $rurl->to_url(),
+			'show_topic_action' => $show_topic_action,
+			'page_split' => $page_split
+		));
+
+		$this->_add_bottom();
+
 		
 		$view_useronline = $auth->has_global_permission('view_useronline_list');
 		if($view_useronline)
@@ -223,6 +231,7 @@ final class BS_Front_Module_topics extends BS_Front_Module
 			'moderators' => $auth->get_forum_mods($fid),
 			'latest_topics_top' => $type == 'contains_cats' && $display_lt && $display_lt_top,
 			'latest_topics_bottom' => $type == 'contains_cats' && $display_lt && $display_lt_bottom,
+			'sub_foum' => $sub_forum,
 			'contains_topics' => $type == 'contains_threads',
 			'view_useronline_list' => $view_useronline
 		));
