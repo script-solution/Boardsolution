@@ -39,13 +39,13 @@ final class BS_Cache_Source_Stats extends FWS_Object implements FWS_Cache_Source
 		$last_edit = BS_DAO::get_posts()->get_lastedit_time();
 		
 		return array(array(
-			'posts_last' => $posts_last['post_time'],
+			'posts_last' => $posts_last,
 			'logins_total' => $logins,
 			'max_online' => 0,
 			'logins_today' => 0,
 			'logins_yesterday' => 0,
 			'logins_last' => $lastlogin,
-			'last_edit' => $last_edit['edited_date']
+			'last_edit' => $last_edit
 		));
 	}
 	
