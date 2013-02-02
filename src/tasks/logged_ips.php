@@ -34,8 +34,9 @@ final class BS_Tasks_logged_ips extends FWS_Tasks_Base
 	public function run()
 	{
 		$cfg = FWS_Props::get()->cfg();
-
-		BS_DAO::get_logips()->delete_timedout($cfg['ip_log_days'] * 86400);
+		
+		if($cfg['ip_log_days']>=1)
+			BS_DAO::get_logips()->delete_timedout($cfg['ip_log_days'] * 86400);
 	}
 }
 ?>
