@@ -124,14 +124,16 @@ class BS_DAO_LogIPs extends FWS_Singleton
 	{
 		$db = FWS_Props::get()->db();
 		$user = FWS_Props::get()->user();
-
-		return $db->insert(BS_TB_LOG_IPS,array(
-			'user_ip' => $user->get_user_ip(),
-			'user_id' => $user->get_user_id(),
-			'user_agent' => $user->get_user_agent(),
-			'date' => time(),
-			'action' => $action
-		));
+		$cfg = FWS_Props::get()->cfg();
+		
+		if($cfg['ip_log_days']>0)
+			return $db->insert(BS_TB_LOG_IPS,array(
+				'user_ip' => $user->get_user_ip(),
+				'user_id' => $user->get_user_id(),
+				'user_agent' => $user->get_user_agent(),
+				'date' => time(),
+				'action' => $action
+			));
 	}
 	
 	/**
