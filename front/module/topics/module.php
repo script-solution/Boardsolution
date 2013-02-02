@@ -127,12 +127,7 @@ final class BS_Front_Module_topics extends BS_Front_Module
 				BS_Front_TopicFactory::add_latest_topics_small($fid);
 
 			BS_ForumUtils::get_forum_list($fid);
-			
 			$sub_forum = true;
-			
-			$tpl->add_variables(array(
-				'sub_forums' => $sub_forum
-			));
 		}
 
 		$url = BS_URL::get_mod_url();
@@ -231,7 +226,7 @@ final class BS_Front_Module_topics extends BS_Front_Module
 			'moderators' => $auth->get_forum_mods($fid),
 			'latest_topics_top' => $type == 'contains_cats' && $display_lt && $display_lt_top,
 			'latest_topics_bottom' => $type == 'contains_cats' && $display_lt && $display_lt_bottom,
-			'sub_foum' => $sub_forum,
+			'sub_forum' => $sub_forum,
 			'contains_topics' => $type == 'contains_threads',
 			'view_useronline_list' => $view_useronline
 		));
