@@ -33,17 +33,24 @@ final class BS_Cache_Source_Stats extends FWS_Object implements FWS_Cache_Source
 {
 	public function get_content()
 	{
+		$sessions = FWS_Props::get()->sessions();
+		$cache = FWS_Props::get()->cache();
+		
 		$logins = BS_DAO::get_profile()->get_total_login_count();
 		$lastlogin = BS_DAO::get_profile()->get_lastlogin();
 		$posts_last = BS_DAO::get_posts()->get_lastpost_time();
 		$last_edit = BS_DAO::get_posts()->get_lastedit_time();
+		$stats_data = $cache->get_cache('stats')->current();
+		
+		$online_num = $sessions->get_online_count();
+		$max_online = ($online_num > $stats_data['max_online'])?$online_num:$stats_data['max_online'];
 		
 		return array(array(
 			'posts_last' => $posts_last,
 			'logins_total' => $logins,
-			'max_online' => 0,
-			'logins_today' => 0,
-			'logins_yesterday' => 0,
+			'max_online' => $max_online,
+			'logins_today' => $stats_data['logins_today'],
+			'logins_yesterday' => $stats_data['logins_yesterday'],
 			'logins_last' => $lastlogin,
 			'last_edit' => $last_edit
 		));
