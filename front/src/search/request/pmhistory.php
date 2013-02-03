@@ -114,8 +114,6 @@ final class BS_Front_Search_Request_PMHistory extends BS_Front_Search_Request_PM
 		);
 	}
 	
-	public function get_keyword_mode(){}	
-	
 	/**
 	 * Builds the search-condition for the query
 	 *

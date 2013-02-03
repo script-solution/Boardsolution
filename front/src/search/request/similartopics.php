@@ -123,8 +123,6 @@ final class BS_Front_Search_Request_SimilarTopics extends BS_Front_Search_Reques
 		return array('relevance','DESC');
 	}
 	
-	public function get_keyword_mode(){}
-	
 	protected function get_dump_vars()
 	{
 		return get_object_vars($this);

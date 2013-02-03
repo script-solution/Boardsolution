@@ -255,6 +255,25 @@ final class BS_Front_Search_Utils extends FWS_UtilBase
 		
 		return $sql;
 	}
+	
+	/**
+	 * Get the needed value of the keyword mode
+	 * 
+	 * @return sring the keyword mode 'AND' or 'OR'
+	 */
+	public static function get_keyword_mode()
+	{
+		$input = FWS_Props::get()->input();
+	
+		$keyword_mode = $input->get_var('keyword_mode','post',FWS_Input::STRING);
+	
+		if($keyword_mode === null)
+			$keyword_mode = $input->get_var(BS_URL_SEARCH_MODE,'get',FWS_Input::STRING);
+	
+		$keyword_mode = (FWS_String::strtolower($keyword_mode) == 'and') ? 'AND' : 'OR';
+	
+		return $keyword_mode;
+	}
 
 	/**
 	 * splits the given string by ' ' and adds all parts to the existing sections-array

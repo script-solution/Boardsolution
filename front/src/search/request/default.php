@@ -201,20 +201,6 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 		return array($order,$ad);
 	}
 	
-	public function get_keyword_mode()
-	{
-		$input = FWS_Props::get()->input();
-		
-		$keyword_mode = $input->get_var('keyword_mode','post',FWS_Input::STRING);
-
-		if($keyword_mode === null)
-			$keyword_mode = $input->get_var(BS_URL_SEARCH_MODE,'get',FWS_Input::STRING);
-		
-		$keyword_mode = (FWS_String::strtolower($keyword_mode) == 'and') ? 'AND' : 'OR';
-		
-		return $keyword_mode;
-	}
-	
 	/**
 	 * Builds the search-condition for the query
 	 *
@@ -234,7 +220,7 @@ final class BS_Front_Search_Request_Default extends BS_Front_Search_Request_TPBa
 		if($username === null)
 			$username = $input->get_var(BS_URL_UN,'get',FWS_Input::STRING);
 		
-		$keyword_mode = $this->get_keyword_mode();
+		$keyword_mode = BS_Front_Search_Utils::get_keyword_mode();
 		
 		$keyword_len = FWS_String::strlen($keyword);
 		if($keyword_len == 0 && $username == '')
