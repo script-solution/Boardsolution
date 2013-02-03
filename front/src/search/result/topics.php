@@ -54,10 +54,11 @@ final class BS_Front_Search_Result_Topics extends FWS_Object implements BS_Front
 		
 		$end = $cfg['threads_per_page'];
 		$pagination = new BS_Pagination($end,count($ids));
-		$murl = BS_URL::get_sub_url(0,'pmsearch');
+		$murl = BS_URL::get_mod_url();
 		$murl->set(BS_URL_ID,$search->get_search_id());
 		$murl->set(BS_URL_ORDER,$order);
 		$murl->set(BS_URL_AD,$ad);
+		$murl->set(BS_URL_SEARCH_MODE,$request->get_keyword_mode());
 		$murl->set(BS_URL_MODE,$request->get_name());
 		$murl->set(BS_URL_LOC,$this->get_name());
 		foreach($request->get_url_params() as $name => $value)
@@ -67,6 +68,7 @@ final class BS_Front_Search_Result_Topics extends FWS_Object implements BS_Front
 		$public_url = clone $murl;
 		$public_url->remove(BS_URL_ID);
 		$public_url->remove(BS_URL_SITE);
+		$public_url->remove(BS_URL_SID);
 
 		$sql = ' t.id IN ('.$idstr.') AND moved_tid = 0';
 

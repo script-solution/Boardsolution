@@ -75,6 +75,7 @@ final class BS_Front_Search_Result_PMs extends FWS_Object implements BS_Front_Se
 		$murl->set(BS_URL_ID,$search->get_search_id());
 		$murl->set(BS_URL_ORDER,$order);
 		$murl->set(BS_URL_AD,$ad);
+		$murl->set(BS_URL_SEARCH_MODE,$request->get_keyword_mode());
 		$murl->set(BS_URL_MODE,$request->get_name());
 		foreach($request->get_url_params() as $name => $value)
 			$murl->set($name,$value);

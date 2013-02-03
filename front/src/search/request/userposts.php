@@ -117,6 +117,8 @@ final class BS_Front_Search_Request_UserPosts extends BS_Front_Search_Request_TP
 		return array('date','DESC');
 	}
 	
+	public function get_keyword_mode(){}
+	
 	protected function get_dump_vars()
 	{
 		return get_object_vars($this);

@@ -524,6 +524,7 @@ define('BS_URL_LIMIT',							'limit');
 define('BS_URL_DEL',								'del');
 define('BS_URL_HL',									'hl');
 define('BS_URL_KW',									'kw');
+define('BS_URL_SEARCH_MODE',						'sm');
 define('BS_URL_UN',									'un');
 define('BS_URL_SID',								'sid');
 define('BS_URL_PAGE',								'page');

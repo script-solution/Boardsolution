@@ -78,6 +78,11 @@ interface BS_Front_Search_Request
 	 * 	<code>array(<order>,<ad>)</code>
 	 */
 	public function get_order();
+
+	/**
+	 * @return sring the keyword mode 'and' or 'or'
+	 */
+	public function get_keyword_mode();
 	
 	/**
 	 * @return array an array of URL-parameters which should be passed during a search
