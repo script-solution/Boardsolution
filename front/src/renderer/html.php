@@ -623,7 +623,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			$tpl->set_template('inc_bottom.htm');
 			$tpl->add_variables(array(
 				'insert_time' => $debug,
-				'forums_init' => $functions->cache_basic_data(),
+				'bs_version' => BS_VERSION,
 				'options' => $options,
 				'register_url' => $com->get_register_url()
 			));
