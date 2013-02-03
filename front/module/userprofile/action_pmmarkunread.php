@@ -48,7 +48,7 @@ final class BS_Front_Action_userprofile_pmmarkunread extends BS_Front_Action_Bas
 			$delete = FWS_Array_Utils::advanced_explode(',',$input->get_var(BS_URL_DEL,'get',FWS_Input::STRING));
 
 		if(!FWS_Array_Utils::is_integer($delete) || count($delete) == 0)
-			return 'Got an invalid id-array via POST';
+			return 'error_no_checkbox_clicked';
 
 		// update db
 		BS_DAO::get_pms()->set_read_flag($delete,$user->get_user_id(),0);
