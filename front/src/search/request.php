@@ -80,7 +80,7 @@ interface BS_Front_Search_Request
 	public function get_order();
 
 	/**
-	 * @return sring the keyword mode 'and' or 'or'
+	 * @return sring the keyword mode 'AND' or 'OR'
 	 */
 	public function get_keyword_mode();
 	
