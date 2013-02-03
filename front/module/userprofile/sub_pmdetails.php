@@ -225,7 +225,7 @@ final class BS_Front_SubModule_userprofile_pmdetails extends BS_Front_SubModule
 		$tpl->add_variables(array(
 			'id' => $data['id'],
 			'delete_url' => $durl->to_url(),
-			'show_reply_btn' => $data['pm_type'] == 'inbox'
+			'show_reply_btn' => $data['pm_type'] == 'inbox' && $user_name != 'Boardsolution'
 		));
 	}
 }

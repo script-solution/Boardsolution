@@ -165,18 +165,22 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 		if($cfg['enable_pms'] == 0)
 			return 'PMs are disabled!';
 		
-		// check the user-id if it is not the current one
-		if($user->get_user_id() != $this->_user_id)
+		//Check for sender "Boardsolution"
+		if($this->_user_id != 0)
 		{
-			$data = BS_DAO::get_user()->get_user_by_id($this->_user_id);
-			if($data === false)
-				return 'A user with id "'.$this->_user_id.'" does not exist';
+			// check the user-id if it is not the current one
+			if($user->get_user_id() != $this->_user_id)
+			{
+				$data = BS_DAO::get_user()->get_user_by_id($this->_user_id);
+				if($data === false)
+					return 'A user with id "'.$this->_user_id.'" does not exist';
+			}
+	
+			// check the total number of pms
+			$outbox_num = BS_DAO::get_pms()->get_count_in_folder('outbox',$this->_user_id);
+			if($cfg['pm_max_outbox'] > 0 && $outbox_num >= $cfg['pm_max_outbox'])
+				return 'maxoutbox';
 		}
-
-		// check the total number of pms
-		$outbox_num = BS_DAO::get_pms()->get_count_in_folder('outbox',$this->_user_id);
-		if($cfg['pm_max_outbox'] > 0 && $outbox_num >= $cfg['pm_max_outbox'])
-			return 'maxoutbox';
 		
 		// check attachments if available
 		if($this->_att !== null && $this->_att->attachments_set())
@@ -209,9 +213,10 @@ final class BS_Front_Action_Plain_PM extends BS_Front_Action_Plain
 			if($data['allow_pms'] == 0)
 				continue;
 
-			// is the user banned?
-			if(BS_DAO::get_userbans()->has_baned($data['id'],$this->_user_id))
-				continue;
+			// is the user banned and not Boardsolution?
+			if($this->_user_id != 0)
+				if(BS_DAO::get_userbans()->has_baned($data['id'],$this->_user_id))
+					continue;
 
 			// we don't want to send multiple PMs to one user
 			if(in_array($data['id'],$this->_receiver_ids))
