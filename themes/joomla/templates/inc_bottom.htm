@@ -67,7 +67,9 @@ function boardJumpRedirect(location)
 	<div class="bs_bottom">
 		<ul class="bs_none_list bs_bottom">
 			<li class="bs_bottom bs_bottom_left">{insert_time}</li>
-			<li class="bs_bottom bs_bottom_center">{forums_init}</li>
+			<li class="bs_bottom bs_bottom_center">
+				Powered by <a target="_blank" href="http://www.boardsolution.de">{bs_version}</a>
+			</li>
 			<li class="bs_bottom bs_bottom_right">
 				<select name="forum_jump" onchange="boardJumpRedirect(this.options[this.selectedIndex].value)">
 					<option value=""> - - - - - - [ {glocale.lang('boardjump')} ] - - - - - - </option>
