@@ -114,8 +114,11 @@ final class BS_Front_SubModule_userprofile_forums extends BS_Front_SubModule
 		$sub_data = array();
 		foreach(BS_DAO::get_subscr()->get_subscr_forums_of_user($user->get_user_id()) as $data)
 		{
-			$forum_ids[$data['forum_id']] = true;
-			$sub_data[$data['forum_id']] = $data;
+			if($functions->has_access_to_intern_forum($user->get_user_id(),$user->get_all_user_groups(),$data['forum_id']))
+			{
+				$forum_ids[$data['forum_id']] = true;
+				$sub_data[$data['forum_id']] = $data;
+			}
 		}
 
 		$end = BS_SUBSCR_FORUMS_PER_PAGE;
