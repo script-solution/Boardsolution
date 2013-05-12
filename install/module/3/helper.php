@@ -85,10 +85,19 @@ final class BS_Install_Module_3_Helper extends FWS_UtilBase
 			$check['admin_email'] = FWS_StringHelper::is_valid_email($admin_email);
 		}
 		
-		$check['board_url'] = FWS_String::substr($board_url,0,7) == "http://" &&
-			$board_url[FWS_String::strlen($board_url) - 1] != '/';
+		$check['board_url'] = self::check_and_change_url($board_url);
 		
 		return $check;
+	}
+	
+	private static function check_and_change_url($board_url)
+	{
+		$user = FWS_Props::get()->user();
+		
+		$url = FWS_FileUtils::ensure_no_trailing_slash($board_url);		
+		$user->set_session_data('board_url', $url);
+		
+		return preg_match('/^(http|https):\/\//i', $url);
 	}
 	
 	/**
