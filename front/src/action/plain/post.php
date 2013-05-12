@@ -355,13 +355,17 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 				$email = $functions->get_mailer('',$einfo['subject'],'');
 				foreach($userlist as $data)
 				{
-					if($data['emails_include_post'] == 1)
-						$email->set_message($einfo['text_post']);
-					else
-						$email->set_message($einfo['text_def']);
-	
-					$email->set_recipient($data['user_email']);
-					$email->send_mail();
+					$ugroups = FWS_Array_Utils::advanced_explode(",",$data['user_group']);
+					if($functions->has_access_to_intern_forum($data['id'],$ugroups,$this->_fid))
+					{
+						if($data['emails_include_post'] == 1)
+							$email->set_message($einfo['text_post']);
+						else
+							$email->set_message($einfo['text_def']);
+		
+						$email->set_recipient($data['user_email']);
+						$email->send_mail();
+					}
 				}
 			}
 	

@@ -34,6 +34,8 @@ final class BS_Tasks_email_notification extends FWS_Tasks_Base
 	public function run()
 	{
 		$cfg = FWS_Props::get()->cfg();
+		$functions = FWS_Props::get()->functions();
+		
 		// can we stop here?
 		if($cfg['enable_email_notification'] == 0)
 			return;
@@ -45,21 +47,27 @@ final class BS_Tasks_email_notification extends FWS_Tasks_Base
 		$time = time();
 		foreach(BS_DAO::get_unsentposts()->get_notification_list() as $row)
 		{
-			if(!isset($posts_to_user[$row['post_id']]))
-				$posts_to_user[$row['post_id']] = array();
-			$posts_to_user[$row['post_id']][] = $row['id'];
-			
-			if(!isset($user_emails[$row['id']]))
+			$ugroups = FWS_Array_Utils::advanced_explode(",",$row['user_group']);
+			$pdata = BS_DAO::get_posts()->get_post_by_id($row['post_id']);
+
+			if($functions->has_access_to_intern_forum($row['id'],$ugroups,$pdata['rubrikid']))
 			{
-				$user_emails[$row['id']] = array(
-					'user_name' => $row['user_name'],
-					'user_email' => $row['user_email'],
-					'include_post' => $row['emails_include_post'],
-					'language' => $row['forum_lang'] > 0 ? $row['forum_lang'] : $cfg['default_forum_lang'],
-					'mail_text' => '',
-					'last_topic' => -1,
-					'topics' => array()
-				);
+				if(!isset($posts_to_user[$row['post_id']]))
+					$posts_to_user[$row['post_id']] = array();
+				$posts_to_user[$row['post_id']][] = $row['id'];
+				
+				if(!isset($user_emails[$row['id']]))
+				{
+					$user_emails[$row['id']] = array(
+						'user_name' => $row['user_name'],
+						'user_email' => $row['user_email'],
+						'include_post' => $row['emails_include_post'],
+						'language' => $row['forum_lang'] > 0 ? $row['forum_lang'] : $cfg['default_forum_lang'],
+						'mail_text' => '',
+						'last_topic' => -1,
+						'topics' => array()
+					);
+				}
 			}
 		}
 		

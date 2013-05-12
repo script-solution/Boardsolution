@@ -57,7 +57,7 @@ class BS_DAO_UnsentPosts extends FWS_Singleton
 		$time = time();
 		return $db->get_rows(
 			'SELECT p.id,up.post_id,u.`'.BS_EXPORT_USER_EMAIL.'` user_email,
-							u.`'.BS_EXPORT_USER_NAME.'` user_name,p.emails_include_post,p.forum_lang
+							u.`'.BS_EXPORT_USER_NAME.'` user_name,p.emails_include_post,p.forum_lang, p.user_group
 			 FROM '.BS_TB_PROFILES.' p
 			 LEFT JOIN '.BS_TB_USER.' u ON u.`'.BS_EXPORT_USER_ID.'`= p.id
 			 RIGHT JOIN '.BS_TB_UNSENT_POSTS.' up ON p.id = up.user_id

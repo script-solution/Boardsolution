@@ -274,7 +274,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 			FWS_Helper::def_error('intge0','user_id',$user_id);
 		
 		return $db->get_rows(
-			'SELECT u.`'.BS_EXPORT_USER_EMAIL.'` user_email,p.emails_include_post
+			'SELECT u.`'.BS_EXPORT_USER_ID.'`, u.`'.BS_EXPORT_USER_EMAIL.'` user_email, p.emails_include_post, p.user_group
 			 FROM '.BS_TB_SUBSCR.' s
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON s.user_id = p.id
 			 LEFT JOIN '.BS_TB_USER.' u ON s.user_id = u.`'.BS_EXPORT_USER_ID.'`
