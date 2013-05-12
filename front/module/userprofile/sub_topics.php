@@ -104,7 +104,14 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 		}
 
 		$end = BS_SUBSCR_TOPICS_PER_PAGE;
-		$num = BS_DAO::get_subscr()->get_subscr_topics_count($user->get_user_id());
+		
+		$sublist_all = BS_DAO::get_subscr()->get_forum_of_subscr_topic($user->get_user_id());
+		$num = count($sublist_all);
+		
+		foreach($sublist_all as $data)
+			if(!$functions->has_access_to_intern_forum($user->get_user_id(),$user->get_all_user_groups(),$data['rubrikid']))
+				$num--;
+		
 		$pagination = new BS_Pagination($end,$num);
 		
 		$url = BS_URL::get_sub_url();
@@ -150,28 +157,31 @@ final class BS_Front_SubModule_userprofile_topics extends BS_Front_SubModule
 		);
 		foreach($sublist as $data)
 		{
-			$purl->set(BS_URL_FID,$data['rubrikid']);
-			$purl->set(BS_URL_TID,$data['topic_id']);
-			
-			list($infod,$infoc) = BS_TopicUtils::get_displayed_name($data['name']);
-			$topic_name = '<a title="'.$infoc.'" href="'.$purl->to_url().'">'.$infod.'</a>';
-
-			$lastpost = $data['lastpost_time'] > 0 ?
-				FWS_Date::get_date($data['lastpost_time']) : $locale->lang('notavailable');
-			
-			$topics[] = array(
-				'topic_status' => BS_TopicUtils::get_status_data(
-					$cache,$data,$unread->is_unread_thread($data['topic_id'])
-				),
-				'topic_symbol' => BS_TopicUtils::get_symbol(
-					$cache,$data['type'],$data['symbol']
-				),
-				'subscribe_date' => FWS_Date::get_date($data['sub_date']),
-				'last_post' => $lastpost,
-				'topic_name' => $topic_name,
-				'topic_id' => $data['id'],
-				'position' => BS_ForumUtils::get_forum_path($data['rubrikid'],false)
-			);
+			if($functions->has_access_to_intern_forum($user->get_user_id(),$user->get_all_user_groups(),$data['rubrikid']))
+			{
+				$purl->set(BS_URL_FID,$data['rubrikid']);
+				$purl->set(BS_URL_TID,$data['topic_id']);
+				
+				list($infod,$infoc) = BS_TopicUtils::get_displayed_name($data['name']);
+				$topic_name = '<a title="'.$infoc.'" href="'.$purl->to_url().'">'.$infod.'</a>';
+	
+				$lastpost = $data['lastpost_time'] > 0 ?
+					FWS_Date::get_date($data['lastpost_time']) : $locale->lang('notavailable');
+				
+				$topics[] = array(
+					'topic_status' => BS_TopicUtils::get_status_data(
+						$cache,$data,$unread->is_unread_thread($data['topic_id'])
+					),
+					'topic_symbol' => BS_TopicUtils::get_symbol(
+						$cache,$data['type'],$data['symbol']
+					),
+					'subscribe_date' => FWS_Date::get_date($data['sub_date']),
+					'last_post' => $lastpost,
+					'topic_name' => $topic_name,
+					'topic_id' => $data['id'],
+					'position' => BS_ForumUtils::get_forum_path($data['rubrikid'],false)
+				);
+			}
 		}
 
 		$pagination->populate_tpl(BS_URL::get_sub_url());

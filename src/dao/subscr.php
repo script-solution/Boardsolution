@@ -225,6 +225,28 @@ class BS_DAO_Subscr extends FWS_Singleton
 	}
 	
 	/**
+	 * Returns the forum ids of the subscribed topics of the given user. 
+	 *
+	 * @param int $user_id the user-id
+	 * @return array the subscriptions
+	 */
+	public function get_forum_of_subscr_topic($user_id)
+	{
+		$db = FWS_Props::get()->db();
+	
+		if(!FWS_Helper::is_integer($user_id) || $user_id <= 0)
+			FWS_Helper::def_error('intgt0','user_id',$user_id);
+	
+		return $db->get_rows(
+			'SELECT t.rubrikid
+			 FROM '.BS_TB_SUBSCR.' s
+			 LEFT JOIN '.BS_TB_THREADS.' t ON s.topic_id = t.id
+			 WHERE user_id = '.$user_id.' AND topic_id > 0
+			 ORDER BY s.sub_date DESC'
+		);
+	}
+	
+	/**
 	 * Returns all subscribed forums of the given user. Optional you can specify the forum-ids
 	 *
 	 * @param int $user_id the user-id
