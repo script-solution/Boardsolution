@@ -46,7 +46,10 @@ foreach($items as $item)
 rename($folder.'_install.php', $folder.'install.php');
 FWS_FileUtils::delete_folder($folder.'themes/joomla');
 FWS_FileUtils::delete_folder($folder.'fws/tests');
-unlink($folder.'fws/.git');
+if(is_dir($folder.'fws/.git'))
+	FWS_FileUtils::delete_folder($folder.'fws/.git');
+else
+	unlink($folder.'fws/.git');
 unlink($folder.'fws/.project');
 unlink($folder.'fws/.buildpath');
 unlink($folder.'fws/.gitignore');
