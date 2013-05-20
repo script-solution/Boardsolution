@@ -1,6 +1,6 @@
 <?php
 define('BS_PATH','../');
-define('FWS_PATH',BS_PATH.'../FrameWorkSolution/');
+define('FWS_PATH',BS_PATH.'fws/');
 include(FWS_PATH.'init.php');
 
 $in = FWS_Input::get_instance();
