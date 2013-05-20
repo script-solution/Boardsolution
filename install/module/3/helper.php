@@ -89,7 +89,13 @@ final class BS_Install_Module_3_Helper extends FWS_UtilBase
 		
 		return $check;
 	}
-	
+
+	/**
+	 * Checks the board-url and deletes the end-slash
+	 *
+	 * @param string $board_url the board-url to check / change
+	 * @return boolean true if valid
+	 */
 	private static function check_and_change_url($board_url)
 	{
 		$user = FWS_Props::get()->user();
