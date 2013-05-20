@@ -1,4 +1,9 @@
 <?php
+function getUsage()
+{
+	return 'Usage: php release.php <targetFolder> [--no-stats]'."\n";
+}
+
 define('BS_PATH','../');
 define('FWS_PATH',BS_PATH.'fws/');
 include(FWS_PATH.'init.php');
@@ -6,11 +11,20 @@ include(FWS_PATH.'init.php');
 $in = FWS_Input::get_instance();
 $argc = $in->get_var('argc','server',FWS_Input::INTEGER);
 $argv = $in->get_var('argv','server');
-if($argc != 2)
+if($argc < 2)
 	die("Missing parameter\n".getUsage());
 
-$folder = FWS_FileUtils::ensure_trailing_slash($argv[1]);
-if(!is_dir($folder) || !FWS_FileUtils::is_writable($folder))
+$folder = null;
+$stats = true;
+for($i = 1; $i < $argc; $i++)
+{
+	if($argv[$i] == '--no-stats')
+		$stats = false;
+	else
+		$folder = FWS_FileUtils::ensure_trailing_slash($argv[$i]);
+}
+
+if($folder === null || !is_dir($folder) || !FWS_FileUtils::is_writable($folder))
 	die('Folder "'.$folder.'" does not exist, is no folder or is not writable!'."\n");
 
 // copy
@@ -21,19 +35,22 @@ $items = array(
 	'LICENSE','README.md'
 );
 foreach($items as $item)
-	exec('cp -R '.BS_PATH.$item.' '.$folder);
+{
+	if(is_dir(BS_PATH.$item))
+		FWS_FileUtils::copy_folder(BS_PATH.$item, $folder.'/'.$item);
+	else
+		FWS_FileUtils::copy(BS_PATH.$item, $folder.'/'.$item);
+}
 
-// rename install.php
-exec('mv '.$folder.'_install.php '.$folder.'install.php');
-// delete joomla-theme
-exec('rm -R '.$folder.'themes/joomla');
-// delete fws-tests, project-files and git-folder
-exec('rm -R '.$folder.'fws/tests');
-exec('rm '.$folder.'fws/.project');
-exec('rm '.$folder.'fws/.buildpath');
-exec('rm -R '.$folder.'fws/.git');
-exec('rm '.$folder.'fws/.gitignore');
-exec('rm '.$folder.'tools/release.php');
+// rename install.php and remove unnecessary stuff
+rename($folder.'_install.php', $folder.'install.php');
+FWS_FileUtils::delete_folder($folder.'themes/joomla');
+FWS_FileUtils::delete_folder($folder.'fws/tests');
+unlink($folder.'fws/.git');
+unlink($folder.'fws/.project');
+unlink($folder.'fws/.buildpath');
+unlink($folder.'fws/.gitignore');
+unlink($folder.'tools/release.php');
 
 // create missing dirs
 echo 'Creating missing stuff...'."\n";
@@ -63,18 +80,18 @@ foreach(FWS_FileUtils::get_list($folder,true,true) as $item)
 	}
 }
 
-exec("echo 'deny from all' > ".$folder."uploads/.htaccess");
+FWS_FileUtils::write($folder.'uploads/.htaccess', "deny from all\n");
 
 // delete files that will be generated during installation
-exec('rm '.$folder.'config/mysql.php');
-exec('rm '.$folder.'dba/access.php');
+unlink($folder.'config/mysql.php');
+unlink($folder.'dba/access.php');
 
 // empty backups-folder except 2 files
-exec('rm -R '.$folder.'dba/backups');
+FWS_FileUtils::delete_folder($folder.'dba/backups');
 mkdir($folder.'dba/backups');
 @chmod($folder.'dba/backups',0777);
-exec("echo '<html><body></body></html>' > ".$folder."dba/backups/index.htm");
-exec("echo '' > ".$folder."dba/backups/backups.txt");
+FWS_FileUtils::write($folder.'dba/backups/index.htm', '<html><body></body></html>');
+FWS_FileUtils::write($folder.'dba/backups/backups.txt', '');
 
 // change path to fws
 echo 'Changing stuff in userdef.php...'."\n";
@@ -94,13 +111,13 @@ FWS_FileUtils::write($folder.'config/userdef.php',$userdef);
 $htaccess = FWS_FileUtils::read($folder.'.htaccess');
 $htaccess = preg_replace('/RewriteBase\s+[^\s]+/','RewriteBase /',$htaccess);
 FWS_FileUtils::write($folder.'.htaccess.txt',$htaccess);
-exec('rm '.$folder.'.htaccess');
+unlink($folder.'.htaccess');
 
 @include_once(BS_PATH.'config/general.php');
 
 // generate zip-file
 echo 'Generating zip-file...'."\n";
-zipFolder($folder,'boardsolution_'.BS_VERSION_ID.'.zip');
+FWS_FileUtils::zip_folder($folder, $folder.'/boardsolution_'.BS_VERSION_ID.'.zip');
 
 // generate version-xml
 echo 'Generating version-info-file...'."\n";
@@ -137,26 +154,12 @@ foreach($files as $name => $hash)
 $target = $folder.'v'.BS_VERSION_ID.'.txt';
 FWS_FileUtils::write($target,$res);
 
-// calculate line-number-statistics
-echo 'Creating statistics...'."\n";
-exec(
-	'cloc --quiet '.$folder.' > '.$folder.'stats.txt'
-);
-
-
-function zipFolder($folder,$target)
+if($stats)
 {
-	$folder = FWS_FileUtils::ensure_trailing_slash($folder);
-	$paths = FWS_FileUtils::get_list($folder,false,true);
-	$cmd = 'cd '.$folder.'; zip -r '.$target;
-	foreach($paths as $path)
-		$cmd .= ' '.str_replace($folder,'',$path);
-	
-	exec($cmd);
-}
-
-function getUsage()
-{
-	return 'Usage: php release.php <targetFolder>'."\n";
+	// calculate line-number-statistics
+	echo 'Creating statistics...'."\n";
+	exec(
+		'cloc --quiet '.$folder.' > '.$folder.'stats.txt'
+	);
 }
 ?>
