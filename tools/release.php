@@ -30,7 +30,7 @@ if($folder === null || !is_dir($folder) || !FWS_FileUtils::is_writable($folder))
 // copy
 echo 'Copying files and folders...'."\n";
 $items = array(
-	'acp','bbceditor','cache','config','dba','extern','front','images','install','language','fws',
+	'acp','bbceditor','config','dba','extern','front','images','install','language','fws',
 	'src','tools','themes','uploads','.htaccess','admin.php','index.php','_install.php','standalone.php',
 	'LICENSE','README.md'
 );
