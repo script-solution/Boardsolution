@@ -50,8 +50,8 @@ if(is_dir($folder.'fws/.git'))
 	FWS_FileUtils::delete_folder($folder.'fws/.git');
 else
 	unlink($folder.'fws/.git');
-unlink($folder.'fws/.project');
-unlink($folder.'fws/.buildpath');
+@unlink($folder.'fws/.project');
+@unlink($folder.'fws/.buildpath');
 unlink($folder.'fws/.gitignore');
 unlink($folder.'tools/release.php');
 
