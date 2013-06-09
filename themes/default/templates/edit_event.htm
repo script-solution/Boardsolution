@@ -28,7 +28,7 @@
 		{if view_important}
 		<dl>
 			<dt>{glocale.lang('important')}:</dt>
-			<dd>{form.get_radio_yesno('important',important_def)} ( {glocale.lang('alwaysshowontop')} )</dd>
+			<dd>{form.get_radio_yesno('important',important_def)} ({glocale.lang('alwaysshowontop')})</dd>
 		</dl>
 		{endif}
 		<dl>
@@ -60,7 +60,7 @@
 						{form.get_radio_yesno('enable_announcements',enable_announcements_def)}
 						| {glocale.lang('maximal')}:
 						{form.get_textbox('max_announcements',max_announcements_def,4,5)}
-						( 0 = {glocale.lang('unlimited')} )
+						(0 = {glocale.lang('unlimited')})
 						</td>
 					</tr>
 					<tr>

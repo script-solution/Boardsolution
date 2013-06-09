@@ -118,7 +118,7 @@ final class BS_Front_Module_faq extends BS_Front_Module
 					foreach($cache->get_cache('user_ranks') as $data)
 					{
 						$ranks[] = array(
-							'points' => $data['post_from'].' - '.$data['post_to']." ".$locale->lang('points'),
+							'points' => $data['post_from'].' &ndash; '.$data['post_to']." ".$locale->lang('points'),
 							'image' => $functions->get_rank_images($num,$a,-1,(string)BS_STATUS_USER),
 							'title' => $data['rank']
 						);

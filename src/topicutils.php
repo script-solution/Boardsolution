@@ -269,7 +269,7 @@ final class BS_TopicUtils extends FWS_UtilBase
 	
 		$var = '<select id="topic_action" name="topic_action"';
 		$var .= ' onchange="performModAction(getModActionURL())">'."\n";
-		$var .= '	<option value=""> - '.$locale->lang('please_choose').' - </option>'."\n";
+		$var .= '	<option value=""> &ndash; '.$locale->lang('please_choose').' &ndash; </option>'."\n";
 		$var .= '	<option value="edit"'.($edit_perm ? '' : $disabled).'>';
 		$var .= $locale->lang('edit_topic').'</option>'."\n";
 	

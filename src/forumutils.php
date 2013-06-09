@@ -413,8 +413,8 @@ final class BS_ForumUtils extends FWS_UtilBase
 		if($add_all_forums_option)
 		{
 			$selected = ($multiple && $select != null && in_array(0,$select)) || $select === 0;
-			$result .= '	<option value="0"'.($selected ? ' selected="selected"' : '').'>- ';
-			$result .= $locale->lang('all').' '.$locale->lang('forums').' -</option>'."\n";
+			$result .= '	<option value="0"'.($selected ? ' selected="selected"' : '').'>&ndash; ';
+			$result .= $locale->lang('all').' '.$locale->lang('forums').' &ndash;</option>'."\n";
 		}
 		
 		$nodes = $forums->get_all_nodes();

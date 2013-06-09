@@ -80,12 +80,12 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 				$this->request_formular(false,false);
 				$vote_options = array(
 					$locale->lang('please_choose'),
-					'1 - '.$locale->lang('verygood'),
-					'2 - '.$locale->lang('good'),
-					'3 - '.$locale->lang('middle'),
-					'4 - '.$locale->lang('acceptable'),
-					'5 - '.$locale->lang('bad'),
-					'6 - 	'.$locale->lang('verybad')
+					'1 &ndash; '.$locale->lang('verygood'),
+					'2 &ndash; '.$locale->lang('good'),
+					'3 &ndash; '.$locale->lang('middle'),
+					'4 &ndash; '.$locale->lang('acceptable'),
+					'5 &ndash; '.$locale->lang('bad'),
+					'6 &ndash; '.$locale->lang('verybad')
 				);
 				
 				$links = array();
@@ -99,7 +99,7 @@ final class BS_Front_SubModule_linklist_default extends BS_Front_SubModule
 					$description = $bbcode->get_message_for_output();
 	
 					if(FWS_String::strlen($data['link_url']) > 35)
-						$murl = '<span title="'.$data['link_url'].'">'.FWS_String::substr($data['link_url'],0,35).'...</span>';
+						$murl = '<span title="'.$data['link_url'].'">'.FWS_String::substr($data['link_url'],0,35).'&hellip;</span>';
 					else
 						$murl = $data['link_url'];
 	
