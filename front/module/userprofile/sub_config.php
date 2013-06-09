@@ -64,7 +64,7 @@ final class BS_Front_SubModule_userprofile_config extends BS_Front_SubModule
 		$fonts = explode(',',$cfg['post_font_pool']);
 		sort($fonts);
 
-		$default_font_options = array(0 => '- '.$locale->lang('none').' -');
+		$default_font_options = array(0 => '&ndash; '.$locale->lang('none').' &ndash;');
 		for($i = 0;$i < count($fonts);$i++)
 		{
 			$current_font = trim($fonts[$i]);

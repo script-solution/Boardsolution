@@ -183,7 +183,7 @@ final class BS_ACP_SubModule_forums_edit extends BS_ACP_SubModule
 
 		$return = '<select name="'.$name.'">'."\n";
 		$sel = ($parent_id == 0) ? ' selected="selected"' : '';
-		$return .= '<option value="0"'.$sel.'>- '.$locale->lang('main_forum').' -</option>'."\n";
+		$return .= '<option value="0"'.$sel.'>&ndash; '.$locale->lang('main_forum').' &ndash;</option>'."\n";
 		$num = count($forums);
 		for($i = 0;$i < $num;$i++)
 		{

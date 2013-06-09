@@ -953,7 +953,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 			`field_suffix` = '',
 			`field_custom_display` = '',
 			`field_is_required` = 0,
-			`field_edit_notice` = '( DD.MM.YYYY )',
+			`field_edit_notice` = '(DD.MM.YYYY)',
 			`display_always` = 1;"
 		);
 		$this->add_to_log_success();
@@ -1070,7 +1070,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 									`always_edit_poll_options` = 0,
 									`view_useronline_list` = 1,
 									`is_team` = 0;");
-		$db->execute("INSERT INTO `".$consts['BS_TB_USER_GROUPS']."` SET
+		$db->execute("INSERT INTO `".$consts['BS_TB_USER_GROUPS'].utf8_decode("` SET
 									`id` = ".BS_STATUS_GUEST.",
 									`group_title` = 'Gäste',
 									`group_color` = '',
@@ -1105,7 +1105,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 									`view_user_online_detail` = 0,
 									`always_edit_poll_options` = 0,
 									`view_useronline_list` = 1,
-									`is_team` = 0;");
+									`is_team` = 0;"));
 		$this->add_to_log_success();
 		
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_RANKS'].'"...');

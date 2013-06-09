@@ -105,16 +105,16 @@ final class BS_Install_Module_3 extends BS_Install_Module
 		$configs[] = array('type' => 'separator','desc' => $locale->lang('step3_db'));
 		
 	 	$configs[] = $this->get_input(
-			"MySQL - Host","host",$status['mysql_connect'],"",40,40
+			"MySQL-Host","host",$status['mysql_connect'],"",40,40
 		);
 		$configs[] = $this->get_input(
-			"MySQL - Login","login",$status['mysql_connect'],"",40,40
+			"MySQL-Login","login",$status['mysql_connect'],"",40,40
 		);
 		$configs[] = $this->get_input(
-			"MySQL - ".$locale->lang("password"),"password",$status['mysql_connect'],"",40,40
+			"MySQL-".$locale->lang("password"),"password",$status['mysql_connect'],"",40,40
 		);
 		$configs[] = $this->get_input(
-			"MySQL - ".$locale->lang("database"),"database",$status['mysql_select_db'],"",40,40
+			"MySQL-".$locale->lang("database"),"database",$status['mysql_select_db'],"",40,40
 		);
 		
 		if($user->get_session_data('install_type','full') == 'full')
