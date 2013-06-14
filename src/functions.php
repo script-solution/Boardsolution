@@ -715,8 +715,8 @@ final class BS_Functions extends FWS_Object
 			$result = 5 - (@round($total / $votes,2) - 1);
 		
 		$pro = @round(100 / (5 / $result),0) * $multi;
-		$text_ins = '( '.$locale->lang('school_grade').': '.abs($result - 6).' | ';
-		$text_ins .= $votes.' '.$locale->lang('votes').' )';
+		$text_ins = '('.$locale->lang('school_grade').': '.abs($result - 6).' | ';
+		$text_ins .= $votes.' '.$locale->lang('votes').')';
 		
 		$img = ($votes == 0) ? 'grey' : 'red';
 		if($votes == 0)
@@ -728,11 +728,11 @@ final class BS_Functions extends FWS_Object
 		$res .= ' /><img src="'.$images['rate_'.$img].'"';
 		$res .= ' height="10" width="'.(($multi * 100) - $pro).'"';
 		$res .= ($text == 0) ? ' title="'.$text_ins.'" alt="'.$text_ins.'"' : '';
-		$res .= ' /><img src="'.$images['rate_back'].'" alt="" /> ( ';
-		$res .= ($text == 1) ? $locale->lang('school_grade').': ' : ' ';
-		$res .= abs($result - 6).' | '.$votes.' ';
-		$res .= ($text == 1) ? $locale->lang('votes') : '';
-		$res .= ' )';
+		$res .= ' /><img src="'.$images['rate_back'].'" alt="" /> (';
+		$res .= ($text == 1) ? $locale->lang('school_grade').': ' : '';
+		$res .= abs($result - 6).' | '.$votes;
+		$res .= ($text == 1) ? ' '.$locale->lang('votes') : '';
+		$res .= ')';
 		
 		return $res;
 	}

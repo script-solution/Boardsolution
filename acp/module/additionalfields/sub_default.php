@@ -92,7 +92,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 		{
 			$field_type = $this->_get_field_type_name($data['field_type']);
 			if($data['field_type'] != 'enum' && $data['field_type'] != 'text' && $data['field_type'] != 'date')
-				$field_type .= ' ( '.$data['field_length'].' )';
+				$field_type .= ' ('.$data['field_length'].')';
 			$display = $this->_get_display_locations_images($data['field_show_type']);
 			
 			if($i > 0)

@@ -953,7 +953,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 			`field_suffix` = '',
 			`field_custom_display` = '',
 			`field_is_required` = 0,
-			`field_edit_notice` = '( DD.MM.YYYY )',
+			`field_edit_notice` = '(DD.MM.YYYY)',
 			`display_always` = 1;"
 		);
 		$this->add_to_log_success();

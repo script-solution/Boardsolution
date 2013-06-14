@@ -220,10 +220,10 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 			foreach(array_keys($groups) as $gname)
 			{
 				if($group == $gname)
-					$menu_item = '- '.$locale->lang('group_'.$gname,false);
+					$menu_item = '&rarr; '.$locale->lang('group_'.$gname,false);
 				else
 				{
-					$menu_item = '- <a href="'.$baseurl->set('group',$catname.'::'.$gname)->to_url().'">';
+					$menu_item = '&rarr; <a href="'.$baseurl->set('group',$catname.'::'.$gname)->to_url().'">';
 					$menu_item .= $locale->lang('group_'.$gname,false).'</a>';
 				}
 

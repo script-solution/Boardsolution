@@ -108,7 +108,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 		$hidden_fields .= '<input type="hidden" name="ad" value="'.$ad.'" />'."\n";
 		
 		$actions = array(
-			0 => '- '.$locale->lang('all').' -',
+			0 => '&ndash; '.$locale->lang('all').' &ndash;',
 			'login' => $locale->lang('action_login'),
 			'post' => $locale->lang('action_post'),
 			'topic' => $locale->lang('action_topic'),

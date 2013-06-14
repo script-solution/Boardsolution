@@ -26,7 +26,7 @@
 		{loop ranks as row => rank}
 		<tr id="row_{row}" class="hlRow">
 			<td width="30%" class="hlCol">
-			{rank:post_from} - <input type="text" name="post_to[{rank:id}]" value="{rank:post_to}" size="6" />
+			{rank:post_from} &ndash; <input type="text" name="post_to[{rank:id}]" value="{rank:post_to}" size="6" />
 			</td>
 			<td width="50%" class="hlCol">
 			<input type="text" name="rank_name[{rank:id}]" value="{rank:rank}" size="30" />
@@ -47,7 +47,7 @@
 	<tr>
 		<td width="40%" class="a_body">&nbsp;</td>
 		<td width="20%" align="center" class="a_body">
-		<input type="submit" value="{glocale.lang('save')} / {glocale.lang('delete')}" />
+		<input type="submit" value="{glocale.lang('save')}/{glocale.lang('delete')}" />
 		</td>
 		<td width="40%" align="right" class="a_body">
 		<a href="javascript:rowHL.toggleAllSelected();">{glocale.lang('invertmark')}</a>

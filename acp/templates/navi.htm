@@ -108,7 +108,7 @@ a.selected {
 		{loop category:modules as module}
 		<li class="sub">
 			<a id="item_{module:id}" {if category:modules.current < category:modules.last || categories.current == categories.last}class="border"{endif}
-			onclick="ChangeSelection({module:id},'border','selected'); {module:javascript}" {module:frame} href="{module:url}">- {module:title}</a>
+			onclick="ChangeSelection({module:id},'border','selected'); {module:javascript}" {module:frame} href="{module:url}">&rarr; {module:title}</a>
 		</li>
 		{endloop}
 		</ul>

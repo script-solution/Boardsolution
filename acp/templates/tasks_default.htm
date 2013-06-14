@@ -38,11 +38,11 @@
 				title="{glocale.lang('disabled')}" alt="{glocale.lang('disabled')}" />
 			{endif}
 			<b>{task:title}</b><br />
-			<span style="font-weight: bold; font-size: 10px;">( {task:file} )</span><br />
+			<span style="font-weight: bold; font-size: 10px;">({task:file})</span><br />
 			<div class="a_desc">{task:description}</div>
 			</td>
 			<td class="hlCol">
-			{glocale.lang('interval')}:&nbsp;&nbsp;{task:interval}<br />
+			{glocale.lang('interval')}:&nbsp;{task:interval}<br />
 			<div style="padding-top: 4px;">{glocale.lang('point_of_time')}:&nbsp;{task:point_of_time}</div>
 			</td>
 			<td class="hlCol" align="center">{task:last_run}</td>
