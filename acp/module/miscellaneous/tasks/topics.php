@@ -75,6 +75,8 @@ final class BS_ACP_Miscellaneous_Tasks_Topics extends FWS_Object implements FWS_
 				$main['comallow'] = $data['comallow'];
 				$main['important'] = $data['important'];
 			}
+			
+			$main['name'] = addslashes($main['name']);
 
 			BS_DAO::get_topics()->update_properties($data['id'],$lastpost,max(0,$posts - 1),$main);
 		}
