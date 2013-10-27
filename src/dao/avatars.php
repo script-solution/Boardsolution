@@ -310,7 +310,7 @@ class BS_DAO_Avatars extends FWS_Singleton
 			 FROM '.BS_TB_AVATARS.' a
 			 LEFT JOIN '.BS_TB_USER.' u ON a.user = u.`'.BS_EXPORT_USER_ID.'`
 			 '.$where.'
-			 ORDER BY a.user DESC
+			 ORDER BY a.user DESC, a.id
 			 '.($count > 0 ? 'LIMIT '.$start.','.$count : '')
 		);
 	}
