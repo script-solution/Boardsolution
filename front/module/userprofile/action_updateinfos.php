@@ -106,9 +106,9 @@ final class BS_Front_Action_userprofile_updateinfos extends BS_Front_Action_Base
 			}
 			else
 			{
-		        BS_DAO::get_user()->update($user->get_user_id(),'','',$email);
-		        
-		        $user->set_profile_val('user_email',$email);
+				BS_DAO::get_user()->update($user->get_user_id(),'',$email);
+				
+				$user->set_profile_val('email',$email);
 				
 				// fire community-event
 				$status = BS_Community_User::get_status_from_groups($user->get_all_user_groups());
