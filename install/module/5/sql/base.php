@@ -138,7 +138,7 @@ abstract class BS_Install_Module_5_SQL_Base extends FWS_Object
 		$content .= '##########################################'."\n";
 		$content .= 'define(\'BS_MYSQL_HOST\',\''.$host.'\');'."\n";
 		$content .= 'define(\'BS_MYSQL_LOGIN\',\''.$login.'\');'."\n";
-		$content .= 'define(\'BS_MYSQL_PASSWORD\',\''.$password.'\');'."\n";
+		$content .= 'define(\'BS_MYSQL_PASSWORD\',\''.html_entity_decode($password, ENT_QUOTES, BS_HTML_CHARSET).'\');'."\n";
 		$content .= 'define(\'BS_MYSQL_DATABASE\',\''.$database.'\');'."\n";
 		$content .= '##########################################'."\n";
 		

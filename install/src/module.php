@@ -65,7 +65,7 @@ abstract class BS_Install_Module extends FWS_Module
 		$dbname = $user->get_session_data('database','');
 		try
 		{
-			$db->connect($host,$login,$pw);
+			$db->connect($host,$login,stripslashes(html_entity_decode($pw, ENT_QUOTES, BS_HTML_CHARSET)));
 			$db->select_database($dbname);
 		}
 		catch(FWS_DB_Exception_DBSelectFailed $ex)
@@ -120,7 +120,7 @@ abstract class BS_Install_Module extends FWS_Module
 			'name' => $name,
 			'size' => $size,
 			'maxlength' => $maxlength,
-			'value' => $user->get_session_data($name) !== false ? $user->get_session_data($name) : $default,
+			'value' => $user->get_session_data($name) !== false ? stripslashes(htmlentities($user->get_session_data($name), ENT_QUOTES, BS_HTML_CHARSET, false)) : $default,
 			'image' => $cond ? 'ok' : 'failed'
 		);
 	}

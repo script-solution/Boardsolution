@@ -207,7 +207,7 @@ class BS_PropLoader extends FWS_PropLoader
 	protected function db()
 	{
 		$c = new FWS_DB_MySQL_Connection();
-		$c->connect(BS_MYSQL_HOST,BS_MYSQL_LOGIN,BS_MYSQL_PASSWORD);
+		$c->connect(BS_MYSQL_HOST,BS_MYSQL_LOGIN,stripslashes(html_entity_decode(BS_MYSQL_PASSWORD, ENT_QUOTES, BS_HTML_CHARSET)));
 		$c->select_database(BS_MYSQL_DATABASE);
 		$c->set_use_transactions(BS_USE_TRANSACTIONS);
 		$c->set_save_queries(BS_DEBUG > 1);
