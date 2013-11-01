@@ -155,6 +155,11 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		if($pid != null)
 			$turl->set(BS_URL_PID,$pid);
 		
+		$surl = BS_URL::get_mod_url('user_search');
+		$surl->set_path(BS_PATH);
+		$surl->set_file('standalone.php');
+		$surl->set(BS_URL_CURRENT,'pmcompose');
+		
 		$this->request_formular();
 		$tpl->add_variables(array(
 			'action_param' => BS_URL_ACTION,
@@ -162,7 +167,7 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 			'target_url' => $turl->to_url(),
 			'receivers' => $receiver != null ? $receiver : array(),
 			'receiver_num' => $receiver != null && is_array($receiver) && count($receiver),
-			'user_search_url' => BS_URL::build_standalone_url('user_search'),
+			'user_search_url' => $surl->to_url(),
 			'title_value' => $form->get_input_value('pm_title',$default_title)
 		));
 	}

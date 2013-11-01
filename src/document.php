@@ -61,6 +61,7 @@ abstract class BS_Document extends FWS_Document
 		$tpl->add_global('glang',$user->get_language());
 		$tpl->add_global('gmodule',$this->get_module_name());
 		$tpl->add_global('gtheme',$user->get_theme());
+		$tpl->add_global('guserenablepm', $cfg['enable_pms'] == 1 && $user->get_profile_val('allow_pms') == 1);
 		
 		$tpl->add_global_ref('gauth',$auth);
 		$tpl->add_allowed_method('gauth','is_in_any_group');

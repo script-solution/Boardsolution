@@ -98,9 +98,6 @@ final class BS_Front_Module_portal extends BS_Front_Module
 			$this->_add_latest_topics_full();
 		
 		// left-bar
-		$show_compose_pm = $user->is_loggedin() && $cfg['enable_pms'] &&
-			$user->get_profile_val('allow_pms');
-		
 		$show_latest_topics_small = $enable_news &&
 			strpos($cfg['current_topic_loc'],'portal') !== false &&
 			$cfg['current_topic_enable'];
@@ -135,7 +132,6 @@ final class BS_Front_Module_portal extends BS_Front_Module
 			'total_user_online' => $user_locations,
 			'user_online_count' => $view_useronline ? $online['online_total'] : 0,
 			'view_useronline_list' => $view_useronline,
-			'show_compose_pm' => $show_compose_pm,
 			'legend' => $legend,
 			'lastlogin' => BS_Front_OnlineUtils::get_last_activity(),
 			'birthdays' => BS_Front_EventUtils::get_todays_birthdays(),

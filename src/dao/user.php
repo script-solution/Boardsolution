@@ -221,6 +221,28 @@ class BS_DAO_User extends BS_DAO_UserBase
 	}
 	
 	/**
+	 * Returns all users whose name is like the given name and allow PMs.
+	 * They will be sorted by experience descending.
+	 *
+	 * @param string $name the name (may be a part)
+	 * @param int $max the maximum number of users to find
+	 * @return array the found users
+	 */
+	public function get_users_like_name_for_pms($name,$max = 6)
+	{
+		$db = FWS_Props::get()->db();
+	
+		return $db->get_rows(
+				'SELECT '.$this->get_fields().'
+			 FROM '.BS_TB_USER.' u
+			 LEFT JOIN '.BS_TB_PROFILES.' p ON u.`'.BS_EXPORT_USER_ID.'` = p.id
+			 WHERE p.active = 1 AND p.banned = 0 AND p.`allow_pms` = 1 AND u.`'.BS_EXPORT_USER_NAME.'` LIKE "%'.$name.'%"
+			 ORDER BY p.exppoints DESC
+			 '.($max > 0 ? 'LIMIT '.$max : '')
+		);
+	}
+	
+	/**
 	 * Determines the number of users that are member of at least one of the given groups. You may
 	 * specify an empty groups-array and you may also specify user-ids that are required.
 	 *

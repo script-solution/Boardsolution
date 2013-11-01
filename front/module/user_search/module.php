@@ -91,19 +91,36 @@ final class BS_Front_Module_user_search extends BS_Front_Module
 			'email_value' => $email
 		));
 		
+		$current_module = $input->get_var('cmod','get',FWS_Input::STRING);
+		
 		$user_list = array();
 		$users = BS_DAO::get_profile()->get_users_by_search(
 			$name,$email,0,array(),'user_name','ASC',$pagination->get_start(),$limit
 		);
 		foreach($users as $data)
 		{
-			$user_list[] = array(
-				'user_name' => $data['user_name'],
-				'email' => BS_UserUtils::get_displayed_email(
-					$data['user_email'],$data['email_display_mode']
-				),
-				'user_group' => $auth->get_usergroup_list($data['user_group'],false,false),
-			);
+			switch ($current_module)
+			{
+				case 'pmcompose':
+					if($data['allow_pms'])
+						$user_list[] = array(
+								'user_name' => $data['user_name'],
+								'email' => BS_UserUtils::get_displayed_email(
+										$data['user_email'],$data['email_display_mode']
+								),
+								'user_group' => $auth->get_usergroup_list($data['user_group'],false,false),
+						);
+					break;
+				
+				default:
+					$user_list[] = array(
+							'user_name' => $data['user_name'],
+							'email' => BS_UserUtils::get_displayed_email(
+									$data['user_email'],$data['email_display_mode']
+							),
+							'user_group' => $auth->get_usergroup_list($data['user_group'],false,false),
+					);
+			}
 		}
 		
 		$tpl->add_variable_ref('user_list',$user_list);

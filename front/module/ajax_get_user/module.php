@@ -57,10 +57,21 @@ final class BS_Front_Module_ajax_get_user extends BS_Front_Module
 		if($cfg['enable_memberlist'] == 1 && $auth->has_global_permission('view_memberlist'))
 		{
 			$keyword = $input->get_var('kw','get',FWS_Input::STRING);
+			$current_module = $input->get_var('cmod','get',FWS_Input::STRING);
 			
 			// limit the search to 6
 			$found_user = array();
-			$users = BS_DAO::get_user()->get_users_like_name($keyword,6);
+			
+			switch($current_module)
+			{
+				case 'pmcompose':
+					$users = BS_DAO::get_user()->get_users_like_name_for_pms($keyword,6);
+					break;
+					
+				default:
+					$users = BS_DAO::get_user()->get_users_like_name($keyword,6);	
+			}
+
 			$count = min(5,count($users));
 			// add max. 5 user
 			for($i = 0;$i < $count;$i++)

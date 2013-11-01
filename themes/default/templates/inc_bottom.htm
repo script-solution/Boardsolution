@@ -34,9 +34,11 @@ function boardJumpRedirect(location)
 		case 'profile':
 			document.location.href = '{gurl.simple_url('userprofile','&$URL_SUB=infos','&')}';
 			break;
+		{if guserenablepm}
 		case 'pms':
 			document.location.href = '{gurl.simple_url('userprofile','&$URL_SUB=pmoverview','&')}';
 			break;
+		{endif}
 		case 'register':
 			document.location.href = '{register_url}';
 			break;

@@ -9,7 +9,7 @@
 		<tr>
 			<th align="left" width="{name_col_width}%" class="bs_coldesc">{name_col}</th>
 			<th width="18%" class="bs_coldesc">{glocale.lang('email')}</th>
-			{if pms_enabled}
+			{if guserenablepm}
 			<th width="12%" class="bs_coldesc">{glocale.lang('pm')}</th>
 			{endif}
 			{if enable_post_count}
@@ -26,10 +26,10 @@
 		{endif}
 		{loop user as data}
 		<tr>
-			<td height="27" class="bs_main">{data:user_name}</td>
-			<td height="27" class="bs_main" align="center">{data:email}</td>
-			{if pms_enabled}
-			<td height="27" class="bs_main" align="center">
+			<td height="27px" class="bs_main">{data:user_name}</td>
+			<td height="27px" class="bs_main" align="center">{data:email}</td>
+			{if guserenablepm}
+			<td height="27px" class="bs_main" align="center">
 			{if data:allow_pms}
 			<a style="float: none;" title="{data:send_pm_title}" class="bs_button"
 				href="{gurl.simple_url('userprofile','&amp;$URL_SUB=pmcompose&amp;$URL_ID='~data:user_id)}"
@@ -40,11 +40,11 @@
 			</td>
 			{endif}
 			{if enable_post_count}
-			<td align="center" height="27" class="bs_main">{data:posts}</td>
+			<td align="center" height="27px" class="bs_main">{data:posts}</td>
 			{endif}
-			<td align="center" height="27" class="bs_main">{data:user_group}</td>
-			<td align="center" height="27" class="bs_main">{data:lastlogin}</td>
-			<td align="center" height="27" class="bs_main">{data:register_date}</td>
+			<td align="center" height="27px" class="bs_main">{data:user_group}</td>
+			<td align="center" height="27px" class="bs_main">{data:lastlogin}</td>
+			<td align="center" height="27px" class="bs_main">{data:register_date}</td>
 		</tr>
 		{endloop}
 	</table>

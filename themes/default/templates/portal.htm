@@ -72,7 +72,7 @@
 				{if gisloggedin}
 				<li class="bs_main"><a href="{profile_config_url}">{glocale.lang('profile_config')}</a></li>
 				{endif}
-				{if show_compose_pm}
+				{if gisloggedin && guserenablepm}
 				<li class="bs_main"><a href="{new_pm_url}">{glocale.lang('compose_new_pm')}</a></li>
 				{endif}
 				{if show_feeds}

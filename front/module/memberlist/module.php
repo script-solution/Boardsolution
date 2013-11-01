@@ -318,7 +318,6 @@ final class BS_Front_Module_memberlist extends BS_Front_Module
 				$locale->lang('group'),'user_group','ASC',$order,$orderurl
 			),
 			'name_col_width' => $name_col_width,
-			'pms_enabled' => $cfg['enable_pms'] == 1,
 			'colspan' => $colspan,
 			'enable_post_count' => $cfg['enable_post_count'] == 1
 		));

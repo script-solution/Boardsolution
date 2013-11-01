@@ -132,7 +132,12 @@ function findMatchingUser()
 	
 	var tempref = this;
 	
-	var url = this.root + "index.php?" + this.actionParam + "=ajax_get_user&kw=";
+	var url_parameters = window.location.search;
+	var splitted_url_parameters = url_parameters.split("&");
+	var split_url_values = splitted_url_parameters[splitted_url_parameters.length-1].split("=");
+	var last_url_parametervalue = split_url_values[split_url_values.length-1];
+	
+	var url = this.root + "index.php?" + this.actionParam + "=ajax_get_user&cmod=" + encodeURIComponent(last_url_parametervalue) + "&kw=";
 	url += encodeURIComponent(keyword);
 	
 	myAjax.setEventHandler('onstart',function() {

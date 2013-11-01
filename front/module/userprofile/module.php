@@ -129,7 +129,6 @@ final class BS_Front_Module_userprofile extends BS_Front_SubModuleContainer
 			'enable_email_notification' => $cfg['enable_email_notification'] == 1,
 			'subscribe_forums_perm' => $cfg['enable_email_notification'] == 1 &&
 				$auth->has_global_permission('subscribe_forums'),
-			'enable_pms' => $cfg['enable_pms'] == 1 && $user->get_profile_val('allow_pms') == 1,
 			'user_pw_change_title' => $cfg['profile_max_user_changes'] != 0 ?
 				$locale->lang('user_n_pw_change') : $locale->lang('pw_change'),
 			'inbox_num' => $inbox_num,

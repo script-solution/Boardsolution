@@ -498,8 +498,6 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			$tpl->add_variables(array(
 				'enable_portal' => $cfg['enable_portal'] == 1,
 				'unread_news_title' => $unread_news_title,
-				'enable_pms' => $user->is_loggedin() && $cfg['enable_pms'] == 1 &&
-					$user->get_profile_val('allow_pms') == 1,
 				'username' => $username,
 				'username_plain' => $user->is_loggedin() ? $user->get_profile_val('user_name') : $username,
 				'forgotpw_link' => $sendpw_url,
@@ -577,7 +575,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$options['linklist'] = $locale->lang('linklist');
 			if($cfg['enable_faq'] == 1)
 				$options['faq'] = $locale->lang('faq');
-			if($user->is_loggedin() && $cfg['enable_pms'] == 1)
+			if($user->is_loggedin() && $cfg['enable_pms'] == 1 && $user->get_profile_val('allow_pms') == 1)
 				$options['pms'] = $locale->lang('privatemessages');
 			if($user->is_loggedin())
 				$options['unread'] = $locale->lang('unread_threads');

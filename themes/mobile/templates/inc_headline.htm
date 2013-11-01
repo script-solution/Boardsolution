@@ -30,7 +30,7 @@
 			({if unread_news_count > 0}<span class="bs_unread">{unread_news_count}</span>{else}0{endif})
 			&middot;
 			{endif}
-			{if gisloggedin && enable_pms}
+			{if gisloggedin && guserenablepm}
 			<a title="{glocale.lang('privatemsgs')} ({unread_pm_count} {glocale.lang('newmsgs')})"
 			   href="{gurl.simple_url('userprofile','&amp;$URL_SUB=pmoverview')}">{glocale.lang('pms')}</a>
 			({if unread_pm_count > 0}<span class="bs_unread">{unread_pm_count}</span>{else}0{endif}) &middot;

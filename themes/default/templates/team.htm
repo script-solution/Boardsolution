@@ -17,9 +17,14 @@ function toggleForumList(id)
 	<h1 class="bs_topic">{glocale.lang('administrators')}</h1>
 	<table class="bs_table" cellpadding="2" cellspacing="1">
 		<tr>
+		{if guserenablepm}
 			<th width="30%" class="bs_coldesc" align="left">{glocale.lang('username')}</th>
 			<th width="50%" class="bs_coldesc">{glocale.lang('mod_forums')}</th>
 			<th width="20%" class="bs_coldesc">{glocale.lang('pm')}</th>
+		{else}
+			<th width="30%" class="bs_coldesc" align="left">{glocale.lang('username')}</th>
+			<th width="70%" class="bs_coldesc">{glocale.lang('mod_forums')}</th>
+		{endif}
 		</tr>
 		{loop admins as admin}
 		<tr>
@@ -34,6 +39,7 @@ function toggleForumList(id)
 			-
 			{endif}
 			</td>
+			{if guserenablepm}
 			<td class="bs_main" align="center">
 			{if show_pm}
 			<a class="bs_button" style="float: none;" href="{admin:pm_url}">{glocale.lang('pm_short')}</a>
@@ -41,6 +47,7 @@ function toggleForumList(id)
 			{glocale.lang('notavailable')}
 			{endif}
 			</td>
+			{endif}
 		</tr>
 		{endloop}
 	</table>
@@ -51,9 +58,14 @@ function toggleForumList(id)
 	<h1 class="bs_topic">{glocale.lang('moderators')}</h1>
 	<table class="bs_table" cellpadding="2" cellspacing="1">
 		<tr>
+		{if guserenablepm}
 			<th width="30%" class="bs_coldesc" align="left">{glocale.lang('username')}</th>
 			<th width="50%" class="bs_coldesc">{glocale.lang('mod_forums')}</th>
 			<th width="20%" class="bs_coldesc">{glocale.lang('pm')}</th>
+		{else}
+			<th width="30%" class="bs_coldesc" align="left">{glocale.lang('username')}</th>
+			<th width="70%" class="bs_coldesc">{glocale.lang('mod_forums')}</th>		
+		{endif}
 		</tr>
 		{loop mods as mod}
 		<tr>
@@ -68,6 +80,7 @@ function toggleForumList(id)
 			-
 			{endif}
 			</td>
+			{if guserenablepm}
 			<td class="bs_main" align="center">
 			{if show_pm}
 			<a class="bs_button" style="float: none;" href="{mod:pm_url}">{glocale.lang('pm_short')}</a>
@@ -75,6 +88,7 @@ function toggleForumList(id)
 			{glocale.lang('notavailable')}
 			{endif}
 			</td>
+			{endif}
 		</tr>
 		{endloop}
 	</table>
@@ -86,14 +100,20 @@ function toggleForumList(id)
 	<h1 class="bs_topic">{name}</h1>
 	<table class="bs_table" cellpadding="2" cellspacing="1">
 		<tr>
+		{if guserenablepm}
 			<th width="30%" class="bs_coldesc" align="left">{glocale.lang('username')}</th>
 			<th width="50%" class="bs_coldesc">{glocale.lang('mod_forums')}</th>
 			<th width="20%" class="bs_coldesc">{glocale.lang('pm')}</th>
+		{else}
+			<th width="30%" class="bs_coldesc" align="left">{glocale.lang('username')}</th>
+			<th width="70%" class="bs_coldesc">{glocale.lang('mod_forums')}</th>
+		{endif}
 		</tr>
 		{loop users as user}
 		<tr>
 			<td class="bs_main">{user:user_name}</td>
 			<td class="bs_main">-</td>
+			{if guserenablepm}
 			<td class="bs_main" align="center">
 			{if show_pm}
 			<a class="bs_button" style="float: none;" href="{user:pm_url}">{glocale.lang('pm_short')}</a>
@@ -101,6 +121,7 @@ function toggleForumList(id)
 			{glocale.lang('notavailable')}
 			{endif}
 			</td>
+			{endif}
 		</tr>
 		{endloop}
 	</table>
