@@ -528,6 +528,23 @@ class BS_DAO_Profile extends BS_DAO_UserBase
 			BS_TB_PROFILES,'WHERE forum_style IN ('.implode(',',$theme_ids).')',$fields
 		);
 	}
+
+	/**
+	 * Updates the given fields for all users with the given avatar-ids
+	 *
+	 * @param array $fields the fields to update. See {@link FWS_DB_Connection::update} for details
+	 * @param array $ids an array with all avatar-ids
+	 * @return int the number of affected rows
+	 */
+	public function update_avatars_by_ids($fields,$ids)
+	{
+		$db = FWS_Props::get()->db();
+		
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
+
+		return $db->update(BS_TB_PROFILES,' WHERE avatar IN ('.implode(',',$ids).')',$fields);
+	}
 	
 	/**
 	 * Adds an additional field with the given name, type and length to the profile-table.

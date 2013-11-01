@@ -44,6 +44,7 @@ final class BS_ACP_Action_avatars_delete extends BS_ACP_Action_Base
 			@unlink(FWS_Path::server_app().'images/avatars/'.$data['av_pfad']);
 
 		BS_DAO::get_avatars()->delete_by_ids($ids);
+		BS_DAO::get_profile()->update_avatars_by_ids(array('avatar' => 0), $ids);
 			
 		$this->set_success_msg($locale->lang('avatars_deleted_successfully'));
 		$this->set_action_performed(true);
