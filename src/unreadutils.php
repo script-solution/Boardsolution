@@ -83,6 +83,9 @@ final class BS_UnreadUtils extends FWS_UtilBase
 		
 		// ok, delete all posts
 		BS_DAO::get_unread()->delete_posts($post_ids);
+		
+		//remove the entries for the e-mail notifications
+		BS_DAO::get_unsentposts()->delete_by_posts($post_ids);
 	}
 	
 	/**
@@ -120,7 +123,12 @@ final class BS_UnreadUtils extends FWS_UtilBase
 		
 		// remove all posts that have no next post
 		if(count($rem) > 0)
+		{
 			BS_DAO::get_unread()->delete_posts($rem);
+			
+			//remove the entries for the e-mail notifications
+			BS_DAO::get_unsentposts()->delete_by_posts($rem);
+		}
 	}
 }
 ?>

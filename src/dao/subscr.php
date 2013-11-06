@@ -307,6 +307,26 @@ class BS_DAO_Subscr extends FWS_Singleton
 	}
 	
 	/**
+	 * Returns all data for given topic-ids incl. some userprofile-data
+	 *
+	 * @param array $tids the topic-ids
+	 * @return array the subscriptions
+	 */
+	public function get_subscribed_all_for_topics($tids)
+	{
+		$db = FWS_Props::get()->db();
+		
+		if(!FWS_Array_Utils::is_integer($tids) || count($tids) == 0)
+			FWS_Helper::def_error('intarray>0','tids',$tids);
+	
+		return $db->get_rows(
+			'SELECT s.*, pr.user_group FROM '.BS_TB_SUBSCR.' s
+			 LEFT JOIN '.BS_TB_PROFILES.' pr ON s.user_id = pr.id
+			 WHERE topic_id IN ('.implode(',',$tids).')'
+		);
+	}
+	
+	/**
 	 * Returns a list with all ids of the subscriptions that "timed out"
 	 *
 	 * @param int $timeout the timeout (in seconds)
@@ -432,6 +452,18 @@ class BS_DAO_Subscr extends FWS_Singleton
 	public function delete_by_topics($tids)
 	{
 		return $this->delete_by('topic_id',$tids);
+	}
+	
+	/**
+	 * Deletes the entries of given user and topic ids
+	 *
+	 * @param string $field the field-name
+	 * @param array $ids all ids to delete
+	 * @return int the number of affected rows
+	 */
+	public function delete_by_user_and_topic($uid,$ids)
+	{
+		return $this->delete_by('user_id = '.$uid.' AND topic_id ',$ids);
 	}
 	
 	/**

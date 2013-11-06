@@ -195,7 +195,12 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 				
 				// delete them
 				foreach($delposts as $uid => $postids)
+				{
 					BS_DAO::get_unread()->delete_posts_of_user($uid,$postids);
+					
+					//remove the entries for the e-mail notifications
+					BS_DAO::get_unsentposts()->delete_by_posts($postids);
+				}
 			}
 			
 			$fields = array(

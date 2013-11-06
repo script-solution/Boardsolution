@@ -165,7 +165,30 @@ final class BS_Front_Action_move_topics_default extends BS_Front_Action_Base
 				
 				// delete them
 				foreach($delposts as $uid => $postids)
+				{
 					BS_DAO::get_unread()->delete_posts_of_user($uid,$postids);
+
+					//remove the entries for the e-mail notifications
+					BS_DAO::get_unsentposts()->delete_by_posts($postids);
+				}
+				
+				$del_subscriptions = array();
+				$subscriptions = BS_DAO::get_subscr()->get_subscribed_all_for_topics($moved_topic_ids);
+				foreach($subscriptions as $data)
+				{
+					// check if the user has access
+					$groups = FWS_Array_Utils::advanced_explode(',',$data['user_group']);
+					if(!$functions->has_access_to_intern_forum($data['user_id'],$groups,$target_fid))
+					{
+						if(!isset($del_subscriptions[$data['user_id']]))
+							$del_subscriptions[$data['user_id']] = array();
+						$del_subscriptions[$data['user_id']] = $moved_topic_ids;
+					}
+				}
+
+				// delete subscriptions
+				foreach($del_subscriptions as $uid => $mtids)
+					BS_DAO::get_subscr()->delete_by_user_and_topic($uid, $mtids);
 			}
 
 			BS_DAO::get_forums()->update_by_id($target_fid,$fields);

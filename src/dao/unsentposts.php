@@ -111,5 +111,24 @@ class BS_DAO_UnsentPosts extends FWS_Singleton
 		);
 		return $db->get_affected_rows();
 	}
+	
+	/**
+	 * Deletes all entries for the given posts
+	 *
+	 * @param array $ids the post-ids
+	 * @return int the number of affected rows
+	 */
+	public function delete_by_posts($ids)
+	{
+		$db = FWS_Props::get()->db();
+	
+		if(!FWS_Array_Utils::is_integer($ids) || count($ids) == 0)
+			FWS_Helper::def_error('intarray>0','ids',$ids);
+	
+		$db->execute(
+				'DELETE FROM '.BS_TB_UNSENT_POSTS.' WHERE post_id IN ('.implode(',',$ids).')'
+		);
+		return $db->get_affected_rows();
+	}
 }
 ?>

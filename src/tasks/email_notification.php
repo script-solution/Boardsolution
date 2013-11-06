@@ -49,6 +49,9 @@ final class BS_Tasks_email_notification extends FWS_Tasks_Base
 		{
 			$ugroups = FWS_Array_Utils::advanced_explode(",",$row['user_group']);
 			$pdata = BS_DAO::get_posts()->get_post_by_id($row['post_id']);
+			
+			if($pdata === false)
+				continue;
 
 			if($functions->has_access_to_intern_forum($row['id'],$ugroups,$pdata['rubrikid']))
 			{
