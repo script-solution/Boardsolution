@@ -1,7 +1,7 @@
 <?php
 /**
  * Contains the userdetails-module
- * 
+ *
  * @package			Boardsolution
  * @subpackage	front.module
  *
@@ -24,7 +24,7 @@
 
 /**
  * The userdetails-module
- * 
+ *
  * @package			Boardsolution
  * @subpackage	front.module
  * @author			Nils Asmussen <nils@script-solution.de>
@@ -39,7 +39,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 	public function init($doc)
 	{
 		parent::init($doc);
-		
+
 		$input = FWS_Props::get()->input();
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
@@ -49,12 +49,12 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 		$id = $input->get_var(BS_URL_ID,'get',FWS_Input::ID);
 		$renderer->set_has_access($user->get_user_id() == $id ||
 			$auth->has_global_permission('view_userdetails'));
-		
+
 		$url = BS_URL::get_mod_url('userdetails');
 		$url->set(BS_URL_ID,$id);
 		$renderer->add_breadcrumb($locale->lang('userdetails'),$url->to_url());
 	}
-	
+
 	/**
 	 * @see FWS_Module::run()
 	 */
@@ -77,20 +77,20 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 			$this->report_error();
 			return;
 		}
-	
+
 		$user_data = BS_DAO::get_profile()->get_user_by_id($id,1,-1);
-	
+
 		// check wether the user has been found
 		if($user_data === false)
 		{
 			$this->report_error();
 			return;
 		}
-		
+
 		$cfields = BS_AddField_Manager::get_instance();
 		$fields = $cfields->get_fields_at(BS_UF_LOC_USER_DETAILS);
 		$field_list = array();
-	
+
 		// determine the number of displayed fields
 		$num_displayed_fields = 0;
 		foreach($fields as $field)
@@ -101,24 +101,24 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 			{
 				if(!$fdata->display_empty())
 					continue;
-				
+
 				$field_value = $locale->lang('notavailable');
 			}
 			else
 				$field_value = $field->get_display($val,'bs_main','bs_main');
-			
+
 			$num_displayed_fields++;
-			
+
 			$field_list[] = array(
 				'field_name' => $field->get_title(),
 				'field_value' => $field_value
 			);
 		}
-	
+
 		$rank_data = $functions->get_rank_data($user_data['exppoints']);
-		
+
 		$tpl->add_variable_ref('add_fields',$field_list);
-	
+
 		if($cfg['enable_avatars'] == 1)
 		{
 			$width = 45;
@@ -141,17 +141,17 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 				'avatar' => ''
 			));
 		}
-	
+
 		$email = BS_UserUtils::get_displayed_email(
 			$user_data['user_email'],$user_data['email_display_mode'],true
 		);
-	
+
 		$tpl->add_variables(array(
 			'width' => $width,
 			'user_name' => $user_data['user_name'],
 			'user_email' => $email
 		));
-		
+
 		// determine signature
 		if($user_data['signatur'] != '')
 		{
@@ -164,7 +164,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 		}
 		else
 			$signature = $locale->lang('notavailable');
-	
+
 		// gather statistics
 		if($user_data['registerdate'] < (time() - 86400))
 		{
@@ -174,12 +174,12 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 		}
 		else
 			$posts_per_day = $locale->lang('notavailable');
-	
+
 		// grab the last posts from the database
 		$denied = array();
 		if($cfg['hide_denied_forums'] == 1)
 			$denied = BS_ForumUtils::get_denied_forums(false);
-		
+
 		$last_posts = false;
 		if(BS_USER_DETAILS_TOPIC_COUNT > 0)
 		{
@@ -199,10 +199,10 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 				);
 			}
 		}
-	
+
 		// collect the options (PM / Email)
 		$options = '';
-		
+
 		$options .= '<a class="bs_button" style="float: left;" href="';
 		$options .= BS_URL::build_mod_url('user_locations').'">';
 		$location = $sessions->get_user_location($user_data['id']);
@@ -215,16 +215,17 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 				$lobj = new BS_Location($location);
 			$loc = $lobj->decode(false);
 			}
-		
+
 			$options .= '<span title="'.$loc.'" style="color: #008000;">';
 			$options .= $locale->lang('status_online').'</span>';
 		}
 		else
 			$options .= '<span style="color: #CC0000;">'.$locale->lang('status_offline').'</span>';
 		$options .= '</a>';
-		
-		if(($cfg['display_denied_options'] || $user->is_loggedin()) && $cfg['enable_pms'] == 1 && 
-			$user_data['allow_pms'] == 1 && $user_data['banned'] == 0)
+
+		if(($cfg['display_denied_options'] || $user->is_loggedin()) && $cfg['enable_pms'] == 1 &&
+			$user->get_profile_val('allow_pms') == 1 && $user_data['allow_pms'] == 1 &&
+			$user_data['banned'] == 0)
 		{
 			$url = BS_URL::get_sub_url('userprofile','pmcompose');
 			$url->set(BS_URL_ID,$user_data['id']);
@@ -232,7 +233,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 			$options .= sprintf($locale->lang('send_pm_to_user'),$user_data['user_name']);
 			$options .= '" href="'.$url->to_url().'">'.$locale->lang('pm_short').'</a>';
 		}
-	
+
 		if(($cfg['display_denied_options'] || $auth->has_global_permission('send_mails')) &&
 			 $user_data['allow_board_emails'] == 1 && $cfg['enable_emails'] == 1 &&
 			 $user_data['user_email'] != '')
@@ -244,7 +245,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 			$options .= '" href="'.$url->to_url().'">';
 			$options .= $locale->lang('email').'</a>';
 		}
-	
+
 		if($options == ' ')
 			$options = $locale->lang('notavailable');
 
@@ -255,16 +256,16 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 				$user_data['exppoints'],$rank_data,$user_data['id']
 			);
 		}
-		
+
 		// display the template
 		if($user_data['lastlogin'] > 0)
 			$lastlogin = FWS_Date::get_date($user_data['lastlogin']);
 		else
 			$lastlogin = $locale->lang('notavailable');
-		
+
 		$searchurl = BS_URL::get_mod_url('search');
 		$searchurl->set(BS_URL_PID,$user_data['id']);
-		
+
 		$tpl->add_variables(array(
 			'width' => $width,
 			'colspan' => $colspan,

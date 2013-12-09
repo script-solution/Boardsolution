@@ -1,7 +1,7 @@
 <?php
 /**
  * Contains the post-data class
- * 
+ *
  * @package			Boardsolution
  * @subpackage	front.src.post
  *
@@ -35,25 +35,25 @@ final class BS_Front_Post_Data extends FWS_Object
 	/**
 	 * A cache for profile-data. As soon as we need a value for the profile it will be created
 	 * and stored here. The next time we'll simply use this value.
-	 * 
+	 *
 	 * @var array
 	 */
 	private static $_profiles = array();
-	
+
 	/**
 	 * The post-number
 	 *
 	 * @var int
 	 */
 	private $_no;
-	
+
 	/**
 	 * The posts-container
 	 *
 	 * @var BS_Front_Post_Container
 	 */
 	private $_container;
-	
+
 	/**
 	 * The data of the post. Contents:
 	 * <code>
@@ -75,19 +75,19 @@ final class BS_Front_Post_Data extends FWS_Object
 	 * 		edited_date,
 	 * 		edited_user,
 	 * 		text_posted,				// the posted text
-	 * 
+	 *
 	 * 		// avatar-table
 	 * 		av_pfad,						// the avatar-path
 	 * 		aowner,							// owner of the avatar
-	 * 		
+	 *
 	 * 		// user-table (edited_user)
 	 * 		edited_user_name,
 	 * 		edited_user_group,
-	 * 
+	 *
 	 * 		// user-table (post_user)
 	 * 		user,								// the username for post_user
 	 * 		email,							// the email for post_user
-	 * 		
+	 *
 	 * 		// profile-table (post_user)
 	 * 		bsignature,					// the signature (in display-format)
 	 * 		id,									// the id of the user
@@ -113,7 +113,7 @@ final class BS_Front_Post_Data extends FWS_Object
 	 * @var array
 	 */
 	private $_data;
-	
+
 	/**
 	 * Constructor
 	 *
@@ -129,12 +129,12 @@ final class BS_Front_Post_Data extends FWS_Object
 			FWS_Helper::def_error('instance','container','BS_Front_Post_Container',$container);
 		if(!is_array($data))
 			FWS_Helper::def_error('array','data',$data);
-		
+
 		$this->_no = $no;
 		$this->_container = $container;
 		$this->_data = $data;
 	}
-	
+
 	/**
 	 * @return boolean wether this is the last post
 	 */
@@ -142,7 +142,7 @@ final class BS_Front_Post_Data extends FWS_Object
 	{
 		return $this->_no == $this->_container->get_post_count() - 1;
 	}
-	
+
 	/**
 	 * Calculates the post-number
 	 *
@@ -155,7 +155,7 @@ final class BS_Front_Post_Data extends FWS_Object
 		$page = $this->_container->get_pagination()->get_page();
 		return (($page - 1) * $cfg['posts_per_page']) + $this->_no + 1;
 	}
-	
+
 	/**
 	 * Builds the CSS-class for this post
 	 *
@@ -167,7 +167,7 @@ final class BS_Front_Post_Data extends FWS_Object
 		$var = (($this->_no % 2) == 1) ? 1 : 2;
 		return 'bs_posts_'.$name.'_'.$var;
 	}
-	
+
 	/**
 	 * @param string $name the name of the field
 	 * @return string the value of the field
@@ -176,10 +176,10 @@ final class BS_Front_Post_Data extends FWS_Object
 	{
 		if(!isset($this->_data[$name]))
 			FWS_Helper::error('The field "'.$name.'" doesn\'t exist!');
-		
+
 		return $this->_data[$name];
 	}
-	
+
 	/**
 	 * @param string $hl the value for BS_URL_HL (null = not set)
 	 * @return string the URL to this post
@@ -192,13 +192,13 @@ final class BS_Front_Post_Data extends FWS_Object
 			$url = BS_URL::get_mod_url('redirect');
 			$url->set(BS_URL_LOC,'show_post');
 		}
-		
+
 		$url->set(BS_URL_ID,$this->get_field('bid'));
 		if($hl !== null)
 			$url->set(BS_URL_HL,$hl);
 		return $url->to_url();
 	}
-	
+
 	/**
 	 * @param boolean $link wether it should be a link
 	 * @return string the username of the post-author
@@ -213,13 +213,13 @@ final class BS_Front_Post_Data extends FWS_Object
 					$this->_data['post_user'],$this->_data['user'],$this->_data['user_group']
 				);
 			}
-			
+
 			return $this->_data['user'];
 		}
-		
+
 		return $this->_data['post_an_user'];
 	}
-	
+
 	/**
 	 * @return string the guest-email to display
 	 */
@@ -232,7 +232,7 @@ final class BS_Front_Post_Data extends FWS_Object
 		else
 			return $locale->lang('notavailable');
 	}
-	
+
 	/**
 	 * @return string the main-user-group in the corresponding color
 	 */
@@ -242,7 +242,7 @@ final class BS_Front_Post_Data extends FWS_Object
 
 		return $auth->get_groupname((int)$this->_data['user_group']);
 	}
-	
+
 	/**
 	 * @return string the user-statistics
 	 */
@@ -253,7 +253,7 @@ final class BS_Front_Post_Data extends FWS_Object
 
 		if(isset(self::$_profiles[$this->_data['id']]['stats']))
 			return self::$_profiles[$this->_data['id']]['stats'];
-		
+
 		$stats = '';
 		if($this->_data['post_user'] != 0 && $cfg['enable_post_count'] == 1)
 		{
@@ -268,11 +268,11 @@ final class BS_Front_Post_Data extends FWS_Object
 			$stats .= $this->_data['exppoints'].' '.$locale->lang('points').', ';
 			$stats .= $this->_data['posts'].' '.$locale->lang('posts');
 		}
-		
+
 		self::$_profiles[$this->_data['id']]['stats'] = $stats;
 		return $stats;
 	}
-	
+
 	/**
 	 * @return string the ip-address of the user
 	 */
@@ -287,7 +287,7 @@ final class BS_Front_Post_Data extends FWS_Object
 			$status = $locale->lang('notavailable');
 		return $status;
 	}
-	
+
 	/**
 	 * @return string The status of the user
 	 */
@@ -300,7 +300,7 @@ final class BS_Front_Post_Data extends FWS_Object
 
 		if($cfg['enable_user_ranks'] == 1 && $this->_data['post_user'] > 0)
 			return '';
-		
+
 		$gdata = $cache->get_cache('user_groups')->get_element((int)$this->_data['user_group']);
 		if($gdata['overrides_mod'] == 0 &&
 			$auth->is_moderator_in_any_forum($this->_data['post_user'],$this->_data['user_group']))
@@ -311,7 +311,7 @@ final class BS_Front_Post_Data extends FWS_Object
 		$group_id = $this->_data['post_user'] > 0 ? (int)$this->_data['user_group'] : BS_STATUS_GUEST;
 		return $auth->get_colored_groupname($group_id);
 	}
-	
+
 	/**
 	 * @return string the register-date of the posting-user
 	 */
@@ -319,12 +319,12 @@ final class BS_Front_Post_Data extends FWS_Object
 	{
 		if(isset(self::$_profiles[$this->_data['id']]['regdate']))
 			return self::$_profiles[$this->_data['id']]['regdate'];
-		
+
 		$date = FWS_Date::get_date($this->_data['registerdate']);
 		self::$_profiles[$this->_data['id']]['regdate'] = $date;
 		return $date;
 	}
-	
+
 	/**
 	 * @return array the data of the rank of the posting-user
 	 */
@@ -334,12 +334,12 @@ final class BS_Front_Post_Data extends FWS_Object
 
 		if(isset(self::$_profiles[$this->_data['id']]['rank']))
 			return self::$_profiles[$this->_data['id']]['rank'];
-		
+
 		$rank = $functions->get_rank_data($this->_data['exppoints']);
 		self::$_profiles[$this->_data['id']]['rank'] = $rank;
 		return $rank;
 	}
-	
+
 	/**
 	 * @return string the title for the rank / usergroup
 	 */
@@ -350,10 +350,10 @@ final class BS_Front_Post_Data extends FWS_Object
 
 		if($cfg['enable_user_ranks'] == 1 && $this->_data['post_user'] > 0)
 			return $locale->lang('rank');
-		
+
 		return $locale->lang('user_group');
 	}
-	
+
 	/**
 	 * @return string the rank-images to display for the posting-user
 	 */
@@ -367,7 +367,7 @@ final class BS_Front_Post_Data extends FWS_Object
 
 		if(isset(self::$_profiles[$this->_data['id']]['rankimg']))
 			return self::$_profiles[$this->_data['id']]['rankimg'];
-		
+
 		if($this->_data['post_user'] > 0)
 		{
 			$rank = $this->get_rank();
@@ -378,11 +378,11 @@ final class BS_Front_Post_Data extends FWS_Object
 		}
 		else
 			$images = '';
-		
+
 		self::$_profiles[$this->_data['id']]['rankimg'] = $images;
 		return $images;
 	}
-	
+
 	/**
 	 * @return boolean wether the avatar should be displayed
 	 */
@@ -390,7 +390,7 @@ final class BS_Front_Post_Data extends FWS_Object
 	{
 		return $this->_data['post_user'] != 0 && $this->get_avatar() != '';
 	}
-	
+
 	/**
 	 * @return string the avatar to display for the posting-user
 	 */
@@ -400,14 +400,14 @@ final class BS_Front_Post_Data extends FWS_Object
 
 		if(isset(self::$_profiles[$this->_data['id']]['avatar']))
 			return self::$_profiles[$this->_data['id']]['avatar'];
-		
+
 		$avatar = '';
 		if($cfg['enable_avatars'] == 1)
 			$avatar = BS_UserUtils::get_avatar_path($this->_data);
 		self::$_profiles[$this->_data['id']]['avatar'] = $avatar;
 		return $avatar;
 	}
-	
+
 	/**
 	 * @return array the additional-fields to display
 	 */
@@ -439,13 +439,13 @@ final class BS_Front_Post_Data extends FWS_Object
 				);
 			}
 		}
-		
+
 		return $fields;
 	}
-	
+
 	/**
 	 * Returns the text of this post
-	 * 
+	 *
 	 * @param boolean $attachments do you want to show the attachments?
 	 * @param boolean $signatures do you want to show the signature?
 	 * @param boolean $edit_notice do you want to show the edited-notice?
@@ -462,7 +462,7 @@ final class BS_Front_Post_Data extends FWS_Object
 			$attlist,$wordwrap_codes
 		);
 	}
-	
+
 	/**
 	 * @return string the post-buttons to display
 	 */
@@ -480,21 +480,21 @@ final class BS_Front_Post_Data extends FWS_Object
 			$fid = $input->get_var(BS_URL_FID,'get',FWS_Input::ID);
 			$tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 			$site = $this->_container->get_pagination()->get_page();
-			
+
 			$dpurl = BS_URL::get_mod_url('delete_post');
 			$dpurl->set(BS_URL_FID,$fid);
 			$dpurl->set(BS_URL_TID,$tid);
-			
+
 			$epurl = BS_URL::get_mod_url('edit_post');
 			$epurl->copy_params($dpurl,array(BS_URL_FID,BS_URL_TID));
 			$epurl->set(BS_URL_SITE,$site);
-			
+
 			$qurl = BS_URL::get_mod_url('new_post');
 			$qurl->copy_params($epurl,array(BS_URL_FID,BS_URL_TID,BS_URL_SITE));
-			
+
 			$ajaxqurl = BS_URL::get_standalone_url('ajax_quote');
 			$ajaxqurl->set(BS_URL_ID,'__ID__');
-				
+
 			$cache = array(
 				'can_reply'					=> $auth->has_current_forum_perm(BS_MODE_REPLY),
 				'fclosed'					=> $forums->forum_is_closed($this->_data['rubrikid']),
@@ -513,7 +513,7 @@ final class BS_Front_Post_Data extends FWS_Object
 				'ajax_qurl'					=> $ajaxqurl->to_url()
 			);
 		}
-		
+
 		$btns = '';
 		if($cache['action'] == 'posts' && ($cache['is_admin'] || !$cache['fclosed']))
 		{
@@ -546,7 +546,7 @@ final class BS_Front_Post_Data extends FWS_Object
 					$btns .= $murl->to_url().'">'.$locale->lang('delete').'</a>';
 				}
 			}
-	
+
 			// edit post
 			if($cfg['display_denied_options'] ||
 				 ($auth->has_current_forum_perm(BS_MODE_EDIT_POST,$this->_data['post_user']) &&
@@ -557,7 +557,7 @@ final class BS_Front_Post_Data extends FWS_Object
 				$btns .= '<a class="bs_button" title="'.$locale->lang('editpost');
 				$btns .= '" href="'.$murl->to_url().'">'.$locale->lang('edit').'</a>';
 			}
-	
+
 			// quote button
 			if(($cfg['display_denied_options'] || $cache['can_reply']) &&
 				$cache['topic']['comallow'] == 1 &&
@@ -571,10 +571,10 @@ final class BS_Front_Post_Data extends FWS_Object
 				$btns .= $this->_data['bid'].'); return false;">'.$locale->lang('quote').'+</a>';
 			}
 		}
-		
+
 		return $btns;
 	}
-	
+
 	/**
 	 * @return string the profile-buttons to display
 	 */
@@ -599,9 +599,9 @@ final class BS_Front_Post_Data extends FWS_Object
 				'user_loc_url'				=> BS_URL::build_mod_url('user_locations')
 			);
 		}
-		
+
 		$btns = '';
-	
+
 		$btns .= '<a class="bs_button" style="float: left;" href="'.$cache['user_loc_url'].'">';
 		$location = $sessions->get_user_location($this->_data['post_user']);
 		if($this->_data['post_user'] > 0 && $location != '' && ($this->_data['ghost_mode'] == 0 ||
@@ -613,14 +613,14 @@ final class BS_Front_Post_Data extends FWS_Object
 				$lobj = new BS_Location($location);
 				$loc = $lobj->decode(false);
 			}
-	
+
 			$btns .= '<span title="'.$loc.'" style="color: #008000;">';
 			$btns .= $locale->lang('status_online').'</span>';
 		}
 		else
 			$btns .= '<span style="color: #CC0000;">'.$locale->lang('status_offline').'</span>';
 		$btns .= '</a>';
-		
+
 		// email button
 		if($cfg['enable_emails'] == 1 && FWS_StringHelper::is_valid_email($this->_data['email']) &&
 			 $this->_data['allow_board_emails'] == 1 &&
@@ -632,10 +632,11 @@ final class BS_Front_Post_Data extends FWS_Object
 			$btns .= sprintf($locale->lang('send_mail_to_user'),$this->_data['user']);
 			$btns .= '" href="'.$murl->to_url().'">'.$locale->lang('email').'</a>';
 		}
-		
+
 		// pm button
 		if($this->_data['banned'] == 0 && $cfg['enable_pms'] == 1 && $this->_data['post_user'] != 0 &&
-			 $this->_data['allow_pms'] == 1 && ($cfg['display_denied_options'] || $cache['is_loggedin']))
+			 $user->get_profile_val('allow_pms') == 1 && $this->_data['allow_pms'] == 1 &&
+			 ($cfg['display_denied_options'] || $cache['is_loggedin']))
 		{
 			$murl = $cache['pm_url'];
 			$murl->set(BS_URL_ID,$this->_data['post_user']);
@@ -645,7 +646,7 @@ final class BS_Front_Post_Data extends FWS_Object
 		}
 		return $btns;
 	}
-	
+
 	/**
 	 * @return boolean wether this post is unread
 	 */
@@ -660,7 +661,7 @@ final class BS_Front_Post_Data extends FWS_Object
 		}
 		return false;
 	}
-	
+
 	/**
 	 * @return string the image that should be displayed for the post (indicates read or unread)
 	 */
@@ -696,10 +697,10 @@ final class BS_Front_Post_Data extends FWS_Object
 			$img .= $locale->lang('nonewentry').'"';
 			$img .= ' src="'.$image.'" />';
 		}
-		
+
 		return $img;
 	}
-	
+
 	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
