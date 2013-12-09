@@ -322,7 +322,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		// send the administrators, users and groups with user-activation rights an e-mail
 		if($cfg['get_email_new_account'] == 1)
 		{
-			$acp_access_groups = array();
+			$acp_access_groups = array(BS_STATUS_ADMIN);
 			$acp_access_users = array();
 			
 			$acp_access = BS_DAO::get_acpaccess()->get_by_module('useractivation');
@@ -337,7 +337,7 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 					
 			$mail = BS_EmailFactory::get_instance()->get_new_account_mail($this->_user_name);
 			$mail_errors = array();
-			foreach(BS_DAO::get_user()->get_users_by_groups(array(BS_STATUS_ADMIN, implode(',', $acp_access_groups)), $acp_access_users) as $adata)
+			foreach(BS_DAO::get_user()->get_users_by_groups($acp_access_groups,$acp_access_users) as $adata)
 			{
 				$mail->set_recipient($adata['user_email']);
 				if(!$mail->send_mail())
