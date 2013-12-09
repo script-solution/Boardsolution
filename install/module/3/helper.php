@@ -73,8 +73,9 @@ final class BS_Install_Module_3_Helper extends FWS_UtilBase
 		$check['mysql_select_db'] = 0;
 	
 		if($host != '' && $login != '' && $database != '')
-		{echo stripslashes(html_entity_decode($password, ENT_QUOTES, BS_HTML_CHARSET));
-			$check['mysql_connect'] = @mysql_connect($host,$login,stripslashes(html_entity_decode($password, ENT_QUOTES, BS_HTML_CHARSET)));
+		{
+			$check['mysql_connect'] = @mysql_connect($host,$login,
+				stripslashes(html_entity_decode($password, ENT_QUOTES, BS_HTML_CHARSET)));
 			$check['mysql_select_db'] = @mysql_select_db($database) ? 1 : 0;
 			if($check['mysql_connect'])
 				mysql_close($check['mysql_connect']);
