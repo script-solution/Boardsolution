@@ -49,7 +49,8 @@ final class BS_Tasks_email_notification extends FWS_Tasks_Base
 		{
 			$ugroups = FWS_Array_Utils::advanced_explode(",",$row['user_group']);
 			$pdata = BS_DAO::get_posts()->get_post_by_id($row['post_id']);
-			
+			// actually this should never happen since we delete the entries now if posts are deleted.
+			// but being a bit defensive here can't hurt :)
 			if($pdata === false)
 				continue;
 
