@@ -634,7 +634,7 @@ final class BS_Front_Post_Data extends FWS_Object
 		}
 		
 		// pm button
-		if($this->_data['banned'] == 0 && $cfg['enable_pms'] == 1 && $user->get_profile_val('allow_pms') == 1 && $this->_data['post_user'] != 0 &&
+		if($this->_data['banned'] == 0 && $cfg['enable_pms'] == 1 && $this->_data['post_user'] != 0 &&
 			 $this->_data['allow_pms'] == 1 && ($cfg['display_denied_options'] || $cache['is_loggedin']))
 		{
 			$murl = $cache['pm_url'];

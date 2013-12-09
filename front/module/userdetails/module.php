@@ -224,8 +224,7 @@ final class BS_Front_Module_userdetails extends BS_Front_Module
 		$options .= '</a>';
 		
 		if(($cfg['display_denied_options'] || $user->is_loggedin()) && $cfg['enable_pms'] == 1 && 
-			$user->get_profile_val('allow_pms') == 1 && $user_data['allow_pms'] == 1 && 
-			$user_data['banned'] == 0)
+			$user_data['allow_pms'] == 1 && $user_data['banned'] == 0)
 		{
 			$url = BS_URL::get_sub_url('userprofile','pmcompose');
 			$url->set(BS_URL_ID,$user_data['id']);
