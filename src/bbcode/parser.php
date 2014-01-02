@@ -278,11 +278,11 @@ final class BS_BBCode_Parser extends FWS_Object
 		if($cfg['msgs_parse_urls'] == 1)
 		{
 			$search[] = '/(\A|\s)((http(s?)|ftp):\/\/|www\.)([^\s,<"]+)/ise';
-			$search[] = '/(\A|\s)([-_a-z0-9\.]+)@([-_a-z0-9]+).([a-z]+)/i';
+			$search[] = '/(\A|\s)\b([a-z0-9._%+-]+)@((?:[a-z0-9-]+\.)+)([a-z]{2,}+)\b/i';
 
 			$replace[] = '"\\1<a target=\"_blank\" href=\""'
 				.'.BS_BBCode_Helper::get_instance()->parse_url(\'\\2\\5\').\'">\\2\\5</a>\'';
-			$replace[] = '\\1<a href="mailto:\\2@\\3.\\4">\\2@\\3.\\4</a>';
+			$replace[] = '\\1<a href="mailto:\\2@\\3\\4">\\2@\\3\\4</a>';
 		}
 
 		// replace the smileys
