@@ -37,8 +37,15 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 	 */
 	protected function run()
 	{
-		$db = FWS_Props::get()->db();
 		$user = FWS_Props::get()->user();
+		$functions = FWS_Props::get()->functions();
+			
+		$host = $user->get_session_data('host','');
+		$login = $user->get_session_data('login','');
+		$password = $user->get_session_data('password','');
+		$database = $user->get_session_data('database','');
+		
+		$db = $functions->connect_to_db($host, $login, $password, $database);
 		
 		$dbname = $user->get_session_data('database','');
 		$prefix = $user->get_session_data('table_prefix','bs_');

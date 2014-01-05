@@ -25,6 +25,43 @@
 ############################ IMPORTANT ############################
 
 /**
+ * Der Zeichensatz, der verwendet werden soll, um Daten aus der Datenbank zu lesen. Dieser sollte
+ * dem Zeichensatz in der DB entsprechen und auch dem im HTML-Dokument.
+ * Siehe BS_HTML_CHARSET.
+ * Beachten Sie, dass dies nur einen Effekt bei MySQL 4.1 und neuer hat!
+ * Sie koennen verfuegbare Zeichensaetze unter anderem mit dem SQL-Befehl "SHOW CHARACTER SET;"
+ * ermitteln.
+ *
+ * The character-set to use for reading data from the database. This charset should be equal
+ * to the one in the DB and also to the one in the HTML-document.
+ * See BS_HTML_CHARSET.
+ * Note that this has just an effect with MySQL 4.1 and later!
+ * You can check for available charsets amongst others with the SQl statement "SHOW CHARACTER SET;".
+ */
+define('BS_DB_CHARSET','utf8');
+
+/**
+ * Der Zeichensatz, der im HTML-Dokument angegeben wird, d.h. im Meta-Tag:
+ * <code>
+ * 	<meta http-equiv="Content-Type" content="text/html; charset=IhrZeichenSatz" />
+ * </code>
+ * Sie koennen dies auch unabhaengig von der MySQL-Version festlegen:
+ * <code>
+ * 	define('BS_HTML_CHARSET','ISO-8859-1');
+ * </code>
+ *
+ * The charset which will be used in the HTML-document, that means in the meta-tag:
+ * <code>
+ * 	<meta http-equiv="Content-Type" content="text/html; charset=YourCharSet" />
+ * </code>
+ * You don't have to define this depending on the MySQL-version:
+ * <code>
+ * 	define('BS_HTML_CHARSET','ISO-8859-1');
+ * </code>
+*/
+define('BS_HTML_CHARSET','UTF-8');
+
+/**
  * Die Datei, mit welcher das Board aufgerufen wird. Standardmaessig ist dies immer "index.php".
  * Falls Sie das Board einbinden, ist es ggf. notwendig den Wert zu aendern.
  * Dabei koennen auch Parameter mit angegeben werden. Z.B. wenn Sie das Board mit
@@ -126,41 +163,6 @@ define('BS_ONLINE_TIMEOUT',300);
  * you have to login again after this time has elapsed.
  */
 define('BS_ACP_ONLINE_TIMEOUT',1800);
-
-/**
- * Der Zeichensatz, der verwendet werden soll, um Daten aus der Datenbank zu lesen. Dieser sollte
- * dem Zeichensatz in der DB entsprechen und auch dem im HTML-Dokument.
- * Siehe BS_HTML_CHARSET.
- * Beachten Sie, dass dies nur einen Effekt bei MySQL 4.1 und neuer hat!
- * 
- * The character-set to use for reading data from the database. This charset should be equal
- * to the one in the DB and also to the one in the HTML-document.
- * See BS_HTML_CHARSET.
- * Note that this has just an effect with MySQL 4.1 and later!
- */
-define('BS_DB_CHARSET','utf8');
-
-/**
- * Der Zeichensatz, der im HTML-Dokument angegeben wird, d.h. im Meta-Tag:
- * <code>
- * 	<meta http-equiv="Content-Type" content="text/html; charset=IhrZeichenSatz" />
- * </code>
- * Sie koennen dies auch unabhaengig von der MySQL-Version festlegen:
- * <code>
- * 	define('BS_HTML_CHARSET','ISO-8859-1');
- * </code>
- * 
- * The charset which will be used in the HTML-document, that means in the meta-tag:
- * <code>
- * 	<meta http-equiv="Content-Type" content="text/html; charset=YourCharSet" />
- * </code>
- * You don't have to define this depending on the MySQL-version:
- * <code>
- * 	define('BS_HTML_CHARSET','ISO-8859-1');
- * </code>
- */
-$__mysql_version = @mysql_get_server_info();
-define('BS_HTML_CHARSET',!$__mysql_version || $__mysql_version >= '4.1' ? 'UTF-8' : 'ISO-8859-1');
 
 ############################ ADMINAREA ############################
 
