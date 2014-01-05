@@ -54,19 +54,20 @@ abstract class BS_Install_Module extends FWS_Module
 	 */
 	protected function connect_to_db()
 	{
-		$db = FWS_Props::get()->db();
-		$user = FWS_Props::get()->user();
 		if(!$this->check_session())
 			return;
 		
-		$host = $user->get_session_data('host','');
-		$login = $user->get_session_data('login','');
-		$pw = $user->get_session_data('password','');
-		$dbname = $user->get_session_data('database','');
 		try
 		{
-			$db->connect($host,$login,stripslashes(html_entity_decode($pw, ENT_QUOTES, BS_HTML_CHARSET)));
-			$db->select_database($dbname);
+			$functions = FWS_Props::get()->functions();
+			$user = FWS_Props::get()->user(); 
+			
+			$host = $user->get_session_data('host','');
+			$login = $user->get_session_data('login','');
+			$password = $user->get_session_data('password','');
+			$database = $user->get_session_data('database','');
+			
+			return $functions->connect_to_db($host, $login, $password, $database);
 		}
 		catch(FWS_DB_Exception_DBSelectFailed $ex)
 		{

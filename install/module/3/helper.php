@@ -40,7 +40,7 @@ final class BS_Install_Module_3_Helper extends FWS_UtilBase
 	{
 		$locale = FWS_Props::get()->locale();
 		$user = FWS_Props::get()->user();
-		$db = FWS_Props::get()->db();
+		$functions = FWS_Props::get()->functions();
 		
 		$host = $user->get_session_data('host','');
 		$login = $user->get_session_data('login','');
@@ -56,10 +56,38 @@ final class BS_Install_Module_3_Helper extends FWS_UtilBase
 
 		$check = array();
 		$check['php'] = phpversion();
-		$mysql_version = $db->get_server_version();
-		if(!$mysql_version)
-			$mysql_version = $db->get_client_version();
-		$check['mysql'] = $mysql_version;
+		
+		$check['mysql_connect'] = 0;
+		$check['mysql_select_db'] = 0;
+		$check['mysql'] = true;
+				
+		if($host != '' && $login != ''  && $database != '')
+		{
+			
+			try 
+			{
+				$db = $functions->connect_to_db($host, $login, $password, $database);
+				
+				$check['mysql_connect'] = $db->is_connected();
+				$check['mysql_select_db'] = ($db->get_selected_db() == '') ? 0 : 1;
+				
+				$mysql_version = $db->get_server_version();
+				if(!$mysql_version)
+					$mysql_version = $db->get_client_version();
+				$check['mysql'] = $mysql_version;
+			}
+			catch(FWS_DB_Exception_DBSelectFailed $ex)
+			{
+				$msgs = FWS_Props::get()->msgs();
+				$msgs->add_error('<b>MySQL-Fehler: '.$ex->get_mysql_error().'</b>');
+			}
+			catch(FWS_DB_Exception_ConnectionFailed $ex)
+			{
+				$msgs = FWS_Props::get()->msgs();
+				$msgs->add_error('<b>MySQL-Fehler: '.$ex->get_mysql_error().'</b>');
+			}
+		}
+		
 		$check['gd'] = FWS_PHPConfig::get_gd_version();
 		$check['chmod_cache'] = FWS_FileUtils::is_writable('cache');
 		$check['chmod_config'] = FWS_FileUtils::is_writable('config');
@@ -68,18 +96,6 @@ final class BS_Install_Module_3_Helper extends FWS_UtilBase
 		$check['chmod_dbabackups'] = FWS_FileUtils::is_writable('dba/backups');
 		$check['chmod_smileys'] = FWS_FileUtils::is_writable('images/smileys');
 		$check['chmod_avatars'] = FWS_FileUtils::is_writable('images/avatars');
-		
-		$check['mysql_connect'] = 0;
-		$check['mysql_select_db'] = 0;
-	
-		if($host != '' && $login != '' && $database != '')
-		{
-			$check['mysql_connect'] = @mysql_connect($host,$login,
-				stripslashes(html_entity_decode($password, ENT_QUOTES, BS_HTML_CHARSET)));
-			$check['mysql_select_db'] = @mysql_select_db($database) ? 1 : 0;
-			if($check['mysql_connect'])
-				mysql_close($check['mysql_connect']);
-		}
 		
 		if($install_type == 'full')
 		{

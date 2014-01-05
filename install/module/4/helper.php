@@ -58,8 +58,16 @@ final class BS_Install_Module_4_Helper extends FWS_UtilBase
 	 */
 	public static function check_update()
 	{
-		$db = FWS_Props::get()->db();
 		$user = FWS_Props::get()->user();
+		$functions = FWS_Props::get()->functions();
+			
+		$host = $user->get_session_data('host','');
+		$login = $user->get_session_data('login','');
+		$password = $user->get_session_data('password','');
+		$database = $user->get_session_data('database','');
+		
+		$db = $functions->connect_to_db($host, $login, $password, $database);		
+		
 		
 		if(!$db->is_connected())
 			return array();
@@ -258,9 +266,16 @@ final class BS_Install_Module_4_Helper extends FWS_UtilBase
 	 */
 	public static function check_full()
 	{
-		$db = FWS_Props::get()->db();
 		$user = FWS_Props::get()->user();
-		$locale = FWS_Props::get()->locale();
+		$locale = FWS_Props::get()->locale();		
+		$functions = FWS_Props::get()->functions();
+			
+		$host = $user->get_session_data('host','');
+		$login = $user->get_session_data('login','');
+		$password = $user->get_session_data('password','');
+		$database = $user->get_session_data('database','');
+		
+		$db = $functions->connect_to_db($host, $login, $password, $database);		
 		
 		if(!$db->is_connected())
 			return array();
