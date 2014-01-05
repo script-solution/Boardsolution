@@ -41,4 +41,14 @@ define('BS_DBA_ENABLE_GZIP',false);
  * The number of SQL-statements per file
  */
 define('BS_DBA_OPERATIONS_PER_CYCLE',200);
+
+/**
+ * The version of BSDBA
+ */
+define('BS_DBA_VERSION','Boardsolution Database Admin v1.10');
+
+/**
+ * The version-id of BSDBA
+*/
+define('BS_DBA_VERSION_ID','110');
 ?>
