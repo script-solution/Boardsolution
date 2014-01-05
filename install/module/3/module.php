@@ -66,7 +66,7 @@ final class BS_Install_Module_3 extends BS_Install_Module
 		);
 		$configs[] = $this->get_status(
 			'MySQL-Version',($values['mysql']===true) ? false : $status['mysql'],0,0,
-				            ($values['mysql']===true) ? $locale->lang('mysql_version_to_check') : $values['mysql']
+							($values['mysql']===true) ? $locale->lang('mysql_version_to_check') : $values['mysql']
 		);
 		$configs[] = $this->get_status(
 			'GD-Library',$status['gd'],0,0,$values['gd'],$locale->lang('gd_description'),'warning'
