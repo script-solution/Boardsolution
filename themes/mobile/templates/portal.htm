@@ -67,6 +67,11 @@
 				{forum:path}
 				</li>
 				{endloop}
+				{if forums.length == 0}
+				<li class="bs_main">
+				{glocale.lang('notavailable')}
+				</li>
+				{endif}
 				<li class="bs_coldesc_sep">&nbsp;</li>
 				{if show_feeds}
 				<li class="bs_main"><a href="{rss20_feed}">{glocale.lang('subscribe_news_feed')} [RSS 2.0]</a></li>
