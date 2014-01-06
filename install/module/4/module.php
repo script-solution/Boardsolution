@@ -51,10 +51,11 @@ final class BS_Install_Module_4 extends BS_Install_Module
 	 */
 	public function run()
 	{
-		$db = FWS_Props::get()->db();
 		$user = FWS_Props::get()->user();
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
+
+		$db = $this->connect_to_db();
 		
 		$this->request_formular();
 

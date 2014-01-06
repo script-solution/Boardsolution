@@ -794,6 +794,41 @@ final class BS_Functions extends FWS_Object
 		
 		return $c;
 	}
+
+	/**
+	 * Connects to the MySQL-DB with some basic commands
+	 *
+	 * @param string $host the hostname. May contain the port
+	 * @param string $login the loginname
+	 * @param string $password the password
+	 * @param string $database the databasename
+	 * @return the db connection
+	 */
+	public function connect_to_db($host, $login, $password, $database)
+	{
+		$c = new FWS_DB_MySQL_Connection();
+
+		if($c->is_connected())
+			return $c;
+		
+		$c->connect($host,$login,stripslashes(html_entity_decode($password, ENT_QUOTES, BS_HTML_CHARSET)));
+		$c->select_database($database);
+		$c->set_use_transactions(BS_USE_TRANSACTIONS);
+		$c->set_save_queries(BS_DEBUG > 1);
+		// we don't want to escape them because we use the input-class to do so.
+		// before query-execution would be better but it is too dangerous to change that now :/
+		$c->set_escape_values(false);
+		
+		$version = $c->get_server_version();
+		if($version >= '4.1')
+		{
+			$c->execute('SET CHARACTER SET '.BS_DB_CHARSET.';');
+			// we don't want to have any sql-modes
+			$c->execute('SET SESSION sql_mode="";');
+		}
+
+		return $c;
+	}
 	
 	protected function get_dump_vars()
 	{
