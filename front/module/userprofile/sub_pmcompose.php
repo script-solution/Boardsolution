@@ -106,13 +106,18 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 				$receiver = array($udaten['user_name']);
 		}
 
-		preg_match_all('/RE\: /i', $edaten['pm_title'], $re_match);
+		if($pid != null && $edaten['pm_title'] != '')
+		{
+			if(BS_ENABLE_RE_STMT_CHECK){
+				$pm_title_upper = FWS_String::strtoupper($edaten['pm_title']);
+				$count_matches = FWS_String::substr_count($pm_title_upper, 'RE: ');
 
-		if($pid != null && $edaten['pm_title'] != ''){
-			if(count($re_match[0]) < 3){
-				$default_title = 'RE: '.$edaten['pm_title'];
+				if($count_matches >= BS_MAX_RE_STMT)
+					$default_title = $edaten['pm_title'];
+				else
+					$default_title = 'RE: '.$edaten['pm_title'];
 			}else{
-				$default_title = $edaten['pm_title'];
+				$default_title = 'RE: '.$edaten['pm_title'];
 			}
 		}else{
 			$default_title = '';

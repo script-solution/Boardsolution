@@ -94,7 +94,7 @@ define('BS_FWS_PATH','fws/');
  * 	1 = display just time, query-count and memory-usage
  * 	2 = display all infos
  */
-define('BS_DEBUG',2);
+define('BS_DEBUG',0);
 
 /**
  * Legt fest ob der Calltrace bei Fehler angezeigt werden soll, d.h. welche Funktionen aufgerufen
@@ -355,6 +355,20 @@ define('BS_MAX_PM_TITLE_LEN',45);
  * The maximum number of receivers per PM
  */
 define('BS_MAX_PM_RECEIVER',5);
+
+/**
+ * Hier koennen Sie die Ueberpruefung der maximalen 'RE: ' Angaben je PM aktivieren.
+ *
+ * Here you could enable the check of the maximum 'RE: ' statements in the title of a PM
+ */
+define('BS_ENABLE_RE_STMT_CHECK', true);
+
+/**
+ * Die maximale Anzahl an 'RE: ' Angaben im Titel einer PM
+ *
+ * The maximum number of 'RE: ' statements in the title of a PM
+ */
+define('BS_MAX_RE_STMT', 3);
 
 /**
  * Ab wieviel Prozent der erlaubten Emails in der PM-Inbox soll dem User bei weiteren PMs
