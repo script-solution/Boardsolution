@@ -364,11 +364,11 @@ define('BS_MAX_PM_RECEIVER',5);
 define('BS_ENABLE_RE_STMT_CHECK', true);
 
 /**
- * Die maximale Anzahl an 'RE: ' Angaben im Titel einer PM
+ * Die maximale Anzahl an 'RE: ' Angaben im Titel einer PM, bevor diese gezaehlt werden
  *
  * The maximum number of 'RE: ' statements in the title of a PM
  */
-define('BS_MAX_RE_STMT', 3);
+define('BS_MAX_RE_STMT', 1);
 
 /**
  * Ab wieviel Prozent der erlaubten Emails in der PM-Inbox soll dem User bei weiteren PMs

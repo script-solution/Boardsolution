@@ -108,15 +108,32 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 
 		if($pid != null && $edaten['pm_title'] != '')
 		{
-			if(BS_ENABLE_RE_STMT_CHECK){
+			if(BS_ENABLE_RE_STMT_CHECK)
+			{
 				$pm_title_upper = FWS_String::strtoupper($edaten['pm_title']);
 				$count_matches = FWS_String::substr_count($pm_title_upper, 'RE: ');
 
 				if($count_matches >= BS_MAX_RE_STMT)
-					$default_title = $edaten['pm_title'];
+				{
+					preg_match("/\((\d+)\).*?RE:/", $pm_title_upper, $match);
+
+
+					if(isset($match[0]) && !empty($match[1]))
+					{
+						$count = $match[0][1];
+						$pos = FWS_String::strpos($edaten['pm_title'], ')');
+						$title = "(" . ++$count . ") " . FWS_String::substr($edaten['pm_title'], $pos + 1);
+
+						$default_title = $title;
+					}
+					else
+						$default_title = '(1) ' . $edaten['pm_title'];
+				}
 				else
 					$default_title = 'RE: '.$edaten['pm_title'];
-			}else{
+			}
+			else
+			{
 				$default_title = 'RE: '.$edaten['pm_title'];
 			}
 		}else{
