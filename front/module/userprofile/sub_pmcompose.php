@@ -108,37 +108,34 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 
 		if($pid != null && $edaten['pm_title'] != '')
 		{
-			if(BS_ENABLE_RE_STMT_CHECK)
+			$pm_title_upper = FWS_String::strtoupper($edaten['pm_title']);
+			$count_matches = FWS_String::substr_count($pm_title_upper,'RE');
+			$pos = FWS_String::strpos($edaten['pm_title'],')');
+
+			if($pos>0)
+				$title = trim(FWS_String::substr($edaten['pm_title'],$pos+2));
+			else
+				$title = $edaten['pm_title'];
+
+
+			if($count_matches > 0)
 			{
-				$pm_title_upper = FWS_String::strtoupper($edaten['pm_title']);
-				$count_matches = FWS_String::substr_count($pm_title_upper, 'RE: ');
+				preg_match("/^RE.*\((\d+)\):/",$pm_title_upper,$match);
 
-				if($count_matches >= BS_MAX_RE_STMT)
+				if(isset($match[0]) && !empty($match[1]))
 				{
-					preg_match("/\((\d+)\).*?RE:/", $pm_title_upper, $match);
+					$count = $match[1];
+					$title = "RE (".++$count."): ".$title;
 
-
-					if(isset($match[0]) && !empty($match[1]))
-					{
-						$count = $match[0][1];
-						$pos = FWS_String::strpos($edaten['pm_title'], ')');
-						$title = "(" . ++$count . ") " . FWS_String::substr($edaten['pm_title'], $pos + 1);
-
-						$default_title = $title;
-					}
-					else
-						$default_title = '(1) ' . $edaten['pm_title'];
+					$default_title = $title;
 				}
 				else
-					$default_title = 'RE: '.$edaten['pm_title'];
+					$default_title = 'RE (1): '.FWS_String::substr($edaten['pm_title'],$pos+4);
 			}
 			else
-			{
 				$default_title = 'RE: '.$edaten['pm_title'];
-			}
-		}else{
+		}else
 			$default_title = '';
-		}
 
 		if($pid != null && $edaten['pm_text_posted'] != '')
 		{

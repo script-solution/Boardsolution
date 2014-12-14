@@ -357,20 +357,6 @@ define('BS_MAX_PM_TITLE_LEN',45);
 define('BS_MAX_PM_RECEIVER',5);
 
 /**
- * Hier koennen Sie die Ueberpruefung der maximalen 'RE: ' Angaben je PM aktivieren.
- *
- * Here you could enable the check of the maximum 'RE: ' statements in the title of a PM
- */
-define('BS_ENABLE_RE_STMT_CHECK', true);
-
-/**
- * Die maximale Anzahl an 'RE: ' Angaben im Titel einer PM, bevor diese gezaehlt werden
- *
- * The maximum number of 'RE: ' statements in the title of a PM
- */
-define('BS_MAX_RE_STMT', 1);
-
-/**
  * Ab wieviel Prozent der erlaubten Emails in der PM-Inbox soll dem User bei weiteren PMs
  * eine Email geschickt werden? D.h. wenn der Wert auf 90 steht und die max. PMs in der Inbox
  * auf 100 gestellt sind, wird dem User ab 90 PMs in der Inbox bei jeder weiteren PM eine Email
