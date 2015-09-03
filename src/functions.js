@@ -124,11 +124,11 @@ function clapForum(id,cookiePrefix)
 		global_cookie = setcookies;
 	}
 	
-	var image = document.getElementById('cross_' + id);
+	var div = document.getElementById('cross_' + id);
 	if(subForums.style.display == "none")
-		image.src = image.src.replace(/crossopen/,'crossclosed');
+		div.className = 'fa fa-plus fa-2x bs_plus_minus';
 	else
-		image.src = image.src.replace(/crossclosed/,'crossopen');
+		div.className = 'fa fa-minus fa-2x bs_plus_minus';
 }
 
 /**

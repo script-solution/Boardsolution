@@ -826,9 +826,7 @@ final class BS_Auth extends FWS_Object
 			}
 		}
 		
-		if($output == '')
-			$output = '-';
-		else if($too_many)
+		if($too_many)
 		{
 			$murl = BS_URL::build_mod_url('team');
 			$output .= ', <a href="'.$murl.'">...</a>';

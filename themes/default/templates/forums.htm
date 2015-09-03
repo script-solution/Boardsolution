@@ -4,36 +4,17 @@
 {if module_error == false}
 
 {if latest_topics_top}
-<div class="bs_padbottom_big">
 {include "inc_topics.htm"}
-</div>
 {endif}
 
 {include "inc_forums.htm"}
 
-<div>
-	<span style="float: left;">
-	<img src="{guser.get_theme_item_path('images/unread/forum_unread.gif')}" alt="{glocale.lang('forum_is_unread')}" /> = <span style="line-height: 18px;">{glocale.lang('forum_is_unread')}</span>
-	</span>
-	<span style="float: right;">
+<div style="float: right; text-align: right;">
 	<a href="{gurl.simple_url(0,'&amp;$URL_AT=$ACTION_CHANGE_READ_STATUS&amp;$URL_LOC=read&amp;$URL_MODE=all','&amp;',true)}">{glocale.lang('markallasread')}</a>
-	</span>
-	<br style="clear: both;" />
-	<span style="float: left;">
-	<img src="{guser.get_theme_item_path('images/unread/forum_read.gif')}" alt="{glocale.lang('forum_is_read')}" /> = <span style="line-height: 18px;">{glocale.lang('forum_is_read')}</span>
-	</span>
-	<span style="float: right;">
-	<a href="{gurl.simple_url('unread')}">{glocale.lang('showunread')}</a>
-	</span>
-	<br style="clear: both;" />
-	<span style="float: left;">
-	<img src="{guser.get_theme_item_path('images/unread/forum_read_closed.gif')}" alt="{glocale.lang('forum_is_closed_msg')}" /> = <span style="line-height: 18px;">{glocale.lang('forum_is_closed_msg')}</span>
-	</span>
-	<span style="float: right;">
+	<br />
 	<a href="{gurl.simple_url('team')}">{glocale.lang('the_team')}</a>
-	</span>
-	<br style="clear: both;" />
 </div>
+<br style="clear: both;" />
 
 {if view_useronline_list}
 {include "inc_online_user.htm"}
@@ -42,84 +23,6 @@
 {if latest_topics_bottom}
 <div class="bs_padtop_big">
 {include "inc_topics.htm"}
-</div>
-{endif}
-
-{if display_ministats}
-
-<div class="bs_border bs_padtop_big">
-	<table class="bs_table" width="100%" cellpadding="2" cellspacing="1">
-		<thead>
-			<tr>
-				<td class="bs_topic" colspan="2">
-				<table width="100%" cellpadding="0" cellspacing="0">
-					<tr>
-						<td width="20%" style="text-align: left; padding-left: 2px;">{clap_image}</td>
-						<td width="60%" align="center">{glocale.lang('ministats')}</td>
-						<td width="20%" align="right" style="padding-right: 6px;">
-						{if show_current_topics_link}
-						<a href="{gurl.simple_url('latest_topics')}">{glocale.lang('current_topics')}</a>
-						{else}
-						&nbsp;
-						{endif}
-						</td>
-					</tr>
-				</table>
-				</td>
-			</tr>
-		</thead>
-		<tbody{ministats_params}>
-			<tr>
-				<td width="50%" class="bs_main">
-				<b>{glocale.lang('lastactivity')}:</b>
-				{if lastlogin == ''}
-				<i>{glocale.lang('unknown')}</i>
-				{else}
-				{lastlogin}
-				{endif}
-				</td>
-				<td width="50%" class="bs_main">
-				<b><span title="{current_events_desc}">{glocale.lang('current_events')}:</span></b>
-				{if events:list.length > 0}
-				{loop events:list as ev}
-				<a href="{ev:url}" {if ev:title_complete != ''}title="{ev:title_complete}" {endif}>{ev:title}</a>
-				({ev:date})
-				{if events:list.current != events:list.last}
-				,
-				{endif} 
-				{endloop}
-				{if events:more}
-				<a href="{gurl.simple_url('calendar')}">...</a>
-				{endif}
-				{else}
-				<i>{glocale.lang('none')}</i>
-				{endif}
-				</td>
-			</tr>
-			<tr>
-				<td width="50%" class="bs_main"><b>{glocale.lang('newest_member')}:</b> {newest_member}</td>
-				<td width="50%" class="bs_main">
-				<b>{glocale.lang('todaysbirthdays')}:</b>
-				{if birthdays:list.length > 0}
-				{loop birthdays:list as bd}
-				{bd:username} ({bd:age})
-				{if birthdays:list.current != birthdays:list.last}
-				,
-				{endif} 
-				{endloop}
-				{if birthdays:more}
-				<a href="{gurl.simple_url('calendar')}">...</a>
-				{endif}
-				{else}
-				<i>{glocale.lang('none')}</i>
-				{endif}
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2" class="bs_main"><b>{glocale.lang('total')}:</b> {statistics_ins}</td>
-			</tr>
-		</tbody>
-	</table>
 </div>
 {endif}
 

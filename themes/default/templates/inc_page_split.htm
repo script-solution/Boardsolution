@@ -1,0 +1,17 @@
+{if page}
+<div align="center">
+	{loop numbers as number}
+	{if number:number == page}
+	<span class="bs_pageno bs_pagecurrent">{number:number}</span>
+	{else}
+	{if number:link}
+	<span class="bs_pageno"><a href="{number:link}">{number:number}</a></span>
+	{else}
+	{number:number}
+	{endif}
+	{endif}
+	{endloop}
+	&nbsp;&nbsp;&nbsp;
+	({glocale.lang('viewing')}: {start_item} &ndash; {end_item}; {glocale.lang('total')}: {total_items})
+</div>
+{endif}

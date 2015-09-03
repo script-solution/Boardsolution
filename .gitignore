@@ -9,3 +9,4 @@
 /dba/backups/*
 !/dba/backups/index.htm
 /dba/access.php
+/themes/Copy of default/*

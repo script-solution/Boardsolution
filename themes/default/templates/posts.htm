@@ -11,29 +11,10 @@
 </div>
 {endif}
 
-<div class="bs_border bs_padtop">
-	<div class="bs_topic">
-		<table width="100%" cellpadding="0" cellspacing="0">
-			<tr>
-				<td align="left">
-				<a href="javascript:scrollTo(0,50000);"><img src="{guser.get_theme_item_path('images/tobottom.gif')}" alt="" /></a>
-				<b>{thread_type_ins}: {threadname_ins}</b>
-				[{glocale.lang('page')} {sasinsert}]
-				</td>
-				<td align="right">
-				{if enable_quick_search}
-				<form method="post" action="{gurl.simple_url('search','&amp;$URL_MODE=topic&amp;$URL_TID='~tid)}">
-				<label for="keywordtf">{glocale.lang('search_this_topic')}:</label>
-				<input type="text" style="padding: 1px;" id="keywordtf" name="keyword" size="15" />
-				<input type="submit" style="padding: 0px;" name="submit" value="{glocale.lang('go')}" />
-				</form>
-				{else}
-				&nbsp;
-				{endif}
-				</td>
-			</tr>
-		</table>
-	</div>
+<div class="bs_border bs_padbottom">
+	<h1 class="bs_topic">
+		{thread_type_ins}: {threadname_ins} [{glocale.lang('page')} {sasinsert}]
+	</h1>
 	{if show_event}
 	{include "inc_event.htm"}
 	{endif}
@@ -41,98 +22,21 @@
 	{include "inc_poll.htm"}
 	{endif}
 </div>
-<br />
 
 {if posts.length > 0}
+{loop posts as post}
+<a id="b_{post:bid}"></a>
 <div class="bs_border">
-	{loop posts as post}
-	<a id="b_{post:bid}"></a>
-	<table class="bs_table" cellpadding="2" cellspacing="1">
-		<tr>
-			<td class="{post:posts_bar_class}" colspan="2">
-			<div style="float: left;">
-				<a href="#b_{post:bid}">{post:new_post_pic}</a> <b>{post:user_name}</b> , {post:post_date}
-			</div>
-			<div style="float: right;">
-				{glocale.lang('post')} <a href="{post:post_url}">#{post:number}</a>
-				&nbsp;&nbsp;
-				<a href="#top" title="{glocale.lang('totop')}">
-				<img src="{guser.get_theme_item_path('images/totop.gif')}" alt="" />
-				</a>
-			</div>
-			<br style="clear: both;" />
-			</td>
-		</tr>
-		<tr>
-			<td valign="top" class="{post:left_table_class}" width="28%">
-			<table width="100%" cellpadding="1" cellspacing="1">
-				{if post:show_avatar}
-				<tr>
-					<td class="{post:left_table_class}" colspan="2">
-					<img alt="" src="{post:avatar}" />
-					</td>
-				</tr>
-				{endif}
-				{if view_ip}
-				<tr>
-					<td class="{post:left_table_class}">IP:</td>
-					<td class="{post:left_table_class}">{post:user_ip}</td>
-				</tr>
-				{endif}
-				<tr>
-					<td class="{post:left_table_class}">{post:rank_title}:</td>
-					<td class="{post:left_table_class}">{post:rank_images}{post:user_status}</td>
-				</tr>
-				{if post:user_id != 0}
-				<tr>
-					<td class="{post:left_table_class}">{glocale.lang('registerdate')}:</td>
-					<td class="{post:left_table_class}">{post:register_time}</td>
-				</tr>
-				{endif}
-				{loop post:add_fields as field}
-				<tr>
-					<td class="{post:left_table_class}">{field:field_name}:</td>
-					<td class="{post:left_table_class}">{field:field_value}</td>
-				</tr>
-				{endloop}
-				{if post:user_id != 0}
-				<tr>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
-					<td colspan="2" class="{post:left_table_class}">{post:stats_ins_bottom}</td>
-				</tr>
-				{else}
-				<tr>
-					<td class="{post:left_table_class}">{glocale.lang('email')}:</td>
-					<td class="{post:left_table_class}">{post:an_email_ins}</td>
-				</tr>
-				{endif}
-			</table>
-			</td>
-			<td class="{post:main_table_class}" width="72%" valign="top">
-			<table width="100%" cellpadding="0" cellspacing="1" style="table-layout: fixed;">
-				<tr>
-					<td class="{post:main_table_class}" width="100%" valign="top">
-					{post:text_ins}
-					</td>
-				</tr>
-			</table>
-			</td>
-		</tr>
-		<tr>
-			<td class="{post:posts_bar_class}" colspan="2">
-			<div style="float: left; width: 50%;">{post:message_ins}</div>
-			<div style="float: right; width: 49%;">{post:bottom_ins}</div>
-			<br style="clear: both;" />
-			</td>
-		</tr>
-	</table>
-	{if post:show_separator}
-	<div class="bs_post_separator">&nbsp;</div>
-	{endif}
-	{endloop}
+	<div class="bs_topic">
+		<div class="bs_post_username">{if post:is_unread}* {endif}{post:user_name}</div>
+		<div class="bs_post_date">{post:post_date}</div>
+		<br style="clear: both;" />
+	</div>
+	<div class="bs_post">{post:text_ins}</div>
+	<div style="float: right;">{post:bottom_ins}</div>
+	<br style="clear: both;" />
 </div>
+{endloop}
 {endif}
 
 <div class="bs_padtop">

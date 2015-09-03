@@ -1,5 +1,5 @@
 div.calendar {
-	background-color: #ebebeb;
+	background-color: #fff;
 	border: 1px solid #7F90AE;
 	font-size: 0.9em;
 }
@@ -39,7 +39,7 @@ div.calendar tbody td {
 }
 
 div.calendar td.cal_month {
-	background-color: #DBDBDB;
+	background-color: #f0f0f0;
 	font-weight: bold;
 }
 
@@ -48,7 +48,7 @@ div.calendar td.cal_wkno {
 }
 
 div.calendar td.cal_wkcorner {
-	background-color: #DBDBDB;
+	background-color: #f0f0f0;
 }
 
 div.calendar td.cal_wkday {
@@ -79,7 +79,7 @@ div.calendar thead td {
 }
 
 div.calendar tfoot td {
-	background-color: #DBDBDB;
+	background-color: #f0f0f0;
 	text-align: center;	
 }
 

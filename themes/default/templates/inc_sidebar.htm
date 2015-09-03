@@ -1,0 +1,22 @@
+<div id="bs_sidebar_container">
+	<br id="bs_sidebar_open">
+	<br id="bs_sidebar_close">
+	 
+	<div id="bs_sidebar">
+		<nav>
+			<ul>
+			{loop top_links as id => link}
+				<li><a href="{link:url}"><i class="fa {link:icon} fa-fw"></i> {link:text}</a></li>
+			{endloop}
+			</ul>
+		</nav>
+		<aside>
+			<div>{avatar}</div>
+			<div>Deine letzten Beiträge</div>
+		</aside>
+		<p>
+			<a class="bs_sidebar_open" href="#bs_sidebar_open">Anzeigen</a>
+			<a class="bs_sidebar_close" href="#bs_sidebar_close">Verstecken</a>
+		</p>
+	</div>
+</div>

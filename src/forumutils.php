@@ -100,7 +100,7 @@ final class BS_ForumUtils extends FWS_UtilBase
 			$clapurl = BS_URL::get_mod_url('forums');
 			$clapurl->set(BS_URL_LOC,'clapforum');
 			
-			$catinfo = array(-1,-1);
+			$catinfo = array();
 			$post_order = BS_PostingUtils::get_posts_order();
 			$next_display_layer = -1;
 			$sub_cats = array();
@@ -112,7 +112,7 @@ final class BS_ForumUtils extends FWS_UtilBase
 				/* @var $daten BS_Forums_NodeData */
 				$forum_id = $daten->get_id();
 				$forum_type_cats = $daten->get_forum_type() == 'contains_cats';
-				$clap_forum = $forum_type_cats && $node->get_layer() - $start_layer == -1;
+				$clap_forum = $forum_type_cats;
 				if($node->get_layer() <= $next_display_layer)
 					$next_display_layer = -1;
 	
@@ -136,20 +136,26 @@ final class BS_ForumUtils extends FWS_UtilBase
 					if(in_array($forum_id,$hidden_forums))
 					{
 						$display_rubrik = 'none';
-						$img_ins = $user->get_theme_item_path('images/crossclosed.gif');
+						$css_class = 'fa fa-plus fa-2x bs_plus_minus';
 					}
 					else
 					{
 						$display_rubrik = 'block';
-						$img_ins = $user->get_theme_item_path('images/crossopen.gif');
+						$css_class = 'fa fa-minus fa-2x bs_plus_minus';
 					}
 					
-					$close_clap_forum = false;
-					if((!$clap_forum || $catinfo[1] != $node->get_id()) && $node->get_layer() == $catinfo[0])
+					$close_clap_forum = array();
+					if(count($catinfo) > 0)
 					{
-						$close_clap_forum = true;
-						if(!$clap_forum)
-							$catinfo = array(-1,-1);
+						if((!$clap_forum || $catinfo[count($catinfo) - 1][1] != $node->get_id()) &&
+								$node->get_layer() <= $catinfo[count($catinfo) - 1][0])
+						{
+								while(count($catinfo) > 0 && $node->get_layer() <= $catinfo[count($catinfo) - 1][0])
+								{
+									$close_clap_forum[] = 0;
+									array_pop($catinfo);
+								}
+						}
 					}
 					
 					// build the "forum-path"
@@ -173,7 +179,6 @@ final class BS_ForumUtils extends FWS_UtilBase
 						if(!$daten->get_display_subforums())
 						{
 							$clap_forum = false;
-							$catinfo = array(-1,-1);
 						}
 						
 						$clapurl->set(BS_URL_FID,$parent_id);
@@ -181,7 +186,7 @@ final class BS_ForumUtils extends FWS_UtilBase
 						$nodes[$fn] = array(
 							'contains_forums' => true,
 							'forum_id' => $forum_id,
-							'img_ins' => $img_ins,
+							'css_class' => $css_class,
 							'display_rubrik' => $display_rubrik,
 							'clap_forum' => $clap_forum,
 							'clap_forum_url' => $clapurl->to_url(),
@@ -255,14 +260,14 @@ final class BS_ForumUtils extends FWS_UtilBase
 					$nodes[$fn]['path_images'] = $pimages;
 					
 					if($clap_forum)
-						$catinfo = array($node->get_layer(),$node->get_id());
+						array_push($catinfo, array($node->get_layer(), $node->get_id()));
 					$fn++;
 				}
 			}
 			
 			$tpl->add_variable_ref('forums',$nodes);
 			$tpl->add_variables(array(
-				'clap_forum_bottom' => $catinfo[0] != -1,
+				'clap_forum_bottom' => $catinfo,
 				'forum_cookie' => $input->get_var(
 					BS_COOKIE_PREFIX.'hidden_forums','cookie',FWS_Input::STRING
 				)
@@ -672,6 +677,7 @@ final class BS_ForumUtils extends FWS_UtilBase
 		}
 
 		$data = $forums->get_node_data($id);
+		$closed_data = $data->get_forum_is_closed();
 
 		// unread forum?
 		$is_unread = false;
@@ -680,30 +686,33 @@ final class BS_ForumUtils extends FWS_UtilBase
 		else
 			$is_unread = $forums->is_unread_forum($id);
 
+		$icon_set = 'fa';
+		$icon_size = 'fa-2x';
+		$icon_read = $icon_set.' fa-file-o '.$icon_size;
+		$icon_unread = $icon_set.' fa-file-text-o '.$icon_size;
+		$icon_closed_read = $icon_read.' fa-stack-1x';
+		$icon_closed_unread = $icon_unread.' fa-stack-1x';
+		$x_icon = $icon_set.' fa-times  fa-stack-1x bs_x_icon_correct';
+		
 		if($is_unread)
 		{
-			$image = $data->get_forum_is_closed() ? 'forum_unread_closed' : 'forum_unread';
 			$readurl->set(BS_URL_FID,$id);
-			$img = $user->get_theme_item_path('images/unread/'.$image.'.gif');
-			return '<a href="'.$readurl->to_url().'"><img src="'.$img.'"'
-				.' alt="'.$locale->lang('markrubrikasread').'"'
-				.' title="'.$locale->lang('markrubrikasread').'" border="0" /></a>';
+			
+			if($closed_data)
+				return '<span class="fa-stack"><i class="'.$icon_closed_unread.'" title="'.$locale->lang('forum_is_closed_msg').' '.$locale->lang('forum_is_unread').' '.$locale->lang('markrubrikasread').'"></i><i class="'.$x_icon.'" title="'.$locale->lang('forum_is_closed_msg').' '.$locale->lang('forum_is_unread').' '.$locale->lang('markrubrikasread').'"></i></span>';
+			
+			return '<a href="'.$readurl->to_url().'"><i class="'.$icon_unread.'" title="'.$locale->lang('forum_is_unread').' '.$locale->lang('markrubrikasread').'"></i></a>';
 		}
-
+		
 		// denied forum?
 		if($cfg['hide_denied_forums'] == 0 && !$auth->has_access_to_intern_forum($id))
-		{
-			$img = $user->get_theme_item_path('images/unread/forum_denied.gif');
-			return '<img src="'.$img.'" alt="'.$locale->lang('login_access_denied').'"'
-				.' title="'.$locale->lang('login_access_denied').'" />';
-		}
+			return '<span class="fa-stack"><i class="'.$icon_closed_read.'" title="'.$locale->lang('login_access_denied').'"></i><i class="'.$x_icon.'" title="'.$locale->lang('login_access_denied').'"></i></span>';
 
 		// default
-		$image = $data->get_forum_is_closed() ? 'forum_read_closed' : 'forum_read';
-		$message = $data->get_forum_is_closed() ? 'forum_is_closed_msg' : 'forum_is_read';
-		$img = $user->get_theme_item_path('images/unread/'.$image.'.gif');
-		return '<img src="'.$img.'" alt="'.$locale->lang($message).'"'
-		 .' title="'.$locale->lang($message).'" />';
+		if($closed_data)
+			return '<span class="fa-stack"><i class="'.$icon_closed_read.'" title="'.$locale->lang('forum_is_closed_msg').' '.$locale->lang('forum_is_read').'"></i><i class="'.$x_icon.'" title="'.$locale->lang('forum_is_closed_msg').' '.$locale->lang('forum_is_read').'"></i></span>';
+
+		return '<i class="'.$icon_read.'" title="'.$locale->lang('forum_is_read').'"></i>';
 	}
 }
 ?>

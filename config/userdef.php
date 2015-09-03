@@ -94,7 +94,7 @@ define('BS_FWS_PATH','fws/');
  * 	1 = display just time, query-count and memory-usage
  * 	2 = display all infos
  */
-define('BS_DEBUG',2);
+define('BS_DEBUG',1);
 
 /**
  * Legt fest ob der Calltrace bei Fehler angezeigt werden soll, d.h. welche Funktionen aufgerufen
@@ -243,7 +243,7 @@ define('BS_MAX_MODS_DISPLAY',6);
  * 
  * The maximum length of the topic-names which will be displayed at the field "last post".
  */
-define('BS_MAX_TOPIC_LENGTH_LAST_POST',13);
+define('BS_MAX_TOPIC_LENGTH_LAST_POST',38);
 
 /**
  * Die Anzahl der Beitraege, die z.B. beim editieren von Beitraegen angezeigt

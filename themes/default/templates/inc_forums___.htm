@@ -1,0 +1,91 @@
+{if forums}
+<div class="bs_border">
+	<h1 class="bs_topic">{title}</h1>
+	<table width="100%" cellpadding="2" cellspacing="1">
+		<tr>
+			<th class="bs_coldesc" align="left">{glocale.lang('name')}</th>
+			<th width="8%" class="bs_coldesc">{glocale.lang('threads')}</th>
+			<th width="8%" class="bs_coldesc">{glocale.lang('posts')}</th>
+			<th width="22%" class="bs_coldesc">{glocale.lang('lastpost')}</th>
+		</tr>
+	</table>
+
+	{loop forums as forum}
+	{if forum:close_clap_forum}
+	</div>
+	{endif}
+	
+	{if forum:contains_forums}
+	<!--  forum containing forums - START -->
+	<table width="100%" cellpadding="2" cellspacing="1">
+		<tr>
+			{loop forum:path_images as pimage}
+			<td valign="top" height="20" width="20">{pimage:image}</td>
+			{endloop}
+			<td height="20" class="bs_categories">
+			{if forum:clap_forum}
+			&nbsp;<a href="{forum:clap_forum_url}" onclick="clapForum('{forum:forum_id}','{forum:cookie_prefix}'); return false;" title="{glocale.lang('hidethisforum')}"><img id="cross_{forum:forum_id}" src="{forum:img_ins}" style="vertical-align: middle;" alt="Toggle" /></a>
+			<a href="{forum:forum_url}">{forum:forum_name_ins}</a>
+			{else}
+			&nbsp;&nbsp;<a href="{forum:forum_url}">{forum:forum_name_ins}</a>
+			{endif}
+			</td>
+		</tr>
+	</table>
+	<!--  forum containing forums - ENDE -->
+	
+	{if forum:clap_forum}
+	<div style="display: {forum:display_rubrik};" id="subForums_{forum:forum_id}">
+	{endif}
+	{else}
+	<!-- forum containing threads - START -->
+	<table width="100%" cellpadding="2" cellspacing="1">
+		<tr>
+			{loop forum:path_images as pimage}
+			<td valign="top" height="28" width="20">{pimage:image}</td>
+			{endloop}
+			<td width="40" class="bs_forums" align="center">{forum:alreadyread}</td>
+			<td class="bs_forums">
+			<a href="{forum:forum_url}">{forum:forum_name_ins}</a>
+			<div class="bs_forums_small">
+			{forum:beschr_ins}<br />
+			{if enable_moderators}
+			<b>{glocale.lang('moderators')}:</b> {forum:mods_ins}<br />
+			{endif}
+			{if forum:sub_forums}
+			<b>{glocale.lang('subdirs')}:</b> {forum:sub_forums}
+			{endif}
+			</div>
+			</td>
+			<td width="8%" class="bs_forums_small" align="center">{forum:thread_count}</td>
+			<td width="8%" class="bs_forums_small" align="center">{forum:post_count}</td>
+			<td width="22%" class="bs_forums_small">
+			{if forum:lastpost == false}
+			-
+			{else}
+			{forum:lastpost:date}<br />
+			{glocale.lang('From')}: {forum:lastpost:username}<br />
+			{glocale.lang('totopic')}:
+			<a title="{glocale.lang('gotolastpost')}" href="{forum:lastpost:lastpost_url}">
+			<img src="{guser.get_theme_item_path('images/lastpost.gif')}" alt="{glocale.lang('gotolastpost')}" style="vertical-align: middle;" />
+			</a>
+			<a title="{forum:lastpost:topic_complete}" href="{forum:lastpost:topic_url}">{forum:lastpost:topic}</a>
+			{endif}
+			</td>
+		</tr>
+	</table>
+	<!--  forum containing threads - ENDE -->
+	{endif}
+	{endloop}
+	
+	{if clap_forum_bottom}
+	</div>
+	{endif}
+</div>
+
+<script type="text/javascript" language="Javascript">
+<!--
+var global_cookie = '{forum_cookie}';
+//-->
+</script>
+{endif}

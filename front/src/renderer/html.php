@@ -350,7 +350,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			'theme' => $user->get_theme(),
 			'title' => $this->get_title(),
 			'forum_title' => $cfg['forum_title'],
-			'charset' => 'charset='.$doc->get_charset(),
+			'charset' => $doc->get_charset(),
 			'mimetype' => $doc->get_mimetype(),
 			'cssfiles' => $this->get_css_files(),
 			'cssblocks' => $this->get_css_blocks(),
@@ -389,7 +389,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('adminarea'),
 					'text' => $locale->lang('adminarea'),
-					'url' => BS_URL::build_admin_url()
+					'url' => BS_URL::build_admin_url(),
+					'icon' => 'fa-gear'
 				);
 			}
 			if($this->_show_top_link('enable_memberlist','view_memberlist'))
@@ -397,7 +398,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('memberlist_desc'),
 					'text' => $locale->lang('memberlist'),
-					'url' => BS_URL::build_mod_url('memberlist')
+					'url' => BS_URL::build_mod_url('memberlist'),
+				  	'icon' => 'fa-users'
 				);
 			}
 			if($this->_show_top_link('enable_linklist','view_linklist'))
@@ -405,7 +407,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('linklist_desc'),
 					'text' => $locale->lang('linklist'),
-					'url' => BS_URL::build_mod_url('linklist')
+					'url' => BS_URL::build_mod_url('linklist'),
+				  	'icon' => 'fa-external-link'
 				);
 			}
 			if($this->_show_top_link('enable_stats','view_stats'))
@@ -413,7 +416,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('statistics_desc'),
 					'text' => $locale->lang('statistics'),
-					'url' => BS_URL::build_mod_url('stats')
+					'url' => BS_URL::build_mod_url('stats'),
+				  	'icon' => 'fa-bar-chart'
 				);
 			}
 			if($this->_show_top_link('enable_faq'))
@@ -421,7 +425,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('faq_desc'),
 					'text' => $locale->lang('faq'),
-					'url' => BS_URL::build_mod_url('faq')
+					'url' => BS_URL::build_mod_url('faq'),
+				  	'icon' => 'fa-info-circle'
 				);
 			}
 		
@@ -432,7 +437,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 					$top_links[] = array(
 						'title' => $locale->lang('register'),
 						'text' => $locale->lang('register'),
-						'url' => $regurl
+						'url' => $regurl,
+				  		'icon' => 'fa-hand-o-right'
 					);
 				}
 			}
@@ -441,7 +447,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('yourprofile'),
 					'text' => $locale->lang('profile'),
-					'url' => BS_URL::build_sub_url('userprofile','infos')
+					'url' => BS_URL::build_sub_url('userprofile','infos'),
+				  	'icon' => 'fa-user'
 				);
 			}
 		
@@ -450,7 +457,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('calendar_desc'),
 					'text' => $locale->lang('calendar'),
-					'url' => BS_URL::build_mod_url('calendar')
+					'url' => BS_URL::build_mod_url('calendar'),
+				  	'icon' => 'fa-calendar'
 				);
 			}
 		
@@ -459,15 +467,26 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$top_links[] = array(
 					'title' => $locale->lang('search_desc'),
 					'text' => $locale->lang('search'),
-					'url' => BS_URL::build_mod_url('search')
+					'url' => BS_URL::build_mod_url('search'),
+				  	'icon' => 'fa-search'
 				);
 			}
 		
+			$tpl->set_template('inc_sidebar.htm');;
 			$tpl->add_variable_ref('top_links',$top_links);
+			if($user->is_loggedin())
+			{
+				$avatar = BS_UserUtils::get_profile_avatar($user->get_profile_val('avatar'),$user->get_user_id());
+				$tpl->add_variables(array(
+						'avatar' => $avatar
+				));
+			}
+			$tpl->set_template('inc_headline.htm');
 		
 			$username = '';
 			$sendpw_url = '';
 			$resend_url = '';
+			$avatar = '';
 			$unread_news_title = '';
 			if($user->is_loggedin())
 			{
@@ -478,7 +497,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 
 				$news_num = $unread->get_unread_news_num();
 				$unread_news_title = $locale->lang('portal').' (';
-				$unread_news_title .= sprintf($locale->lang('unread_news'),$news_num).')';
+				$unread_news_title .= sprintf($locale->lang('unread_news'),$news_num).')';	
 			}
 			else
 			{
