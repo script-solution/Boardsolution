@@ -1,48 +1,74 @@
 {if type != 'contains_cats'}
-<div class="bs_border">
-	<h1 class="bs_topic">{thread_title}</h1>
-	<ul>
-	{if num == 0}
-	<div class="bs_main">{glocale.lang('no_topics_found')}</div>
-	{endif}
-	{loop topics as index => topic}
-		<li>
-			{if show_thread_action}
-			<input id="id_{index}" type="checkbox" name="selected_topics[]" value="{topic:topic_id}" />
-			{endif}
-			{if topic:is_unread}*{endif}
-			{if topic:is_important}
-			<b>{glocale.lang('important')}</b>:
-			{endif}
-			<a href="{topic:topic_url}">
-			{if topic:is_moved}
-			<i>{if topic:name_complete != ''}{topic:name_complete}{else}{topic:name}{endif}</i>
-			{else}
-			{if topic:name_complete != ''}{topic:name_complete}{else}{topic:name}{endif}
-			{endif}
-			</a>
-			{if topic:page_split}
-			&nbsp;&nbsp;<span class="bs_desc">{topic:page_split}</span>
-			{endif}
-			{if topic:show_forum}
-			<div class="bs_topics_small">{topic:forum_path}</div>
-			{endif}
-			<div class="bs_topics_small">
-				<u>{glocale.lang('lastpost')}:</u>
-				{if topic:lastpost == false}
-				-
+<ul>
+	<li>
+		<div class="bs_topics">
+			<div class="bs_topics_parent">
+				<a href="{forum:forum_url}">{thread_title}</a>
+			</div>
+			<div>
+				{if num == 0}
+				<div class="bs_main">{glocale.lang('no_topics_found')}</div>
 				{else}
-				{topic:lastpost:date}, {glocale.lang('from')}: {topic:lastpost:username}
-				<a title="{glocale.lang('gotolastpost')}" href="{topic:lastpost:url}">
-				<img src="{guser.get_theme_item_path('images/lastpost.gif')}"
-					style="vertical-align: middle;" alt="{glocale.lang('gotolastpost')}" />
-				</a>
+				<ul>
+				{loop topics as index => topic}
+				<li>
+				   <div class="bs_topics_cl"></div>
+					<div class="bs_topics_child">	
+						<div class="bs_topics_child_status bs_topics_child_hvmiddle">
+							{if show_thread_action}
+							<input id="id_{index}" type="checkbox" name="selected_topics[]" value="{topic:topic_id}" />
+							{endif}
+							{if topic:is_unread}*{endif}
+							{if topic:is_important}
+							<i class="fa fa-sticky-note-o fa-2x" title="{glocale.lang('important')}"></i>
+							{endif}
+						</div>
+						<div class="bs_topics_child_maindata">
+							<a href="{topic:topic_url}">
+								{if topic:is_moved}
+								<i>{if topic:name_complete != ''}{topic:name_complete}{else}{topic:name}{endif}</i>
+								{else}
+								{if topic:name_complete != ''}{topic:name_complete}{else}{topic:name}{endif}
+								{endif}
+							</a>
+							{if topic:show_forum}
+							<div>
+								{if topic:page_split}
+									&nbsp;&nbsp;<span class="bs_desc">{topic:page_split}</span>
+								{endif}{topic:forum_path}
+							</div>
+							{endif}
+							<div>{glocale.lang('thread')} {glocale.lang('from')}: {topic:creator:username}, {topic:creator:date}</div>
+
+						</div>
+						<div class="bs_topics_child_tpcount bs_topics_child_hvmiddle">
+							<dl>
+								<dt>{forum:thread_count}</dt>
+								<dd>{glocale.lang('threads')}</dd>
+								<dt>{forum:post_count}</dt>
+								<dd>{glocale.lang('posts')}</dd>
+							</dl>
+						</div>
+						<div class="bs_topics_child_lpost bs_topics_child_hmiddle">
+							{if topic:lastpost == false}
+							-
+							{else}
+							<div>
+								<div><a title="{forum:lastpost:topic_complete}" href="{forum:lastpost:topic_url}">{forum:lastpost:topic}</a></div>
+								<div class="last_post_icon"><a title="{glocale.lang('gotolastpost')}" href="{topic:lastpost:url}"></a></div>
+								{glocale.lang('from')}: {topic:lastpost:username}, {topic:lastpost:date}
+							</div>
+						{endif}		
+						</div>
+					</div>
+					</li>
+					{endloop}
+				</ul>
 				{endif}
 			</div>
-		</li>
-	{endloop}
-	</ul>
-</div>
+		</div>
+	</li>
+</ul>
 {else}
 {if sub_forum == false}
 <div class="bs_border">

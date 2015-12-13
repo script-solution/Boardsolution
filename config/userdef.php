@@ -377,6 +377,13 @@ define('BS_PM_INBOX_FULL_EMAIL_SINCE',90);
  */
 define('BS_USER_DETAILS_TOPIC_COUNT',5);
 
+/**
+ * Die Anzahl der Themen bei "Letzte Aktivitaet" in der Sidebar
+ *
+ * The number of topics at "Last activity" in the sidebar
+ */
+define('BS_USER_DETAILS_TOPIC_COUNT_SIDEBAR',10);
+
 ############################ BBCODE ############################
 
 /**

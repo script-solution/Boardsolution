@@ -9,9 +9,9 @@
 		
 		{if forum:contains_forums}
 		<li>
-			<div class="bs_forums">
+			<div class="bs_forums{if forum:clap_forum}{else} bs_forums_closed{endif}">
 				<!--  forum containing forums - START -->
-				<div class="bs_forums_parent">
+				<div class="bs_forums_parent{if forum:clap_forum}{else} bs_forums_closed{endif}">
 					<a href="{forum:forum_url}">{forum:forum_name_ins}</a>
 					{if forum:clap_forum}
 						<div>
@@ -53,7 +53,7 @@
 							<div>
 								<div><a title="{forum:lastpost:topic_complete}" href="{forum:lastpost:topic_url}">{forum:lastpost:topic}</a></div>
 								<div class="last_post_icon"><a title="{glocale.lang('gotolastpost')}" href="{forum:lastpost:lastpost_url}"></a></div>
-								{glocale.lang('From')}: {forum:lastpost:username}, {forum:lastpost:date}
+								{glocale.lang('From')}: {forum:lastpost:username}, <a title="{forum:lastpost:topic_complete}" href="{forum:lastpost:topic_url}">{forum:lastpost:date}</a>
 							</div>
 						{endif}		
 				</div>

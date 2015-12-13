@@ -12,7 +12,21 @@
 		</nav>
 		<aside>
 			<div>{avatar}</div>
-			<div>Deine letzten Beiträge</div>
+			<div id="bs_sidebar_lpost">
+				{if last_posts !== false}
+				{if last_posts.length == 0}
+				<i>{glocale.lang('none')}</i>
+				{else}
+				<i>Aktivitäts-Protokoll:</i>
+				{loop last_posts as lp}
+				<div>
+					<div><a title="{lp:topic_name}" href="{lp:topic_url}">{lp:topic_name}</a></div>
+					{lp:date}
+				</div>
+				{endloop}
+				{endif}
+				{endif}
+			</div>
 		</aside>
 		<p>
 			<a class="bs_sidebar_open" href="#bs_sidebar_open">Anzeigen</a>

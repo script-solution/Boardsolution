@@ -480,6 +480,45 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				$tpl->add_variables(array(
 						'avatar' => $avatar
 				));
+
+				
+				$user_data = BS_DAO::get_profile()->get_user_by_id($id,1,-1);
+				
+				// check wether the user has been found
+				if($user_data === false)
+				{
+					$this->report_error();
+					return;
+				}
+
+				// grab the last posts from the database
+				$denied = array();
+				if($cfg['hide_denied_forums'] == 1)
+					$denied = BS_ForumUtils::get_denied_forums(false);
+				
+				$last_posts = false;
+				if(BS_USER_DETAILS_TOPIC_COUNT_SIDEBAR > 0)
+				{
+					$rurl = BS_URL::get_mod_url('redirect');
+					$rurl->set(BS_URL_LOC,'show_post');
+					$postlist = BS_DAO::get_posts()->get_last_posts_of_user(
+							$user_data['id'],$denied,BS_USER_DETAILS_TOPIC_COUNT_SIDEBAR
+					);
+					$last_posts = array();
+					foreach($postlist as $data)
+					{
+						$last_posts[] = array(
+								'date' => FWS_Date::get_date($data['post_time']),
+								'forum_path' => BS_ForumUtils::get_forum_path($data['rubrikid'],false),
+								'topic_url' => $rurl->set(BS_URL_ID,$data['id'])->to_url(),
+								'topic_name' => $data['name']
+						);
+					}
+					
+					$tpl->add_variables(array(
+							'last_posts' => $last_posts
+					));
+				}			
 			}
 			$tpl->set_template('inc_headline.htm');
 		

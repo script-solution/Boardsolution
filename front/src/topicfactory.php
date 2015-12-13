@@ -185,7 +185,6 @@ final class BS_Front_TopicFactory extends FWS_UtilBase
 		$topics = new BS_Front_Topics($title,$infos['sql'],'lastpost','DESC',$num,0,true);
 		$topics->set_show_topic_action(false);
 		$topics->set_show_important_first(false);
-		$topics->set_show_forum(true);
 		$topics->set_middle_width(60);
 		
 		$murl = BS_URL::get_mod_url('forums');

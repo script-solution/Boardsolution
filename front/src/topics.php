@@ -656,12 +656,14 @@ final class BS_Front_Topics extends FWS_Object
 					$forum_id = $data['moved_rid'];
 					$topic_starter = '';
 					$lastpost = '';
+					$creator = '';
 				}
 				else
 				{
 					$topic_id = $data['id'];
 					$forum_id = $data['rubrikid'];
 					$lastpost = $this->_get_topic_lastpost($data,$post_order,$pages);
+					$creator = $this->_get_topic_creator($data);
 					$topic_starter = $this->_get_topic_starter($data);
 				}
 
@@ -689,6 +691,7 @@ final class BS_Front_Topics extends FWS_Object
 					'show_important' => $this->_show_important_first && $is_important != $data['important'],
 					'topic_id' => $data['id'],
 					'lastpost' => $lastpost,
+					'creator' => $creator,
 					'topicstart' => $topic_starter,
 					'posts' => $data['posts'],
 					'views' => $data['views'],
@@ -771,6 +774,32 @@ final class BS_Front_Topics extends FWS_Object
 		);
 	}
 	
+
+	/**
+	 * generates the creator-data
+	 *
+	 * @param array $data the topic-data
+	 * @return array|bool an array with keys 'date' and 'username'
+	 */
+	private function _get_topic_creator(&$data)
+	{
+		$locale = FWS_Props::get()->locale();
+		
+		// determine username
+		if($data[BS_EXPORT_USER_ID] != 0)
+		{
+			$user_name = BS_UserUtils::get_link(
+					$data[BS_EXPORT_USER_ID],$data['username'],$data['user_group']
+			);
+		}
+		else
+			$user_name = $locale->lang('guest');
+	
+		return array(
+				'date' => FWS_Date::get_date($data['post_time']),
+				'username' => $user_name
+		);
+	}
 	protected function get_dump_vars()
 	{
 		return get_object_vars($this);
