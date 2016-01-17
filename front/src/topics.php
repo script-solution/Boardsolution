@@ -748,6 +748,8 @@ final class BS_Front_Topics extends FWS_Object
 	 */
 	private function _get_topic_lastpost(&$data,$posts_order,$pages)
 	{
+		$helper = BS_BBCode_Helper::get_instance();
+		
 		if($data['lastpost_id'] == 0)
 			return false;
 
@@ -763,14 +765,37 @@ final class BS_Front_Topics extends FWS_Object
 			$user_name = BS_UserUtils::get_link(
 				$data['lastpost_user'],$data['lp_username'],$data['lastpost_user_group']
 			);
+			$user_name_plain = $data['lp_username'];
 		}
 		else
+		{
 			$user_name = $data['lastpost_an_user'];
+			$user_name_plain = $data['lastpost_an_user'];
+		}
+
+		if($data['lp_av_pfad'] == '')
+			$avatar = FWS_Path::client_app().'images/avatars/no_avatar.gif';
+		else
+			$avatar = FWS_Path::client_app().'images/avatars/'.$data['lp_av_pfad'];
+		
+
+		$tmp_prev = preg_replace('/(\[QUOTE(.*)\])/i', '', $data['lp_preview']);
+		$tmp_prev = preg_replace('/[[\/\!]*?[^\[\]]*?]/si', '', $tmp_prev);
+		
+		$ls = new FWS_HTML_LimitedString($tmp_prev, 40);
+		$res = $ls->get();
+		if($ls->has_cut())
+			$preview = array($res,strip_tags($tmp_prev));
+		else
+			$preview = array($tmp_prev,'');
 
 		return array(
 			'date' => FWS_Date::get_date($data['lastpost_time']),
 			'username' => $user_name,
-			'url' => $murl.'#b_'.$data['lastpost_id']
+			'username_plain' => $user_name_plain,
+			'url' => $murl.'#b_'.$data['lastpost_id'],
+			'avatar' => $avatar,
+			'preview' => $preview[0]
 		);
 	}
 	
@@ -791,13 +816,24 @@ final class BS_Front_Topics extends FWS_Object
 			$user_name = BS_UserUtils::get_link(
 					$data[BS_EXPORT_USER_ID],$data['username'],$data['user_group']
 			);
+			$user_name_plain = $data['username'];
 		}
 		else
+		{
 			$user_name = $locale->lang('guest');
-	
+			$user_name_plain = $locale->lang('guest');
+		}
+		
+		if($data['av_pfad'] == '')
+			$avatar = FWS_Path::client_app().'images/avatars/no_avatar.gif';
+		else
+			$avatar = FWS_Path::client_app().'images/avatars/'.$data['av_pfad'];
+		
 		return array(
 				'date' => FWS_Date::get_date($data['post_time']),
-				'username' => $user_name
+				'username' => $user_name,
+				'username_plain' => $user_name_plain,
+				'avatar' => $avatar
 		);
 	}
 	protected function get_dump_vars()

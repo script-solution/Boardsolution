@@ -146,13 +146,17 @@ class BS_DAO_Topics extends FWS_Singleton
 		return $db->get_rows(
 			'SELECT t.*,u.`'.BS_EXPORT_USER_NAME.'` username,
 							u2.`'.BS_EXPORT_USER_NAME.'` lp_username,rt.forum_name rubrikname,
-							p.user_group,p2.user_group lastpost_user_group'.$kw_add.'
+							p.user_group,p2.user_group lastpost_user_group'.$kw_add.',
+							a.av_pfad, a2.av_pfad lp_av_pfad, po.text_posted lp_preview
 			 FROM '.BS_TB_THREADS.' t
 			 LEFT JOIN '.BS_TB_USER.' u ON t.post_user = u.`'.BS_EXPORT_USER_ID.'`
 			 LEFT JOIN '.BS_TB_USER.' u2 ON t.lastpost_user = u2.`'.BS_EXPORT_USER_ID.'`
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON t.post_user = p.id
 			 LEFT JOIN '.BS_TB_PROFILES.' p2 ON t.lastpost_user = p2.id
 			 LEFT JOIN '.BS_TB_FORUMS.' rt ON ( t.rubrikid = rt.id )
+			 LEFT JOIN '.BS_TB_AVATARS.' a ON p.avatar = a.id
+			 LEFT JOIN '.BS_TB_AVATARS.' a2 ON p2.avatar = a2.id
+			 LEFT JOIN '.BS_TB_POSTS.' po ON t.lastpost_id = po.id
 			 '.$where.'
 			 ORDER BY '.$order.'
 			 '.($count > 0 ? 'LIMIT '.$start.','.$count : '')

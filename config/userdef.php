@@ -243,7 +243,7 @@ define('BS_MAX_MODS_DISPLAY',6);
  * 
  * The maximum length of the topic-names which will be displayed at the field "last post".
  */
-define('BS_MAX_TOPIC_LENGTH_LAST_POST',38);
+define('BS_MAX_TOPIC_LENGTH_LAST_POST',32);
 
 /**
  * Die Anzahl der Beitraege, die z.B. beim editieren von Beitraegen angezeigt

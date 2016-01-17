@@ -207,6 +207,7 @@ final class BS_ForumUtils extends FWS_UtilBase
 						$lp_data['threadid'] = $daten->get_lastpost_topicid();
 						$lp_data['post_an_user'] = $daten->get_lastpost_an_user();
 						$lp_data['user_group'] = $daten->get_lastpost_usergroups();
+						$lp_data['avatar'] = $daten->get_lastpost_avatar();
 	
 						if(!$daten->get_display_subforums())
 						{
@@ -225,6 +226,7 @@ final class BS_ForumUtils extends FWS_UtilBase
 								$lp_data['post_an_user'] = $info['lastpost'][7];
 								$lp_data['tposts'] = $info['lastpost'][8];
 								$lp_data['user_group'] = $info['lastpost'][9];
+								$lp_data['avatar'] = $info['lastpost'][10];
 							}
 							$sub_forums = $info['sub_forums'];
 						}
@@ -580,7 +582,8 @@ final class BS_ForumUtils extends FWS_UtilBase
 							$daten->get_lastpost_topicid(),
 							$daten->get_lastpost_an_user(),
 							$daten->get_lastpost_topicposts(),
-							$daten->get_lastpost_usergroups()
+							$daten->get_lastpost_usergroups(),
+							$daten->get_lastpost_avatar()
 						);
 					}
 					
@@ -640,13 +643,19 @@ final class BS_ForumUtils extends FWS_UtilBase
 		else
 			$user_name = $data['post_an_user'];
 	
+		if($data['avatar'] == '')
+			$avatar = FWS_Path::client_app().'images/avatars/no_avatar.gif';
+		else
+			$avatar = FWS_Path::client_app().'images/avatars/'.$data['avatar'];
+		
 		return array(
 			'date' => FWS_Date::get_date($data['post_time']),
 			'username' => $user_name,
 			'lastpost_url' => $lastpost_url.'#b_'.$data['lastpost_id'],
 			'topic_complete' => $tnamec,
 			'topic' => $tnamed,
-			'topic_url' => $topic_url
+			'topic_url' => $topic_url,
+			'avatar' => $avatar
 		);
 	}
 

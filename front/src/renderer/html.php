@@ -362,7 +362,9 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			'atom_feed' => $feedurl->set(BS_URL_MODE,'atom')->to_url(),
 			'sig_max_height' => $cfg['sig_max_height'],
 			'show_headline' => $this->_show_headline,
-			'feeds_enabled' => $cfg['enable_news_feeds']
+			'feeds_enabled' => $cfg['enable_news_feeds'],
+			'location' => $breadcrumbs,
+			'breadcrumbs' => $this->get_breadcrumbs()
 		));
 		$tpl->restore_template();
 
@@ -373,12 +375,12 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			
 			$tpl->set_template('inc_headline.htm');
 			$tpl->add_variables(array(
-				'location' => $breadcrumbs,
-				'breadcrumbs' => $this->get_breadcrumbs(),
 				'action_type' => BS_ACTION_LOGIN,
 				'login_url' => BS_URL::build_mod_url('login'),
 				'show_deactivated_notice' => $cfg['enable_board'] == 0 && $user->is_admin(),
-				'headline_url' => BS_URL::build_forums_url()
+				'headline_url' => BS_URL::build_forums_url(),
+				'target_url' => BS_URL::build_mod_url('login'),
+				'target_url_reg' => BS_URL::build_mod_url('register')
 			));
 			
 			$top_links = array();

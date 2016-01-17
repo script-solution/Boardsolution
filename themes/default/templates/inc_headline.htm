@@ -1,53 +1,94 @@
-{if show_deactivated_notice}
-<div class="bs_body" style="font-size: 13px; color: #FF0000;">{glocale.lang('board_is_disabled_admin_hint')}</div>
-{endif}
+<div id="bs_headline">
+	{if show_deactivated_notice}
+	<div style="font-size: 13px; color: #FF0000;">{glocale.lang('board_is_disabled_admin_hint')}</div>
+	{endif}
 
-<div class="bs_menu_wrapper">
-	<div class="bs_welcome">
-		<div style="float: left;">
-			{glocale.lang('welcome')}, <b>{username}</b>!
-		</div>
-		<div style="float: right;">
-			{if enable_portal}
-			<a href="{gurl.build_portal_url()}" title="{unread_news_title}">{glocale.lang('portal')}</a>
-			({if unread_news_count > 0}<span class="bs_unread">{unread_news_count}</span>{else}0{endif})
-			&middot;
-			{endif}
-					
-			{if gisloggedin && guserenablepm}
-			<a title="{glocale.lang('privatemsgs')} ({unread_pm_count} {glocale.lang('newmsgs')})"
-			   href="{gurl.simple_url('userprofile','&amp;$URL_SUB=pmoverview')}">{glocale.lang('privatemsgs')}</a>
-			({if unread_pm_count > 0}<span class="bs_unread">{unread_pm_count}</span>{else}0{endif}) &middot;
-			{endif}
-			
-			<a title="{unread_topics_title}"
-			   href="{gurl.simple_url('unread')}">{glocale.lang('unread_threads')}</a>
-			({if unread_topic_count > 0}<span class="bs_unread">{unread_topic_count}</span>
-			<a href="{first_unread_url}"><img src="{guser.get_theme_item_path('images/unread/first_unread_post.gif')}"
-				alt="" /></a>{else}0{endif}) &middot;
-			
-			{if gisloggedin == false}
-			
-			<a href="{login_url}">{glocale.lang('login')}</a> &middot;
-			{if forgotpw_link != ''}
-			<a href="{forgotpw_link}">{glocale.lang('forgetpw')}</a> &middot;
-			{endif}
-			{if resendact_link != ''}
-			<a href="{resendact_link}">{glocale.lang('resend_activation_link')}</a>
-			{endif}
 
+  <ul id="topnav">
+  	{if gisloggedin}
+  	<li><div class="topnav-first-logged-in">
+  	{else}
+  	<li><div class="topnav-first-logged-out">
+  	{endif}
+    {glocale.lang('welcome')}, <span style="font-weight: bold;">{username}</span>. 
+			<br /><span class="form-break"></span><span class="form-break"></span>
+			Du hast
+			<a href="{gurl.simple_url('unread')}">
+			{if unread_topic_count > 1}
+			<span class="bs_unread">{unread_topic_count}</span> {glocale.lang('unread_threads_2')}</a>
 			{else}
-			
-			<a href="{gurl.simple_url(-1,'&amp;$URL_AT=$ACTION_LOGOUT','&amp;',true)}">{glocale.lang('logout')}</a>
-			
+			{if unread_topic_count == 0}
+			0 {glocale.lang('unread_threads_2')}</a>
+			{else}
+			<span class="bs_unread">{unread_topic_count}</span> {glocale.lang('unread_threads_4')}</a>
 			{endif}
-		</div>
-		<br style="clear: both;" />
-	</div>
-</div>
+			{endif}
+			{if unread_topic_count > 0} <a title="{glocale.lang('goto_first_unread_post')}" href="{first_unread_url}"><i class="fa fa-level-up"></i></a>{endif}{if enable_portal && guserenablepm }, <span class="form-break"></span>{else}{if enable_portal == false && guserenablepm == false}. {else}{if enable_portal == false && guserenablepm}, <span class="form-break"></span>{endif}{endif}{endif}{if gisloggedin && guserenablepm}
+			<a href="{gurl.simple_url('userprofile','&amp;$URL_SUB=pmoverview')}">
+			{if unread_pm_count > 1}
+			<span class="bs_unread">{unread_pm_count}</span> {glocale.lang('privatemsgs_2')}</a>
+			{else}
+			{if unread_pm_count == 0}
+			0 {glocale.lang('privatemsgs_2')}</a>
+			{else}
+			<span class="bs_unread">{unread_pm_count}</span> {glocale.lang('privatemsgs_4')}</a>
+			{endif}
+			{endif}
+			{if enable_portal == false}.{endif}
+			{endif}
+			
+			{if enable_portal}
+			und<span class="form-break"></span> 
+			<a href="{gurl.build_portal_url()}">
+			{if unread_news_count == 0}
+			0 News im Portal</a>.
+			{else}
+			<span class="bs_unread">{unread_news_count}</span> News im Portal</a>.
+			{endif}
+			{endif}</div></li>
+	{if gisloggedin}
+    <li><div>
+    	{glocale.lang('lastlogin')}: {if lastlogin}{lastlogin}{else}<i>{glocale.lang('notavailable')}</i>{endif}
+		</div></li>
+    <li><div>
+		<form method="post" action="{gurl.simple_url(-1,'&amp;$URL_AT=$ACTION_LOGOUT','&amp;',true)}" style="display: inline"  id="logout-form">
+			<fieldset>
+				 <span class="form-bullets">&bull;&bull;&bull; </span><button type="submit"><i class="fa fa-sign-out"></i> {glocale.lang('logout')}</button><br />
+			</fieldset>
+		</form>
+		</div></li>
+	{else}
+	<li><div>
+		<form method="post" action="{target_url}" style="display: inline" id="login-form">
+			<fieldset>
+				<input type="hidden" name="action_type" value="{action_type}" />
+				<input type="hidden" name="login" value="1" />
+				<span class="form-title">{glocale.lang('quicklogin')}:</span>
+				<span class="form-break"></span>
+				<input required="required" type="text" name="user_login" placeholder="Benutzername"  />
+				<span class="form-break"></span>
+				<input required="required" type="password" name="pw_login" placeholder="Passwort" />
+				<span class="form-break"></span>
+				<button type="submit"><i class="fa fa-sign-in"></i> {glocale.lang('login')}</button><span class="form-break"></span><br />
+				{if forgotpw_link != ''}
+				<span class="form-break"></span><a href="{forgotpw_link}" style="font-style: italic;">{glocale.lang('forgetpw')}?</a>
+				{endif}
+				{if resendact_link != ''}
+				<span class="form-bullets">&bull;&bull;&bull; </span><span class="form-break"></span><a href="{resendact_link}" style="font-style: italic;">{glocale.lang('resend_activation_link')}?</a>
+				{endif}
+			</fieldset>
+		</form>
+		{endif}</div></li>
+		{if gisloggedin == false}
+		<li><div>
+		<form method="post" action="{target_url_reg}" style="display: inline"  id="register-form">
+			<fieldset>
+				 <span class="form-bullets">&bull;&bull;&bull; </span><button type="submit"><i class="fa fa-pencil-square-o"></i> {glocale.lang('register')}</button><br />
+				<span style="font-style: italic;">&nbsp;</span>
+			</fieldset>
+		</form>
+		</div></li>
+	{endif}
+  </ul>
 
-<div class="bs_border bs_padbottom">
-	<div class="bs_main">
-		<b>{glocale.lang('position')}:</b> {location}
-	</div>
 </div>

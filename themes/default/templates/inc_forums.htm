@@ -51,9 +51,13 @@
 							-
 						{else}
 							<div>
+								<div style="border: 1px solid #c7c7c7; background: #fff; padding: 2px; width: 30px; float: left; margin-right: 5px;">
+									<img alt="{forum:lastpost:username_plain}" src="{forum:lastpost:avatar}" style="width: 30px; height: 30px; vertical-align: middle; text-align: center;" />
+								</div>
 								<div><a title="{forum:lastpost:topic_complete}" href="{forum:lastpost:topic_url}">{forum:lastpost:topic}</a></div>
 								<div class="last_post_icon"><a title="{glocale.lang('gotolastpost')}" href="{forum:lastpost:lastpost_url}"></a></div>
-								{glocale.lang('From')}: {forum:lastpost:username}, <a title="{forum:lastpost:topic_complete}" href="{forum:lastpost:topic_url}">{forum:lastpost:date}</a>
+								{glocale.lang('From')}: {forum:lastpost:username}, {forum:lastpost:date}
+								<br style="clear:left" />
 							</div>
 						{endif}		
 				</div>

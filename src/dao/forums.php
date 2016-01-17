@@ -92,12 +92,14 @@ class BS_DAO_Forums extends FWS_Singleton
 			'SELECT f.*,b.post_user lastpost_userid,b.post_time lastpost_time,
 							b.post_an_user lastpost_an_user,b.threadid lastpost_topicid,
 							u.`'.BS_EXPORT_USER_NAME.'` lastpost_username,t.posts lastpost_topicposts,
-							t.name lastpost_topicname,p.user_group lastpost_usergroups
+							t.name lastpost_topicname,p.user_group lastpost_usergroups,
+							a.av_pfad lastpost_avatar
 			 FROM '.BS_TB_FORUMS.' f
 			 LEFT JOIN '.BS_TB_POSTS.' b ON f.lastpost_id = b.id
 			 LEFT JOIN '.BS_TB_USER.' u ON b.post_user = u.`'.BS_EXPORT_USER_ID.'`
 			 LEFT JOIN '.BS_TB_PROFILES.' p ON b.post_user = p.id
 			 LEFT JOIN '.BS_TB_THREADS.' t ON b.threadid = t.id
+			 LEFT JOIN '.BS_TB_AVATARS.' a ON p.avatar = a.id
 			 ORDER BY f.parent_id ASC,f.sortierung ASC'
 		);
 	}

@@ -3,7 +3,7 @@
 	<li>
 		<div class="bs_topics">
 			<div class="bs_topics_parent">
-				<a href="{forum:forum_url}">{thread_title}</a>
+				{thread_title}
 			</div>
 			<div>
 				{if num == 0}
@@ -18,12 +18,16 @@
 							{if show_thread_action}
 							<input id="id_{index}" type="checkbox" name="selected_topics[]" value="{topic:topic_id}" />
 							{endif}
-							{if topic:is_unread}*{endif}
-							{if topic:is_important}
-							<i class="fa fa-sticky-note-o fa-2x" title="{glocale.lang('important')}"></i>
-							{endif}
+
+							<div style="border: 1px solid #c7c7c7; background: #fff; padding: 2px; width: 30px;">
+								<img alt="{topic:creator:username_plain}" src="{topic:creator:avatar}" style="width: 30px; height: 30px; vertical-align: middle; text-align: center;" />
+							</div>
 						</div>
+						{if topic:show_forum}
 						<div class="bs_topics_child_maindata">
+						{else}
+						<div class="bs_topics_child_latest_topics bs_topics_child_maindata">
+						{endif}
 							<a href="{topic:topic_url}">
 								{if topic:is_moved}
 								<i>{if topic:name_complete != ''}{topic:name_complete}{else}{topic:name}{endif}</i>
@@ -41,6 +45,7 @@
 							<div>{glocale.lang('thread')} {glocale.lang('from')}: {topic:creator:username}, {topic:creator:date}</div>
 
 						</div>
+						{if topic:show_forum}
 						<div class="bs_topics_child_tpcount bs_topics_child_hvmiddle">
 							<dl>
 								<dt>{forum:thread_count}</dt>
@@ -49,14 +54,19 @@
 								<dd>{glocale.lang('posts')}</dd>
 							</dl>
 						</div>
+						{endif}
 						<div class="bs_topics_child_lpost bs_topics_child_hmiddle">
 							{if topic:lastpost == false}
 							-
 							{else}
 							<div>
-								<div><a title="{forum:lastpost:topic_complete}" href="{forum:lastpost:topic_url}">{forum:lastpost:topic}</a></div>
+								<div style="border: 1px solid #c7c7c7; background: #fff; padding: 2px; width: 30px; float: left; margin-right: 5px;">
+									<img alt="{topic:lastpost:username_plain}" src="{topic:lastpost:avatar}" style="width: 30px; height: 30px; vertical-align: middle; text-align: center;" />
+								</div>
+								<div><a title="{glocale.lang('gotolastpost')}" href="{topic:lastpost:url}">{topic:lastpost:preview}</a></div>
 								<div class="last_post_icon"><a title="{glocale.lang('gotolastpost')}" href="{topic:lastpost:url}"></a></div>
-								{glocale.lang('from')}: {topic:lastpost:username}, {topic:lastpost:date}
+								{glocale.lang('From')}: {topic:lastpost:username}, {topic:lastpost:date}
+								<br style="clear:left" />
 							</div>
 						{endif}		
 						</div>

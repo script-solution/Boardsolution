@@ -211,6 +211,14 @@ final class BS_Forums_NodeData extends FWS_Tree_NodeData
 		return isset($this->_data['lastpost_username']) ? $this->_data['lastpost_username'] : '';
 	}
 	
+	/**
+	 * @return string the filename of the avatar of the last post in this forum
+	 */
+	public function get_lastpost_avatar()
+	{
+		return isset($this->_data['lastpost_avatar']) ? $this->_data['lastpost_avatar'] : '';
+	}
+	
 	protected function get_dump_vars()
 	{
 		return array_merge(parent::get_dump_vars(),get_object_vars($this));

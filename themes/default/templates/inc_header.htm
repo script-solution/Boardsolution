@@ -4,6 +4,7 @@
 <title>{title}</title>
 <meta name="robots" content="{robots_value}" />
 <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 {if redirect}
 <meta http-equiv="refresh" content="{redirect:time}; url={redirect:url}" />
 {endif}
@@ -21,8 +22,8 @@
 <link rel="stylesheet" type="{file:type}" href="{file:src}" />
 {endloop}
 <link rel="stylesheet" href="{guser.get_theme_item_path('fas/css/font-awesome.css')}">
-<link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('advanced.css')}" />
 <link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('basic.css')}" />
+<link rel="stylesheet" type="text/css" href="{guser.get_theme_item_path('advanced.css')}" />
 {if feeds_enabled}
 <link rel="alternate" type="application/rss+xml" title="RSS 2.0 Newsfeed" href="{rss20_feed}" />
 <link rel="alternate" type="application/atom+xml" title="Atom Newsfeed" href="{atom_feed}" />
@@ -74,14 +75,60 @@ function setCookie(name,value,lifetime)
 {endloop}
 </head>
 <body>
-{if gisloggedin}
 {if show_headline}
+{include "inc_headline.htm"}
+{if gisloggedin}
 {include "inc_sidebar.htm"}
 {endif}
 {endif}
+
+<div id="bs_banner">
+	<div id="bs_search_banner">
+		<form method="post" action="{target_url}" id="banner-search-form">
+			<fieldset>
+				<input type="text" placeholder="Suche...">
+				<button type="submit"><i class="fa fa-search"></i></button>
+			</fieldset>
+		</form>
+	</div>
+	<br><br><br>Hier könnte Ihr Banner sein ;-)
+</div>
+
+<div class="breads">
+	<div class="breads_pad">
+	<div class="breads_first">
+	{loop breadcrumbs as bc}
+		{if breadcrumbs.current == 0}
+		<a href="{bc:1}" title="{bc:0}"><i class="fa fa-home"></i></a>{if breadcrumbs.current == breadcrumbs.length-1}</div>{endif}
+		{else}
+			{if breadcrumbs.current < breadcrumbs.length-1}
+			<i class="fa fa-angle-right"></i> <a href="{bc:1}">{bc:0}</a>
+			{else}
+			<i class="fa fa-angle-right"></i></div> <div class="breads_last">{bc:0}</div>
+			{endif}
+		{endif}
+	{endloop}
+	</div>
+</div>
+
 <div id="bs_container">
 <a id="bs_top"></a>
-{if show_headline}
-{include "inc_headline.htm"}
-{endif}
+
+<!--  
+<div class="breadcrumb">
+{loop breadcrumbs as bc}
+	{if breadcrumbs.current == 0}
+	<a href="{bc:1}">{bc:0}</a>
+	{else}
+	{if breadcrumbs.current < breadcrumbs.length-1}
+	<a href="{bc:1}">{bc:0}</a>
+	{else}
+	<span>{bc:0}</span>
+	{endif}
+	{endif}
+{endloop}
+</div>
+<br />
+-->
+
 {include "inc_messages.htm"}
