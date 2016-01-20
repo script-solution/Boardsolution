@@ -83,15 +83,17 @@ function setCookie(name,value,lifetime)
 {endif}
 
 <div id="bs_banner">
-	<div id="bs_search_banner">
-		<form method="post" action="{target_url}" id="banner-search-form">
+	<div id="bs_banner_search">
+		<form method="post" action="{quick_search_target}" id="banner-search-form">
 			<fieldset>
-				<input type="text" placeholder="Suche...">
-				<button type="submit"><i class="fa fa-search"></i></button>
+				<input type="hidden" name="fid[]" value="{fid}" />
+				<input type="hidden" name="submit" value="1" />
+				<input type="text" name="keyword" placeholder="Suche...">
+				<button type="submit" title="{glocale.lang('go')}"><i class="fa fa-search"></i></button>
 			</fieldset>
 		</form>
 	</div>
-	<br><br><br>Hier könnte Ihr Banner sein ;-)
+	<br><br>Hier könnte Ihr Banner sein ;-)
 </div>
 
 <div class="breads">

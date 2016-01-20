@@ -75,14 +75,13 @@ table
 	color: #fff
 }
 
-#bs_search_banner
+#bs_banner_search
 {
-	position: relative;
 	text-align: right;
-	margin-right: 10px
+	padding-right: 10px;
 }
 
-#bs_search_banner input
+#bs_banner_search input
 {
 	padding: 10px;
 	font-size: 0.25em;
@@ -90,14 +89,37 @@ table
 	margin: 0px;
 	border: 0px solid #000;
 	opacity: 0.7;
+	position: relative;
+	left: 18px;
 }
 
-#bs_search_banner input:hover, #bs_search_banner input:focus
+#bs_banner_search input:hover, #bs_banner_search input:focus
 {
 	opacity: 1;
 }
 
-#bs_search_banner .fa-search
+#bs_banner_search button
+{
+	padding: 0px;
+	margin: 0px;
+	text-align: left;
+	font-size: 0.8em;
+	background: none;
+	cursor: pointer;
+	line-height: 1em;
+	vertical-align: middle;
+	border: none;
+	color: #fff;
+	opacity: 0.7;
+}
+
+#bs_banner_search button:hover
+{
+	opacity: 1.0;
+}
+
+
+#bs_banner_search .fa-search
 {
 	padding-left: 5px;
 	font-size: 0.5em;
@@ -207,7 +229,7 @@ table
 #login-form fieldset {
 }
 
-#login-form input, button {
+#login-form input, #login-form button {
 	font-size: 0.9em;
 }
 

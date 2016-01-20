@@ -1,12 +1,12 @@
+@CHARSET "UTF-8";
 @media screen and (max-width: 1010px)
 { 
-    ul#topnav li 
+    ul#topnav li
     {
     	display: block;
     	border: 1px solid #c7c7c7;
     	padding: 10px 0px 10px 0px;
     }
-    
 	#topnav li:nth-of-type(1) > div
 	{
 		text-align: center;

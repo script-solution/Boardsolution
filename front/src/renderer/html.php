@@ -364,7 +364,9 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 			'show_headline' => $this->_show_headline,
 			'feeds_enabled' => $cfg['enable_news_feeds'],
 			'location' => $breadcrumbs,
-			'breadcrumbs' => $this->get_breadcrumbs()
+			'breadcrumbs' => $this->get_breadcrumbs(),
+			'quick_search_target' => BS_URL::build_mod_url('search'),
+			'fid' => $input->get_var(BS_URL_FID,'get',FWS_Input::ID)
 		));
 		$tpl->restore_template();
 
@@ -474,7 +476,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				);
 			}
 		
-			$tpl->set_template('inc_sidebar.htm');;
+			$tpl->set_template('inc_sidebar.htm');
 			$tpl->add_variable_ref('top_links',$top_links);
 			if($user->is_loggedin())
 			{
