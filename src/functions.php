@@ -806,7 +806,7 @@ final class BS_Functions extends FWS_Object
 	 */
 	public function connect_to_db($host, $login, $password, $database)
 	{
-		$c = new FWS_DB_MySQL_Connection();
+		$c = new FWS_DB_MySQLi_Connection();
 
 		if($c->is_connected())
 			return $c;
