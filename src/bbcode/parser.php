@@ -250,11 +250,21 @@ final class BS_BBCode_Parser extends FWS_Object
 		$this->_text = str_replace('<BSP>',$this->_board_path,$this->_text);
 		$this->_text = str_replace('<BSF>',
 			$this->_board_path.$functions->get_board_file(true),$this->_text);
-		$this->_text = preg_replace(
-			'/<LANG=([^}]+?)>/e','FWS_Props::get()->locale()->lang("\\1")',$this->_text
+		$this->_text = preg_replace_callback(
+			'/<LANG=([^}]+?)>/',
+			function($m)
+			{
+				return FWS_Props::get()->locale()->lang($m[1]);
+			},
+			$this->_text
 		);
-		$this->_text = preg_replace(
-			'/<THEMEITEM=([^}]+?)>/e','FWS_Props::get()->user()->get_theme_item_path("\\1")',$this->_text
+		$this->_text = preg_replace_callback(
+			'/<THEMEITEM=([^}]+?)>/',
+			function($m)
+			{
+				return FWS_Props::get()->user()->get_theme_item_path($m[1]);
+			},
+			$this->_text
 		);
 
 		// replace paths
@@ -277,11 +287,14 @@ final class BS_BBCode_Parser extends FWS_Object
 		// convert plain-text urls and emails to links?
 		if($cfg['msgs_parse_urls'] == 1)
 		{
-			$search[] = '/(\A|\s)((http(s?)|ftp):\/\/|www\.)([^\s,<"]+)/ise';
+			$search[] = '/(\A|\s)((http(s?)|ftp):\/\/|www\.)([^\s,<"]+)/is';
 			$search[] = '/(\A|\s)\b([a-z0-9._%+-]+)@((?:[a-z0-9-]+\.)+)([a-z]{2,}+)\b/i';
 
-			$replace[] = '"\\1<a target=\"_blank\" href=\""'
-				.'.BS_BBCode_Helper::get_instance()->parse_url(\'\\2\\5\').\'">\\2\\5</a>\'';
+			$replace[] = function($m)
+			{
+				return $m[1].'<a target="_blank" href="'
+					.BS_BBCode_Helper::get_instance()->parse_url($m[2].$m[5]).'">'.$m[2].$m[5].'</a>';
+			};
 			$replace[] = '\\1<a href="mailto:\\2@\\3\\4">\\2@\\3\\4</a>';
 		}
 
@@ -294,15 +307,22 @@ final class BS_BBCode_Parser extends FWS_Object
 			{
 				if(trim($smileys[$i]['code']) != '')
 				{
-					$search[] = "/".preg_quote($smileys[$i]['code'],'/').'($|\s|<)/ei';
-					$replace[] = '$this->_get_smiley_code("'.$smileys[$i]['code'].'","'
-						.$smileys[$i]['path'].'")."\\1"';
+					$search[] = "/".preg_quote($smileys[$i]['code'],'/').'($|\s|<)/i';
+					$replace[] = function($m) use($smileys,$i)
+					{
+						return $this->_get_smiley_code($smileys[$i]['code'],$smileys[$i]['path']).$m[1];
+					};
 				}
 			}
 		}
 		
-		if(count($search) > 0)
-			$this->_text = preg_replace($search,$replace,$this->_text);
+		for($i = 0; $i < count($search); $i++)
+		{
+			if(is_callable($replace[$i]))
+				$this->_text = preg_replace_callback($search[$i],$replace[$i],$this->_text);
+			else
+				$this->_text = preg_replace($search[$i],$replace[$i],$this->_text);
+		}
 
 		// wordwrap...
 		$this->_text = BS_BBCode_WordWrap::word_wrap_special(

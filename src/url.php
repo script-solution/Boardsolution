@@ -32,6 +32,27 @@
 final class BS_URL extends FWS_URL
 {
 	/**
+	 * Replaces $ABC with the value of BS_ABC.
+	 *
+	 * @param string $str the input value
+	 * @return string the result
+	 */
+	private static function replace_constants($str)
+	{
+		if($str != '')
+		{
+			$str = preg_replace_callback(
+				'/\$([a-z0-9_]+)/i',
+				function($match) {
+					return constant('BS_'.$match[1]);
+				},
+				$str
+			);
+		}
+		return $str;
+	}
+	
+	/**
 	 * This method is intended for using it in templates.
 	 * You can use the following shortcut for the constants (in <var>$additional</var>):
 	 * <code>$<name></code>
@@ -46,10 +67,8 @@ final class BS_URL extends FWS_URL
 	 */
 	public static function simple_acp_url($module = 0,$additional = '',$separator = '&amp;')
 	{
-		if($additional != '')
-			$additional = preg_replace('/\$([a-z0-9_]+)/ie','BS_\\1',$additional);
 		$url = self::get_acpmod_url($module,$separator);
-		self::_set_additional_params($url,$separator,$additional);
+		self::_set_additional_params($url,$separator,self::replace_constants($additional));
 		return $url->to_url();
 	}
 	
@@ -70,10 +89,8 @@ final class BS_URL extends FWS_URL
 	public static function simple_url($module = 0,$additional = '',$separator = '&amp;',
 		$force_sid = false)
 	{
-		if($additional != '')
-			$additional = preg_replace('/\$([a-z0-9_]+)/ie','BS_\\1',$additional);
 		$url = self::get_mod_url($module,$separator,$force_sid);
-		self::_set_additional_params($url,$separator,$additional);
+		self::_set_additional_params($url,$separator,self::replace_constants($additional));
 		return $url->to_url();
 	}
 	

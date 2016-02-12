@@ -94,9 +94,15 @@ final class BS_Locale extends FWS_Object implements FWS_Locale
 			foreach($matches[1] as $k => $name)
 			{
 				if(strrchr($name,'}') !== false)
-					$name = preg_replace('/{(BS_[A-Z0-9_:]+?)}/ie','\\1',$name);
+				{
+					$name = preg_replace_callback(
+						'/{(BS_[A-Z0-9_:]+?)}/i',function($m) { return constant($m[1]); },$name);
+				}
 				if(strrchr($matches[2][$k],'}') !== false)
-					$matches[2][$k] = preg_replace('/{(BS_[A-Z0-9_:]+?)}/ie','\\1',$matches[2][$k]);
+				{
+					$matches[2][$k] = preg_replace_callback(
+						'/{(BS_[A-Z0-9_:]+?)}/i',function($m) { return constant($m[1]); },$matches[2][$k]);
+				}
 				$lang[$name] = str_replace('\\"','"',$matches[2][$k]);
 			}
 		}
