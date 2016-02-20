@@ -448,9 +448,10 @@ class BS_DAO_Topics extends FWS_Singleton
 		$db = FWS_Props::get()->db();
 	
 		return $db->get_row(
-				'SELECT name, symbol, comallow, important
-			 FROM '.BS_TB_THREADS.'
-			 WHERE id = '.$id);
+			 'SELECT name, symbol, comallow, important
+			  FROM '.BS_TB_THREADS.'
+			  WHERE id = '.$id
+		);
 	}
 	
 	/**
