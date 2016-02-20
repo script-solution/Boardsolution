@@ -38,7 +38,6 @@ final class BS_Front_Action_userprofile_updateconfig extends BS_Front_Action_Bas
 		$cfg = FWS_Props::get()->cfg();
 		$cache = FWS_Props::get()->cache();
 		$locale = FWS_Props::get()->locale();
-		$info['reload'] = false;
 
 		// nothing to do?
 		if(!$input->isset_var('submit','post'))
@@ -98,10 +97,6 @@ final class BS_Front_Action_userprofile_updateconfig extends BS_Front_Action_Bas
 			else
 				$lang = $cfg['default_forum_lang'];
 
-			// reload to change the language
-			if($user->get_profile_val('forum_lang') != $lang)
-				$info['reload'] = true;
-
 			$fields['forum_lang'] = $lang;
 			$user->set_profile_val('forum_lang',$lang);
 		}
@@ -115,20 +110,12 @@ final class BS_Front_Action_userprofile_updateconfig extends BS_Front_Action_Bas
 			else
 				$style = $cfg['default_forum_style'];
 
-			// reload to change the style
-			if($user->get_profile_val('forum_style') != $style)
-				$info['reload'] = true;
-
 			$fields['forum_style'] = $style;
 			$user->set_profile_val('forum_style',$style);
 		}
 		
 		if(@timezone_open($timezone) === false)
 			return 'Invalid timezone "'.$timezone.'"';
-
-		// we have to reload the page if the timezone or daylightsaving has changed
-		if($timezone != $user->get_profile_val('timezone'))
-			$info['reload'] = true;
 
 		if($cfg['allow_ghost_mode'] == 1)
 			$fields['ghost_mode'] = $ghost_mode;
