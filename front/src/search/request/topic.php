@@ -50,11 +50,9 @@ final class BS_Front_Search_Request_Topic extends BS_Front_Search_Request_TPBasi
 	 * 
 	 * @param int $tid the topic-id
 	 */
-	public function __construct($tid = 0)
+	public function __construct($tid)
 	{
 		$this->_tid = $tid;
-		if(!$this->_tid)
-			$this->_tid = $input->get_var(BS_URL_TID,'get',FWS_Input::ID);
 	}
 	
 	public function get_initial_result_type()
