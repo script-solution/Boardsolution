@@ -120,7 +120,7 @@ final class BS_Install_Module_3_Helper extends FWS_UtilBase
 		$url = FWS_FileUtils::ensure_no_trailing_slash($board_url);		
 		$user->set_session_data('board_url', $url);
 		
-		return preg_match('/^(http|https):\/\//i', $url);
+		return preg_match('/^(http|https):\/\//i',$url) === 1;
 	}
 	
 	/**

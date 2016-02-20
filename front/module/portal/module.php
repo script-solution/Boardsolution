@@ -462,7 +462,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		$cfg = FWS_Props::get()->cfg();
 
 		if($cfg['news_count'] == 0)
-			return 0;
+			return false;
 		
 		$fids = FWS_Array_Utils::advanced_explode(',',$cfg['news_forums']);
 		if(!FWS_Array_Utils::is_integer($fids) || count($fids) == 0)
