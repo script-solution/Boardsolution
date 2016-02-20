@@ -441,7 +441,7 @@ class BS_DAO_Topics extends FWS_Singleton
 	 * Returns the original data of a shadow-topic
 	 *
 	 * @param int $id the original-topic-id
-	 * @return array with the field name, symbol, comallow and important
+	 * @return array|bool with the field name, symbol, comallow and important
 	 */
 	public function get_original_data_of_shadow_topic($id)
 	{
@@ -540,10 +540,10 @@ class BS_DAO_Topics extends FWS_Singleton
 	 * the given topic.
 	 *
 	 * @param int $tid the topic-id
-	 * @param array $needed the name, symbol and settings of the topic
 	 * @param array $lastpost the data of the last-post with the fields 'id','post_time','post_user',
 	 * 	and 'post_an_user'
 	 * @param int $replies the number of replies to set
+	 * @param array $main the topic data
 	 * @return int the number of affected rows
 	 */
 	public function update_properties($tid,$lastpost,$replies,$main)

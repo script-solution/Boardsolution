@@ -457,7 +457,7 @@ class BS_DAO_Subscr extends FWS_Singleton
 	/**
 	 * Deletes the entries of given user and topic ids
 	 *
-	 * @param string $field the field-name
+	 * @param int $uid the user id
 	 * @param array $ids all ids to delete
 	 * @return int the number of affected rows
 	 */

@@ -259,7 +259,7 @@ final class BS_Front_Search_Utils extends FWS_UtilBase
 	/**
 	 * Get the needed value of the keyword mode
 	 * 
-	 * @return sring the keyword mode 'AND' or 'OR'
+	 * @return string the keyword mode 'AND' or 'OR'
 	 */
 	public static function get_keyword_mode()
 	{
