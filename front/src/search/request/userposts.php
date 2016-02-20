@@ -31,6 +31,13 @@
  */
 final class BS_Front_Search_Request_UserPosts extends BS_Front_Search_Request_TPBasic
 {
+	/**
+	 * The name of the user
+	 *
+	 * @var string
+	 */
+	private $_username;
+	
 	public function get_initial_result_type()
 	{
 		return 'posts';
