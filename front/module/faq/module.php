@@ -164,7 +164,7 @@ final class BS_Front_Module_faq extends BS_Front_Module
 						$rurl->set(BS_URL_LOC,'show_topic')->set(BS_URL_TID,1)->to_url(),
 						$durl->set('path','uploads/file.txt')->to_url(),
 						$durl->set('path','uploads/image.jpg')->to_url(),
-						highlight_string("<?php\necho \"test\";\n?>",1)
+						highlight_string("<?php\necho \"test\";\n?>",true)
 					);
 					break;
 				
