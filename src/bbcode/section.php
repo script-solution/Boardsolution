@@ -133,6 +133,7 @@ final class BS_BBCode_Section extends FWS_Object
 	 * Builds the content (recursively)
 	 *
 	 * @return string the html-code or null if something went wrong
+	 * @throws BS_BBCode_Exception_InvalidParam if a parameter is invalid
 	 */
 	public function get_content()
 	{

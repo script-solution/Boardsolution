@@ -245,6 +245,7 @@ final class BS_Front_SubModule_stats_default extends BS_Front_SubModule
 	 * @param string $username the name of the user
 	 * @param string $user_groups the usergroups of the user
 	 * @param string $text the text-value
+	 * @return array an array with the data
 	 */
 	private function _get_stats_data($row,$percent,$user_id,$username,$user_groups,$text)
 	{
