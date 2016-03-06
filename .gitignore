@@ -4,9 +4,11 @@
 /config/mysql.php
 /images/avatars/*
 !/images/avatars/_blank.jpg
+!/images/avatars/no_avatar.gif
 /uploads/*
 !/uploads/.htaccess
 /dba/backups/*
 !/dba/backups/index.htm
 /dba/access.php
 /themes/Copy of default/*
+/.settings/
