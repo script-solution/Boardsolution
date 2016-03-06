@@ -651,6 +651,7 @@ final class BS_ForumUtils extends FWS_UtilBase
 		return array(
 			'date' => FWS_Date::get_date($data['post_time']),
 			'username' => $user_name,
+			'username_plain' => $data['post_an_user'],
 			'lastpost_url' => $lastpost_url.'#b_'.$data['lastpost_id'],
 			'topic_complete' => $tnamec,
 			'topic' => $tnamed,
