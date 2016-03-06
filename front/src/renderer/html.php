@@ -685,7 +685,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				'insert_time' => $debug,
 				'bs_version' => BS_VERSION,
 				'options' => $options,
-				'register_url' => $com->get_register_url()
+				'register_url' => $com->get_register_url(),
+				'current_year' => FWS_Date::get_formated_date('Y')
 			));
 		
 			$tpl->add_variable_ref('forums',$nodes);
