@@ -613,7 +613,14 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				'unread_pm_count' => $user->is_loggedin() ? $user->get_profile_val('unread_pms') : 0,
 			),'inc_headline.htm');
 		}
-
+		
+		$queries = BS_DEBUG == 2 ? FWS_Printer::to_string($db->get_queries(), true, true, false, true) : '';
+		
+		if($queries != '')
+		{
+			$queries = explode("<br />", $queries);	
+		}
+		
 		if($this->_show_bottom)
 		{
 			$options = array();
@@ -686,7 +693,8 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				'bs_version' => BS_VERSION,
 				'options' => $options,
 				'register_url' => $com->get_register_url(),
-				'current_year' => FWS_Date::get_formated_date('Y')
+				'current_year' => FWS_Date::get_formated_date('Y'),
+				'queries' => $queries
 			));
 		
 			$tpl->add_variable_ref('forums',$nodes);
@@ -696,7 +704,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 		// show footer
 		$tpl->set_template('inc_footer.htm');
 		$tpl->add_variables(array(
-			'queries' => BS_DEBUG == 2 ? FWS_Printer::to_string($db->get_queries()) : '',
+			'queries' => $queries,
 			'show_bottom' => $this->_show_bottom
 		));
 		$tpl->restore_template();

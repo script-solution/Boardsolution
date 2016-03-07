@@ -2,5 +2,19 @@
 {if show_bottom}
 {include "inc_bottom.htm"}
 {endif}
+{if queries}
+<div id="console">
+<div>
+SQL-Konsole:
+</div>
+<div>
+<pre>
+{loop queries as q}
+<code>{q}</code>
+{endloop}
+</pre>
+</div>
+</div>
+{endif}
 </body>
 </html>
