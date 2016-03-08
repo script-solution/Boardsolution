@@ -1,6 +1,11 @@
 @CHARSET "UTF-8";
 @media screen and (max-width: 1010px)
 { 
+	#bs_headline
+	{
+		margin-top: 210px;
+	}
+    
     ul#topnav li
     {
     	display: block;
@@ -76,5 +81,28 @@
 	{
 		color: #fff;
 		font-size: 1.0em;
+	}
+
+	#bs_banner
+	{
+		width: 100%;
+		padding: 0px;
+		position: absolute;
+		top: 0px;
+		margin: 0px;
+	}
+	
+	#bs_banner_search input
+	{
+		font-size: 0.35em;
+		top: 5px;
+		left: 10px;
+	}
+	
+	#bs_banner_search button
+	{
+		font-size: 1.0em;
+		position: relative;
+		top: 3px;
 	}
 }

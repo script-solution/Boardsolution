@@ -75,6 +75,14 @@ table
 	color: #fff
 }
 
+#bs_banner_text
+{
+	font-size: 1em;
+	line-height: 1em;
+	position: relative;
+	top: 30px
+}
+
 #bs_banner_search
 {
 	text-align: right;
