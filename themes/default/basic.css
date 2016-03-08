@@ -50,14 +50,11 @@ table
 
 #bs_container 
 {
-	width: 990px;
-	margin: 10px auto;
-	background-color: #fff;
-	padding: 5px;
-	border-radius: 8px;
-	-webkit-box-shadow:	0px 0px 12px 0px rgba(15, 15, 15, 0.5);
-	-moz-box-shadow: 0px 0px 12px 0px rgba(15, 15, 15, 0.5);
-	box-shadow:	0px 0px 12px 0px rgba(15, 15, 15, 0.5);
+	width: 1000px;
+	margin: 0px auto;
+	background-color: rgba(255,255,255,0.0);
+	padding: 0px;
+	border-radius: 0px;
 }
 
 #bs_banner
@@ -307,9 +304,7 @@ table
 
 .bs_forums
 {
-	margin: 0px auto;
 	border: 1px solid #c7c7c7;
-	padding: 0px;
 	margin: 6px;
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
@@ -585,15 +580,22 @@ div.bs_forums_child_status
 	cursor: pointer;
 }
 
-
-
+.bs_sub_container
+{
+	background-color: #fff;
+	-webkit-box-shadow:	0px 0px 12px 0px rgba(15, 15, 15, 0.5);
+	-moz-box-shadow: 0px 0px 12px 0px rgba(15, 15, 15, 0.5);
+	box-shadow:	0px 0px 12px 0px rgba(15, 15, 15, 0.5);
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	padding: 6px;
+	margin-bottom: 10px;
+}
 
 .bs_topics
 {
-	margin: 0px auto;
-	border: 1px solid #c7c7c7;
-	padding: 0px;
 	margin: 6px;
+	border: 1px solid #c7c7c7;
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 }
