@@ -1178,6 +1178,28 @@ div.bs_topics_child_status
 	text-decoration: none;
 }
 
+footer #footer-stats
+{
+	font-size: 0.75em;
+	text-shadow: 0 -1px 1px #1a1a1a, 0 1px 1px #4d4d4d;
+	font-style: normal;
+	position: relative;
+	bottom: -50px;
+}
+
+#footer-with-console {
+	margin-bottom: 270px;
+}
+
+#footer-with-console #footer-stats
+{
+	color: #eee;
+	font-size: 1.1em;
+	font-style: normal;
+	position: relative;
+	bottom: -45px;
+}
+
 #footer-with-console {
 	margin-bottom: 270px;
 }

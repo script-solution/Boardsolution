@@ -11,6 +11,9 @@
 		<div>
 			&copy; 2003 - {current_year} <a target="_blank" href="http://www.script-solution.de">script-solution.de</a>
 		</div>
+		{if debug_level > 0}
+		<div id="footer-stats">Diese Seite wurden in {used_time} Sek. mit {used_queries} DB-Zugriffen und einem Speicherverbrauch von {used_mem} generiert.</div>
+		{endif}
 	</div>
 	<div id="footer-back"></div>
 </footer>

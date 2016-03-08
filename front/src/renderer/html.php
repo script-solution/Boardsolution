@@ -676,20 +676,25 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				);
 			}
 			
-			$debug = '&nbsp;';
+			$used_time = '';
+			$used_queries = '';
+			$used_mem = '';
 			if(BS_DEBUG > 0)
 			{
 				$doc = FWS_Props::get()->doc();
 				$profiler = $doc->get_profiler();
-				$qry_num = $db->get_query_count();
-				$debug = $profiler->get_time().' '.$locale->lang('sec').', '
-					.$qry_num.' '.$locale->lang('qrys').', '
-					.FWS_StringHelper::get_formated_data_size($profiler->get_memory_usage());
+
+				$used_time = $profiler->get_time();
+				$used_queries = $db->get_query_count();
+				$used_mem = FWS_StringHelper::get_formated_data_size($profiler->get_memory_usage());
 			}
 			
 			$tpl->set_template('inc_bottom.htm');
 			$tpl->add_variables(array(
-				'insert_time' => $debug,
+				'debug_level' => BS_DEBUG,
+				'used_time' => $used_time,
+				'used_queries' => $used_queries,
+				'used_mem' => $used_mem,
 				'bs_version' => BS_VERSION,
 				'options' => $options,
 				'register_url' => $com->get_register_url(),
