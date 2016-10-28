@@ -147,7 +147,7 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 			}
 		
 			// create the destination image
-			$dest = new FWS_GD_Image((int)$width,(int)$height,FWS_PHPConfig::is_gd2_installed());
+			$dest = new FWS_GD_Image((int)$width,(int)$height,FWS_PHPConfig::is_gd2_installed(),$src_size[2]);
 			
 			// load the source-image
 			switch($src_size[2])
