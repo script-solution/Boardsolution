@@ -909,6 +909,8 @@ div.bs_topics_child_status
 {
 	color: #333;
 	text-decoration: none;
+	font-weight: bold;
+	font-size: 0.85em;
 }
 #bs_sidebar_lpost > div  a
 {
@@ -919,7 +921,7 @@ div.bs_topics_child_status
 	color: #333;
 	font-style: italic;
 	text-decoration: none;
-	font-size: 0.8em;
+	font-size: 0.7em;
 }
 #bs_sidebar_lpost a:hover
 {
