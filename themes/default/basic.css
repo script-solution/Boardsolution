@@ -594,7 +594,6 @@ div.bs_forums_child_status
 
 .bs_options_container
 {
-	padding: 6px;
 	margin-bottom: 10px;
 	text-align: right;
 }
@@ -608,7 +607,7 @@ div.bs_forums_child_status
 	border-radius: 8px;
 	padding: 10px;
 	margin-left: 15px;
-	color: #333;
+	color: #5d5d5d;
 	font-style: normal;
 	text-decoration: none;
 	display: inline;
@@ -617,9 +616,10 @@ div.bs_forums_child_status
 
 .bs_options_container > div > a
 {
-	color: #333;
+	color: #5d5d5d;
 	font-style: normal;
 	text-decoration: none;
+	padding-left: 6px;
 }
 .bs_options_container > div:hover
 {
