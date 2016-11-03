@@ -592,6 +592,58 @@ div.bs_forums_child_status
 	margin-bottom: 10px;
 }
 
+.bs_options_container
+{
+	padding: 6px;
+	margin-bottom: 10px;
+	text-align: right;
+}
+
+.bs_options_container > div
+{
+	background-color: #fff;
+	-webkit-box-shadow:	0px 0px 12px 0px rgba(15, 15, 15, 0.5);
+	-moz-box-shadow: 0px 0px 12px 0px rgba(15, 15, 15, 0.5);
+	box-shadow:	0px 0px 12px 0px rgba(15, 15, 15, 0.5);
+	border-radius: 8px;
+	padding: 10px;
+	
+	color: #333;
+	font-style: normal;
+	text-decoration: none;
+	display: inline;
+	line-height:3.5em;
+}
+
+.bs_options_container > div > a
+{
+	color: #333;
+	font-style: normal;
+	text-decoration: none;
+}
+.bs_options_container > div:hover
+{
+	color: #fff;
+	background-color: #4285bb;
+	text-shadow: 1px 1px 4px rgba(10, 5, 80, 0.85);
+	-webkit-box-shadow:	0px 0px 12px 0px rgba(15, 15, 15, 0.4);
+	-moz-box-shadow: 0px 0px 12px 0px rgba(15, 15, 15, 0.4);
+	box-shadow:	0px 0px 12px 0px rgba(15, 15, 15, 0.4);
+}
+
+.bs_options_container > div:hover > a
+{
+	color: #fff;
+	background-color: #4285bb;
+	text-shadow: 1px 1px 4px rgba(10, 5, 80, 0.85);
+}
+
+.bs_options_container > div > a:hover
+{
+	color: #fff;
+	text-shadow: 1px 1px 4px rgba(10, 5, 80, 0.85);
+}
+
 .bs_topics
 {
 	margin: 6px;

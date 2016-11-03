@@ -13,10 +13,9 @@
 {include "inc_forums.htm"}
 </div>
 
-<div class="bs_sub_container">
-	<a href="{gurl.simple_url(0,'&amp;$URL_AT=$ACTION_CHANGE_READ_STATUS&amp;$URL_LOC=read&amp;$URL_MODE=all','&amp;',true)}">{glocale.lang('markallasread')}</a>
-	<br />
-	<a href="{gurl.simple_url('team')}">{glocale.lang('the_team')}</a>
+<div class="bs_options_container">
+	<div><a href="{gurl.simple_url('team')}">{glocale.lang('the_team')}</a></div>
+	<div><a href="{gurl.simple_url(0,'&amp;$URL_AT=$ACTION_CHANGE_READ_STATUS&amp;$URL_LOC=read&amp;$URL_MODE=all','&amp;',true)}">{glocale.lang('markallasread')}</a></div>
 </div>
 
 {if view_useronline_list}
