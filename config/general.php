@@ -167,7 +167,7 @@ define('BS_EXPORT_USER_EMAIL','user_email');
 /**
  * The version of boardsolution (please do not change!)
  */
-define('BS_VERSION_ID',												'145');
-define('BS_VERSION',													'Boardsolution v1.45');
+define('BS_VERSION_ID',												'146');
+define('BS_VERSION',													'Boardsolution v1.46');
 #=========================================
 ?>
