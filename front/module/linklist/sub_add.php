@@ -74,7 +74,7 @@ final class BS_Front_SubModule_linklist_add extends BS_Front_SubModule
 			$categories[$name] =$name;
 	
 		$pform = new BS_PostingForm($locale->lang('description'),'','desc');
-		$pform->set_textarea_height('100px');
+		$pform->set_textarea_height(100);
 		$pform->add_form();
 		
 		$tpl->add_variables(array(

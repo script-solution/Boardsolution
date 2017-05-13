@@ -100,7 +100,7 @@ final class BS_PostingForm extends FWS_Object
 	 *
 	 * @var integer
 	 */
-	private $_textarea_height = '250px';
+	private $_textarea_height = 250;
 	
 	/**
 	 * Show the hide-bbcode/-smiley-checkboxes?
@@ -198,7 +198,7 @@ final class BS_PostingForm extends FWS_Object
 	/**
 	 * Sets the height of the textarea
 	 * 
-	 * @param string $height the new value (for the CSS-attribute "height")
+	 * @param string $height the new value in pixels
 	 */
 	public function set_textarea_height($height)
 	{

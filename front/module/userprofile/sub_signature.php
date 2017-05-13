@@ -71,7 +71,7 @@ final class BS_Front_SubModule_userprofile_signature extends BS_Front_SubModule
 		
 		$form = new BS_PostingForm($locale->lang('signature').':',
 			$user->get_profile_val('signature_posted'),'sig');
-		$form->set_textarea_height('100px');
+		$form->set_textarea_height(100);
 		$form->add_form();
 		
 		$bbcode = new BS_BBCode_Parser(

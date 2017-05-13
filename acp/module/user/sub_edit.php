@@ -161,7 +161,7 @@ final class BS_ACP_SubModule_user_edit extends BS_ACP_SubModule
 		
 		// add signature form
 		$pform = new BS_PostingForm($locale->lang('signature'),$data['signature_posted'],'sig');
-		$pform->set_textarea_height('100px');
+		$pform->set_textarea_height(100);
 		$pform->add_form();
 		
 		// set colspan for the post-form-template
