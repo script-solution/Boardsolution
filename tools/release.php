@@ -93,8 +93,8 @@ unlink($folder.'dba/access.php');
 FWS_FileUtils::delete_folder($folder.'dba/backups');
 mkdir($folder.'dba/backups');
 @chmod($folder.'dba/backups',0777);
-FWS_FileUtils::write($folder.'dba/backups/index.htm', '<html><body></body></html>');
 FWS_FileUtils::write($folder.'dba/backups/backups.txt', '');
+FWS_FileUtils::write($folder.'dba/backups/.htaccess', "deny from all\n");
 
 // change path to fws
 echo 'Changing stuff in userdef.php...'."\n";

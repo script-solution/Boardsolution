@@ -132,7 +132,7 @@ final class BS_Front_SubModule_calendar_editevent extends BS_Front_SubModule
 		$pform = new BS_PostingForm(
 			$locale->lang('description').':',$default['description_posted'],'desc'
 		);
-		$pform->set_textarea_height('100px');
+		$pform->set_textarea_height(100);
 		$pform->add_form();
 		
 		$tpl->add_variable_ref('default',$default);

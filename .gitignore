@@ -8,7 +8,7 @@
 /uploads/*
 !/uploads/.htaccess
 /dba/backups/*
-!/dba/backups/index.htm
+!/dba/backups/.htaccess
 /dba/access.php
 /themes/Copy of default/*
 /.settings/

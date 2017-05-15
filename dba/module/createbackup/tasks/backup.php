@@ -153,16 +153,16 @@ final class BS_DBA_Module_CreateBackup_Tasks_Backup extends FWS_Object implement
 				}
 				
 				$order = ' ORDER BY ';
-				$set = $db->execute('SHOW COLUMNS FROM '.$data['tables'][$x]);
+				$set = $db->get_rows('SHOW COLUMNS FROM '.$data['tables'][$x]);
 				foreach($set as $row)
 					$order .= '`'.$row['Field'].'` ASC,';
 				$order = FWS_String::substr($order,0,FWS_String::strlen($order) - 1);
-				
+					
 				$set = $db->execute(
 					'SELECT * FROM '.$data['tables'][$x].' '.$order.'
 					 LIMIT '.$start.','.$length
 				);
-				foreach($set as $row)
+				foreach($set->get_rows() as $row)
 				{
 					$fields_tmp = '';
 					$values_tmp = '';

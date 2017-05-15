@@ -55,8 +55,6 @@ final class BS_Install_Module_4 extends BS_Install_Module
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
 
-		$db = $this->connect_to_db();
-		
 		$this->request_formular();
 
 		$prefix = $user->get_session_data('table_prefix','bs_');
@@ -91,8 +89,6 @@ final class BS_Install_Module_4 extends BS_Install_Module
 			'show_table_prefix' => true,
 			'title' => $locale->lang('step_dbcheck')
 		));
-		
-		$db->disconnect();
 	}
 }
 ?>
