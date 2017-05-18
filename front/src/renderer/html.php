@@ -485,16 +485,6 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 						'avatar' => $avatar
 				));
 
-				
-				$user_data = BS_DAO::get_profile()->get_user_by_id($user->get_user_id(),1,-1);
-				
-				// check wether the user has been found
-				if($user_data === false)
-				{
-					$this->report_error();
-					return;
-				}
-
 				// grab the last posts from the database
 				$denied = array();
 				if($cfg['hide_denied_forums'] == 1)
@@ -506,7 +496,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 					$rurl = BS_URL::get_mod_url('redirect');
 					$rurl->set(BS_URL_LOC,'show_post');
 					$postlist = BS_DAO::get_posts()->get_last_posts_of_user(
-							$user_data['id'],$denied,BS_USER_DETAILS_TOPIC_COUNT_SIDEBAR
+							$user->get_user_id(),$denied,BS_USER_DETAILS_TOPIC_COUNT_SIDEBAR
 					);
 					$last_posts = array();
 					foreach($postlist as $data)
