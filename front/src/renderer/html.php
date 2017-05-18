@@ -486,7 +486,7 @@ final class BS_Front_Renderer_HTML extends FWS_Document_Renderer_HTML_Default
 				));
 
 				
-				$user_data = BS_DAO::get_profile()->get_user_by_id($id,1,-1);
+				$user_data = BS_DAO::get_profile()->get_user_by_id($user->get_user_id(),1,-1);
 				
 				// check wether the user has been found
 				if($user_data === false)
