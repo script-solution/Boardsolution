@@ -108,7 +108,7 @@ final class BS_Front_TopicFactory extends FWS_UtilBase
 		else
 			$search_string = ' AND t.name LIKE \'%'.$title.'%\'';
 	
-		$sql = ' t.id != '.$tid.' AND moved_tid = 0'.$search_string;
+		$sql = ' t.id != '.$tid.' AND t.moved_tid = 0'.$search_string;
 	
 		// build search link
 		$murl = BS_URL::get_mod_url('search');
@@ -217,12 +217,12 @@ final class BS_Front_TopicFactory extends FWS_UtilBase
 			for($i = 0;$i < $len;$i++)
 				$ids[] = $subforums[$i]->get_id();
 	
-			$sql = ' t.rubrikid IN ('.implode(',',$ids).') AND moved_tid = 0';
+			$sql = ' t.rubrikid IN ('.implode(',',$ids).') AND t.moved_tid = 0';
 			$title = sprintf($locale->lang('current_topics_in'),$forums->get_forum_name($fid));
 		}
 		else
 		{
-			$sql = ' moved_tid = 0';
+			$sql = ' t.moved_tid = 0';
 			$title = $locale->lang('current_topics');
 		}
 		

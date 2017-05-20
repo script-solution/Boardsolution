@@ -219,7 +219,7 @@ final class BS_Front_Module_portal extends BS_Front_Module
 		$title = '<a href="'.$murl.'">'.$locale->lang('current_topics').'</a>';
 		
 		$num = $cfg['current_topic_num'];
-		$topics = new BS_Front_Topics($title,' moved_tid = 0','lastpost','DESC',$num,0,true);
+		$topics = new BS_Front_Topics($title,' t.moved_tid = 0','lastpost','DESC',$num,0,true);
 		$topics->set_show_topic_action(false);
 		$topics->set_show_important_first(false);
 		$topics->set_show_forum(true);

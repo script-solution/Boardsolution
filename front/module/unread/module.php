@@ -68,7 +68,7 @@ final class BS_Front_Module_unread extends BS_Front_Module
 		// display the topics
 		$topics = new BS_Front_Topics(
 			$locale->lang('unread_threads'),
-			' t.id IN ('.$tids.') AND moved_tid = 0',
+			' t.id IN ('.$tids.') AND t.moved_tid = 0',
 			'lastpost',
 			'DESC',
 			$end

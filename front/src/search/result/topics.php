@@ -70,7 +70,7 @@ final class BS_Front_Search_Result_Topics extends FWS_Object implements BS_Front
 		$public_url->remove(BS_URL_SITE);
 		$public_url->remove(BS_URL_SID);
 
-		$sql = ' t.id IN ('.$idstr.') AND moved_tid = 0';
+		$sql = ' t.id IN ('.$idstr.') AND t.moved_tid = 0';
 
 		// display the topics
 		$topics = new BS_Front_Topics($request->get_title($search),$sql,$order,$ad,$end);

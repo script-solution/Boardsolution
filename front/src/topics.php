@@ -649,22 +649,19 @@ final class BS_Front_Topics extends FWS_Object
 				else
 					$topic_name = BS_TopicUtils::get_displayed_name($data['name']);
 				
+				$creator = $this->_get_topic_creator($data);
+				$lastpost = $this->_get_topic_lastpost($data,$post_order,$pages);
+					
 				// special values for shadow-topics
 				if($data['moved_tid'] != 0 && $data['moved_rid'] != 0)
 				{
 					$topic_id = $data['moved_tid'];
 					$forum_id = $data['moved_rid'];
-					$topic_starter = '';
-					$lastpost = '';
-					$creator = '';
 				}
 				else
 				{
 					$topic_id = $data['id'];
 					$forum_id = $data['rubrikid'];
-					$lastpost = $this->_get_topic_lastpost($data,$post_order,$pages);
-					$creator = $this->_get_topic_creator($data);
-					$topic_starter = $this->_get_topic_starter($data);
 				}
 
 				// build url
@@ -692,7 +689,6 @@ final class BS_Front_Topics extends FWS_Object
 					'topic_id' => $data['id'],
 					'lastpost' => $lastpost,
 					'creator' => $creator,
-					'topicstart' => $topic_starter,
 					'posts' => $data['posts'],
 					'views' => $data['views'],
 					'topic_status' => BS_TopicUtils::get_status_data(
@@ -798,7 +794,6 @@ final class BS_Front_Topics extends FWS_Object
 			'preview' => $preview[0]
 		);
 	}
-	
 
 	/**
 	 * generates the creator-data
@@ -810,24 +805,43 @@ final class BS_Front_Topics extends FWS_Object
 	{
 		$locale = FWS_Props::get()->locale();
 		
-		// determine username
-		if($data[BS_EXPORT_USER_ID] != 0)
+		$datautil = array();
+		
+		if($data['moved_tid'] != 0 && $data['moved_rid'] != 0)
 		{
-			$user_name = BS_UserUtils::get_link(
-					$data[BS_EXPORT_USER_ID],$data['username'],$data['user_group']
-			);
-			$user_name_plain = $data['username'];
+			$datautil['post_user'] = $data['shadow_topic_post_user'];
+			$datautil['post_an_user'] = $data['shadow_topic_post_an_user'];
+			$datautil['username'] = $data['shadow_topic_username'];
+			$datautil['user_group'] = $data['shadow_topic_user_group'];
+			$datautil['av_pfad'] = $data['shadow_topic_av_pfad'];
 		}
 		else
 		{
-			$user_name = $locale->lang('guest');
-			$user_name_plain = $locale->lang('guest');
+			$datautil['post_user'] = $data['post_user'];
+			$datautil['post_an_user'] = $data['post_an_user'];
+			$datautil['username'] = $data['username'];
+			$datautil['user_group'] = $data['user_group'];
+			$datautil['av_pfad'] = $data['av_pfad'];
 		}
 		
-		if($data['av_pfad'] == '')
+		// determine username
+		if($datautil['post_user'] != 0)
+		{
+			$user_name = BS_UserUtils::get_link(
+					$datautil['post_user'],$datautil['username'],$datautil['user_group']
+			);
+			$user_name_plain = $datautil['username'];
+		}
+		else
+		{
+			$user_name = ($datautil['post_an_user']===NULL)?$locale->lang('guest'):$datautil['post_an_user'];
+			$user_name_plain = $user_name;
+		}
+		
+		if($datautil['av_pfad'] == '')
 			$avatar = FWS_Path::client_app().'images/avatars/no_avatar.gif';
 		else
-			$avatar = FWS_Path::client_app().'images/avatars/'.$data['av_pfad'];
+			$avatar = FWS_Path::client_app().'images/avatars/'.$datautil['av_pfad'];
 		
 		return array(
 				'date' => FWS_Date::get_date($data['post_time']),
