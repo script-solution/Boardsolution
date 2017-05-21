@@ -767,6 +767,7 @@ div.bs_topics_child_status
 {
 	color: #333;
 	text-decoration: none;
+	cursor: pointer;
 }
 .bs_topics_child_lpost > div > a
 {

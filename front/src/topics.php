@@ -777,6 +777,9 @@ final class BS_Front_Topics extends FWS_Object
 
 		$tmp_prev = preg_replace('/(\[QUOTE(.*)\])/i', '', $data['lp_preview']);
 		$tmp_prev = preg_replace('/[[\/\!]*?[^\[\]]*?]/si', '', $tmp_prev);
+		$tmp_prev = preg_replace('/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/', '', $tmp_prev);
+		$tmp_prev = html_entity_decode($tmp_prev, ENT_QUOTES, BS_HTML_CHARSET);
+		$tmp_prev = trim($tmp_prev);
 		
 		$ls = new FWS_HTML_LimitedString($tmp_prev, 40);
 		$res = $ls->get();
@@ -791,7 +794,8 @@ final class BS_Front_Topics extends FWS_Object
 			'username_plain' => $user_name_plain,
 			'url' => $murl.'#b_'.$data['lastpost_id'],
 			'avatar' => $avatar,
-			'preview' => $preview[0]
+			'preview' => $preview[0],
+			'preview_full' => ($preview[1]=='')?$preview[0]:htmlentities($preview[1], ENT_QUOTES, BS_HTML_CHARSET),
 		);
 	}
 
