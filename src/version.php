@@ -39,7 +39,7 @@ final class BS_Version extends FWS_Object
 	/**
 	 * The path of the versions-file
 	 */
-	const VERSION_PATH = '/bsversions/versions_140b3.xml';
+	const VERSION_PATH = '/bsversions/versions.xml';
 	
 	/**
 	 * Represents the type "update"
@@ -181,12 +181,12 @@ final class BS_Version extends FWS_Object
 	}
 	
 	/**
-	 * @return int the beta-number (0 if it is no beta)
+	 * @return int the testnumber-number (0 if it is no beta)
 	 */
-	public function get_beta_number()
+	public function get_testnumber_number()
 	{
 		$matches = array();
-		if(preg_match('/^\d{3}b(\d+)$/',$this->_id,$matches))
+		if(preg_match('/^\d{3}[ab]{1}(\d+)$/',$this->_id,$matches))
 			return $matches[1];
 		return 0;
 	}
@@ -199,13 +199,17 @@ final class BS_Version extends FWS_Object
 	 */
 	public function compare($version)
 	{
+		// cut alpha number
+		$tvno = strtok($this->_id,'a');
+		$cvno = strtok($version->get_id(),'a');
+		
 		// cut beta number
-		$tvno = strtok($this->_id,'b');
-		$cvno = strtok($version->get_id(),'b');
+		$tvno = strtok($tvno,'b');
+		$cvno = strtok($cvno,'b');
 		if($tvno == $cvno)
 		{
-			$tb = $this->get_beta_number();
-			$cb = $version->get_beta_number();
+			$tb = $this->get_testnumber_number();
+			$cb = $version->get_testnumber_number();
 			if($tb == 0 && $cb == 0)
 				return 0;
 			if($tb > 0 && $cb == 0)
