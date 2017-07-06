@@ -124,6 +124,14 @@ final class BS_Session_Data extends FWS_Session_Data
 		
 		return (string)$this->_bot_name;
 	}
+	
+	/**
+	 * @return boolean wether the bot has access or not
+	 */
+	public function get_bot_access()
+	{
+		return $this->_get_bot_access($this->get_user_agent(),$this->get_user_ip());
+	}
 
 	/**
 	 * @return string the location of the user
@@ -216,6 +224,38 @@ final class BS_Session_Data extends FWS_Session_Data
 		}
 
 		return null;
+	}
+	
+	/**
+	 * checks wether this user is a known bot and returns if access to board is given
+	 *
+	 * @param string $agent the user-agent
+	 * @param string $ip the ip of the user
+	 * @return boolean true if access is given, false if not
+	 */
+	private function _get_bot_access($agent,$ip)
+	{
+		$cache = FWS_Props::get()->cache();
+		
+		foreach($cache->get_cache('bots') as $bot)
+		{
+			if(FWS_String::strpos($agent,$bot['bot_match']) !== false)
+			{
+				// is a ip-range given?
+				if($bot['bot_ip_start'] != '')
+				{
+					if($ip >= $bot['bot_ip_start'] && $ip <= $bot['bot_ip_end'])
+						return $bot['bot_access'] == '1' ? true : false;
+						
+						// otherwise we don't treat this user as a bot
+						continue;
+				}
+
+				return $bot['bot_access'] == '1' ? true : false;
+			}
+		}
+		
+		return false;
 	}
 	
 	protected function get_dump_vars()

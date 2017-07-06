@@ -354,6 +354,14 @@ final class BS_User_Current extends FWS_User_Current
 	{
 		return $this->_user->get_bot_name();
 	}
+	
+	/**
+	 * @return boolean true if the user has access
+	 */
+	public function get_bot_access()
+	{
+		return $this->_user->get_bot_access();
+	}
 
 	/**
 	 * @return boolean true if this user is an admin

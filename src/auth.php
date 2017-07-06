@@ -589,8 +589,7 @@ final class BS_Auth extends FWS_Object
 			return false;
 		else if($user->is_bot())
 		{
-			$bot = $user->get_bot_name();
-			if($bot !== null && !$bot['bot_access'])
+			if($user->get_bot_name() !== null && !$user->get_bot_access())
 				return false;
 		}
 		
