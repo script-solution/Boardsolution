@@ -11,16 +11,13 @@
 	{endif}
 	
 	{loop forums as forum}
-		{if sub_forum}
-		{else}
-			{loop forum:close_clap_forum as b}
-						</ul>
-					</div>
+		{loop forum:close_clap_forum as b}
+					</ul>
 				</div>
-			</li>
-			{endloop}
-		{endif}	
-			
+			</div>
+		</li>
+		{endloop}
+		
 		{if forum:contains_forums}
 		<li>
 			<div class="bs_forums{if forum:clap_forum}{else} bs_forums_closed{endif}">
@@ -62,17 +59,17 @@
 				<div class="bs_forums_child_lpost bs_forums_child_hmiddle">
 					{if forum:lastpost == false}
 							-
-						{else}
-							<div>
-								<div style="border: 1px solid #c7c7c7; background: #fff; padding: 2px; width: 30px; float: left; margin-right: 5px;">
-									<img alt="{forum:lastpost:username_plain}" src="{forum:lastpost:avatar}" style="width: 30px; height: 30px; vertical-align: middle; text-align: center;" />
-								</div>
-								<div><a title="{forum:lastpost:topic_complete}" href="{forum:lastpost:topic_url}">{forum:lastpost:topic}</a></div>
-								<div class="last_post_icon"><a title="{glocale.lang('gotolastpost')}" href="{forum:lastpost:lastpost_url}"></a></div>
-								{glocale.lang('From')}: {forum:lastpost:username}, {forum:lastpost:date}
-								<br style="clear:left" />
+					{else}
+						<div>
+							<div style="border: 1px solid #c7c7c7; background: #fff; padding: 2px; width: 30px; float: left; margin-right: 5px;">
+								<img alt="{forum:lastpost:username_plain}" src="{forum:lastpost:avatar}" style="width: 30px; height: 30px; vertical-align: middle; text-align: center;" />
 							</div>
-						{endif}		
+							<div><a title="{forum:lastpost:topic_complete}" href="{forum:lastpost:topic_url}">{forum:lastpost:topic}</a></div>
+							<div class="last_post_icon"><a title="{glocale.lang('gotolastpost')}" href="{forum:lastpost:lastpost_url}"></a></div>
+							{glocale.lang('From')}: {forum:lastpost:username}, {forum:lastpost:date}
+							<br style="clear:left" />
+						</div>
+					{endif}
 				</div>
 			</div>
 			</li>
@@ -80,17 +77,17 @@
 		{endif}
 	{endloop}
 
+	{loop clap_forum_bottom as b}
+			</ul>
+		</div>
+	</div>
+	{endloop}
+	
 	{if sub_forum}
 				</ul>
 			</div>
 		</div>
 	</li>
-	{else}
-		{loop clap_forum_bottom as b}
-				</ul>
-			</div>
-		</div>
-		{endloop}
 	{endif}
 </ul>
 <script>
