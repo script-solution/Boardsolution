@@ -268,8 +268,21 @@ final class BS_ForumUtils extends FWS_UtilBase
 			}
 			
 			$tpl->add_variable_ref('forums',$nodes);
+
+			if($parent_id > 0)
+				if($forums->has_childs($parent_id))
+				{
+					$path = $forums->get_path($parent_id);
+					$tpl->add_variables(array(
+							'sub_forum' => true,
+							'forum_name_ins' => $path[0][0],
+							'forum_url' => BS_URL::build_topics_url($parent_id,1)
+					));
+				}
+			
 			$tpl->add_variables(array(
 				'clap_forum_bottom' => $catinfo,
+				'forum_url' => BS_URL::build_topics_url($parent_id,1),
 				'forum_cookie' => $input->get_var(
 					BS_COOKIE_PREFIX.'hidden_forums','cookie',FWS_Input::STRING
 				)

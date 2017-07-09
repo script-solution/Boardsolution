@@ -223,12 +223,17 @@ final class BS_Front_Module_topics extends BS_Front_Module
 		$type = $forums->get_forum_type($fid);
 		$tpl->add_variables(array(
 			'forum_name' => $forum_data->get_name(),
-			'moderators' => $auth->get_forum_mods($fid),
 			'latest_topics_top' => $type == 'contains_cats' && $display_lt && $display_lt_top,
 			'latest_topics_bottom' => $type == 'contains_cats' && $display_lt && $display_lt_bottom,
 			'sub_forum' => $sub_forum,
 			'contains_topics' => $type == 'contains_threads',
 			'view_useronline_list' => $view_useronline
+		));
+		
+		$tpl->set_template('inc_forum_moderators.htm');
+		$tpl->add_variables(array(
+				'moderators' => $auth->get_forum_mods($fid),
+				'can_view_locations' => $auth->has_global_permission('view_online_locations'),
 		));
 	}
 	

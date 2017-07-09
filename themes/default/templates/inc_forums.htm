@@ -1,12 +1,26 @@
 {if forums}
 <ul>
-	{loop forums as forum}
-		{loop forum:close_clap_forum as b}
-				</ul>
+	{if sub_forum}
+	<li>
+		<div class="bs_forums">
+			<div class="bs_forums_parent">
+				<a href="{forum_url}">{forum_name_ins}</a>
 			</div>
-		</div>
-		{endloop}
-		
+				<div style="display: block;">
+					<ul>
+	{endif}
+	
+	{loop forums as forum}
+		{if sub_forum}
+		{else}
+			{loop forum:close_clap_forum as b}
+						</ul>
+					</div>
+				</div>
+			</li>
+			{endloop}
+		{endif}	
+			
 		{if forum:contains_forums}
 		<li>
 			<div class="bs_forums{if forum:clap_forum}{else} bs_forums_closed{endif}">
@@ -26,10 +40,9 @@
 				{else}
 				</div>
 				{endif}
-		{else}
+		{else}	
 			<!-- forum containing threads - START -->
 			<li>
-		   <div class="bs_forums_cl"></div>
 			<div class="bs_forums_child">
 				<div class="bs_forums_child_status bs_forums_child_hvmiddle">{forum:alreadyread}</div>
 				<div class="bs_forums_child_maindata"><a href="{forum:forum_url}">{forum:forum_name_ins}</a>
@@ -67,11 +80,18 @@
 		{endif}
 	{endloop}
 
-	{loop clap_forum_bottom as b}
-			</ul>
+	{if sub_forum}
+				</ul>
+			</div>
 		</div>
-	</div>
-	{endloop}
+	</li>
+	{else}
+		{loop clap_forum_bottom as b}
+				</ul>
+			</div>
+		</div>
+		{endloop}
+	{endif}
 </ul>
 <script>
 <!--

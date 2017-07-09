@@ -3,15 +3,8 @@
 {if action_result < 1}
 {if module_error == false}
 
-{if latest_topics_top && sub_forum}
-{include "inc_topics.htm"}
-<br />
-{endif}
-
+{if display_event || display_poll || display_topic}
 <div>
-	<div style="float: left;">
-		<b>{glocale.lang('moderators')}:</b> {moderators}
-	</div>
 	<div style="float: right; width: 50%;">
 		{if display_event}
 		<a class="bs_button_big" title="{glocale.lang('createnewevent')}" href="{gurl.simple_url('new_event','&amp;$URL_FID='~fid)}">{glocale.lang('newevent')}</a>
@@ -25,11 +18,18 @@
 	</div>
 	<br style="clear: both;" />
 </div>
+{endif}
 
-{if sub_forums}
-<div class="bs_padbottom">
-{include "inc_forums.htm"}
-</div>
+{if sub_forum}
+	<div class="bs_sub_container">
+		{include "inc_forums.htm"}
+		{if view_useronline_list}
+			<div>
+			{include "inc_forum_moderators.htm"}
+			{include "inc_online_user.htm"}
+			</div>
+		{endif}
+	</div>
 {endif}
 
 {if contains_topics}
@@ -44,7 +44,7 @@
 </form>
 {endif}
 
-<div class="bs_padtop">
+<div>
 {include "inc_pagination.htm"}
 </div>
 {else}
@@ -52,15 +52,18 @@
 {endif}
 
 {if latest_topics_bottom && sub_forum}
-<div class="bs_padtop">
 {include "inc_topics.htm"}
+<div>
 </div>
 {endif}
 
+{if sub_forum}
+{else}
 {if view_useronline_list}
-<div class="bs_padtop">
+<div>
 {include "inc_online_user.htm"}
 </div>
+{endif}
 {endif}
 
 {endif}
