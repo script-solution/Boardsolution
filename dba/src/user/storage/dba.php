@@ -52,16 +52,22 @@ final class BS_DBA_User_Storage_DBA extends FWS_Object implements FWS_User_Stora
 	}
 
 	/**
-	 * @see FWS_User_Storage::get_hash_of_pw()
+	 * @see FWS_User_Storage::verify_password()
 	 *
-	 * @param string $pw
+	 * @param string &$pw
 	 * @param FWS_User_Data $data
-	 * @return string
+	 * @return int
 	 */
-	public function get_hash_of_pw($pw,$data)
+	public function check_password(&$pw,$data)
 	{
 		// we don't store the hash of the pw
-		return $pw;
+		$hash = $data->get_user_pw();
+		if(strcmp($pw,$hash) === 0)
+		{
+			$pw = $hash;
+			return FWS_User_Current::LOGIN_ERROR_NO_ERROR;
+		}
+		return FWS_User_Current::LOGIN_ERROR_PW_INCORRECT;
 	}
 
 	/**

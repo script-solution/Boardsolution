@@ -166,7 +166,6 @@ final class BS_User_Current extends FWS_User_Current
 		{
 			if($input->isset_var('conf','post'))
 			{
-				$hashpw = false; // the password is already hashed
 				if(!$functions->check_security_code(false))
 					$loggedin = self::LOGIN_ERROR_INVALID_SEC_CODE;
 			}
@@ -180,7 +179,7 @@ final class BS_User_Current extends FWS_User_Current
 		}
 		
 		if($hashpw && $loggedin == self::LOGIN_ERROR_NO_ERROR)
-			$pw = $this->_storage->get_hash_of_pw($pw,$this->_userdata);
+			$loggedin = $this->_storage->check_password($pw,$this->_userdata);
 		
 		if($loggedin == self::LOGIN_ERROR_NO_ERROR)
 		{
@@ -191,7 +190,7 @@ final class BS_User_Current extends FWS_User_Current
 			if(empty($pw))
 				$loggedin = self::LOGIN_ERROR_PW_INCORRECT;
 			else
-				$loggedin = $this->check_user($username,$pw);
+				$loggedin = $this->check_user($username,$hashpw ? false : $pw);
 		}
 		
 		// increase the login-tries, if the pw was incorrect

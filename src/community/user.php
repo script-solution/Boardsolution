@@ -57,7 +57,7 @@ final class BS_Community_User extends FWS_Object
 		$groups = FWS_Array_Utils::advanced_explode(',',$data['user_group']);
 		$status = self::get_status_from_groups($groups);
 		return new BS_Community_User(
-			$data['id'],$data['user_name'],$data['user_email'],$status,md5($data['user_pw'])
+			$data['id'],$data['user_name'],$data['user_email'],$status,$data['user_pw']
 		);
 	}
 	
@@ -93,7 +93,7 @@ final class BS_Community_User extends FWS_Object
 	private $_pw_plain;
 	
 	/**
-	 * The md5-hash of the password
+	 * The hash of the password
 	 *
 	 * @var string
 	 */
@@ -120,7 +120,7 @@ final class BS_Community_User extends FWS_Object
 	 * @param string $name the user-name
 	 * @param string $email the email-address
 	 * @param int $status the user-status (self::STATUS_USER or self::STATUS_ADMIN)
-	 * @param string $pw_hash the md5-hash of the password
+	 * @param string $pw_hash the hash of the password
 	 * @param string $pw_plain the plain password (null = not available)
 	 */
 	public function __construct($id,$name,$email,$status,$pw_hash,$pw_plain = null)
@@ -160,7 +160,7 @@ final class BS_Community_User extends FWS_Object
 	}
 
 	/**
-	 * @return string the md5-hash of the password
+	 * @return string the hash of the password
 	 */
 	public function get_pw_hash()
 	{

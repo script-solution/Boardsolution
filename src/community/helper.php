@@ -36,7 +36,7 @@ final class BS_Community_Helper extends FWS_UtilBase
 	 * set so that she/he will be loggedin by them the next time she/he opens the board.
 	 *
 	 * @param string $name the user-name
-	 * @param string $pw the md5-hash of the password
+	 * @param string $pw the hash of the password
 	 */
 	public static function login($name,$pw)
 	{

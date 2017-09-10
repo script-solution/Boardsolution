@@ -62,7 +62,7 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 		$notify = $input->get_var('notify','post',FWS_Input::INT_BOOL);
 
 		// check pw
-		if($user_pw == '' || $user_pw != $user_pw_conf)
+		if($user_pw == '' || $user_pw !== $user_pw_conf)
 			return 'registerpwsnichtidentisch';
 
 		// check email
@@ -77,8 +77,10 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 		if(BS_DAO::get_user()->email_exists($user_email))
 			return 'email_exists';
 
+		$hash = BS_Password::hash($user_pw);
+
 		// create user
-		$id = BS_DAO::get_user()->create($user_name,$user_email,$user_pw);
+		$id = BS_DAO::get_user()->create($user_name,$user_email,$hash);
 
 		// build user-groups
 		$groups = array();
@@ -102,7 +104,7 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 		$status = BS_Community_User::get_status_from_groups($groups);
 		$user = new BS_Community_User(
 			$id,$input->unescape_value($user_name,'post'),
-			$input->unescape_value($user_email,'post'),$status,md5($user_pw),
+			$input->unescape_value($user_email,'post'),$status,$hash),
 			$input->unescape_value($user_pw,'post')
 		);
 		BS_Community_Manager::get_instance()->fire_user_registered($user);

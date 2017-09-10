@@ -853,7 +853,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$db->execute("CREATE TABLE `{$consts['BS_TB_USER']}` (
 		  `id` int(10) unsigned NOT NULL auto_increment,
 		  `user_name` varchar(50) NOT NULL,
-		  `user_pw` varchar(32) NOT NULL,
+		  `user_pw` varchar(255) NOT NULL,
 		  `user_email` varchar(255) NOT NULL,
 		  PRIMARY KEY  (`id`)
 		) ENGINE=MyISAM;");
@@ -865,7 +865,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 			"INSERT INTO `".$consts['BS_TB_USER']."`
 			 (`id`, `user_name`, `user_pw`, `user_email`)
 			 VALUES
-			 (1, '".$admin_login."', '".md5($admin_pw)."', '".$admin_email."');"
+			 (1, '".$admin_login."', '".BS_Password::hash($admin_pw)."', '".$admin_email."');"
 		);
 		$this->add_to_log_success();
 		

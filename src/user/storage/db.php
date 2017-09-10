@@ -80,9 +80,18 @@ final class BS_User_Storage_DB extends FWS_Object implements FWS_User_Storage
 		return new BS_User_Data($data);
 	}
 	
-	public function get_hash_of_pw($pw,$data)
+	public function check_password(&$pw,$data)
 	{
-		return md5($pw);
+		$hash = $data->get_profile_val('user_pw');
+		if(BS_Password::needs_rehash($hash))
+			return FWS_User_Current::LOGIN_ERROR_PW_OUTDATED;
+		
+		if(BS_Password::verify($pw,$hash))
+		{
+			$pw = $hash;
+			return FWS_User_Current::LOGIN_ERROR_NO_ERROR;
+		}
+		return FWS_User_Current::LOGIN_ERROR_PW_INCORRECT;
 	}
 	
 	/**

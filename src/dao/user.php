@@ -318,7 +318,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 	 *
 	 * @param string $user_name the user-name (has to be unique!)
 	 * @param string $user_email the email
-	 * @param string $user_pw the password in plain-text
+	 * @param string $user_pw the password hash
 	 * @param int $user_id the id to use (null = automatically)
 	 * @return int the id of the user that has been used
 	 */
@@ -338,7 +338,7 @@ class BS_DAO_User extends BS_DAO_UserBase
 		$fields = array(
 			BS_EXPORT_USER_NAME => $user_name,
 			BS_EXPORT_USER_EMAIL => $user_email,
-			BS_EXPORT_USER_PW => md5($user_pw)
+			BS_EXPORT_USER_PW => $user_pw
 		);
 		if($user_id !== null)
 			$fields[BS_EXPORT_USER_ID] = $user_id;

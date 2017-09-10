@@ -60,7 +60,7 @@ final class BS_Front_Action_change_password_default extends BS_Front_Action_Base
 		if($password == null || $password_conf == null)
 			return 'missing_password';
 
-		if($password != $password_conf)
+		if($password !== $password_conf)
 			return 'passwords_not_equal';
 
 		// everything seems to be ok, so we can change the password
@@ -70,7 +70,8 @@ final class BS_Front_Action_change_password_default extends BS_Front_Action_Base
 		if($userdata === false)
 			return 'The user with id "'.$user_id.'" doesn\'t exist!';
 		
-		BS_DAO::get_user()->update($user_id,'',md5($password));
+		$hash = BS_Password::hash($password);
+		BS_DAO::get_user()->update($user_id,'',$hash);
 
 		// finally delete the entry in the change-password-table
 		BS_DAO::get_changepw()->delete_by_user($user_id);
@@ -79,7 +80,7 @@ final class BS_Front_Action_change_password_default extends BS_Front_Action_Base
 		$groups = FWS_Array_Utils::advanced_explode(',',$userdata['user_group']);
 		$status = BS_Community_User::get_status_from_groups($groups);
 		$u = new BS_Community_User(
-			$user_id,$userdata['user_name'],$userdata['user_email'],$status,md5($password),
+			$user_id,$userdata['user_name'],$userdata['user_email'],$status,$hash,
 			$input->unescape_value($password,'post')
 		);
 		BS_Community_Manager::get_instance()->fire_user_changed($u);
