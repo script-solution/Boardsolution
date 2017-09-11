@@ -116,9 +116,11 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 			$sql_fields['add_'.$fdata->get_name()] = $sql_val;
 		}
 
+		$hash = $user_pw != '' ? BS_Password::hash($user_pw) : '';
+
 		// update the database
 		if($com->is_user_management_enabled())
-			BS_DAO::get_user()->update($id,$user_name,$user_pw != '' ? BS_Password::hash($user_pw) : '',$user_email);
+			BS_DAO::get_user()->update($id,$user_name,$hash,$user_email);
 
 		$groups = array();
 		if($user->get_user_id() == $id)
@@ -165,7 +167,7 @@ final class BS_ACP_Action_user_edit extends BS_ACP_Action_Base
 		$status = BS_Community_User::get_status_from_groups($groups);
 		$u = new BS_Community_User(
 			$id,$input->unescape_value($user_name,'post'),
-			$input->unescape_value($user_email,'post'),$status,BS_Password::hash($user_pw),
+			$input->unescape_value($user_email,'post'),$status,$hash,
 			$input->unescape_value($user_pw,'post')
 		);
 		BS_Community_Manager::get_instance()->fire_user_changed($u);

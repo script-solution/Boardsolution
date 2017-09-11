@@ -31,19 +31,19 @@
  */
 final class BS_Password
 {
-  public static function hash($pw)
-  {
-    return password_hash($pw,PASSWORD_DEFAULT);
-  }
-  
-  public static function needs_rehash($hash)
-  {
-    return password_needs_rehash($hash,PASSWORD_DEFAULT);
-  }
-  
-  public static function verify($pw,$hash)
-  {
-    return password_verify($pw,$hash);
-  }
+	public static function hash($pw)
+	{
+		return password_hash($pw,PASSWORD_DEFAULT);
+	}
+
+	public static function needs_rehash($hash)
+	{
+		return password_needs_rehash($hash,PASSWORD_DEFAULT);
+	}
+
+	public static function verify($pw,$hash)
+	{
+		return password_verify($pw,$hash);
+	}
 }
 ?>
