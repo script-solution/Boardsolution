@@ -259,3 +259,44 @@ function reloadImage(object)
 	
 	object.src = url;
 }
+
+/**
+ * Change the color of the topic-entry-background
+ *
+ * @param string get_id the id of f.e. the input-checkbox
+ * @param string set_id the id of the topic-entry to change the background
+ * @param string color the new color for the background
+ */
+function changeDivBGColor(get_id,set_id,color)
+{
+	if(document.getElementById(get_id).checked)
+	{
+		
+		document.getElementById(set_id).style.backgroundColor = color;
+	}
+	else
+	{
+		document.getElementById(set_id).style.backgroundColor = "";
+	}
+}
+
+/**
+ * Get the selected IDs
+ *
+ * @param string the ids
+ */
+function getSelectedIds()
+{	
+	var ids = "";
+	var cb = null;
+	for(var i = 0;(cb = document.getElementById('id_' + i)) != null;i++)
+	{
+		if(cb.checked)
+			ids += cb.value + ",";
+	}
+
+	if(ids == "")
+		return '';
+
+	return ids;
+}

@@ -643,6 +643,58 @@ div.bs_forums_child_status
 	text-shadow: 1px 1px 4px rgba(10, 5, 80, 0.85);
 }
 
+.bs_options_container_top
+{
+	margin-bottom: 12px;
+	text-align: right;
+}
+
+.bs_options_container_top > div
+{
+	background-color: #fff;
+	-webkit-box-shadow:	0px 0px 12px 0px rgba(15, 15, 15, 0.5);
+	-moz-box-shadow: 0px 0px 12px 0px rgba(15, 15, 15, 0.5);
+	box-shadow:	0px 0px 12px 0px rgba(15, 15, 15, 0.5);
+	border-radius: 8px;
+	padding: 10px;
+	margin-left: 15px;
+	color: #5d5d5d;
+	font-style: normal;
+	text-decoration: none;
+	display: inline;
+	line-height:3.5em;
+}
+
+.bs_options_container_top > div > a
+{
+	color: #5d5d5d;
+	font-style: normal;
+	text-decoration: none;
+}
+.bs_options_container_top > div:hover
+{
+	color: #fff;
+	background-color: #4285bb;
+	text-shadow: 1px 1px 4px rgba(10, 5, 80, 0.85);
+	-webkit-box-shadow:	0px 0px 12px 0px rgba(15, 15, 15, 0.4);
+	-moz-box-shadow: 0px 0px 12px 0px rgba(15, 15, 15, 0.4);
+	box-shadow:	0px 0px 12px 0px rgba(15, 15, 15, 0.4);
+}
+
+.bs_options_container_top > div:hover > a
+{
+	color: #fff;
+	background-color: #4285bb;
+	text-shadow: 1px 1px 4px rgba(10, 5, 80, 0.85);
+}
+
+.bs_options_container_top > div > a:hover
+{
+	color: #fff;
+	text-shadow: 1px 1px 4px rgba(10, 5, 80, 0.85);
+}
+
+
 .bs_topics
 {
 	margin: 6px;
@@ -697,6 +749,32 @@ div.bs_forums_child_status
 	top: 11px;
 	right: 30px;
 }
+
+.bs_topics_title
+{
+	width: 100%;
+	height: 35px;
+	background-image: url("images/forums/node1.png");
+	background-position: center;
+	background-repeat: repeat;
+	background-color: #1f326e;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+.bs_topics_title span
+{
+	display: inline-block;
+	font-size: 1.05em;
+	font-variant:small-caps;
+	text-transform: capitalize;
+	text-decoration: none;
+	margin-top: 11px;
+	margin-left: 15px;
+	color: #fff;
+	text-shadow: 1px 1px 4px rgba(30, 30, 30, 0.85);
+}
+
 .bs_topics_child
 {
 	width: 100%;
@@ -1110,27 +1188,17 @@ div.bs_topics_child_status
 	background: #353753;
 }
 
-/*adding the arrows for the breadcrumbs using rotated pseudo elements*/
 .breadcrumb a:after 
 {
 	content: '';
 	position: absolute;
 	top: 0; 
-	right: -0.9em; /*half of square's length*/
-	/*same dimension as the line-height of .breadcrumb a */
+	right: -0.9em; 
 	width: 24px;
 	height: 24px;
-	/*as you see the rotated square takes a larger height. which makes it tough to position it properly. So we are going to scale it down so that the diagonals become equal to the line-height of the link. We scale it to 70.7% because if square's: 
-	length = 1; diagonal = (1^2 + 1^2)^0.5 = 1.414 (pythagoras theorem)
-	if diagonal required = 1; length = 1/1.414 = 0.707*/
 	transform: scale(0.707106) rotate(45deg);
-	/*we need to prevent the arrows from getting buried under the next link*/
 	z-index: 1;
-	/*background same as links but the gradient will be rotated to compensate with the transform applied*/
 	background: #F2F2F2;
-	/*
-		5px - for rounded arrows and 
-		50px - to prevent hover glitches on the border created using shadows*/
 	border-radius: 0 5px 0 50px;
 }
 
@@ -1430,4 +1498,200 @@ footer #footer-stats
     color: #c7c7c7;
     margin-left: 10px;
     margin-right: 10px;
+}
+
+
+/* ------ Checkbox ------ */
+.bs_checkbox input[type="checkbox"]
+{
+	display:none;
+}
+.bs_checkbox label 
+{
+	padding: 0px;
+	margin: 0px;
+	width: 0px;
+	height: 0px;
+	border: 0px;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline; 
+}
+.bs_checkbox input[type="checkbox"] + label::before 
+{
+	width: 18px;
+	height: 18px;
+	padding: 3px;
+	border-radius: 18px;
+	border: 1px solid #e5e5e5;
+	background-color: #fff;
+	display: inline-block;
+	content: "";
+}
+.bs_checkbox input[type="checkbox"]:checked + label::before 
+{
+	background-image: url("images/forums/node1.png");
+	background-position: center;
+	background-repeat: repeat;
+	background-color: #1f326e;
+}
+
+/* ------ DropDown-List ------ */
+.bs_dropdownlist 
+{
+	position: relative;
+	display: inline-block;
+	width: 250px;
+	height: 40px;
+	line-height: 2.4;
+	background: #fff;
+	overflow: hidden;
+	-webkit-box-shadow:	0px 0px 2px 0px rgba(15, 15, 15, 0.5);
+	-moz-box-shadow: 0px 0px 2px 0px rgba(15, 15, 15, 0.5);
+	box-shadow:	0px 0px 2px 0px rgba(15, 15, 15, 0.5);
+	margin-left: 10px;
+	margin-right: 5px;
+}
+
+.bs_dropdownlist select 
+{
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 5px;
+	color: #5d5d5d;
+	cursor: pointer;
+	background: #fff;
+	outline: 0;
+	border: 0 !important;
+	appearance: none;
+}
+
+.bs_dropdownlist select:hover
+{
+	background-color: #4285bb;
+	text-shadow: 1px 1px 4px rgba(10, 5, 80, 0.85);
+	-webkit-box-shadow:	0px 0px 12px 0px rgba(15, 15, 15, 0.4);
+	-moz-box-shadow: 0px 0px 12px 0px rgba(15, 15, 15, 0.4);
+	box-shadow:	0px 0px 12px 0px rgba(15, 15, 15, 0.4);
+	color: #fff;
+}
+
+.bs_dropdownlist select::-ms-expand 
+{
+	display: none;
+}
+
+.bs_dropdownlist::after
+{
+	content: '\25BC';
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	padding: 0px 20px;
+	background: #fff;
+	pointer-events: none;
+	color: #5d5d5d;
+}
+
+.bs_dropdownlist:hover::after
+{
+	background-color: #4285bb;
+	text-shadow: 1px 1px 4px rgba(10, 5, 80, 0.85);
+	color: #fff;
+	margin:right: 10px;
+}
+
+/* ------ Topic Options ------ */
+.bs_topic_options
+{
+	padding-left: 30px;
+	padding-top: 10px;
+	height: 40px;
+}
+
+.bs_topic_options_dd
+{
+	color: #5d5d5d;
+	float: left;
+}
+.bs_topic_options_b
+{
+	float: left;
+}
+.bs_topic_options_b button
+{
+	position: relative;
+	display: inline-block;
+	width: 150px;
+	height: 40px;
+	background: #fff;
+	overflow: hidden;
+	-webkit-box-shadow:	0px 0px 2px 0px rgba(15, 15, 15, 0.5);
+	-moz-box-shadow: 0px 0px 2px 0px rgba(15, 15, 15, 0.5);
+	box-shadow:	0px 0px 2px 0px rgba(15, 15, 15, 0.5);
+	margin-left:10px;
+	border: 0 !important;
+	appearance: none;
+	outline: 0;
+	cursor: pointer;
+}
+
+.bs_topic_options_b button:hover
+{
+	background-color: #4285bb;
+	text-shadow: 1px 1px 4px rgba(10, 5, 80, 0.85);
+	color: #fff;
+}
+
+/* ------ Pagination ------ */
+.bs_pagination
+{
+	padding: 35px 6px;
+	color: #959595;
+	font-size: 1.1em;
+}
+
+.bs_pagination a
+{
+	color: #555;
+	text-decoration: none;
+	text-shadow: 1px 1px 1px rgba(185, 185, 185, 0.75);
+}
+
+.bs_pagination a:hover
+{
+	color: #333;
+	text-shadow: 0px 0px 9px rgba(150, 150, 255, 0.95);
+}
+
+.bs_pagination_current
+{
+	color: #4285bb;
+	margin-left:2px;
+	margin-right:2px;
+}
+
+.bs_pagination_other
+{
+	margin-left:2px;
+	margin-right:2px;
+}
+
+.bs_pagination_total
+{
+	font-size: 0.6em;
+	font-style: italic;
+	padding-top: 5px;
+}
+
+.bs_clear_l
+{
+	clear: left;
+}
+
+.bs_clear_r
+{
+	clear: right;
 }

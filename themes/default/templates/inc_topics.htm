@@ -2,9 +2,15 @@
 <ul>
 	<li>
 		<div class="bs_topics">
+		{if type == 'contains_threads'}
+			<div class="bs_topics_title">
+				<span>{thread_title}</span>
+			</div>
+		{else}
 			<div class="bs_topics_parent">
 				{thread_title}
 			</div>
+		{endif}
 			<div>
 				{if num == 0}
 				<div class="bs_main">{glocale.lang('no_topics_found')}</div>
@@ -13,12 +19,13 @@
 				{loop topics as index => topic}
 				<li>
 				   <div class="bs_topics_cl"></div>
-					<div class="bs_topics_child">	
+					<div class="bs_topics_child" id="topic_id_{index}">
+						{if show_thread_action}
+						<div class="bs_topics_child_status bs_topics_child_hvmiddle bs_checkbox">
+							<input id="id_{index}" type="checkbox" name="selected_topics[]" value="{topic:topic_id}" onchange="changeDivBGColor('id_{index}', 'topic_id_{index}', '#e5f9ff');" /><label for="id_{index}"></label>
+						</div>
+						{endif}
 						<div class="bs_topics_child_status bs_topics_child_hvmiddle">
-							{if show_thread_action}
-							<input id="id_{index}" type="checkbox" name="selected_topics[]" value="{topic:topic_id}" />
-							{endif}
-
 							<div style="border: 1px solid #c7c7c7; background: #fff; padding: 2px; width: 30px;">
 								<img alt="{topic:creator:username_plain}" src="{topic:creator:avatar}" style="width: 30px; height: 30px; vertical-align: middle; text-align: center;" />
 							</div>

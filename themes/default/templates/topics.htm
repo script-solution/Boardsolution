@@ -4,68 +4,115 @@
 {if module_error == false}
 
 {if display_event || display_poll || display_topic}
-<div>
-	<div style="float: right; width: 50%;">
+<div class="bs_options_container_top">
 		{if display_event}
-		<a class="bs_button_big" title="{glocale.lang('createnewevent')}" href="{gurl.simple_url('new_event','&amp;$URL_FID='~fid)}">{glocale.lang('newevent')}</a>
+		<div><a title="{glocale.lang('createnewevent')}" href="{gurl.simple_url('new_event','&amp;$URL_FID='~fid)}"><i class="fa fa-calendar" aria-hidden="true"></i> {glocale.lang('newevent')}</a></div>
 		{endif}
 		{if display_poll}
-		<a class="bs_button_big" title="{glocale.lang('createnewpoll')}" href="{gurl.simple_url('new_poll','&amp;$URL_FID='~fid)}">{glocale.lang('newpoll')}</a>
+		<div><a title="{glocale.lang('createnewpoll')}" href="{gurl.simple_url('new_poll','&amp;$URL_FID='~fid)}"><i class="fa fa-bar-chart" aria-hidden="true"></i> {glocale.lang('newpoll')}</a></div>
 		{endif}
 		{if display_topic}
-		<a class="bs_button_big" title="{glocale.lang('createnewthread')}" href="{gurl.simple_url('new_topic','&amp;$URL_FID='~fid)}">{glocale.lang('newthread')}</a>
+		<div><a	 title="{glocale.lang('createnewthread')}" href="{gurl.simple_url('new_topic','&amp;$URL_FID='~fid)}"><i class="fa fa-file-o" aria-hidden="true"></i> {glocale.lang('newthread')}</a></div>
 		{endif}
-	</div>
-	<br style="clear: both;" />
 </div>
 {endif}
 
 {if sub_forum}
 	<div class="bs_sub_container">
 		{include "inc_forums.htm"}
-		{if view_useronline_list}
-			<div>
-			{include "inc_forum_moderators.htm"}
-			{include "inc_online_user.htm"}
-			</div>
+		{if contains_topics}
+		{else}
+			{if view_useronline_list}
+				<div>
+				{include "inc_forum_moderators.htm"}
+				{include "inc_online_user.htm"}
+				</div>
+			{endif}
 		{endif}
+	{if contains_topics}
+	<div style="height: 10px;"></div>
+	{else}
 	</div>
+	{endif}
 {endif}
 
 {if contains_topics}
-{if show_topic_action}
-<form name="thread_action" method="post" action="{redirect_url}">
-{endif}
-{include "inc_topics.htm"}
-{topic_action_combo}
-<input type="submit" onclick="performModAction(getModActionURL());" value="{glocale.lang('performaction')}" /> |
-<a href="javascript:invertSelection('id_',0);">{glocale.lang('invertmark')}</a>
-{if show_topic_action}
-</form>
-{endif}
+{include "inc_topic_action_js.htm"}
+	{if sub_forum}
+	{else}
+		<div class="bs_sub_container">
+	{endif}
+	{if show_topic_action}
+		<form name="thread_action" method="post" action="{redirect_url}">
+	{endif}
+	{include "inc_topics.htm"}
+	<div class="bs_topic_options">
+		<div class="bs_topic_options_dd">
+			<i class="fa fa-level-up fa-flip-horizontal fa-2x" aria-hidden="true" style="vertical-align: top"></i>
+			<div class="bs_dropdownlist">{topic_action_combo}</div>
+		</div>
+		<div class="bs_topic_options_b">
+			<script>
+			function checkOption_over()
+			{
+				var button = document.getElementById('performaction');
+				var dropdown = document.getElementById('topic_action');
+				
+				if(dropdown.options[dropdown.selectedIndex].value == '' || !getSelectedIds())
+				{
+					button.setAttribute('disabled',true);
+					button.style.cursor='not-allowed';
+				}
+			}
+			function checkOption_out()
+			{
+				var button = document.getElementById('performaction');
 
-<div>
-{include "inc_pagination.htm"}
-</div>
+				button.setAttribute('disabled',false);
+				button.style.cursor='';
+
+			}
+			</script>
+			<button id="performaction" type="submit" onclick="performModAction(getModActionURL());" value="{glocale.lang('performaction')}" onmouseover="checkOption_over();" onmouseout="checkOption_out();">{glocale.lang('performaction')}</button>			
+			<button id="invertmark" type="button" onclick="invertSelection('id_',0);">{glocale.lang('invertmark')}</button>
+		</div>
+	</div>
+	<div class="bs_clear_l"></div>
+	{if show_topic_action}
+		</form>
+	{endif}
+	<div>
+	{include "inc_pagination.htm"}
+	</div>
 {else}
-{include "inc_topics.htm"}
+	{include "inc_topics.htm"}
 {endif}
 
 {if latest_topics_bottom && sub_forum}
-{include "inc_topics.htm"}
-<div>
-</div>
+	{include "inc_topics.htm"}
+	<div>
+	</div>
+{endif}
+
+{if sub_forum}
+	{if contains_topics}
+		{if view_useronline_list}
+			<div>
+			{include "inc_online_user.htm"}
+			</div>
+		{endif}
+	{endif}
 {endif}
 
 {if sub_forum}
 {else}
-{if view_useronline_list}
-<div>
-{include "inc_online_user.htm"}
-</div>
+	{if view_useronline_list}
+		<div>
+		{include "inc_online_user.htm"}
+		</div>
+	{endif}
 {endif}
-{endif}
-
+	</div>
 {endif}
 {endif}
 
