@@ -724,6 +724,11 @@ div.bs_forums_child_status
 
 .bs_topics_child_hmiddle
 {
+	text-align: center;
+}
+
+.bs_topics_child_vmiddle
+{
 	vertical-align: middle;
 }
 
@@ -824,7 +829,7 @@ div.bs_topics_child_status
 }
 .bs_topics_child_tpcount dd
 {
-    padding-right: 25px;
+    padding-left: 47px;
 }
 
 

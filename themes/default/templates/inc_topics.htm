@@ -46,16 +46,16 @@
 
 						</div>
 						{if topic:show_forum}
-						<div class="bs_topics_child_tpcount bs_topics_child_hvmiddle">
+						<div class="bs_topics_child_tpcount bs_topics_child_vmiddle">
 							<dl>
-								<dt>{forum:thread_count}</dt>
-								<dd>{glocale.lang('threads')}</dd>
-								<dt>{forum:post_count}</dt>
-								<dd>{glocale.lang('posts')}</dd>
+								<dt>{topic:posts}</dt>
+								<dd>{glocale.lang('replies')}</dd>
+								<dt>{topic:views}</dt>
+								<dd>{glocale.lang('views')}</dd>
 							</dl>
 						</div>
 						{endif}
-						<div class="bs_topics_child_lpost bs_topics_child_hmiddle">
+						<div class="bs_topics_child_lpost bs_topics_child_vmiddle">
 							{if topic:lastpost == false}
 							-
 							{else}
