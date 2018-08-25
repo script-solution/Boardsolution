@@ -76,7 +76,7 @@ final class BS_Front_Module_login extends BS_Front_Module
 		if($input->isset_var('login','post') && $user->has_reached_max_login_tries())
 		{
 			$username = $input->get_var('user_login','post',FWS_Input::STRING);
-			$pw = md5($input->get_var('pw_login','post',FWS_Input::STRING));
+			$pw = $input->get_var('pw_login','post',FWS_Input::STRING);
 			
 			$sec_code_field = FWS_StringHelper::generate_random_key(15);
 			$user->set_session_data('sec_code_field',$sec_code_field);

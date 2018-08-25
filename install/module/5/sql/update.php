@@ -607,6 +607,14 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 		);
 		$this->add_to_log_success();
 		
+		// user
+		$this->add_to_log('Changing Table "'.$consts['BS_TB_USER'].'"...');
+		$db->execute(
+			"ALTER TABLE `{$consts['BS_TB_USER']}`
+			CHANGE `user_pw` `user_pw` VARCHAR(255) NOT NULL"
+		);
+		$this->add_to_log_success();
+		
 		// tasks
 		$this->add_to_log('Deleting Task in "'.$consts['BS_TB_TASKS'].'"...');
 		$db->execute("DELETE FROM `{$consts['BS_TB_TASKS']}` WHERE task_file = 'events.php'");

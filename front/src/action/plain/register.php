@@ -287,8 +287,9 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		$db->start_transaction();
 		
 		// insert the user into the database
+		$hash = BS_Password::hash($this->_user_pw);
 		$id = BS_DAO::get_user()->create(
-			$this->_user_name,$this->_user_email,$this->_user_pw,$this->_user_id
+			$this->_user_name,$this->_user_email,$hash,$this->_user_id
 		);
 		$this->_user_id = $id;
 		
@@ -358,14 +359,14 @@ final class BS_Front_Action_Plain_Register extends BS_Front_Action_Plain
 		if($cfg['account_activation'] == 'none')
 		{
 			$cookies->set_cookie('user',$this->_user_name);
-			$cookies->set_cookie('pw',md5($this->_user_pw));
+			$cookies->set_cookie('pw',$hash);
 			
 			// fire community-event
 			$status = BS_Community_User::get_status_from_groups($this->_user_groups);
 			$user = new BS_Community_User(
 				$this->_user_id,
 				$input->unescape_value($this->_user_name,'post'),
-				$input->unescape_value($this->_user_email,'post'),$status,md5($this->_user_pw),
+				$input->unescape_value($this->_user_email,'post'),$status,$hash,
 				$input->unescape_value($this->_user_pw,'post')
 			);
 			BS_Community_Manager::get_instance()->fire_user_registered($user);

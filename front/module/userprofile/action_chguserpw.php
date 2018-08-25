@@ -94,10 +94,10 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 		// does the user want to change the password?
 		if($new_password != '' || $new_password_conf != '')
 		{
-			if($new_password != $new_password_conf)
+			if($new_password !== $new_password_conf)
 				return 'pwchangefailed';
 
-			if(md5($current_password) != $user->get_profile_val('user_pw'))
+			if(!BS_Password::verify($current_password,$user->get_profile_val('user_pw')))
 				return 'pwchangefailed';
 
 			$change_password = true;
@@ -107,7 +107,7 @@ final class BS_Front_Action_userprofile_chguserpw extends BS_Front_Action_Base
 		if(!$change_username && !$change_password)
 			return '';
 
-		$password = md5($new_password);
+		$password = BS_Password::hash($new_password);
 
 		// build the query
 		if($change_username)
