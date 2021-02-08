@@ -186,7 +186,7 @@ final class BS_Install_Module_4_Helper extends FWS_UtilBase
 				'edited_user', 'text_posted', 
 			),
 			'profiles' => array(
-				'id', 'add_hp', 'add_icq', 'add_irc', 'avatar', 'signatur', 'registerdate', 'posts', 'exppoints', 
+				'id', 'add_hp', 'add_irc', 'avatar', 'signatur', 'registerdate', 'posts', 'exppoints', 
 				'logins', 'lastlogin', 'active', 'banned', 'linkvotes', 'default_font', 'allow_pms', 'ghost_mode', 
 				'unread_topics', 'last_unread_update', 'online', 'bbcode_mode', 'attach_signature', 
 				'allow_board_emails', 'forum_style', 'forum_lang', 'default_email_notification', 'timezone', 

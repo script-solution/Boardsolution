@@ -550,7 +550,6 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		$db->execute("CREATE TABLE `{$consts['BS_TB_PROFILES']}` (
 		  `id` int(10) unsigned NOT NULL default '0',
 		  `add_hp` varchar(255) NOT NULL,
-		  `add_icq` int(15) default NULL,
 		  `add_irc` varchar(120) NOT NULL,
 		  `add_wohnort` varchar(255) NOT NULL default '',
 		  `add_Hobbys` varchar(255) NOT NULL,
@@ -917,22 +916,6 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		);
 		$db->execute(
 			"INSERT INTO `".$consts['BS_TB_USER_FIELDS']."` SET `id` = 2,
-			`field_name` = 'icq',
-			`field_type` = 'int',
-			`field_length` = 15,
-			`field_sort` = 3,
-			`field_show_type` = 9,
-			`display_name` = 'ICQ',
-			`allowed_values` = '',
-			`field_validation` = '',
-			`field_suffix` = '',
-			`field_custom_display` = '".addslashes('<img src="http://online.mirabilis.com/scripts/online.dll?icq={value}&amp;img=5" alt="" align="top" /> {value}')."',
-			`field_is_required` = 0,
-			`field_edit_notice` = '',
-			`display_always` = 1;"
-		);
-		$db->execute(
-			"INSERT INTO `".$consts['BS_TB_USER_FIELDS']."` SET `id` = 3,
 			`field_name` = 'irc',
 			`field_type` = 'line',
 			`field_length` = 120,
@@ -948,7 +931,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 			`display_always` = 1;"
 		);
 		$db->execute(
-			"INSERT INTO `".$consts['BS_TB_USER_FIELDS']."` SET `id` = 4,
+			"INSERT INTO `".$consts['BS_TB_USER_FIELDS']."` SET `id` = 3,
 			`field_name` = 'birthday',
 			`field_type` = 'date',
 			`field_length` = 0,
