@@ -40,6 +40,7 @@ final class BS_Front_Action_new_post_default extends BS_Front_Action_Base
 		$ips = FWS_Props::get()->ips();
 		$locale = FWS_Props::get()->locale();
 		$cfg = FWS_Props::get()->cfg();
+		
 		// anything to do?
 		if(!$input->isset_var('submit','post'))
 			return '';
@@ -56,6 +57,11 @@ final class BS_Front_Action_new_post_default extends BS_Front_Action_Base
 		$forum_data = $forums->get_node_data($fid);
 		if(!$user->is_admin() && $forum_data->get_forum_is_closed())
 			return 'You are no admin and the forum is closed';
+		
+		// Posts allowed?
+		$topic_data = BS_DAO::get_topics()->get_by_id($tid);
+		if($topic_data['comallow'] == 0)
+			return 'Posts for this topic are disabled';
 
 		// check if the user has just made a post
 		$spam_post_on = $auth->is_ipblock_enabled('spam_post');
@@ -66,7 +72,6 @@ final class BS_Front_Action_new_post_default extends BS_Front_Action_Base
 		}
 
 		// does the topic exist and is it open?
-		$topic_data = BS_DAO::get_topics()->get_by_id($tid);
 		if(!$user->is_admin() && $topic_data['thread_closed'] == 1)
 			return 'You are no admin and the topic is closed';
 		
