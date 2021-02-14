@@ -149,7 +149,7 @@ final class BS_Install_Module_4_Helper extends FWS_UtilBase
 			'forums' => array(
 				'id', 'parent_id', 'sortierung', 'forum_name', 'description', 'forum_type', 'forum_is_intern', 
 				'threads', 'posts', 'lastpost_id', 'permission_thread', 'permission_poll', 'permission_event', 
-					'permission_post', 'increase_experience', 'increase_postcount', 'display_subforums', 'forum_is_closed',
+				'permission_post', 'increase_experience', 'increase_postcount', 'display_subforums', 'forum_is_closed',
 			),
 			'intern' => array(
 				'id', 'fid', 'access_type', 'access_value', 
