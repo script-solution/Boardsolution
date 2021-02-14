@@ -62,9 +62,10 @@ final class BS_Forums_NodeData extends FWS_Tree_NodeData
 	{
 		$methods = array(
 			'description','display_subforums','forum_is_closed','forum_is_intern','forum_type',
-			'increase_experience','lastpost_id','posts','threads','lastpost_an_user','lastpost_time',
-			'lastpost_topicid','lastpost_topicname','lastpost_topicposts','lastpost_usergroups',
-			'lastpost_userid','lastpost_username','id','parent_id','sort'
+			'increase_experience','increase_postcount','lastpost_id','posts','threads',
+			'lastpost_an_user','lastpost_time','lastpost_topicid','lastpost_topicname',
+			'lastpost_topicposts','lastpost_usergroups','lastpost_userid','lastpost_username',
+			'id','parent_id','sort'
 		);
 		$res = array('forum_name' => $this->get_name());
 		foreach($methods as $m)
@@ -121,6 +122,14 @@ final class BS_Forums_NodeData extends FWS_Tree_NodeData
 	public function get_increase_experience()
 	{
 		return isset($this->_data['increase_experience']) ? $this->_data['increase_experience'] : true;
+	}
+
+	/**
+	 * @return boolean wether this forum increases the post-count for the users
+	 */
+	public function get_increase_postcount()
+	{
+		return isset($this->_data['increase_postcount']) ? $this->_data['increase_postcount'] : true;
 	}
 
 	/**

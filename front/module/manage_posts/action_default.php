@@ -373,6 +373,52 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 			}
 		}
 
+		// both forums increase the postcount?
+		if($target_forum_data->get_increase_postcount() && $forum_data->get_increase_postcount())
+		{
+			// nothing to do
+		}
+		else
+		{
+			// if the user-post is not counted in one of the forums we have to change the
+			// postcount of the user who have posted
+			$user_pc = array();
+			foreach($post_data as $pdata)
+			{
+				if($pdata['post_user'] > 0)
+				{
+					if(!isset($user_pc[$pdata['post_user']]))
+						$user_pc[$pdata['post_user']] = 0;
+						$user_pc[$pdata['post_user']] += 1;
+				}
+			}
+
+			// if the target-forum counts the posts and the original forum not
+			// we have to increase the postcount for the topic-creator and all posters
+			if(!$forum_data->get_increase_postcount() && $target_forum_data->get_increase_postcount())
+			{
+				foreach($user_pc as $user_id => $postcount)
+				{
+					BS_DAO::get_profile()->update_user_by_id(
+							array('posts' => array('posts + '.$postcount)),$user_id
+							);
+				}
+			}
+			// the other way arround.
+			else if($forum_data->get_increase_postcount() && !$target_forum_data->get_increase_postcount())
+			{
+				// we have to substract the postcount of the posters
+				// NOTE: we don't reduce the postcount for the first post, because it is not possible
+				// to move the first post in a topic. therefore there is nothing to do
+				foreach($user_pc as $user_id => $postcount)
+				{
+					BS_DAO::get_profile()->update_user_by_id(
+							array('posts' => array('posts - '.$postcount)),$user_id
+							);
+				}
+			}
+		}
+
 		// move the posts
 		BS_DAO::get_posts()->update_by_ids($post_ids,array(
 			'rubrikid' => $target_fid,

@@ -364,6 +364,7 @@ final class BS_Install_Module_5_SQL_Full extends BS_Install_Module_5_SQL_Base
 		  `posts` int(10) unsigned NOT NULL default '0',
 		  `lastpost_id` int(10) NOT NULL default '0',
 		  `increase_experience` tinyint(1) unsigned NOT NULL default '0',
+		  `increase_postcount` tinyint(1) unsigned NOT NULL default '0',
 		  `display_subforums` tinyint(1) unsigned NOT NULL default '0',
 		  `forum_is_closed` tinyint(1) unsigned NOT NULL default '0',
 		  PRIMARY KEY  (`id`),

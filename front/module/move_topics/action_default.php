@@ -278,6 +278,57 @@ final class BS_Front_Action_move_topics_default extends BS_Front_Action_Base
 				}
 			}
 
+			// do we have to change the user-postcount?
+			if($forum_data->get_increase_postcount() != $target_forum_data->get_increase_postcount())
+			{
+				$user_pc = array();
+				$start_posts = array();
+				foreach(BS_DAO::get_posts()->get_posts_by_topics($moved_topic_ids) as $data)
+				{
+					// determine the first post in every topic
+					if(!isset($start_posts[$data['threadid']]) ||
+							$data['post_time'] < $start_posts[$data['threadid']][1])
+						$start_posts[$data['threadid']] = array($data['post_user'],$data['post_time']);
+
+						if(!isset($user_pc[$data['post_user']]))
+							$user_pc[$data['post_user']] = 0;
+
+							$user_pc[$data['post_user']] += 1;
+				}
+
+				// finally change the post-count
+				if(!$forum_data->get_increase_postcount() && $target_forum_data->get_increase_postcount())
+				{
+					foreach($user_pc as $user_id => $postcount)
+					{
+						// if we have added a reason in the target-forum we HAVE got the postcount for
+						// this post but we've found the post in the query above..so we have to decrease
+						// the postcount to add by the number of moved topics
+						if($post_reason == 1)
+							$postcount -= 1 * $num;
+
+							BS_DAO::get_profile()->update_user_by_id(
+									array('posts' => array('posts + '.$postcount)),$user_id
+									);
+					}
+				}
+				else
+				{
+					foreach($user_pc as $user_id => $postcount)
+					{
+						// if we have added a reason in the target-forum we HAVE NOT got the postcount
+						// for this post but we've found the post in the query above..so we have to decrease
+						// the postcount to substract by the number of moved topics
+						if($post_reason == 1)
+							$postcount -= 1 * $num;
+
+							BS_DAO::get_profile()->update_user_by_id(
+									array('posts' => array('posts - '.$postcount)),$user_id
+									);
+					}
+				}
+			}
+
 			$this->set_success_msg(sprintf(
 				$locale->lang('success_'.BS_ACTION_MOVE_TOPICS),
 				implode('", "',$moved_topics)

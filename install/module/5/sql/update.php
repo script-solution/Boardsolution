@@ -443,7 +443,14 @@ final class BS_Install_Module_5_SQL_Update extends BS_Install_Module_5_SQL_Base
 			 DROP `permission_event`,
 			 DROP `permission_post`"
  		);
- 		$this->add_to_log_success();
+		$db->execute(
+			"ALTER TABLE `{$consts['BS_TB_FORUMS']}`
+			ADD `increase_postcount` tinyint(1) unsigned NOT NULL default '0' after `increase_experience`"
+		);
+		$db->execute(
+			"UPDATE `{$consts['BS_TB_FORUMS']}` SET `increase_postcount` = 1"
+		);
+		$this->add_to_log_success();
 		
  		// link-votes
 		$this->add_to_log('Creating Table "'.$consts['BS_TB_LINK_VOTES'].'"...');

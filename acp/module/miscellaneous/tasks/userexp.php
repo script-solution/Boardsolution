@@ -1,6 +1,6 @@
 <?php
 /**
- * Contains the user-experience-task for the miscellaneous module
+ * Contains the user-experience- and postcount-task for the miscellaneous module
  * 
  * @package			Boardsolution
  * @subpackage	acp.module
@@ -23,7 +23,7 @@
  */
 
 /**
- * The task to refresh the user-experience
+ * The task to refresh the user-experience and postcount
  *
  * @package			Boardsolution
  * @subpackage	acp.module
@@ -66,7 +66,8 @@ final class BS_ACP_Miscellaneous_Tasks_UserExp extends FWS_Object implements FWS
 		{
 			if(!isset($user_data[$data['post_user']]['posts']))
 				$user_data[$data['post_user']]['posts'] = 0;
-			$user_data[$data['post_user']]['posts'] += $data['num'];
+			if($data['increase_postcount'] == 1)
+				$user_data[$data['post_user']]['posts'] += $data['num'];
 
 			if(!isset($user_data[$data['post_user']]['exp']))
 				$user_data[$data['post_user']]['exp'] = 0;

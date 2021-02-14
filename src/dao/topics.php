@@ -210,7 +210,7 @@ class BS_DAO_Topics extends FWS_Singleton
 	
 	/**
 	 * Returns all topics in the given forums. In addition to the topic-data you'll get wether
-	 * the forum increases the experience or not
+	 * the forum increases the experience and postcount or not
 	 *
 	 * @param array $fids the forums
 	 * @return array the topics
@@ -223,7 +223,7 @@ class BS_DAO_Topics extends FWS_Singleton
 			FWS_Helper::def_error('intarray>0','fids',$fids);
 		
 		return $db->get_rows(
-			'SELECT t.*,increase_experience
+			'SELECT t.*,f.increase_experience,f.increase_postcount
 			 FROM '.BS_TB_THREADS.' t
 			 LEFT JOIN '.BS_TB_FORUMS.' f ON t.rubrikid = f.id
 			 WHERE rubrikid IN ('.implode(',',$fids).')'

@@ -130,6 +130,9 @@ final class BS_Front_Action_Plain_DeleteTopics extends BS_Front_Action_Plain
 					
 					if($forum_data->get_increase_experience() == 1)
 						$user_experience[$data['post_user']]['experience'] += BS_EXPERIENCE_FOR_TOPIC;
+
+					if($forum_data->get_increase_postcount() == 0)
+						$user_experience[$data['post_user']]['posts'] = 0;
 				}
 	
 				// + 1 because we store the number of replies in the db, not the number of posts
@@ -199,10 +202,13 @@ final class BS_Front_Action_Plain_DeleteTopics extends BS_Front_Action_Plain
 						if($forum_data->get_increase_experience())
 							$user_experience[$pdata['post_user']]['experience'] += BS_EXPERIENCE_FOR_POST;
 		
-						if(isset($user_experience[$pdata['post_user']]['posts']))
-							$user_experience[$pdata['post_user']]['posts']++;
-						else
-							$user_experience[$pdata['post_user']]['posts'] = 1;
+						if($forum_data->get_increase_postcount())
+						{
+							if(isset($user_experience[$pdata['post_user']]['posts']))
+								$user_experience[$pdata['post_user']]['posts']++;
+							else
+								$user_experience[$pdata['post_user']]['posts'] = 1;
+						}
 					}
 				}
 	

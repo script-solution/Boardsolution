@@ -61,6 +61,7 @@ final class BS_ACP_Action_forums_edit extends BS_ACP_Action_Base
 			'post' => $input->get_var('permission_post','post')
 		);
 		$increase_experience = $input->get_var('increase_experience','post',FWS_Input::INT_BOOL);
+		$increase_postcount = $input->get_var('increase_postcount','post',FWS_Input::INT_BOOL);
 		$display_subforums = $input->get_var('display_subforums','post',FWS_Input::INT_BOOL);
 		$forum_is_closed = $input->get_var('forum_is_closed','post',FWS_Input::INT_BOOL);
 		
@@ -104,6 +105,7 @@ final class BS_ACP_Action_forums_edit extends BS_ACP_Action_Base
 			'forum_type' => $forum_type,
 			'forum_is_intern' => $forum_is_intern,
 			'increase_experience' => $increase_experience,
+			'increase_postcount' => $increase_postcount,
 			'display_subforums' => $display_subforums,
 			'forum_is_closed' => $forum_is_closed
 		);

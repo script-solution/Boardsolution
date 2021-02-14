@@ -404,8 +404,12 @@ final class BS_Front_Action_Plain_Post extends BS_Front_Action_Plain
 		// update posts and points in profile, if the user is loggedin
 		if($this->_user_id > 0)
 		{
-			$fields = array('posts' => array('posts + 1'));
 			$forum_data = $forums->get_node_data($this->_fid);
+			if($forum_data->get_increase_postcount())
+				$fields = array('posts' => array('posts + 1'));
+			else
+				$fields = array('posts' => array('posts'));
+
 			if($forum_data->get_increase_experience())
 			{
 				$number = $this->_add_topic ? BS_EXPERIENCE_FOR_POST + BS_EXPERIENCE_FOR_TOPIC

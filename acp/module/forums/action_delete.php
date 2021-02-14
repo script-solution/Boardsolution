@@ -73,7 +73,8 @@ final class BS_ACP_Action_forums_delete extends BS_ACP_Action_Base
 			if(!isset($reduce[$pdaten['post_user']]['exp']))
 				$reduce[$pdaten['post_user']]['exp'] = 0;
 			
-			$reduce[$pdaten['post_user']]['posts'] += $pdaten['num'];
+			if($pdaten['increase_postcount'] == 1)
+				$reduce[$pdaten['post_user']]['posts'] += $pdaten['num'];
 			if($pdaten['increase_experience'] == 1)
 				$reduce[$pdaten['post_user']]['exp'] += $pdaten['num'] * BS_EXPERIENCE_FOR_POST;
 		}

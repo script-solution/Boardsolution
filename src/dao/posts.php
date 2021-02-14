@@ -684,6 +684,7 @@ class BS_DAO_Posts extends FWS_Singleton
 	 * 		'num' => <numberOfPosts>,
 	 * 		'post_user' => <userId>,
 	 * 		'increase_experience' => ... // wether the posts should increase the experience
+	 * 		'increase_postcount' => ... // wether the posts should increase the postcount
 	 * 	)
 	 * </code>
 	 *
@@ -698,11 +699,11 @@ class BS_DAO_Posts extends FWS_Singleton
 			FWS_Helper::def_error('intarray>0','ids',$ids);
 		
 		return $db->get_rows(
-			'SELECT COUNT(p.id) num,post_user,increase_experience
+			'SELECT COUNT(p.id) num,post_user,f.increase_experience,f.increase_postcount
 			 FROM '.BS_TB_POSTS.' p
 			 LEFT JOIN '.BS_TB_FORUMS.' f ON p.rubrikid = f.id
 			 WHERE post_user IN ('.implode(',',$ids).')
-			 GROUP BY post_user,increase_experience'
+			 GROUP BY post_user,increase_experience,increase_postcount'
 		);
 	}
 	
@@ -714,6 +715,7 @@ class BS_DAO_Posts extends FWS_Singleton
 	 * 		'num' => <numberOfPosts>,
 	 * 		'post_user' => <userId>,
 	 * 		'increase_experience' => ... // wether the posts should increase the experience
+	 * 		'increase_postcount' => ... // wether the posts should increase the postcount
 	 * 	)
 	 * </code>
 	 *
@@ -728,11 +730,11 @@ class BS_DAO_Posts extends FWS_Singleton
 			FWS_Helper::def_error('intarray>0','fids',$fids);
 		
 		return $db->get_rows(
-			'SELECT COUNT(*) num,post_user,f.increase_experience
+			'SELECT COUNT(*) num,post_user,f.increase_experience,f.increase_postcount
 			 FROM '.BS_TB_POSTS.' p
 			 LEFT JOIN '.BS_TB_FORUMS.' f ON p.rubrikid = f.id
 			 WHERE post_user != 0 AND rubrikid IN ('.implode(',',$fids).')
-			 GROUP BY post_user,f.increase_experience'
+			 GROUP BY post_user,f.increase_experience,f.increase_postcount'
 		);
 	}
 	

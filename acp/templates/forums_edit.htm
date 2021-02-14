@@ -7,7 +7,7 @@
 function toggleForumType()
 {
 	var cb = FWS_getElement('forum_type');
-	var ids = new Array('rowclosed','rowdesc','rowexp','additional','htmlallowed','rightsexplain');
+	var ids = new Array('rowclosed','rowdesc','rowexp','rowpc','additional','htmlallowed','rightsexplain');
 	for(var i = 0;i < ids.length;i++)
 	{
 		if(cb.value == 'contains_cats')
@@ -53,6 +53,13 @@ function toggleForumType()
 			<dd>
 				{form.get_radio_yesno('increase_experience',default:increase_experience)}
 				<div class="a_desc">{glocale.lang('increase_experience_desc')}</div>
+			</dd>
+		</dl>
+		<dl id="rowpc">
+			<dt>{glocale.lang('increase_postcount')}:</dt>
+			<dd>
+				{form.get_radio_yesno('increase_postcount',default:increase_postcount)}
+				<div class="a_desc">{glocale.lang('increase_postcount_desc')}</div>
 			</dd>
 		</dl>
 		<dl>

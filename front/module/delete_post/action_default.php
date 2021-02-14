@@ -160,7 +160,11 @@ final class BS_Front_Action_delete_post_default extends BS_Front_Action_Base
 		// decrease the posts of the user
 		foreach($user_posts as $user_id => $number)
 		{
-			$fields = array('posts' => array('posts - '.$number));
+			if($forum_data->get_increase_postcount())
+				$fields = array('posts' => array('posts - '.$number));
+			else
+				$fields = array('posts' => array('posts'));
+
 			if($forum_data->get_increase_experience())
 				$fields['exppoints'] = array('exppoints - '.($number * BS_EXPERIENCE_FOR_POST));
 
