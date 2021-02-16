@@ -475,6 +475,7 @@ final class BS_User_Current extends FWS_User_Current
 		if($online_num > $stats_data['max_online'])
 		{
 			$cache->get_cache('stats')->set_element_field(0,'max_online',$online_num);
+			$cache->get_cache('stats')->set_element_field(0,'max_online_date',time());
 			$regen_stats = true;
 		}
 

@@ -143,6 +143,7 @@ final class BS_API_Module_general_stats extends BS_API_Module
 		$this->logins_today = $stats['logins_today'];
 		$this->logins_yesterday = $stats['logins_yesterday'];
 		$this->max_user_online = $stats['max_online'];
+		$this->max_user_online_date = $stats['max_online_date'];
 		$this->forum_count = $stats['total_forums'];
 		$this->topic_count = $stats['total_topics'];
 		$this->post_count = $stats['posts_total'];

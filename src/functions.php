@@ -191,6 +191,11 @@ final class BS_Functions extends FWS_Object
 				$stats_data['logins_last'] = FWS_Date::get_date($stats_data['logins_last']);
 			else
 				$stats_data['logins_last'] = $locale->lang('no_logins_found');
+
+			if($stats_data['max_online_date'] > 0)
+				$stats_data['max_online_date'] = FWS_Date::get_date($stats_data['max_online_date']);
+			else
+				$stats_data['max_online_date'] = $locale->lang('notavailable');
 		}
 		
 		return $stats_data;

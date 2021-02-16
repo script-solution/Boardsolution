@@ -44,14 +44,29 @@ final class BS_Cache_Source_Stats extends FWS_Object implements FWS_Cache_Source
 		
 		$online_num = $sessions->get_online_count();
 		if($cache)
-			$max_online = ($online_num > $stats_data['max_online']) ? $online_num : $stats_data['max_online'];
+		{
+			if($online_num > $stats_data['max_online'])
+			{
+				$max_online = $online_num;
+				$max_online_date = time();
+			}
+			else
+			{
+				$max_online = $stats_data['max_online'];
+				$max_online_date = $stats_data['max_online_date'];
+			}
+		}
 		else
+		{
 			$max_online = 0;
+			$max_online_date = time();
+		}
 		
 		return array(array(
 			'posts_last' => $posts_last,
 			'logins_total' => $logins,
 			'max_online' => $max_online,
+			'max_online_date' => $max_online_date,
 			'logins_today' => $cache ? $stats_data['logins_today'] : 0,
 			'logins_yesterday' => $cache ? $stats_data['logins_yesterday'] : 0,
 			'logins_last' => $lastlogin,
