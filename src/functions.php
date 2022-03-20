@@ -714,7 +714,10 @@ final class BS_Functions extends FWS_Object
 		else
 			$result = 5 - (@round($total / $votes,2) - 1);
 		
-		$pro = @round(100 / (5 / $result),0) * $multi;
+		if($result == 0)
+			$pro = 0;
+		else
+			$pro = @round(100 / (5 / $result),0) * $multi;
 		$text_ins = '('.$locale->lang('school_grade').': '.abs($result - 6).' | ';
 		$text_ins .= $votes.' '.$locale->lang('votes').')';
 		

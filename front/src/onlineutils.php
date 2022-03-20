@@ -106,7 +106,7 @@ final class BS_Front_OnlineUtils extends FWS_UtilBase
 		$durl = BS_URL::get_mod_url('userdetails');
 		
 		// sort user by date descending
-		usort($users,create_function('$a,$b','return $b[\'date\'] - $a[\'date\'];'));
+		usort($users,function ($a,$b) { return $b['date'] - $a['date']; });
 		$permission_to_view_location = $auth->has_global_permission('view_online_locations');
 		foreach($users as $daten)
 		{

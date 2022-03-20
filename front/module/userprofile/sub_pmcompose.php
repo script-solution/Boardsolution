@@ -200,7 +200,7 @@ final class BS_Front_SubModule_userprofile_pmcompose extends BS_Front_SubModule
 		FWS_Array_Utils::trim($user_names);
 
 		$un_str = FWS_Array_Utils::advanced_implode("','",$user_names);
-		if(count($un_str) == 0)
+		if($un_str == '')
 		{
 			if(count($receiver) == 0)
 				return 'no_receivers_assigned';

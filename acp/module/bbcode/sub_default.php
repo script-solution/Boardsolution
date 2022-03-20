@@ -124,7 +124,7 @@ final class BS_ACP_SubModule_bbcode_default extends BS_ACP_SubModule
 			'site' => $site,
 			'search_url' => 'admin.php',
 			'hidden' => $hidden,
-			'search_val' => stripslashes($search)
+			'search_val' => $search !== null ? stripslashes($search) : ''
 		));
 	}
 }

@@ -136,8 +136,12 @@ final class BS_Front_SubModule_userprofile_pmsearch extends BS_Front_SubModule
 			);
 
 			$keyword_mode_value = $form->get_input_value('keyword_mode','and');
-			$keyword = stripslashes($input->get_var('keyword','post',FWS_Input::STRING));
-			$username = stripslashes($input->get_var('un','post',FWS_Input::STRING));
+			$keyword = $input->get_var('keyword','post',FWS_Input::STRING);
+			if($keyword !== null)
+				$keyword = stripslashes($keyword);
+			$username = $input->get_var('un','post',FWS_Input::STRING);
+			if($username !== null)
+				$username = stripslashes($username);
 
 			$faqurl = BS_URL::get_mod_url('faq');
 			$faqurl->set_anchor('f_9');

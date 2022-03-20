@@ -92,7 +92,7 @@ final class BS_ACP_Module_avatars extends BS_ACP_Module
 			'action_type_import' => BS_ACP_ACTION_IMPORT_AVATARS,
 			'search_url' => 'admin.php',
 			'hidden' => $hidden,
-			'search_val' => stripslashes($search)
+			'search_val' => $search !== null ? stripslashes($search) : ''
 		));
 
 		$end = 10;

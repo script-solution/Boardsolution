@@ -218,7 +218,7 @@ final class BS_ACP_Module_attachments extends BS_ACP_Module
 			'site' => $site,
 			'search_url' => 'admin.php',
 			'hidden' => $hidden,
-			'search_val' => stripslashes($search)
+			'search_val' => $search !== null ? stripslashes($search) : ''
 		));
 
 		$murl = BS_URL::get_acpmod_url();

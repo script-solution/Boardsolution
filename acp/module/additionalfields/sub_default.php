@@ -134,7 +134,7 @@ final class BS_ACP_SubModule_additionalfields_default extends BS_ACP_SubModule
 		$tpl->add_variables(array(
 			'search_url' => 'admin.php',
 			'hidden' => $hidden,
-			'search_val' => stripslashes($search)
+			'search_val' => $search !== null ? stripslashes($search) : ''
 		));
 	}
 	

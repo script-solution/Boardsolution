@@ -57,8 +57,7 @@ final class BS_ACP_Module_phpinfo extends BS_ACP_Module
 		$tpl = FWS_Props::get()->tpl();
 		$locale = FWS_Props::get()->locale();
 
-		$phpinfo = new ReflectionFunction('phpinfo');
-		if($phpinfo->isDisabled())
+		if(!function_exists('phpinfo'))
 		{
 			$this->report_error(FWS_Document_Messages::ERROR,$locale->lang('phpinfo_disabled'));
 			return;

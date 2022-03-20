@@ -154,7 +154,7 @@ final class BS_ACP_Module_Themes_Editor_Simple extends BS_ACP_Module_Themes_Edit
 		}
 
 		$cgroup = $input->get_var('group','get',FWS_Input::STRING);
-		$groupa = explode('::',$cgroup);
+		$groupa = $cgroup !== null ? explode('::',$cgroup) : array();
 		if(count($groupa) == 2)
 			list($cat,$group) = $groupa;
 		else

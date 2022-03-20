@@ -121,7 +121,7 @@ final class BS_ACP_SubModule_config_search extends BS_ACP_SubModule
 			'hidden_fields' => $hidden_fields,
 			'groups_per_line' => $perline,
 			'group_rows' => $helper->get_groups(0,$perline),
-			'keyword' => stripslashes($keyword),
+			'keyword' => $keyword !== null ? stripslashes($keyword) : '',
 			'groups_width' => round(100 / $perline),
 			'at' => BS_ACP_ACTION_REVERT_SETTING,
 			'view' => 'search',

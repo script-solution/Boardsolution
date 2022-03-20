@@ -53,7 +53,7 @@ abstract class BS_Front_Search_Request_TPBasic extends FWS_Object
 	 * @param array $keywords you may specify an array with keywords for "MATCH(...) AGAINST ..."
 	 * @return array an array with the found ids
 	 */
-	protected final function get_result_ids_impl($type = 'posts',$search_cond,$limit,$keywords = null)
+	protected final function get_result_ids_impl($type,$search_cond,$limit,$keywords = null)
 	{
 		$msgs = FWS_Props::get()->msgs();
 		$locale = FWS_Props::get()->locale();

@@ -117,10 +117,12 @@ final class BS_DBA_Module_index extends BS_DBA_Module
 				$total_rows += $data['Rows'];
 				$total_overhead += $overhead;
 				
-				$create_date = BS_DBA_Utils::get_instance()->mysql_date_to_time($data['Create_time']);
-				
-				if($create_date >= 0)
-					$create_date = FWS_Date::get_date($create_date);
+				if($data['Create_time'] !== null)
+				{
+					$create_date = BS_DBA_Utils::get_instance()->mysql_date_to_time($data['Create_time']);
+					if($create_date >= 0)
+						$create_date = FWS_Date::get_date($create_date);
+				}
 				else
 					$create_date = $locale->lang('notavailable');
 				

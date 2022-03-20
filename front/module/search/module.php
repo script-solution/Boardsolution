@@ -149,8 +149,12 @@ final class BS_Front_Module_search extends BS_Front_Module
 				'topics' => $locale->lang('threads')
 			);
 
-			$keyword = stripslashes($input->get_var('keyword','post',FWS_Input::STRING));
-			$username = stripslashes($input->get_var('un','post',FWS_Input::STRING));
+			$keyword = $input->get_var('keyword','post',FWS_Input::STRING);
+			if($keyword !== null)
+				$keyword = stripslashes($keyword);
+			$username = $input->get_var('un','post',FWS_Input::STRING);
+			if($username !== null)
+				$username = stripslashes($username);
 			
 			$selection = $input->get_var('fid','post');
 			$forum_combo = BS_ForumUtils::get_recursive_forum_combo(

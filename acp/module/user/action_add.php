@@ -104,7 +104,7 @@ final class BS_ACP_Action_user_add extends BS_ACP_Action_Base
 		$status = BS_Community_User::get_status_from_groups($groups);
 		$user = new BS_Community_User(
 			$id,$input->unescape_value($user_name,'post'),
-			$input->unescape_value($user_email,'post'),$status,$hash),
+			$input->unescape_value($user_email,'post'),$status,$hash,
 			$input->unescape_value($user_pw,'post')
 		);
 		BS_Community_Manager::get_instance()->fire_user_registered($user);

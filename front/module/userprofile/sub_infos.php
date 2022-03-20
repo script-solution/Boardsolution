@@ -74,7 +74,7 @@ final class BS_Front_SubModule_userprofile_infos extends BS_Front_SubModule
 			'email_value' => $form->get_input_value('user_email',$user->get_profile_val('user_email')),
 			'target_url' => BS_URL::build_sub_url(),
 			'confirm_emails' => $cfg['confirm_email_addresses'],
-			'new_email_address' => $email_change['user_id'] ? $email_change['email_address'] : ''
+			'new_email_address' => $email_change !== false ? $email_change['email_address'] : ''
 		));
 		
 		$cfields = BS_AddField_Manager::get_instance();
