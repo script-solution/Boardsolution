@@ -199,6 +199,7 @@ final class BS_Front_Action_Plain_Topic extends BS_Front_Action_Plain
 			'type' => $this->_type,
 			'comallow' => $this->_allow_posts,
 			'important' => $this->_important,
+			'locked' => 0,
 			'lastpost_id' => $this->_post->get_post_id()
 		);
 		BS_DAO::get_topics()->create($fields);

@@ -115,6 +115,7 @@ final class BS_Front_Action_move_topics_default extends BS_Front_Action_Base
 					'lastpost_time' => $data['lastpost_time'],
 					'important' => $data['important'],
 					'moved' => 1,
+					'locked' => 0,
 					'moved_tid' => $data['id'],
 					'moved_rid' => $target_fid
 				);

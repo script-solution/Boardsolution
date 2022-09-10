@@ -267,6 +267,7 @@ final class BS_Front_Action_manage_posts_default extends BS_Front_Action_Base
 				'type' => 0,
 				'comallow' => 1,
 				'important' => 0,
+				'locked' => 0,
 				'lastpost_id' => $last_post['id']
 			);
 			$topic_id = BS_DAO::get_topics()->create($fields);
