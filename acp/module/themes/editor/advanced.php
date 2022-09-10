@@ -39,7 +39,7 @@ final class BS_ACP_Module_Themes_Editor_Advanced extends BS_ACP_Module_Themes_Ed
 		$input = FWS_Props::get()->input();
 		$tpl = FWS_Props::get()->tpl();
 		$file = $input->get_var('file','get',FWS_Input::STRING);
-		if(!preg_match('/^[a-zA-Z0-9_]+\.css$/',$file))
+		if($file === null || !preg_match('/^[a-zA-Z0-9_]+\.css$/',$file))
 			$file = 'basic.css';
 		$path = $this->_theme.'/'.$file;
 		$theme = $input->get_var('theme','get',FWS_Input::STRING);

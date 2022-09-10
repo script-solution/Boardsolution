@@ -37,7 +37,7 @@ final class BS_ACP_Action_themes_advancedsave extends BS_ACP_Action_Base
 		$locale = FWS_Props::get()->locale();
 
 		$file = $input->get_var('file','get',FWS_Input::STRING);
-		if(!preg_match('/^[a-zA-Z0-9_]+\.css$/',$file))
+		if($file == '' || !preg_match('/^[a-zA-Z0-9_]+\.css$/',$file))
 			return 'Invalid filename!';
 		$theme = $input->get_var('theme','get',FWS_Input::STRING);
 		if($theme == null)

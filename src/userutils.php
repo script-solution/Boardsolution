@@ -219,11 +219,11 @@ final class BS_UserUtils extends FWS_UtilBase
 	{
 		$cfg = FWS_Props::get()->cfg();
 
-		if(preg_match("/([\"\\/|'])/i",$user_name))
+		if($user_name && preg_match("/([\"\\/|'])/i",$user_name))
 			return false;
 	
 		if($cfg['profile_user_special_chars'] == 0 &&
-			!preg_match('/^([a-z|0-9|_|\\-|\\[|\\]]+)$/i',$user_name))
+			(!$user_name || !preg_match('/^([a-z|0-9|_|\\-|\\[|\\]]+)$/i',$user_name)))
 			return false;
 	
 		return true;

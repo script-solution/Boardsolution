@@ -39,7 +39,7 @@ final class BS_ACP_Action_themes_add extends BS_ACP_Action_Base
 
 		$theme_name = $input->get_var('theme_name','post',FWS_Input::STRING);
 		$theme_folder = $input->get_var('theme_folder','post',FWS_Input::STRING);
-		if(!preg_match('/^[a-z0-9_]+$/i',$theme_folder))
+		if($theme_folder == '' || !preg_match('/^[a-z0-9_]+$/i',$theme_folder))
 			return 'invalid_theme_folder_name';
 		
 		if($cache->get_cache('themes')->element_exists_with(array('theme_folder' => $theme_folder)))

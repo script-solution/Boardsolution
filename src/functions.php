@@ -334,7 +334,7 @@ final class BS_Functions extends FWS_Object
 							$match .= '.*';
 					}
 	
-					if(preg_match('/'.$match.'/',$value))
+					if($value && preg_match('/'.$match.'/',$value))
 						return true;
 				}
 				else if($data['bann_name'] == $value)

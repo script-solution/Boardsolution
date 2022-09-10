@@ -56,7 +56,7 @@ final class BS_ACP_Action_usergroups_edit extends BS_ACP_Action_Base
 		if($type == 'add' || $id != BS_STATUS_GUEST)
 		{
 			$group_color = $input->get_var('group_color','post',FWS_Input::STRING);
-			if(!preg_match('/^[a-f0-9]{6}$/i',$group_color))
+			if($group_color == '' || !preg_match('/^[a-f0-9]{6}$/i',$group_color))
 				return 'invalid_group_color';
 
 			$overrides_mod = $input->get_var('overrides_mod','post',FWS_Input::INT_BOOL);
