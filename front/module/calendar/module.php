@@ -89,7 +89,7 @@ final class BS_Front_Module_calendar extends BS_Front_SubModuleContainer
 		$hidden_fields = array_merge($hidden_fields,$extern);
 	
 		$years = array();
-		for($y = 1990;$y <= 2020;$y++)
+		for($y = $year - 20;$y <= $year + 20;$y++)
 			$years[$y] = $y;
 		
 		$form = $this->request_formular(false,false);
