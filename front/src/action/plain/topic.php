@@ -135,7 +135,7 @@ final class BS_Front_Action_Plain_Topic extends BS_Front_Action_Plain
 		$this->_post = $post;
 		$this->_symbol = $type != 0 ? 0 : (int)$symbol;
 		$this->_allow_posts = (bool)$allow_posts;
-		$this->_important = (bool)$important;
+		$this->_important = $important ? 1 : 0;
 	}
 	
 	/**
