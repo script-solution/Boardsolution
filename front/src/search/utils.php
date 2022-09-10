@@ -270,7 +270,8 @@ final class BS_Front_Search_Utils extends FWS_UtilBase
 		if($keyword_mode === null)
 			$keyword_mode = $input->get_var(BS_URL_SEARCH_MODE,'get',FWS_Input::STRING);
 	
-		$keyword_mode = (FWS_String::strtolower($keyword_mode) == 'and') ? 'AND' : 'OR';
+		$keyword_mode = ($keyword_mode !== null &&
+			FWS_String::strtolower($keyword_mode) == 'and') ? 'AND' : 'OR';
 	
 		return $keyword_mode;
 	}

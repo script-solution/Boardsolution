@@ -76,7 +76,8 @@ final class BS_ACP_Action_tasks_edit extends BS_ACP_Action_Base
 		if(!$is_default && trim($title) == '')
 			return 'task_missing_title';
 		
-		$file = basename($file);
+		if($file !== null)
+			$file = basename($file);
 		if(!$is_default && !is_file(FWS_Path::server_app().'src/tasks/'.$file))
 			return 'task_invalid_file';
 		

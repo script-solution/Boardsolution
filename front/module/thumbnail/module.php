@@ -53,6 +53,11 @@ final class BS_Front_Module_thumbnail extends BS_Front_Module
 		$auth = FWS_Props::get()->auth();
 
 		$ipath = $input->get_var('path','get',FWS_Input::STRING);
+		if($ipath === null)
+		{
+			$this->report_error();
+			return;
+		}
 		
 		$file = basename($ipath);
 		$path = dirname($ipath).'/'.$file;
