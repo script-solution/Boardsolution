@@ -177,7 +177,7 @@ final class BS_ACP_Module_iplog extends BS_ACP_Module
 			),
 			'num' => $num,
 			'delete_all_url' => $durl->set('ask','delete_allq')->to_url(),
-			'reset_url' => $durl->remove('ask')->set('site',1)->to_url(),
+			'reset_url' => BS_URL::build_acpmod_url(),
 		));
 		
 		switch($order)
